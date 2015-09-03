@@ -13,10 +13,10 @@ sed -e "s/windres -o rc.o/windres $(SHARED_RCFLAGS) -o rc.o/g" -i Makefile.share
 set SHARED_RCFLAGS=-F pe-i386
 
 del /s *.o *.a *.exe >> nul 2>&1
-if "%CPU%" == "win32" sh -c 'perl Configure mingw shared no-unit-test no-ssl2 no-ssl3 no-idea no-hw no-dso no-sse2 --prefix=C:/w/openssl'
-if "%CPU%" == "win64" sh -c 'perl Configure mingw64 shared no-unit-test no-ssl2 no-ssl3 no-idea no-hw no-dso no-asm --prefix=C:/w/openssl'
-sh -c make depend
-sh -c make
+if "%CPU%" == "win32" sh -c 'perl Configure mingw   shared no-unit-test no-ssl2 no-ssl3 no-idea no-hw no-dso no-sse2 --prefix=C:/w/openssl'
+if "%CPU%" == "win64" sh -c 'perl Configure mingw64 shared no-unit-test no-ssl2 no-ssl3 no-idea no-hw no-dso no-asm  --prefix=C:/w/openssl'
+sh -c mingw32-make depend
+sh -c mingw32-make
 
 if not exist "include\openssl\opensslv.h" (
    echo Error: Move this script to the OpenSSL source root directory.
