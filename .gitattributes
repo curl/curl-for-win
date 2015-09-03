@@ -1,0 +1,7 @@
+# Default
+*         text=auto
+
+# Text files with fixed EOL requirements
+*.bat     text eol=crlf
+*.sh      text eol=lf
+*.diff    text eol=lf
