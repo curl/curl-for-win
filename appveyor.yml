@@ -5,7 +5,7 @@ branches:
 skip_tags: true
 os: Windows Server 2012 R2
 clone_depth: 8
-clone_folder: C:\deps\
+clone_folder: C:\w\
 environment:
   BINTRAY_APIKEY:
     secure: ZrOhbhL3M2mVTZu+MU2WPDB/4rJArq4rEdND/eKa9iNHFCiLNUF49jvfbuXfnCGE
@@ -16,7 +16,6 @@ environment:
   VIRUSTOTAL_APIKEY:
     secure: TdJYONfrpH45DuyKxraVqgHYy25IQ/F8TKHzYf+u5zz1aiM2yR0YTMaGxyj2EMReEearSI9kD9D2ZykybSVEbRyEaotZlceUb2lPDKELl3M=
 install:
-- mkdir C:\w\
 - set VER_ZLIB=1.2.8
 - set VER_OPENSSL=1.0.2d
 - set VER_LIBSSH2=1.6.0
