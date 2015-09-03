@@ -20,6 +20,7 @@ install:
 - openssl dgst -sha256 git.7z | findstr /i /c:"2ace32df8b8449e2b48cc6e4d0152be7f4bf8e7174d0dc43f67a1ae23bf26f9d"
 - 7z x -y -oC:\git\ git.7z > nul
 - set PATH=C:\git\cmd;F:\git\usr\bin;C:\git\mingw64\bin;%PATH%
+- curl --version
 - set VER_ZLIB=1.2.8
 - set VER_OPENSSL=1.0.2d
 - set VER_LIBSSH2=1.6.0
@@ -35,7 +36,7 @@ install:
 - tar -zxvf zip.tar.gz > nul 2>&1
 - del zip.tar.gz
 - move zlib-%VER_ZLIB% zlib
-- curl -fsS http://www.openssl.org/source/openssl-%VER_OPENSSL%.tar.gz -o openssl.tar.gz
+- curl -fsS https://www.openssl.org/source/openssl-%VER_OPENSSL%.tar.gz -o openssl.tar.gz
 - openssl dgst -sha256 openssl.tar.gz | findstr /i /c:"671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8"
 - tar -zxvf openssl.tar.gz > nul 2>&1
 - del openssl.tar.gz
