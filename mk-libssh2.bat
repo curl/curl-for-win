@@ -3,7 +3,7 @@
 @echo on
 
 setlocal
-pushd openssl
+pushd libssh2
 
 set ZLIB_PATH=../../zlib
 set OPENSSL_PATH=../../openssl
