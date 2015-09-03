@@ -7,17 +7,14 @@ os: Windows Server 2012 R2
 clone_depth: 8
 clone_folder: C:\deps\
 environment:
-  matrix:
-  - HB_COMPILER: mingw64
-  - HB_COMPILER: mingw
-    BINTRAY_APIKEY:
-      secure: ZrOhbhL3M2mVTZu+MU2WPDB/4rJArq4rEdND/eKa9iNHFCiLNUF49jvfbuXfnCGE
-    BINTRAY_USER:
-      secure: jfLq1ApyVLNouxv07skhrg==
-    BINTRAY_PATH:
-      secure: +CyA1IIhoPpI7EY54BsRADDxb1V62HDWLSekCX4mTxk=
-    VIRUSTOTAL_APIKEY:
-      secure: TdJYONfrpH45DuyKxraVqgHYy25IQ/F8TKHzYf+u5zz1aiM2yR0YTMaGxyj2EMReEearSI9kD9D2ZykybSVEbRyEaotZlceUb2lPDKELl3M=
+  BINTRAY_APIKEY:
+    secure: ZrOhbhL3M2mVTZu+MU2WPDB/4rJArq4rEdND/eKa9iNHFCiLNUF49jvfbuXfnCGE
+  BINTRAY_USER:
+    secure: jfLq1ApyVLNouxv07skhrg==
+  BINTRAY_PATH:
+    secure: +CyA1IIhoPpI7EY54BsRADDxb1V62HDWLSekCX4mTxk=
+  VIRUSTOTAL_APIKEY:
+    secure: TdJYONfrpH45DuyKxraVqgHYy25IQ/F8TKHzYf+u5zz1aiM2yR0YTMaGxyj2EMReEearSI9kD9D2ZykybSVEbRyEaotZlceUb2lPDKELl3M=
 install:
 - mkdir C:\w\
 - set VER_ZLIB=1.2.8
