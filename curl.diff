@@ -1,6 +1,6 @@
 --- lib/curl_setup.h	2015-06-11 19:50:43.000000000 +0200
-+++ lib/curl_setup-PAT.h	2015-09-04 01:07:58.162035100 +0200
-@@ -249,13 +249,16 @@
++++ lib/curl_setup-PAT.h	2015-09-04 01:35:53.631186500 +0200
+@@ -249,7 +249,7 @@
  #  ifdef HAVE_WINSOCK2_H
  #    include <winsock2.h>
  #    ifdef HAVE_WS2TCPIP_H
@@ -9,12 +9,15 @@
  #    endif
  #  else
  #    ifdef HAVE_WINSOCK_H
- #      include <winsock.h>
- #    endif
- #  endif
-+#  ifdef USE_WINDOWS_SSPI
-+#    include <wincrypt.h>
-+#  endif
- #  include <tchar.h>
- #  ifdef UNICODE
-      typedef wchar_t *(*curl_wcsdup_callback)(const wchar_t *str);
+@@ -611,6 +611,11 @@
+ #define USE_SSL    /* SSL support has been enabled */
+ #endif
+ 
++#if !defined(CURL_DISABLE_VERBOSE_STRINGS) && \
++    defined(USE_WINDOWS_SSPI)
++#include <wincrypt.h>  /* for CRYPT_E_REVOKED macro */
++#endif
++
+ /* Single point where USE_SPNEGO definition might be defined */
+ #if !defined(CURL_DISABLE_CRYPTO_AUTH) && \
+     (defined(HAVE_GSSAPI) || defined(USE_WINDOWS_SSPI))

@@ -17,9 +17,11 @@ set CURL_CFLAG_EXTRAS=-DCURL_STATICLIB -fno-ident
 set CURL_LDFLAG_EXTRAS=-static-libgcc
 rem   -flto -ffat-lto-objects
 
-dos2unix ..\curl.diff
-patch -p0 -i ..\curl.diff
-patch -p0 -i ../curl.diff
+if exist ..\..\curl.diff (
+   dos2unix ..\..\curl.diff
+   patch -p0 -i ../../curl.diff
+   del ..\..\curl.diff
+)
 
 mingw32-make mingw32-clean
 mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-ipv6

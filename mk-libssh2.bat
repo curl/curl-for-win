@@ -17,9 +17,11 @@ set LIBSSH2_LDFLAG_EXTRAS=-static-libgcc
 
 pushd win32
 
-dos2unix ..\..\libssh2.diff
-patch -p0 -i ..\..\libssh2.diff
-patch -p0 -i ../../libssh2.diff
+if exist ..\..\libssh2.diff (
+   dos2unix ..\..\libssh2.diff
+   patch -p0 -i ../../libssh2.diff
+   del ..\..\libssh2.diff
+)
 
 mingw32-make clean
 mingw32-make
