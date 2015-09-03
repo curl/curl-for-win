@@ -16,6 +16,7 @@ environment:
   VIRUSTOTAL_APIKEY:
     secure: TdJYONfrpH45DuyKxraVqgHYy25IQ/F8TKHzYf+u5zz1aiM2yR0YTMaGxyj2EMReEearSI9kD9D2ZykybSVEbRyEaotZlceUb2lPDKELl3M=
 install:
+- curl --version
 - set VER_ZLIB=1.2.8
 - set VER_OPENSSL=1.0.2d
 - set VER_LIBSSH2=1.6.0
@@ -31,7 +32,7 @@ install:
 - tar -zxvf zip.tar.gz > nul 2>&1
 - del zip.tar.gz
 - move zlib-%VER_ZLIB% zlib
-- curl -fsS https://www.openssl.org/source/openssl-%VER_OPENSSL%.tar.gz -o openssl.tar.gz
+- curl -fsS http://www.openssl.org/source/openssl-%VER_OPENSSL%.tar.gz -o openssl.tar.gz
 - openssl dgst -sha256 openssl.tar.gz | findstr /i /c:"671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8"
 - tar -zxvf openssl.tar.gz > nul 2>&1
 - del openssl.tar.gz
