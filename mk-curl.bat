@@ -1,6 +1,6 @@
 :: Copyright 2014-2015 Viktor Szakats (vszakats.net/harbour). See LICENSE.md.
 
-:: @echo off
+@echo on
 
 setlocal
 pushd curl
@@ -67,7 +67,8 @@ set _CDO=%CD%
 
 pushd "%_DST%\.."
 if exist "%_CDO%\%_NAM%.zip" del /f "%_CDO%\%_NAM%.zip"
-zip -q -9 -X -r -o "%_CDO%\%_NAM%.zip" "%_NAM%" -i *
+rem zip -q -9 -X -r -o "%_CDO%\%_NAM%.zip" "%_NAM%" -i *
+7z a -bd -r -mx -tzip "%_CDO%\%_NAM%.zip" "%_NAM%\*"
 popd
 
 rd /s /q "%TEMP%\%_NAM%"

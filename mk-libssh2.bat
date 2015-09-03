@@ -1,6 +1,6 @@
 :: Copyright 2014-2015 Viktor Szakats (vszakats.net/harbour). See LICENSE.md.
 
-:: @echo off
+@echo on
 
 setlocal
 pushd openssl

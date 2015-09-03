@@ -10,13 +10,14 @@ sed -e "s/-march=i486 -Wall::-D_MT:MINGW32:-lws2_32/-march=i686 -mtune=generic -
 sed -e "s/-DWIN32_LEAN_AND_MEAN -DUNICODE/-DWIN32_LEAN_AND_MEAN -DOPENSSL_NO_GOST -m64 -fno-ident -flto -ffat-lto-objects -static-libgcc -DUNICODE/g" -i Configure
 sed -e "s/windres -o rc.o/windres $(SHARED_RCFLAGS) -o rc.o/g" -i Makefile.shared
 
-set SHARED_RCFLAGS=-F pe-i386
+if "%CPU%" == "win32" set SHARED_RCFLAGS=-F pe-i386
+if "%CPU%" == "win64" set SHARED_RCFLAGS=-F pe-x86-64
 
 del /s *.o *.a *.exe >> nul 2>&1
-if "%CPU%" == "win32" sh -c 'perl Configure mingw   shared no-unit-test no-ssl2 no-ssl3 no-idea no-hw no-dso no-sse2 --prefix=C:/w/openssl'
-if "%CPU%" == "win64" sh -c 'perl Configure mingw64 shared no-unit-test no-ssl2 no-ssl3 no-idea no-hw no-dso no-asm  --prefix=C:/w/openssl'
-sh -c mingw32-make depend
-sh -c mingw32-make
+if "%CPU%" == "win32" perl Configure mingw   shared no-unit-test no-ssl2 no-ssl3 no-idea no-hw no-dso no-sse2 --prefix=C:/w/openssl
+if "%CPU%" == "win64" perl Configure mingw64 shared no-unit-test no-ssl2 no-ssl3 no-idea no-hw no-dso no-asm  --prefix=C:/w/openssl
+mingw32-make depend
+mingw32-make
 
 if not exist "include\openssl\opensslv.h" (
    echo Error: Move this script to the OpenSSL source root directory.
@@ -47,7 +48,9 @@ set _CDO=%CD%
 
 pushd "%_DST%\.."
 if exist "%_CDO%\%_NAM%.zip" del /f "%_CDO%\%_NAM%.zip"
-zip -q -9 -X -r -o "%_CDO%\%_NAM%.zip" "%_NAM%" -i *
+rem zip -q -9 -X -r -o "%_CDO%\%_NAM%.zip" "%_NAM%" -i *
+7z a -bd -r -mx -tzip "%_CDO%\%_NAM%.zip" "%_NAM%\*"
+
 popd
 
 rd /s /q "%TEMP%\%_NAM%"
