@@ -47,14 +47,18 @@ install:
 - del libssh2.tar.gz
 - move libssh2-%VER_LIBSSH2% libssh2
 - dos2unix libssh2.diff
-- patch -p1 -i libssh2.diff
+- cd libssh2
+- patch -p0 -i ../libssh2.diff
+- cd ..
 - curl -fsS -L --proto-redir =https https://github.com/bagder/curl/releases/download/curl-%VER_CURL:.=_%/curl-%VER_CURL%.tar.gz -o curl.tar.gz
 - openssl dgst -sha256 curl.tar.gz | findstr /i /c:"d01212ee29110799db969be31eeab902f50eca00d52fb8fb44630d08964762be"
 - tar -zxvf curl.tar.gz > nul 2>&1
 - del curl.tar.gz
 - move curl-%VER_CURL% curl
 - dos2unix curl.diff
-- patch -p1 -i curl.diff
+- cd curl
+- patch -p0 -i ../curl.diff
+- cd ..
 build_script:
 - set _ORI_PATH=%PATH%
 #- set PATH=C:\w\mingw64\bin;%PATH%
