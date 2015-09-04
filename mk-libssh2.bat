@@ -55,7 +55,7 @@ popd
 
 rd /s /q "%TEMP%\%_NAM%"
 
-curl -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/libssh2-test/%VER_LIBSSH2%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
+if "%APPVEYOR_REPO_BRANCH%" == "master" curl -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/libssh2-test/%VER_LIBSSH2%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
 for %%I in ("%_NAM%.zip") do echo %%~nxI: %%~zI bytes %%~tI
 openssl dgst -sha256 "%_NAM%.zip"
 

@@ -1,7 +1,4 @@
 version: 1.0.{build}
-branches:
-  only:
-  - master
 skip_tags: true
 os: Windows Server 2012 R2
 clone_depth: 8
@@ -13,9 +10,8 @@ environment:
     secure: jfLq1ApyVLNouxv07skhrg==
   BINTRAY_PATH:
     secure: +CyA1IIhoPpI7EY54BsRADDxb1V62HDWLSekCX4mTxk=
-  VIRUSTOTAL_APIKEY:
-    secure: TdJYONfrpH45DuyKxraVqgHYy25IQ/F8TKHzYf+u5zz1aiM2yR0YTMaGxyj2EMReEearSI9kD9D2ZykybSVEbRyEaotZlceUb2lPDKELl3M=
 install:
+# We use the zlib headers and static libraries bundled with mingw-w64
 #- set VER_ZLIB=1.2.8
 - set VER_OPENSSL=1.0.2d
 - set VER_LIBSSH2=1.6.0
@@ -61,6 +57,8 @@ install:
 - cd curl
 - patch -p0 -i ../curl.diff
 - cd ..
+- reg add "HKCU\Control Panel\International" /v sShortDate /t REG_SZ /d "yyyy-MM-dd" /f
+- reg add "HKCU\Control Panel\International" /v sShortTime /t REG_SZ /d "HH:mm" /f
 build_script:
 - set PATH=C:\w\mingw64\bin;%PATH%
 # From https://www.mirrorservice.org/sites/dl.sourceforge.net/pub/sourceforge/m/mi/mingw-w64-dgn/mingw-w64/mingw-w64-bin-x86_64-20150801.7z
