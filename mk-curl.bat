@@ -25,7 +25,7 @@ if not exist "include\curl\curlver.h" (
    exit /b
 )
 
-set _NAM=curl-%VER_CURL%-%CPU%-mingw
+set _NAM=curl-%VER_CURL%-%CPU%-mingw-t
 set _DST=%TEMP%\%_NAM%
 
 :: Download CA bundle
@@ -62,6 +62,7 @@ if exist lib\*.a   xcopy /y /s lib\*.a   "%_DST%\lib\"
 if exist lib\*.lib xcopy /y /s lib\*.lib "%_DST%\lib\"
 
 unix2dos "%_DST%\*.txt"
+unix2dos "%_DST%\docs\*.txt"
 
 set _CDO=%CD%
 

@@ -26,7 +26,7 @@ if not exist "include\openssl\opensslv.h" (
    exit /b
 )
 
-set _NAM=openssl-%VER_OPENSSL%-%CPU%-mingw
+set _NAM=openssl-%VER_OPENSSL%-%CPU%-mingw-t
 set _DST=%TEMP%\%_NAM%
 
 xcopy /y /q    apps\openssl.exe "%_DST%\"

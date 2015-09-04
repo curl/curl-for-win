@@ -27,13 +27,12 @@ if not exist "include\libssh2.h" (
    exit /b
 )
 
-set _NAM=libssh2-%VER_LIBSSH2%-%CPU%-mingw
+set _NAM=libssh2-%VER_LIBSSH2%-%CPU%-mingw-t
 set _DST=%TEMP%\%_NAM%
 
 xcopy /y /s /q docs\*.              "%_DST%\docs\*.txt"
-xcopy /y /s /q docs\*.html          "%_DST%\docs\"
 xcopy /y /s /q include\*.*          "%_DST%\include\"
- copy /y       CHANGES              "%_DST%\CHANGES.txt"
+ copy /y       NEWS                 "%_DST%\NEWS.txt"
  copy /y       COPYING              "%_DST%\COPYING.txt"
  copy /y       README               "%_DST%\README.txt"
  copy /y       RELEASE-NOTES        "%_DST%\RELEASE-NOTES.txt"
@@ -43,6 +42,7 @@ if exist win32\*.a   xcopy /y /s win32\*.a   "%_DST%\lib\"
 if exist win32\*.lib xcopy /y /s win32\*.lib "%_DST%\lib\"
 
 unix2dos "%_DST%\*.txt"
+unix2dos "%_DST%\docs\*.txt"
 
 set _CDO=%CD%
 
