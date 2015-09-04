@@ -5,6 +5,8 @@
 setlocal
 pushd libssh2
 
+:: Build
+
 set ZLIB_PATH=../../zlib
 set OPENSSL_PATH=../../openssl
 set OPENSSL_LIBPATH=%OPENSSL_PATH%
@@ -16,16 +18,11 @@ rem -flto -ffat-lto-objects
 set LIBSSH2_LDFLAG_EXTRAS=-static-libgcc
 
 pushd win32
-
 mingw32-make clean
 mingw32-make
-
 popd
 
-if not exist "include\libssh2.h" (
-   echo Error: Move this script to the source root directory.
-   exit /b
-)
+:: Create package
 
 set _NAM=libssh2-%VER_LIBSSH2%-%CPU%-mingw
 set _DST=%TEMP%\%_NAM%

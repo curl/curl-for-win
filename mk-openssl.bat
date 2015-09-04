@@ -5,10 +5,13 @@
 setlocal
 pushd openssl
 
-:: local patches
+:: Apply local patches
+
 sed -e "s/-march=i486 -Wall::-D_MT:MINGW32:-lws2_32/-march=i686 -mtune=generic -m32 -fno-ident -flto -ffat-lto-objects -static-libgcc -Wall::-D_MT:MINGW32:-lws2_32/g" -i Configure
 sed -e "s/-DWIN32_LEAN_AND_MEAN -DUNICODE/-DWIN32_LEAN_AND_MEAN -DOPENSSL_NO_GOST -m64 -fno-ident -flto -ffat-lto-objects -static-libgcc -DUNICODE/g" -i Configure
 sed -e "s/windres -o rc.o/windres $(SHARED_RCFLAGS) -o rc.o/g" -i Makefile.shared
+
+:: Build
 
 if "%CPU%" == "win32" set SHARED_RCFLAGS=-F pe-i386
 if "%CPU%" == "win64" set SHARED_RCFLAGS=-F pe-x86-64
@@ -21,10 +24,7 @@ if "%CPU%" == "win64" perl Configure mingw64 shared no-unit-test no-ssl2 no-ssl3
 sh -c mingw32-make depend
 sh -c mingw32-make
 
-if not exist "include\openssl\opensslv.h" (
-   echo Error: Move this script to the source root directory.
-   exit /b
-)
+:: Create package
 
 set _NAM=openssl-%VER_OPENSSL%-%CPU%-mingw
 set _DST=%TEMP%\%_NAM%

@@ -5,6 +5,8 @@
 setlocal
 pushd curl
 
+:: Build
+
 set ZLIB_PATH=../../zlib
 set OPENSSL_PATH=../../openssl
 set OPENSSL_INCLUDE=%OPENSSL_PATH%/include
@@ -20,10 +22,7 @@ rem   -flto -ffat-lto-objects
 mingw32-make mingw32-clean
 mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-ipv6
 
-if not exist "include\curl\curlver.h" (
-   echo Error: Move this script to the source root directory.
-   exit /b
-)
+:: Create package
 
 set _NAM=curl-%VER_CURL%-%CPU%-mingw
 set _DST=%TEMP%\%_NAM%
