@@ -2,8 +2,10 @@
 
 @echo off
 
+set _NAM=openssl
+
 setlocal
-pushd openssl
+pushd "%_NAM%"
 
 :: Apply local patches
 
@@ -19,16 +21,17 @@ if "%CPU%" == "win32" set SHARED_RCFLAGS=-F pe-i386
 if "%CPU%" == "win64" set SHARED_RCFLAGS=-F pe-x86-64
 
 del /s *.o *.a *.exe >> nul 2>&1
-if "%CPU%" == "win32" perl Configure mingw   shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso no-sse2 --prefix=C:\w\openssl
-if "%CPU%" == "win64" perl Configure mingw64 shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso no-asm  --prefix=C:\w\openssl
+if "%CPU%" == "win32" perl Configure mingw   shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso no-sse2 "--prefix=%CD%"
+if "%CPU%" == "win64" perl Configure mingw64 shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso no-asm  "--prefix=%CD%"
 sh -c mingw32-make depend
 sh -c mingw32-make
 
 :: Create package
 
-set _NAM=openssl-%VER_OPENSSL%-%CPU%-mingw
-if "%APPVEYOR_REPO_BRANCH%" == "master" set _NAM=%_NAM%-t
-set _DST=%TEMP%\%_NAM%
+set _BAS=%_NAM%-%VER_OPENSSL%-%CPU%-mingw
+if "%APPVEYOR_REPO_BRANCH%" == "master" set _BAS=%_BAS%-t
+if "%APPVEYOR_REPO_BRANCH%" == "master" set _REPOSUFF=-test
+set _DST=%TEMP%\%_BAS%
 
 xcopy /y /q    apps\openssl.exe "%_DST%\"
 xcopy /y /q    apps\*.dll       "%_DST%\"
@@ -50,17 +53,17 @@ unix2dos "%_DST%\*.txt"
 set _CDO=%CD%
 
 pushd "%_DST%\.."
-if exist "%_CDO%\%_NAM%.zip" del /f "%_CDO%\%_NAM%.zip"
-7z a -bd -r -mx -tzip "%_CDO%\%_NAM%.zip" "%_NAM%\*" > nul
+if exist "%_CDO%\%_BAS%.zip" del /f "%_CDO%\%_BAS%.zip"
+7z a -bd -r -mx -tzip "%_CDO%\%_BAS%.zip" "%_BAS%\*" > nul
 
 popd
 
-rd /s /q "%TEMP%\%_NAM%"
+rd /s /q "%TEMP%\%_BAS%"
 
-curl -fsS -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/openssl-test/%VER_OPENSSL%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
-for %%I in ("%_NAM%.zip") do echo %%~nxI: %%~zI bytes %%~tI
-openssl dgst -sha256 "%_NAM%.zip"
-openssl dgst -sha256 "%_NAM%.zip" >> hashes.txt
+curl -fsS -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/%BINTRAY_USER%/generic/%_NAM%%_REPOSUFF%/%VER_OPENSSL%/%_BAS%.zip?override=1&publish=1" --data-binary "@%_BAS%.zip"
+for %%I in ("%_BAS%.zip") do echo %%~nxI: %%~zI bytes %%~tI
+openssl dgst -sha256 "%_BAS%.zip"
+openssl dgst -sha256 "%_BAS%.zip" >> ..\hashes.txt
 
 popd
 endlocal

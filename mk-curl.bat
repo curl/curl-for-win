@@ -2,8 +2,10 @@
 
 @echo off
 
+set _NAM=curl
+
 setlocal
-pushd curl
+pushd "%_NAM%"
 
 :: Build
 
@@ -24,9 +26,10 @@ mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-ipv6
 
 :: Create package
 
-set _NAM=curl-%VER_CURL%-%CPU%-mingw
-if "%APPVEYOR_REPO_BRANCH%" == "master" set _NAM=%_NAM%-t
-set _DST=%TEMP%\%_NAM%
+set _BAS=%_NAM%-%VER_CURL%-%CPU%-mingw
+if "%APPVEYOR_REPO_BRANCH%" == "master" set _BAS=%_BAS%-t
+if "%APPVEYOR_REPO_BRANCH%" == "master" set _REPOSUFF=-test
+set _DST=%TEMP%\%_BAS%
 
 :: Download CA bundle
 
@@ -55,16 +58,16 @@ unix2dos "%_DST%\docs\*.txt"
 set _CDO=%CD%
 
 pushd "%_DST%\.."
-if exist "%_CDO%\%_NAM%.zip" del /f "%_CDO%\%_NAM%.zip"
-7z a -bd -r -mx -tzip "%_CDO%\%_NAM%.zip" "%_NAM%\*" > nul
+if exist "%_CDO%\%_BAS%.zip" del /f "%_CDO%\%_BAS%.zip"
+7z a -bd -r -mx -tzip "%_CDO%\%_BAS%.zip" "%_BAS%\*" > nul
 popd
 
-rd /s /q "%TEMP%\%_NAM%"
+rd /s /q "%TEMP%\%_BAS%"
 
-curl -fsS -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/curl-test/%VER_CURL%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
-for %%I in ("%_NAM%.zip") do echo %%~nxI: %%~zI bytes %%~tI
-openssl dgst -sha256 "%_NAM%.zip"
-openssl dgst -sha256 "%_NAM%.zip" >> hashes.txt
+curl -fsS -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/%BINTRAY_USER%/generic/%_NAM%%_REPOSUFF%/%VER_CURL%/%_BAS%.zip?override=1&publish=1" --data-binary "@%_BAS%.zip"
+for %%I in ("%_BAS%.zip") do echo %%~nxI: %%~zI bytes %%~tI
+openssl dgst -sha256 "%_BAS%.zip"
+openssl dgst -sha256 "%_BAS%.zip" >> ..\hashes.txt
 
 popd
 endlocal
