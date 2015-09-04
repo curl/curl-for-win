@@ -9,5 +9,5 @@
 - Components are verified using SHA-256 hashes
 
 ---
-This document Copyright &copy;&nbsp;2014&ndash;2015 Viktor Szakáts (vszakats.net/harbour)<br />
+This document Copyright &copy;&nbsp;2014&ndash;2015 Viktor Szakáts <https://github.com/vszakats><br />
 [![Creative Commons Attribution-ShareAlike 4.0](https://rawgit.com/cc-icons/cc-icons/master/fonts/cc-icons-svg/small.by-sa.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
