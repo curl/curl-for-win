@@ -3,10 +3,14 @@
 
 # Automated Windows builds for OpenSSL, libssh2, cURL
 
-- Packaging tries to follow other binary releases found on the Internet
-- Static libraries are built with LTO option enabled (can still be linked in non-LTO mode)
-- Both 32-bit and 64-bit packages are built using the same process
-- Components are verified using SHA-256 hashes
+  - Packaging tries to follow other binary releases found on the Internet
+  - Static libraries are built with LTO option enabled (can still be linked in non-LTO mode)
+  - Both 32-bit and 64-bit packages are built using the same process
+  - Components are verified using SHA-256 hashes
+
+# Please donate to support maintaining these builds
+
+  - [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BPSZQYKXMQJYG)
 
 ---
 This document Copyright &copy;&nbsp;2014&ndash;2015 Viktor Szakáts <https://github.com/vszakats><br />

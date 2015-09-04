@@ -2,7 +2,10 @@
 
 @echo off
 
-set _NAM=curl
+set _NAM=%~n0
+set _NAM=%_NAM:~3%
+set _VER=%1
+set _CPU=%2
 
 setlocal
 pushd "%_NAM%"
@@ -15,18 +18,17 @@ set OPENSSL_INCLUDE=%OPENSSL_PATH%/include
 set OPENSSL_LIBPATH=%OPENSSL_PATH%
 set OPENSSL_LIBS=-lssl -lcrypto
 set LIBSSH2_PATH=../../libssh2
-if "%CPU%" == "win32" set ARCH=w32
-if "%CPU%" == "win64" set ARCH=w64
-set CURL_CFLAG_EXTRAS=-DCURL_STATICLIB -fno-ident
+if "%_CPU%" == "win32" set ARCH=w32
+if "%_CPU%" == "win64" set ARCH=w64
+set CURL_CFLAG_EXTRAS=-DCURL_STATICLIB -fno-ident -flto -ffat-lto-objects
 set CURL_LDFLAG_EXTRAS=-static-libgcc
-rem   -flto -ffat-lto-objects
 
 mingw32-make mingw32-clean
 mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-ipv6
 
 :: Create package
 
-set _BAS=%_NAM%-%VER_CURL%-%CPU%-mingw
+set _BAS=%_NAM%-%_VER%-%_CPU%-mingw
 if "%APPVEYOR_REPO_BRANCH%" == "master" set _BAS=%_BAS%-t
 if "%APPVEYOR_REPO_BRANCH%" == "master" set _REPOSUFF=-test
 set _DST=%TEMP%\%_BAS%
@@ -64,7 +66,7 @@ popd
 
 rd /s /q "%TEMP%\%_BAS%"
 
-curl -fsS -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/%BINTRAY_USER%/generic/%_NAM%%_REPOSUFF%/%VER_CURL%/%_BAS%.zip?override=1&publish=1" --data-binary "@%_BAS%.zip"
+curl -fsS -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/%BINTRAY_USER%/generic/%_NAM%%_REPOSUFF%/%_VER%/%_BAS%.zip?override=1&publish=1" --data-binary "@%_BAS%.zip"
 for %%I in ("%_BAS%.zip") do echo %%~nxI: %%~zI bytes %%~tI
 openssl dgst -sha256 "%_BAS%.zip"
 openssl dgst -sha256 "%_BAS%.zip" >> ..\hashes.txt
