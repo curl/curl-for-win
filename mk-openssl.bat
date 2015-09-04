@@ -19,8 +19,8 @@ if "%CPU%" == "win32" set SHARED_RCFLAGS=-F pe-i386
 if "%CPU%" == "win64" set SHARED_RCFLAGS=-F pe-x86-64
 
 del /s *.o *.a *.exe >> nul 2>&1
-if "%CPU%" == "win32" perl Configure mingw   shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-hw no-dso no-sse2 --prefix=C:\w\openssl
-if "%CPU%" == "win64" perl Configure mingw64 shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-hw no-dso no-asm  --prefix=C:\w\openssl
+if "%CPU%" == "win32" perl Configure mingw   shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso no-sse2 --prefix=C:\w\openssl
+if "%CPU%" == "win64" perl Configure mingw64 shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso no-asm  --prefix=C:\w\openssl
 sh -c mingw32-make depend
 sh -c mingw32-make
 
@@ -32,7 +32,7 @@ set _DST=%TEMP%\%_NAM%
 
 xcopy /y /q    apps\openssl.exe "%_DST%\"
 xcopy /y /q    apps\*.dll       "%_DST%\"
-rem xcopy /y /q    engines\*.dll    "%_DST%\"
+xcopy /y /q    engines\*.dll    "%_DST%\"
  copy /y       apps\openssl.cnf "%_DST%\openssl.cfg"
 xcopy /y /s /q include\*.*      "%_DST%\include\"
 xcopy /y /q    ms\applink.c     "%_DST%\include\openssl\"
