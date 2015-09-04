@@ -8,8 +8,6 @@ environment:
     secure: FUQVzdqjaAvLYH/yTdL1rdtrVcAheHbK4YUvNNpvArR09vfkkuAk+8ntrg2MRYa2
   BINTRAY_USER:
     secure: jfLq1ApyVLNouxv07skhrg==
-  BINTRAY_PATH:
-    secure: +CyA1IIhoPpI7EY54BsRADDxb1V62HDWLSekCX4mTxk=
 install:
 # Using zlib headers and static libraries bundled with mingw-w64
 #- set VER_ZLIB=1.2.8
@@ -39,6 +37,11 @@ install:
 - tar -zxvf openssl.tar.gz > nul 2>&1
 - del openssl.tar.gz
 - move openssl-%VER_OPENSSL% openssl
+- dos2unix openssl.diff
+- cd openssl
+# Using 'sed' for now
+#- patch -p0 -i ../openssl.diff
+- cd ..
 - curl -fsS -L --proto-redir =https https://github.com/libssh2/libssh2/releases/download/libssh2-%VER_LIBSSH2%/libssh2-%VER_LIBSSH2%.tar.gz -o libssh2.tar.gz
 - openssl dgst -sha256 libssh2.tar.gz | findstr /i /c:"5a202943a34a1d82a1c31f74094f2453c207bf9936093867f41414968c8e8215"
 - tar -zxvf libssh2.tar.gz > nul 2>&1

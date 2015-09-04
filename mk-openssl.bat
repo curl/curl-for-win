@@ -53,19 +53,8 @@ if exist *.lib xcopy /y /s *.lib "%_DST%\lib\"
 
 unix2dos "%_DST%\*.txt"
 
-set _CDO=%CD%
-
-pushd "%_DST%\.."
-if exist "%_CDO%\%_BAS%.zip" del /f "%_CDO%\%_BAS%.zip"
-7z a -bd -r -mx -tzip "%_CDO%\%_BAS%.zip" "%_BAS%\*" > nul
-popd
-
-rd /s /q "%TEMP%\%_BAS%"
-
-curl -fsS -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/%BINTRAY_USER%/generic/%_NAM%%_REPOSUFF%/%_VER%/%_BAS%.zip?override=1&publish=1" --data-binary "@%_BAS%.zip"
-for %%I in ("%_BAS%.zip") do echo %%~nxI: %%~zI bytes %%~tI
-openssl dgst -sha256 "%_BAS%.zip"
-openssl dgst -sha256 "%_BAS%.zip" >> ..\hashes.txt
+call pack.bat
+call upload.bat
 
 popd
 endlocal

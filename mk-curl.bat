@@ -20,7 +20,7 @@ set OPENSSL_LIBS=-lssl -lcrypto
 set LIBSSH2_PATH=../../libssh2
 if "%_CPU%" == "win32" set ARCH=w32
 if "%_CPU%" == "win64" set ARCH=w64
-set CURL_CFLAG_EXTRAS=-DCURL_STATICLIB -fno-ident -flto -ffat-lto-objects
+set CURL_CFLAG_EXTRAS=-DCURL_STATICLIB -fno-ident
 set CURL_LDFLAG_EXTRAS=-static-libgcc
 
 mingw32-make mingw32-clean
@@ -57,19 +57,8 @@ if exist lib\*.lib xcopy /y /s lib\*.lib "%_DST%\lib\"
 unix2dos "%_DST%\*.txt"
 unix2dos "%_DST%\docs\*.txt"
 
-set _CDO=%CD%
-
-pushd "%_DST%\.."
-if exist "%_CDO%\%_BAS%.zip" del /f "%_CDO%\%_BAS%.zip"
-7z a -bd -r -mx -tzip "%_CDO%\%_BAS%.zip" "%_BAS%\*" > nul
-popd
-
-rd /s /q "%TEMP%\%_BAS%"
-
-curl -fsS -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/%BINTRAY_USER%/generic/%_NAM%%_REPOSUFF%/%_VER%/%_BAS%.zip?override=1&publish=1" --data-binary "@%_BAS%.zip"
-for %%I in ("%_BAS%.zip") do echo %%~nxI: %%~zI bytes %%~tI
-openssl dgst -sha256 "%_BAS%.zip"
-openssl dgst -sha256 "%_BAS%.zip" >> ..\hashes.txt
+call pack.bat
+call upload.bat
 
 popd
 endlocal
