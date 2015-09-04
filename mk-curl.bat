@@ -25,9 +25,8 @@ mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-ipv6
 :: Create package
 
 set _NAM=curl-%VER_CURL%-%CPU%-mingw
-set _DST=%TEMP%\%_NAM%
-
 if "%APPVEYOR_REPO_BRANCH%" == "master" set _NAM=%_NAM%-t
+set _DST=%TEMP%\%_NAM%
 
 :: Download CA bundle
 
@@ -57,7 +56,6 @@ set _CDO=%CD%
 
 pushd "%_DST%\.."
 if exist "%_CDO%\%_NAM%.zip" del /f "%_CDO%\%_NAM%.zip"
-rem zip -q -9 -X -r -o "%_CDO%\%_NAM%.zip" "%_NAM%" -i *
 7z a -bd -r -mx -tzip "%_CDO%\%_NAM%.zip" "%_NAM%\*" > nul
 popd
 

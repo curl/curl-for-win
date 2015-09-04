@@ -13,10 +13,10 @@ sed -e "s/windres -o rc.o/windres $(SHARED_RCFLAGS) -o rc.o/g" -i Makefile.share
 
 :: Build
 
+set MAKE=mingw32-make
+
 if "%CPU%" == "win32" set SHARED_RCFLAGS=-F pe-i386
 if "%CPU%" == "win64" set SHARED_RCFLAGS=-F pe-x86-64
-
-set MAKE=mingw32-make
 
 del /s *.o *.a *.exe >> nul 2>&1
 if "%CPU%" == "win32" perl Configure mingw   shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-hw no-dso no-sse2 --prefix=C:\w\openssl
@@ -27,9 +27,8 @@ sh -c mingw32-make
 :: Create package
 
 set _NAM=openssl-%VER_OPENSSL%-%CPU%-mingw
-set _DST=%TEMP%\%_NAM%
-
 if "%APPVEYOR_REPO_BRANCH%" == "master" set _NAM=%_NAM%-t
+set _DST=%TEMP%\%_NAM%
 
 xcopy /y /q    apps\openssl.exe "%_DST%\"
 xcopy /y /q    apps\*.dll       "%_DST%\"
@@ -52,7 +51,6 @@ set _CDO=%CD%
 
 pushd "%_DST%\.."
 if exist "%_CDO%\%_NAM%.zip" del /f "%_CDO%\%_NAM%.zip"
-rem zip -q -9 -X -r -o "%_CDO%\%_NAM%.zip" "%_NAM%" -i *
 7z a -bd -r -mx -tzip "%_CDO%\%_NAM%.zip" "%_NAM%\*" > nul
 
 popd
