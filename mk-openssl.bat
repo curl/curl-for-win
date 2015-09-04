@@ -1,6 +1,6 @@
 :: Copyright 2014-2015 Viktor Szakats (vszakats.net/harbour). See LICENSE.md.
 
-@echo on
+@echo off
 
 setlocal
 pushd openssl
@@ -22,7 +22,7 @@ sh -c mingw32-make depend
 sh -c mingw32-make
 
 if not exist "include\openssl\opensslv.h" (
-   echo Error: Move this script to the OpenSSL source root directory.
+   echo Error: Move this script to the source root directory.
    exit /b
 )
 
@@ -51,13 +51,13 @@ set _CDO=%CD%
 pushd "%_DST%\.."
 if exist "%_CDO%\%_NAM%.zip" del /f "%_CDO%\%_NAM%.zip"
 rem zip -q -9 -X -r -o "%_CDO%\%_NAM%.zip" "%_NAM%" -i *
-7z a -bd -r -mx -tzip "%_CDO%\%_NAM%.zip" "%_NAM%\*"
+7z a -bd -r -mx -tzip "%_CDO%\%_NAM%.zip" "%_NAM%\*" > nul
 
 popd
 
 rd /s /q "%TEMP%\%_NAM%"
 
-:: curl -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/openssl/%VER_OPENSSL%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
+curl -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/openssl-test/%VER_OPENSSL%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
 for %%I in ("%_NAM%.zip") do echo %%~nxI: %%~zI bytes %%~tI
 openssl dgst -sha256 "%_NAM%.zip"
 

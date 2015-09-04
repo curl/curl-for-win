@@ -1,6 +1,6 @@
 :: Copyright 2014-2015 Viktor Szakats (vszakats.net/harbour). See LICENSE.md.
 
-@echo on
+@echo off
 
 setlocal
 pushd libssh2
@@ -21,6 +21,43 @@ mingw32-make clean
 mingw32-make
 
 popd
+
+if not exist "include\libssh2.h" (
+   echo Error: Move this script to the source root directory.
+   exit /b
+)
+
+set _NAM=libssh2-%VER_LIBSSH2%-%CPU%-mingw
+set _DST=%TEMP%\%_NAM%
+
+xcopy /y /s /q docs\*.              "%_DST%\docs\*.txt"
+xcopy /y /s /q docs\*.html          "%_DST%\docs\"
+xcopy /y /s /q include\*.*          "%_DST%\include\"
+ copy /y       CHANGES              "%_DST%\CHANGES.txt"
+ copy /y       COPYING              "%_DST%\COPYING.txt"
+ copy /y       README               "%_DST%\README.txt"
+ copy /y       RELEASE-NOTES        "%_DST%\RELEASE-NOTES.txt"
+xcopy /y /s    win32\*.dll          "%_DST%\bin\"
+
+if exist win32\*.a   xcopy /y /s win32\*.a   "%_DST%\lib\"
+if exist win32\*.lib xcopy /y /s win32\*.lib "%_DST%\lib\"
+
+unix2dos "%_DST%\*.txt"
+
+set _CDO=%CD%
+
+pushd "%_DST%\.."
+if exist "%_CDO%\%_NAM%.zip" del /f "%_CDO%\%_NAM%.zip"
+rem zip -q -9 -X -r -o "%_CDO%\%_NAM%.zip" "%_NAM%" -i *
+7z a -bd -r -mx -tzip "%_CDO%\%_NAM%.zip" "%_NAM%\*" > nul
+
+popd
+
+rd /s /q "%TEMP%\%_NAM%"
+
+curl -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/libssh2-test/%VER_LIBSSH2%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
+for %%I in ("%_NAM%.zip") do echo %%~nxI: %%~zI bytes %%~tI
+openssl dgst -sha256 "%_NAM%.zip"
 
 popd
 endlocal
