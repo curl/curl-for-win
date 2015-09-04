@@ -30,20 +30,8 @@ set _DST=%TEMP%\%_NAM%
 if "%APPVEYOR_REPO_BRANCH%" == "master" set _NAM=%_NAM%-t
 
 :: Download CA bundle
-set _DL_URL=https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt
-set _DL_DST=%~dp0\ca-bundle.crt
 
-set _TMP=%TEMP%\_webdl.js
-echo var http = new ActiveXObject(^"WinHttp.WinHttpRequest.5.1^");> "%_TMP%"
-echo http.Open(^"GET^", ^"%_DL_URL%^", false);>> "%_TMP%"
-echo http.Send();>> "%_TMP%"
-echo if(http.Status() == 200) {>> "%_TMP%"
-echo    var f = new ActiveXObject(^"ADODB.Stream^");>> "%_TMP%"
-echo    f.type = 1; f.open(); f.write(http.responseBody);>> "%_TMP%"
-echo    f.savetofile(^"%_DL_DST:\=\\%^", 2);>> "%_TMP%"
-echo }>> "%_TMP%"
-cscript "%_TMP%" //Nologo
-del "%_TMP%"
+if not exist "%~dp0\ca-bundle.crt" curl -fsS -L --proto-redir =https https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt -o "%~dp0\ca-bundle.crt"
 
 xcopy /y /s /q docs\*.              "%_DST%\docs\*.txt"
 xcopy /y /s /q docs\*.html          "%_DST%\docs\"
