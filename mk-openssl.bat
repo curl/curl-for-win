@@ -32,7 +32,7 @@ set _DST=%TEMP%\%_NAM%
 
 xcopy /y /q    apps\openssl.exe "%_DST%\"
 xcopy /y /q    apps\*.dll       "%_DST%\"
-xcopy /y /q    engines\*.dll    "%_DST%\"
+xcopy /y /q    engines\*.dll    "%_DST%\engines\"
  copy /y       apps\openssl.cnf "%_DST%\openssl.cfg"
 xcopy /y /s /q include\*.*      "%_DST%\include\"
 xcopy /y /q    ms\applink.c     "%_DST%\include\openssl\"
@@ -57,9 +57,10 @@ popd
 
 rd /s /q "%TEMP%\%_NAM%"
 
-curl -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/openssl-test/%VER_OPENSSL%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
+curl -fsS -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/openssl-test/%VER_OPENSSL%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
 for %%I in ("%_NAM%.zip") do echo %%~nxI: %%~zI bytes %%~tI
 openssl dgst -sha256 "%_NAM%.zip"
+openssl dgst -sha256 "%_NAM%.zip" >> hashes.txt
 
 popd
 endlocal

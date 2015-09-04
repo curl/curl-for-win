@@ -32,19 +32,19 @@ set _DST=%TEMP%\%_NAM%
 
 if not exist "%~dp0\ca-bundle.crt" curl -fsS -L --proto-redir =https https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt -o "%~dp0\ca-bundle.crt"
 
-xcopy /y /s /q docs\*.              "%_DST%\docs\*.txt"
-xcopy /y /s /q docs\*.html          "%_DST%\docs\"
-xcopy /y /s /q docs\libcurl\*.html  "%_DST%\docs\libcurl\"
-xcopy /y /s /q include\curl\*.h     "%_DST%\include\curl\"
- copy /y       lib\mk-ca-bundle.pl  "%_DST%\"
- copy /y       lib\mk-ca-bundle.vbs "%_DST%\"
- copy /y       CHANGES              "%_DST%\CHANGES.txt"
- copy /y       COPYING              "%_DST%\COPYING.txt"
- copy /y       README               "%_DST%\README.txt"
- copy /y       RELEASE-NOTES        "%_DST%\RELEASE-NOTES.txt"
-xcopy /y /s    src\*.exe            "%_DST%\bin\"
-xcopy /y /s    lib\*.dll            "%_DST%\bin\"
- copy /y       ca-bundle.crt        "%_DST%\bin\curl-ca-bundle.crt"
+xcopy /y /s /q docs\*.               "%_DST%\docs\*.txt"
+xcopy /y /s /q docs\*.html           "%_DST%\docs\"
+xcopy /y /s /q docs\libcurl\*.html   "%_DST%\docs\libcurl\"
+xcopy /y /s /q include\curl\*.h      "%_DST%\include\curl\"
+ copy /y       lib\mk-ca-bundle.pl   "%_DST%\"
+ copy /y       lib\mk-ca-bundle.vbs  "%_DST%\"
+ copy /y       CHANGES               "%_DST%\CHANGES.txt"
+ copy /y       COPYING               "%_DST%\COPYING.txt"
+ copy /y       README                "%_DST%\README.txt"
+ copy /y       RELEASE-NOTES         "%_DST%\RELEASE-NOTES.txt"
+xcopy /y /s    src\*.exe             "%_DST%\bin\"
+xcopy /y /s    lib\*.dll             "%_DST%\bin\"
+ copy /y       "%~dp0\ca-bundle.crt" "%_DST%\bin\curl-ca-bundle.crt"
 
 if exist lib\*.a   xcopy /y /s lib\*.a   "%_DST%\lib\"
 if exist lib\*.lib xcopy /y /s lib\*.lib "%_DST%\lib\"
@@ -61,9 +61,10 @@ popd
 
 rd /s /q "%TEMP%\%_NAM%"
 
-curl -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/curl-test/%VER_CURL%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
+curl -fsS -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/curl-test/%VER_CURL%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
 for %%I in ("%_NAM%.zip") do echo %%~nxI: %%~zI bytes %%~tI
 openssl dgst -sha256 "%_NAM%.zip"
+openssl dgst -sha256 "%_NAM%.zip" >> hashes.txt
 
 popd
 endlocal

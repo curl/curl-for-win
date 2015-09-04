@@ -59,6 +59,7 @@ install:
 - cd ..
 - reg add "HKCU\Control Panel\International" /v sShortDate /t REG_SZ /d "yyyy-MM-dd" /f
 - reg add "HKCU\Control Panel\International" /v sShortTime /t REG_SZ /d "HH:mm" /f
+- del /f hashes.txt
 build_script:
 - set PATH=C:\w\mingw64\bin;%PATH%
 # From https://www.mirrorservice.org/sites/dl.sourceforge.net/pub/sourceforge/m/mi/mingw-w64-dgn/mingw-w64/mingw-w64-bin-x86_64-20150801.7z
@@ -71,3 +72,4 @@ build_script:
 - mk-openssl.bat
 - mk-libssh2.bat
 - mk-curl.bat
+- type hashes.txt
