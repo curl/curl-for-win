@@ -60,7 +60,7 @@ build_script:
 #- set PATH=C:\w\mingw64\bin;%PATH%
 - set PATH=C:\mingw\bin;%PATH%
 #- copy /y C:\w\mingw64\bin\mingw32-make.exe C:\w\mingw64\bin\make.exe
-- copy /y C:\mingw\bin\mingw32-make.exe C:\mingw\bin\make.exe
+#- copy /y C:\mingw\bin\mingw32-make.exe C:\mingw\bin\make.exe
 - set CPU=win32
 - mk-openssl.bat
 - mk-libssh2.bat
