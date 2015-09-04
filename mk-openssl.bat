@@ -13,6 +13,8 @@ sed -e "s/windres -o rc.o/windres $(SHARED_RCFLAGS) -o rc.o/g" -i Makefile.share
 if "%CPU%" == "win32" set SHARED_RCFLAGS=-F pe-i386
 if "%CPU%" == "win64" set SHARED_RCFLAGS=-F pe-x86-64
 
+set MAKE=mingw32-make
+
 del /s *.o *.a *.exe >> nul 2>&1
 if "%CPU%" == "win32" perl Configure mingw   shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-hw no-dso no-sse2 --prefix=C:\w\openssl
 if "%CPU%" == "win64" perl Configure mingw64 shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-hw no-dso no-asm  --prefix=C:\w\openssl
