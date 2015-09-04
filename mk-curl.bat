@@ -33,7 +33,6 @@ if not "%APPVEYOR_REPO_BRANCH%" == "master" set _BAS=%_BAS%-test
 set _DST=%TEMP%\%_BAS%
 
 :: Download CA bundle
-
 if not exist "%~dp0\ca-bundle.crt" curl -fsS -L --proto-redir =https https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt -o "%~dp0\ca-bundle.crt"
 
 xcopy /y /s /q docs\*.               "%_DST%\docs\*.txt"
