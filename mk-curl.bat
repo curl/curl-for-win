@@ -29,8 +29,8 @@ mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-ipv6
 :: Create package
 
 set _BAS=%_NAM%-%_VER%-%_CPU%-mingw
-if "%APPVEYOR_REPO_BRANCH%" == "master" set _BAS=%_BAS%-t
-if "%APPVEYOR_REPO_BRANCH%" == "master" set _REPOSUFF=-test
+if not "%APPVEYOR_REPO_BRANCH%" == "master" set _BAS=%_BAS%-t
+if not "%APPVEYOR_REPO_BRANCH%" == "master" set _REPOSUFF=-test
 set _DST=%TEMP%\%_BAS%
 
 :: Download CA bundle
