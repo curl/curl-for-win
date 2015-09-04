@@ -1,5 +1,5 @@
---- lib/curl_setup.h	2015-06-11 19:50:43.000000000 +0200
-+++ lib/curl_setup-PAT.h	2015-09-04 01:35:53.631186500 +0200
+--- curl/lib/curl_setup.h	2015-06-11 19:50:43.000000000 +0200
++++ curl/lib/curl_setup-PAT.h	2015-09-04 01:35:53.631186500 +0200
 @@ -249,7 +249,7 @@
  #  ifdef HAVE_WINSOCK2_H
  #    include <winsock2.h>
