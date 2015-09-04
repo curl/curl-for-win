@@ -53,8 +53,8 @@ if exist *.lib xcopy /y /s *.lib "%_DST%\lib\"
 
 unix2dos "%_DST%\*.txt"
 
-call pack.bat
-call upload.bat
+call ..\pack.bat
+call ..\upload.bat
 
 popd
 endlocal

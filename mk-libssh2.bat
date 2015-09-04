@@ -47,8 +47,8 @@ if exist win32\*.lib xcopy /y /s win32\*.lib "%_DST%\lib\"
 unix2dos "%_DST%\*.txt"
 unix2dos "%_DST%\docs\*.txt"
 
-call pack.bat
-call upload.bat
+call ..\pack.bat
+call ..\upload.bat
 
 popd
 endlocal
