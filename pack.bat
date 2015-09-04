@@ -6,8 +6,8 @@
 set _CDO=%CD%
 
 pushd "%_DST%\.."
-if exist "%_CDO%\%_BAS%.zip" del /f "%_CDO%\%_BAS%.zip"
-7z a -bd -r -mx -tzip "%_CDO%\%_BAS%.zip" "%_BAS%\*" > nul
+if exist "%_CDO%\%_BAS%.7z" del /f "%_CDO%\%_BAS%.7z"
+7z a -bd -r -mx "%_CDO%\%_BAS%.7z" "%_BAS%\*" > nul
 popd
 
 rd /s /q "%TEMP%\%_BAS%"
