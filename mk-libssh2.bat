@@ -27,8 +27,10 @@ if not exist "include\libssh2.h" (
    exit /b
 )
 
-set _NAM=libssh2-%VER_LIBSSH2%-%CPU%-mingw-t
+set _NAM=libssh2-%VER_LIBSSH2%-%CPU%-mingw
 set _DST=%TEMP%\%_NAM%
+
+if "%APPVEYOR_REPO_BRANCH%" == "master" set _NAM=%_NAM%-t
 
 xcopy /y /s /q docs\*.              "%_DST%\docs\*.txt"
 xcopy /y /s /q include\*.*          "%_DST%\include\"
@@ -55,7 +57,7 @@ popd
 
 rd /s /q "%TEMP%\%_NAM%"
 
-if "%APPVEYOR_REPO_BRANCH%" == "master" curl -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/libssh2-test/%VER_LIBSSH2%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
+curl -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/libssh2-test/%VER_LIBSSH2%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
 for %%I in ("%_NAM%.zip") do echo %%~nxI: %%~zI bytes %%~tI
 openssl dgst -sha256 "%_NAM%.zip"
 

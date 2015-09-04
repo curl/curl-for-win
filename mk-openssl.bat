@@ -26,8 +26,10 @@ if not exist "include\openssl\opensslv.h" (
    exit /b
 )
 
-set _NAM=openssl-%VER_OPENSSL%-%CPU%-mingw-t
+set _NAM=openssl-%VER_OPENSSL%-%CPU%-mingw
 set _DST=%TEMP%\%_NAM%
+
+if "%APPVEYOR_REPO_BRANCH%" == "master" set _NAM=%_NAM%-t
 
 xcopy /y /q    apps\openssl.exe "%_DST%\"
 xcopy /y /q    apps\*.dll       "%_DST%\"
@@ -57,7 +59,7 @@ popd
 
 rd /s /q "%TEMP%\%_NAM%"
 
-if "%APPVEYOR_REPO_BRANCH%" == "master" curl -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/openssl-test/%VER_OPENSSL%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
+curl -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/openssl-test/%VER_OPENSSL%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
 for %%I in ("%_NAM%.zip") do echo %%~nxI: %%~zI bytes %%~tI
 openssl dgst -sha256 "%_NAM%.zip"
 

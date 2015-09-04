@@ -25,8 +25,10 @@ if not exist "include\curl\curlver.h" (
    exit /b
 )
 
-set _NAM=curl-%VER_CURL%-%CPU%-mingw-t
+set _NAM=curl-%VER_CURL%-%CPU%-mingw
 set _DST=%TEMP%\%_NAM%
+
+if "%APPVEYOR_REPO_BRANCH%" == "master" set _NAM=%_NAM%-t
 
 :: Download CA bundle
 set _DL_URL=https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt
@@ -74,7 +76,7 @@ popd
 
 rd /s /q "%TEMP%\%_NAM%"
 
-if "%APPVEYOR_REPO_BRANCH%" == "master" curl -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/curl-test/%VER_CURL%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
+curl -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/vszakats/generic/curl-test/%VER_CURL%/%_NAM%.zip?override=1&publish=1" --data-binary "@%_NAM%.zip"
 for %%I in ("%_NAM%.zip") do echo %%~nxI: %%~zI bytes %%~tI
 openssl dgst -sha256 "%_NAM%.zip"
 
