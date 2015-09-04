@@ -20,6 +20,8 @@ install:
 - set VER_OPENSSL=1.0.2d
 - set VER_LIBSSH2=1.6.0
 - set VER_CURL=7.44.0
+# We must reconfigure PATH to use short names for the sh.exe location, otherwise the OpenSSL build process fails at one point
+- set PATH=C:\PROGRA~2\Git\cmd;C:\PROGRA~2\Git\bin;C:\Perl\site\bin;C:\Perl\bin;C:\Windows\system32;C:\Windows;C:\Program Files\7-Zip
 #- curl -fsS -L --proto-redir =https https://github.com/git-for-windows/git/releases/download/v2.5.0.windows.1/PortableGit-2.5.0-64-bit.7z.exe -o git.7z
 #- openssl dgst -sha256 git.7z | findstr /i /c:"2ace32df8b8449e2b48cc6e4d0152be7f4bf8e7174d0dc43f67a1ae23bf26f9d"
 #- 7z x -y -oC:\git\ git.7z > nul
