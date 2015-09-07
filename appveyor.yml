@@ -16,8 +16,8 @@ install:
 - set VER_CURL=7.44.0
 # PATH must be reconfigured to use short name for the sh.exe location, otherwise the OpenSSL build process fails
 - set PATH=C:\PROGRA~2\Git\bin;%PATH%
-#- curl -fsS -L --proto-redir =https https://github.com/git-for-windows/git/releases/download/v2.5.0.windows.1/PortableGit-2.5.0-64-bit.7z.exe -o git.7z
-#- openssl dgst -sha256 git.7z | findstr /i /c:"2ace32df8b8449e2b48cc6e4d0152be7f4bf8e7174d0dc43f67a1ae23bf26f9d"
+#- curl -fsS -L --proto-redir =https https://github.com/git-for-windows/git/releases/download/v2.5.1.windows.1/PortableGit-2.5.1-64-bit.7z.exe -o git.7z
+#- openssl dgst -sha256 git.7z | findstr /i /c:"f1853c63cd27a28510d80d5ffa2d70e2c9392d0a0174d5821fb7b764bff24b89"
 #- 7z x -y -oC:\git\ git.7z > nul
 #- set PATH=C:\git\cmd;C:\git\usr\bin;C:\git\mingw64\bin;%PATH%
 # Long URL: "https://www.mirrorservice.org/sites/dl.sourceforge.net/pub/sourceforge/m/mi/mingw-w64/Toolchains targetting Win64/Personal Builds/mingw-builds/5.1.0/threads-win32/sjlj/x86_64-5.1.0-release-win32-sjlj-rt_v4-rev0.7z" https://goo.gl/HF6raX
