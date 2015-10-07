@@ -13,11 +13,11 @@ install:
 #- set VER_ZLIB=1.2.8
 - set VER_OPENSSL=1.0.2d
 - set VER_LIBSSH2=1.6.0
-- set VER_CURL=7.44.0
+- set VER_CURL=7.45.0
 # PATH must be reconfigured to use short name for the sh.exe location, otherwise the OpenSSL build process fails
 - set PATH=C:\PROGRA~2\Git\bin;%PATH%
-#- curl -fsS -L --proto-redir =https https://github.com/git-for-windows/git/releases/download/v2.5.1.windows.1/PortableGit-2.5.1-64-bit.7z.exe -o git.7z
-#- openssl dgst -sha256 git.7z | findstr /i /c:"f1853c63cd27a28510d80d5ffa2d70e2c9392d0a0174d5821fb7b764bff24b89"
+#- curl -fsS -L --proto-redir =https https://github.com/git-for-windows/git/releases/download/v2.6.1.windows.1/PortableGit-2.6.1-64-bit.7z.exe -o git.7z
+#- openssl dgst -sha256 git.7z | findstr /i /c:"5118b86924fd586caa1f31ebda2d71ed4f7c18ba6c0df4a71f06b90d625837e8"
 #- 7z x -y -oC:\git\ git.7z > nul
 #- set PATH=C:\git\cmd;C:\git\usr\bin;C:\git\mingw64\bin;%PATH%
 # Long URL: "https://www.mirrorservice.org/sites/dl.sourceforge.net/pub/sourceforge/m/mi/mingw-w64/Toolchains targetting Win64/Personal Builds/mingw-builds/5.2.0/threads-posix/sjlj/x86_64-5.2.0-release-posix-sjlj-rt_v4-rev0.7z"
@@ -51,7 +51,7 @@ install:
 - patch -p0 -i ../libssh2.diff
 - cd ..
 - curl -fsS -L --proto-redir =https https://github.com/bagder/curl/releases/download/curl-%VER_CURL:.=_%/curl-%VER_CURL%.tar.gz -o curl.tar.gz
-- openssl dgst -sha256 curl.tar.gz | findstr /i /c:"d01212ee29110799db969be31eeab902f50eca00d52fb8fb44630d08964762be"
+- openssl dgst -sha256 curl.tar.gz | findstr /i /c:"02c78c8060d587422e2826f622c729189b56084bba365140f13af3d402b6cb6b"
 - tar -zxvf curl.tar.gz > nul 2>&1
 - del curl.tar.gz
 - move curl-%VER_CURL% curl
