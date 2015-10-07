@@ -67,6 +67,15 @@ if exist lib\*.lib xcopy /y /s lib\*.lib "%_DST%\lib\"
 unix2dos -k %_DST:\=/%/*.txt
 unix2dos -k %_DST:\=/%/docs/*.txt
 
+touch -c %_DST:\=/%/docs/examples     -r CHANGES
+touch -c %_DST:\=/%/docs/libcurl/opts -r CHANGES
+touch -c %_DST:\=/%/docs/libcurl      -r CHANGES
+touch -c %_DST:\=/%/docs              -r CHANGES
+touch -c %_DST:\=/%/include/curl      -r CHANGES
+touch -c %_DST:\=/%/include           -r CHANGES
+touch -c %_DST:\=/%/lib               -r CHANGES
+touch -c %_DST:\=/%/bin               -r CHANGES
+
 call ..\pack.bat
 call ..\upload.bat
 

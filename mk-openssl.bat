@@ -65,6 +65,11 @@ if exist *.lib xcopy /y /s *.lib "%_DST%\lib\"
 
 unix2dos -k %_DST:\=/%/*.txt
 
+touch -c %_DST:\=/%/engines         -r CHANGES
+touch -c %_DST:\=/%/include/openssl -r CHANGES
+touch -c %_DST:\=/%/include         -r CHANGES
+touch -c %_DST:\=/%/lib             -r CHANGES
+
 call ..\pack.bat
 call ..\upload.bat
 

@@ -56,6 +56,11 @@ if exist win32\*.lib xcopy /y /s win32\*.lib "%_DST%\lib\"
 unix2dos -k %_DST:\=/%/*.txt
 unix2dos -k %_DST:\=/%/docs/*.txt
 
+touch -c %_DST:\=/%/docs    -r NEWS
+touch -c %_DST:\=/%/include -r NEWS
+touch -c %_DST:\=/%/lib     -r NEWS
+touch -c %_DST:\=/%/bin     -r NEWS
+
 call ..\pack.bat
 call ..\upload.bat
 
