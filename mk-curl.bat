@@ -35,6 +35,9 @@ if not exist ..\ca-bundle.crt curl -R -fsS -L --proto-redir =https https://raw.g
 if exist lib\*.a   strip -p --enable-deterministic-archives -g lib\*.a
 if exist lib\*.lib strip -p --enable-deterministic-archives -g lib\*.lib
 
+python ..\peclean.py src\*.exe
+python ..\peclean.py lib\*.dll
+
 touch -c src/*.exe        -r CHANGES
 touch -c lib/*.dll        -r CHANGES
 touch -c ../ca-bundle.crt -r CHANGES

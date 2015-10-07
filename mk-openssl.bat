@@ -35,7 +35,10 @@ sh -c mingw32-make
 if exist *.a   strip -p --enable-deterministic-archives -g *.a
 if exist *.lib strip -p --enable-deterministic-archives -g *.lib
 
-touch -c apps/*.exe          -r CHANGES
+python ..\peclean.py apps\openssl.exe
+python ..\peclean.py apps\*.dll
+
+touch -c apps/openssl.exe    -r CHANGES
 touch -c apps/*.dll          -r CHANGES
 touch -c engines/*.dll       -r CHANGES
 touch -c include/openssl/*.h -r CHANGES

@@ -36,6 +36,8 @@ touch -c win32/*.dll -r NEWS
 touch -c win32/*.a   -r NEWS
 touch -c win32/*.lib -r NEWS
 
+python ..\peclean.py win32\*.dll
+
 :: Create package
 
 set _BAS=%_NAM%-%_VER%-%_CPU%-mingw
