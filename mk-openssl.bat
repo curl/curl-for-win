@@ -30,6 +30,18 @@ if "%_CPU%" == "win64" perl Configure mingw64 shared no-unit-test no-ssl2 no-ssl
 sh -c mingw32-make depend
 sh -c mingw32-make
 
+:: Make steps for determinism
+
+if exist *.a   strip -p --enable-deterministic-archives -g *.a
+if exist *.lib strip -p --enable-deterministic-archives -g *.lib
+
+touch -c apps/*.exe          -r CHANGES
+touch -c apps/*.dll          -r CHANGES
+touch -c engines/*.dll       -r CHANGES
+touch -c include/openssl/*.h -r CHANGES
+touch -c *.a                 -r CHANGES
+touch -c *.lib               -r CHANGES
+
 :: Create package
 
 set _BAS=%_NAM%-%_VER%-%_CPU%-mingw
@@ -51,7 +63,7 @@ xcopy /y /q    ms\applink.c     "%_DST%\include\openssl\"
 if exist *.a   xcopy /y /s *.a   "%_DST%\lib\"
 if exist *.lib xcopy /y /s *.lib "%_DST%\lib\"
 
-unix2dos "%_DST%\*.txt"
+unix2dos -k %_DST:\=/%/*.txt
 
 call ..\pack.bat
 call ..\upload.bat

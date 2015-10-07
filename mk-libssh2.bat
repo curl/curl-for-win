@@ -27,6 +27,15 @@ mingw32-make clean
 mingw32-make
 popd
 
+:: Make steps for determinism
+
+if exist win32\*.a   strip -p --enable-deterministic-archives -g win32\*.a
+if exist win32\*.lib strip -p --enable-deterministic-archives -g win32\*.lib
+
+touch -c win32/*.dll -r NEWS
+touch -c win32/*.a   -r NEWS
+touch -c win32/*.lib -r NEWS
+
 :: Create package
 
 set _BAS=%_NAM%-%_VER%-%_CPU%-mingw
@@ -44,8 +53,8 @@ xcopy /y /s    win32\*.dll          "%_DST%\bin\"
 if exist win32\*.a   xcopy /y /s win32\*.a   "%_DST%\lib\"
 if exist win32\*.lib xcopy /y /s win32\*.lib "%_DST%\lib\"
 
-unix2dos "%_DST%\*.txt"
-unix2dos "%_DST%\docs\*.txt"
+unix2dos -k %_DST:\=/%/*.txt
+unix2dos -k %_DST:\=/%/docs/*.txt
 
 call ..\pack.bat
 call ..\upload.bat
