@@ -38,6 +38,7 @@ install:
 - tar -zxvf openssl.tar.gz > nul 2>&1
 - del openssl.tar.gz
 - move openssl-%VER_OPENSSL% openssl
+- sh -c ./mk-openssl-seed.sh
 - dos2unix openssl.diff
 - cd openssl
 # Using 'sed' for now
