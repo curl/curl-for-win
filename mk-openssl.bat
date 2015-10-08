@@ -37,6 +37,7 @@ if exist *.lib strip -p --enable-deterministic-archives -g *.lib
 
 python ..\peclean.py apps\openssl.exe
 python ..\peclean.py apps\*.dll
+python ..\peclean.py engines\*.dll
 
 touch -c apps/openssl.exe    -r CHANGES
 touch -c apps/*.dll          -r CHANGES
