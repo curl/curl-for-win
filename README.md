@@ -1,7 +1,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
 [![Build status](https://ci.appveyor.com/api/projects/status/4bx4006pge6jbqch/branch/master?svg=true)](https://ci.appveyor.com/project/vsz/harbour-deps/branch/master)
 
-# Automated Windows builds for cURL, libssh2, OpenSSL
+# Automated, reproducible, Windows builds for cURL, libssh2, OpenSSL
 
   - Packaging tries to follow other binary releases found on the Internet
   - Static libraries are built with LTO option enabled (can be linked in non-LTO mode as well)
