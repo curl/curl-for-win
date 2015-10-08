@@ -73,6 +73,7 @@ touch -c %_DST:\=/%/engines         -r CHANGES
 touch -c %_DST:\=/%/include/openssl -r CHANGES
 touch -c %_DST:\=/%/include         -r CHANGES
 touch -c %_DST:\=/%/lib             -r CHANGES
+touch -c %_DST:\=/%                 -r CHANGES
 
 call ..\pack.bat
 call ..\upload.bat

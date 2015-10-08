@@ -62,6 +62,7 @@ touch -c %_DST:\=/%/docs    -r NEWS
 touch -c %_DST:\=/%/include -r NEWS
 touch -c %_DST:\=/%/lib     -r NEWS
 touch -c %_DST:\=/%/bin     -r NEWS
+touch -c %_DST:\=/%         -r NEWS
 
 call ..\pack.bat
 call ..\upload.bat

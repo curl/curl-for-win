@@ -78,6 +78,7 @@ touch -c %_DST:\=/%/include/curl      -r CHANGES
 touch -c %_DST:\=/%/include           -r CHANGES
 touch -c %_DST:\=/%/lib               -r CHANGES
 touch -c %_DST:\=/%/bin               -r CHANGES
+touch -c %_DST:\=/%                   -r CHANGES
 
 call ..\pack.bat
 call ..\upload.bat
