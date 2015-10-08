@@ -32,11 +32,11 @@ popd
 if exist win32\*.a   strip -p --enable-deterministic-archives -g win32\*.a
 if exist win32\*.lib strip -p --enable-deterministic-archives -g win32\*.lib
 
+python ..\peclean.py win32\*.dll
+
 touch -c win32/*.dll -r NEWS
 touch -c win32/*.a   -r NEWS
 touch -c win32/*.lib -r NEWS
-
-python ..\peclean.py win32\*.dll
 
 :: Create package
 
