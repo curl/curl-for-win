@@ -25,7 +25,9 @@ set CURL_CFLAG_EXTRAS=-DCURL_STATICLIB -fno-ident
 set CURL_LDFLAG_EXTRAS=-static-libgcc
 
 mingw32-make mingw32-clean
-mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-ipv6
+# Do not link WinIDN in 32-bit builds for Windows XP compatibility (missing normaliz.dll)
+if "%_CPU%" == "win32" mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-ipv6
+if "%_CPU%" == "win64" mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-ipv6-winidn
 
 :: Download CA bundle
 if not exist ..\ca-bundle.crt curl -R -fsS -L --proto-redir =https https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt -o ..\ca-bundle.crt
