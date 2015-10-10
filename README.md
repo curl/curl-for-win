@@ -16,6 +16,16 @@
        * <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66305>
        * <https://reproducible.debian.net/issues/unstable/randomness_in_fat_lto_objects_issue.html>
 
+# Binary package downloads
+
+  * cURL: <https://bintray.com/vszakats/generic/curl>
+  * libssh2: <https://bintray.com/vszakats/generic/libssh2>
+  * OpenSSL: <https://bintray.com/vszakats/generic/openssl>
+
+# Live build logs
+
+  <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
+
 # Please donate to support maintaining these builds
 
   - [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BPSZQYKXMQJYG)
