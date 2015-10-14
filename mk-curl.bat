@@ -66,6 +66,9 @@ xcopy /y /s    src\*.exe            "%_DST%\bin\"
 xcopy /y /s    lib\*.dll            "%_DST%\bin\"
  copy /y       ..\ca-bundle.crt     "%_DST%\bin\curl-ca-bundle.crt"
 
+ copy /y       ..\openssl\LICENSE   "%_DST%\LICENSE-openssl.txt"
+ copy /y       ..\libssh2\COPYING   "%_DST%\COPYING-libssh2.txt"
+
 if exist lib\*.a   xcopy /y /s lib\*.a   "%_DST%\lib\"
 if exist lib\*.lib xcopy /y /s lib\*.lib "%_DST%\lib\"
 

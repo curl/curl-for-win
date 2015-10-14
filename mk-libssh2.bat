@@ -52,6 +52,8 @@ xcopy /y /s /q include\*.*          "%_DST%\include\"
  copy /y       RELEASE-NOTES        "%_DST%\RELEASE-NOTES.txt"
 xcopy /y /s    win32\*.dll          "%_DST%\bin\"
 
+ copy /y       ..\openssl\LICENSE   "%_DST%\LICENSE-openssl.txt"
+
 if exist win32\*.a   xcopy /y /s win32\*.a   "%_DST%\lib\"
 if exist win32\*.lib xcopy /y /s win32\*.lib "%_DST%\lib\"
 
