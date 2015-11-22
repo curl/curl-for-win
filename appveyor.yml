@@ -18,11 +18,7 @@ install:
 - python -m pip --disable-pip-version-check install --upgrade pip
 - python -m pip install pefile
 # PATH must be reconfigured to use short name for the sh.exe location, otherwise the OpenSSL build process fails
-- set PATH=C:\PROGRA~2\Git\bin;%PATH%
-- curl -fsS -L --proto-redir =https https://github.com/git-for-windows/git/releases/download/v2.6.1.windows.1/PortableGit-2.6.1-64-bit.7z.exe -o git.7z
-- openssl dgst -sha256 git.7z | findstr /i /c:"5118b86924fd586caa1f31ebda2d71ed4f7c18ba6c0df4a71f06b90d625837e8"
-- 7z x -y -oC:\git\ git.7z > nul
-- set PATH=C:\git\cmd;C:\git\usr\bin;C:\git\mingw64\bin;%PATH%
+- set PATH=C:\PROGRA~1\Git\usr\bin;%PATH%
 - ps: curl -fsS https://www.mirrorservice.org/sites/dl.sourceforge.net/pub/sourceforge/m/mi/mingw-w64/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/5.2.0/threads-posix/sjlj/x86_64-5.2.0-release-posix-sjlj-rt_v4-rev0.7z -o mingw.7z
 - openssl dgst -sha256 mingw.7z | findstr /i /c:"c0536c55a1d12882987afd0a9be377413eaf6cee105e921c949899fa9b308b35"
 # Will unpack into C:\w\mingw64
@@ -32,7 +28,6 @@ install:
 #- tar -zxvf zip.tar.gz > nul 2>&1
 #- del zip.tar.gz
 #- move zlib-%VER_ZLIB% zlib
-# Use http:// here for old curl.exe (curl 7.30.0 (i386-pc-win32) libcurl/7.30.0 OpenSSL/0.9.8{ zlib/1.2.7) otherwise it will fail.
 - curl -fsS https://www.openssl.org/source/openssl-%VER_OPENSSL%.tar.gz -o openssl.tar.gz
 - openssl dgst -sha256 openssl.tar.gz | findstr /i /c:"671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8"
 - tar -zxvf openssl.tar.gz > nul 2>&1
