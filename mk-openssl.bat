@@ -37,7 +37,7 @@ if exist *.lib strip -p --enable-deterministic-archives -g *.lib
 
 :: Strip debug info
 
-strip -p -g apps\openssl.exe
+strip -p -s apps\openssl.exe
 
 python ..\peclean.py apps\openssl.exe
 python ..\peclean.py apps\*.dll
