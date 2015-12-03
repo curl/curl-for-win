@@ -13,7 +13,7 @@ install:
 #- set VER_ZLIB=1.2.8
 - set VER_OPENSSL=1.0.2d
 - set VER_LIBSSH2=1.6.0
-- set VER_CURL=7.45.0
+- set VER_CURL=7.46.0
 - ps: rm alias:curl
 - python -m pip --disable-pip-version-check install --upgrade pip
 - python -m pip install pefile
@@ -49,7 +49,7 @@ install:
 - patch -p0 -i ../libssh2.diff
 - cd ..
 - curl -fsS -L --proto-redir =https https://github.com/bagder/curl/releases/download/curl-%VER_CURL:.=_%/curl-%VER_CURL%.tar.gz -o curl.tar.gz
-- openssl dgst -sha256 curl.tar.gz | findstr /i /c:02c78c8060d587422e2826f622c729189b56084bba365140f13af3d402b6cb6b
+- openssl dgst -sha256 curl.tar.gz | findstr /i /c:df9e7d4883abdd2703ee758fe0e3ae74cec759b26ec2b70e5d1c40239eea06ec
 - tar -zxvf curl.tar.gz > nul 2>&1
 - del curl.tar.gz
 - move curl-%VER_CURL% curl
