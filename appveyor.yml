@@ -48,9 +48,9 @@ install:
 - cd libssh2
 - patch -p0 -i ../libssh2.diff
 - cd ..
-- curl -fsS -L --proto-redir =https https://github.com/bagder/curl/releases/download/curl-%VER_CURL:.=_%/curl-%VER_CURL%.tar.gz -o curl.tar.gz
-- openssl dgst -sha256 curl.tar.gz | findstr /i /c:df9e7d4883abdd2703ee758fe0e3ae74cec759b26ec2b70e5d1c40239eea06ec
-- tar -zxvf curl.tar.gz > nul 2>&1
+- curl -fsS -L --proto-redir =https https://github.com/bagder/curl/releases/download/curl-%VER_CURL:.=_%/curl-%VER_CURL%.tar.gz -o curl.tar.bz2
+- openssl dgst -sha256 curl.tar.gz | findstr /i /c:b7d726cdd8ed4b6db0fa1b474a3c59ebbbe4dcd4c61ac5e7ade0e0270d3195ad
+- tar -jxvf curl.tar.gz > nul 2>&1
 - del curl.tar.gz
 - move curl-%VER_CURL% curl
 - dos2unix curl.diff
