@@ -19,9 +19,6 @@ install:
 - python -m pip install pefile
 # PATH must be reconfigured to use short name for the sh.exe location, otherwise the OpenSSL build process fails
 - set PATH=C:\PROGRA~1\Git\usr\bin;%PATH%
-# Create stub that clears ERRORLEVEL
-- echo %*> success.bat
-- echo exit /b 00>> success.bat
 - type success.bat
 - ps: curl -fsS https://www.mirrorservice.org/sites/dl.sourceforge.net/pub/sourceforge/m/mi/mingw-w64/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/5.2.0/threads-posix/sjlj/x86_64-5.2.0-release-posix-sjlj-rt_v4-rev0.7z -o mingw.7z
 - openssl dgst -sha256 mingw.7z | findstr /i /c:c0536c55a1d12882987afd0a9be377413eaf6cee105e921c949899fa9b308b35
