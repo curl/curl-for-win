@@ -31,8 +31,8 @@ install:
 - curl -fsS https://www.openssl.org/source/openssl-%VER_OPENSSL%.tar.gz -o openssl.tar.gz
 - openssl dgst -sha256 openssl.tar.gz | findstr /i /c:e23ccafdb75cfcde782da0151731aa2185195ac745eea3846133f2e05c0e0bff
 - 7z x -y openssl.tar.gz
-- 7z x -y openssl.tar
-- del openssl.tar
+- 7z x -y openssl-%VER_OPENSSL%.tar
+- del openssl-%VER_OPENSSL%.tar
 #- tar -zxvf openssl.tar.gz > nul 2>&1
 - del openssl.tar.gz
 - move openssl-%VER_OPENSSL% openssl
