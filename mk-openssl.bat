@@ -1,7 +1,7 @@
 :: Copyright 2014-2015 Viktor Szakats <https://github.com/vszakats>
 :: See LICENSE.md
 
-@echo off
+@echo on
 
 set _NAM=%~n0
 set _NAM=%_NAM:~3%
