@@ -11,7 +11,7 @@ environment:
 install:
 # Using zlib headers and static libraries bundled with mingw-w64
 #- set VER_ZLIB=1.2.8
-- set VER_OPENSSL=1.0.2e
+- set VER_OPENSSL=1.0.2d
 - set VER_LIBSSH2=1.6.0
 - set VER_CURL=7.46.0
 - ps: rm alias:curl
@@ -29,7 +29,9 @@ install:
 #- del zip.tar.gz
 #- move zlib-%VER_ZLIB% zlib
 - curl -fsS https://www.openssl.org/source/openssl-%VER_OPENSSL%.tar.gz -o openssl.tar.gz
-- openssl dgst -sha256 openssl.tar.gz | findstr /i /c:e23ccafdb75cfcde782da0151731aa2185195ac745eea3846133f2e05c0e0bff
+- openssl dgst -sha256 openssl.tar.gz | findstr /i /c:671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8
+# 1.0.2e
+#- openssl dgst -sha256 openssl.tar.gz | findstr /i /c:e23ccafdb75cfcde782da0151731aa2185195ac745eea3846133f2e05c0e0bff
 - success tar -zxvf openssl.tar.gz > nul 2>&1
 - del openssl.tar.gz
 - move openssl-%VER_OPENSSL% openssl
