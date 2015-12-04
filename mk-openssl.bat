@@ -25,8 +25,8 @@ if "%_CPU%" == "win32" set SHARED_RCFLAGS=-F pe-i386
 if "%_CPU%" == "win64" set SHARED_RCFLAGS=-F pe-x86-64
 
 del /s *.o *.a *.exe >> nul 2>&1
-if "%_CPU%" == "win32" perl Configure mingw   shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso no-sse2 "--prefix=%CD:\=/%"
-if "%_CPU%" == "win64" perl Configure mingw64 shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso         "--prefix=%CD:\=/%"
+if "%_CPU%" == "win32" perl Configure mingw   shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso "--prefix=%CD:\=/%"
+if "%_CPU%" == "win64" perl Configure mingw64 shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso "--prefix=%CD:\=/%"
 sh -c "mingw32-make depend"
 sh -c "mingw32-make"
 
