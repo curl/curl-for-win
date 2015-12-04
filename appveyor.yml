@@ -28,9 +28,10 @@ install:
 #- tar -zxvf zip.tar.gz > nul 2>&1
 #- del zip.tar.gz
 #- move zlib-%VER_ZLIB% zlib
-- curl -fsS https://www.openssl.org/source/openssl-%VER_OPENSSL%.tar.gz -o openssl.tar.gz
+- curl -fsS https://www.openssl.org/source/old/1.0.2/openssl-1.0.2d.tar.gz
 - openssl dgst -sha256 openssl.tar.gz | findstr /i /c:671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8
 # 1.0.2e
+#- curl -fsS https://www.openssl.org/source/openssl-%VER_OPENSSL%.tar.gz -o openssl.tar.gz
 #- openssl dgst -sha256 openssl.tar.gz | findstr /i /c:e23ccafdb75cfcde782da0151731aa2185195ac745eea3846133f2e05c0e0bff
 - success tar -zxvf openssl.tar.gz > nul 2>&1
 - del openssl.tar.gz
