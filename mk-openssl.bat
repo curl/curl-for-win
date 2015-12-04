@@ -25,7 +25,7 @@ if "%_CPU%" == "win32" set SHARED_RCFLAGS=-F pe-i386
 if "%_CPU%" == "win64" set SHARED_RCFLAGS=-F pe-x86-64
 
 del /s *.o *.a *.exe >> nul 2>&1
-if "%_CPU%" == "win32" perl Configure mingw   shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea        "--prefix=%CD:\=/%"
+if "%_CPU%" == "win32" perl Configure mingw   shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso "--prefix=%CD:\=/%"
 :: Disable asm in 64-bit builds. It makes linking the static libs fail in LTO mode:
 ::   C:\Users\...\AppData\Local\Temp\ccUO3sBD.s: Assembler messages:
 ::   C:\Users\...\AppData\Local\Temp\ccUO3sBD.s:23710: Error: operand type mismatch for `div'
@@ -33,7 +33,7 @@ if "%_CPU%" == "win32" perl Configure mingw   shared no-unit-test no-ssl2 no-ssl
 ::   compilation terminated.
 ::   C:/mingw/bin/../lib/gcc/x86_64-w64-mingw32/5.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: lto-wrapper failed
 ::   collect2.exe: error: ld returned 1 exit status
-if "%_CPU%" == "win64" perl Configure mingw64 shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-asm "--prefix=%CD:\=/%"
+if "%_CPU%" == "win64" perl Configure mingw64 shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso no-asm "--prefix=%CD:\=/%"
 sh -c "mingw32-make depend"
 sh -c "mingw32-make"
 
@@ -48,7 +48,7 @@ strip -p -s apps\openssl.exe
 
 python ..\peclean.py apps\openssl.exe
 python ..\peclean.py apps\*.dll
-python ..\peclean.py engines\*.dll
+if exist engines\*.dll python ..\peclean.py engines\*.dll
 
 touch -c apps/openssl.exe    -r CHANGES
 touch -c apps/*.dll          -r CHANGES
