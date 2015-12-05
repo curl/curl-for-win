@@ -57,6 +57,10 @@ touch -c include/openssl/*.h -r CHANGES
 touch -c *.a                 -r CHANGES
 touch -c *.lib               -r CHANGES
 
+:: Test run
+
+apps\openssl.exe version
+
 :: Create package
 
 set _BAS=%_NAM%-%_VER%-%_CPU%-mingw
