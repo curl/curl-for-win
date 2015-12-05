@@ -46,6 +46,10 @@ touch -c ../ca-bundle.crt -r CHANGES
 touch -c lib/*.a          -r CHANGES
 touch -c lib/*.lib        -r CHANGES
 
+:: Test run
+
+src\curl.exe --version
+
 :: Create package
 
 set _BAS=%_NAM%-%_VER%-%_CPU%-mingw
