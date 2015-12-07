@@ -6,7 +6,7 @@
   - Packaging tries to follow other binary releases found on the Internet.
   - Static libraries are built with LTO option enabled (can be linked in non-LTO mode as well.)
   - Both 32-bit and 64-bit packages are built using the same process.
-  - Standalone `curl.exe` executable (only `msvcrt.dll` is required).
+  - Standalone `curl.exe` (only `msvcrt.dll` is required).
   - Components are verified using SHA-256 hashes.
   - Generated binaries are reproducible, meaning they will have the same
     hash given the same input sources and C compiler. Because LTO mode
