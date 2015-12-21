@@ -25,7 +25,7 @@ set CURL_CFLAG_EXTRAS=-DCURL_STATICLIB -fno-ident
 set CURL_LDFLAG_EXTRAS=-static-libgcc
 
 mingw32-make mingw32-clean
-# Do not link WinIDN in 32-bit builds for Windows XP compatibility (missing normaliz.dll)
+:: Do not link WinIDN in 32-bit builds for Windows XP compatibility (missing normaliz.dll)
 if "%_CPU%" == "win32" mingw32-make mingw32-rtmp-ssh2-ssl-sspi-zlib-ldaps-srp-ipv6
 if "%_CPU%" == "win64" mingw32-make mingw32-rtmp-ssh2-ssl-sspi-zlib-ldaps-srp-ipv6-winidn
 
