@@ -24,7 +24,7 @@ set LIBSSH2_PATH=../../libssh2
 if "%_CPU%" == "win32" set ARCH=w32
 if "%_CPU%" == "win64" set ARCH=w64
 set CURL_CFLAG_EXTRAS=-DCURL_STATICLIB -DNGHTTP2_STATICLIB -fno-ident
-set CURL_LDFLAG_EXTRAS=-static-libgcc
+set CURL_LDFLAG_EXTRAS=-static-libgcc -L../../libev/lib -lev
 
 mingw32-make mingw32-clean
 :: - '-rtmp' is not enabled because libcurl then (of course) needs librtmp
