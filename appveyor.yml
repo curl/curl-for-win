@@ -3,15 +3,18 @@ skip_tags: true
 os: Windows Server 2012 R2
 clone_depth: 8
 clone_folder: C:\w\
+
 environment:
   BINTRAY_APIKEY:
     secure: FUQVzdqjaAvLYH/yTdL1rdtrVcAheHbK4YUvNNpvArR09vfkkuAk+8ntrg2MRYa2
   BINTRAY_USER:
     secure: jfLq1ApyVLNouxv07skhrg==
-init:
-- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-on_finish:
-- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
+#init:
+#- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#on_finish:
+#- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 install:
 # Using zlib headers and static libraries bundled with mingw-w64
 #- set VER_ZLIB=1.2.8
@@ -92,6 +95,7 @@ install:
 - reg add "HKCU\Control Panel\International" /v sShortTime /t REG_SZ /d HH:mm /f
 # From https://www.mirrorservice.org/sites/dl.sourceforge.net/pub/sourceforge/m/mi/mingw-w64-dgn/mingw-w64/mingw-w64-bin-x86_64-20150801.7z
 - copy /y mingw32-make.exe C:\w\mingw64\bin\mingw32-make.exe
+
 build_script:
 - set PATH=C:\w\mingw64\bin;%PATH%
 - set CPU=win32
