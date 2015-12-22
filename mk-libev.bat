@@ -13,10 +13,13 @@ pushd "%_NAM%"
 
 :: Build
 
-sh --version
+set _OUT=_start.sh
+echo #!/bin/sh> "%_OUT%"
+echo.>> "%_OUT%"
+echo exec 0^</dev/null; ./configure>> "%_OUT%"
 
 del /s *.o *.a *.lo *.la *.lai *.Plo >> nul 2>&1
-sh --debug --verbose -x "./configure"
+sh -c "./_start.sh"
 mingw32-make MAKE=C:\w\mingw64\bin\mingw32-make
 
 :: Make steps for determinism
