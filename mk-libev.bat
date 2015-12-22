@@ -14,6 +14,9 @@ pushd "%_NAM%"
 :: Build
 
 del /s *.o *.a *.lo *.la *.lai *.Plo >> nul 2>&1
+if "%_CPU%" == "win32" set LDFLAGS=-m32
+if "%_CPU%" == "win64" set LDFLAGS=-m64
+set CFLAGS=%LDFLAGS%
 :: Open dummy file descriptor to fix './<script>: line <n>: 0: Bad file descriptor'
 sh -c "exec 0</dev/null && ./configure '--prefix=%CD:\=/%'"
 sh -c "exec 0</dev/null && mingw32-make MAKE=C:/w/mingw64/bin/mingw32-make"
