@@ -9,22 +9,20 @@ set _VER=%1
 set _CPU=%2
 
 setlocal
+set _CDO=%CD%
 pushd "%_NAM%"
 
 :: Build
 
 pushd ..
-set BASE=%CD%
 popd
 
 set INC=-I../../openssl/include -I../../zlib
-if "%_CPU%" == "win32" (
-   set XCFLAGS=-m32
-   set XLDFLAGS=-m32 "-L%BASE%/../openssl" "-L%BASE%/../zlib"
-) else (
-   set XCFLAGS=-m64
-   set XLDFLAGS=-m64 "-L%BASE%/../openssl" "-L%BASE%/../zlib"
-)
+if "%_CPU%" == "win32" set XCFLAGS=-m32
+if "%_CPU%" == "win64" set XCFLAGS=-m64
+set XLDFLAGS=%XCFLAGS% "-L%_CDO%/openssl" "-L%_CDO%/zlib"
+set XLDFLAGS=%XCFLAGS% "-L%_CDO%/openssl" "-L%_CDO%/zlib"
+set LDFLAGS=%XLDFLAGS%
 del /s *.o *.a *.dll *.so *.exe >> nul 2>&1
 mingw32-make SYS=mingw SODEF_yes=
 
