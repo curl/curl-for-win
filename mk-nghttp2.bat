@@ -16,7 +16,7 @@ pushd "%_NAM%"
 
 if "%_CPU%" == "win32" set LDFLAGS=-m32
 if "%_CPU%" == "win64" set LDFLAGS=-m64
-set CFLAGS=%LDFLAGS% -U__STRICT_ANSI__ -I"%_CDO:\=/%/libev" -L"%_CDO:\=/%/libev/.libs"
+set CFLAGS=%LDFLAGS% -U__STRICT_ANSI__ -I"%_CDO:\=/%/libev/include" -L"%_CDO:\=/%/libev/lib"
 set CXXFLAGS=%CFLAGS%
 :: Open dummy file descriptor to fix './<script>: line <n>: 0: Bad file descriptor'
 sh -c "exec 0</dev/null && ./configure '--prefix=%CD:\=/%'"
