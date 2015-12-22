@@ -14,9 +14,6 @@ pushd "%_NAM%"
 
 :: Build
 
-pushd ..
-popd
-
 set INC=-I../../openssl/include -I../../zlib
 if "%_CPU%" == "win32" set XCFLAGS=-m32
 if "%_CPU%" == "win64" set XCFLAGS=-m64
