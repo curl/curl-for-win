@@ -13,6 +13,8 @@ pushd "%_NAM%"
 
 :: Build
 
+set > env_env.txt
+
 del /s *.o *.a *.lo *.la *.lai *.Plo >> nul 2>&1
 sh -x "./configure"
 mingw32-make MAKE=C:\w\mingw64\bin\mingw32-make
