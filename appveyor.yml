@@ -40,10 +40,10 @@ install:
 - del libev.tar.gz
 - move libev-%VER_LIBEV% libev
 ### nghttp2
-- curl -fsS -L --proto-redir =https https://github.com/tatsuhiro-t/nghttp2/releases/download/v%VER_NGHTTP2%/nghttp2-%VER_NGHTTP2%.tar.xz -o nghttp2.tar.xz
-- openssl dgst -sha256 nghttp2.tar.xz | findstr /i /c:52e345d46d6f990dc19be8a35403a5230345182d26d04cb82abbea4a168f5987
-- tar -xvf nghttp2.tar.xz > nul 2>&1
-- del nghttp2.tar.xz
+- curl -fsS -L --proto-redir =https https://github.com/tatsuhiro-t/nghttp2/releases/download/v%VER_NGHTTP2%/nghttp2-%VER_NGHTTP2%.tar.bz2 -o nghttp2.tar.bz2
+- openssl dgst -sha256 nghttp2.tar.bz2 | findstr /i /c:af2b6ec8ad1cd12fe38c2a6c14dd51e37f9259b8e0d1f4cb47a931c65bfa4604
+- tar -xvf nghttp2.tar.bz2 > nul 2>&1
+- del nghttp2.tar.bz2
 - move nghttp2-%VER_NGHTTP2% nghttp2
 ### openssl
 - curl -fsS https://www.openssl.org/source/openssl-%VER_OPENSSL%.tar.gz -o openssl.tar.gz
