@@ -18,8 +18,8 @@ pushd "%_NAM%"
 :: must be built on a path that does not contain spaces.
 set CFLAGS=-U__STRICT_ANSI__ -I%_CDO:\=/%/libev -L%_CDO:\=/%/libev/.libs
 set CXXFLAGS=%CFLAGS%
-sh -x "./configure"
-mingw32-make MAKE=C:\w\mingw64\bin\mingw32-make
+sh -c "exec 0</dev/null && ./configure"
+sh -c "exec 0</dev/null && mingw32-make"
 
 :: Make steps for determinism
 

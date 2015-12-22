@@ -13,14 +13,9 @@ pushd "%_NAM%"
 
 :: Build
 
-set _OUT=_start.sh
-echo #!/bin/sh> "%_OUT%"
-echo.>> "%_OUT%"
-echo exec 0^</dev/null; ./configure>> "%_OUT%"
-
 del /s *.o *.a *.lo *.la *.lai *.Plo >> nul 2>&1
-sh -c "./_start.sh"
-mingw32-make MAKE=C:\w\mingw64\bin\mingw32-make
+sh -c "exec 0</dev/null && ./configure"
+sh -c "exec 0</dev/null && mingw32-make"
 
 :: Make steps for determinism
 
