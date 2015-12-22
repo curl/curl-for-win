@@ -26,7 +26,28 @@ sh -c "exec 0</dev/null && mingw32-make MAKE=C:/w/mingw64/bin/mingw32-make insta
 
 if exist lib\*.a strip -p --enable-deterministic-archives -g lib\*.a
 
-touch -c lib/*.a -r Changes
+touch -c include/*.* -r Changes
+touch -c lib/*.*     -r Changes
+
+:: Create package
+
+set _BAS=%_NAM%-%_VER%-%_CPU%-mingw
+set _DST=%TEMP%\%_BAS%
+
+xcopy /y /s include\*.*          "%_DST%\include\"
+xcopy /y /s lib\*.*              "%_DST%\lib\"
+ copy /y    Changes              "%_DST%\Changes.txt"
+ copy /y    LICENSE              "%_DST%\LICENSE.txt"
+ copy /y    README               "%_DST%\README.txt"
+
+unix2dos -k %_DST:\=/%/*.txt
+
+touch -c %_DST:\=/%/include -r Changes
+touch -c %_DST:\=/%/lib     -r Changes
+touch -c %_DST:\=/%         -r Changes
+
+call ..\pack.bat
+call ..\upload.bat
 
 popd
 endlocal
