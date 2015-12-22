@@ -14,7 +14,7 @@ pushd "%_NAM%"
 :: Build
 
 del /s *.o *.a *.lo *.la *.lai *.Plo >> nul 2>&1
-sh -c "./Configure"
+sh -x "./configure"
 mingw32-make
 
 :: Make steps for determinism

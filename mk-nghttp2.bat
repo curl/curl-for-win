@@ -14,11 +14,11 @@ pushd "%_NAM%"
 
 :: Build
 
-# Do not put '-I' or '-L' in double quotes. It means these
-# must be built on a path that does not contain spaces.
+:: Do not put '-I' or '-L' in double quotes. It means these
+:: must be built on a path that does not contain spaces.
 set CFLAGS=-U__STRICT_ANSI__ -I%_CDO:\=/%/libev -L%_CDO:\=/%/libev/.libs
 set CXXFLAGS=%CFLAGS%
-sh -c "./Configure"
+sh -x "./configure"
 mingw32-make
 
 :: Make steps for determinism
