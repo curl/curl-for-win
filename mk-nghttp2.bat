@@ -25,9 +25,9 @@ sh -c "exec 0</dev/null && mingw32-make MAKE=C:/w/mingw64/bin/mingw32-make insta
 
 :: Make steps for determinism
 
-if exist lib\.libs\*.a strip -p --enable-deterministic-archives -g lib\.libs\*.a
+if exist lib\*.a strip -p --enable-deterministic-archives -g lib\*.a
 
-touch -c lib/.libs/*.a -r ChangeLog
+touch -c lib/*.a -r ChangeLog
 
 popd
 endlocal
