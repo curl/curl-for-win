@@ -75,6 +75,9 @@ xcopy /y /s    lib\*.dll            "%_DST%\bin\"
 
  copy /y       ..\openssl\LICENSE   "%_DST%\LICENSE-openssl.txt"
  copy /y       ..\libssh2\COPYING   "%_DST%\COPYING-libssh2.txt"
+::copy /y       ..\librtmp\COPYING   "%_DST%\COPYING-librtmp.txt"
+ copy /y       ..\nghttp2\COPYING   "%_DST%\COPYING-nghttp2.txt"
+ copy /y       ..\libev\LICENSE     "%_DST%\LICENSE-libev.txt"
 
 if exist lib\*.a   xcopy /y /s lib\*.a   "%_DST%\lib\"
 if exist lib\*.lib xcopy /y /s lib\*.lib "%_DST%\lib\"
