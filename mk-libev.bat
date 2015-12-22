@@ -16,7 +16,7 @@ pushd "%_NAM%"
 sh --version
 
 del /s *.o *.a *.lo *.la *.lai *.Plo >> nul 2>&1
-sh -x "./configure"
+sh -x "./configure" 1> 1.txt 2> 2.txt
 mingw32-make MAKE=C:\w\mingw64\bin\mingw32-make
 
 :: Make steps for determinism
