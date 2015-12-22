@@ -14,13 +14,12 @@ pushd "%_NAM%"
 
 :: Build
 
-:: Do not enclose '-I' or '-L' in double quotes. It means
-:: these must be built on a path that does not contain spaces.
-set CFLAGS=-U__STRICT_ANSI__ -I%_CDO:\=/%/libev -L%_CDO:\=/%/libev/.libs
+set CFLAGS=-U__STRICT_ANSI__ -I"%_CDO:\=/%/libev" -L"%_CDO:\=/%/libev/.libs"
 set CXXFLAGS=%CFLAGS%
 :: Open dummy file descriptor to fix './<script>: line <n>: 0: Bad file descriptor'
-sh -c "exec 0</dev/null && ./configure"
+sh -c "exec 0</dev/null && ./configure '--prefix=%CD:\=/%'"
 sh -c "exec 0</dev/null && mingw32-make MAKE=C:/w/mingw64/bin/mingw32-make"
+sh -c "exec 0</dev/null && mingw32-make install"
 
 :: Make steps for determinism
 
