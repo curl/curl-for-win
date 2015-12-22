@@ -15,7 +15,7 @@ pushd "%_NAM%"
 
 del /s *.o *.a *.lo *.la *.lai *.Plo >> nul 2>&1
 sh -x "./configure"
-mingw32-make
+mingw32-make MAKE=C:\w\mingw64\bin\mingw32-make
 
 :: Make steps for determinism
 

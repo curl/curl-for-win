@@ -19,7 +19,7 @@ pushd "%_NAM%"
 set CFLAGS=-U__STRICT_ANSI__ -I%_CDO:\=/%/libev -L%_CDO:\=/%/libev/.libs
 set CXXFLAGS=%CFLAGS%
 sh -x "./configure"
-mingw32-make
+mingw32-make MAKE=C:\w\mingw64\bin\mingw32-make
 
 :: Make steps for determinism
 
