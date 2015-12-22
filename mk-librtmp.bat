@@ -16,8 +16,8 @@ pushd "%_NAM%"
 set INC=-I../../openssl/include -I../../zlib
 if "%_CPU%" == "win32" set XCFLAGS=-m32
 if "%_CPU%" == "win64" set XCFLAGS=-m64
-if "%_CPU%" == "win32" set XLDFLAGS=-m32 -L../../openssl/lib -L../../zlib
-if "%_CPU%" == "win64" set XLDFLAGS=-m64 -L../../openssl/lib -L../../zlib
+if "%_CPU%" == "win32" set XLDFLAGS=-m32 -L../../openssl -L../../zlib
+if "%_CPU%" == "win64" set XLDFLAGS=-m64 -L../../openssl -L../../zlib
 set LDFLAGS=%XLDFLAGS%
 mingw32-make SYS=mingw SODEF_yes=
 
