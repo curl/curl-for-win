@@ -1,4 +1,4 @@
-:: Copyright 2014-2015 Viktor Szakats <https://github.com/vszakats>
+:: Copyright 2015 Viktor Szakats <https://github.com/vszakats>
 :: See LICENSE.md
 
 @echo off
