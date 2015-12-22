@@ -15,7 +15,7 @@ pushd "%_NAM%"
 
 del /s *.o *.a *.lo *.la *.lai *.Plo >> nul 2>&1
 sh -c "exec 0</dev/null && ./configure"
-sh -c "exec 0</dev/null && mingw32-make"
+sh -c "exec 0</dev/null && mingw32-make MAKE=C:/w/mingw64/bin/mingw32-make"
 
 :: Make steps for determinism
 
