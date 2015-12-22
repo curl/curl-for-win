@@ -23,11 +23,11 @@ set LIBRTMP_PATH=../../librtmp
 set LIBSSH2_PATH=../../libssh2
 if "%_CPU%" == "win32" set ARCH=w32
 if "%_CPU%" == "win64" set ARCH=w64
-set CURL_CFLAG_EXTRAS=-DCURL_STATICLIB -fno-ident
+set CURL_CFLAG_EXTRAS=-DCURL_STATICLIB -DNGHTTP2_STATICLIB -fno-ident
 set CURL_LDFLAG_EXTRAS=-static-libgcc
 
 mingw32-make mingw32-clean
-:: - '-rtmp' is not enabled because libcurl then (of course) needs librtmp 
+:: - '-rtmp' is not enabled because libcurl then (of course) needs librtmp
 ::   even if its functionality is not actually needed or used
 :: - Do not link WinIDN in 32-bit builds, for Windows XP compatibility (missing normaliz.dll)
 if "%_CPU%" == "win32" mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-srp-nghttp2-ipv6
