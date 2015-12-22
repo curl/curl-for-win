@@ -71,10 +71,12 @@ build_script:
 - set PATH=C:\w\mingw64\bin;%PATH%
 - set CPU=win32
 - mk-openssl.bat %VER_OPENSSL% %CPU%
+- mk-librtmp.bat %VER_LIBRTMP% %CPU%
 - mk-libssh2.bat %VER_LIBSSH2% %CPU%
 - mk-curl.bat    %VER_CURL%    %CPU%
 - set CPU=win64
 - mk-openssl.bat %VER_OPENSSL% %CPU%
+- mk-librtmp.bat %VER_LIBRTMP% %CPU%
 - mk-libssh2.bat %VER_LIBSSH2% %CPU%
 - mk-curl.bat    %VER_CURL%    %CPU%
 - type hashes.txt
