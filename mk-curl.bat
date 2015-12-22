@@ -24,7 +24,7 @@ set LIBSSH2_PATH=../../libssh2
 if "%_CPU%" == "win32" set ARCH=w32
 if "%_CPU%" == "win64" set ARCH=w64
 set CURL_CFLAG_EXTRAS=-DCURL_STATICLIB -DNGHTTP2_STATICLIB -fno-ident
-set CURL_LDFLAG_EXTRAS=-static-libgcc -L../../libev/lib -lev
+set CURL_LDFLAG_EXTRAS=-static-libgcc
 
 mingw32-make mingw32-clean
 :: - '-rtmp' is not enabled because libcurl then (of course) needs librtmp
@@ -77,7 +77,6 @@ set _DST=%TEMP%\%_BAS%
    copy /y       ..\libssh2\COPYING   "%_DST%\COPYING-libssh2.txt"
 :: copy /y       ..\librtmp\COPYING   "%_DST%\COPYING-librtmp.txt"
    copy /y       ..\nghttp2\COPYING   "%_DST%\COPYING-nghttp2.txt"
-   copy /y       ..\libev\LICENSE     "%_DST%\LICENSE-libev.txt"
 
 if exist lib\*.a   xcopy /y /s lib\*.a   "%_DST%\lib\"
 if exist lib\*.lib xcopy /y /s lib\*.lib "%_DST%\lib\"

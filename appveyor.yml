@@ -18,7 +18,6 @@ environment:
 install:
 # Using zlib headers and static libraries bundled with mingw-w64
 #- set VER_ZLIB=1.2.8
-- set VER_LIBEV=4.22
 - set VER_NGHTTP2=1.5.0
 - set VER_OPENSSL=1.0.2e
 - set VER_LIBRTMP=2.3
@@ -40,12 +39,6 @@ install:
 #- tar -xvf zip.tar.gz > nul 2>&1
 #- del zip.tar.gz
 #- move zlib-%VER_ZLIB% zlib
-### libev
-- curl -fsS http://dist.schmorp.de/libev/libev-%VER_LIBEV%.tar.gz -o libev.tar.gz
-- openssl dgst -sha256 libev.tar.gz | findstr /i /c:736079e8ac543c74d59af73f9c52737b3bfec9601f020bf25a87a4f4d0f01bd6
-- tar -xvf libev.tar.gz > nul 2>&1
-- del libev.tar.gz
-- move libev-%VER_LIBEV% libev
 ### nghttp2
 - curl -fsS -L --proto-redir =https https://github.com/tatsuhiro-t/nghttp2/releases/download/v%VER_NGHTTP2%/nghttp2-%VER_NGHTTP2%.tar.bz2 -o nghttp2.tar.bz2
 - openssl dgst -sha256 nghttp2.tar.bz2 | findstr /i /c:af2b6ec8ad1cd12fe38c2a6c14dd51e37f9259b8e0d1f4cb47a931c65bfa4604
@@ -99,14 +92,12 @@ install:
 build_script:
 - set PATH=C:\w\mingw64\bin;%PATH%
 - set CPU=win32
-- mk-libev.bat   %VER_LIBEV%   %CPU%
 - mk-nghttp2.bat %VER_NGHTTP2% %CPU%
 - mk-openssl.bat %VER_OPENSSL% %CPU%
 - mk-librtmp.bat %VER_LIBRTMP% %CPU%
 - mk-libssh2.bat %VER_LIBSSH2% %CPU%
 - mk-curl.bat    %VER_CURL%    %CPU%
 - set CPU=win64
-- mk-libev.bat   %VER_LIBEV%   %CPU%
 - mk-nghttp2.bat %VER_NGHTTP2% %CPU%
 - mk-openssl.bat %VER_OPENSSL% %CPU%
 - mk-librtmp.bat %VER_LIBRTMP% %CPU%
