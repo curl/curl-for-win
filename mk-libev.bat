@@ -13,7 +13,7 @@ pushd "%_NAM%"
 
 :: Build
 
-set > env_env.txt
+sh --version
 
 del /s *.o *.a *.lo *.la *.lai *.Plo >> nul 2>&1
 sh -x "./configure"
