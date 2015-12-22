@@ -3,10 +3,14 @@
 
 @echo off
 
-if     "%APPVEYOR_REPO_BRANCH%" == "master" set _SUF=
-if not "%APPVEYOR_REPO_BRANCH%" == "master" set _SUF=-test
+if "%APPVEYOR_REPO_BRANCH%" == "master" (
+   set _SUF=
+) else (
+   set _SUF=-test
+   mv "%_BAS%.7z" "%_BAS%%_SUF%.7z"
+)
 
-curl -fsS -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/%BINTRAY_USER%/generic/%_NAM%%_SUF%/%_VER%/%_BAS%.7z?override=1&publish=1" --data-binary "@%_BAS%.7z"
-for %%I in ("%_BAS%.7z") do echo %%~nxI: %%~zI bytes %%~tI
-openssl dgst -sha256 "%_BAS%.7z"
-openssl dgst -sha256 "%_BAS%.7z" >> ..\hashes.txt
+curl -fsS -u "%BINTRAY_USER%:%BINTRAY_APIKEY%" -X PUT "https://api.bintray.com/content/%BINTRAY_USER%/generic/%_NAM%%_SUF%/%_VER%/%_BAS%%_SUF%.7z?override=1&publish=1" --data-binary "@%_BAS%%_SUF%.7z"
+for %%I in ("%_BAS%%_SUF%.7z") do echo %%~nxI: %%~zI bytes %%~tI
+openssl dgst -sha256 "%_BAS%%_SUF%.7z"
+openssl dgst -sha256 "%_BAS%%_SUF%.7z" >> ..\hashes.txt
