@@ -12,6 +12,7 @@ install:
 # Using zlib headers and static libraries bundled with mingw-w64
 #- set VER_ZLIB=1.2.8
 - set VER_OPENSSL=1.0.2e
+- set VER_LIBRTMP=2.3
 - set VER_LIBSSH2=1.6.0
 - set VER_CURL=7.46.0
 - ps: rm alias:curl
@@ -39,6 +40,11 @@ install:
 # Using 'sed' for now
 #- patch -p0 -i ../openssl.diff
 - cd ..
+- curl -fsS https://rtmpdump.mplayerhq.hu/download/rtmpdump-%VER_LIBRTMP%.tgz -o librtmp.tar.gz
+- openssl dgst -sha256 librtmp.tar.gz | findstr /i /c:ef38b7a99d82ce6912063d21063aeaf28185341b3df486e24bffce5354224b2c
+- tar -zxvf librtmp.tar.gz > nul 2>&1
+- del librtmp.tar.gz
+- move rtmpdump-%VER_LIBRTMP% librtmp
 - curl -fsS -L --proto-redir =https https://github.com/libssh2/libssh2/releases/download/libssh2-%VER_LIBSSH2%/libssh2-%VER_LIBSSH2%.tar.gz -o libssh2.tar.gz
 - openssl dgst -sha256 libssh2.tar.gz | findstr /i /c:5a202943a34a1d82a1c31f74094f2453c207bf9936093867f41414968c8e8215
 - tar -zxvf libssh2.tar.gz > nul 2>&1
