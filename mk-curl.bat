@@ -18,6 +18,7 @@ set OPENSSL_PATH=../../openssl
 set OPENSSL_INCLUDE=%OPENSSL_PATH%/include
 set OPENSSL_LIBPATH=%OPENSSL_PATH%
 set OPENSSL_LIBS=-lssl -lcrypto
+set LIBRTMP_PATH=../../librtmp
 set LIBSSH2_PATH=../../libssh2
 if "%_CPU%" == "win32" set ARCH=w32
 if "%_CPU%" == "win64" set ARCH=w64
@@ -26,8 +27,8 @@ set CURL_LDFLAG_EXTRAS=-static-libgcc
 
 mingw32-make mingw32-clean
 :: Do not link WinIDN in 32-bit builds for Windows XP compatibility (missing normaliz.dll)
-if "%_CPU%" == "win32" mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-srp-ipv6
-if "%_CPU%" == "win64" mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-srp-ipv6-winidn
+if "%_CPU%" == "win32" mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-srp-rtmp-ipv6
+if "%_CPU%" == "win64" mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-srp-rtmp-ipv6-winidn
 
 :: Download CA bundle
 if not exist ..\ca-bundle.crt curl -R -fsS -L --proto-redir =https https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt -o ..\ca-bundle.crt
