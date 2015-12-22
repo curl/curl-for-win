@@ -14,6 +14,7 @@ pushd "%_NAM%"
 
 :: Build
 
+del /s *.o *.a *.lo *.la *.lai *.Plo *.pc >> nul 2>&1
 if "%_CPU%" == "win32" set LDFLAGS=-m32
 if "%_CPU%" == "win64" set LDFLAGS=-m64
 set CFLAGS=%LDFLAGS% -U__STRICT_ANSI__ -I"%_CDO:\=/%/libev/include" -L"%_CDO:\=/%/libev/lib"
