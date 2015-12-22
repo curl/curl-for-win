@@ -14,11 +14,16 @@ pushd "%_NAM%"
 :: Build
 
 set INC=-I../../openssl/include -I../../zlib
-if "%_CPU%" == "win32" set XCFLAGS=-m32
-if "%_CPU%" == "win64" set XCFLAGS=-m64
-if "%_CPU%" == "win32" set XLDFLAGS=-m32 -L../../openssl -L../../zlib
-if "%_CPU%" == "win64" set XLDFLAGS=-m64 -L../../openssl -L../../zlib
-set LDFLAGS=%XLDFLAGS%
+if "%_CPU%" == "win32" (
+   set XCFLAGS=-m32
+   set XLDFLAGS=-m32 -L../openssl -L../zlib
+   set  LDFLAGS=-m32 -L../../openssl -L../../zlib
+) else (
+   set XCFLAGS=-m64
+   set XLDFLAGS=-m64 -L../openssl -L../zlib
+   set  LDFLAGS=-m64 -L../../openssl -L../../zlib
+)
+del /s *.o *.a *.dll *.so *.exe >> nul 2>&1
 mingw32-make SYS=mingw SODEF_yes=
 
 :: Make steps for determinism
