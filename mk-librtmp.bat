@@ -21,7 +21,6 @@ set INC=-I../../openssl/include -I../../zlib
 if "%_CPU%" == "win32" set XCFLAGS=-m32
 if "%_CPU%" == "win64" set XCFLAGS=-m64
 set XLDFLAGS=%XCFLAGS% "-L%_CDO%/openssl" "-L%_CDO%/zlib"
-set XLDFLAGS=%XCFLAGS% "-L%_CDO%/openssl" "-L%_CDO%/zlib"
 set LDFLAGS=%XLDFLAGS%
 del /s *.o *.a *.dll *.so *.exe >> nul 2>&1
 mingw32-make SYS=mingw SODEF_yes=
