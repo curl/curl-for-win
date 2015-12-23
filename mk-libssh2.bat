@@ -41,7 +41,6 @@ touch -c win32/*.lib -r NEWS
 :: Create package
 
 set _BAS=%_NAM%-%_VER%-%_CPU%-mingw
-if not "%APPVEYOR_REPO_BRANCH%" == "master" set _BAS=%_BAS%-test
 set _DST=%TEMP%\%_BAS%
 
 xcopy /y /s /q docs\*.              "%_DST%\docs\*.txt"

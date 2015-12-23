@@ -18,16 +18,20 @@ set OPENSSL_PATH=../../openssl
 set OPENSSL_INCLUDE=%OPENSSL_PATH%/include
 set OPENSSL_LIBPATH=%OPENSSL_PATH%
 set OPENSSL_LIBS=-lssl -lcrypto
+set NGHTTP2_PATH=../../nghttp2
+set LIBRTMP_PATH=../../librtmp
 set LIBSSH2_PATH=../../libssh2
 if "%_CPU%" == "win32" set ARCH=w32
 if "%_CPU%" == "win64" set ARCH=w64
-set CURL_CFLAG_EXTRAS=-DCURL_STATICLIB -fno-ident
+set CURL_CFLAG_EXTRAS=-DCURL_STATICLIB -DNGHTTP2_STATICLIB -fno-ident
 set CURL_LDFLAG_EXTRAS=-static-libgcc
 
 mingw32-make mingw32-clean
-# Do not link WinIDN in 32-bit builds for Windows XP compatibility (missing normaliz.dll)
-if "%_CPU%" == "win32" mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-ipv6
-if "%_CPU%" == "win64" mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-ipv6-winidn
+:: - '-rtmp' is not enabled because libcurl then (of course) needs librtmp
+::   even if its functionality is not actually needed or used
+:: - Do not link WinIDN in 32-bit builds, for Windows XP compatibility (missing normaliz.dll)
+if "%_CPU%" == "win32" mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-srp-nghttp2-ipv6
+if "%_CPU%" == "win64" mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-srp-nghttp2-ipv6-winidn
 
 :: Download CA bundle
 if not exist ..\ca-bundle.crt curl -R -fsS -L --proto-redir =https https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt -o ..\ca-bundle.crt
@@ -53,25 +57,26 @@ src\curl.exe --version
 :: Create package
 
 set _BAS=%_NAM%-%_VER%-%_CPU%-mingw
-if not "%APPVEYOR_REPO_BRANCH%" == "master" set _BAS=%_BAS%-test
 set _DST=%TEMP%\%_BAS%
 
-xcopy /y /s /q docs\*.              "%_DST%\docs\*.txt"
-xcopy /y /s /q docs\*.html          "%_DST%\docs\"
-xcopy /y /s /q docs\libcurl\*.html  "%_DST%\docs\libcurl\"
-xcopy /y /s /q include\curl\*.h     "%_DST%\include\curl\"
- copy /y       lib\mk-ca-bundle.pl  "%_DST%\"
- copy /y       lib\mk-ca-bundle.vbs "%_DST%\"
- copy /y       CHANGES              "%_DST%\CHANGES.txt"
- copy /y       COPYING              "%_DST%\COPYING.txt"
- copy /y       README               "%_DST%\README.txt"
- copy /y       RELEASE-NOTES        "%_DST%\RELEASE-NOTES.txt"
-xcopy /y /s    src\*.exe            "%_DST%\bin\"
-xcopy /y /s    lib\*.dll            "%_DST%\bin\"
- copy /y       ..\ca-bundle.crt     "%_DST%\bin\curl-ca-bundle.crt"
+  xcopy /y /s /q docs\*.              "%_DST%\docs\*.txt"
+  xcopy /y /s /q docs\*.html          "%_DST%\docs\"
+  xcopy /y /s /q docs\libcurl\*.html  "%_DST%\docs\libcurl\"
+  xcopy /y /s /q include\curl\*.h     "%_DST%\include\curl\"
+   copy /y       lib\mk-ca-bundle.pl  "%_DST%\"
+   copy /y       lib\mk-ca-bundle.vbs "%_DST%\"
+   copy /y       CHANGES              "%_DST%\CHANGES.txt"
+   copy /y       COPYING              "%_DST%\COPYING.txt"
+   copy /y       README               "%_DST%\README.txt"
+   copy /y       RELEASE-NOTES        "%_DST%\RELEASE-NOTES.txt"
+  xcopy /y /s    src\*.exe            "%_DST%\bin\"
+  xcopy /y /s    lib\*.dll            "%_DST%\bin\"
+   copy /y       ..\ca-bundle.crt     "%_DST%\bin\curl-ca-bundle.crt"
 
- copy /y       ..\openssl\LICENSE   "%_DST%\LICENSE-openssl.txt"
- copy /y       ..\libssh2\COPYING   "%_DST%\COPYING-libssh2.txt"
+   copy /y       ..\openssl\LICENSE   "%_DST%\LICENSE-openssl.txt"
+   copy /y       ..\libssh2\COPYING   "%_DST%\COPYING-libssh2.txt"
+:: copy /y       ..\librtmp\COPYING   "%_DST%\COPYING-librtmp.txt"
+   copy /y       ..\nghttp2\COPYING   "%_DST%\COPYING-nghttp2.txt"
 
 if exist lib\*.a   xcopy /y /s lib\*.a   "%_DST%\lib\"
 if exist lib\*.lib xcopy /y /s lib\*.lib "%_DST%\lib\"

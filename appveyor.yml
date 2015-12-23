@@ -3,15 +3,24 @@ skip_tags: true
 os: Windows Server 2012 R2
 clone_depth: 8
 clone_folder: C:\w\
+
 environment:
   BINTRAY_APIKEY:
     secure: FUQVzdqjaAvLYH/yTdL1rdtrVcAheHbK4YUvNNpvArR09vfkkuAk+8ntrg2MRYa2
   BINTRAY_USER:
     secure: jfLq1ApyVLNouxv07skhrg==
+
+#init:
+#- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#on_finish:
+#- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 install:
 # Using zlib headers and static libraries bundled with mingw-w64
 #- set VER_ZLIB=1.2.8
+- set VER_NGHTTP2=1.5.0
 - set VER_OPENSSL=1.0.2e
+- set VER_LIBRTMP=2.3
 - set VER_LIBSSH2=1.6.0
 - set VER_CURL=7.46.0
 - ps: rm alias:curl
@@ -19,18 +28,27 @@ install:
 - python -m pip install pefile
 # PATH must be reconfigured to use short name for the sh.exe location, otherwise the OpenSSL build process fails
 - set PATH=C:\PROGRA~1\Git\usr\bin;%PATH%
+### mingw
 - ps: curl -fsS https://www.mirrorservice.org/sites/dl.sourceforge.net/pub/sourceforge/m/mi/mingw-w64/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/5.2.0/threads-posix/sjlj/x86_64-5.2.0-release-posix-sjlj-rt_v4-rev0.7z -o mingw.7z
 - openssl dgst -sha256 mingw.7z | findstr /i /c:c0536c55a1d12882987afd0a9be377413eaf6cee105e921c949899fa9b308b35
 # Will unpack into C:\w\mingw64
 - 7z x -y -oC:\w\ mingw.7z > nul
+### zlib
 #- curl -fsS -L --proto-redir =https https://github.com/madler/zlib/archive/v%VER_ZLIB%.tar.gz -o zip.tar.gz
 #- openssl dgst -sha256 zip.tar.gz | findstr /i /c:e380bd1bdb6447508beaa50efc653fe45f4edc1dafe11a251ae093e0ee97db9a
-#- tar -zxvf zip.tar.gz > nul 2>&1
+#- tar -xvf zip.tar.gz > nul 2>&1
 #- del zip.tar.gz
 #- move zlib-%VER_ZLIB% zlib
+### nghttp2
+- curl -fsS -L --proto-redir =https https://github.com/tatsuhiro-t/nghttp2/releases/download/v%VER_NGHTTP2%/nghttp2-%VER_NGHTTP2%.tar.bz2 -o nghttp2.tar.bz2
+- openssl dgst -sha256 nghttp2.tar.bz2 | findstr /i /c:af2b6ec8ad1cd12fe38c2a6c14dd51e37f9259b8e0d1f4cb47a931c65bfa4604
+- tar -xvf nghttp2.tar.bz2 > nul 2>&1
+- del nghttp2.tar.bz2
+- move nghttp2-%VER_NGHTTP2% nghttp2
+### openssl
 - curl -fsS https://www.openssl.org/source/openssl-%VER_OPENSSL%.tar.gz -o openssl.tar.gz
 - openssl dgst -sha256 openssl.tar.gz | findstr /i /c:e23ccafdb75cfcde782da0151731aa2185195ac745eea3846133f2e05c0e0bff
-- success tar -zxvf openssl.tar.gz > nul 2>&1
+- success tar -xvf openssl.tar.gz > nul 2>&1
 - del openssl.tar.gz
 - move openssl-%VER_OPENSSL% openssl
 - sh -c ./mk-openssl-seed.sh
@@ -39,36 +57,50 @@ install:
 # Using 'sed' for now
 #- patch -p0 -i ../openssl.diff
 - cd ..
+### librtmp
+#- curl -fsS https://rtmpdump.mplayerhq.hu/download/rtmpdump-%VER_LIBRTMP%.tgz -o librtmp.tar.gz
+#- openssl dgst -sha256 librtmp.tar.gz | findstr /i /c:ef38b7a99d82ce6912063d21063aeaf28185341b3df486e24bffce5354224b2c
+#- tar -xvf librtmp.tar.gz > nul 2>&1
+#- del librtmp.tar.gz
+#- move rtmpdump-%VER_LIBRTMP% librtmp
+### libssh2
 - curl -fsS -L --proto-redir =https https://github.com/libssh2/libssh2/releases/download/libssh2-%VER_LIBSSH2%/libssh2-%VER_LIBSSH2%.tar.gz -o libssh2.tar.gz
 - openssl dgst -sha256 libssh2.tar.gz | findstr /i /c:5a202943a34a1d82a1c31f74094f2453c207bf9936093867f41414968c8e8215
-- tar -zxvf libssh2.tar.gz > nul 2>&1
+- tar -xvf libssh2.tar.gz > nul 2>&1
 - del libssh2.tar.gz
 - move libssh2-%VER_LIBSSH2% libssh2
 - dos2unix libssh2.diff
 - cd libssh2
 - patch -p0 -i ../libssh2.diff
 - cd ..
+### curl
 - curl -fsS -L --proto-redir =https https://github.com/bagder/curl/releases/download/curl-%VER_CURL:.=_%/curl-%VER_CURL%.tar.bz2 -o curl.tar.bz2
 - openssl dgst -sha256 curl.tar.bz2 | findstr /i /c:b7d726cdd8ed4b6db0fa1b474a3c59ebbbe4dcd4c61ac5e7ade0e0270d3195ad
-- tar -jxvf curl.tar.bz2 > nul 2>&1
+- tar -xvf curl.tar.bz2 > nul 2>&1
 - del curl.tar.bz2
 - move curl-%VER_CURL% curl
 - dos2unix curl.diff
 - cd curl
 - patch -p0 -i ../curl.diff
 - cd ..
+###
 - reg add "HKCU\Control Panel\International" /v sShortDate /t REG_SZ /d yyyy-MM-dd /f
 - reg add "HKCU\Control Panel\International" /v sShortTime /t REG_SZ /d HH:mm /f
 # From https://www.mirrorservice.org/sites/dl.sourceforge.net/pub/sourceforge/m/mi/mingw-w64-dgn/mingw-w64/mingw-w64-bin-x86_64-20150801.7z
 - copy /y mingw32-make.exe C:\w\mingw64\bin\mingw32-make.exe
+
 build_script:
 - set PATH=C:\w\mingw64\bin;%PATH%
 - set CPU=win32
+- mk-nghttp2.bat %VER_NGHTTP2% %CPU%
 - mk-openssl.bat %VER_OPENSSL% %CPU%
+#- mk-librtmp.bat %VER_LIBRTMP% %CPU%
 - mk-libssh2.bat %VER_LIBSSH2% %CPU%
 - mk-curl.bat    %VER_CURL%    %CPU%
 - set CPU=win64
+- mk-nghttp2.bat %VER_NGHTTP2% %CPU%
 - mk-openssl.bat %VER_OPENSSL% %CPU%
+#- mk-librtmp.bat %VER_LIBRTMP% %CPU%
 - mk-libssh2.bat %VER_LIBSSH2% %CPU%
 - mk-curl.bat    %VER_CURL%    %CPU%
 - type hashes.txt
