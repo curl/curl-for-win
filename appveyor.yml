@@ -58,11 +58,11 @@ install:
 #- patch -p0 -i ../openssl.diff
 - cd ..
 ### librtmp
-- curl -fsS https://rtmpdump.mplayerhq.hu/download/rtmpdump-%VER_LIBRTMP%.tgz -o librtmp.tar.gz
-- openssl dgst -sha256 librtmp.tar.gz | findstr /i /c:ef38b7a99d82ce6912063d21063aeaf28185341b3df486e24bffce5354224b2c
-- tar -xvf librtmp.tar.gz > nul 2>&1
-- del librtmp.tar.gz
-- move rtmpdump-%VER_LIBRTMP% librtmp
+#- curl -fsS https://rtmpdump.mplayerhq.hu/download/rtmpdump-%VER_LIBRTMP%.tgz -o librtmp.tar.gz
+#- openssl dgst -sha256 librtmp.tar.gz | findstr /i /c:ef38b7a99d82ce6912063d21063aeaf28185341b3df486e24bffce5354224b2c
+#- tar -xvf librtmp.tar.gz > nul 2>&1
+#- del librtmp.tar.gz
+#- move rtmpdump-%VER_LIBRTMP% librtmp
 ### libssh2
 - curl -fsS -L --proto-redir =https https://github.com/libssh2/libssh2/releases/download/libssh2-%VER_LIBSSH2%/libssh2-%VER_LIBSSH2%.tar.gz -o libssh2.tar.gz
 - openssl dgst -sha256 libssh2.tar.gz | findstr /i /c:5a202943a34a1d82a1c31f74094f2453c207bf9936093867f41414968c8e8215
@@ -94,13 +94,13 @@ build_script:
 - set CPU=win32
 - mk-nghttp2.bat %VER_NGHTTP2% %CPU%
 - mk-openssl.bat %VER_OPENSSL% %CPU%
-- mk-librtmp.bat %VER_LIBRTMP% %CPU%
+#- mk-librtmp.bat %VER_LIBRTMP% %CPU%
 - mk-libssh2.bat %VER_LIBSSH2% %CPU%
 - mk-curl.bat    %VER_CURL%    %CPU%
 - set CPU=win64
 - mk-nghttp2.bat %VER_NGHTTP2% %CPU%
 - mk-openssl.bat %VER_OPENSSL% %CPU%
-- mk-librtmp.bat %VER_LIBRTMP% %CPU%
+#- mk-librtmp.bat %VER_LIBRTMP% %CPU%
 - mk-libssh2.bat %VER_LIBSSH2% %CPU%
 - mk-curl.bat    %VER_CURL%    %CPU%
 - type hashes.txt
