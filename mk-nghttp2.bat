@@ -37,11 +37,14 @@ set _BAS=%_NAM%-%_VER%-%_CPU%-mingw
 set _DST=%TEMP%\%_BAS%
 
 xcopy /y /s include\*.*          "%_DST%\include\"
-xcopy /y /s lib\*.*              "%_DST%\lib\"
  copy /y    ChangeLog            "%_DST%\ChangeLog.txt"
  copy /y    AUTHORS              "%_DST%\AUTHORS.txt"
  copy /y    COPYING              "%_DST%\COPYING.txt"
  copy /y    README.rst           "%_DST%\README.rst"
+
+if exist *.a  xcopy /y /s lib\*.a  "%_DST%\lib\"
+if exist *.la xcopy /y /s lib\*.la "%_DST%\lib\"
+if exist *.pc xcopy /y /s lib\*.pc "%_DST%\lib\"
 
 unix2dos -k %_DST:\=/%/*.txt
 unix2dos -k %_DST:\=/%/*.rst
