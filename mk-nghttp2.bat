@@ -42,9 +42,9 @@ xcopy /y /s include\*.*          "%_DST%\include\"
  copy /y    COPYING              "%_DST%\COPYING.txt"
  copy /y    README.rst           "%_DST%\README.rst"
 
-if exist *.a  xcopy /y /s lib\*.a  "%_DST%\lib\"
-if exist *.la xcopy /y /s lib\*.la "%_DST%\lib\"
-if exist *.pc xcopy /y /s lib\*.pc "%_DST%\lib\"
+if exist lib\*.a  xcopy /y /s lib\*.a  "%_DST%\lib\"
+if exist lib\*.la xcopy /y /s lib\*.la "%_DST%\lib\"
+if exist lib\*.pc xcopy /y /s lib\*.pc "%_DST%\lib\"
 
 unix2dos -k %_DST:\=/%/*.txt
 unix2dos -k %_DST:\=/%/*.rst
