@@ -18,7 +18,7 @@ environment:
 install:
 # Using zlib headers and static libraries bundled with mingw-w64
 #- set VER_ZLIB=1.2.8
-- set VER_NGHTTP2=1.5.0
+- set VER_NGHTTP2=1.6.0
 - set VER_OPENSSL=1.0.2e
 - set VER_LIBRTMP=2.3
 - set VER_LIBSSH2=1.6.0
@@ -41,7 +41,7 @@ install:
 #- move zlib-%VER_ZLIB% zlib
 ### nghttp2
 - curl -fsS -L --proto-redir =https https://github.com/tatsuhiro-t/nghttp2/releases/download/v%VER_NGHTTP2%/nghttp2-%VER_NGHTTP2%.tar.bz2 -o nghttp2.tar.bz2
-- openssl dgst -sha256 nghttp2.tar.bz2 | findstr /i /c:af2b6ec8ad1cd12fe38c2a6c14dd51e37f9259b8e0d1f4cb47a931c65bfa4604
+- openssl dgst -sha256 nghttp2.tar.bz2 | findstr /i /c:7ac5624bc744c766bf6b37de31d7c48dfceb648313306311943968bdad77d5bd
 - tar -xvf nghttp2.tar.bz2 > nul 2>&1
 - del nghttp2.tar.bz2
 - move nghttp2-%VER_NGHTTP2% nghttp2
