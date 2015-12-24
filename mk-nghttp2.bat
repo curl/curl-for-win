@@ -49,10 +49,11 @@ if exist lib\*.pc xcopy /y /s lib\*.pc "%_DST%\lib\"
 unix2dos -k %_DST:\=/%/*.txt
 unix2dos -k %_DST:\=/%/*.rst
 
-touch -c %_DST:\=/%/include       -r ChangeLog
-touch -c %_DST:\=/%/lib/pkgconfig -r ChangeLog
-touch -c %_DST:\=/%/lib           -r ChangeLog
-touch -c %_DST:\=/%               -r ChangeLog
+touch -c %_DST:\=/%/include/nghttp2 -r ChangeLog
+touch -c %_DST:\=/%/include         -r ChangeLog
+touch -c %_DST:\=/%/lib/pkgconfig   -r ChangeLog
+touch -c %_DST:\=/%/lib             -r ChangeLog
+touch -c %_DST:\=/%                 -r ChangeLog
 
 call ..\pack.bat
 call ..\upload.bat
