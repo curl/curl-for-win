@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Copyright 2015 Viktor Szakats (vszakats.net/harbour)
 # See LICENSE.md
 
