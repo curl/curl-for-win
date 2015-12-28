@@ -1,6 +1,6 @@
 diff -u -r openssl/Configure openssl-fix/Configure
---- Configure	2015-07-09 13:57:15.000000000 +0200
-+++ Configure-PAT	2015-09-03 12:25:48.556078400 +0200
+--- a/Configure	2015-07-09 13:57:15.000000000 +0200
++++ b/Configure	2015-09-03 12:25:48.556078400 +0200
 @@ -591,7 +591,7 @@
  "BC-32","bcc32::::WIN32::BN_LLONG DES_PTR RC4_INDEX EXPORT_VAR_AS_FN:${no_asm}:win32",
  
@@ -20,8 +20,8 @@ diff -u -r openssl/Configure openssl-fix/Configure
  # UWIN 
  "UWIN", "cc:-DTERMIOS -DL_ENDIAN -O -Wall:::UWIN::BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${no_asm}:win32",
 diff -u -r openssl/Makefile.shared openssl-fix/Makefile.shared
---- Makefile.shared	2015-07-09 13:53:21.000000000 +0200
-+++ Makefile.shared-PAT	2015-09-03 12:25:48.726106000 +0200
+--- a/Makefile.shared	2015-07-09 13:53:21.000000000 +0200
++++ b/Makefile.shared	2015-09-03 12:25:48.726106000 +0200
 @@ -293,7 +293,7 @@
  	fi; \
  	dll_name=$$SHLIB$$SHLIB_SOVER$$SHLIB_SUFFIX; \

@@ -7,6 +7,3 @@ cd "$(dirname "$0")" || exit
 readonly ts=$(stat -c %Y openssl/CHANGES)
 
 sed -e "s/-frandom-seed=__RANDOM_SEED__/-frandom-seed=${ts}/g" -i openssl.diff
-sed -e "s/-frandom-seed=__RANDOM_SEED__/-frandom-seed=${ts}/g" -i mk-openssl.bat
-
-unix2dos mk-openssl.bat

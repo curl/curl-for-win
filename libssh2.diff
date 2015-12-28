@@ -1,5 +1,5 @@
---- win32/GNUmakefile	2015-03-12 11:23:18.000000000 +0100
-+++ win32/GNUmakefile-PAT	2015-09-03 15:28:51.806006400 +0200
+--- a/win32/GNUmakefile	2015-03-12 11:23:18.000000000 +0100
++++ b/win32/GNUmakefile-PAT	2015-09-03 15:28:51.806006400 +0200
 @@ -111,11 +111,12 @@
  
  # Global flags for all compilers

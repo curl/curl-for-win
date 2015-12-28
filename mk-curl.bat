@@ -26,6 +26,8 @@ if "%_CPU%" == "win64" set ARCH=w64
 set CURL_CFLAG_EXTRAS=-DCURL_STATICLIB -DNGHTTP2_STATICLIB -fno-ident
 set CURL_LDFLAG_EXTRAS=-static-libgcc
 
+if not exist Makefile call buildconf.bat
+
 mingw32-make mingw32-clean
 :: - '-rtmp' is not enabled because libcurl then (of course) needs librtmp
 ::   even if its functionality is not actually needed or used

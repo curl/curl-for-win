@@ -33,6 +33,11 @@ install:
 - openssl dgst -sha256 mingw.7z | findstr /i /c:c0536c55a1d12882987afd0a9be377413eaf6cee105e921c949899fa9b308b35
 # Will unpack into C:\w\mingw64
 - 7z x -y -oC:\w\ mingw.7z > nul
+# Patch to make GetCurrentFiber() working in x86 mode for OpenSSL 1.1.0
+# Ref: https://sourceforge.net/p/mingw-w64/mailman/message/34403784/
+- cd /d C:\w\mingw64
+- patch -p1 -i C:/w/mingw.diff
+- cd /d C:\w
 ### zlib
 #- curl -fsS -L --proto-redir =https https://github.com/madler/zlib/archive/v%VER_ZLIB%.tar.gz -o zip.tar.gz
 #- openssl dgst -sha256 zip.tar.gz | findstr /i /c:e380bd1bdb6447508beaa50efc653fe45f4edc1dafe11a251ae093e0ee97db9a
@@ -54,8 +59,7 @@ install:
 - sh -c ./mk-openssl-seed.sh
 - dos2unix openssl.diff
 - cd openssl
-# Using 'sed' for now
-#- patch -p0 -i ../openssl.diff
+- patch -p1 -i ../openssl.diff
 - cd ..
 ### librtmp
 #- curl -fsS https://rtmpdump.mplayerhq.hu/download/rtmpdump-%VER_LIBRTMP%.tgz -o librtmp.tar.gz
@@ -71,7 +75,7 @@ install:
 - move libssh2-%VER_LIBSSH2% libssh2
 - dos2unix libssh2.diff
 - cd libssh2
-- patch -p0 -i ../libssh2.diff
+- patch -p1 -i ../libssh2.diff
 - cd ..
 ### curl
 - curl -fsS -L --proto-redir =https https://github.com/bagder/curl/releases/download/curl-%VER_CURL:.=_%/curl-%VER_CURL%.tar.bz2 -o curl.tar.bz2
@@ -81,7 +85,7 @@ install:
 - move curl-%VER_CURL% curl
 - dos2unix curl.diff
 - cd curl
-- patch -p0 -i ../curl.diff
+- patch -p1 -i ../curl.diff
 - cd ..
 ###
 - reg add "HKCU\Control Panel\International" /v sShortDate /t REG_SZ /d yyyy-MM-dd /f
