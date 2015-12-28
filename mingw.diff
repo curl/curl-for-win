@@ -1,0 +1,21 @@
+--- a\x86_64-w64-mingw32\include\winnt.h	2015-09-09 21:47:28.000000000 +0200
++++ b\x86_64-w64-mingw32\include\winnt.h	2015-12-23 19:48:14.975280100 +0100
+@@ -1995,15 +1995,15 @@
+ 
+ #define DbgRaiseAssertionFailure __int2c
+ 
+-  __CRT_INLINE struct _TEB *NtCurrentTeb(void)
++  FORCEINLINE struct _TEB *NtCurrentTeb(void)
+   {
+     return (struct _TEB *)__readfsdword(PcTeb);
+   }
+-  __CRT_INLINE PVOID GetCurrentFiber(void)
++  FORCEINLINE PVOID GetCurrentFiber(void)
+   {
+     return(PVOID)__readfsdword(0x10);
+   }
+-  __CRT_INLINE PVOID GetFiberData(void)
++  FORCEINLINE PVOID GetFiberData(void)
+   {
+       return *(PVOID *)GetCurrentFiber();
+   }
