@@ -60,17 +60,17 @@ apps\openssl.exe version
 set _BAS=%_NAM%-%_VER%-%_CPU%-mingw
 set _DST=%TEMP%\%_BAS%
 
-xcopy /y /q    apps\openssl.exe "%_DST%\"
-xcopy /y /q    apps\*.dll       "%_DST%\"
-xcopy /y /q    engines\*.dll    "%_DST%\engines\"
- copy /y       apps\openssl.cnf "%_DST%\openssl.cfg"
-xcopy /y /s /q include\*.*      "%_DST%\include\"
-xcopy /y /q    ms\applink.c     "%_DST%\include\openssl\"
- copy /y       CHANGES          "%_DST%\CHANGES.txt"
- copy /y       LICENSE          "%_DST%\LICENSE.txt"
- copy /y       README           "%_DST%\README.txt"
- copy /y       FAQ              "%_DST%\FAQ.txt"
- copy /y       NEWS             "%_DST%\NEWS.txt"
+xcopy /y /q apps\openssl.exe    "%_DST%\"
+xcopy /y /q apps\*.dll          "%_DST%\"
+xcopy /y /q engines\*.dll       "%_DST%\engines\"
+ copy /y    apps\openssl.cnf    "%_DST%\openssl.cfg"
+xcopy /y /q include\openssl\*.h "%_DST%\include\openssl\"
+xcopy /y /q ms\applink.c        "%_DST%\include\openssl\"
+ copy /y    CHANGES             "%_DST%\CHANGES.txt"
+ copy /y    LICENSE             "%_DST%\LICENSE.txt"
+ copy /y    README              "%_DST%\README.txt"
+ copy /y    FAQ                 "%_DST%\FAQ.txt"
+ copy /y    NEWS                "%_DST%\NEWS.txt"
 
 if exist *.a   xcopy /y /s *.a   "%_DST%\lib\"
 if exist *.lib xcopy /y /s *.lib "%_DST%\lib\"
