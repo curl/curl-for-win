@@ -10,7 +10,7 @@ environment:
   BINTRAY_USER:
     secure: jfLq1ApyVLNouxv07skhrg==
   VIRUSTOTAL_APIKEY:
-    secure: TdJYONfrpH45DuyKxraVqgHYy25IQ/F8TKHzYf+u5zz1aiM2yR0YTMaGxyj2EMReEearSI9kD9D2ZykybSVEbRyEaotZlceUb2lPDK
+    secure: TdJYONfrpH45DuyKxraVqgHYy25IQ/F8TKHzYf+u5zz1aiM2yR0YTMaGxyj2EMReEearSI9kD9D2ZykybSVEbRyEaotZlceUb2lPDKELl3M=
 
 #init:
 #  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
@@ -37,50 +37,47 @@ install:
   - 7z x -y "-o%APPVEYOR_BUILD_FOLDER%" mingw.7z > nul
   # Patch to make GetCurrentFiber() working in x86 mode for OpenSSL 1.1.0
   # Ref: https://sourceforge.net/p/mingw-w64/mailman/message/34403784/
-  - patch -p1 -i "%APPVEYOR_BUILD_FOLDER%\mingw.diff" -d "%APPVEYOR_BUILD_FOLDER%\mingw64"
+  - patch -p1 -d "%APPVEYOR_BUILD_FOLDER%\mingw64" < mingw.diff
   ### zlib
 # - curl -fsS -L --proto-redir =https https://github.com/madler/zlib/archive/v%VER_ZLIB%.tar.gz -o zip.tar.gz
 # - openssl dgst -sha256 zip.tar.gz | findstr /i /c:e380bd1bdb6447508beaa50efc653fe45f4edc1dafe11a251ae093e0ee97db9a
 # - tar -xvf zip.tar.gz > nul 2>&1
 # - del zip.tar.gz
-# - move zlib-%VER_ZLIB% zlib
+# - move zlib-* zlib
   ### nghttp2
   - curl -fsS -L --proto-redir =https https://github.com/tatsuhiro-t/nghttp2/releases/download/v%VER_NGHTTP2%/nghttp2-%VER_NGHTTP2%.tar.bz2 -o nghttp2.tar.bz2
   - openssl dgst -sha256 nghttp2.tar.bz2 | findstr /i /c:7ac5624bc744c766bf6b37de31d7c48dfceb648313306311943968bdad77d5bd
   - tar -xvf nghttp2.tar.bz2 > nul 2>&1
   - del nghttp2.tar.bz2
-  - move nghttp2-%VER_NGHTTP2% nghttp2
+  - move nghttp2-* nghttp2
   ### openssl
   - curl -fsS https://www.openssl.org/source/openssl-%VER_OPENSSL%.tar.gz -o openssl.tar.gz
   - openssl dgst -sha256 openssl.tar.gz | findstr /i /c:e23ccafdb75cfcde782da0151731aa2185195ac745eea3846133f2e05c0e0bff
   - success tar -xvf openssl.tar.gz > nul 2>&1
   - del openssl.tar.gz
-  - move openssl-%VER_OPENSSL% openssl
+  - move openssl-* openssl
   - sh -c ./mk-openssl-seed.sh
-  - dos2unix openssl.diff
-  - patch -p1 -i ../openssl.diff -d openssl
+  - dos2unix < openssl.diff | patch -p1 -d openssl
   ### librtmp
 # - curl -fsS https://rtmpdump.mplayerhq.hu/download/rtmpdump-%VER_LIBRTMP%.tgz -o librtmp.tar.gz
 # - openssl dgst -sha256 librtmp.tar.gz | findstr /i /c:ef38b7a99d82ce6912063d21063aeaf28185341b3df486e24bffce5354224b2c
 # - tar -xvf librtmp.tar.gz > nul 2>&1
 # - del librtmp.tar.gz
-# - move rtmpdump-%VER_LIBRTMP% librtmp
+# - move rtmpdump-* librtmp
   ### libssh2
   - curl -fsS -L --proto-redir =https https://github.com/libssh2/libssh2/releases/download/libssh2-%VER_LIBSSH2%/libssh2-%VER_LIBSSH2%.tar.gz -o libssh2.tar.gz
   - openssl dgst -sha256 libssh2.tar.gz | findstr /i /c:5a202943a34a1d82a1c31f74094f2453c207bf9936093867f41414968c8e8215
   - tar -xvf libssh2.tar.gz > nul 2>&1
   - del libssh2.tar.gz
-  - move libssh2-%VER_LIBSSH2% libssh2
-  - dos2unix libssh2.diff
-  - patch -p1 -i ../libssh2.diff -d libssh2
+  - move libssh2-* libssh2
+  - dos2unix < libssh2.diff | patch -p1 -d libssh2
   ### curl
   - curl -fsS -L --proto-redir =https https://github.com/bagder/curl/releases/download/curl-%VER_CURL:.=_%/curl-%VER_CURL%.tar.bz2 -o curl.tar.bz2
   - openssl dgst -sha256 curl.tar.bz2 | findstr /i /c:b7d726cdd8ed4b6db0fa1b474a3c59ebbbe4dcd4c61ac5e7ade0e0270d3195ad
   - tar -xvf curl.tar.bz2 > nul 2>&1
   - del curl.tar.bz2
-  - move curl-%VER_CURL% curl
-  - dos2unix curl.diff
-  - patch -p1 -i ../curl.diff -d curl
+  - move curl-* curl
+  - dos2unix < curl.diff | patch -p1 -d curl
   ###
   - reg add "HKCU\Control Panel\International" /v sShortDate /t REG_SZ /d yyyy-MM-dd /f
   - reg add "HKCU\Control Panel\International" /v sShortTime /t REG_SZ /d HH:mm /f
