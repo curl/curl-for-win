@@ -45,7 +45,7 @@ set _DST=%TEMP%\%_BAS%
 
 :: Suppress xcopy error:
 ::   'Could not expand second file name so as to match first' for '.gitignore'
-  del /f /a docs\.*
+  del /f /s /a docs\.*
 xcopy /y /s /q docs\*.              "%_DST%\docs\*.txt"
 xcopy /y /s /q include\*.*          "%_DST%\include\"
  copy /y       NEWS                 "%_DST%\NEWS.txt"
