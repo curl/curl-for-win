@@ -43,6 +43,9 @@ touch -c win32/*.lib -r NEWS
 set _BAS=%_NAM%-%_VER%-%_CPU%-mingw
 set _DST=%TEMP%\%_BAS%
 
+:: Suppress xcopy error:
+::   'Could not expand second file name so as to match first' for '.gitignore'
+  del /f /a docs\.*
 xcopy /y /s /q docs\*.              "%_DST%\docs\*.txt"
 xcopy /y /s /q include\*.*          "%_DST%\include\"
  copy /y       NEWS                 "%_DST%\NEWS.txt"
