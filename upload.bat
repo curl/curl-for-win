@@ -12,4 +12,4 @@ for %%I in ("%_BAS%%_SUF%.7z") do echo %%~nxI: %%~zI bytes %%~tI
 openssl dgst -sha256 "%_BAS%%_SUF%.7z"
 openssl dgst -sha256 "%_BAS%%_SUF%.7z" >> ..\hashes.txt
 
-if "%APPVEYOR_REPO_BRANCH%" == "master" curl -fsS -X POST https://www.virustotal.com/vtapi/v2/file/scan --form apikey=%VIRUSTOTAL_APIKEY% --form "file=@%_BAS%%_SUF%.7z"
+if "%APPVEYOR_REPO_BRANCH%" == "master" curl -fsS -X POST https://www.virustotal.com/vtapi/v2/file/scan --form "apikey=%VIRUSTOTAL_APIKEY%" --form "file=@%_BAS%%_SUF%.7z"

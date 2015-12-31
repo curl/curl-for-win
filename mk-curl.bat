@@ -65,6 +65,7 @@ set _DST=%TEMP%\%_BAS%
   ::   'Could not expand second file name so as to match first' for '.gitignore'
     del /f /s /a docs\.*
   xcopy /y /s /q docs\*.              "%_DST%\docs\*.txt"
+  xcopy /y /s /q docs\*.md            "%_DST%\docs\"
   xcopy /y /s /q docs\*.html          "%_DST%\docs\"
   xcopy /y /s /q docs\libcurl\*.html  "%_DST%\docs\libcurl\"
   xcopy /y /s /q include\curl\*.h     "%_DST%\include\curl\"
