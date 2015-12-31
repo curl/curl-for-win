@@ -88,6 +88,7 @@ if exist lib\*.a   xcopy /y /s lib\*.a   "%_DST%\lib\"
 if exist lib\*.lib xcopy /y /s lib\*.lib "%_DST%\lib\"
 
 unix2dos -k %_DST:\=/%/*.txt
+unix2dos -k %_DST:\=/%/docs/*.md
 unix2dos -k %_DST:\=/%/docs/*.txt
 
 touch -c %_DST:\=/%/docs/examples     -r CHANGES
