@@ -12,7 +12,7 @@
   - Generated binaries are reproducible, meaning they will have the same
     hash given the same input sources and C compiler. Because LTO mode
     doesn't support reproducibility out of the box (as of GCC 5.2), the
-    `-frandom-seed=` workaround is used (with a source-version dependent value) 
+    `-frandom-seed=` workaround is used (with a source-version dependent value)
     to resolve this while building OpenSSL. See more on the issue here:
 
        * <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66305>
