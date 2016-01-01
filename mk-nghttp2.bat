@@ -28,8 +28,9 @@ sh -c "exec 0</dev/null && mingw32-make MAKE=C:/w/mingw64/bin/mingw32-make insta
 
 if exist lib\*.a strip -p --enable-deterministic-archives -g lib\*.a
 
-touch -c include/*.* -r ChangeLog
-touch -c lib/*.*     -r ChangeLog
+touch -c include/nghttp2/*.* -r ChangeLog
+touch -c lib/pkgconfig/*.*   -r ChangeLog
+touch -c lib/*.*             -r ChangeLog
 
 :: Create package
 
