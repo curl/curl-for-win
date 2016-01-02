@@ -11,6 +11,7 @@ import sys
 
 if len(sys.argv) > 1:
    for file in glob.glob(sys.argv[1]):
+      print(file)
       ts = calendar.timegm(datetime.datetime(2015, 1, 1).timetuple())
       pe = pefile.PE(file)
       pe.FILE_HEADER.TimeDateStamp = ts
