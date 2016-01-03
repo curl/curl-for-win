@@ -35,7 +35,8 @@ environment:
 install:
   - python -m pip --disable-pip-version-check install --upgrade pip
   - python -m pip install pefile
-  # PATH must be reconfigured to use short name for the sh.exe location, otherwise the OpenSSL build process fails
+  # PATH must be reconfigured to use short name for the sh.exe location, otherwise the OpenSSL build process fails.
+  # It is also required to override Windows tools with Git for Windows ones. (f.e. 'find')
   - set PATH=C:\PROGRA~1\Git\usr\bin;%PATH%
   - sh -c ./dl.sh
 
