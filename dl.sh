@@ -5,7 +5,7 @@
 # - Requires Git for Windows or busybox to run on Windows
 # - Requires *_VER_ and *_HASH envvars
 
-set | grep _VER_
+set | grep _VER_=
 
 # Quit if any of the lines fail
 set -e
