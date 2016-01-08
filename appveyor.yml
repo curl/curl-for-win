@@ -58,19 +58,19 @@ build_script:
   - type hashes.txt
 
 artifacts:
-  - path: nghttp2-*-win32-mingw.7z
+  - path: nghttp2-*-win32-mingw*.7z
     name: nghttp2-mingw32
-  - path: nghttp2-*-win64-mingw.7z
+  - path: nghttp2-*-win64-mingw*.7z
     name: nghttp2-mingw64
-  - path: openssl-*-win32-mingw.7z
+  - path: openssl-*-win32-mingw*.7z
     name: openssl-mingw32
-  - path: openssl-*-win64-mingw.7z
+  - path: openssl-*-win64-mingw*.7z
     name: openssl-mingw64
-  - path: libssh2-*-win32-mingw.7z
+  - path: libssh2-*-win32-mingw*.7z
     name: libssh2-mingw32
-  - path: libssh2-*-win64-mingw.7z
+  - path: libssh2-*-win64-mingw*.7z
     name: libssh2-mingw64
-  - path: curl-*-win32-mingw.7z
+  - path: curl-*-win32-mingw*.7z
     name: curl-mingw32
-  - path: curl-*-win64-mingw.7z
+  - path: curl-*-win64-mingw*.7z
     name: curl-mingw64
