@@ -3,6 +3,8 @@
 # Copyright 2014-2016 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
+cd "$(dirname "$0")" || exit
+
 _CDO="$(pwd)"
 
 (
