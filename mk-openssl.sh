@@ -87,16 +87,19 @@ _CPU="$2"
    cp -f -p FAQ                 "${_DST}/FAQ.txt"
    cp -f -p NEWS                "${_DST}/NEWS.txt"
 
+   cp -f -p ../BUILD-README.txt "${_DST}/BUILD-README.txt"
+
    if ls ./*.a   > /dev/null 2>&1 ; then cp -f -p ./*.a   "${_DST}/lib" ; fi
    if ls ./*.lib > /dev/null 2>&1 ; then cp -f -p ./*.lib "${_DST}/lib" ; fi
 
    unix2dos -k "${_DST}"/*.txt
 
-   touch -c "${_DST}/engines"         -r CHANGES
-   touch -c "${_DST}/include/openssl" -r CHANGES
-   touch -c "${_DST}/include"         -r CHANGES
-   touch -c "${_DST}/lib"             -r CHANGES
-   touch -c "${_DST}"                 -r CHANGES
+   touch -c "${_DST}/BUILD-README.txt" -r CHANGES
+   touch -c "${_DST}/engines"          -r CHANGES
+   touch -c "${_DST}/include/openssl"  -r CHANGES
+   touch -c "${_DST}/include"          -r CHANGES
+   touch -c "${_DST}/lib"              -r CHANGES
+   touch -c "${_DST}"                  -r CHANGES
 
    ../pack.sh
    ../ul.sh

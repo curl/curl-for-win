@@ -48,7 +48,4 @@ _CDO="$(pwd)"
    touch -c librtmp/*.dll -r ChangeLog
    touch -c librtmp/*.a   -r ChangeLog
    touch -c librtmp/*.lib -r ChangeLog
-
-   ../pack.sh
-   ../ul.sh
 )

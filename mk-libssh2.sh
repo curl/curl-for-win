@@ -60,14 +60,16 @@ _CPU="$2"
          cp -f -p "${file}" "${_DST}/${file}.txt"
       fi
    done
-   cp -f -p include/*.h        "${_DST}/include/"
-   cp -f -p NEWS               "${_DST}/NEWS.txt"
-   cp -f -p COPYING            "${_DST}/COPYING.txt"
-   cp -f -p README             "${_DST}/README.txt"
-   cp -f -p RELEASE-NOTES      "${_DST}/RELEASE-NOTES.txt"
-   cp -f -p win32/*.dll        "${_DST}/bin/"
+   cp -f -p include/*.h         "${_DST}/include/"
+   cp -f -p NEWS                "${_DST}/NEWS.txt"
+   cp -f -p COPYING             "${_DST}/COPYING.txt"
+   cp -f -p README              "${_DST}/README.txt"
+   cp -f -p RELEASE-NOTES       "${_DST}/RELEASE-NOTES.txt"
+   cp -f -p win32/*.dll         "${_DST}/bin/"
 
-   cp -f -p ../openssl/LICENSE "${_DST}/LICENSE-openssl.txt"
+   cp -f -p ../openssl/LICENSE  "${_DST}/LICENSE-openssl.txt"
+
+   cp -f -p ../BUILD-README.txt "${_DST}/BUILD-README.txt"
 
    if ls win32/*.a   > /dev/null 2>&1 ; then cp -f -p win32/*.a   "${_DST}/lib" ; fi
    if ls win32/*.lib > /dev/null 2>&1 ; then cp -f -p win32/*.lib "${_DST}/lib" ; fi
@@ -75,11 +77,12 @@ _CPU="$2"
    unix2dos -k "${_DST}"/*.txt
    unix2dos -k "${_DST}"/docs/*.txt
 
-   touch -c "${_DST}/docs"    -r NEWS
-   touch -c "${_DST}/include" -r NEWS
-   touch -c "${_DST}/lib"     -r NEWS
-   touch -c "${_DST}/bin"     -r NEWS
-   touch -c "${_DST}"         -r NEWS
+   touch -c "${_DST}/BUILD-README.txt" -r NEWS
+   touch -c "${_DST}/docs"             -r NEWS
+   touch -c "${_DST}/include"          -r NEWS
+   touch -c "${_DST}/lib"              -r NEWS
+   touch -c "${_DST}/bin"              -r NEWS
+   touch -c "${_DST}"                  -r NEWS
 
    ../pack.sh
    ../ul.sh

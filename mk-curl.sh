@@ -103,6 +103,8 @@ _CPU="$2"
 #  cp -f -p ../librtmp/COPYING       "${_DST}/COPYING-librtmp.txt"
    cp -f -p ../nghttp2/COPYING       "${_DST}/COPYING-nghttp2.txt"
 
+   cp -f -p ../BUILD-README.txt      "${_DST}/BUILD-README.txt"
+
    if ls lib/*.a   > /dev/null 2>&1 ; then cp -f -p lib/*.a   "${_DST}/lib" ; fi
    if ls lib/*.lib > /dev/null 2>&1 ; then cp -f -p lib/*.lib "${_DST}/lib" ; fi
 
@@ -110,6 +112,7 @@ _CPU="$2"
    unix2dos -k "${_DST}"/docs/*.md
    unix2dos -k "${_DST}"/docs/*.txt
 
+   touch -c "${_DST}/BUILD-README.txt"  -r CHANGES
    touch -c "${_DST}/docs/examples"     -r CHANGES
    touch -c "${_DST}/docs/libcurl/opts" -r CHANGES
    touch -c "${_DST}/docs/libcurl"      -r CHANGES
