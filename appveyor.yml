@@ -66,6 +66,10 @@ artifacts:
     name: openssl-mingw32
   - path: openssl/openssl-*-win64-mingw*.7z
     name: openssl-mingw64
+  - path: librtmp/librtmp-*-win32-mingw*.7z
+    name: librtmp-mingw32
+  - path: librtmp/librtmp-*-win64-mingw*.7z
+    name: librtmp-mingw64
   - path: libssh2/libssh2-*-win32-mingw*.7z
     name: libssh2-mingw32
   - path: libssh2/libssh2-*-win64-mingw*.7z
