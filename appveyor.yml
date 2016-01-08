@@ -57,11 +57,12 @@ build_script:
 # - sh -c "./mk-curl.sh       %CURL_VER_% %CPU%"
   - type hashes.txt
   - dir *.*
+  - dir nghttp2/*.*
 
 artifacts:
-  - path: 'nghttps2/nghttp2-*-win32-mingw*.7z'
+  - path: 'nghttp2/nghttp2-*-win32-mingw*.7z'
     name: nghttp2-mingw32
-  - path: 'nghttps2/nghttp2-*-win64-mingw*.7z'
+  - path: 'nghttp2/nghttp2-*-win64-mingw*.7z'
     name: nghttp2-mingw64
   - path: 'openssl/openssl-*-win32-mingw*.7z'
     name: openssl-mingw32
