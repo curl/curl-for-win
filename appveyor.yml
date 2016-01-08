@@ -61,9 +61,7 @@ build_script:
                               
 artifacts:                    
   - path: nghttp2/nghttp2-*-win32-mingw*.7z
-    name: nghttp2-mingw32     
   - path: nghttp2/nghttp2-*-win64-mingw*.7z
-    name: nghttp2-mingw64     
   - path: openssl/openssl-*-win32-mingw*.7z
     name: openssl-mingw32                
   - path: openssl/openssl-*-win64-mingw*.7z
