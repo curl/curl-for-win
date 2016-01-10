@@ -10,7 +10,7 @@ export _BAS
 export _DST
 
 _NAM="$(basename "$0")"
-_NAM="$(echo "${_NAM}" | cut -c 4- | cut -f 1 -d '.')"
+_NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
 _VER="$1"
 _CPU="$2"
 
@@ -58,8 +58,6 @@ _CPU="$2"
    cp -f -p COPYING             "${_DST}/COPYING.txt"
    cp -f -p README.rst          "${_DST}/README.rst"
 
-   cp -f -p ../BUILD-README.txt "${_DST}/BUILD-README.txt"
-
    if ls lib/*.a            > /dev/null 2>&1 ; then cp -f -p lib/*.a            "${_DST}/lib" ; fi
    if ls lib/*.la           > /dev/null 2>&1 ; then cp -f -p lib/*.la           "${_DST}/lib" ; fi
    if ls lib/*.pc           > /dev/null 2>&1 ; then cp -f -p lib/*.pc           "${_DST}/lib" ; fi
@@ -68,13 +66,12 @@ _CPU="$2"
    unix2dos -k "${_DST}"/*.txt
    unix2dos -k "${_DST}"/*.rst
 
-   touch -c "${_DST}/BUILD-README.txt" -r ChangeLog
-   touch -c "${_DST}/include/nghttp2"  -r ChangeLog
-   touch -c "${_DST}/include"          -r ChangeLog
-   touch -c "${_DST}/lib/pkgconfig"    -r ChangeLog
-   touch -c "${_DST}/lib"              -r ChangeLog
-   touch -c "${_DST}"                  -r ChangeLog
+   touch -c "${_DST}/include/nghttp2" -r ChangeLog
+   touch -c "${_DST}/include"         -r ChangeLog
+   touch -c "${_DST}/lib/pkgconfig"   -r ChangeLog
+   touch -c "${_DST}/lib"             -r ChangeLog
+   touch -c "${_DST}"                 -r ChangeLog
 
-   ../pack.sh
-   ../ul.sh
+   ../_pack.sh "$(pwd)/ChangeLog"
+   ../_ul.sh
 )

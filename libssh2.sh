@@ -10,7 +10,7 @@ export _BAS
 export _DST
 
 _NAM="$(basename "$0")"
-_NAM="$(echo "${_NAM}" | cut -c 4- | cut -f 1 -d '.')"
+_NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
 _VER="$1"
 _CPU="$2"
 
@@ -39,7 +39,7 @@ _CPU="$2"
    if ls win32/*.a   > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g win32/*.a   ; fi
    if ls win32/*.lib > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g win32/*.lib ; fi
 
-   python ../peclean.py 'win32/*.dll'
+   python ../_peclean.py 'win32/*.dll'
 
    touch -c win32/*.dll -r NEWS
    touch -c win32/*.a   -r NEWS
@@ -69,21 +69,18 @@ _CPU="$2"
 
    cp -f -p ../openssl/LICENSE  "${_DST}/LICENSE-openssl.txt"
 
-   cp -f -p ../BUILD-README.txt "${_DST}/BUILD-README.txt"
-
    if ls win32/*.a   > /dev/null 2>&1 ; then cp -f -p win32/*.a   "${_DST}/lib" ; fi
    if ls win32/*.lib > /dev/null 2>&1 ; then cp -f -p win32/*.lib "${_DST}/lib" ; fi
 
    unix2dos -k "${_DST}"/*.txt
    unix2dos -k "${_DST}"/docs/*.txt
 
-   touch -c "${_DST}/BUILD-README.txt" -r NEWS
-   touch -c "${_DST}/docs"             -r NEWS
-   touch -c "${_DST}/include"          -r NEWS
-   touch -c "${_DST}/lib"              -r NEWS
-   touch -c "${_DST}/bin"              -r NEWS
-   touch -c "${_DST}"                  -r NEWS
+   touch -c "${_DST}/docs"    -r NEWS
+   touch -c "${_DST}/include" -r NEWS
+   touch -c "${_DST}/lib"     -r NEWS
+   touch -c "${_DST}/bin"     -r NEWS
+   touch -c "${_DST}"         -r NEWS
 
-   ../pack.sh
-   ../ul.sh
+   ../_pack.sh "$(pwd)/NEWS"
+   ../_ul.sh
 )

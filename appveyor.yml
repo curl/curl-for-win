@@ -38,33 +38,29 @@ install:
   # PATH must be reconfigured to use short name for the sh.exe location, otherwise the OpenSSL build process fails.
   # It is also required to override Windows tools with Git for Windows ones. (f.e. 'find')
   - set PATH=C:\PROGRA~1\Git\usr\bin;%PATH%
-  - sh -c ./dl.sh
+  - sh -c ./_dl.sh
 
 build_script:
   - set PATH=%APPVEYOR_BUILD_FOLDER%\mingw64\bin;%PATH%
   - set _MAK=%APPVEYOR_BUILD_FOLDER%\mingw64\bin\mingw32-make.exe
+  - set _URL=https://github.com/%APPVEYOR_REPO_NAME%
   - set CPU=win32
-  - sh -c "./mk-nghttp2.sh %NGHTTP2_VER_% %CPU%"
-  - sh -c "./mk-openssl.sh %OPENSSL_VER_% %CPU%"
-# - sh -c "./mk-librtmp.sh %LIBRTMP_VER_% %CPU%"
-  - sh -c "./mk-libssh2.sh %LIBSSH2_VER_% %CPU%"
-  - sh -c "./mk-curl.sh       %CURL_VER_% %CPU%"
+  - sh -c "./nghttp2.sh %NGHTTP2_VER_% %CPU%"
+  - sh -c "./openssl.sh %OPENSSL_VER_% %CPU%"
+# - sh -c "./librtmp.sh %LIBRTMP_VER_% %CPU%"
+  - sh -c "./libssh2.sh %LIBSSH2_VER_% %CPU%"
+  - sh -c "./curl.sh       %CURL_VER_% %CPU%"
   - set CPU=win64
-  - sh -c "./mk-nghttp2.sh %NGHTTP2_VER_% %CPU%"
-  - sh -c "./mk-openssl.sh %OPENSSL_VER_% %CPU%"
-# - sh -c "./mk-librtmp.sh %LIBRTMP_VER_% %CPU%"
-  - sh -c "./mk-libssh2.sh %LIBSSH2_VER_% %CPU%"
-  - sh -c "./mk-curl.sh       %CURL_VER_% %CPU%"
+  - sh -c "./nghttp2.sh %NGHTTP2_VER_% %CPU%"
+  - sh -c "./openssl.sh %OPENSSL_VER_% %CPU%"
+# - sh -c "./librtmp.sh %LIBRTMP_VER_% %CPU%"
+  - sh -c "./libssh2.sh %LIBSSH2_VER_% %CPU%"
+  - sh -c "./curl.sh       %CURL_VER_% %CPU%"
   - type hashes.txt
 
 artifacts:
-  - path: nghttp2/nghttp2-*-win32-mingw.7z
-  - path: nghttp2/nghttp2-*-win64-mingw.7z
-  - path: openssl/openssl-*-win32-mingw.7z
-  - path: openssl/openssl-*-win64-mingw.7z
-  - path: librtmp/librtmp-*-win32-mingw.7z
-  - path: librtmp/librtmp-*-win64-mingw.7z
-  - path: libssh2/libssh2-*-win32-mingw.7z
-  - path: libssh2/libssh2-*-win64-mingw.7z
-  - path: curl/curl-*-win32-mingw.7z
-  - path: curl/curl-*-win64-mingw.7z
+  - path: nghttp2-*-mingw.*
+  - path: openssl-*-mingw.*
+  - path: librtmp-*-mingw.*
+  - path: libssh2-*-mingw.*
+  - path: curl-*-mingw.*

@@ -18,6 +18,10 @@
        * <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66305>
        * <https://reproducible.debian.net/issues/unstable/randomness_in_fat_lto_objects_issue.html>
 
+# Please donate to support maintaining these builds
+
+  - [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BPSZQYKXMQJYG)
+
 # Binary package downloads
 
   * cURL: <https://bintray.com/vszakats/generic/curl>
@@ -28,10 +32,6 @@
 # Live build logs
 
   <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
-
-# Please donate to support maintaining these builds
-
-  - [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BPSZQYKXMQJYG)
 
 ---
 This document Copyright &copy;&nbsp;2014&ndash;2016 Viktor Szakáts <https://github.com/vszakats><br />

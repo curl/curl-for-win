@@ -10,7 +10,7 @@ export _BAS
 export _DST
 
 _NAM="$(basename "$0")"
-_NAM="$(echo "${_NAM}" | cut -c 4- | cut -f 1 -d '.')"
+_NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
 _VER="$1"
 _CPU="$2"
 
@@ -49,10 +49,10 @@ _CPU="$2"
 
    strip -p -s apps/openssl.exe
 
-   python ../peclean.py 'apps/openssl.exe'
-   python ../peclean.py 'apps/*.dll'
+   python ../_peclean.py 'apps/openssl.exe'
+   python ../_peclean.py 'apps/*.dll'
    if ls engines/*.dll > /dev/null 2>&1 ; then
-      python ../peclean.py 'engines/*.dll'
+      python ../_peclean.py 'engines/*.dll'
    fi
 
    touch -c apps/openssl.exe    -r CHANGES
@@ -87,20 +87,17 @@ _CPU="$2"
    cp -f -p FAQ                 "${_DST}/FAQ.txt"
    cp -f -p NEWS                "${_DST}/NEWS.txt"
 
-   cp -f -p ../BUILD-README.txt "${_DST}/BUILD-README.txt"
-
    if ls ./*.a   > /dev/null 2>&1 ; then cp -f -p ./*.a   "${_DST}/lib" ; fi
    if ls ./*.lib > /dev/null 2>&1 ; then cp -f -p ./*.lib "${_DST}/lib" ; fi
 
    unix2dos -k "${_DST}"/*.txt
 
-   touch -c "${_DST}/BUILD-README.txt" -r CHANGES
-   touch -c "${_DST}/engines"          -r CHANGES
-   touch -c "${_DST}/include/openssl"  -r CHANGES
-   touch -c "${_DST}/include"          -r CHANGES
-   touch -c "${_DST}/lib"              -r CHANGES
-   touch -c "${_DST}"                  -r CHANGES
+   touch -c "${_DST}/engines"         -r CHANGES
+   touch -c "${_DST}/include/openssl" -r CHANGES
+   touch -c "${_DST}/include"         -r CHANGES
+   touch -c "${_DST}/lib"             -r CHANGES
+   touch -c "${_DST}"                 -r CHANGES
 
-   ../pack.sh
-   ../ul.sh
+   ../_pack.sh "$(pwd)/CHANGES"
+   ../_ul.sh
 )

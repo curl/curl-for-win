@@ -65,4 +65,3 @@ set -e
    tar -xvf pack.bin > /dev/null 2>&1
    rm pack.bin
    mv curl-* curl
-   dos2unix < curl.diff | patch -p1 -d curl

@@ -10,7 +10,7 @@ export _BAS
 export _DST
 
 _NAM="$(basename "$0")"
-_NAM="$(echo "${_NAM}" | cut -c 4- | cut -f 1 -d '.')"
+_NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
 _VER="$1"
 _CPU="$2"
 
@@ -41,8 +41,8 @@ _CDO="$(pwd)"
    if ls librtmp/*.a   > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g librtmp/*.a   ; fi
    if ls librtmp/*.lib > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g librtmp/*.lib ; fi
 
-   python ../peclean.py './*.exe'
-   python ../peclean.py 'librtmp/*.dll'
+   python ../_peclean.py './*.exe'
+   python ../_peclean.py 'librtmp/*.dll'
 
    touch -c librtmp/*.exe -r ChangeLog
    touch -c librtmp/*.dll -r ChangeLog

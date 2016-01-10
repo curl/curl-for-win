@@ -10,7 +10,7 @@ export _BAS
 export _DST
 
 _NAM="$(basename "$0")"
-_NAM="$(echo "${_NAM}" | cut -c 4- | cut -f 1 -d '.')"
+_NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
 _VER="$1"
 _CPU="$2"
 
@@ -51,8 +51,8 @@ _CPU="$2"
    if ls lib/*.a   > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g lib/*.a   ; fi
    if ls lib/*.lib > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g lib/*.lib ; fi
 
-   python ../peclean.py 'src/*.exe'
-   python ../peclean.py 'lib/*.dll'
+   python ../_peclean.py 'src/*.exe'
+   python ../_peclean.py 'lib/*.dll'
 
    touch -c src/*.exe        -r CHANGES
    touch -c lib/*.dll        -r CHANGES
@@ -103,8 +103,6 @@ _CPU="$2"
 #  cp -f -p ../librtmp/COPYING       "${_DST}/COPYING-librtmp.txt"
    cp -f -p ../nghttp2/COPYING       "${_DST}/COPYING-nghttp2.txt"
 
-   cp -f -p ../BUILD-README.txt      "${_DST}/BUILD-README.txt"
-
    if ls lib/*.a   > /dev/null 2>&1 ; then cp -f -p lib/*.a   "${_DST}/lib" ; fi
    if ls lib/*.lib > /dev/null 2>&1 ; then cp -f -p lib/*.lib "${_DST}/lib" ; fi
 
@@ -112,7 +110,6 @@ _CPU="$2"
    unix2dos -k "${_DST}"/docs/*.md
    unix2dos -k "${_DST}"/docs/*.txt
 
-   touch -c "${_DST}/BUILD-README.txt"  -r CHANGES
    touch -c "${_DST}/docs/examples"     -r CHANGES
    touch -c "${_DST}/docs/libcurl/opts" -r CHANGES
    touch -c "${_DST}/docs/libcurl"      -r CHANGES
@@ -123,6 +120,6 @@ _CPU="$2"
    touch -c "${_DST}/bin"               -r CHANGES
    touch -c "${_DST}"                   -r CHANGES
 
-   ../pack.sh
-   ../ul.sh
+   ../_pack.sh "$(pwd)/CHANGES"
+   ../_ul.sh
 )
