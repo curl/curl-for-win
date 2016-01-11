@@ -8,13 +8,26 @@ cd "$(dirname "$0")" || exit
 _CDO="$(pwd)"
 
 _FN="${_DST}/BUILD-README.txt"
-cp -f -p 'BUILD-README.txt' "${_FN}"
+cat << EOF > "${_FN}"
+Visit the project page for details about these builds and the list of changes:
+
+   ${_URL}
+
+Please donate to support maintaining these builds:
+
+   PayPal:
+      https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BPSZQYKXMQJYG
+
+Thank you!
+EOF
 unix2dos -k "${_FN}"
 touch -c "${_FN}" -r "$1"
 
 _FN="${_DST}/BUILD-HOMEPAGE.url"
-echo '[InternetShortcut]' > "${_FN}"
-echo "URL=${_URL}" >> "${_FN}"
+cat << EOF > "${_FN}"
+[InternetShortcut]
+URL=${_URL}
+EOF
 unix2dos -k "${_FN}"
 touch -c "${_FN}" -r "$1"
 
