@@ -49,10 +49,10 @@ _CPU="$2"
 
    strip -p -s apps/openssl.exe
 
-   python ../_peclean.py 'apps/openssl.exe'
-   python ../_peclean.py 'apps/*.dll'
+   ../_peclean.py 'apps/openssl.exe'
+   ../_peclean.py 'apps/*.dll'
    if ls engines/*.dll > /dev/null 2>&1 ; then
-      python ../_peclean.py 'engines/*.dll'
+      ../_peclean.py 'engines/*.dll'
    fi
 
    touch -c apps/openssl.exe    -r CHANGES

@@ -51,8 +51,8 @@ _CPU="$2"
    if ls lib/*.a   > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g lib/*.a   ; fi
    if ls lib/*.lib > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g lib/*.lib ; fi
 
-   python ../_peclean.py 'src/*.exe'
-   python ../_peclean.py 'lib/*.dll'
+   ../_peclean.py 'src/*.exe'
+   ../_peclean.py 'lib/*.dll'
 
    touch -c src/*.exe        -r CHANGES
    touch -c lib/*.dll        -r CHANGES

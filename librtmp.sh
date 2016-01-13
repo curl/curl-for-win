@@ -41,8 +41,8 @@ _CDO="$(pwd)"
    if ls librtmp/*.a   > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g librtmp/*.a   ; fi
    if ls librtmp/*.lib > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g librtmp/*.lib ; fi
 
-   python ../_peclean.py './*.exe'
-   python ../_peclean.py 'librtmp/*.dll'
+   ../_peclean.py './*.exe'
+   ../_peclean.py 'librtmp/*.dll'
 
    touch -c librtmp/*.exe -r ChangeLog
    touch -c librtmp/*.dll -r ChangeLog

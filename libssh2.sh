@@ -39,7 +39,7 @@ _CPU="$2"
    if ls win32/*.a   > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g win32/*.a   ; fi
    if ls win32/*.lib > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g win32/*.lib ; fi
 
-   python ../_peclean.py 'win32/*.dll'
+   ../_peclean.py 'win32/*.dll'
 
    touch -c win32/*.dll -r NEWS
    touch -c win32/*.a   -r NEWS
