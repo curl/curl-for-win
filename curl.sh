@@ -54,9 +54,9 @@ _CPU="$2"
    ../_peclean.py 'src/*.exe'
    ../_peclean.py 'lib/*.dll'
 
+   touch -c ../ca-bundle.crt -r CHANGES
    touch -c src/*.exe        -r CHANGES
    touch -c lib/*.dll        -r CHANGES
-   touch -c ../ca-bundle.crt -r CHANGES
    touch -c lib/*.a          -r CHANGES
    touch -c lib/*.lib        -r CHANGES
 
