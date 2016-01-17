@@ -21,7 +21,7 @@ Please donate to support maintaining these builds:
 Thank you!
 EOF
 unix2dos -k "${_FN}"
-touch -c "${_FN}" -r "$1"
+touch -c -r "$1" "${_FN}"
 
 _FN="${_DST}/BUILD-HOMEPAGE.url"
 cat << EOF > "${_FN}"
@@ -29,7 +29,9 @@ cat << EOF > "${_FN}"
 URL=${_URL}
 EOF
 unix2dos -k "${_FN}"
-touch -c "${_FN}" -r "$1"
+touch -c -r "$1" "${_FN}"
+
+find "${_DST}" -type d -d -exec touch -c -r "$1" '{}' \;
 
 (
    cd "${_DST}/.." || exit

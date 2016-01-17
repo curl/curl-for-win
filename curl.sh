@@ -109,8 +109,6 @@ _CPU="$2"
    unix2dos -k "${_DST}"/docs/*.md
    unix2dos -k "${_DST}"/docs/*.txt
 
-   find "${_DST}" -type d -d -exec touch -c -r "${_REF}" '{}' \;
-
    ../_pack.sh "$(pwd)/${_REF}"
    ../_ul.sh
 )
