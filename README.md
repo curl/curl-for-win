@@ -29,9 +29,9 @@
   * libssh2: <https://bintray.com/vszakats/generic/libssh2>
   * OpenSSL: <https://bintray.com/vszakats/generic/openssl>
 
-# Live build logs
+  Live build logs:
 
-  <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
+    <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
 
 ---
 This document Copyright &copy;&nbsp;2014&ndash;2016 Viktor Szakáts <https://github.com/vszakats><br />
