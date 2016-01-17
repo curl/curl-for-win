@@ -28,7 +28,7 @@ _CPU="$2"
    find . -name '*.a'   -type f -delete
    find . -name '*.exe' -type f -delete
 
-   [ "${_CPU}" = 'win32' ] && perl Configure mingw   shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso '--prefix=/usr/local'
+   [ "${_CPU}" = 'win32' ] && ./Configure mingw   shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso '--prefix=/usr/local'
    # Disable asm in 64-bit builds. It makes linking the static libs fail in LTO mode:
    #   C:\Users\...\AppData\Local\Temp\ccUO3sBD.s: Assembler messages:
    #   C:\Users\...\AppData\Local\Temp\ccUO3sBD.s:23710: Error: operand type mismatch for `div'
@@ -36,14 +36,13 @@ _CPU="$2"
    #   compilation terminated.
    #   C:/mingw/bin/../lib/gcc/x86_64-w64-mingw32/5.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: lto-wrapper failed
    #   collect2.exe: error: ld returned 1 exit status
-   [ "${_CPU}" = 'win64' ] && perl Configure mingw64 shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso no-asm '--prefix=/usr/local'
+   [ "${_CPU}" = 'win64' ] && ./Configure mingw64 shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso no-asm '--prefix=/usr/local'
    mingw32-make depend
    mingw32-make
 
    # Make steps for determinism
 
-   if ls ./*.a   > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g ./*.a   ; fi
-   if ls ./*.lib > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g ./*.lib ; fi
+   if ls ./*.a > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g ./*.a ; fi
 
    # Strip debug info
 
@@ -55,12 +54,15 @@ _CPU="$2"
       ../_peclean.py 'engines/*.dll'
    fi
 
-   touch -c apps/openssl.exe    -r CHANGES
-   touch -c apps/*.dll          -r CHANGES
-   touch -c engines/*.dll       -r CHANGES
-   touch -c include/openssl/*.h -r CHANGES
-   touch -c ./*.a               -r CHANGES
-   touch -c ./*.lib             -r CHANGES
+   readonly _REF='CHANGES'
+
+   touch -c -r "${_REF}" apps/openssl.exe
+   touch -c -r "${_REF}" apps/*.dll
+   touch -c -r "${_REF}" include/openssl/*.h
+   touch -c -r "${_REF}" ./*.a
+   if ls engines/*.dll > /dev/null 2>&1 ; then
+      touch -c -r "${_REF}" engines/*.dll
+   fi
 
    # Test run
 
@@ -71,13 +73,16 @@ _CPU="$2"
    _BAS="${_NAM}-${_VER}-${_CPU}-mingw"
    _DST="$(mktemp -d)/${_BAS}"
 
-   mkdir -p "${_DST}/engines"
    mkdir -p "${_DST}/include/openssl"
    mkdir -p "${_DST}/lib"
 
+   if ls engines/*.dll > /dev/null 2>&1 ; then
+      mkdir -p "${_DST}/engines"
+      cp -f -p engines/*.dll    "${_DST}/engines/"
+   fi
+
    cp -f -p apps/openssl.exe    "${_DST}/"
    cp -f -p apps/*.dll          "${_DST}/"
-   cp -f -p engines/*.dll       "${_DST}/engines/"
    cp -f -p apps/openssl.cnf    "${_DST}/openssl.cfg"
    cp -f -p include/openssl/*.h "${_DST}/include/openssl/"
    cp -f -p ms/applink.c        "${_DST}/include/openssl/"
@@ -87,17 +92,12 @@ _CPU="$2"
    cp -f -p FAQ                 "${_DST}/FAQ.txt"
    cp -f -p NEWS                "${_DST}/NEWS.txt"
 
-   if ls ./*.a   > /dev/null 2>&1 ; then cp -f -p ./*.a   "${_DST}/lib" ; fi
-   if ls ./*.lib > /dev/null 2>&1 ; then cp -f -p ./*.lib "${_DST}/lib" ; fi
+   if ls ./*.a > /dev/null 2>&1 ; then cp -f -p ./*.a "${_DST}/lib" ; fi
 
    unix2dos -k "${_DST}"/*.txt
 
-   touch -c "${_DST}/engines"         -r CHANGES
-   touch -c "${_DST}/include/openssl" -r CHANGES
-   touch -c "${_DST}/include"         -r CHANGES
-   touch -c "${_DST}/lib"             -r CHANGES
-   touch -c "${_DST}"                 -r CHANGES
+   find "${_DST}" -type d -d -exec touch -c -r "${_REF}" '{}' \;
 
-   ../_pack.sh "$(pwd)/CHANGES"
+   ../_pack.sh "$(pwd)/${_REF}"
    ../_ul.sh
 )

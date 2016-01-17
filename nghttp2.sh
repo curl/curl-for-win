@@ -40,9 +40,11 @@ _CPU="$2"
 
    if ls lib/*.a > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g lib/*.a ; fi
 
-   touch -c include/nghttp2/*.* -r ChangeLog
-   touch -c lib/pkgconfig/*.*   -r ChangeLog
-   touch -c lib/*.*             -r ChangeLog
+   readonly _REF='ChangeLog'
+
+   touch -c -r "${_REF}" include/nghttp2/*.*
+   touch -c -r "${_REF}" lib/pkgconfig/*.*
+   touch -c -r "${_REF}" lib/*.*
 
    # Create package
 
@@ -66,12 +68,8 @@ _CPU="$2"
    unix2dos -k "${_DST}"/*.txt
    unix2dos -k "${_DST}"/*.rst
 
-   touch -c "${_DST}/include/nghttp2" -r ChangeLog
-   touch -c "${_DST}/include"         -r ChangeLog
-   touch -c "${_DST}/lib/pkgconfig"   -r ChangeLog
-   touch -c "${_DST}/lib"             -r ChangeLog
-   touch -c "${_DST}"                 -r ChangeLog
+   find "${_DST}" -type d -d -exec touch -c -r "${_REF}" '{}' \;
 
-   ../_pack.sh "$(pwd)/ChangeLog"
+   ../_pack.sh "$(pwd)/${_REF}"
    ../_ul.sh
 )

@@ -36,14 +36,14 @@ _CPU="$2"
 
    # Make steps for determinism
 
-   if ls win32/*.a   > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g win32/*.a   ; fi
-   if ls win32/*.lib > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g win32/*.lib ; fi
+   if ls win32/*.a > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g win32/*.a ; fi
 
    ../_peclean.py 'win32/*.dll'
 
-   touch -c win32/*.dll -r NEWS
-   touch -c win32/*.a   -r NEWS
-   touch -c win32/*.lib -r NEWS
+   readonly _REF='NEWS'
+
+   touch -c -r "${_REF}" win32/*.dll
+   touch -c -r "${_REF}" win32/*.a
 
    # Create package
 
@@ -69,18 +69,13 @@ _CPU="$2"
 
    cp -f -p ../openssl/LICENSE  "${_DST}/LICENSE-openssl.txt"
 
-   if ls win32/*.a   > /dev/null 2>&1 ; then cp -f -p win32/*.a   "${_DST}/lib" ; fi
-   if ls win32/*.lib > /dev/null 2>&1 ; then cp -f -p win32/*.lib "${_DST}/lib" ; fi
+   if ls win32/*.a > /dev/null 2>&1 ; then cp -f -p win32/*.a "${_DST}/lib" ; fi
 
    unix2dos -k "${_DST}"/*.txt
    unix2dos -k "${_DST}"/docs/*.txt
 
-   touch -c "${_DST}/docs"    -r NEWS
-   touch -c "${_DST}/include" -r NEWS
-   touch -c "${_DST}/lib"     -r NEWS
-   touch -c "${_DST}/bin"     -r NEWS
-   touch -c "${_DST}"         -r NEWS
+   find "${_DST}" -type d -d -exec touch -c -r "${_REF}" '{}' \;
 
-   ../_pack.sh "$(pwd)/NEWS"
+   ../_pack.sh "$(pwd)/${_REF}"
    ../_ul.sh
 )

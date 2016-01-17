@@ -48,17 +48,17 @@ _CPU="$2"
 
    # Make steps for determinism
 
-   if ls lib/*.a   > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g lib/*.a   ; fi
-   if ls lib/*.lib > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g lib/*.lib ; fi
+   if ls lib/*.a > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g lib/*.a ; fi
 
    ../_peclean.py 'src/*.exe'
    ../_peclean.py 'lib/*.dll'
 
-   touch -c ../ca-bundle.crt -r CHANGES
-   touch -c src/*.exe        -r CHANGES
-   touch -c lib/*.dll        -r CHANGES
-   touch -c lib/*.a          -r CHANGES
-   touch -c lib/*.lib        -r CHANGES
+   readonly _REF='CHANGES'
+
+   touch -c -r "${_REF}" ../ca-bundle.crt
+   touch -c -r "${_REF}" src/*.exe
+   touch -c -r "${_REF}" lib/*.dll
+   touch -c -r "${_REF}" lib/*.a
 
    # Test run
 
@@ -103,23 +103,14 @@ _CPU="$2"
 #  cp -f -p ../librtmp/COPYING       "${_DST}/COPYING-librtmp.txt"
    cp -f -p ../nghttp2/COPYING       "${_DST}/COPYING-nghttp2.txt"
 
-   if ls lib/*.a   > /dev/null 2>&1 ; then cp -f -p lib/*.a   "${_DST}/lib" ; fi
-   if ls lib/*.lib > /dev/null 2>&1 ; then cp -f -p lib/*.lib "${_DST}/lib" ; fi
+   if ls lib/*.a > /dev/null 2>&1 ; then cp -f -p lib/*.a "${_DST}/lib" ; fi
 
    unix2dos -k "${_DST}"/*.txt
    unix2dos -k "${_DST}"/docs/*.md
    unix2dos -k "${_DST}"/docs/*.txt
 
-   touch -c "${_DST}/docs/examples"     -r CHANGES
-   touch -c "${_DST}/docs/libcurl/opts" -r CHANGES
-   touch -c "${_DST}/docs/libcurl"      -r CHANGES
-   touch -c "${_DST}/docs"              -r CHANGES
-   touch -c "${_DST}/include/curl"      -r CHANGES
-   touch -c "${_DST}/include"           -r CHANGES
-   touch -c "${_DST}/lib"               -r CHANGES
-   touch -c "${_DST}/bin"               -r CHANGES
-   touch -c "${_DST}"                   -r CHANGES
+   find "${_DST}" -type d -d -exec touch -c -r "${_REF}" '{}' \;
 
-   ../_pack.sh "$(pwd)/CHANGES"
+   ../_pack.sh "$(pwd)/${_REF}"
    ../_ul.sh
 )
