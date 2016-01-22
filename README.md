@@ -14,7 +14,7 @@
   - Components are verified using SHA-256 hashes.
   - Generated binaries are [reproducible](https://reproducible-builds.org), meaning
     they will have the same hash given the same input sources and C compiler.
-    Because LTO mode doesn't support reproducibility out of the box (as of GCC 5.2),
+    Because LTO mode doesn't support reproducibility out of the box (as of GCC 5.3),
     the `-frandom-seed=` workaround is used (with a source-version dependent value)
     to resolve this while building OpenSSL. See more on the issue here:
 
