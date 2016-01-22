@@ -5,7 +5,7 @@
 
   - Packaging aims to follow popular binary releases found on the Internet.
   - Static libraries are built with [LTO](https://en.wikipedia.org/wiki/Interprocedural_optimization) option enabled (can be linked in non-LTO mode as well.)
-  - Both Intel 32-bit and 64-bit packages are built using the same process.
+  - Both x86 and x64 packages are built using the same process.
   - Standalone `curl.exe` (only `msvcrt.dll` is required).
   - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
   - The build process is fully transparent by using publicly available
