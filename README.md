@@ -10,7 +10,8 @@
   - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the
-    build [in the public](https://ci.appveyor.com/project/vsz/harbour-deps), with open, auditable build logs.
+    build [in the public](https://ci.appveyor.com/project/vsz/harbour-deps),
+    with open, auditable [build logs](https://ci.appveyor.com/project/vsz/harbour-deps/branch/master).
   - Components are verified using SHA-256 hashes.
   - Generated binaries are [reproducible](https://reproducible-builds.org), meaning
     they will have the same hash given the same input sources and C compiler.
