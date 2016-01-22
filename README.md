@@ -1,13 +1,16 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
 [![Build status](https://ci.appveyor.com/api/projects/status/4bx4006pge6jbqch/branch/master?svg=true)](https://ci.appveyor.com/project/vsz/harbour-deps/branch/master)
 
-# Automated, reproducible, Windows builds for cURL, nghttp2, libssh2, OpenSSL
+# Automated, reproducible, transparent, Windows builds for cURL, nghttp2, libssh2, OpenSSL
 
   - Packaging tries to follow other binary releases found on the Internet.
   - Static libraries are built with LTO option enabled (can be linked in non-LTO mode as well.)
   - Both 32-bit and 64-bit packages are built using the same process.
   - Standalone `curl.exe` (only `msvcrt.dll` is required).
   - curl/libcurl are built with HTTP/2 support enabled.
+  - The build process is fully transparent by using publicly available
+    open source code, C compiler, build scripts and running the
+    build in the public, with open, auditable build logs.
   - Components are verified using SHA-256 hashes.
   - Generated binaries are reproducible, meaning they will have the same
     hash given the same input sources and C compiler. Because LTO mode
@@ -17,6 +20,8 @@
 
        * <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66305>
        * <https://reproducible.debian.net/issues/unstable/randomness_in_fat_lto_objects_issue.html>
+
+  - Generated binaries are uploaded to VirusTotal.
 
 # Please donate to support maintaining these builds
 
