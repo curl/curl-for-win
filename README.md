@@ -3,7 +3,7 @@
 
 # Automated, reproducible, transparent, Windows builds for cURL, nghttp2, libssh2, OpenSSL
 
-  - Packaging tries to follow other binary releases found on the Internet.
+  - Packaging aims to follow other binary releases found on the Internet.
   - Static libraries are built with LTO option enabled (can be linked in non-LTO mode as well.)
   - Both 32-bit and 64-bit packages are built using the same process.
   - Standalone `curl.exe` (only `msvcrt.dll` is required).
