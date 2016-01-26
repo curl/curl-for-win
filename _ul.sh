@@ -33,7 +33,7 @@ if [ "${APPVEYOR_REPO_BRANCH}" = 'master' ] ; then
       set +x
       curl -fsS \
          -X POST 'https://www.virustotal.com/vtapi/v2/file/scan' \
-         --form "apikey=${VIRUSTOTAL_APIKEY}" \
+         --form-string "apikey=${VIRUSTOTAL_APIKEY}" \
          --form "file=@${_BAS}${_SUF}.7z"
    )
 fi
