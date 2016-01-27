@@ -47,6 +47,7 @@ _CPU="$2"
    # Strip debug info
 
    strip -p -s apps/openssl.exe
+   strip -p -s apps/*.dll
 
    ../_peclean.py 'apps/openssl.exe'
    ../_peclean.py 'apps/*.dll'
