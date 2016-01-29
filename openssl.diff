@@ -44,3 +44,37 @@ index 6e2293b..498cc32 100644
  
  # define BIO_set_nbio(b,n)       BIO_ctrl(b,BIO_C_SET_NBIO,(n),NULL)
  
+diff --git a/crypto/dh/dh.h b/crypto/dh/dh.h
+index 5498a9d..a5bd901 100644
+--- a/crypto/dh/dh.h
++++ b/crypto/dh/dh.h
+@@ -174,7 +174,7 @@ struct dh_st {
+ /* DH_check_pub_key error codes */
+ # define DH_CHECK_PUBKEY_TOO_SMALL       0x01
+ # define DH_CHECK_PUBKEY_TOO_LARGE       0x02
+-# define DH_CHECK_PUBKEY_INVALID         0x03
++# define DH_CHECK_PUBKEY_INVALID         0x04
+ 
+ /*
+  * primes p where (p-1)/2 is prime too are called "safe"; we define this for
+diff --git a/crypto/dh/dh_check.c b/crypto/dh/dh_check.c
+index 5adedc0..0277041 100644
+--- a/crypto/dh/dh_check.c
++++ b/crypto/dh/dh_check.c
+@@ -160,13 +160,12 @@ int DH_check_pub_key(const DH *dh, const BIGNUM *pub_key, int *ret)
+         goto err;
+     BN_CTX_start(ctx);
+     tmp = BN_CTX_get(ctx);
+-    if (tmp == NULL)
++    if (tmp == NULL || !BN_set_word(tmp, 1))
+         goto err;
+-    BN_set_word(tmp, 1);
+     if (BN_cmp(pub_key, tmp) <= 0)
+         *ret |= DH_CHECK_PUBKEY_TOO_SMALL;
+-    BN_copy(tmp, dh->p);
+-    BN_sub_word(tmp, 1);
++    if (BN_copy(tmp, dh->p) == NULL || !BN_sub_word(tmp, 1))
++        goto err;
+     if (BN_cmp(pub_key, tmp) >= 0)
+         *ret |= DH_CHECK_PUBKEY_TOO_LARGE;
+ 
