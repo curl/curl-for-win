@@ -68,6 +68,7 @@ _CPU="$2"
    # Test run
 
    apps/openssl.exe version
+   apps/openssl.exe ciphers
 
    # Create package
 
