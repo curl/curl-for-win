@@ -45,7 +45,7 @@ set -e
    dos2unix < openssl.diff | patch -p1 -d openssl
 
    # librtmp
-#  curl -fsS -o pack.bin "https://rtmpdump.mplayerhq.hu/download/rtmpdump-${VER_LIBRTMP}.tgz"
+#  curl -fsS -o pack.bin "https://rtmpdump.mplayerhq.hu/download/rtmpdump-${LIBRTMP_VER_}.tgz"
 #  openssl dgst -sha256 pack.bin | grep -q "${LIBRTMP_HASH}"
 #  tar -xvf pack.bin > /dev/null 2>&1
 #  rm pack.bin
@@ -60,7 +60,7 @@ set -e
    dos2unix < libssh2.diff | patch -p1 -d libssh2
 
    # curl
-   curl -fsS -o pack.bin -L --proto-redir =https "https://github.com/bagder/curl/releases/download/curl-$(echo "${CURL_VER_}" | sed -e 's|\.|_|g')/curl-${CURL_VER_}.tar.bz2"
+   curl -fsS -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2"
    openssl dgst -sha256 pack.bin | grep -q "${CURL_HASH}"
    tar -xvf pack.bin > /dev/null 2>&1
    rm pack.bin
