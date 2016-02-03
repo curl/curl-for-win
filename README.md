@@ -1,7 +1,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
 [![Build status](https://ci.appveyor.com/api/projects/status/4bx4006pge6jbqch/branch/master?svg=true)](https://ci.appveyor.com/project/vsz/harbour-deps/branch/master)
 
-# Automated, reproducible, transparent, Windows builds for [cURL](https://curl.haxx.se), [nghttp2](https://nghttp2.org), [libssh2](https://github.com/libssh2/libssh2), [OpenSSL](https://www.openssl.org)
+# Automated, reproducible, transparent, Windows builds for [cURL](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [libssh2](https://github.com/libssh2/libssh2), [OpenSSL](https://www.openssl.org/)
 
   - Packaging aims to follow popular binary releases found on the Internet.
   - Static libraries are built with [LTO](https://en.wikipedia.org/wiki/Interprocedural_optimization) option enabled (can be linked in non-LTO mode as well.)
@@ -22,7 +22,7 @@
        * <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66305>
        * <https://reproducible.debian.net/issues/unstable/randomness_in_fat_lto_objects_issue.html>
 
-  - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com).
+  - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
 
 # Please donate to support maintaining these builds
 
