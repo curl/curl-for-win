@@ -42,9 +42,8 @@ _CPU="$2"
    [ "${_CPU}" = 'win64' ] && mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-srp-nghttp2-ipv6-winidn
 
    # Download CA bundle
-   [ -f '../ca-bundle.crt' ] || curl -R -fsS \
-      -o '../ca-bundle.crt' \
-      -L --proto-redir =https 'https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt'
+   [ -f '../ca-bundle.crt' ] || \
+      curl -R -fsS -o '../ca-bundle.crt' 'https://curl.haxx.se/ca/cacert.pem'
 
    # Make steps for determinism
 
