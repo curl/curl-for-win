@@ -17,6 +17,8 @@ _CPU="$2"
 (
    cd "${_NAM}" || exit
 
+   readonly _REF='CHANGES'
+
    # Build
 
    export MAKE=mingw32-make
@@ -30,7 +32,7 @@ _CPU="$2"
 
    OPTIONS='-fno-ident -static-libgcc'
    # Create a fixed seed based on the timestamp of the OpenSSL source package
-   OPTIONS="${OPTIONS} -flto -ffat-lto-objects -frandom-seed=$(stat -c %Y CHANGES)"
+   OPTIONS="${OPTIONS} -flto -ffat-lto-objects -frandom-seed=$(stat -c %Y "${_REF}")"
    OPTIONS="${OPTIONS} shared no-unit-test no-ssl3 no-rc5 no-idea no-dso"
    # for 1.0.2
    OPTIONS="${OPTIONS} no-ssl2"
@@ -65,8 +67,6 @@ _CPU="$2"
    if ls engines/*.dll > /dev/null 2>&1 ; then
       ../_peclean.py 'engines/*.dll'
    fi
-
-   readonly _REF='CHANGES'
 
    touch -c -r "${_REF}" apps/openssl.exe
    touch -c -r "${_REF}" apps/*.dll
