@@ -40,7 +40,7 @@ _CPU="$2"
 #  OPTIONS="${OPTIONS} --unified"
 
    # shellcheck disable=SC2086
-   [ "${_CPU}" = 'win32' ] && ./Configure '--prefix=/usr/local' mingw   -m32 ${OPTIONS} -march=i686
+   [ "${_CPU}" = 'win32' ] && ./Configure '--prefix=/usr/local' mingw   -m32 ${OPTIONS} -march=i686 -mtune=generic
    # Disable asm in 64-bit builds. It makes linking the static libs fail in LTO mode:
    #   C:\Users\...\AppData\Local\Temp\ccUO3sBD.s: Assembler messages:
    #   C:\Users\...\AppData\Local\Temp\ccUO3sBD.s:23710: Error: operand type mismatch for `div'
