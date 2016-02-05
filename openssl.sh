@@ -28,7 +28,17 @@ _CPU="$2"
    find . -name '*.a'   -type f -delete
    find . -name '*.exe' -type f -delete
 
-   [ "${_CPU}" = 'win32' ] && ./Configure mingw   shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso '--prefix=/usr/local'
+   OPTIONS="-fno-ident -static-libgcc"
+   # Create a fixed seed based on the timestamp of the OpenSSL source package
+   OPTIONS="${OPTIONS} -flto -ffat-lto-objects -frandom-seed=$(stat -c %Y CHANGES)"
+   OPTIONS="${OPTIONS} shared no-unit-test no-ssl3 no-rc5 no-idea no-dso"
+   # for 1.0.2
+   OPTIONS="${OPTIONS} no-ssl2"
+   # for 1.1.0
+   # --unified
+
+   # shellcheck disable=SC2086
+   [ "${_CPU}" = 'win32' ] && ./Configure mingw   -m32 ${OPTIONS} -march=i686 '--prefix=/usr/local'
    # Disable asm in 64-bit builds. It makes linking the static libs fail in LTO mode:
    #   C:\Users\...\AppData\Local\Temp\ccUO3sBD.s: Assembler messages:
    #   C:\Users\...\AppData\Local\Temp\ccUO3sBD.s:23710: Error: operand type mismatch for `div'
@@ -36,7 +46,8 @@ _CPU="$2"
    #   compilation terminated.
    #   C:/mingw/bin/../lib/gcc/x86_64-w64-mingw32/5.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: lto-wrapper failed
    #   collect2.exe: error: ld returned 1 exit status
-   [ "${_CPU}" = 'win64' ] && ./Configure mingw64 shared no-unit-test no-ssl2 no-ssl3 no-rc5 no-idea no-dso no-asm '--prefix=/usr/local'
+   # shellcheck disable=SC2086
+   [ "${_CPU}" = 'win64' ] && ./Configure mingw64 -m64 ${OPTIONS} no-asm '--prefix=/usr/local'
    mingw32-make depend
    mingw32-make
 

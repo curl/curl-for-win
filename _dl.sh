@@ -39,9 +39,6 @@ set -e
    tar -xvf pack.bin > /dev/null 2>&1 || true
    rm pack.bin
    mv openssl-* openssl
-
-   # Create a fixed seed based on the timestamp of the OpenSSL source package
-   sed -e "s/-frandom-seed=__RANDOM_SEED__/-frandom-seed=$(stat -c %Y openssl/CHANGES)/g" -i openssl.diff
    dos2unix < openssl.diff | patch -p1 -d openssl
 
    # librtmp
