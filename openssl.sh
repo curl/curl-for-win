@@ -32,7 +32,7 @@ _CPU="$2"
 
    OPTIONS='-fno-ident -static-libgcc'
    # Create a fixed seed based on the timestamp of the OpenSSL source package
-   OPTIONS="${OPTIONS} -flto -ffat-lto-objects -frandom-seed=$(stat -c %Y "${_REF}")"
+#  OPTIONS="${OPTIONS} -flto -ffat-lto-objects -frandom-seed=$(stat -c %Y "${_REF}")"
    OPTIONS="${OPTIONS} shared no-unit-test no-ssl3 no-rc5 no-idea no-dso"
    # for 1.0.2
    OPTIONS="${OPTIONS} no-ssl2"
