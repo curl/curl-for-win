@@ -23,8 +23,8 @@ _CPU="$2"
 
    export MAKE=mingw32-make
 
-   [ "${_CPU}" = 'win32' ] && export SHARED_RCFLAGS='-F pe-i386'
-   [ "${_CPU}" = 'win64' ] && export SHARED_RCFLAGS='-F pe-x86-64'
+   [ "${_CPU}" = 'win32' ] && export SHARED_RCFLAGS='--target=pe-i386'
+   [ "${_CPU}" = 'win64' ] && export SHARED_RCFLAGS='--target=pe-x86-64'
 
    find . -name '*.o'   -type f -delete
    find . -name '*.a'   -type f -delete
