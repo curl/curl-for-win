@@ -36,12 +36,11 @@ _CPU="$2"
 #  OPTIONS="${OPTIONS} -flto -ffat-lto-objects -frandom-seed=$(stat -c %Y "${_REF}")"
    # mingw64 LTO build will fail (as of mingw 5.2.0) without the `no-asm` option.
    [ "${_CPU}" = 'win64' ] && [ "${OPTIONS#*-flto*}" != "${OPTIONS}" ] && OPTIONS="${OPTIONS} no-asm"
-   OPTIONS="${OPTIONS} shared no-unit-test no-ssl3 no-rc5 no-idea no-dso"
    [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.0.2' ] && OPTIONS="${OPTIONS} no-ssl2"
 #  [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-pre' ] && OPTIONS="${OPTIONS} --unified"
 
    # shellcheck disable=SC2086
-   ./Configure ${OPTIONS} -fno-ident -static-libgcc '--prefix=/usr/local'
+   ./Configure ${OPTIONS} shared no-unit-test no-ssl3 no-rc5 no-idea no-dso -fno-ident -static-libgcc '--prefix=/usr/local'
    mingw32-make depend
    mingw32-make
 
