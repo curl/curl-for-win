@@ -30,20 +30,18 @@ _CPU="$2"
    find . -name '*.a'   -type f -delete
    find . -name '*.exe' -type f -delete
 
-   OPTIONS='-fno-ident -static-libgcc'
+   [ "${_CPU}" = 'win32' ] && OPTIONS='mingw   -m32'
+   [ "${_CPU}" = 'win64' ] && OPTIONS='mingw64 -m64'
    # Create a fixed seed based on the timestamp of the OpenSSL source package.
-   # LTO note: mingw64 builds will fail (as of mingw 5.2.0) unless using `no-asm` option.
 #  OPTIONS="${OPTIONS} -flto -ffat-lto-objects -frandom-seed=$(stat -c %Y "${_REF}")"
+   # mingw64 LTO build will fail (as of mingw 5.2.0) without the `no-asm` option.
+   [ "${_CPU}" = 'win64' ] && [ "${OPTIONS#*-flto*}" != "${OPTIONS}" ] && OPTIONS="${OPTIONS} no-asm"
    OPTIONS="${OPTIONS} shared no-unit-test no-ssl3 no-rc5 no-idea no-dso"
-   # for 1.0.2
-   OPTIONS="${OPTIONS} no-ssl2"
-   # for 1.1.0
-#  OPTIONS="${OPTIONS} --unified"
+   [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.0.2' ] && OPTIONS="${OPTIONS} no-ssl2"
+#  [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-pre' ] && OPTIONS="${OPTIONS} --unified"
 
    # shellcheck disable=SC2086
-   [ "${_CPU}" = 'win32' ] && ./Configure '--prefix=/usr/local' mingw   -m32 ${OPTIONS}
-   # shellcheck disable=SC2086
-   [ "${_CPU}" = 'win64' ] && ./Configure '--prefix=/usr/local' mingw64 -m64 ${OPTIONS}
+   ./Configure ${OPTIONS} -fno-ident -static-libgcc '--prefix=/usr/local'
    mingw32-make depend
    mingw32-make
 
