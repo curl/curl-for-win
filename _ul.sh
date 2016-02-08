@@ -31,9 +31,12 @@ openssl dgst -sha256 "${_BAS}${_SUF}.7z" >> hashes.txt
 if [ "${APPVEYOR_REPO_BRANCH}" = 'master' ] ; then
    (
       set +x
-      curl -fsS \
+      out="$(curl -fsS \
          -X POST 'https://www.virustotal.com/vtapi/v2/file/scan' \
          --form-string "apikey=${VIRUSTOTAL_APIKEY}" \
-         --form "file=@${_BAS}${_SUF}.7z"
+         --form "file=@${_BAS}${_SUF}.7z")"
+      echo "${out}"
+      echo "VirusTotal URL for '${_BAS}${_SUF}.7z':"
+      echo "$(echo "${out}" | grep -o 'https://[a-zA-Z0-9./]*')"
    )
 fi
