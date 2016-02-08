@@ -6,7 +6,7 @@ diff -u -r openssl/Configure openssl-fix/Configure
  
  # MinGW
 -"mingw", "gcc:-mno-cygwin -DL_ENDIAN -DWIN32_LEAN_AND_MEAN -fomit-frame-pointer -O3 -march=i486 -Wall::-D_MT:MINGW32:-lws2_32 -lgdi32 -lcrypt32:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts} EXPORT_VAR_AS_FN:${x86_asm}:coff:win32:cygwin-shared:-D_WINDLL -DOPENSSL_USE_APPLINK:-mno-cygwin:.dll.a",
-+"mingw", "gcc:-mno-cygwin -DL_ENDIAN -DWIN32_LEAN_AND_MEAN -fomit-frame-pointer -O3 -Wall::-D_MT:MINGW32:-lws2_32 -lgdi32 -lcrypt32:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts} EXPORT_VAR_AS_FN:${x86_asm}:coff:win32:cygwin-shared:-D_WINDLL:-mno-cygwin:.dll.a",
++"mingw", "gcc:-mno-cygwin -DL_ENDIAN -DWIN32_LEAN_AND_MEAN -fomit-frame-pointer -O3 -Wall::-D_MT:MINGW32:-lws2_32 -lgdi32 -lcrypt32:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts} EXPORT_VAR_AS_FN:${x86_asm}:coff:win32:cygwin-shared:-D_WINDLL -DOPENSSL_USE_APPLINK:-mno-cygwin:.dll.a",
  # As for OPENSSL_USE_APPLINK. Applink makes it possible to use .dll
  # compiled with one compiler with application compiled with another
  # compiler. It's possible to engage Applink support in mingw64 build,
@@ -22,6 +22,23 @@ diff -u -r openssl/Makefile.shared openssl-fix/Makefile.shared
  	extras="$$extras rc.o"; \
  	ALLSYMSFLAGS='-Wl,--whole-archive'; \
  	NOALLSYMSFLAGS='-Wl,--no-whole-archive'; \
+diff -u -r openssl/ms/uplink-x86.pl openssl-fix/ms/uplink-x86.pl
+--- a/ms/uplink-x86.pl	2015-12-03 17:51:01.000000000 +0100
++++ b/ms/uplink-x86.pl	2016-02-07 23:19:36.000000000 +0100
+@@ -14,11 +14,11 @@
+ for ($i=1;$i<=$N;$i++) {
+ &function_begin_B("_\$lazy${i}");
+ 	&lea	("eax",&DWP(&label("OPENSSL_UplinkTable")));
+-	&push	("eax");
+ 	&push	($i);
++	&push	("eax");
+ 	&call	(&label("OPENSSL_Uplink"));
+-	&add	("esp",8);
+ 	&pop	("eax");
++	&add	("esp",4);
+ 	&jmp_ptr(&DWP(4*$i,"eax"));
+ &function_end_B("_\$lazy${i}");
+ }
 diff --git a/crypto/bio/bio.h b/crypto/bio/bio.h
 index 6e2293b..498cc32 100644
 --- a/crypto/bio/bio.h
