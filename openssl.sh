@@ -32,10 +32,12 @@ _CPU="$2"
 
    [ "${_CPU}" = 'win32' ] && OPTIONS='mingw   -m32'
    [ "${_CPU}" = 'win64' ] && OPTIONS='mingw64 -m64'
-   # Create a fixed seed based on the timestamp of the OpenSSL source package.
-#  OPTIONS="${OPTIONS} -flto -ffat-lto-objects -frandom-seed=$(stat -c %Y "${_REF}")"
-   # mingw64 LTO build will fail (as of mingw 5.2.0) without the `no-asm` option.
-   [ "${_CPU}" = 'win64' ] && [ "${OPTIONS#*-flto*}" != "${OPTIONS}" ] && OPTIONS="${OPTIONS} no-asm"
+   if [ "${APPVEYOR_REPO_BRANCH#*lto*}" != "${APPVEYOR_REPO_BRANCH}" ] ; then
+      # Create a fixed seed based on the timestamp of the OpenSSL source package.
+      OPTIONS="${OPTIONS} -flto -ffat-lto-objects -frandom-seed=$(stat -c %Y "${_REF}")"
+      # mingw64 build (as of mingw 5.2.0) will fail without the `no-asm` option.
+      [ "${_CPU}" = 'win64' ] && OPTIONS="${OPTIONS} no-asm"
+   fi
    [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.0.2' ] && OPTIONS="${OPTIONS} no-ssl2"
 #  [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-pre' ] && OPTIONS="${OPTIONS} --unified"
 
