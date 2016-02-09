@@ -32,7 +32,8 @@ _CPU="$2"
    export CFLAGS="${LDFLAGS} -U__STRICT_ANSI__ -DNGHTTP2_STATICLIB -fno-ident"
    export CXXFLAGS="${CFLAGS}"
    # Open dummy file descriptor to fix './<script>: line <n>: 0: Bad file descriptor'
-   exec 0</dev/null && ./configure --enable-lib-only "--prefix=$(pwd)"
+   exec 0</dev/null && ./configure --enable-lib-only "--prefix=$(pwd)" --silent
+#  exec 0</dev/null && mingw32-make "MAKE=$(echo "${_MAK}" | sed -e 's|\\|/|g')" clean > /dev/null
    exec 0</dev/null && mingw32-make "MAKE=$(echo "${_MAK}" | sed -e 's|\\|/|g')"
    exec 0</dev/null && mingw32-make "MAKE=$(echo "${_MAK}" | sed -e 's|\\|/|g')" install
 
