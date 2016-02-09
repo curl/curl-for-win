@@ -21,8 +21,6 @@ _CPU="$2"
 
    # Build
 
-   export MAKE=mingw32-make
-
    [ "${_CPU}" = 'win32' ] && export SHARED_RCFLAGS='--target=pe-i386'
    [ "${_CPU}" = 'win64' ] && export SHARED_RCFLAGS='--target=pe-x86-64'
 
@@ -39,12 +37,12 @@ _CPU="$2"
       [ "${_CPU}" = 'win64' ] && OPTIONS="${OPTIONS} no-asm"
    fi
    [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.0.2' ] && OPTIONS="${OPTIONS} no-ssl2"
-#  [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-pre' ] && OPTIONS="${OPTIONS} --unified"
 
+   export MAKE=mingw32-make
    # shellcheck disable=SC2086
    ./Configure ${OPTIONS} shared no-unit-test no-ssl3 no-rc5 no-idea no-dso -fno-ident -static-libgcc '--prefix=/usr/local'
-   mingw32-make depend
-   mingw32-make
+   "${MAKE}" depend
+   "${MAKE}"
 
    # Make steps for determinism
 
