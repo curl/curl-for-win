@@ -55,11 +55,14 @@ _CPU="$2"
    mkdir -p "${_DST}/lib"
    mkdir -p "${_DST}/bin"
 
-   for file in docs/* ; do
-      if [ -f "${file}" ] && echo "${file}" | grep -v '\.' > /dev/null 2>&1 ; then
-         cp -f -p "${file}" "${_DST}/${file}.txt"
-      fi
-   done
+   (
+      set +x
+      for file in docs/* ; do
+         if [ -f "${file}" ] && echo "${file}" | grep -v '\.' > /dev/null 2>&1 ; then
+            cp -f -p "${file}" "${_DST}/${file}.txt"
+         fi
+      done
+   )
    cp -f -p include/*.h         "${_DST}/include/"
    cp -f -p NEWS                "${_DST}/NEWS.txt"
    cp -f -p COPYING             "${_DST}/COPYING.txt"

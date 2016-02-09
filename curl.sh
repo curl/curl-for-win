@@ -73,16 +73,19 @@ _CPU="$2"
    mkdir -p "${_DST}/lib"
    mkdir -p "${_DST}/bin"
 
-   for file in docs/* ; do
-      if [ -f "${file}" ] && echo "${file}" | grep -v '\.' > /dev/null 2>&1 ; then
-         cp -f -p "${file}" "${_DST}/${file}.txt"
-      fi
-   done
-   for file in docs/libcurl/* ; do
-      if [ -f "${file}" ] && echo "${file}" | grep -v '\.' > /dev/null 2>&1 ; then
-         cp -f -p "${file}" "${_DST}/${file}.txt"
-      fi
-   done
+   (
+      set +x
+      for file in docs/* ; do
+         if [ -f "${file}" ] && echo "${file}" | grep -v '\.' > /dev/null 2>&1 ; then
+            cp -f -p "${file}" "${_DST}/${file}.txt"
+         fi
+      done
+      for file in docs/libcurl/* ; do
+         if [ -f "${file}" ] && echo "${file}" | grep -v '\.' > /dev/null 2>&1 ; then
+            cp -f -p "${file}" "${_DST}/${file}.txt"
+         fi
+      done
+   )
    cp -f -p docs/libcurl/opts/*.html "${_DST}/docs/libcurl/opts/"
    cp -f -p docs/libcurl/*.html      "${_DST}/docs/libcurl/"
    cp -f -p docs/*.html              "${_DST}/docs/"
