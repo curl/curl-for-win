@@ -30,8 +30,8 @@
 
 # Live build logs
 
-  <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
-  <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master-libressl>
+  * <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
+  * <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master-libressl>
 
 ---
 This document Copyright &copy;&nbsp;2014&ndash;2016 Viktor Szakáts <https://github.com/vszakats><br />
