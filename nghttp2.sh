@@ -33,9 +33,9 @@ _CPU="$2"
    export CXXFLAGS="${CFLAGS}"
    # Open dummy file descriptor to fix './<script>: line <n>: 0: Bad file descriptor'
    exec 0</dev/null && ./configure --enable-lib-only "--prefix=$(pwd)" --silent
-#  exec 0</dev/null && mingw32-make "MAKE=$(echo "${_MAK}" | sed -e 's|\\|/|g')" clean > /dev/null
-   exec 0</dev/null && mingw32-make "MAKE=$(echo "${_MAK}" | sed -e 's|\\|/|g')"
-   exec 0</dev/null && mingw32-make "MAKE=$(echo "${_MAK}" | sed -e 's|\\|/|g')" install
+#  exec 0</dev/null && make clean > /dev/null
+   exec 0</dev/null && make
+   exec 0</dev/null && make install
 
    # Make steps for determinism
 
