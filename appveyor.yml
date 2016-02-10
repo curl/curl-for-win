@@ -32,13 +32,11 @@ environment:
 #on_finish:
 #  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
-install:
+build_script:
   - set PATH=C:\msys64\usr\bin;%PATH%
   - python -m pip --disable-pip-version-check install --upgrade pip
   - python -m pip install pefile
   - sh -c ./_dl.sh
-
-build_script:
   - set _URL=https://github.com/%APPVEYOR_REPO_NAME%
   - set PATH=%APPVEYOR_BUILD_FOLDER%\mingw64\bin;%PATH%
   - set CPU=win32
