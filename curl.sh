@@ -47,12 +47,12 @@ _CPU="$2"
 
    # Make steps for determinism
 
-   if ls lib/*.a > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g lib/*.a ; fi
-
-   ../_peclean.py 'src/*.exe'
-   ../_peclean.py 'lib/*.dll'
-
    readonly _REF='CHANGES'
+
+   strip -p --enable-deterministic-archives -g lib/*.a
+
+   ../_peclean.py "${_REF}" 'src/*.exe'
+   ../_peclean.py "${_REF}" 'lib/*.dll'
 
    touch -c -r "${_REF}" ../ca-bundle.crt
    touch -c -r "${_REF}" src/*.exe
@@ -93,6 +93,7 @@ _CPU="$2"
    cp -f -p include/curl/*.h         "${_DST}/include/curl/"
    cp -f -p src/*.exe                "${_DST}/bin/"
    cp -f -p lib/*.dll                "${_DST}/bin/"
+   cp -f -p lib/*.a                  "${_DST}/lib/"
    cp -f -p lib/mk-ca-bundle.pl      "${_DST}/"
    cp -f -p CHANGES                  "${_DST}/CHANGES.txt"
    cp -f -p COPYING                  "${_DST}/COPYING.txt"
@@ -104,8 +105,6 @@ _CPU="$2"
    cp -f -p ../libssh2/COPYING       "${_DST}/COPYING-libssh2.txt"
 #  cp -f -p ../librtmp/COPYING       "${_DST}/COPYING-librtmp.txt"
    cp -f -p ../nghttp2/COPYING       "${_DST}/COPYING-nghttp2.txt"
-
-   if ls lib/*.a > /dev/null 2>&1 ; then cp -f -p lib/*.a "${_DST}/lib" ; fi
 
    unix2dos -k "${_DST}"/*.txt
    unix2dos -k "${_DST}"/docs/*.md

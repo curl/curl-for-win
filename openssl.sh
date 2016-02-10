@@ -46,17 +46,14 @@ _CPU="$2"
 
    # Make steps for determinism
 
-   if ls ./*.a > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g ./*.a ; fi
-
-   # Strip debug info
-
+   strip -p --enable-deterministic-archives -g ./*.a
    strip -p -s apps/openssl.exe
    strip -p -s apps/*.dll
 
-   ../_peclean.py 'apps/openssl.exe'
-   ../_peclean.py 'apps/*.dll'
+   ../_peclean.py "${_REF}" 'apps/openssl.exe'
+   ../_peclean.py "${_REF}" 'apps/*.dll'
    if ls engines/*.dll > /dev/null 2>&1 ; then
-      ../_peclean.py 'engines/*.dll'
+      ../_peclean.py "${_REF}" 'engines/*.dll'
    fi
 
    touch -c -r "${_REF}" apps/openssl.exe
@@ -90,13 +87,12 @@ _CPU="$2"
    cp -f -p apps/openssl.cnf    "${_DST}/openssl.cfg"
    cp -f -p include/openssl/*.h "${_DST}/include/openssl/"
    cp -f -p ms/applink.c        "${_DST}/include/openssl/"
+   cp -f -p ./*.a               "${_DST}/lib/"
    cp -f -p CHANGES             "${_DST}/CHANGES.txt"
    cp -f -p LICENSE             "${_DST}/LICENSE.txt"
    cp -f -p README              "${_DST}/README.txt"
    cp -f -p FAQ                 "${_DST}/FAQ.txt"
    cp -f -p NEWS                "${_DST}/NEWS.txt"
-
-   if ls ./*.a > /dev/null 2>&1 ; then cp -f -p ./*.a "${_DST}/lib" ; fi
 
    unix2dos -k "${_DST}"/*.txt
 

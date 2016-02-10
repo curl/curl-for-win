@@ -39,13 +39,13 @@ _CPU="$2"
 
    # Make steps for determinism
 
-   if ls lib/*.a > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g lib/*.a ; fi
-
    readonly _REF='ChangeLog'
 
-   touch -c -r "${_REF}" include/nghttp2/*.*
-   touch -c -r "${_REF}" lib/pkgconfig/*.*
-   touch -c -r "${_REF}" lib/*.*
+   strip -p --enable-deterministic-archives -g lib/*.a
+
+   touch -c -r "${_REF}" include/nghttp2/*.h
+   touch -c -r "${_REF}" lib/pkgconfig/*.pc
+   touch -c -r "${_REF}" lib/*.a
 
    # Create package
 
@@ -56,15 +56,12 @@ _CPU="$2"
    mkdir -p "${_DST}/lib/pkgconfig"
 
    cp -f -p include/nghttp2/*.h "${_DST}/include/nghttp2/"
+   cp -f -p lib/*.a             "${_DST}/lib/"
+   cp -f -p lib/pkgconfig/*.pc  "${_DST}/lib/pkgconfig/"
    cp -f -p ChangeLog           "${_DST}/ChangeLog.txt"
    cp -f -p AUTHORS             "${_DST}/AUTHORS.txt"
    cp -f -p COPYING             "${_DST}/COPYING.txt"
    cp -f -p README.rst          "${_DST}/README.rst"
-
-   if ls lib/*.a            > /dev/null 2>&1 ; then cp -f -p lib/*.a            "${_DST}/lib" ; fi
-   if ls lib/*.la           > /dev/null 2>&1 ; then cp -f -p lib/*.la           "${_DST}/lib" ; fi
-   if ls lib/*.pc           > /dev/null 2>&1 ; then cp -f -p lib/*.pc           "${_DST}/lib" ; fi
-   if ls lib/pkgconfig/*.pc > /dev/null 2>&1 ; then cp -f -p lib/pkgconfig/*.pc "${_DST}/lib/pkgconfig" ; fi
 
    unix2dos -k "${_DST}"/*.txt
    unix2dos -k "${_DST}"/*.rst

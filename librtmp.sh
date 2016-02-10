@@ -38,12 +38,12 @@ _CDO="$(pwd)"
 
    # Make steps for determinism
 
-   if ls librtmp/*.a > /dev/null 2>&1 ; then strip -p --enable-deterministic-archives -g librtmp/*.a ; fi
-
-   ../_peclean.py './*.exe'
-   ../_peclean.py 'librtmp/*.dll'
-
    readonly _REF='ChangeLog'
+
+   strip -p --enable-deterministic-archives -g librtmp/*.a
+
+   ../_peclean.py "${_REF}" './*.exe'
+   ../_peclean.py "${_REF}" 'librtmp/*.dll'
 
    touch -c -r "${_REF}" librtmp/*.exe
    touch -c -r "${_REF}" librtmp/*.dll
