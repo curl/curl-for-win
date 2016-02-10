@@ -34,7 +34,7 @@ _CDO="$(pwd)"
    find . -name '*.so'  -type f -delete
    find . -name '*.exe' -type f -delete
 
-   mingw32-make SYS=mingw SODEF_yes=
+   make SYS=mingw SODEF_yes=
 
    # Make steps for determinism
 
