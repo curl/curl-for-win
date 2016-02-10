@@ -39,9 +39,8 @@ install:
   - sh -c ./_dl.sh
 
 build_script:
-  - set PATH=%APPVEYOR_BUILD_FOLDER%\mingw64\bin;%PATH%
-  - set _MAK=%APPVEYOR_BUILD_FOLDER%\mingw64\bin\mingw32-make.exe
   - set _URL=https://github.com/%APPVEYOR_REPO_NAME%
+  - set PATH=%APPVEYOR_BUILD_FOLDER%\mingw64\bin;%PATH%
   - set CPU=win32
   - sh -c "./nghttp2.sh %NGHTTP2_VER_% %CPU%"
   - sh -c "./openssl.sh %OPENSSL_VER_% %CPU%"
