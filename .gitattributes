@@ -1,6 +1,0 @@
-# Default
-*         text=auto
-
-# Text files with fixed EOL requirements
-*.sh      text eol=lf
-*.diff    text eol=lf
