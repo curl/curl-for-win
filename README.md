@@ -15,6 +15,7 @@
   - Generated binaries are [reproducible](https://reproducible-builds.org), meaning
     they will have the same hash given the same input sources and C compiler.
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
+  - Optional support for [LibreSSL](http://www.libressl.org/).
 
 # Please donate to support maintaining these builds
 
@@ -25,6 +26,7 @@
   * cURL: <https://bintray.com/vszakats/generic/curl>
   * nghttp2: <https://bintray.com/vszakats/generic/nghttp2>
   * libssh2: <https://bintray.com/vszakats/generic/libssh2>
+  * LibreSSL: <https://bintray.com/vszakats/generic/libressl> (optional)
   * OpenSSL: <https://bintray.com/vszakats/generic/openssl>
 
 # Live build logs

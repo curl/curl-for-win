@@ -20,7 +20,8 @@ _CPU="$2"
    # Build
 
    export ZLIB_PATH=../../zlib
-   export OPENSSL_PATH=../../openssl
+   [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
+   [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
    export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
    export OPENSSL_LIBPATH="${OPENSSL_PATH}"
    export OPENSSL_LIBS='-lssl -lcrypto'
@@ -101,10 +102,12 @@ _CPU="$2"
    cp -f -p RELEASE-NOTES            "${_DST}/RELEASE-NOTES.txt"
    cp -f -p ../ca-bundle.crt         "${_DST}/bin/curl-ca-bundle.crt"
 
-   cp -f -p ../openssl/LICENSE       "${_DST}/LICENSE-openssl.txt"
    cp -f -p ../libssh2/COPYING       "${_DST}/COPYING-libssh2.txt"
 #  cp -f -p ../librtmp/COPYING       "${_DST}/COPYING-librtmp.txt"
    cp -f -p ../nghttp2/COPYING       "${_DST}/COPYING-nghttp2.txt"
+
+   [ -d ../libressl ] && cp -f -p ../libressl/COPYING "${_DST}/COPYING-libressl.txt"
+   [ -d ../openssl ]  && cp -f -p ../openssl/LICENSE  "${_DST}/LICENSE-openssl.txt"
 
    unix2dos -k "${_DST}"/*.txt
    unix2dos -k "${_DST}"/docs/*.md

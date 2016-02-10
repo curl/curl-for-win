@@ -20,7 +20,9 @@ _CPU="$2"
    # Build
 
    export ZLIB_PATH=../../zlib
-   export OPENSSL_PATH=../../openssl
+   [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
+   [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
+#  export LINK_OPENSSL_STATIC=yes; export OPENSSL_LIBS_STAT='crypto ssl'
    export OPENSSL_LIBPATH="${OPENSSL_PATH}"
    export OPENSSL_LIBS_DYN='crypto.dll ssl.dll'
    [ "${_CPU}" = 'win32' ] && export ARCH=w32
@@ -71,7 +73,8 @@ _CPU="$2"
    cp -f -p README              "${_DST}/README.txt"
    cp -f -p RELEASE-NOTES       "${_DST}/RELEASE-NOTES.txt"
 
-   cp -f -p ../openssl/LICENSE  "${_DST}/LICENSE-openssl.txt"
+   [ -d ../libressl ] && cp -f -p ../libressl/COPYING "${_DST}/COPYING-libressl.txt"
+   [ -d ../openssl ]  && cp -f -p ../openssl/LICENSE  "${_DST}/LICENSE-openssl.txt"
 
    unix2dos -k "${_DST}"/*.txt
    unix2dos -k "${_DST}"/docs/*.txt

@@ -33,13 +33,22 @@ set -e
    rm pack.bin
    mv nghttp2-* nghttp2
 
-   # openssl
-   curl -fsS -o pack.bin "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz"
-   openssl dgst -sha256 pack.bin | grep -q "${OPENSSL_HASH}"
-   tar -xvf pack.bin > /dev/null 2>&1 || true
-   rm pack.bin
-   mv openssl-* openssl
-   dos2unix < openssl.diff | patch -p1 -d openssl
+   if [ "${APPVEYOR_REPO_BRANCH}${TRAVIS_BRANCH}${GIT_BRANCH}" = 'libressl' ] ; then
+      # libressl
+      curl -fsS -o pack.bin "http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz"
+      openssl dgst -sha256 pack.bin | grep -q "${LIBRESSL_HASH}"
+      tar -xvf pack.bin > /dev/null 2>&1 || true
+      rm pack.bin
+      mv libressl-* libressl
+   else
+      # openssl
+      curl -fsS -o pack.bin "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz"
+      openssl dgst -sha256 pack.bin | grep -q "${OPENSSL_HASH}"
+      tar -xvf pack.bin > /dev/null 2>&1 || true
+      rm pack.bin
+      mv openssl-* openssl
+      dos2unix < openssl.diff | patch -p1 -d openssl
+   fi
 
    # librtmp
 #  curl -fsS -o pack.bin "https://rtmpdump.mplayerhq.hu/download/rtmpdump-${LIBRTMP_VER_}.tgz"

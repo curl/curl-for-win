@@ -18,6 +18,8 @@ environment:
   ZLIB_HASH: e380bd1bdb6447508beaa50efc653fe45f4edc1dafe11a251ae093e0ee97db9a
   NGHTTP2_VER_: 1.7.0
   NGHTTP2_HASH: 9447ddfc2888c5d2d7ef27370b9f911c0263430666682105ca4066dcd88708f0
+  LIBRESSL_VER_: 2.3.2
+  LIBRESSL_HASH: 80f45fae4859f161b1980cad846d4217417d0c89006ad29c0ea8c88da564a96a
   OPENSSL_VER_: 1.0.2f
   OPENSSL_HASH: 932b4ee4def2b434f85435d9e3e19ca8ba99ce9a065a61524b429a9d5e9b2e9c
   LIBRTMP_VER_: 2.3
@@ -40,21 +42,24 @@ build_script:
   - set _URL=https://github.com/%APPVEYOR_REPO_NAME%
   - set PATH=%APPVEYOR_BUILD_FOLDER%\mingw64\bin;%PATH%
   - set CPU=win32
-  - sh -c "./nghttp2.sh %NGHTTP2_VER_% %CPU%"
-  - sh -c "./openssl.sh %OPENSSL_VER_% %CPU%"
-# - sh -c "./librtmp.sh %LIBRTMP_VER_% %CPU%"
-  - sh -c "./libssh2.sh %LIBSSH2_VER_% %CPU%"
-  - sh -c "./curl.sh       %CURL_VER_% %CPU%"
+  - sh -c "./nghttp2.sh   %NGHTTP2_VER_% %CPU%"
+  - sh -c "./libressl.sh %LIBRESSL_VER_% %CPU%"
+  - sh -c "./openssl.sh   %OPENSSL_VER_% %CPU%"
+# - sh -c "./librtmp.sh   %LIBRTMP_VER_% %CPU%"
+  - sh -c "./libssh2.sh   %LIBSSH2_VER_% %CPU%"
+  - sh -c "./curl.sh         %CURL_VER_% %CPU%"
   - set CPU=win64
-  - sh -c "./nghttp2.sh %NGHTTP2_VER_% %CPU%"
-  - sh -c "./openssl.sh %OPENSSL_VER_% %CPU%"
-# - sh -c "./librtmp.sh %LIBRTMP_VER_% %CPU%"
-  - sh -c "./libssh2.sh %LIBSSH2_VER_% %CPU%"
-  - sh -c "./curl.sh       %CURL_VER_% %CPU%"
+  - sh -c "./nghttp2.sh   %NGHTTP2_VER_% %CPU%"
+  - sh -c "./libressl.sh %LIBRESSL_VER_% %CPU%"
+  - sh -c "./openssl.sh   %OPENSSL_VER_% %CPU%"
+# - sh -c "./librtmp.sh   %LIBRTMP_VER_% %CPU%"
+  - sh -c "./libssh2.sh   %LIBSSH2_VER_% %CPU%"
+  - sh -c "./curl.sh         %CURL_VER_% %CPU%"
   - type hashes.txt
 
 artifacts:
   - path: nghttp2-*-mingw.*
+  - path: libressl-*-mingw.*
   - path: openssl-*-mingw.*
   - path: librtmp-*-mingw.*
   - path: libssh2-*-mingw.*

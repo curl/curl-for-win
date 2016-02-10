@@ -14,7 +14,7 @@
  AR	= $(LD)
  ARFLAGS	= -nostdlib -library -o
  LIBEXT	= lib
-@@ -130,7 +131,7 @@
+@@ -130,22 +131,22 @@
  else
  LD	= $(CROSSPREFIX)gcc
  RC	= $(CROSSPREFIX)windres
@@ -23,7 +23,11 @@
  AR	= $(CROSSPREFIX)ar
  ARFLAGS	= -cq
  LIBEXT	= a
-@@ -142,10 +143,12 @@
+ RANLIB	= $(CROSSPREFIX)ranlib
+-#LDLIBS	+= -lwsock32
+-LDLIBS	+= -lws2_32
+ RCFLAGS	= -I $(PROOT)/include -O coff
+ CFLAGS	+= -fno-builtin
  CFLAGS	+= -fno-strict-aliasing
  CFLAGS	+= -Wall # -pedantic
  ifeq ($(ARCH),w64)
@@ -37,3 +41,12 @@
  RCFLAGS	+= -F pe-i386
  endif
  endif
+@@ -186,6 +187,8 @@
+ 	LDLIBS += $(patsubst %,$(OPENSSL_LIBPATH)/lib%.$(LIBEXT), $(OPENSSL_LIBS_DYN))
+ endif
+ endif
++#LDLIBS	+= -lwsock32
++LDLIBS	+= -lws2_32
+ 
+ ifdef WITH_ZLIB
+ 	CFLAGS += -DLIBSSH2_HAVE_ZLIB

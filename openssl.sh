@@ -15,7 +15,7 @@ _VER="$1"
 _CPU="$2"
 
 (
-   cd "${_NAM}" || exit
+   cd "${_NAM}" || exit 0
 
    readonly _REF='CHANGES'
 
