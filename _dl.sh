@@ -33,7 +33,7 @@ set -e
    rm pack.bin
    mv nghttp2-* nghttp2
 
-   if [ "${APPVEYOR_REPO_BRANCH}${TRAVIS_BRANCH}${GIT_BRANCH}" = 'libressl' ] ; then
+   if [ "${APPVEYOR_REPO_BRANCH#*libressl*}" != "${APPVEYOR_REPO_BRANCH}" ] ; then
       # libressl
       curl -fsS -o pack.bin "http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz"
       openssl dgst -sha256 pack.bin | grep -q "${LIBRESSL_HASH}"

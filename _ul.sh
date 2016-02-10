@@ -5,11 +5,11 @@
 
 cd "$(dirname "$0")" || exit
 
-if [ "${APPVEYOR_REPO_BRANCH}" != 'master' ] ; then
+if [ "${APPVEYOR_REPO_BRANCH#*master*}" != "${APPVEYOR_REPO_BRANCH}" ] ; then
+   _SUF=
+else
    _SUF='-test'
    mv "${_BAS}.7z" "${_BAS}${_SUF}.7z"
-else
-   _SUF=
 fi
 
 (
@@ -28,7 +28,7 @@ esac
 openssl dgst -sha256 "${_BAS}${_SUF}.7z"
 openssl dgst -sha256 "${_BAS}${_SUF}.7z" >> hashes.txt
 
-if [ "${APPVEYOR_REPO_BRANCH}" = 'master' ] ; then
+if [ "${APPVEYOR_REPO_BRANCH#*master*}" != "${APPVEYOR_REPO_BRANCH}" ] ; then
    (
       set +x
       out="$(curl -fsS \

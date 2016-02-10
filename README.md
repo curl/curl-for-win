@@ -1,7 +1,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
 [![Build status](https://ci.appveyor.com/api/projects/status/4bx4006pge6jbqch/branch/master?svg=true)](https://ci.appveyor.com/project/vsz/harbour-deps/branch/master)
 
-# Automated, reproducible, transparent, Windows builds for [cURL](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [libssh2](https://github.com/libssh2/libssh2), [OpenSSL](https://www.openssl.org/)
+# Automated, reproducible, transparent, Windows builds for [cURL](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [libssh2](https://github.com/libssh2/libssh2), [OpenSSL](https://www.openssl.org/) and [LibreSSL](http://www.libressl.org/)
 
   - Packaging aims to follow popular binary releases found on the Internet.
   - Both x86 and x64 packages are built using the same process.
@@ -15,7 +15,6 @@
   - Generated binaries are [reproducible](https://reproducible-builds.org), meaning
     they will have the same hash given the same input sources and C compiler.
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
-  - Optional support for [LibreSSL](http://www.libressl.org/).
 
 # Please donate to support maintaining these builds
 
@@ -26,12 +25,13 @@
   * cURL: <https://bintray.com/vszakats/generic/curl>
   * nghttp2: <https://bintray.com/vszakats/generic/nghttp2>
   * libssh2: <https://bintray.com/vszakats/generic/libssh2>
-  * LibreSSL: <https://bintray.com/vszakats/generic/libressl> (optional)
+  * LibreSSL: <https://bintray.com/vszakats/generic/libressl>
   * OpenSSL: <https://bintray.com/vszakats/generic/openssl>
 
 # Live build logs
 
   <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
+  <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master-libressl>
 
 ---
 This document Copyright &copy;&nbsp;2014&ndash;2016 Viktor Szakáts <https://github.com/vszakats><br />
