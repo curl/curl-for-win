@@ -33,6 +33,8 @@ _CPU="$2"
    export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -DNGHTTP2_STATICLIB -fno-ident'
    export CURL_LDFLAG_EXTRAS='-static-libgcc'
 
+   # TOFIX: This will not create a fully release-comliant file tree,
+   #        f.e. documentation will be incomplete.
    [ -f 'Makefile' ] || ./buildconf.bat
 
    mingw32-make mingw32-clean
