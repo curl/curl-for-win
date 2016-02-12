@@ -5,7 +5,6 @@
 
 export _NAM
 export _VER
-export _CPU
 export _BAS
 export _DST
 
@@ -30,13 +29,11 @@ _CPU="$2"
    find . -name '*.exe' -type f -delete
 
    export CC=x86_64-w64-mingw32-gcc
-   [ "${_CPU}" = 'win32' ] && OPTIONS=--host=i686-w64-mingw32
-   [ "${_CPU}" = 'win64' ] && OPTIONS=--host=x86_64-w64-mingw32
+   [ "${_CPU}" = '32' ] && OPTIONS=--host=i686-w64-mingw32
+   [ "${_CPU}" = '64' ] && OPTIONS=--host=x86_64-w64-mingw32
 
-   [ "${_CPU}" = 'win32' ] && _FLAGS='-m32'
-   [ "${_CPU}" = 'win64' ] && _FLAGS='-m64'
-   export CFLAGS="${_FLAGS} -fno-ident"
-   export LDFLAGS="${_FLAGS} -static-libgcc"
+   export CFLAGS="-m${_CPU} -fno-ident"
+   export LDFLAGS="-m${_CPU} -static-libgcc"
 
    # TOFIX:
    #   * shared .dlls keep depending on libgcc_s*.dll (and its dependencies)
@@ -76,7 +73,7 @@ _CPU="$2"
 
    # Create package
 
-   _BAS="${_NAM}-${_VER}-${_CPU}-mingw"
+   _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
    _DST="$(mktemp -d)/${_BAS}"
 
    mkdir -p "${_DST}/include/openssl"

@@ -1,11 +1,9 @@
 version: 1.0.{build}
-skip_tags: true
 os: Windows Server 2012 R2
 clone_depth: 8
 clone_folder: C:\w\
 build:
   verbosity: detailed
-
 environment:
   BINTRAY_APIKEY:
     secure: Awq2bXuEyT0/JC/phuGILqT9hj9sVslq2+btJlFhH89a1xagztNH8h3jTru5rJKd
@@ -13,54 +11,18 @@ environment:
     secure: jfLq1ApyVLNouxv07skhrg==
   VIRUSTOTAL_APIKEY:
     secure: TdJYONfrpH45DuyKxraVqgHYy25IQ/F8TKHzYf+u5zz1aiM2yR0YTMaGxyj2EMReEearSI9kD9D2ZykybSVEbRyEaotZlceUb2lPDKELl3M=
-
-  ZLIB_VER_: 1.2.8
-  ZLIB_HASH: e380bd1bdb6447508beaa50efc653fe45f4edc1dafe11a251ae093e0ee97db9a
-  NGHTTP2_VER_: 1.7.0
-  NGHTTP2_HASH: 9447ddfc2888c5d2d7ef27370b9f911c0263430666682105ca4066dcd88708f0
-  LIBRESSL_VER_: 2.3.2
-  LIBRESSL_HASH: 80f45fae4859f161b1980cad846d4217417d0c89006ad29c0ea8c88da564a96a
-  OPENSSL_VER_: 1.0.2f
-  OPENSSL_HASH: 932b4ee4def2b434f85435d9e3e19ca8ba99ce9a065a61524b429a9d5e9b2e9c
-  LIBRTMP_VER_: 2.3
-  LIBRTMP_HASH: ef38b7a99d82ce6912063d21063aeaf28185341b3df486e24bffce5354224b2c
-  LIBSSH2_VER_: 1.6.0
-  LIBSSH2_HASH: 5a202943a34a1d82a1c31f74094f2453c207bf9936093867f41414968c8e8215
-  CURL_VER_: 7.47.1
-  CURL_HASH: ddc643ab9382e24bbe4747d43df189a0a6ce38fcb33df041b9cb0b3cd47ae98f
-
+build_script:
+  - set PATH=C:\Python27-x64;C:\msys64\usr\bin;%SystemRoot%\system32
+  - pacman --noconfirm --noprogressbar -S p7zip
+  - python -m pip --disable-pip-version-check install --upgrade pip
+  - python -m pip install pefile
+  - sh -c ./_build.sh
+artifacts:
+  - path: '*-*-mingw.*'
+    name: master
+  - path: '*-*-mingw-libressl.*'
+    name: master-libressl
 #init:
 #  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 #on_finish:
 #  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-
-build_script:
-  - set PATH=C:\msys64\usr\bin;%PATH%
-  - python -m pip --disable-pip-version-check install --upgrade pip
-  - python -m pip install pefile
-  - sh -c ./_dl.sh
-  - set _URL=https://github.com/%APPVEYOR_REPO_NAME%
-  - set PATH=%APPVEYOR_BUILD_FOLDER%\mingw64\bin;%PATH%
-  - set CPU=win32
-  - sh -c "./nghttp2.sh   %NGHTTP2_VER_% %CPU%"
-  - sh -c "./libressl.sh %LIBRESSL_VER_% %CPU%"
-  - sh -c "./openssl.sh   %OPENSSL_VER_% %CPU%"
-# - sh -c "./librtmp.sh   %LIBRTMP_VER_% %CPU%"
-  - sh -c "./libssh2.sh   %LIBSSH2_VER_% %CPU%"
-  - sh -c "./curl.sh         %CURL_VER_% %CPU%"
-  - set CPU=win64
-  - sh -c "./nghttp2.sh   %NGHTTP2_VER_% %CPU%"
-  - sh -c "./libressl.sh %LIBRESSL_VER_% %CPU%"
-  - sh -c "./openssl.sh   %OPENSSL_VER_% %CPU%"
-# - sh -c "./librtmp.sh   %LIBRTMP_VER_% %CPU%"
-  - sh -c "./libssh2.sh   %LIBSSH2_VER_% %CPU%"
-  - sh -c "./curl.sh         %CURL_VER_% %CPU%"
-  - type hashes.txt
-
-artifacts:
-  - path: nghttp2-*-mingw.*
-  - path: libressl-*-mingw.*
-  - path: openssl-*-mingw.*
-  - path: librtmp-*-mingw.*
-  - path: libssh2-*-mingw.*
-  - path: curl-*-mingw.*

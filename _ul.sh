@@ -5,7 +5,7 @@
 
 cd "$(dirname "$0")" || exit
 
-if [ "${APPVEYOR_REPO_BRANCH#*master*}" != "${APPVEYOR_REPO_BRANCH}" ] ; then
+if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] ; then
    _SUF=
 else
    _SUF='-test'
@@ -28,7 +28,7 @@ esac
 openssl dgst -sha256 "${_BAS}${_SUF}.7z"
 openssl dgst -sha256 "${_BAS}${_SUF}.7z" >> hashes.txt
 
-if [ "${APPVEYOR_REPO_BRANCH#*master*}" != "${APPVEYOR_REPO_BRANCH}" ] ; then
+if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] ; then
    (
       set +x
       out="$(curl -fsS \
@@ -37,6 +37,6 @@ if [ "${APPVEYOR_REPO_BRANCH#*master*}" != "${APPVEYOR_REPO_BRANCH}" ] ; then
          --form "file=@${_BAS}${_SUF}.7z")"
       echo "${out}"
       echo "VirusTotal URL for '${_BAS}${_SUF}.7z':"
-      echo "$(echo "${out}" | grep -o 'https://[a-zA-Z0-9./]*')"
+      echo "${out}" | grep -o 'https://[a-zA-Z0-9./]*'
    )
 fi

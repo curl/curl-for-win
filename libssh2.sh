@@ -5,7 +5,6 @@
 
 export _NAM
 export _VER
-export _CPU
 export _BAS
 export _DST
 
@@ -25,8 +24,7 @@ _CPU="$2"
 #  export LINK_OPENSSL_STATIC=yes; export OPENSSL_LIBS_STAT='crypto ssl'
    export OPENSSL_LIBPATH="${OPENSSL_PATH}"
    export OPENSSL_LIBS_DYN='crypto.dll ssl.dll'
-   [ "${_CPU}" = 'win32' ] && export ARCH=w32
-   [ "${_CPU}" = 'win64' ] && export ARCH=w64
+   export ARCH="w${_CPU}"
    export LIBSSH2_CFLAG_EXTRAS='-fno-ident'
    export LIBSSH2_LDFLAG_EXTRAS='-static-libgcc'
 
@@ -49,8 +47,8 @@ _CPU="$2"
 
    # Create package
 
-   [ -d ../libressl ] && _BAS="${_NAM}-${_VER}-${_CPU}-mingw-libressl"
-   [ -d ../openssl ]  && _BAS="${_NAM}-${_VER}-${_CPU}-mingw"
+   [ -d ../libressl ] && _BAS="${_NAM}-${_VER}-win${_CPU}-mingw-libressl"
+   [ -d ../openssl ]  && _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
    _DST="$(mktemp -d)/${_BAS}"
 
    mkdir -p "${_DST}/docs"

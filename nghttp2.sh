@@ -5,7 +5,6 @@
 
 export _NAM
 export _VER
-export _CPU
 export _BAS
 export _DST
 
@@ -27,15 +26,14 @@ _CPU="$2"
    find . -name '*.Plo' -type f -delete
    find . -name '*.pc'  -type f -delete
 
-   [ "${_CPU}" = 'win32' ] && export LDFLAGS='-m32'
-   [ "${_CPU}" = 'win64' ] && export LDFLAGS='-m64'
+   export LDFLAGS="-m${_CPU}"
    export CFLAGS="${LDFLAGS} -U__STRICT_ANSI__ -DNGHTTP2_STATICLIB -fno-ident"
    export CXXFLAGS="${CFLAGS}"
    # Open dummy file descriptor to fix './<script>: line <n>: 0: Bad file descriptor'
    exec 0</dev/null && ./configure --enable-lib-only "--prefix=$(pwd)" --silent
 #  exec 0</dev/null && make clean > /dev/null
    exec 0</dev/null && make
-   exec 0</dev/null && make install
+   exec 0</dev/null && make install > /dev/null
 
    # Make steps for determinism
 
@@ -49,7 +47,7 @@ _CPU="$2"
 
    # Create package
 
-   _BAS="${_NAM}-${_VER}-${_CPU}-mingw"
+   _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
    _DST="$(mktemp -d)/${_BAS}"
 
    mkdir -p "${_DST}/include/nghttp2"

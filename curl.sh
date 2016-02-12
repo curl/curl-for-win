@@ -5,7 +5,6 @@
 
 export _NAM
 export _VER
-export _CPU
 export _BAS
 export _DST
 
@@ -28,8 +27,7 @@ _CPU="$2"
    export NGHTTP2_PATH=../../nghttp2
    export LIBRTMP_PATH=../../librtmp
    export LIBSSH2_PATH=../../libssh2
-   [ "${_CPU}" = 'win32' ] && export ARCH=w32
-   [ "${_CPU}" = 'win64' ] && export ARCH=w64
+   export ARCH="w${_CPU}"
    export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -DNGHTTP2_STATICLIB -fno-ident'
    export CURL_LDFLAG_EXTRAS='-static-libgcc'
 
@@ -37,12 +35,12 @@ _CPU="$2"
    #        f.e. documentation will be incomplete.
    [ -f 'Makefile' ] || ./buildconf.bat
 
+   OPTIONS='mingw32-ssh2-ssl-sspi-zlib-ldaps-srp-nghttp2-ipv6'
+   [ -d ../librtmp ] && OPTIONS="${OPTIONS}-rtmp"
+   # Do not link WinIDN in 32-bit builds, for Windows XP compatibility (missing normaliz.dll)
+   [ "${_CPU}" = '64' ] && OPTIONS="${OPTIONS}-winidn"
    mingw32-make mingw32-clean
-   # - '-rtmp' is not enabled because libcurl then (of course) needs librtmp
-   #   even if its functionality is not actually needed or used
-   # - Do not link WinIDN in 32-bit builds, for Windows XP compatibility (missing normaliz.dll)
-   [ "${_CPU}" = 'win32' ] && mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-srp-nghttp2-ipv6
-   [ "${_CPU}" = 'win64' ] && mingw32-make mingw32-ssh2-ssl-sspi-zlib-ldaps-srp-nghttp2-ipv6-winidn
+   mingw32-make "${OPTIONS}"
 
    # Download CA bundle
    [ -f '../ca-bundle.crt' ] || \
@@ -68,8 +66,8 @@ _CPU="$2"
 
    # Create package
 
-   [ -d ../libressl ] && _BAS="${_NAM}-${_VER}-${_CPU}-mingw-libressl"
-   [ -d ../openssl ]  && _BAS="${_NAM}-${_VER}-${_CPU}-mingw"
+   [ -d ../libressl ] && _BAS="${_NAM}-${_VER}-win${_CPU}-mingw-libressl"
+   [ -d ../openssl ]  && _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
    _DST="$(mktemp -d)/${_BAS}"
 
    mkdir -p "${_DST}/docs/libcurl/opts"

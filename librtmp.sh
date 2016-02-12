@@ -5,7 +5,6 @@
 
 export _NAM
 export _VER
-export _CPU
 export _BAS
 export _DST
 
@@ -17,13 +16,12 @@ _CPU="$2"
 _CDO="$(pwd)"
 
 (
-   cd "${_NAM}" || exit
+   cd "${_NAM}" || exit 0
 
    # Build
 
    export INC=-I../../openssl/include -I../../zlib
-   [ "${_CPU}" = 'win32' ] && export XCFLAGS='-m32'
-   [ "${_CPU}" = 'win64' ] && export XCFLAGS='-m64'
+   export XCFLAGS="-m${_CPU}"
    export XLDFLAGS="${XCFLAGS} \"-L${_CDO}/openssl\" \"-L${_CDO}/zlib\""
    export LDFLAGS="${XLDFLAGS}"
    export XCFLAGS="${XCFLAGS} -fno-ident"

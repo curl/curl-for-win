@@ -5,7 +5,6 @@
 
 export _NAM
 export _VER
-export _CPU
 export _BAS
 export _DST
 
@@ -21,27 +20,29 @@ _CPU="$2"
 
    # Build
 
-   [ "${_CPU}" = 'win32' ] && export SHARED_RCFLAGS='--target=pe-i386'
-   [ "${_CPU}" = 'win64' ] && export SHARED_RCFLAGS='--target=pe-x86-64'
-
    find . -name '*.o'   -type f -delete
    find . -name '*.a'   -type f -delete
    find . -name '*.exe' -type f -delete
 
-   [ "${_CPU}" = 'win32' ] && OPTIONS='mingw   -m32'
-   [ "${_CPU}" = 'win64' ] && OPTIONS='mingw64 -m64'
-   if [ "${APPVEYOR_REPO_BRANCH#*lto*}" != "${APPVEYOR_REPO_BRANCH}" ] ; then
+   [ "${_CPU}" = '32' ] && OPTIONS='mingw'
+   [ "${_CPU}" = '64' ] && OPTIONS='mingw64'
+   if [ "${_BRANCH#*lto*}" != "${_BRANCH}" ] ; then
       # Create a fixed seed based on the timestamp of the OpenSSL source package.
       OPTIONS="${OPTIONS} -flto -ffat-lto-objects -frandom-seed=$(stat -c %Y "${_REF}")"
       # mingw64 build (as of mingw 5.2.0) will fail without the `no-asm` option.
-      [ "${_CPU}" = 'win64' ] && OPTIONS="${OPTIONS} no-asm"
+      [ "${_CPU}" = '64' ] && OPTIONS="${OPTIONS} no-asm"
    fi
-   [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.0.2' ] && OPTIONS="${OPTIONS} no-ssl2"
+   if [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.0.2' ] ; then
+      [ "${_CPU}" = '32' ] && export SHARED_RCFLAGS='--target=pe-i386'
+      [ "${_CPU}" = '64' ] && export SHARED_RCFLAGS='--target=pe-x86-64'
+      OPTIONS="${OPTIONS} -m${_CPU} no-ssl2 -static-libgcc"
+   fi
    [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-pre' ] && OPTIONS="${OPTIONS} --unified"
+   [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-dev' ] && OPTIONS="${OPTIONS} --unified"
 
    # shellcheck disable=SC2086
-   ./Configure ${OPTIONS} shared no-unit-test no-ssl3 no-rc5 no-idea no-dso -fno-ident -static-libgcc '--prefix=/usr/local'
-   make depend
+   ./Configure ${OPTIONS} shared no-unit-test no-ssl3 no-rc5 no-idea no-dso -fno-ident '--prefix=/usr/local'
+   [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.1.0' ] || make depend
    make
 
    # Make steps for determinism
@@ -71,7 +72,7 @@ _CPU="$2"
 
    # Create package
 
-   _BAS="${_NAM}-${_VER}-${_CPU}-mingw"
+   _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
    _DST="$(mktemp -d)/${_BAS}"
 
    mkdir -p "${_DST}/include/openssl"
