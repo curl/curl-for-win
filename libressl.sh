@@ -35,8 +35,7 @@ _CPU="$2"
    export CFLAGS="-m${_CPU} -fno-ident"
    export LDFLAGS="-m${_CPU} -static-libgcc"
 
-   # TOFIX:
-   #   * shared .dlls keep depending on libgcc_s*.dll (and its dependencies)
+   # TOFIX: Shared .dlls keep depending on libgcc_s*.dll (and its dependencies)
 
    # shellcheck disable=SC2086
    exec 0</dev/null && ./configure ${OPTIONS} '--prefix=/usr/local' --silent --disable-silent-rules
