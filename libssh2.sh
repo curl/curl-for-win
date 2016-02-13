@@ -26,7 +26,8 @@ _CPU="$2"
    export OPENSSL_LIBS_DYN='crypto.dll ssl.dll'
    export ARCH="w${_CPU}"
    export LIBSSH2_CFLAG_EXTRAS='-fno-ident'
-   export LIBSSH2_LDFLAG_EXTRAS='-static-libgcc'
+   export LIBSSH2_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
+   [ "${_CPU}" = '64' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
 
    (
       cd win32 || exit
