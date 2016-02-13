@@ -66,8 +66,8 @@ _CPU="$2"
 
    # Create package
 
-   [ -d ../libressl ] && _BAS="${_NAM}-${_VER}-win${_CPU}-mingw-libressl"
-   [ -d ../openssl ]  && _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
+   _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
+   [ -d ../libressl ] && _BAS="${_BAS}-libressl"
    _DST="$(mktemp -d)/${_BAS}"
 
    mkdir -p "${_DST}/docs/libcurl/opts"
