@@ -68,6 +68,7 @@ _CPU="$2"
 
    _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
    [ -d ../libressl ] && _BAS="${_BAS}-libressl"
+   [ -d ../librtmp ] && _BAS="${_BAS}-librtmp"
    _DST="$(mktemp -d)/${_BAS}"
 
    mkdir -p "${_DST}/docs/libcurl/opts"
