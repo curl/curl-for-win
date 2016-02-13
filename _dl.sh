@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 
 # Copyright 2015-2016 Viktor Szakats (vszakats.net/harbour)
 # See LICENSE.md
