@@ -37,11 +37,13 @@ _CPU="$2"
       [ "${_CPU}" = '64' ] && export SHARED_RCFLAGS='--target=pe-x86-64'
       OPTIONS="${OPTIONS} -m${_CPU} no-ssl2 -static-libgcc"
    fi
+   # Requires mingw 5.0 or upper
+   [ "${_CPU}" = '64' ] && OPTIONS="${OPTIONS} -Wl,--high-entropy-va"
    [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-pre' ] && OPTIONS="${OPTIONS} --unified"
    [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-dev' ] && OPTIONS="${OPTIONS} --unified"
 
    # shellcheck disable=SC2086
-   ./Configure ${OPTIONS} shared no-unit-test no-ssl3 no-rc5 no-idea no-dso -fno-ident '--prefix=/usr/local'
+   ./Configure ${OPTIONS} shared -Wl,--nxcompat -Wl,--dynamicbase no-unit-test no-ssl3 no-rc5 no-idea no-dso -fno-ident '--prefix=/usr/local'
    [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.1.0' ] || make depend
    make
 

@@ -8,7 +8,7 @@ cd "$(dirname "$0")" || exit
 export _BRANCH="${APPVEYOR_REPO_BRANCH}${TRAVIS_BRANCH}${GIT_BRANCH}"
 [ -n "${_BRANCH}" ] || _BRANCH="$(git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')"
 export _URL=''
-which git && _URL="$(git ls-remote --get-url | sed 's|\.git||')"
+which git > /dev/null && _URL="$(git ls-remote --get-url | sed 's|\.git||')"
 [ -n "${_URL}" ] || _URL="https://github.com/${APPVEYOR_REPO_NAME}${TRAVIS_REPO_SLUG}"
 
 . ./_dl.sh || exit 1

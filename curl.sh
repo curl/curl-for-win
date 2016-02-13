@@ -29,7 +29,8 @@ _CPU="$2"
    export LIBSSH2_PATH=../../libssh2
    export ARCH="w${_CPU}"
    export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -DNGHTTP2_STATICLIB -fno-ident'
-   export CURL_LDFLAG_EXTRAS='-static-libgcc'
+   export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
+   [ "${_CPU}" = '64' ] && CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
 
    # TOFIX: This will not create a fully release-comliant file tree,
    #        f.e. documentation will be incomplete.
