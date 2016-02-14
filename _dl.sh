@@ -47,7 +47,7 @@ if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ] ; then
    # libressl
    curl -fsS -o pack.bin "http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz"
    openssl dgst -sha256 pack.bin | grep -q "${LIBRESSL_HASH}"
-   tar -xvf pack.bin > /dev/null 2>&1 || true
+   tar -xvf pack.bin > /dev/null 2>&1
    rm pack.bin
    rm -f -r libressl && mv libressl-* libressl
 else
@@ -59,7 +59,7 @@ else
       curl -fsS -o pack.bin "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz"
       openssl dgst -sha256 pack.bin | grep -q "${OPENSSL_HASH}"
    fi
-   tar -xvf pack.bin > /dev/null 2>&1 || true
+   tar -xvf pack.bin > /dev/null 2>&1
    rm pack.bin
    rm -f -r openssl && mv openssl-* openssl
    [ -f "openssl${PATSUF}.diff" ] && dos2unix < "openssl${PATSUF}.diff" | patch -N -p1 -d openssl
