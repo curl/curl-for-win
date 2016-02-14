@@ -30,20 +30,22 @@ _CPU="$2"
    export CFLAGS="${LDFLAGS} -U__STRICT_ANSI__ -DNGHTTP2_STATICLIB -fno-ident"
    export CXXFLAGS="${CFLAGS}"
    # Open dummy file descriptor to fix './<script>: line <n>: 0: Bad file descriptor'
-   exec 0</dev/null && ./configure --enable-lib-only "--prefix=$(pwd)" --silent
+   exec 0</dev/null && ./configure --enable-lib-only '--prefix=/usr/local' --silent
 #  exec 0</dev/null && make clean > /dev/null
-   exec 0</dev/null && make
-   exec 0</dev/null && make install > /dev/null
+   exec 0</dev/null && make install "DESTDIR=$(pwd)/pkg" > /dev/null
+
+   # DESTDIR= + --prefix=
+   _PKG='pkg/usr/local'
 
    # Make steps for determinism
 
    readonly _REF='ChangeLog'
 
-   strip -p --enable-deterministic-archives -g lib/*.a
+   strip -p --enable-deterministic-archives -g ${_PKG}/lib/*.a
 
-   touch -c -r "${_REF}" include/nghttp2/*.h
-   touch -c -r "${_REF}" lib/pkgconfig/*.pc
-   touch -c -r "${_REF}" lib/*.a
+   touch -c -r "${_REF}" ${_PKG}/include/nghttp2/*.h
+   touch -c -r "${_REF}" ${_PKG}/lib/pkgconfig/*.pc
+   touch -c -r "${_REF}" ${_PKG}/lib/*.a
 
    # Create package
 
@@ -53,13 +55,13 @@ _CPU="$2"
    mkdir -p "${_DST}/include/nghttp2"
    mkdir -p "${_DST}/lib/pkgconfig"
 
-   cp -f -p include/nghttp2/*.h "${_DST}/include/nghttp2/"
-   cp -f -p lib/*.a             "${_DST}/lib/"
-   cp -f -p lib/pkgconfig/*.pc  "${_DST}/lib/pkgconfig/"
-   cp -f -p ChangeLog           "${_DST}/ChangeLog.txt"
-   cp -f -p AUTHORS             "${_DST}/AUTHORS.txt"
-   cp -f -p COPYING             "${_DST}/COPYING.txt"
-   cp -f -p README.rst          "${_DST}/README.rst"
+   cp -f -p ${_PKG}/include/nghttp2/*.h "${_DST}/include/nghttp2/"
+   cp -f -p ${_PKG}/lib/*.a             "${_DST}/lib/"
+   cp -f -p ${_PKG}/lib/pkgconfig/*.pc  "${_DST}/lib/pkgconfig/"
+   cp -f -p ChangeLog                   "${_DST}/ChangeLog.txt"
+   cp -f -p AUTHORS                     "${_DST}/AUTHORS.txt"
+   cp -f -p COPYING                     "${_DST}/COPYING.txt"
+   cp -f -p README.rst                  "${_DST}/README.rst"
 
    unix2dos -k "${_DST}"/*.txt
    unix2dos -k "${_DST}"/*.rst
