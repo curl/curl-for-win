@@ -28,20 +28,16 @@ _CPU="$2"
    find . -name '*.dll' -type f -delete
    find . -name '*.exe' -type f -delete
 
-   export CC=gcc
+   export CC='gcc -static-libgcc'
    [ "${_CPU}" = '32' ] && OPTIONS=--host=i686-w64-mingw32
    [ "${_CPU}" = '64' ] && OPTIONS=--host=x86_64-w64-mingw32
 
    export CFLAGS="-m${_CPU} -fno-ident"
    export LDFLAGS="-m${_CPU}"
 
-   # TOFIX: 32-bit .dlls keep depending on libgcc_s*.dll (and its dependency),
-   #        regardless of extra `-static-libgcc` option being passed via *FLAGS.
-
    # shellcheck disable=SC2086
    exec 0</dev/null && ./configure ${OPTIONS} '--prefix=/usr/local' --silent --disable-silent-rules
-   exec 0</dev/null && make clean > /dev/null
-   exec 0</dev/null && make check > /dev/null
+#  exec 0</dev/null && make clean > /dev/null
    exec 0</dev/null && make install "DESTDIR=$(pwd)/pkg" > /dev/null
 
    # DESTDIR= + --prefix=
