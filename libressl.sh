@@ -32,8 +32,8 @@ _CPU="$2"
    [ "${_CPU}" = '32' ] && OPTIONS=--host=i686-w64-mingw32
    [ "${_CPU}" = '64' ] && OPTIONS=--host=x86_64-w64-mingw32
 
-   export CFLAGS="-m${_CPU} -fno-ident"
    export LDFLAGS="-m${_CPU}"
+   export CFLAGS="${LDFLAGS} -fno-ident"
 
    # shellcheck disable=SC2086
    exec 0</dev/null && ./configure ${OPTIONS} --disable-silent-rules '--prefix=/usr/local' --silent

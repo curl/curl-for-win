@@ -27,7 +27,7 @@ _CPU="$2"
    find . -name '*.pc'  -type f -delete
 
    export LDFLAGS="-m${_CPU}"
-   export CFLAGS="${LDFLAGS} -U__STRICT_ANSI__ -DNGHTTP2_STATICLIB -fno-ident"
+   export CFLAGS="${LDFLAGS} -fno-ident -U__STRICT_ANSI__ -DNGHTTP2_STATICLIB"
    export CXXFLAGS="${CFLAGS}"
    # Open dummy file descriptor to fix './<script>: line <n>: 0: Bad file descriptor'
    exec 0</dev/null && ./configure --enable-lib-only '--prefix=/usr/local' --silent
