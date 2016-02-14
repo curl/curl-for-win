@@ -21,9 +21,9 @@ for _CPU in '32' '64' ; do
    if [ -d './mingw64/bin' ] ; then
       tmp="$(realpath './mingw64/bin')"
    else
-      # mingw-w64 comes with its own python copy. Override that with
+      # mingw-w64 comes with its own Python copy. Override that with
       # AppVeyor's external one, which has our extra installed 'pefile'
-      # package. MSYS2's own python is not good either, as its default
+      # package. MSYS2's own Python is not good either, as its default
       # gcc toolchain would override mingw-w64, if put it front in PATH.
       tmp="/mingw${_CPU}/bin"
       if [ "${APPVEYOR}" = 'True' ] ; then
