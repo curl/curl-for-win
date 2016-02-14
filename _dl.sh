@@ -78,8 +78,8 @@ fi
 
 # libssh2
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
-   LIBSSH2_VER_='1.6.1-dev'
-   curl -fsS -o pack.bin -L --proto-redir =https https://github.com/libssh2/libssh2/archive/e64260a11792fb3242441c3f190ac0a6bf7591eb.tar.gz
+   LIBSSH2_VER_='1.7.0-dev'
+   curl -fsS -o pack.bin -L --proto-redir =https https://github.com/libssh2/libssh2/archive/298f056fd6931e5e8bedc4fce5142a46c8f9f4b9.tar.gz
 else
    curl -fsS -o pack.bin -L --proto-redir =https "https://github.com/libssh2/libssh2/releases/download/libssh2-${LIBSSH2_VER_}/libssh2-${LIBSSH2_VER_}.tar.gz"
    openssl dgst -sha256 pack.bin | grep -q "${LIBSSH2_HASH}"
@@ -92,7 +92,7 @@ rm -f -r libssh2 && mv libssh2-* libssh2
 # curl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
    CURL_VER_='7.47.2-dev'
-   curl -fsS -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/c3aac489195526c23190fcfe4ce63cbe49ea00e6.tar.gz
+   curl -fsS -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/ede0bfc079da52e5b05764852e7cb55fc6dff09f.tar.gz
 else
    curl -fsS -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2"
    openssl dgst -sha256 pack.bin | grep -q "${CURL_HASH}"
@@ -100,5 +100,6 @@ fi
 tar -xvf pack.bin > /dev/null 2>&1
 rm pack.bin
 rm -f -r curl && mv curl-* curl
+[ -f "curl${PATSUF}.diff" ] && dos2unix < "curl${PATSUF}.diff" | patch -N -p1 -d curl
 
 set +e
