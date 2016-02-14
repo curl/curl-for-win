@@ -36,7 +36,7 @@ _CPU="$2"
    export LDFLAGS="-m${_CPU}"
 
    # shellcheck disable=SC2086
-   exec 0</dev/null && ./configure ${OPTIONS} '--prefix=/usr/local' --silent --disable-silent-rules
+   exec 0</dev/null && ./configure ${OPTIONS} --disable-silent-rules '--prefix=/usr/local' --silent
 #  exec 0</dev/null && make clean > /dev/null
    exec 0</dev/null && make install "DESTDIR=$(pwd)/pkg" > /dev/null
 
