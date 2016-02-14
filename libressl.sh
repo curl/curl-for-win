@@ -35,6 +35,8 @@ _CPU="$2"
    export LDFLAGS="-m${_CPU}"
    export CFLAGS="${LDFLAGS} -fno-ident"
 
+   # TOFIX: Burnt-in prefix is not fully deterministic. It has 'C:/msys64' prepended.
+
    # shellcheck disable=SC2086
    exec 0</dev/null && ./configure ${OPTIONS} --disable-silent-rules '--prefix=/usr/local' --silent
 #  exec 0</dev/null && make clean > /dev/null
