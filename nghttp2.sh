@@ -61,7 +61,7 @@ _CPU="$2"
    cp -f -p ChangeLog                   "${_DST}/ChangeLog.txt"
    cp -f -p AUTHORS                     "${_DST}/AUTHORS.txt"
    cp -f -p COPYING                     "${_DST}/COPYING.txt"
-   cp -f -p README.rst                  "${_DST}/README.rst"
+   cp -f -p README.rst                  "${_DST}/"
 
    unix2dos -k "${_DST}"/*.txt
    unix2dos -k "${_DST}"/*.rst

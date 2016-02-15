@@ -86,7 +86,7 @@ _CPU="$2"
    cp -f -p ${_PKG}/include/*.h         "${_DST}/include/"
    cp -f -p ChangeLog                   "${_DST}/ChangeLog.txt"
    cp -f -p COPYING                     "${_DST}/COPYING.txt"
-   cp -f -p README.md                   "${_DST}/README.md"
+   cp -f -p README.md                   "${_DST}/"
 
    unix2dos -k "${_DST}"/*.md
    unix2dos -k "${_DST}"/*.txt
