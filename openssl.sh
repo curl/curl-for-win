@@ -87,7 +87,7 @@ _CPU="$2"
 
    cp -f -p apps/openssl.exe    "${_DST}/"
    cp -f -p apps/*.dll          "${_DST}/"
-   cp -f -p apps/openssl.cnf    "${_DST}/openssl.cnf"
+   cp -f -p apps/openssl.cnf    "${_DST}/"
    cp -f -p include/openssl/*.h "${_DST}/include/openssl/"
    cp -f -p ms/applink.c        "${_DST}/include/openssl/"
    cp -f -p ./*.a               "${_DST}/lib/"
