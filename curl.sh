@@ -38,7 +38,7 @@ _CPU="$2"
    [ -f 'Makefile' ] || ./buildconf.bat
 
    OPTIONS='mingw32-ssh2-ssl-sspi-zlib-ldaps-srp-nghttp2-ipv6'
-   [ -d ../c-ares ]  && OPTIONS="${OPTIONS}-ares"
+   [ -d ../c-ares ] && OPTIONS="${OPTIONS}-ares"
    [ -d ../librtmp ] && OPTIONS="${OPTIONS}-rtmp"
    # Do not link WinIDN in 32-bit builds, for Windows XP compatibility (missing normaliz.dll)
    [ "${_CPU}" = '64' ] && OPTIONS="${OPTIONS}-winidn"
@@ -108,9 +108,9 @@ _CPU="$2"
    cp -f -p ../ca-bundle.crt         "${_DST}/bin/curl-ca-bundle.crt"
 
    cp -f -p ../libssh2/COPYING       "${_DST}/COPYING-libssh2.txt"
-#  cp -f -p ../librtmp/COPYING       "${_DST}/COPYING-librtmp.txt"
    cp -f -p ../nghttp2/COPYING       "${_DST}/COPYING-nghttp2.txt"
 
+   [ -d ../librtmp ]  && cp -f -p ../librtmp/COPYING  "${_DST}/COPYING-librtmp.txt"
    [ -d ../libressl ] && cp -f -p ../libressl/COPYING "${_DST}/COPYING-libressl.txt"
    [ -d ../openssl ]  && cp -f -p ../openssl/LICENSE  "${_DST}/LICENSE-openssl.txt"
 
