@@ -43,7 +43,10 @@ _CPU="$2"
    [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-dev' ] && OPTIONS="${OPTIONS} --unified"
 
    # shellcheck disable=SC2086
-   ./Configure ${OPTIONS} shared -Wl,--nxcompat -Wl,--dynamicbase no-unit-test no-ssl3 no-rc5 no-idea no-dso -fno-ident '--prefix=/usr/local'
+   ./Configure ${OPTIONS} shared \
+      -fno-ident \
+      -Wl,--nxcompat -Wl,--dynamicbase \
+      no-unit-test no-ssl3 no-rc5 no-idea no-dso '--prefix=/usr/local'
    [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.1.0' ] || make depend
    make
 
