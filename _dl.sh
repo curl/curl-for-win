@@ -5,6 +5,8 @@
 
 export ZLIB_VER_='1.2.8'
 export ZLIB_HASH=e380bd1bdb6447508beaa50efc653fe45f4edc1dafe11a251ae093e0ee97db9a
+export LIBIDN_VER_='1.32'
+export LIBIDN_HASH=ba5d5afee2beff703a34ee094668da5c6ea5afa38784cebba8924105e185c4f5
 export NGHTTP2_VER_='1.7.1'
 export NGHTTP2_HASH=6e2252b9a79df2be97ab7349e145882eda42b126ab7c3e068dc44aff0ae77959
 export CARES_VER_='1.10.0'
@@ -44,6 +46,16 @@ openssl dgst -sha256 pack.bin | grep -q "${NGHTTP2_HASH}"
 tar -xvf pack.bin > /dev/null 2>&1
 rm pack.bin
 rm -f -r nghttp2 && mv nghttp2-* nghttp2
+
+# Will increase curl binary sizes by 1MB, so leave this optional.
+if [ "${_BRANCH#*libidn*}" != "${_BRANCH}" ] ; then
+   # libidn
+   curl -fsS -o pack.bin -L --proto-redir =https "http://ftp.gnu.org/gnu/libidn/libidn-${LIBIDN_VER_}.tar.gz"
+   openssl dgst -sha256 pack.bin | grep -q "${LIBIDN_HASH}"
+   tar -xvf pack.bin > /dev/null 2>&1
+   rm pack.bin
+   rm -f -r libidn && mv libidn-* libidn
+fi
 
 if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ] ; then
    # c-ares
