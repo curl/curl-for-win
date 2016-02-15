@@ -25,6 +25,7 @@ _CPU="$2"
    export OPENSSL_LIBPATH="${OPENSSL_PATH}"
    export OPENSSL_LIBS='-lssl -lcrypto'
    export NGHTTP2_PATH=../../nghttp2/pkg/usr/local
+   export LIBCARES_PATH=../../c-ares
    export LIBRTMP_PATH=../../librtmp
    export LIBSSH2_PATH=../../libssh2
    export ARCH="w${_CPU}"
@@ -37,6 +38,7 @@ _CPU="$2"
    [ -f 'Makefile' ] || ./buildconf.bat
 
    OPTIONS='mingw32-ssh2-ssl-sspi-zlib-ldaps-srp-nghttp2-ipv6'
+   [ -d ../c-ares ]  && OPTIONS="${OPTIONS}-ares"
    [ -d ../librtmp ] && OPTIONS="${OPTIONS}-rtmp"
    # Do not link WinIDN in 32-bit builds, for Windows XP compatibility (missing normaliz.dll)
    [ "${_CPU}" = '64' ] && OPTIONS="${OPTIONS}-winidn"

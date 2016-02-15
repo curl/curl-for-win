@@ -7,6 +7,8 @@ export ZLIB_VER_='1.2.8'
 export ZLIB_HASH=e380bd1bdb6447508beaa50efc653fe45f4edc1dafe11a251ae093e0ee97db9a
 export NGHTTP2_VER_='1.7.1'
 export NGHTTP2_HASH=6e2252b9a79df2be97ab7349e145882eda42b126ab7c3e068dc44aff0ae77959
+export CARES_VER_='1.10.0'
+export CARES_HASH=3d701674615d1158e56a59aaede7891f2dde3da0f46a6d3c684e0ae70f52d3db
 export LIBRESSL_VER_='2.3.2'
 export LIBRESSL_HASH=80f45fae4859f161b1980cad846d4217417d0c89006ad29c0ea8c88da564a96a
 export OPENSSL_VER_='1.0.2f'
@@ -42,6 +44,21 @@ openssl dgst -sha256 pack.bin | grep -q "${NGHTTP2_HASH}"
 tar -xvf pack.bin > /dev/null 2>&1
 rm pack.bin
 rm -f -r nghttp2 && mv nghttp2-* nghttp2
+
+if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ] ; then
+   # c-ares
+   if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
+      CARES_VER_='1.11.0-dev'
+      curl -fsS -o pack.bin -L --proto-redir =https https://github.com/c-ares/c-ares/archive/e41a39b022f28e46a381af118f258432eef0eca5.tar.gz
+   else
+      curl -fsS -o pack.bin "http://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz"
+      openssl dgst -sha256 pack.bin | grep -q "${CARES_HASH}"
+   fi
+   tar -xvf pack.bin > /dev/null 2>&1
+   rm pack.bin
+   rm -f -r c-ares && mv c-ares-* c-ares
+   [ -f "c-ares${PATSUF}.diff" ] && dos2unix < "c-ares${PATSUF}.diff" | patch -N -p1 -d c-ares
+fi
 
 if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ] ; then
    # libressl

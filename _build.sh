@@ -32,6 +32,7 @@ for _CPU in '32' '64' ; do
    fi
    export PATH="${tmp}:${_ORI_PATH}"
 
+   ./c-ares.sh      "${CARES_VER_}" "${_CPU}"
    ./nghttp2.sh   "${NGHTTP2_VER_}" "${_CPU}"
    ./libressl.sh "${LIBRESSL_VER_}" "${_CPU}"
    ./openssl.sh   "${OPENSSL_VER_}" "${_CPU}"
