@@ -65,7 +65,7 @@ _CPU="$2"
 
    # Test run
 
-   src/curl.exe --version
+   src/curl.exe -V
 
    # Create package
 
