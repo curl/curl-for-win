@@ -108,7 +108,7 @@ fi
 # libssh2
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
    LIBSSH2_VER_='1.7.0-dev'
-   curl -fsS -o pack.bin -L --proto-redir =https https://github.com/libssh2/libssh2/archive/298f056fd6931e5e8bedc4fce5142a46c8f9f4b9.tar.gz
+   curl -fsS -o pack.bin -L --proto-redir =https https://github.com/libssh2/libssh2/archive/1fcf849e15ffda99cc30b6d23b8d378f501225a2.tar.gz
 else
    curl -fsS -o pack.bin -L --proto-redir =https "https://github.com/libssh2/libssh2/releases/download/libssh2-${LIBSSH2_VER_}/libssh2-${LIBSSH2_VER_}.tar.gz"
    openssl dgst -sha256 pack.bin | grep -q "${LIBSSH2_HASH}"
@@ -121,7 +121,7 @@ rm -f -r libssh2 && mv libssh2-* libssh2
 # curl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
    CURL_VER_='7.47.2-dev'
-   curl -fsS -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/ede0bfc079da52e5b05764852e7cb55fc6dff09f.tar.gz
+   curl -fsS -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/71398487e75e47c026d0655d540ade247d18f62c.tar.gz
 else
    curl -fsS -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2"
    openssl dgst -sha256 pack.bin | grep -q "${CURL_HASH}"
