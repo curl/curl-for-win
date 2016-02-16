@@ -30,12 +30,12 @@ _CPU="$2"
 
    readonly _REF='NEWS'
 
-   strip -p --enable-deterministic-archives -g *.a
+   strip -p --enable-deterministic-archives -g ./*.a
 
    ../_peclean.py "${_REF}" '*.exe'
 
-   touch -c -r "${_REF}" *.a
-   touch -c -r "${_REF}" *.exe
+   touch -c -r "${_REF}" ./*.a
+   touch -c -r "${_REF}" ./*.exe
 
    # Create package
 
@@ -47,9 +47,9 @@ _CPU="$2"
    cp -f -p ares.h        "${_DST}/"
    cp -f -p ares_build.h  "${_DST}/"
    cp -f -p ares_rules.h  "${_DST}/"
-   cp -f -p *.a           "${_DST}/"
-   cp -f -p *.exe         "${_DST}/"
-   cp -f -p *.pdf         "${_DST}/"
+   cp -f -p ./*.a         "${_DST}/"
+   cp -f -p ./*.exe       "${_DST}/"
+   cp -f -p ./*.pdf       "${_DST}/"
    cp -f -p README.md     "${_DST}/"
    cp -f -p NEWS          "${_DST}/NEWS.txt"
    cp -f -p RELEASE-NOTES "${_DST}/RELEASE-NOTES.txt"
