@@ -50,8 +50,8 @@ _CPU="$2"
    cp -f -p *.a           "${_DST}/"
    cp -f -p *.exe         "${_DST}/"
    cp -f -p *.pdf         "${_DST}/"
+   cp -f -p README.md     "${_DST}/"
    cp -f -p NEWS          "${_DST}/NEWS.txt"
-   cp -f -p README.md     "${_DST}/README.md"
    cp -f -p RELEASE-NOTES "${_DST}/RELEASE-NOTES.txt"
 
    unix2dos -k "${_DST}"/*.md
