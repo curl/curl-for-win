@@ -57,6 +57,6 @@ _CPU="$2"
    unix2dos -k "${_DST}"/*.md
    unix2dos -k "${_DST}"/*.txt
 
-   ../_pack.sh "$(pwd)/${_REF}"
+#  ../_pack.sh "$(pwd)/${_REF}"
 #  ../_ul.sh
 )

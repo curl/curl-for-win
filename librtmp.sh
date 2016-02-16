@@ -47,4 +47,7 @@ _CDO="$(pwd)"
    touch -c -r "${_REF}" librtmp/*.exe
    touch -c -r "${_REF}" librtmp/*.dll
    touch -c -r "${_REF}" librtmp/*.a
+
+#  ../_pack.sh "$(pwd)/${_REF}"
+#  ../_ul.sh
 )
