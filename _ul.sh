@@ -25,9 +25,7 @@ case "$(uname)" in
    *)           stat -c '%n: %s bytes %y' "${_BAS}${_SUF}.7z";;
 esac
 
-out="$(openssl dgst -sha256 "${_BAS}${_SUF}.7z")"
-echo "${out}"
-echo "${out}" >> hashes.txt
+openssl dgst -sha256 "${_BAS}${_SUF}.7z" | tee -a hashes.txt
 
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] ; then
    (
