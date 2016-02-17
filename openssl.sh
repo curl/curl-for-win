@@ -36,6 +36,8 @@ _CPU="$2"
       [ "${_CPU}" = '32' ] && export SHARED_RCFLAGS='--target=pe-i386'
       [ "${_CPU}" = '64' ] && export SHARED_RCFLAGS='--target=pe-x86-64'
       OPTIONS="${OPTIONS} -m${_CPU} no-ssl2 -static-libgcc"
+   else
+      OPTIONS="${OPTIONS} no-filenames"
    fi
    # Requires mingw 5.0 or upper
    [ "${_CPU}" = '64' ] && OPTIONS="${OPTIONS} -Wl,--high-entropy-va"
