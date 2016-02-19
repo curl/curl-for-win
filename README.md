@@ -9,7 +9,7 @@
   - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the
-    build [in the public](https://ci.appveyor.com/project/vsz/harbour-deps),
+    build [in public](https://ci.appveyor.com/project/vsz/harbour-deps),
     with open, auditable [build logs](https://ci.appveyor.com/project/vsz/harbour-deps/branch/master).
   - Binaries are built with supported [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29) options enabled.
   - Binaries are currently using [SJLJ](https://stackoverflow.com/a/15685229/1732433) exception handling.
