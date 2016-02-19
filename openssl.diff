@@ -6,7 +6,7 @@ diff -u -r openssl/Configure openssl-fix/Configure
  
  # MinGW
 -"mingw", "gcc:-mno-cygwin -DL_ENDIAN -DWIN32_LEAN_AND_MEAN -fomit-frame-pointer -O3 -march=i486 -Wall::-D_MT:MINGW32:-lws2_32 -lgdi32 -lcrypt32:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts} EXPORT_VAR_AS_FN:${x86_asm}:coff:win32:cygwin-shared:-D_WINDLL -DOPENSSL_USE_APPLINK:-mno-cygwin:.dll.a",
-+"mingw", "gcc:-mno-cygwin -DL_ENDIAN -DWIN32_LEAN_AND_MEAN -fomit-frame-pointer -O3 -Wall::-D_MT:MINGW32:-lws2_32 -lgdi32 -lcrypt32:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts} EXPORT_VAR_AS_FN:${x86_asm}:coff:win32:cygwin-shared:-D_WINDLL -DOPENSSL_USE_APPLINK:-mno-cygwin:.dll.a",
++"mingw", "gcc:-mno-cygwin -DL_ENDIAN -DWIN32_LEAN_AND_MEAN -DUNICODE -D_UNICODE -fomit-frame-pointer -O3 -Wall::-D_MT:MINGW32:-lws2_32 -lgdi32 -lcrypt32:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts} EXPORT_VAR_AS_FN:${x86_asm}:coff:win32:cygwin-shared:-D_WINDLL -DOPENSSL_USE_APPLINK:-mno-cygwin:.dll.a",
  # As for OPENSSL_USE_APPLINK. Applink makes it possible to use .dll
  # compiled with one compiler with application compiled with another
  # compiler. It's possible to engage Applink support in mingw64 build,
@@ -22,6 +22,19 @@ diff -u -r openssl/Makefile.shared openssl-fix/Makefile.shared
  	extras="$$extras rc.o"; \
  	ALLSYMSFLAGS='-Wl,--whole-archive'; \
  	NOALLSYMSFLAGS='-Wl,--no-whole-archive'; \
+diff --git a/Makefile.shared b/Makefile.shared
+index e753f44..5fe14e6 100644
+--- a/Makefile.shared
++++ b/Makefile.shared
+@@ -289,7 +289,7 @@ link_a.cygwin:
+ 		SHLIB_SOVER=32; \
+ 		extras="$(LIBNAME).def"; \
+ 		$(PERL) util/mkdef.pl 32 $$SHLIB > $$extras; \
+-		base=; [ $(LIBNAME) = "crypto" ] && base=-Wl,--image-base,0x63000000; \
++		base=; [ $(LIBNAME) = "crypto" -a -n "$(FIPSCANLIB)" ] && base=-Wl,--image-base,0x63000000; \
+ 	fi; \
+ 	dll_name=$$SHLIB$$SHLIB_SOVER$$SHLIB_SUFFIX; \
+ 	$(PERL) util/mkrc.pl $$dll_name | \
 diff -u -r openssl/ms/uplink-x86.pl openssl-fix/ms/uplink-x86.pl
 --- a/ms/uplink-x86.pl	2015-12-03 17:51:01.000000000 +0100
 +++ b/ms/uplink-x86.pl	2016-02-07 23:19:36.000000000 +0100

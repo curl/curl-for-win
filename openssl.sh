@@ -22,6 +22,7 @@ _CPU="$2"
 
    find . -name '*.o'   -type f -delete
    find . -name '*.a'   -type f -delete
+   find . -name '*.dll' -type f -delete
    find . -name '*.exe' -type f -delete
 
    [ "${_CPU}" = '32' ] && OPTIONS='mingw'
@@ -76,6 +77,9 @@ _CPU="$2"
 
    apps/openssl.exe version
    apps/openssl.exe ciphers
+
+   objdump -x apps/openssl.exe | grep -E "(file format|Dll Name:)"
+   objdump -x apps/*.dll       | grep -E "(file format|Dll Name:)"
 
    # Create package
 
