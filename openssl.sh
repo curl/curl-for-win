@@ -72,7 +72,7 @@ _CPU="$2"
       touch -c -r "${_REF}" engines/*.dll
    fi
 
-   # Test run
+   # Tests
 
    apps/openssl.exe version
    apps/openssl.exe ciphers

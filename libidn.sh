@@ -53,7 +53,7 @@ _CPU="$2"
    touch -c -r "${_REF}" ${_PKG}/lib/pkgconfig/*.pc
    touch -c -r "${_REF}" ${_PKG}/include/*.h
 
-   # Test run
+   # Tests
 
    ${_PKG}/bin/idn.exe -V
 

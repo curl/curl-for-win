@@ -64,7 +64,7 @@ _CPU="$2"
    touch -c -r "${_REF}" ${_PKG}/include/openssl/*.h
    touch -c -r "${_REF}" ${_PKG}/include/*.h
 
-   # Test run
+   # Tests
 
    ${_PKG}/bin/openssl.exe version
    ${_PKG}/bin/openssl.exe ciphers

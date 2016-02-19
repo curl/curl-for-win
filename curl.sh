@@ -23,7 +23,7 @@ _CPU="$2"
    [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
    export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
    export OPENSSL_LIBPATH="${OPENSSL_PATH}"
-   export OPENSSL_LIBS='-lssl -lcrypto'
+   export OPENSSL_LIBS='-lssl -Wl,-static -lcrypto -Wl,-static'
    export NGHTTP2_PATH=../../nghttp2/pkg/usr/local
    export LIBIDN_PATH=../../libidn/pkg/usr/local
    export LIBCARES_PATH=../../c-ares
@@ -69,9 +69,10 @@ _CPU="$2"
    touch -c -r "${_REF}" lib/*.dll
    touch -c -r "${_REF}" lib/*.a
 
-   # Test run
+   # Tests
 
    src/curl.exe -V
+   objdump -x 'src/curl.exe' | grep 'DLL Name'
 
    # Create package
 
