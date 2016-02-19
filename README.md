@@ -11,6 +11,7 @@
     open source code, C compiler, build scripts and running the
     build [in the public](https://ci.appveyor.com/project/vsz/harbour-deps),
     with open, auditable [build logs](https://ci.appveyor.com/project/vsz/harbour-deps/branch/master).
+  - Binaries are built with supported hardening options enabled.
   - Binaries are currently using [SJLJ](https://stackoverflow.com/a/15685229/1732433) exception handling.
     (steps to migrate to [DWARF](https://en.wikipedia.org/wiki/DWARF)/[SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH) are underway)
   - Components are verified using SHA-256 hashes.
