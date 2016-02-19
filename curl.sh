@@ -73,8 +73,8 @@ _CPU="$2"
 
    src/curl.exe -V
 
-   objdump -x src/*.exe | grep -E "(file format|Dll Name:)"
-   objdump -x lib/*.dll | grep -E "(file format|Dll Name:)"
+   objdump -x src/*.exe | grep -E -i "(file format|dll name)"
+   objdump -x lib/*.dll | grep -E -i "(file format|dll name)"
 
    # Create package
 
