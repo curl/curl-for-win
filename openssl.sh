@@ -47,6 +47,7 @@ _CPU="$2"
 
    # shellcheck disable=SC2086
    ./Configure ${OPTIONS} shared \
+      "--cross-compile-prefix=${_CCPREFIX}" \
       -fno-ident \
       -Wl,--nxcompat -Wl,--dynamicbase \
       no-unit-test no-ssl3 no-rc5 no-idea no-dso '--prefix=/usr/local'

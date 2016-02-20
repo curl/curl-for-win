@@ -20,18 +20,20 @@ _CDO="$(pwd)"
 
    # Build
 
-   export INC=-I../../openssl/include -I../../zlib
+   find . -name '*.o'   -type f -delete
+   find . -name '*.a'   -type f -delete
+   find . -name '*.dll' -type f -delete
+   find . -name '*.so'  -type f -delete
+   find . -name '*.exe' -type f -delete
+
+   export INC='-I../../openssl/include -I../../zlib'
    export XCFLAGS="-m${_CPU}"
    export XLDFLAGS="${XCFLAGS} \"-L${_CDO}/openssl\" \"-L${_CDO}/zlib\" -static-libgcc -Wl,--nxcompat -Wl,--dynamicbase"
    [ "${_CPU}" = '64' ] && XLDFLAGS="${XLDFLAGS} -Wl,--high-entropy-va"
    export LDFLAGS="${XLDFLAGS}"
    export XCFLAGS="${XCFLAGS} -fno-ident"
 
-   find . -name '*.o'   -type f -delete
-   find . -name '*.a'   -type f -delete
-   find . -name '*.dll' -type f -delete
-   find . -name '*.so'  -type f -delete
-   find . -name '*.exe' -type f -delete
+   export CROSS_COMPILE="${_CCPREFIX}"
 
    make SYS=mingw SODEF_yes=
 

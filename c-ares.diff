@@ -19,3 +19,22 @@ index 42149f5..043c76f 100644
  	$(RM) ares_build.h
  endif
 -
+diff --git a/Makefile.m32 b/Makefile.m32
+index 42149f5..1a7d8a2 100644
+--- a/Makefile.m32
++++ b/Makefile.m32
+@@ -10,10 +10,10 @@
+ 
+ LIB	= libcares.a
+ 
+-AR	= ar
+-CC	= gcc
+-LD	= gcc
+-RANLIB	= ranlib
++AR	= $(CROSSPREFIX)ar
++CC	= $(CROSSPREFIX)gcc
++LD	= $(CROSSPREFIX)gcc
++RANLIB	= $(CROSSPREFIX)ranlib
+ #RM	= rm -f
+ CP	= cp -afv
+ 

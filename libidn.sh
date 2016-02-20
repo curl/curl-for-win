@@ -28,7 +28,7 @@ _CPU="$2"
    find . -name '*.dll' -type f -delete
    find . -name '*.exe' -type f -delete
 
-   export CC='gcc -static-libgcc'
+   export CC="${_CCPREFIX}gcc -static-libgcc"
    export LDFLAGS="-m${_CPU}"
    export CFLAGS="${LDFLAGS} -fno-ident"
    # Open dummy file descriptor to fix './<script>: line <n>: 0: Bad file descriptor'

@@ -22,6 +22,8 @@ _CPU="$2"
    export CARES_LDFLAG_EXTRAS="-m${_CPU} -static-libgcc -Wl,--nxcompat -Wl,--dynamicbase"
    [ "${_CPU}" = '64' ] && CARES_LDFLAG_EXTRAS="${CARES_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
 
+   export CROSSPREFIX="${_CCPREFIX}"
+
    mingw32-make -f Makefile.m32 clean
    mingw32-make -f Makefile.m32
    mingw32-make -f Makefile.m32 demos

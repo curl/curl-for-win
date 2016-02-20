@@ -26,6 +26,7 @@ _CPU="$2"
    find . -name '*.Plo' -type f -delete
    find . -name '*.pc'  -type f -delete
 
+   export CC="${_CCPREFIX}gcc -static-libgcc"
    export LDFLAGS="-m${_CPU}"
    export CFLAGS="${LDFLAGS} -fno-ident -U__STRICT_ANSI__ -DNGHTTP2_STATICLIB"
    export CXXFLAGS="${CFLAGS}"

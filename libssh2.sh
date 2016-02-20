@@ -29,6 +29,8 @@ _CPU="$2"
    export LIBSSH2_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
    [ "${_CPU}" = '64' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
 
+   export CROSSPREFIX="${_CCPREFIX}"
+
    (
       cd win32 || exit
       mingw32-make clean

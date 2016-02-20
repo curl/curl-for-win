@@ -28,7 +28,7 @@ _CPU="$2"
    find . -name '*.dll' -type f -delete
    find . -name '*.exe' -type f -delete
 
-   export CC='gcc -static-libgcc'
+   export CC="${_CCPREFIX}gcc -static-libgcc"
    [ "${_CPU}" = '32' ] && OPTIONS=--host=i686-w64-mingw32
    [ "${_CPU}" = '64' ] && OPTIONS=--host=x86_64-w64-mingw32
 

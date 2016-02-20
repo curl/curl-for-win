@@ -34,6 +34,8 @@ _CPU="$2"
    export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
    [ "${_CPU}" = '64' ] && CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
 
+   export CROSSPREFIX="${_CCPREFIX}"
+
    # TOFIX: This will not create a fully release-compliant file tree,
    #        f.e. documentation will be incomplete.
    [ -f 'Makefile' ] || ./buildconf.bat
