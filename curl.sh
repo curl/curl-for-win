@@ -47,8 +47,9 @@ _CPU="$2"
       OPTIONS="${OPTIONS}-idn"
       CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_IDN_FREE_H"
    else
-      # Do not link WinIDN in 32-bit builds, for Windows XP compatibility (missing normaliz.dll)
-      [ "${_CPU}" = '64' ] && OPTIONS="${OPTIONS}-winidn"
+      # NOTE: If Windows XP is missing `normaliz.dll`, install this package:
+      #       https://www.microsoft.com/en-us/download/details.aspx?id=734
+      OPTIONS="${OPTIONS}-winidn"
    fi
    mingw32-make mingw32-clean
    mingw32-make "${OPTIONS}"
