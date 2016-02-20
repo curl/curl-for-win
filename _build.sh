@@ -36,8 +36,8 @@ for _CPU in '32' '64' ; do
    export PATH="${tmp}:${_ORI_PATH}"
 
    # Prefixes don't work with MSYS2/mingw-w64, because `ar`, `nm` and
-   # `runlib` are missing with them. They are accessible either without
-   # one, or with one, as `gcc-ar`, `gcc-nm`, `gcc-runlib`.
+   # `runlib` are missing from them. They are accessible either _without_
+   # one, or as prefix + `gcc-ar`, `gcc-nm`, `gcc-runlib`.
    case "$(uname)" in
       *_NT*) _CCPREFIX=
    esac
