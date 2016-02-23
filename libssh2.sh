@@ -67,13 +67,13 @@ _CPU="$2"
          fi
       done
    )
-   cp -f -p include/*.h         "${_DST}/include/"
-   cp -f -p win32/*.dll         "${_DST}/bin/"
-   cp -f -p win32/*.a           "${_DST}/lib/"
-   cp -f -p NEWS                "${_DST}/NEWS.txt"
-   cp -f -p COPYING             "${_DST}/COPYING.txt"
-   cp -f -p README              "${_DST}/README.txt"
-   cp -f -p RELEASE-NOTES       "${_DST}/RELEASE-NOTES.txt"
+   cp -f -p include/*.h   "${_DST}/include/"
+   cp -f -p win32/*.dll   "${_DST}/bin/"
+   cp -f -p win32/*.a     "${_DST}/lib/"
+   cp -f -p NEWS          "${_DST}/NEWS.txt"
+   cp -f -p COPYING       "${_DST}/COPYING.txt"
+   cp -f -p README        "${_DST}/README.txt"
+   cp -f -p RELEASE-NOTES "${_DST}/RELEASE-NOTES.txt"
 
    [ -d ../libressl ] && cp -f -p ../libressl/COPYING "${_DST}/COPYING-libressl.txt"
    [ -d ../openssl ]  && cp -f -p ../openssl/LICENSE  "${_DST}/LICENSE-openssl.txt"
