@@ -17,8 +17,8 @@ export OPENSSL_VER_='1.0.2f'
 export OPENSSL_HASH=932b4ee4def2b434f85435d9e3e19ca8ba99ce9a065a61524b429a9d5e9b2e9c
 export LIBRTMP_VER_='2.4+20151223'
 export LIBRTMP_HASH=f8eb8d0c8ed085c90666ba0e8fbe0e960e0cf0c2a58604fda3ed85a28f2ef5f6
-export LIBSSH2_VER_='1.6.0'
-export LIBSSH2_HASH=5a202943a34a1d82a1c31f74094f2453c207bf9936093867f41414968c8e8215
+export LIBSSH2_VER_='1.7.0'
+export LIBSSH2_HASH=e4561fd43a50539a8c2ceb37841691baf03ecb7daf043766da1b112e4280d584
 export CURL_VER_='7.47.1'
 export CURL_HASH=ddc643ab9382e24bbe4747d43df189a0a6ce38fcb33df041b9cb0b3cd47ae98f
 
@@ -107,10 +107,10 @@ fi
 
 # libssh2
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
-   LIBSSH2_VER_='1.7.0-dev'
+   LIBSSH2_VER_='1.7.1-dev'
    curl -fsS -o pack.bin -L --proto-redir =https https://github.com/libssh2/libssh2/archive/1fcf849e15ffda99cc30b6d23b8d378f501225a2.tar.gz
 else
-   curl -fsS -o pack.bin -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}/libssh2-${LIBSSH2_VER_}.tar.gz"
+   curl -fsS -o pack.bin -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz"
    openssl dgst -sha256 pack.bin | grep -q "${LIBSSH2_HASH}"
 fi
 tar -xvf pack.bin > /dev/null 2>&1
