@@ -1,7 +1,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
 [![Build status](https://ci.appveyor.com/api/projects/status/4bx4006pge6jbqch/branch/master?svg=true)](https://ci.appveyor.com/project/vsz/harbour-deps/branch/master)
 
-# Automated, reproducible, transparent, Windows builds for [cURL](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [libssh2](https://github.com/libssh2/libssh2), [OpenSSL](https://www.openssl.org/) and [LibreSSL](http://www.libressl.org/)
+# Automated, reproducible, transparent, Windows builds for [cURL](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [libssh2](https://libssh2.com), [OpenSSL](https://www.openssl.org/) and [LibreSSL](http://www.libressl.org/)
 
   - Packaging aims to follow popular binary releases found on the Internet.
   - Both x86 and x64 packages are built using the same process.

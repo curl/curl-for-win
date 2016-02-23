@@ -110,7 +110,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
    LIBSSH2_VER_='1.7.0-dev'
    curl -fsS -o pack.bin -L --proto-redir =https https://github.com/libssh2/libssh2/archive/1fcf849e15ffda99cc30b6d23b8d378f501225a2.tar.gz
 else
-   curl -fsS -o pack.bin -L --proto-redir =https "https://github.com/libssh2/libssh2/releases/download/libssh2-${LIBSSH2_VER_}/libssh2-${LIBSSH2_VER_}.tar.gz"
+   curl -fsS -o pack.bin -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}/libssh2-${LIBSSH2_VER_}.tar.gz"
    openssl dgst -sha256 pack.bin | grep -q "${LIBSSH2_HASH}"
 fi
 tar -xvf pack.bin > /dev/null 2>&1
