@@ -22,6 +22,7 @@ _CPU="$2"
 
    find . -name '*.o'   -type f -delete
    find . -name '*.a'   -type f -delete
+   find . -name '*.pc'  -type f -delete
    find . -name '*.dll' -type f -delete
    find . -name '*.exe' -type f -delete
 
@@ -88,7 +89,7 @@ _CPU="$2"
    _DST="$(mktemp -d)/${_BAS}"
 
    mkdir -p "${_DST}/include/openssl"
-   mkdir -p "${_DST}/lib"
+   mkdir -p "${_DST}/lib/pkgconfig"
 
    if ls engines/*.dll > /dev/null 2>&1 ; then
       mkdir -p "${_DST}/engines"
@@ -101,6 +102,7 @@ _CPU="$2"
    cp -f -p include/openssl/*.h "${_DST}/include/openssl/"
    cp -f -p ms/applink.c        "${_DST}/include/openssl/"
    cp -f -p ./*.a               "${_DST}/lib/"
+   cp -f -p ./*.pc              "${_DST}/lib/pkgconfig/"
    cp -f -p CHANGES             "${_DST}/CHANGES.txt"
    cp -f -p LICENSE             "${_DST}/LICENSE.txt"
    cp -f -p README              "${_DST}/README.txt"
