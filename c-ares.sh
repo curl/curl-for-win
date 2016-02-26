@@ -20,7 +20,7 @@ _CPU="$2"
 
    export CARES_CFLAG_EXTRAS="-m${_CPU} -fno-ident"
    export CARES_LDFLAG_EXTRAS="-m${_CPU} -static-libgcc -Wl,--nxcompat -Wl,--dynamicbase"
-   [ "${_CPU}" = '64' ] && CARES_LDFLAG_EXTRAS="${CARES_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
+   [ "${_CPU}" = '64' ] && CARES_LDFLAG_EXTRAS="${CARES_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x154000000"
 
    export CROSSPREFIX="${_CCPREFIX}"
 

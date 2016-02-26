@@ -42,7 +42,7 @@ _CPU="$2"
       OPTIONS="${OPTIONS} no-filenames"
    fi
    # Requires mingw 5.0 or upper
-   [ "${_CPU}" = '64' ] && OPTIONS="${OPTIONS} -Wl,--high-entropy-va"
+   [ "${_CPU}" = '64' ] && OPTIONS="${OPTIONS} -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
    [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-pre' ] && OPTIONS="${OPTIONS} --unified"
    [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-dev' ] && OPTIONS="${OPTIONS} --unified"
 

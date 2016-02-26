@@ -29,7 +29,7 @@ _CDO="$(pwd)"
    export INC='-I../../openssl/include -I../../zlib'
    export XCFLAGS="-m${_CPU}"
    export XLDFLAGS="${XCFLAGS} \"-L${_CDO}/openssl\" \"-L${_CDO}/zlib\" -static-libgcc -Wl,--nxcompat -Wl,--dynamicbase"
-   [ "${_CPU}" = '64' ] && XLDFLAGS="${XLDFLAGS} -Wl,--high-entropy-va"
+   [ "${_CPU}" = '64' ] && XLDFLAGS="${XLDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x153000000"
    export LDFLAGS="${XLDFLAGS}"
    export XCFLAGS="${XCFLAGS} -fno-ident"
 

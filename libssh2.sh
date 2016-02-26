@@ -27,7 +27,7 @@ _CPU="$2"
    export ARCH="w${_CPU}"
    export LIBSSH2_CFLAG_EXTRAS='-fno-ident'
    export LIBSSH2_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
-   [ "${_CPU}" = '64' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
+   [ "${_CPU}" = '64' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
 
    export CROSSPREFIX="${_CCPREFIX}"
 
