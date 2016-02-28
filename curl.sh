@@ -11,7 +11,7 @@ export _DST
 _NAM="$(basename "$0")"
 _NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
 _VER="$1"
-_CPU="$2"
+_cpu="$2"
 
 (
    cd "${_NAM}" || exit
@@ -29,11 +29,11 @@ _CPU="$2"
    export LIBCARES_PATH=../../c-ares
    export LIBRTMP_PATH=../../librtmp
    export LIBSSH2_PATH=../../libssh2
-   export ARCH="w${_CPU}"
+   export ARCH="w${_cpu}"
    export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -DNGHTTP2_STATICLIB -fno-ident'
    export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
-   [ "${_CPU}" = '32' ] && CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--pic-executable,-e,_mainCRTStartup"
-   [ "${_CPU}" = '64' ] && CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--pic-executable,-e,mainCRTStartup -Wl,--high-entropy-va -Wl,--image-base,0x150000000"
+   [ "${_cpu}" = '32' ] && CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--pic-executable,-e,_mainCRTStartup"
+   [ "${_cpu}" = '64' ] && CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--pic-executable,-e,mainCRTStartup -Wl,--high-entropy-va -Wl,--image-base,0x150000000"
 
    export CROSSPREFIX="${_CCPREFIX}"
 
@@ -41,19 +41,19 @@ _CPU="$2"
    #        f.e. documentation will be incomplete.
    [ -f 'Makefile' ] || ./buildconf.bat
 
-   OPTIONS='mingw32-ssh2-ssl-sspi-zlib-ldaps-srp-nghttp2-ipv6'
-   [ -d ../c-ares ] && OPTIONS="${OPTIONS}-ares"
-   [ -d ../librtmp ] && OPTIONS="${OPTIONS}-rtmp"
+   options='mingw32-ssh2-ssl-sspi-zlib-ldaps-srp-nghttp2-ipv6'
+   [ -d ../c-ares ] && options="${options}-ares"
+   [ -d ../librtmp ] && options="${options}-rtmp"
    if [ -d ../libidn ] ; then
-      OPTIONS="${OPTIONS}-idn"
+      options="${options}-idn"
       CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_IDN_FREE_H"
    else
       # NOTE: If Windows XP is missing `normaliz.dll`, install this package:
       #       https://www.microsoft.com/en-us/download/details.aspx?id=734
-      OPTIONS="${OPTIONS}-winidn"
+      options="${options}-winidn"
    fi
    mingw32-make mingw32-clean
-   mingw32-make "${OPTIONS}"
+   mingw32-make "${options}"
 
    # Download CA bundle
    [ -f '../ca-bundle.crt' ] || \
@@ -61,17 +61,17 @@ _CPU="$2"
 
    # Make steps for determinism
 
-   readonly _REF='CHANGES'
+   readonly _ref='CHANGES'
 
    strip -p --enable-deterministic-archives -g lib/*.a
 
-   ../_peclean.py "${_REF}" 'src/*.exe'
-   ../_peclean.py "${_REF}" 'lib/*.dll'
+   ../_peclean.py "${_ref}" 'src/*.exe'
+   ../_peclean.py "${_ref}" 'lib/*.dll'
 
-   touch -c -r "${_REF}" ../ca-bundle.crt
-   touch -c -r "${_REF}" src/*.exe
-   touch -c -r "${_REF}" lib/*.dll
-   touch -c -r "${_REF}" lib/*.a
+   touch -c -r "${_ref}" ../ca-bundle.crt
+   touch -c -r "${_ref}" src/*.exe
+   touch -c -r "${_ref}" lib/*.dll
+   touch -c -r "${_ref}" lib/*.a
 
    # Tests
 
@@ -82,7 +82,7 @@ _CPU="$2"
 
    # Create package
 
-   _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
+   _BAS="${_NAM}-${_VER}-win${_cpu}-mingw"
    [ -d ../libressl ] && _BAS="${_BAS}-libressl"
    [ -d ../librtmp ] && _BAS="${_BAS}-librtmp"
    _DST="$(mktemp -d)/${_BAS}"
@@ -132,6 +132,6 @@ _CPU="$2"
    unix2dos -k "${_DST}"/docs/*.md
    unix2dos -k "${_DST}"/docs/*.txt
 
-   ../_pack.sh "$(pwd)/${_REF}"
+   ../_pack.sh "$(pwd)/${_ref}"
    ../_ul.sh
 )

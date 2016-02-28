@@ -11,7 +11,7 @@ export _DST
 _NAM="$(basename "$0")"
 _NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
 _VER="$1"
-_CPU="$2"
+_cpu="$2"
 
 (
    cd "${_NAM}" || exit
@@ -24,10 +24,10 @@ _CPU="$2"
 #  export LINK_OPENSSL_STATIC=yes; export OPENSSL_LIBS_STAT='crypto ssl'
    export OPENSSL_LIBPATH="${OPENSSL_PATH}"
    export OPENSSL_LIBS_DYN='crypto.dll ssl.dll'
-   export ARCH="w${_CPU}"
+   export ARCH="w${_cpu}"
    export LIBSSH2_CFLAG_EXTRAS='-fno-ident'
    export LIBSSH2_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
-   [ "${_CPU}" = '64' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
+   [ "${_cpu}" = '64' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
 
    export CROSSPREFIX="${_CCPREFIX}"
 
@@ -39,18 +39,18 @@ _CPU="$2"
 
    # Make steps for determinism
 
-   readonly _REF='NEWS'
+   readonly _ref='NEWS'
 
    strip -p --enable-deterministic-archives -g win32/*.a
 
-   ../_peclean.py "${_REF}" 'win32/*.dll'
+   ../_peclean.py "${_ref}" 'win32/*.dll'
 
-   touch -c -r "${_REF}" win32/*.dll
-   touch -c -r "${_REF}" win32/*.a
+   touch -c -r "${_ref}" win32/*.dll
+   touch -c -r "${_ref}" win32/*.a
 
    # Create package
 
-   _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
+   _BAS="${_NAM}-${_VER}-win${_cpu}-mingw"
    [ -d ../libressl ] && _BAS="${_BAS}-libressl"
    _DST="$(mktemp -d)/${_BAS}"
 
@@ -81,6 +81,6 @@ _CPU="$2"
    unix2dos -k "${_DST}"/*.txt
    unix2dos -k "${_DST}"/docs/*.txt
 
-   ../_pack.sh "$(pwd)/${_REF}"
+   ../_pack.sh "$(pwd)/${_ref}"
    ../_ul.sh
 )

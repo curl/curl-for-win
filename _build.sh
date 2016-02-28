@@ -13,9 +13,9 @@ which git > /dev/null && _URL="$(git ls-remote --get-url | sed 's|\.git||')"
 
 . ./_dl.sh || exit 1
 
-_ORI_PATH="${PATH}"
+_ori_path="${PATH}"
 
-for _CPU in '32' '64' ; do
+for _cpu in '32' '64' ; do
 
    export _CCPREFIX=
 
@@ -23,17 +23,17 @@ for _CPU in '32' '64' ; do
    if [ -d './mingw64/bin' ] ; then
       tmp="$(realpath './mingw64/bin')"
    else
-      tmp="/mingw${_CPU}/bin"
+      tmp="/mingw${_cpu}/bin"
       if [ "${APPVEYOR}" = 'True' ] ; then
          # mingw-w64 comes with its own Python copy. Override that with
          # AppVeyor's external one, which has our extra installed 'pefile'
          # package.
          tmp="/c/Python27-x64:${tmp}"
       fi
-      [ "${_CPU}" = '32' ] && _CCPREFIX='i686-w64-mingw32-'
-      [ "${_CPU}" = '64' ] && _CCPREFIX='x86_64-w64-mingw32-'
+      [ "${_cpu}" = '32' ] && _CCPREFIX='i686-w64-mingw32-'
+      [ "${_cpu}" = '64' ] && _CCPREFIX='x86_64-w64-mingw32-'
    fi
-   export PATH="${tmp}:${_ORI_PATH}"
+   export PATH="${tmp}:${_ori_path}"
 
    # Prefixes don't work with MSYS2/mingw-w64, because `ar`, `nm` and
    # `runlib` are missing from them. They are accessible either _without_
@@ -42,14 +42,14 @@ for _CPU in '32' '64' ; do
       *_NT*) _CCPREFIX=
    esac
 
-   ./libidn.sh     "${LIBIDN_VER_}" "${_CPU}"
-   ./c-ares.sh      "${CARES_VER_}" "${_CPU}"
-   ./nghttp2.sh   "${NGHTTP2_VER_}" "${_CPU}"
-   ./libressl.sh "${LIBRESSL_VER_}" "${_CPU}"
-   ./openssl.sh   "${OPENSSL_VER_}" "${_CPU}"
-   ./librtmp.sh   "${LIBRTMP_VER_}" "${_CPU}"
-   ./libssh2.sh   "${LIBSSH2_VER_}" "${_CPU}"
-   ./curl.sh         "${CURL_VER_}" "${_CPU}"
+   ./libidn.sh     "${LIBIDN_VER_}" "${_cpu}"
+   ./c-ares.sh      "${CARES_VER_}" "${_cpu}"
+   ./nghttp2.sh   "${NGHTTP2_VER_}" "${_cpu}"
+   ./libressl.sh "${LIBRESSL_VER_}" "${_cpu}"
+   ./openssl.sh   "${OPENSSL_VER_}" "${_cpu}"
+   ./librtmp.sh   "${LIBRTMP_VER_}" "${_cpu}"
+   ./libssh2.sh   "${LIBSSH2_VER_}" "${_cpu}"
+   ./curl.sh         "${CURL_VER_}" "${_cpu}"
 done
 
 ls -l ./*-*-mingw*.*

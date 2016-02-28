@@ -5,10 +5,10 @@
 
 cd "$(dirname "$0")" || exit
 
-_CDO="$(pwd)"
+_cdo="$(pwd)"
 
-_FN="${_DST}/BUILD-README.txt"
-cat << EOF > "${_FN}"
+_fn="${_DST}/BUILD-README.txt"
+cat << EOF > "${_fn}"
 Visit the project page for details about these builds and the list of changes:
 
    ${_URL}
@@ -20,28 +20,28 @@ Please donate to support maintaining these builds:
 
 Thank you!
 EOF
-unix2dos -k "${_FN}"
-touch -c -r "$1" "${_FN}"
+unix2dos -k "${_fn}"
+touch -c -r "$1" "${_fn}"
 
-_FN="${_DST}/BUILD-HOMEPAGE.url"
-cat << EOF > "${_FN}"
+_fn="${_DST}/BUILD-HOMEPAGE.url"
+cat << EOF > "${_fn}"
 [InternetShortcut]
 URL=${_URL}
 EOF
-unix2dos -k "${_FN}"
-touch -c -r "$1" "${_FN}"
+unix2dos -k "${_fn}"
+touch -c -r "$1" "${_fn}"
 
 find "${_DST}" -type d -d -exec touch -c -r "$1" '{}' \;
 
 (
    cd "${_DST}/.." || exit
-   rm -f "${_CDO}/${_BAS}.7z"
+   rm -f "${_cdo}/${_BAS}.7z"
    case "$(uname)" in
       *_NT*) find "${_BAS}" -exec attrib +A -R {} \;
    esac
    # NOTE: add -stl option after updating to 15.12 or upper
-   7z a -bd -r -mx "${_CDO}/${_BAS}.7z" "${_BAS}/*" > /dev/null
-   touch -c "${_CDO}/${_BAS}.7z" -r "$1"
+   7z a -bd -r -mx "${_cdo}/${_BAS}.7z" "${_BAS}/*" > /dev/null
+   touch -c "${_cdo}/${_BAS}.7z" -r "$1"
 )
 
 rm -f -r "${_DST:?}"

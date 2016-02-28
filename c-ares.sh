@@ -11,16 +11,16 @@ export _DST
 _NAM="$(basename "$0")"
 _NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
 _VER="$1"
-_CPU="$2"
+_cpu="$2"
 
 (
    cd "${_NAM}" || exit 0
 
    # Build
 
-   export CARES_CFLAG_EXTRAS="-m${_CPU} -fno-ident"
-   export CARES_LDFLAG_EXTRAS="-m${_CPU} -static-libgcc -Wl,--nxcompat -Wl,--dynamicbase"
-   [ "${_CPU}" = '64' ] && CARES_LDFLAG_EXTRAS="${CARES_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x154000000"
+   export CARES_CFLAG_EXTRAS="-m${_cpu} -fno-ident"
+   export CARES_LDFLAG_EXTRAS="-m${_cpu} -static-libgcc -Wl,--nxcompat -Wl,--dynamicbase"
+   [ "${_cpu}" = '64' ] && CARES_LDFLAG_EXTRAS="${CARES_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x154000000"
 
    export CROSSPREFIX="${_CCPREFIX}"
 
@@ -30,18 +30,18 @@ _CPU="$2"
 
    # Make steps for determinism
 
-   readonly _REF='NEWS'
+   readonly _ref='NEWS'
 
    strip -p --enable-deterministic-archives -g ./*.a
 
-   ../_peclean.py "${_REF}" '*.exe'
+   ../_peclean.py "${_ref}" '*.exe'
 
-   touch -c -r "${_REF}" ./*.a
-   touch -c -r "${_REF}" ./*.exe
+   touch -c -r "${_ref}" ./*.a
+   touch -c -r "${_ref}" ./*.exe
 
    # Create package
 
-   _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
+   _BAS="${_NAM}-${_VER}-win${_cpu}-mingw"
    _DST="$(mktemp -d)/${_BAS}"
 
    mkdir -p "${_DST}"
@@ -59,6 +59,6 @@ _CPU="$2"
    unix2dos -k "${_DST}"/*.md
    unix2dos -k "${_DST}"/*.txt
 
-#  ../_pack.sh "$(pwd)/${_REF}"
+#  ../_pack.sh "$(pwd)/${_ref}"
 #  ../_ul.sh
 )

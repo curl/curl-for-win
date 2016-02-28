@@ -6,26 +6,26 @@
 cd "$(dirname "$0")" || exit
 
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] ; then
-   _SUF=
+   _suf=
 else
-   _SUF='-test'
-   mv "${_BAS}.7z" "${_BAS}${_SUF}.7z"
+   _suf='-test'
+   mv "${_BAS}.7z" "${_BAS}${_suf}.7z"
 fi
 
 (
    set +x
    curl -fsS -u "${BINTRAY_USER}:${BINTRAY_APIKEY}" \
-      -X PUT "https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_SUF}/${_VER}/${_BAS}${_SUF}.7z?override=1&publish=1" \
-      --data-binary "@${_BAS}${_SUF}.7z"
+      -X PUT "https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_suf}/${_VER}/${_BAS}${_suf}.7z?override=1&publish=1" \
+      --data-binary "@${_BAS}${_suf}.7z"
 )
 
 # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>
 case "$(uname)" in
-   *BSD|Darwin) stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_BAS}${_SUF}.7z";;
-   *)           stat -c '%n: %s bytes %y' "${_BAS}${_SUF}.7z";;
+   *BSD|Darwin) stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_BAS}${_suf}.7z";;
+   *)           stat -c '%n: %s bytes %y' "${_BAS}${_suf}.7z";;
 esac
 
-openssl dgst -sha256 "${_BAS}${_SUF}.7z" | tee -a hashes.txt
+openssl dgst -sha256 "${_BAS}${_suf}.7z" | tee -a hashes.txt
 
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] ; then
    (
@@ -33,9 +33,9 @@ if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] ; then
       out="$(curl -fsS \
          -X POST 'https://www.virustotal.com/vtapi/v2/file/scan' \
          --form-string "apikey=${VIRUSTOTAL_APIKEY}" \
-         --form "file=@${_BAS}${_SUF}.7z")"
+         --form "file=@${_BAS}${_suf}.7z")"
       echo "${out}"
-      echo "VirusTotal URL for '${_BAS}${_SUF}.7z':"
+      echo "VirusTotal URL for '${_BAS}${_suf}.7z':"
       echo "${out}" | grep -o 'https://[a-zA-Z0-9./]*'
    )
 fi

@@ -11,7 +11,7 @@ export _DST
 _NAM="$(basename "$0")"
 _NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
 _VER="$1"
-_CPU="$2"
+_cpu="$2"
 
 (
    cd "${_NAM}" || exit
@@ -29,7 +29,7 @@ _CPU="$2"
    find . -name '*.exe' -type f -delete
 
    export CC="${_CCPREFIX}gcc -static-libgcc"
-   export LDFLAGS="-m${_CPU}"
+   export LDFLAGS="-m${_cpu}"
    export CFLAGS="${LDFLAGS} -fno-ident"
    # Open dummy file descriptor to fix './<script>: line <n>: 0: Bad file descriptor'
    exec 0</dev/null && ./configure --disable-silent-rules '--prefix=/usr/local' --silent
@@ -37,38 +37,38 @@ _CPU="$2"
    exec 0</dev/null && make install "DESTDIR=$(pwd)/pkg" > /dev/null
 
    # DESTDIR= + --prefix=
-   _PKG='pkg/usr/local'
+   _pkg='pkg/usr/local'
 
    # Make steps for determinism
 
-   readonly _REF='NEWS'
+   readonly _ref='NEWS'
 
-   strip -p --enable-deterministic-archives -g ${_PKG}/lib/*.a
-   strip -p -s ${_PKG}/bin/*.exe
+   strip -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
+   strip -p -s ${_pkg}/bin/*.exe
 
-   ../_peclean.py "${_REF}" "${_PKG}/bin/*.exe"
+   ../_peclean.py "${_ref}" "${_pkg}/bin/*.exe"
 
-   touch -c -r "${_REF}" ${_PKG}/bin/*.exe
-   touch -c -r "${_REF}" ${_PKG}/lib/*.a
-   touch -c -r "${_REF}" ${_PKG}/lib/pkgconfig/*.pc
-   touch -c -r "${_REF}" ${_PKG}/include/*.h
+   touch -c -r "${_ref}" ${_pkg}/bin/*.exe
+   touch -c -r "${_ref}" ${_pkg}/lib/*.a
+   touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
+   touch -c -r "${_ref}" ${_pkg}/include/*.h
 
    # Tests
 
-   ${_PKG}/bin/idn.exe -V
+   ${_pkg}/bin/idn.exe -V
 
    # Create package
 
-   _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
+   _BAS="${_NAM}-${_VER}-win${_cpu}-mingw"
    _DST="$(mktemp -d)/${_BAS}"
 
    mkdir -p "${_DST}/include"
    mkdir -p "${_DST}/lib/pkgconfig"
 
-   cp -f -p ${_PKG}/bin/*.exe          "${_DST}/"
-   cp -f -p ${_PKG}/lib/*.a            "${_DST}/lib/"
-   cp -f -p ${_PKG}/lib/pkgconfig/*.pc "${_DST}/lib/pkgconfig/"
-   cp -f -p ${_PKG}/include/*.h        "${_DST}/include/"
+   cp -f -p ${_pkg}/bin/*.exe          "${_DST}/"
+   cp -f -p ${_pkg}/lib/*.a            "${_DST}/lib/"
+   cp -f -p ${_pkg}/lib/pkgconfig/*.pc "${_DST}/lib/pkgconfig/"
+   cp -f -p ${_pkg}/include/*.h        "${_DST}/include/"
    cp -f -p NEWS                       "${_DST}/NEWS.txt"
    cp -f -p AUTHORS                    "${_DST}/AUTHORS.txt"
    cp -f -p COPYING                    "${_DST}/COPYING.txt"
@@ -77,6 +77,6 @@ _CPU="$2"
    unix2dos -k "${_DST}"/*.txt
    unix2dos -k "${_DST}"/*.rst
 
-#  ../_pack.sh "$(pwd)/${_REF}"
+#  ../_pack.sh "$(pwd)/${_ref}"
 #  ../_ul.sh
 )

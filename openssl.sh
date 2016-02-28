@@ -11,12 +11,12 @@ export _DST
 _NAM="$(basename "$0")"
 _NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
 _VER="$1"
-_CPU="$2"
+_cpu="$2"
 
 (
    cd "${_NAM}" || exit 0
 
-   readonly _REF='CHANGES'
+   readonly _ref='CHANGES'
 
    # Build
 
@@ -26,28 +26,28 @@ _CPU="$2"
    find . -name '*.dll' -type f -delete
    find . -name '*.exe' -type f -delete
 
-   [ "${_CPU}" = '32' ] && OPTIONS='mingw'
-   [ "${_CPU}" = '64' ] && OPTIONS='mingw64'
+   [ "${_cpu}" = '32' ] && options='mingw'
+   [ "${_cpu}" = '64' ] && options='mingw64'
    if [ "${_BRANCH#*lto*}" != "${_BRANCH}" ] ; then
       # Create a fixed seed based on the timestamp of the OpenSSL source package.
-      OPTIONS="${OPTIONS} -flto -ffat-lto-objects -frandom-seed=$(stat -c %Y "${_REF}")"
+      options="${options} -flto -ffat-lto-objects -frandom-seed=$(stat -c %Y "${_ref}")"
       # mingw64 build (as of mingw 5.2.0) will fail without the `no-asm` option.
-      [ "${_CPU}" = '64' ] && OPTIONS="${OPTIONS} no-asm"
+      [ "${_cpu}" = '64' ] && options="${options} no-asm"
    fi
    if [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.0.2' ] ; then
-      [ "${_CPU}" = '32' ] && export SHARED_RCFLAGS='--target=pe-i386'
-      [ "${_CPU}" = '64' ] && export SHARED_RCFLAGS='--target=pe-x86-64'
-      OPTIONS="${OPTIONS} -m${_CPU} no-ssl2 -static-libgcc"
+      [ "${_cpu}" = '32' ] && export SHARED_RCFLAGS='--target=pe-i386'
+      [ "${_cpu}" = '64' ] && export SHARED_RCFLAGS='--target=pe-x86-64'
+      options="${options} -m${_cpu} no-ssl2 -static-libgcc"
    else
-      OPTIONS="${OPTIONS} no-filenames"
+      options="${options} no-filenames"
    fi
    # Requires mingw 5.0 or upper
-   [ "${_CPU}" = '64' ] && OPTIONS="${OPTIONS} -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
-   [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-pre' ] && OPTIONS="${OPTIONS} --unified"
-   [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-dev' ] && OPTIONS="${OPTIONS} --unified"
+   [ "${_cpu}" = '64' ] && options="${options} -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
+   [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-pre' ] && options="${options} --unified"
+   [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-dev' ] && options="${options} --unified"
 
    # shellcheck disable=SC2086
-   ./Configure ${OPTIONS} shared \
+   ./Configure ${options} shared \
       "--cross-compile-prefix=${_CCPREFIX}" \
       -fno-ident \
       -Wl,--nxcompat -Wl,--dynamicbase \
@@ -61,18 +61,18 @@ _CPU="$2"
    strip -p -s apps/openssl.exe
    strip -p -s apps/*.dll
 
-   ../_peclean.py "${_REF}" 'apps/openssl.exe'
-   ../_peclean.py "${_REF}" 'apps/*.dll'
+   ../_peclean.py "${_ref}" 'apps/openssl.exe'
+   ../_peclean.py "${_ref}" 'apps/*.dll'
    if ls engines/*.dll > /dev/null 2>&1 ; then
-      ../_peclean.py "${_REF}" 'engines/*.dll'
+      ../_peclean.py "${_ref}" 'engines/*.dll'
    fi
 
-   touch -c -r "${_REF}" apps/openssl.exe
-   touch -c -r "${_REF}" apps/*.dll
-   touch -c -r "${_REF}" include/openssl/*.h
-   touch -c -r "${_REF}" ./*.a
+   touch -c -r "${_ref}" apps/openssl.exe
+   touch -c -r "${_ref}" apps/*.dll
+   touch -c -r "${_ref}" include/openssl/*.h
+   touch -c -r "${_ref}" ./*.a
    if ls engines/*.dll > /dev/null 2>&1 ; then
-      touch -c -r "${_REF}" engines/*.dll
+      touch -c -r "${_ref}" engines/*.dll
    fi
 
    # Tests
@@ -85,7 +85,7 @@ _CPU="$2"
 
    # Create package
 
-   _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
+   _BAS="${_NAM}-${_VER}-win${_cpu}-mingw"
    _DST="$(mktemp -d)/${_BAS}"
 
    mkdir -p "${_DST}/include/openssl"
@@ -111,6 +111,6 @@ _CPU="$2"
 
    unix2dos -k "${_DST}"/*.txt
 
-   ../_pack.sh "$(pwd)/${_REF}"
+   ../_pack.sh "$(pwd)/${_ref}"
    ../_ul.sh
 )

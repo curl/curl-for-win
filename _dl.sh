@@ -26,9 +26,9 @@ export CURL_HASH=ddc643ab9382e24bbe4747d43df189a0a6ce38fcb33df041b9cb0b3cd47ae98
 set -e
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
-   PATSUF='.dev'
+   _patsuf='.dev'
 else
-   PATSUF=''
+   _patsuf=''
 fi
 
 if [ "${_BRANCH#*msysmingw*}" = "${_BRANCH}" ] ; then
@@ -69,7 +69,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ] ; then
    tar -xvf pack.bin > /dev/null 2>&1
    rm pack.bin
    rm -f -r c-ares && mv c-ares-* c-ares
-   [ -f "c-ares${PATSUF}.diff" ] && dos2unix < "c-ares${PATSUF}.diff" | patch -N -p1 -d c-ares
+   [ -f "c-ares${_patsuf}.diff" ] && dos2unix < "c-ares${_patsuf}.diff" | patch -N -p1 -d c-ares
 fi
 
 if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ] ; then
@@ -91,7 +91,7 @@ else
    tar -xvf pack.bin > /dev/null 2>&1
    rm pack.bin
    rm -f -r openssl && mv openssl-* openssl
-   [ -f "openssl${PATSUF}.diff" ] && dos2unix < "openssl${PATSUF}.diff" | patch -N -p1 -d openssl
+   [ -f "openssl${_patsuf}.diff" ] && dos2unix < "openssl${_patsuf}.diff" | patch -N -p1 -d openssl
 fi
 
 # Do not include this by default to avoid an unnecessary libcurl dependency
@@ -116,7 +116,7 @@ fi
 tar -xvf pack.bin > /dev/null 2>&1
 rm pack.bin
 rm -f -r libssh2 && mv libssh2-* libssh2
-[ -f "libssh2${PATSUF}.diff" ] && dos2unix < "libssh2${PATSUF}.diff" | patch -N -p1 -d libssh2
+[ -f "libssh2${_patsuf}.diff" ] && dos2unix < "libssh2${_patsuf}.diff" | patch -N -p1 -d libssh2
 
 # curl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
@@ -129,6 +129,6 @@ fi
 tar -xvf pack.bin > /dev/null 2>&1
 rm pack.bin
 rm -f -r curl && mv curl-* curl
-[ -f "curl${PATSUF}.diff" ] && dos2unix < "curl${PATSUF}.diff" | patch -N -p1 -d curl
+[ -f "curl${_patsuf}.diff" ] && dos2unix < "curl${_patsuf}.diff" | patch -N -p1 -d curl
 
 set +e
