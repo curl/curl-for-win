@@ -31,7 +31,11 @@ _cpu="$2"
    export CFLAGS="${LDFLAGS} -fno-ident -U__STRICT_ANSI__ -DNGHTTP2_STATICLIB"
    export CXXFLAGS="${CFLAGS}"
    # Open dummy file descriptor to fix './<script>: line <n>: 0: Bad file descriptor'
-   exec 0</dev/null && ./configure --enable-lib-only '--prefix=/usr/local' --silent
+   exec 0</dev/null && ./configure \
+      --disable-dependency-tracking \
+      --enable-lib-only \
+      '--prefix=/usr/local' \
+      --silent
 #  exec 0</dev/null && make clean > /dev/null
    exec 0</dev/null && make install "DESTDIR=$(pwd)/pkg" > /dev/null
 

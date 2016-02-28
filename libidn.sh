@@ -32,7 +32,11 @@ _cpu="$2"
    export LDFLAGS="-m${_cpu}"
    export CFLAGS="${LDFLAGS} -fno-ident"
    # Open dummy file descriptor to fix './<script>: line <n>: 0: Bad file descriptor'
-   exec 0</dev/null && ./configure --disable-silent-rules '--prefix=/usr/local' --silent
+   exec 0</dev/null && ./configure \
+      --disable-dependency-tracking \
+      --disable-silent-rules \
+      '--prefix=/usr/local' \
+      --silent
 #  exec 0</dev/null && make clean > /dev/null
    exec 0</dev/null && make install "DESTDIR=$(pwd)/pkg" > /dev/null
 

@@ -38,7 +38,11 @@ _cpu="$2"
    # TOFIX: Burnt-in prefix is not fully deterministic. It has 'C:/msys64' prepended.
 
    # shellcheck disable=SC2086
-   exec 0</dev/null && ./configure ${OPTIONS} --disable-silent-rules '--prefix=/usr/local' --silent
+   exec 0</dev/null && ./configure ${OPTIONS} \
+      --disable-dependency-tracking \
+      --disable-silent-rules \
+      '--prefix=/usr/local' \
+      --silent
 #  exec 0</dev/null && make clean > /dev/null
    exec 0</dev/null && make install "DESTDIR=$(pwd)/pkg" > /dev/null
 
