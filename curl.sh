@@ -32,8 +32,13 @@ _cpu="$2"
    export ARCH="w${_cpu}"
    export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -DNGHTTP2_STATICLIB -fno-ident'
    export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
-   [ "${_cpu}" = '32' ] && CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--pic-executable,-e,_mainCRTStartup"
-   [ "${_cpu}" = '64' ] && CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--pic-executable,-e,mainCRTStartup -Wl,--high-entropy-va -Wl,--image-base,0x150000000"
+   if [ "${_cpu}" = '32' ] ; then
+      export CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
+   else
+      export CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
+      export CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
+   fi
 
    export CROSSPREFIX="${_CCPREFIX}"
 

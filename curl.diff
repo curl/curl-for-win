@@ -1,3 +1,15 @@
+diff --git a/lib/Makefile.m32 b/lib/Makefile.m32
+--- a/lib/Makefile.m32
++++ b/lib/Makefile.m32
+@@ -80,7 +80,7 @@
+ CFLAGS	= $(CURL_CFLAG_EXTRAS) -g -O2 -Wall
+ CFLAGS	+= -fno-strict-aliasing
+ # comment LDFLAGS below to keep debug info
+-LDFLAGS	= $(CURL_LDFLAG_EXTRAS) -s
++LDFLAGS	= $(CURL_LDFLAG_EXTRAS) $(CURL_LDFLAG_EXTRAS_DLL) -s
+ AR	= $(CROSSPREFIX)ar
+ RANLIB	= $(CROSSPREFIX)ranlib
+ RC	= $(CROSSPREFIX)windres
 diff --git a/src/Makefile.m32 b/src/Makefile.m32
 index 44925f5..6459f0a 100644
 --- a/src/Makefile.m32
@@ -11,7 +23,7 @@ index 44925f5..6459f0a 100644
  CFLAGS	+= -fno-strict-aliasing
  # comment LDFLAGS below to keep debug info
 -LDFLAGS	= -s
-+LDFLAGS	= $(CURL_LDFLAG_EXTRAS) -s
++LDFLAGS	= $(CURL_LDFLAG_EXTRAS) $(CURL_LDFLAG_EXTRAS_EXE) -s
  AR	= $(CROSSPREFIX)ar
  RC	= $(CROSSPREFIX)windres
  RCFLAGS	= --include-dir=$(PROOT)/include -O COFF
