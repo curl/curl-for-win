@@ -74,6 +74,7 @@ _cpu="$2"
    touch -c -r "${_ref}" apps/*.dll
    touch -c -r "${_ref}" include/openssl/*.h
    touch -c -r "${_ref}" ./*.a
+   touch -c -r "${_ref}" ./*.pc
    if ls engines/*.dll > /dev/null 2>&1 ; then
       touch -c -r "${_ref}" engines/*.dll
    fi
