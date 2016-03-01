@@ -60,6 +60,9 @@ _cpu="$2"
    strip -p --enable-deterministic-archives -g ./*.a
    strip -p -s apps/openssl.exe
    strip -p -s apps/*.dll
+   if ls engines/*.dll > /dev/null 2>&1 ; then
+      strip -p -s engines/*.dll
+   fi
 
    ../_peclean.py "${_ref}" 'apps/openssl.exe'
    ../_peclean.py "${_ref}" 'apps/*.dll'
