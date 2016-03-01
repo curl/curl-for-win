@@ -31,7 +31,7 @@ EOF
 unix2dos -k "${_fn}"
 touch -c -r "$1" "${_fn}"
 
-find "${_DST}" -type d -depth -exec touch -c -r "$1" '{}' \;
+find -depth "${_DST}" -type d -exec touch -c -r "$1" '{}' \;
 
 (
    cd "${_DST}/.." || exit
