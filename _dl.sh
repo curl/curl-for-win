@@ -50,7 +50,7 @@ rm -f -r nghttp2 && mv nghttp2-* nghttp2
 # Will increase curl binary sizes by 1MB, so leave this optional.
 if [ "${_BRANCH#*libidn*}" != "${_BRANCH}" ] ; then
    # libidn
-   curl -fsS -o pack.bin -L --proto-redir =https "http://ftp.gnu.org/gnu/libidn/libidn-${LIBIDN_VER_}.tar.gz" || exit 1
+   curl -fsS -o pack.bin -L --proto-redir =https "https://ftp.gnu.org/gnu/libidn/libidn-${LIBIDN_VER_}.tar.gz" || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBIDN_HASH}" || exit 1
    tar -xvf pack.bin > /dev/null 2>&1 || exit 1
    rm pack.bin
