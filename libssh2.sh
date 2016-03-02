@@ -21,9 +21,13 @@ _cpu="$2"
    export ZLIB_PATH=../../zlib
    [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
    [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
-#  export LINK_OPENSSL_STATIC=yes; export OPENSSL_LIBS_STAT='crypto ssl'
-   export OPENSSL_LIBPATH="${OPENSSL_PATH}"
-   export OPENSSL_LIBS_DYN='crypto.dll ssl.dll'
+   if [ -n "${OPENSSL_PATH}" ] ; then
+#     export LINK_OPENSSL_STATIC=yes; export OPENSSL_LIBS_STAT='crypto ssl'
+      export OPENSSL_LIBPATH="${OPENSSL_PATH}"
+      export OPENSSL_LIBS_DYN='crypto.dll ssl.dll'
+   else
+      export WITH_WINCNG=1
+   fi
    export ARCH="w${_cpu}"
    export LIBSSH2_CFLAG_EXTRAS='-fno-ident'
    export LIBSSH2_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
