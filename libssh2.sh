@@ -18,6 +18,11 @@ _cpu="$2"
 
    # Build
 
+   export ARCH="w${_cpu}"
+   export LIBSSH2_CFLAG_EXTRAS='-fno-ident'
+   export LIBSSH2_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
+   [ "${_cpu}" = '64' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
+
    export ZLIB_PATH=../../zlib
    [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
    [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
@@ -28,10 +33,6 @@ _cpu="$2"
    else
       export WITH_WINCNG=1
    fi
-   export ARCH="w${_cpu}"
-   export LIBSSH2_CFLAG_EXTRAS='-fno-ident'
-   export LIBSSH2_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
-   [ "${_cpu}" = '64' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
 
    export CROSSPREFIX="${_CCPREFIX}"
 

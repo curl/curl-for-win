@@ -16,21 +16,15 @@ _cpu="$2"
 (
    cd "${_NAM}" || exit
 
+   # Prepare build
+
+   # TOFIX: This will not create a fully release-compliant file tree,
+   #        f.e. documentation will be incomplete.
+   [ -f 'Makefile' ] || ./buildconf.bat
+
    # Build
 
-   options='mingw32-zlib-ipv6-sspi-ldaps-srp'
-
-   export ZLIB_PATH=../../zlib
-   [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
-   [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
-   if [ -n "${OPENSSL_PATH}" ] ; then
-      options="${options}-ssl"
-      export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
-      export OPENSSL_LIBPATH="${OPENSSL_PATH}"
-      export OPENSSL_LIBS='-lssl -lcrypto'
-   else
-      options="${options}-winssl"
-   fi
+   options='mingw32-ipv6-sspi-ldaps-srp'
 
    export ARCH="w${_cpu}"
    # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
@@ -49,12 +43,6 @@ _cpu="$2"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
    fi
 
-   export CROSSPREFIX="${_CCPREFIX}"
-
-   # TOFIX: This will not create a fully release-compliant file tree,
-   #        f.e. documentation will be incomplete.
-   [ -f 'Makefile' ] || ./buildconf.bat
-
    # Generate .def file for libcurl by parsing curl headers.
    # Useful to limit .dll exports to libcurl functions meant to be exported.
    # Without this, the default linker logic kicks in, whereas every public
@@ -69,6 +57,19 @@ _cpu="$2"
       sort >> libcurl.def
    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} ../libcurl.def"
 
+   export ZLIB_PATH=../../zlib
+   options="${options}-zlib"
+
+   [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
+   [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
+   if [ -n "${OPENSSL_PATH}" ] ; then
+      options="${options}-ssl"
+      export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
+      export OPENSSL_LIBPATH="${OPENSSL_PATH}"
+      export OPENSSL_LIBS='-lssl -lcrypto'
+   else
+      options="${options}-winssl"
+   fi
    if [ -d ../libssh2 ] ; then
       options="${options}-ssh2"
       export LIBSSH2_PATH=../../libssh2
@@ -95,6 +96,9 @@ _cpu="$2"
       #       https://www.microsoft.com/en-us/download/details.aspx?id=734
       options="${options}-winidn"
    fi
+
+   export CROSSPREFIX="${_CCPREFIX}"
+
    mingw32-make mingw32-clean
    mingw32-make "${options}"
 
