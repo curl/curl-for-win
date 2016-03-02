@@ -10,11 +10,13 @@ diff --git a/lib/Makefile.m32 b/lib/Makefile.m32
  AR	= $(CROSSPREFIX)ar
  RANLIB	= $(CROSSPREFIX)ranlib
  RC	= $(CROSSPREFIX)windres
-@@ -153,7 +153,6 @@
+@@ -153,7 +153,9 @@
  endif
  ifeq ($(findstring -ssh2,$(CFG)),-ssh2)
  SSH2 = 1
--SSL = 1
++ifneq ($(findstring -winssl,$(CFG)),-winssl)
+ SSL = 1
++endif
  ZLIB = 1
  endif
  ifeq ($(findstring -ssl,$(CFG)),-ssl)
@@ -45,11 +47,13 @@ index 44925f5..6459f0a 100644
  AR	= $(CROSSPREFIX)ar
  RC	= $(CROSSPREFIX)windres
  RCFLAGS	= --include-dir=$(PROOT)/include -O COFF
-@@ -168,7 +168,6 @@
+@@ -168,7 +168,9 @@
  endif
  ifeq ($(findstring -ssh2,$(CFG)),-ssh2)
  SSH2 = 1
--SSL = 1
++ifneq ($(findstring -winssl,$(CFG)),-winssl)
+ SSL = 1
++endif
  ZLIB = 1
  endif
  ifeq ($(findstring -ssl,$(CFG)),-ssl)
