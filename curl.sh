@@ -18,7 +18,7 @@ _cpu="$2"
 
    # Build
 
-   options='mingw32-zlib-ipv6-sspi-ldaps-srp-ssh2'
+   options='mingw32-zlib-ipv6-sspi-ldaps-srp'
 
    export ZLIB_PATH=../../zlib
    [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
@@ -35,7 +35,6 @@ _cpu="$2"
    export LIBIDN_PATH=../../libidn/pkg/usr/local
    export LIBCARES_PATH=../../c-ares
    export LIBRTMP_PATH=../../librtmp
-   export LIBSSH2_PATH=../../libssh2
 
    export ARCH="w${_cpu}"
    # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
@@ -64,9 +63,9 @@ _cpu="$2"
    # Useful to limit .dll exports to libcurl functions meant to be exported.
    # Without this, the default linker logic kicks in, whereas every public
    # function is exported if none is marked for export explicitly. This
-   # leads to exporting every libcurl public function, as well as libssh2,
-   # nghttp2, zlib, etc. ones, resulting in a larger .dll, an inflated implib
-   # and a non-standard list of exported functions.
+   # leads to exporting every libcurl public function, as well as any other
+   # ones from statically linked dependencies, resulting in a larger .dll,
+   # an inflated implib and a non-standard list of exported functions.
    echo 'EXPORTS' > libcurl.def
    grep '^CURL_EXTERN ' include/curl/*.h | \
       awk 'match($0, /CURL_EXTERN ([a-zA-Z\* ]*)[\* ]([a-z_]*)\(/, v) {print v[2]}' | \
@@ -74,6 +73,10 @@ _cpu="$2"
       sort >> libcurl.def
    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} ../libcurl.def"
 
+   if [ -d ../libssh2 ] ; then
+      options="${options}-ssh2"
+      export LIBSSH2_PATH=../../libssh2
+   fi
    if [ -d ../nghttp2 ] ; then
       options="${options}-nghttp2"
       CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGHTTP2_STATICLIB"
@@ -156,8 +159,7 @@ _cpu="$2"
    cp -f -p RELEASE-NOTES            "${_DST}/RELEASE-NOTES.txt"
    cp -f -p ../ca-bundle.crt         "${_DST}/bin/curl-ca-bundle.crt"
 
-   cp -f -p ../libssh2/COPYING       "${_DST}/COPYING-libssh2.txt"
-
+   [ -d ../libssh2 ]  && cp -f -p ../libssh2/COPYING  "${_DST}/COPYING-libssh2.txt"
    [ -d ../nghttp2 ]  && cp -f -p ../nghttp2/COPYING  "${_DST}/COPYING-nghttp2.txt"
    [ -d ../libidn ]   && cp -f -p ../libidn/COPYING   "${_DST}/COPYING-libidn.txt"
    [ -d ../librtmp ]  && cp -f -p ../librtmp/COPYING  "${_DST}/COPYING-librtmp.txt"
