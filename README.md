@@ -17,7 +17,7 @@
   - Components are verified using SHA-256 hashes.
   - Generated binaries are [reproducible](https://reproducible-builds.org), meaning
     they will have the same hash given the same input sources and C compiler.
-  - Optional support for [libidn](https://www.gnu.org/software/libidn/), [C-ares](http://c-ares.haxx.se) and [librtmp](https://rtmpdump.mplayerhq.hu).
+  - Optional support for [libidn](https://www.gnu.org/software/libidn/), [C-ares](http://c-ares.haxx.se), [librtmp](https://rtmpdump.mplayerhq.hu) and [WinSSL](https://en.wikipedia.org/wiki/Cryptographic_Service_Provider) as a fall-back backend.
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
 
 # Please donate to support maintaining these builds
