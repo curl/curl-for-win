@@ -10,6 +10,24 @@ diff --git a/lib/Makefile.m32 b/lib/Makefile.m32
  AR	= $(CROSSPREFIX)ar
  RANLIB	= $(CROSSPREFIX)ranlib
  RC	= $(CROSSPREFIX)windres
+@@ -153,7 +153,6 @@
+ endif
+ ifeq ($(findstring -ssh2,$(CFG)),-ssh2)
+ SSH2 = 1
+-SSL = 1
+ ZLIB = 1
+ endif
+ ifeq ($(findstring -ssl,$(CFG)),-ssl)
+@@ -252,6 +252,9 @@ ifdef SSL
+     endif
+   endif
+ endif
++ifdef WINSSL
++  DLL_LIBS += -lbcrypt -lcrypt32
++endif
+ ifdef ZLIB
+   INCLUDES += -I"$(ZLIB_PATH)"
+   CFLAGS += -DHAVE_LIBZ -DHAVE_ZLIB_H
 diff --git a/src/Makefile.m32 b/src/Makefile.m32
 index 44925f5..6459f0a 100644
 --- a/src/Makefile.m32
@@ -27,3 +45,21 @@ index 44925f5..6459f0a 100644
  AR	= $(CROSSPREFIX)ar
  RC	= $(CROSSPREFIX)windres
  RCFLAGS	= --include-dir=$(PROOT)/include -O COFF
+@@ -168,7 +168,6 @@
+ endif
+ ifeq ($(findstring -ssh2,$(CFG)),-ssh2)
+ SSH2 = 1
+-SSL = 1
+ ZLIB = 1
+ endif
+ ifeq ($(findstring -ssl,$(CFG)),-ssl)
+@@ -268,6 +268,9 @@ ifdef SSL
+   CFLAGS += -DUSE_OPENSSL
+   curl_LDADD += -L"$(OPENSSL_LIBPATH)" $(OPENSSL_LIBS)
+ endif
++ifdef WINSSL
++  curl_LDADD += -lbcrypt -lcrypt32
++endif
+ ifdef ZLIB
+   INCLUDES += -I"$(ZLIB_PATH)"
+   CFLAGS += -DHAVE_LIBZ -DHAVE_ZLIB_H

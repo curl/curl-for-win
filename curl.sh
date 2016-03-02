@@ -18,25 +18,38 @@ _cpu="$2"
 
    # Build
 
+   options='mingw32-zlib-ipv6-sspi-ldaps-srp-ssh2'
+
    export ZLIB_PATH=../../zlib
    [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
    [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
-   export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
-   export OPENSSL_LIBPATH="${OPENSSL_PATH}"
-   export OPENSSL_LIBS='-lssl -lcrypto'
+   if [ -n "${OPENSSL_PATH}" ] ; then
+      options="${options}-ssl"
+      export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
+      export OPENSSL_LIBPATH="${OPENSSL_PATH}"
+      export OPENSSL_LIBS='-lssl -lcrypto'
+   else
+      options="${options}-winssl"
+   fi
    export NGHTTP2_PATH=../../nghttp2/pkg/usr/local
    export LIBIDN_PATH=../../libidn/pkg/usr/local
    export LIBCARES_PATH=../../c-ares
    export LIBRTMP_PATH=../../librtmp
    export LIBSSH2_PATH=../../libssh2
    export ARCH="w${_cpu}"
-   export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -DNGHTTP2_STATICLIB -fno-ident'
+   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
+   # public libcurl functions being marked as 'exported'. It's useful to
+   # avoid the chance of libcurl functions getting exported from final
+   # binaries when linked against static libcurl libs.
+   export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -fno-ident'
    export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
+   export CURL_LDFLAG_EXTRAS_EXE
+   export CURL_LDFLAG_EXTRAS_DLL
    if [ "${_cpu}" = '32' ] ; then
-      export CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
+      CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
    else
-      export CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
-      export CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
+      CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
+      CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
    fi
 
@@ -46,7 +59,24 @@ _cpu="$2"
    #        f.e. documentation will be incomplete.
    [ -f 'Makefile' ] || ./buildconf.bat
 
-   options='mingw32-ssh2-ssl-sspi-zlib-ldaps-srp-nghttp2-ipv6'
+   # Generate .def file for libcurl by parsing curl headers.
+   # Useful to limit .dll exports to libcurl functions meant to be exported.
+   # Without this, the default linker logic kicks in, whereas every public
+   # function is exported if none is marked for export explicitly. This
+   # leads to exporting every libcurl public function, as well as libssh2,
+   # nghttp2, zlib, etc. ones, resulting in a larger .dll, an inflated implib
+   # and a non-standard list of exported functions.
+   echo 'EXPORTS' > libcurl.def
+   grep '^CURL_EXTERN ' include/curl/*.h | \
+      awk 'match($0, /CURL_EXTERN ([a-zA-Z\* ]*)[\* ]([a-z_]*)\(/, v) {print v[2]}' | \
+      grep -v '^$' | \
+      sort >> libcurl.def
+   CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} ../libcurl.def"
+
+   if [ -d ../nghttp2 ] ; then
+      options="${options}-nghttp2"
+      CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGHTTP2_STATICLIB"
+   fi
    [ -d ../c-ares ] && options="${options}-ares"
    [ -d ../librtmp ] && options="${options}-rtmp"
    if [ -d ../libidn ] ; then
