@@ -46,6 +46,8 @@ _cpu="$2"
    [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-pre' ] && options="${options} --unified"
    [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-dev' ] && options="${options} --unified"
 
+   # AR=, NM=, RANLIB=
+
    # shellcheck disable=SC2086
    ./Configure ${options} shared \
       "--cross-compile-prefix=${_CCPREFIX}" \
