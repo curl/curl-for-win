@@ -31,10 +31,6 @@ _cpu="$2"
    else
       options="${options}-winssl"
    fi
-   export NGHTTP2_PATH=../../nghttp2/pkg/usr/local
-   export LIBIDN_PATH=../../libidn/pkg/usr/local
-   export LIBCARES_PATH=../../c-ares
-   export LIBRTMP_PATH=../../librtmp
 
    export ARCH="w${_cpu}"
    # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
@@ -79,12 +75,20 @@ _cpu="$2"
    fi
    if [ -d ../nghttp2 ] ; then
       options="${options}-nghttp2"
+      export NGHTTP2_PATH=../../nghttp2/pkg/usr/local
       CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGHTTP2_STATICLIB"
    fi
-   [ -d ../c-ares ] && options="${options}-ares"
-   [ -d ../librtmp ] && options="${options}-rtmp"
+   if [ -d ../c-ares ] ; then
+      options="${options}-ares"
+      export LIBCARES_PATH=../../c-ares
+   fi
+   if [ -d ../librtmp ] ; then
+      options="${options}-rtmp"
+      export LIBRTMP_PATH=../../librtmp
+   fi
    if [ -d ../libidn ] ; then
       options="${options}-idn"
+      export LIBIDN_PATH=../../libidn/pkg/usr/local
       CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_IDN_FREE_H"
    else
       # NOTE: If Windows XP is missing `normaliz.dll`, install this package:
