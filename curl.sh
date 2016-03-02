@@ -52,9 +52,9 @@ _cpu="$2"
    # an inflated implib and a non-standard list of exported functions.
    echo 'EXPORTS' > libcurl.def
    grep '^CURL_EXTERN ' include/curl/*.h | \
-      awk 'match($0, /CURL_EXTERN ([a-zA-Z\* ]*)[\* ]([a-z_]*)\(/, v) {print v[2]}' | \
+      awk 'match($0, /CURL_EXTERN ([a-zA-Z_\* ]*)[\* ]([a-z_]*)\(/, v) {print v[2]}' | \
       grep -v '^$' | \
-      sort >> libcurl.def
+      sort | tee -a libcurl.def
    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} ../libcurl.def"
 
    export ZLIB_PATH=../../zlib
