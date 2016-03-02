@@ -36,6 +36,7 @@ _cpu="$2"
    export LIBCARES_PATH=../../c-ares
    export LIBRTMP_PATH=../../librtmp
    export LIBSSH2_PATH=../../libssh2
+
    export ARCH="w${_cpu}"
    # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
    # public libcurl functions being marked as 'exported'. It's useful to
@@ -156,8 +157,8 @@ _cpu="$2"
    cp -f -p ../ca-bundle.crt         "${_DST}/bin/curl-ca-bundle.crt"
 
    cp -f -p ../libssh2/COPYING       "${_DST}/COPYING-libssh2.txt"
-   cp -f -p ../nghttp2/COPYING       "${_DST}/COPYING-nghttp2.txt"
 
+   [ -d ../nghttp2 ]  && cp -f -p ../nghttp2/COPYING  "${_DST}/COPYING-nghttp2.txt"
    [ -d ../libidn ]   && cp -f -p ../libidn/COPYING   "${_DST}/COPYING-libidn.txt"
    [ -d ../librtmp ]  && cp -f -p ../librtmp/COPYING  "${_DST}/COPYING-librtmp.txt"
    [ -d ../libressl ] && cp -f -p ../libressl/COPYING "${_DST}/COPYING-libressl.txt"
