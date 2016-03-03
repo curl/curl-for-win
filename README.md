@@ -19,7 +19,7 @@
     they will have the same hash given the same input sources and C compiler.
   - Patching policy: No locally maintained patches. Patches are only
     applied locally if already merged upstream or &mdash; in case it's
-    necessary for a successful build &mdash; have it submitted upstream
+    necessary for a successful build &mdash; had it submitted upstream
     with fair confidence of getting accepted.
   - Optional support for [libidn](https://www.gnu.org/software/libidn/), [C-ares](http://c-ares.haxx.se), [librtmp](https://rtmpdump.mplayerhq.hu) and for [WinSSL](https://en.wikipedia.org/wiki/Cryptographic_Service_Provider) as a fall-back backend.
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
