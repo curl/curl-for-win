@@ -60,8 +60,8 @@ fi
 if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ] ; then
    # c-ares
    if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
-      CARES_VER_='1.11.0-dev'
-      curl -fsS -o pack.bin -L --proto-redir =https https://github.com/c-ares/c-ares/archive/e41a39b022f28e46a381af118f258432eef0eca5.tar.gz || exit 1
+      CARES_VER_='1.11.1-dev'
+      curl -fsS -o pack.bin -L --proto-redir =https https://github.com/c-ares/c-ares/archive/0b7a497ab7f1d2f84bc3c6df0badd0d311fbb6c6.tar.gz || exit 1
    else
       curl -fsS -o pack.bin "http://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz" || exit 1
       openssl dgst -sha256 pack.bin | grep -q "${CARES_HASH}" || exit 1
