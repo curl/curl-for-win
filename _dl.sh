@@ -32,7 +32,6 @@ set -e
 alias curl='curl -fsS --connect-timeout 15'
 
 gpg --version | grep gpg
-gpg --keyserver hkps://pgp.mit.edu --recv-keys 00D026C4
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
    _patsuf='.dev'
@@ -78,7 +77,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ] ; then
    else
       curl -o pack.bin "http://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz" || exit 1
       curl -o pack.sig "http://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
-      gpg -q --recv-keys 279d5c91
+      gpg -q --keyserver hkps://pgp.mit.edu --recv-keys 279d5c91
       gpg --verify pack.sig pack.bin || exit 1
       openssl dgst -sha256 pack.bin | grep -q "${CARES_HASH}" || exit 1
    fi
@@ -108,7 +107,7 @@ else
       curl -o pack.bin "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz" || exit 1
       curl -o pack.sig "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz.asc" || exit 1
       # From https://www.openssl.org/community/team.html
-      gpg -q --recv-keys D9C4D26D0E604491 D3577507FA40E9E2 9195C48241FBF7DD DFAB592ABDD52F1C 4F6DE1562118CF83 AA589DAC5A6A9B85 2064C53641C25E5D F23479455C51B27C 0833F510E18C1C32
+      gpg -q --keyserver hkps://pgp.mit.edu --recv-keys D9C4D26D0E604491 D3577507FA40E9E2 9195C48241FBF7DD DFAB592ABDD52F1C 4F6DE1562118CF83 AA589DAC5A6A9B85 2064C53641C25E5D F23479455C51B27C 0833F510E18C1C32
       gpg --verify pack.sig pack.bin || exit 1
       openssl dgst -sha256 pack.bin | grep -q "${OPENSSL_HASH}" || exit 1
    fi
@@ -136,7 +135,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
 else
    curl -o pack.bin -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz" || exit 1
    curl -o pack.sig -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz.asc" || exit 1
-   gpg -q --recv-keys 279d5c91
+   gpg -q --keyserver hkps://pgp.mit.edu --recv-keys 279d5c91
    gpg --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBSSH2_HASH}" || exit 1
 fi
@@ -152,7 +151,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
 else
    curl -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2" || exit 1
    curl -o pack.sig "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2.asc" || exit 1
-   gpg -q --recv-keys 279d5c91
+   gpg -q --keyserver hkps://pgp.mit.edu --recv-keys 279d5c91
    gpg --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${CURL_HASH}" || exit 1
 fi
