@@ -37,7 +37,7 @@ _cpu="$2"
    if [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.0.2' ] ; then
       [ "${_cpu}" = '32' ] && export SHARED_RCFLAGS='--target=pe-i386'
       [ "${_cpu}" = '64' ] && export SHARED_RCFLAGS='--target=pe-x86-64'
-      options="${options} -m${_cpu} -static-libgcc no-ssl3"
+      options="${options} -m${_cpu} -static-libgcc no-ssl3 no-rc5"
    else
       options="${options} no-filenames"
    fi
@@ -53,7 +53,7 @@ _cpu="$2"
       "--cross-compile-prefix=${_CCPREFIX}" \
       -fno-ident \
       -Wl,--nxcompat -Wl,--dynamicbase \
-      no-unit-test no-rc5 no-idea no-dso '--prefix=/usr/local'
+      no-unit-test no-idea no-dso '--prefix=/usr/local'
    [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.1.0' ] || make depend
    make
 
