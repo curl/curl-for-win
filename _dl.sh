@@ -25,7 +25,7 @@ export CURL_HASH=ddc643ab9382e24bbe4747d43df189a0a6ce38fcb33df041b9cb0b3cd47ae98
 # Quit if any of the lines fail
 set -e
 
-gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys 00D026C4
+gpg --keyserver hkps://pgp.mit.edu --recv-keys 00D026C4
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
    _patsuf='.dev'
@@ -100,6 +100,7 @@ else
    else
       curl -fsS -o pack.bin "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz" || exit 1
       curl -fsS -o pack.sig "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz.asc" || exit 1
+      # From https://www.openssl.org/community/team.html
       gpg -q --recv-keys D9C4D26D0E604491 D3577507FA40E9E2 9195C48241FBF7DD DFAB592ABDD52F1C 4F6DE1562118CF83 AA589DAC5A6A9B85 2064C53641C25E5D F23479455C51B27C 0833F510E18C1C32
       gpg --verify pack.sig pack.bin || exit 1
       openssl dgst -sha256 pack.bin | grep -q "${OPENSSL_HASH}" || exit 1

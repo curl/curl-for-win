@@ -17,6 +17,7 @@
   - Components are verified using SHA-256 hashes.
   - Generated binaries are [reproducible](https://reproducible-builds.org), meaning
     they will have the same hash given the same input sources and C compiler.
+  - Generated binaries are GPG signed with Bintray’s [keypair](https://bintray.com/docs/usermanual/uploads/uploads_gpgsigning.html).
   - Patching policy: No locally maintained patches. Patches are only
     applied locally if already merged upstream or &mdash; in case it's
     necessary for a successful build &mdash; had it submitted upstream
