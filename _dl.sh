@@ -35,7 +35,7 @@ if [ "${_BRANCH#*msysmingw*}" = "${_BRANCH}" ] ; then
    # mingw
    curl -fsS -o pack.bin -L 'https://downloads.sourceforge.net/mingw-w64/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/5.3.0/threads-posix/sjlj/x86_64-5.3.0-release-posix-sjlj-rt_v4-rev0.7z' || exit 1
    openssl dgst -sha256 pack.bin | grep -q ec28b6640ad4f183be7afcd6e9c5eabb24b89729ca3fec7618755555b5d70c19 || exit 1
-   # Will unpack into "./mingw64"
+   # Will unpack into './mingw64'
    7z x -y pack.bin > /dev/null || exit 1
    rm pack.bin
 fi
