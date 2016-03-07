@@ -31,6 +31,7 @@ set -e
 
 alias curl='curl -fsS --connect-timeout 15'
 
+gpg --version | grep gpg
 gpg --keyserver hkps://pgp.mit.edu --recv-keys 00D026C4
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
