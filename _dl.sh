@@ -25,6 +25,8 @@ export CURL_HASH=ddc643ab9382e24bbe4747d43df189a0a6ce38fcb33df041b9cb0b3cd47ae98
 # Quit if any of the lines fail
 set -e
 
+gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys 00D026C4
+
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
    _patsuf='.dev'
 else
@@ -51,6 +53,10 @@ rm -f -r nghttp2 && mv nghttp2-* nghttp2
 if [ "${_BRANCH#*libidn*}" != "${_BRANCH}" ] ; then
    # libidn
    curl -fsS -o pack.bin "https://ftp.gnu.org/gnu/libidn/libidn-${LIBIDN_VER_}.tar.gz" || exit 1
+   curl -fsS -o pack.sig "https://ftp.gnu.org/gnu/libidn/libidn-${LIBIDN_VER_}.tar.gz.sig" || exit 1
+   curl -fsS -o pack.gpg 'https://ftp.gnu.org/gnu/gnu-keyring.gpg' || exit 1
+   gpg -q --import pack.gpg 2> /dev/null
+   gpg --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBIDN_HASH}" || exit 1
    tar -xvf pack.bin > /dev/null 2>&1 || exit 1
    rm pack.bin
@@ -64,6 +70,9 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ] ; then
       curl -fsS -o pack.bin -L --proto-redir =https https://github.com/c-ares/c-ares/archive/0b7a497ab7f1d2f84bc3c6df0badd0d311fbb6c6.tar.gz || exit 1
    else
       curl -fsS -o pack.bin "http://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz" || exit 1
+      curl -fsS -o pack.sig "http://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
+      gpg -q --recv-keys 279d5c91
+      gpg --verify pack.sig pack.bin || exit 1
       openssl dgst -sha256 pack.bin | grep -q "${CARES_HASH}" || exit 1
    fi
    tar -xvf pack.bin > /dev/null 2>&1 || exit 1
@@ -75,6 +84,10 @@ fi
 if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ] ; then
    # libressl
    curl -fsS -o pack.bin "http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz" || exit 1
+   curl -fsS -o pack.sig "http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz.asc" || exit 1
+   curl -fsS -o pack.gpg 'http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl.asc'
+   gpg -q --import pack.gpg 2> /dev/null
+   gpg --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBRESSL_HASH}" || exit 1
    tar -xvf pack.bin > /dev/null 2>&1 || exit 1
    rm pack.bin
@@ -86,6 +99,9 @@ else
       curl -fsS -o pack.bin -L --proto-redir =https https://github.com/openssl/openssl/archive/master.tar.gz || exit 1
    else
       curl -fsS -o pack.bin "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz" || exit 1
+      curl -fsS -o pack.sig "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz.asc" || exit 1
+      gpg -q --recv-keys D9C4D26D0E604491 D3577507FA40E9E2 9195C48241FBF7DD DFAB592ABDD52F1C 4F6DE1562118CF83 AA589DAC5A6A9B85 2064C53641C25E5D F23479455C51B27C 0833F510E18C1C32
+      gpg --verify pack.sig pack.bin || exit 1
       openssl dgst -sha256 pack.bin | grep -q "${OPENSSL_HASH}" || exit 1
    fi
    tar -xvf pack.bin > /dev/null 2>&1 || exit 1
@@ -111,6 +127,9 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
    curl -fsS -o pack.bin -L --proto-redir =https https://github.com/libssh2/libssh2/archive/1fcf849e15ffda99cc30b6d23b8d378f501225a2.tar.gz || exit 1
 else
    curl -fsS -o pack.bin -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz" || exit 1
+   curl -fsS -o pack.sig -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz.asc" || exit 1
+   gpg -q --recv-keys 279d5c91
+   gpg --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBSSH2_HASH}" || exit 1
 fi
 tar -xvf pack.bin > /dev/null 2>&1 || exit 1
@@ -124,6 +143,9 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
    curl -fsS -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/71398487e75e47c026d0655d540ade247d18f62c.tar.gz || exit 1
 else
    curl -fsS -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2" || exit 1
+   curl -fsS -o pack.sig "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2.asc" || exit 1
+   gpg -q --recv-keys 279d5c91
+   gpg --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${CURL_HASH}" || exit 1
 fi
 tar -xvf pack.bin > /dev/null 2>&1 || exit 1
