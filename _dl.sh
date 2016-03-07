@@ -25,7 +25,7 @@ export CURL_HASH=ddc643ab9382e24bbe4747d43df189a0a6ce38fcb33df041b9cb0b3cd47ae98
 # Quit if any of the lines fail
 set -e
 
-alias curl='curl -fsS --connect-timeout 20'
+alias curl='curl -fsS --connect-timeout 15'
 
 gpg --keyserver hkps://pgp.mit.edu --recv-keys 00D026C4
 
