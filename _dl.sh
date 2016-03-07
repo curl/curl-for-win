@@ -77,7 +77,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ] ; then
    else
       curl -o pack.bin "http://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz" || exit 1
       curl -o pack.sig "http://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
-      gpg -q --keyserver hkps://pgp.mit.edu --recv-keys 279d5c91
+      gpg -q --keyserver hkps://pgp.mit.edu --recv-keys 78E11C6B279D5C91
       gpg --verify pack.sig pack.bin || exit 1
       openssl dgst -sha256 pack.bin | grep -q "${CARES_HASH}" || exit 1
    fi
@@ -135,7 +135,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
 else
    curl -o pack.bin -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz" || exit 1
    curl -o pack.sig -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz.asc" || exit 1
-   gpg -q --keyserver hkps://pgp.mit.edu --recv-keys 279d5c91
+   gpg -q --keyserver hkps://pgp.mit.edu --recv-keys 78E11C6B279D5C91
    gpg --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBSSH2_HASH}" || exit 1
 fi
@@ -151,7 +151,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
 else
    curl -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2" || exit 1
    curl -o pack.sig "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2.asc" || exit 1
-   gpg -q --keyserver hkps://pgp.mit.edu --recv-keys 279d5c91
+   gpg -q --keyserver hkps://pgp.mit.edu --recv-keys 78E11C6B279D5C91
    gpg --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${CURL_HASH}" || exit 1
 fi
