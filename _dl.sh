@@ -22,6 +22,10 @@ export LIBSSH2_HASH=e4561fd43a50539a8c2ceb37841691baf03ecb7daf043766da1b112e4280
 export CURL_VER_='7.47.1'
 export CURL_HASH=ddc643ab9382e24bbe4747d43df189a0a6ce38fcb33df041b9cb0b3cd47ae98f
 
+# Install required component
+python -m pip --disable-pip-version-check install --upgrade pip
+python -m pip install pefile
+
 # Quit if any of the lines fail
 set -e
 
