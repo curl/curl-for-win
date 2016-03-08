@@ -43,8 +43,6 @@ _cpu="$2"
    fi
    # Requires mingw 5.0 or upper
    [ "${_cpu}" = '64' ] && options="${options} -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
-   [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-pre' ] && options="${options} --unified"
-   [ "$(echo "${OPENSSL_VER_}" | cut -c -9)" = '1.1.0-dev' ] && options="${options} --unified"
 
    # AR=, NM=, RANLIB=
 
