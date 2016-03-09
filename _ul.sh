@@ -15,12 +15,13 @@ else
 fi
 
 (
-   # - Repository option: "GPG sign uploaded files using Bintray's public/private key pair."
-   #   - passphrase set      -> Success, Bintray signature
-   #   - empty/no passphrase -> Warning, Bintray signature
-   # - Repository option: "GPG Sign uploaded files automatically."
-   #   - passphrase set      -> Success, Custom signature
-   #   - empty/no passphrase -> Warning, No signature
+   # - Bintray behavior when passphrased private key is provided:
+   #   - Repository option: "GPG sign uploaded files using Bintray's public/private key pair."
+   #     - passphrase set      -> Success, Bintray signature
+   #     - empty/no passphrase -> Warning, Bintray signature
+   #   - Repository option: "GPG Sign uploaded files automatically."
+   #     - passphrase set      -> Success, Custom signature
+   #     - empty/no passphrase -> Warning, No signature
 
    set +x
    curl -fsS -u "${BINTRAY_USER}:${BINTRAY_APIKEY}" \

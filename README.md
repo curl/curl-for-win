@@ -14,7 +14,7 @@
   - Binaries are built with supported [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29) options enabled.
   - Binaries are currently using [SJLJ](https://stackoverflow.com/a/15685229/1732433) exception handling.
     (steps to migrate to [DWARF](https://en.wikipedia.org/wiki/DWARF)/[SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH) are underway)
-  - Components are verified using SHA-256 hashes.
+  - Components are verified using SHA-256 hashes and GPG signatures where available.
   - Generated binaries are [reproducible](https://reproducible-builds.org), meaning
     they will have the same hash given the same input sources and C compiler.
   - Generated binaries are GPG signed with Bintray's [key pair](https://bintray.com/docs/usermanual/uploads/uploads_gpgsigning.html):
