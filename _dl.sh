@@ -60,8 +60,8 @@ if [ "${_BRANCH#*libidn*}" != "${_BRANCH}" ] ; then
    # libidn
    curl -o pack.bin "https://ftp.gnu.org/gnu/libidn/libidn-${LIBIDN_VER_}.tar.gz" || exit 1
    curl -o pack.sig "https://ftp.gnu.org/gnu/libidn/libidn-${LIBIDN_VER_}.tar.gz.sig" || exit 1
-   curl -o pack.gpg 'https://ftp.gnu.org/gnu/gnu-keyring.gpg' || exit 1
-   gpg -q --import pack.gpg 2> /dev/null
+   curl 'https://ftp.gnu.org/gnu/gnu-keyring.gpg' | \
+      gpg -q --import 2> /dev/null
    gpg --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBIDN_HASH}" || exit 1
    tar -xvf pack.bin > /dev/null 2>&1 || exit 1
