@@ -91,8 +91,7 @@ if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ] ; then
    # libressl
    curl -o pack.bin "http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz" || exit 1
    curl -o pack.sig "http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz.asc" || exit 1
-   curl -o pack.gpg 'http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl.asc'
-   gpg -q --import pack.gpg 2> /dev/null
+   gpg -q --keyserver hkps://pgp.mit.edu --recv-keys 663AF51BD5E4D8D5
    gpg --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBRESSL_HASH}" || exit 1
    tar -xvf pack.bin > /dev/null 2>&1 || exit 1
