@@ -8,15 +8,25 @@ cd "$(dirname "$0")" || exit
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] ; then
    _suf=
 else
+   # Do not sign test packages
+   GPG_PASSPHRASE=
    _suf='-test'
    mv "${_BAS}.7z" "${_BAS}${_suf}.7z"
 fi
 
 (
+   # - Repository options: "GPG sign uploaded files using Bintray's public/private key pair."
+   #   - passphrase set      -> Success, BinTray signature
+   #   - empty/no passphrase -> Warning, BinTray signature
+   # - Repository options: "GPG Sign uploaded files automatically."
+   #   - passphrase set      -> Success, Custom signature
+   #   - empty/no passphrase -> Warning, No signature
+
    set +x
    curl -fsS -u "${BINTRAY_USER}:${BINTRAY_APIKEY}" \
       -X PUT "https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_suf}/${_VER}/${_BAS}${_suf}.7z?override=1&publish=1" \
-      --data-binary "@${_BAS}${_suf}.7z"
+      --data-binary "@${_BAS}${_suf}.7z" \
+      -H "X-GPG-PASSPHRASE: ${GPG_PASSPHRASE}"
 )
 
 # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>

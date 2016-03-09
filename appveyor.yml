@@ -9,6 +9,8 @@ environment:
     secure: jfLq1ApyVLNouxv07skhrg==
   BINTRAY_APIKEY:
     secure: Awq2bXuEyT0/JC/phuGILqT9hj9sVslq2+btJlFhH89a1xagztNH8h3jTru5rJKd
+  GPG_PASSPHRASE:
+    secure: t0zZqLgvaePWqUGn/dLMQ50M3YkMTktXSWglL1dyaEHKTOuXYiNe070dNlJEAoi1
   VIRUSTOTAL_APIKEY:
     secure: TdJYONfrpH45DuyKxraVqgHYy25IQ/F8TKHzYf+u5zz1aiM2yR0YTMaGxyj2EMReEearSI9kD9D2ZykybSVEbRyEaotZlceUb2lPDKELl3M=
 build_script:
