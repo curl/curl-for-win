@@ -16,8 +16,8 @@ fi
 
 (
    # - Repository option: "GPG sign uploaded files using Bintray's public/private key pair."
-   #   - passphrase set      -> Success, BinTray signature
-   #   - empty/no passphrase -> Warning, BinTray signature
+   #   - passphrase set      -> Success, Bintray signature
+   #   - empty/no passphrase -> Warning, Bintray signature
    # - Repository option: "GPG Sign uploaded files automatically."
    #   - passphrase set      -> Success, Custom signature
    #   - empty/no passphrase -> Warning, No signature
