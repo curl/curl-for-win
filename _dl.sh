@@ -19,7 +19,7 @@ export LIBRTMP_VER_='2.4+20151223'
 export LIBRTMP_HASH=f8eb8d0c8ed085c90666ba0e8fbe0e960e0cf0c2a58604fda3ed85a28f2ef5f6
 export LIBSSH2_VER_='1.7.0'
 export LIBSSH2_HASH=e4561fd43a50539a8c2ceb37841691baf03ecb7daf043766da1b112e4280d584
-export CURL_VER_='7.47.1'
+export CURL_VER_='7.48.0'
 export CURL_HASH=ddc643ab9382e24bbe4747d43df189a0a6ce38fcb33df041b9cb0b3cd47ae98f
 
 # Quit if any of the lines fail
