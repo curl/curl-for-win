@@ -16,8 +16,6 @@ environment:
 build_script:
   - set PATH=C:\Python27-x64;C:\msys64\usr\bin;%SystemRoot%\system32
   - pacman --noconfirm --noprogressbar -S p7zip mc
-  - python -m pip --disable-pip-version-check install --upgrade pip
-  - python -m pip install pefile
   - sh -c ./_build.sh
 artifacts:
   - path: '*-*-mingw.*'

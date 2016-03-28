@@ -25,6 +25,10 @@ export CURL_HASH=864e7819210b586d42c674a1fdd577ce75a78b3dda64c63565abe5aefd72c75
 # Quit if any of the lines fail
 set -e
 
+# Install required component
+python -m pip --disable-pip-version-check install --upgrade pip
+python -m pip install pefile || exit 1
+
 alias curl='curl -fsS --connect-timeout 15'
 alias gpg='gpg --keyid-format LONG'
 
