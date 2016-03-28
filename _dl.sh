@@ -27,7 +27,7 @@ set -e
 
 # Install required component
 python -m pip --disable-pip-version-check install --upgrade pip
-python -m pip install pefile || exit 1
+python -m pip install --allow-external https://github.com/erocarrera/pefile/releases/download/v2016.3.4/pefile-2016.3.4.tar.gz || exit 1
 
 alias curl='curl -fsS --connect-timeout 15'
 alias gpg='gpg --keyid-format LONG'
