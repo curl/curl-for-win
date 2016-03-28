@@ -42,7 +42,7 @@ rm pack.bin
 rm -f -r pefile && mv pefile-* pefile
 (
    cd pefile || exit 1
-   ./setup.py install
+   python ./setup.py install
 )
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
