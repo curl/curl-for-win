@@ -36,7 +36,7 @@ gpg --version | grep gpg
 
 # pefile
 curl -o pack.bin 'https://github.com/erocarrera/pefile/releases/download/v2016.3.4/pefile-2016.3.4.tar.gz' || exit 1
-openssl dgst -sha256 pack.bin | grep -q '51d149b31d0eeb5c97c67ee6a05b529d9fab37557d59d82c1f489560dc0b66f7' || exit 1
+openssl dgst -sha256 pack.bin | grep -q 51d149b31d0eeb5c97c67ee6a05b529d9fab37557d59d82c1f489560dc0b66f7 || exit 1
 tar -xvf pack.bin > /dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r pefile && mv pefile-* pefile
