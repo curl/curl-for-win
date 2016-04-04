@@ -3,7 +3,7 @@
 
 # Automated, reproducible, transparent, Windows builds for [cURL](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [libssh2](https://libssh2.org), [OpenSSL](https://www.openssl.org/) and [LibreSSL](http://www.libressl.org/)
 
-  - Packaging aims to follow popular binary releases found on the Internet.
+  - Packaging aims to follow popular binary releases found on the internet.
   - Both x86 and x64 packages are built using the same process.
   - Standalone `curl.exe` (only `msvcrt.dll` is required).
   - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
