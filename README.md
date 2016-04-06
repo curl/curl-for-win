@@ -10,7 +10,7 @@
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the
     build [in public](https://ci.appveyor.com/project/vsz/harbour-deps),
-    with open, auditable [build logs](https://ci.appveyor.com/project/vsz/harbour-deps/branch/master).
+    with open, auditable [build logs](#live-build-logs).
   - Binaries are built with supported [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29) options enabled.
   - Binaries are currently using [SJLJ](https://stackoverflow.com/a/15685229/1732433) exception handling.
     (steps to migrate to [DWARF](https://en.wikipedia.org/wiki/DWARF)/[SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH) are underway)
