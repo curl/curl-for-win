@@ -7,8 +7,8 @@ export ZLIB_VER_='1.2.8'
 export ZLIB_HASH=e380bd1bdb6447508beaa50efc653fe45f4edc1dafe11a251ae093e0ee97db9a
 export LIBIDN_VER_='1.32'
 export LIBIDN_HASH=ba5d5afee2beff703a34ee094668da5c6ea5afa38784cebba8924105e185c4f5
-export NGHTTP2_VER_='1.9.2'
-export NGHTTP2_HASH=8029e0d1bfe0f07ba350ebf585eec11d397252f4edfeb571e36c1c572bd0d5ca
+export NGHTTP2_VER_='1.10.0'
+export NGHTTP2_HASH=b0921f69d66b2344393369cee02792d58ee0a7ce0354a19409d3dc0ee99025d5
 export CARES_VER_='1.11.0'
 export CARES_HASH=b3612e6617d9682928a1d50c1040de4db6519f977f0b25d40cf1b632900b3efd
 export LIBRESSL_VER_='2.3.3'
@@ -50,7 +50,7 @@ if [ "${_BRANCH#*msysmingw*}" = "${_BRANCH}" ] ; then
 fi
 
 # nghttp2
-curl -o pack.bin -L --proto-redir =https "https://github.com/tatsuhiro-t/nghttp2/releases/download/v${NGHTTP2_VER_}/nghttp2-${NGHTTP2_VER_}.tar.bz2" || exit 1
+curl -o pack.bin -L --proto-redir =https "https://github.com/nghttp2/nghttp2/releases/download/v${NGHTTP2_VER_}/nghttp2-${NGHTTP2_VER_}.tar.bz2" || exit 1
 openssl dgst -sha256 pack.bin | grep -q "${NGHTTP2_HASH}" || exit 1
 tar -xvf pack.bin > /dev/null 2>&1 || exit 1
 rm pack.bin
