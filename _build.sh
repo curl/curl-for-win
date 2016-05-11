@@ -5,7 +5,7 @@
 
 cd "$(dirname "$0")" || exit
 
-export _BRANCH="${APPVEYOR_REPO_BRANCH}${TRAVIS_BRANCH}${GIT_BRANCH}"
+export _BRANCH="${APPVEYOR_REPO_BRANCH}${TRAVIS_BRANCH}${CI_BUILD_REF_NAME}${GIT_BRANCH}"
 [ -n "${_BRANCH}" ] || _BRANCH="$(git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')"
 export _URL=''
 which git > /dev/null && _URL="$(git ls-remote --get-url | sed 's|\.git||')"
