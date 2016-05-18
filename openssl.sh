@@ -51,7 +51,9 @@ _cpu="$2"
       "--cross-compile-prefix=${_CCPREFIX}" \
       -fno-ident \
       -Wl,--nxcompat -Wl,--dynamicbase \
-      no-unit-test no-idea no-dso \
+      no-unit-test \
+      no-idea \
+      no-dso \
       '--prefix=/usr/local'
    [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.1.0' ] || make depend
    make
