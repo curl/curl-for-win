@@ -107,7 +107,7 @@ else
       curl -o pack.bin "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz" || exit 1
       curl -o pack.sig "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz.asc" || exit 1
       # From https://www.openssl.org/community/team.html
-      gpg -q --keyserver hkps://pgp.mit.edu --recv-keys D9C4D26D0E604491 D3577507FA40E9E2 9195C48241FBF7DD DFAB592ABDD52F1C 2064C53641C25E5D F23479455C51B27C 0833F510E18C1C32
+      gpg -q --keyserver hkps://pgp.mit.edu --recv-keys D3577507FA40E9E2 9195C48241FBF7DD DFAB592ABDD52F1C 2064C53641C25E5D F23479455C51B27C 0833F510E18C1C32
       gpg --verify pack.sig pack.bin || exit 1
       openssl dgst -sha256 pack.bin | grep -q "${OPENSSL_HASH}" || exit 1
    fi
