@@ -30,7 +30,7 @@ python -m pip --disable-pip-version-check install --upgrade pip
 python -m pip install pefile
 
 alias curl='curl -fsS --connect-timeout 15'
-alias gpg='gpg --keyid-format LONG'
+alias gpg='gpg --batch --keyid-format LONG'
 
 gpg --version | grep gpg
 
@@ -146,12 +146,12 @@ rm -f -r libssh2 && mv libssh2-* libssh2
 
 # curl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
-   CURL_VER_='7.47.2-dev'
-   curl -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/71398487e75e47c026d0655d540ade247d18f62c.tar.gz || exit 1
+   CURL_VER_='7.50.1-dev'
+   curl -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/fe3db2e43b8e2d8670b66e1ae5a3ae413ac310c0.tar.gz || exit 1
 else
    curl -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2" || exit 1
    curl -o pack.sig "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2.asc" || exit 1
-   gpg -q --keyserver hkps://pgp.mit.edu --recv-keys 5CC908FDB71E12C2 78E11C6B279D5C91
+   gpg -q --keyserver hkps://pgp.mit.edu --recv-keys 5CC908FDB71E12C2
    gpg --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${CURL_HASH}" || exit 1
 fi
