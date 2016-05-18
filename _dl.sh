@@ -146,8 +146,8 @@ rm -f -r libssh2 && mv libssh2-* libssh2
 
 # curl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
-   CURL_VER_='7.50.1-dev'
-   curl -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/fe3db2e43b8e2d8670b66e1ae5a3ae413ac310c0.tar.gz || exit 1
+   CURL_VER_='7.49.1-dev'
+   curl -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/1c86f140303c8c386c596b6b8cda6747264a8482.tar.gz || exit 1
 else
    curl -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2" || exit 1
    curl -o pack.sig "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2.asc" || exit 1
