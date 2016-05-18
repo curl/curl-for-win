@@ -29,7 +29,7 @@ set -e
 python -m pip --disable-pip-version-check install --upgrade pip
 python -m pip install pefile
 
-alias curl='curl -fsS --connect-timeout 15'
+alias curl='curl -fsS --connect-timeout 15 --retry 3'
 alias gpg='gpg --batch --keyid-format LONG'
 
 gpg --version | grep gpg
