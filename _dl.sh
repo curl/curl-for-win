@@ -16,7 +16,7 @@ export LIBRESSL_HASH=7a1135b2620f78928e89538c211a4df1d9415994001d1e7c9178c6b6d72
 export OPENSSL_VER_='1.0.2h'
 export OPENSSL_HASH=1d4007e53aad94a5b2002fe045ee7bb0b3d98f1a47f8b2bc851dcd1c74332919
 export LIBRTMP_VER_='2.4+20151223'
-export LIBRTMP_HASH=f8eb8d0c8ed085c90666ba0e8fbe0e960e0cf0c2a58604fda3ed85a28f2ef5f6
+export LIBRTMP_HASH=5c032f5c8cc2937eb55a81a94effdfed3b0a0304b6376147b86f951e225e3ab5
 export LIBSSH2_VER_='1.7.0'
 export LIBSSH2_HASH=e4561fd43a50539a8c2ceb37841691baf03ecb7daf043766da1b112e4280d584
 export CURL_VER_='7.49.0'
@@ -121,7 +121,7 @@ fi
 # and potential licensing issues.
 if [ "${_BRANCH#*librtmp*}" != "${_BRANCH}" ] ; then
    # librtmp
-   curl -o pack.bin 'https://mirrorservice.org/sites/ftp.debian.org/debian/pool/main/r/rtmpdump/rtmpdump_2.4+20151223.gitfa8646d.orig.tar.gz' || exit 1
+   curl -o pack.bin 'https://mirrorservice.org/sites/ftp.debian.org/debian/pool/main/r/rtmpdump/rtmpdump_2.4+20151223.gitfa8646d.1.orig.tar.gz' || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBRTMP_HASH}" || exit 1
    tar -xvf pack.bin > /dev/null 2>&1 || exit 1
    rm pack.bin
