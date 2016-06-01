@@ -43,6 +43,11 @@ _cpu="$2"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
    fi
 
+   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ] ; then
+      CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,-Map,curl.map"
+      CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,-Map,libcurl.map"
+   fi
+
    # Generate .def file for libcurl by parsing curl headers.
    # Useful to limit .dll exports to libcurl functions meant to be exported.
    # Without this, the default linker logic kicks in, whereas every public
@@ -173,6 +178,11 @@ _cpu="$2"
    [ -d ../librtmp ]  && cp -f -p ../librtmp/COPYING  "${_DST}/COPYING-librtmp.txt"
    [ -d ../libressl ] && cp -f -p ../libressl/COPYING "${_DST}/COPYING-libressl.txt"
    [ -d ../openssl ]  && cp -f -p ../openssl/LICENSE  "${_DST}/LICENSE-openssl.txt"
+
+   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ] ; then
+      cp -f -p src/*.map                "${_DST}/bin/"
+      cp -f -p lib/*.map                "${_DST}/bin/"
+   fi
 
    unix2dos -k "${_DST}"/*.txt
    unix2dos -k "${_DST}"/docs/*.md
