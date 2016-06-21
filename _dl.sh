@@ -32,6 +32,12 @@ python -m pip install pefile
 alias curl='curl -fsS --connect-timeout 15 --retry 3'
 alias gpg='gpg --batch --keyid-format LONG'
 
+gpg_recv_keys() {
+   if ! gpg -q --keyserver hkps://pgp.mit.edu --recv-keys "$@" ; then
+      gpg -q --keyserver hkps://sks-keyservers.net --recv-keys "$@"
+   fi
+}
+
 gpg --version | grep gpg
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
@@ -78,7 +84,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ] ; then
    else
       curl -o pack.bin "http://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz" || exit 1
       curl -o pack.sig "http://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
-      gpg -q --keyserver hkps://pgp.mit.edu --recv-keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2 914C533DF9B2ADA2204F586D78E11C6B279D5C91
+      gpg_recv_keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2 914C533DF9B2ADA2204F586D78E11C6B279D5C91
       gpg --verify pack.sig pack.bin || exit 1
       openssl dgst -sha256 pack.bin | grep -q "${CARES_HASH}" || exit 1
    fi
@@ -92,7 +98,7 @@ if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ] ; then
    # libressl
    curl -o pack.bin "http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz" || exit 1
    curl -o pack.sig "http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz.asc" || exit 1
-   gpg -q --keyserver hkps://pgp.mit.edu --recv-keys A1EB079B8D3EB92B4EBD3139663AF51BD5E4D8D5
+   gpg_recv_keys A1EB079B8D3EB92B4EBD3139663AF51BD5E4D8D5
    gpg --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBRESSL_HASH}" || exit 1
    tar -xvf pack.bin > /dev/null 2>&1 || exit 1
@@ -107,7 +113,7 @@ else
       curl -o pack.bin "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz" || exit 1
       curl -o pack.sig "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz.asc" || exit 1
       # From https://www.openssl.org/community/team.html
-      gpg -q --keyserver hkps://pgp.mit.edu --recv-keys 8657ABB260F056B1E5190839D9C4D26D0E604491
+      gpg_recv_keys 8657ABB260F056B1E5190839D9C4D26D0E604491
       gpg --verify pack.sig pack.bin || exit 1
       openssl dgst -sha256 pack.bin | grep -q "${OPENSSL_HASH}" || exit 1
    fi
@@ -135,7 +141,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
 else
    curl -o pack.bin -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz" || exit 1
    curl -o pack.sig -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz.asc" || exit 1
-   gpg -q --keyserver hkps://pgp.mit.edu --recv-keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2 914C533DF9B2ADA2204F586D78E11C6B279D5C91
+   gpg_recv_keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2 914C533DF9B2ADA2204F586D78E11C6B279D5C91
    gpg --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBSSH2_HASH}" || exit 1
 fi
@@ -151,7 +157,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
 else
    curl -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2" || exit 1
    curl -o pack.sig "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2.asc" || exit 1
-   gpg -q --keyserver hkps://pgp.mit.edu --recv-keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+   gpg_recv_keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
    gpg --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${CURL_HASH}" || exit 1
 fi
