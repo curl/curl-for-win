@@ -15,9 +15,9 @@ environment:
     secure: TdJYONfrpH45DuyKxraVqgHYy25IQ/F8TKHzYf+u5zz1aiM2yR0YTMaGxyj2EMReEearSI9kD9D2ZykybSVEbRyEaotZlceUb2lPDKELl3M=
 build_script:
   - set PATH=C:\Python27-x64;C:\msys64\usr\bin;%SystemRoot%\system32
-# - pacman --noconfirm --noprogressbar --sync -yu -u
-# - pacman --noconfirm --noprogressbar --sync -yu -u
-  - pacman --noconfirm --noprogressbar --sync p7zip mc
+# - pacman --noconfirm --noprogressbar -S -yu -u
+# - pacman --noconfirm --noprogressbar -S -yu -u
+  - pacman --noconfirm --noprogressbar -S p7zip mc
   - sh -c ./_build.sh
 artifacts:
   - path: '*-*-mingw.*'
