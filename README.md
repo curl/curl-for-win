@@ -3,7 +3,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;
 [![PayPal Donate](https://img.shields.io/badge/PayPal-donate-f8981D.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2DZM6WAGRJWT6)
 
-# Automated, reproducible, transparent, Windows builds for [curl](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [libssh2](https://libssh2.org), [OpenSSL](https://www.openssl.org/) and [LibreSSL](http://www.libressl.org/)
+# Automated, reproducible, transparent, Windows builds for [curl](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [libssh2](https://libssh2.org) and [OpenSSL](https://www.openssl.org/)
 
   - Packaging aims to follow popular binary releases found on the internet.
   - Both x86 and x64 packages are built using the same process.
@@ -37,13 +37,11 @@
   * curl: <https://bintray.com/vszakats/generic/curl>
   * nghttp2: <https://bintray.com/vszakats/generic/nghttp2>
   * libssh2: <https://bintray.com/vszakats/generic/libssh2>
-  * LibreSSL: <https://bintray.com/vszakats/generic/libressl>
   * OpenSSL: <https://bintray.com/vszakats/generic/openssl>
 
 # Live build logs
 
   * <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
-  * <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master-libressl>
 
 ---
 This document Copyright &copy;&nbsp;2014&ndash;2016 Viktor Szakáts <https://github.com/vszakats><br />
