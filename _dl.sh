@@ -7,8 +7,8 @@ export ZLIB_VER_='1.2.8'
 export ZLIB_HASH=e380bd1bdb6447508beaa50efc653fe45f4edc1dafe11a251ae093e0ee97db9a
 export LIBIDN_VER_='1.32'
 export LIBIDN_HASH=ba5d5afee2beff703a34ee094668da5c6ea5afa38784cebba8924105e185c4f5
-export NGHTTP2_VER_='1.12.0'
-export NGHTTP2_HASH=b605bdfb9ca49bd06ab37cf17cc311f1b8b593f48dfb9b81dac75e22a86922ff
+export NGHTTP2_VER_='1.13.0'
+export NGHTTP2_HASH=d4801aced0d10b9ccf5f6dcdc5efd927b9f5dc3c4a1af3b7a687284e4765d679
 export CARES_VER_='1.11.0'
 export CARES_HASH=b3612e6617d9682928a1d50c1040de4db6519f977f0b25d40cf1b632900b3efd
 export LIBRESSL_VER_='2.3.6'
@@ -152,7 +152,7 @@ rm -f -r libssh2 && mv libssh2-* libssh2
 
 # curl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
-   CURL_VER_='7.49.1-dev'
+   CURL_VER_='7.50.1-dev'
    curl -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/bcc8f485e5e364deb6b5ad8502635b4358aaa277.tar.gz || exit 1
 else
    curl -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2" || exit 1
