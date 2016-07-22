@@ -5,8 +5,8 @@
 
 export ZLIB_VER_='1.2.8'
 export ZLIB_HASH=e380bd1bdb6447508beaa50efc653fe45f4edc1dafe11a251ae093e0ee97db9a
-export LIBIDN_VER_='1.32'
-export LIBIDN_HASH=ba5d5afee2beff703a34ee094668da5c6ea5afa38784cebba8924105e185c4f5
+export LIBIDN_VER_='1.33'
+export LIBIDN_HASH=44a7aab635bb721ceef6beecc4d49dfd19478325e1b47f3196f7d2acc4930e19
 export NGHTTP2_VER_='1.13.0'
 export NGHTTP2_HASH=d4801aced0d10b9ccf5f6dcdc5efd927b9f5dc3c4a1af3b7a687284e4765d679
 export CARES_VER_='1.11.0'
