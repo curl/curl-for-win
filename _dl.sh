@@ -69,7 +69,7 @@ if [ "${_BRANCH#*libidn*}" != "${_BRANCH}" ] ; then
    curl -o pack.sig "https://ftp.gnu.org/gnu/libidn/libidn-${LIBIDN_VER_}.tar.gz.sig" || exit 1
    curl 'https://ftp.gnu.org/gnu/gnu-keyring.gpg' | \
       gpg -q --import 2> /dev/null
-   gpg --verify pack.sig pack.bin || exit 1
+   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBIDN_HASH}" || exit 1
    tar -xvf pack.bin > /dev/null 2>&1 || exit 1
    rm pack.bin
@@ -85,7 +85,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ] ; then
       curl -o pack.bin "http://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz" || exit 1
       curl -o pack.sig "http://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
       gpg_recv_keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2 914C533DF9B2ADA2204F586D78E11C6B279D5C91
-      gpg --verify pack.sig pack.bin || exit 1
+      gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
       openssl dgst -sha256 pack.bin | grep -q "${CARES_HASH}" || exit 1
    fi
    tar -xvf pack.bin > /dev/null 2>&1 || exit 1
@@ -99,7 +99,7 @@ if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ] ; then
    curl -o pack.bin "http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz" || exit 1
    curl -o pack.sig "http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz.asc" || exit 1
    gpg_recv_keys A1EB079B8D3EB92B4EBD3139663AF51BD5E4D8D5
-   gpg --verify pack.sig pack.bin || exit 1
+   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBRESSL_HASH}" || exit 1
    tar -xvf pack.bin > /dev/null 2>&1 || exit 1
    rm pack.bin
@@ -114,7 +114,7 @@ else
       curl -o pack.sig "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz.asc" || exit 1
       # From https://www.openssl.org/community/team.html
       gpg_recv_keys 8657ABB260F056B1E5190839D9C4D26D0E604491
-      gpg --verify pack.sig pack.bin || exit 1
+      gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
       openssl dgst -sha256 pack.bin | grep -q "${OPENSSL_HASH}" || exit 1
    fi
    tar -xvf pack.bin > /dev/null 2>&1 || exit 1
@@ -142,7 +142,7 @@ else
    curl -o pack.bin -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz" || exit 1
    curl -o pack.sig -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz.asc" || exit 1
    gpg_recv_keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2 914C533DF9B2ADA2204F586D78E11C6B279D5C91
-   gpg --verify pack.sig pack.bin || exit 1
+   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBSSH2_HASH}" || exit 1
 fi
 tar -xvf pack.bin > /dev/null 2>&1 || exit 1
@@ -158,7 +158,7 @@ else
    curl -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2" || exit 1
    curl -o pack.sig "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2.asc" || exit 1
    gpg_recv_keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
-   gpg --verify pack.sig pack.bin || exit 1
+   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${CURL_HASH}" || exit 1
 fi
 tar -xvf pack.bin > /dev/null 2>&1 || exit 1
