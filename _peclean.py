@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2015-2016 Viktor Szakats (vszakats.net/harbour)
+# Copyright 2015-2016 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 import calendar

@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2015-2016 Viktor Szakats (vszakats.net/harbour)
+# Copyright 2015-2016 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 export ZLIB_VER_='1.2.8'
