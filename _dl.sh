@@ -124,6 +124,10 @@ else
    curl -o openssl.diff -L --proto-redir =https https://github.com/openssl/openssl/pull/1514.diff
    openssl dgst -sha256 openssl.diff | grep -q d2d0d529e94ed7737007d59f547bd073e164dc6c46aa915f5d713152b51f7d46 || exit 1
    [ -f "openssl${_patsuf}.diff" ] && dos2unix < "openssl${_patsuf}.diff" | patch -N -p1 -d openssl
+   # Patch to fix a recurring regression regarding some macros
+   curl -o openssl.diff -L --proto-redir =https https://github.com/openssl/openssl/pull/1520.diff
+   openssl dgst -sha256 openssl.diff | grep -q d7cbd46bf6bc0a72ced56b24e93bf616fc1ec8f6b7f25ec1d2fb3d661ad2eef5 || exit 1
+   [ -f "openssl${_patsuf}.diff" ] && dos2unix < "openssl${_patsuf}.diff" | patch -N -p1 -d openssl
 fi
 
 # Do not include this by default to avoid an unnecessary libcurl dependency
