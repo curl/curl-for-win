@@ -26,6 +26,8 @@ _cpu="$2"
    find . -name '*.dll' -type f -delete
    find . -name '*.exe' -type f -delete
 
+   engdir='engines'
+
    [ "${_cpu}" = '32' ] && options='mingw'
    [ "${_cpu}" = '64' ] && options='mingw64'
    if [ "${_BRANCH#*lto*}" != "${_BRANCH}" ] ; then
@@ -51,6 +53,7 @@ _cpu="$2"
       "--cross-compile-prefix=${_CCPREFIX}" \
       -fno-ident \
       -Wl,--nxcompat -Wl,--dynamicbase \
+      no-tests \
       no-unit-test \
       no-idea \
       no-dso \
@@ -63,14 +66,14 @@ _cpu="$2"
    strip -p --enable-deterministic-archives -g ./*.a
    strip -p -s apps/openssl.exe
    strip -p -s apps/*.dll
-   if ls engines/*.dll > /dev/null 2>&1 ; then
-      strip -p -s engines/*.dll
+   if ls ${engdir}/*.dll > /dev/null 2>&1 ; then
+      strip -p -s ${engdir}/*.dll
    fi
 
    ../_peclean.py "${_ref}" 'apps/openssl.exe'
    ../_peclean.py "${_ref}" 'apps/*.dll'
-   if ls engines/*.dll > /dev/null 2>&1 ; then
-      ../_peclean.py "${_ref}" 'engines/*.dll'
+   if ls ${engdir}/*.dll > /dev/null 2>&1 ; then
+      ../_peclean.py "${_ref}" "${engdir}/*.dll"
    fi
 
    touch -c -r "${_ref}" apps/openssl.exe
@@ -78,8 +81,8 @@ _cpu="$2"
    touch -c -r "${_ref}" include/openssl/*.h
    touch -c -r "${_ref}" ./*.a
    touch -c -r "${_ref}" ./*.pc
-   if ls engines/*.dll > /dev/null 2>&1 ; then
-      touch -c -r "${_ref}" engines/*.dll
+   if ls ${engdir}/*.dll > /dev/null 2>&1 ; then
+      touch -c -r "${_ref}" ${engdir}/*.dll
    fi
 
    # Tests
@@ -98,9 +101,9 @@ _cpu="$2"
    mkdir -p "${_DST}/include/openssl"
    mkdir -p "${_DST}/lib/pkgconfig"
 
-   if ls engines/*.dll > /dev/null 2>&1 ; then
-      mkdir -p "${_DST}/engines"
-      cp -f -p engines/*.dll    "${_DST}/engines/"
+   if ls ${engdir}/*.dll > /dev/null 2>&1 ; then
+      mkdir -p "${_DST}/${engdir}"
+      cp -f -p ${engdir}/*.dll  "${_DST}/${engdir}/"
    fi
 
    cp -f -p apps/openssl.cnf    "${_DST}/"

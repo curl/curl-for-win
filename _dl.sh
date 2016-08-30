@@ -13,8 +13,8 @@ export CARES_VER_='1.11.0'
 export CARES_HASH=b3612e6617d9682928a1d50c1040de4db6519f977f0b25d40cf1b632900b3efd
 export LIBRESSL_VER_='2.4.2'
 export LIBRESSL_HASH=5f87d778e5d62822d60e38fa9621c1c5648fc559d198ba314bd9d89cbf67d9e3
-export OPENSSL_VER_='1.0.2h'
-export OPENSSL_HASH=1d4007e53aad94a5b2002fe045ee7bb0b3d98f1a47f8b2bc851dcd1c74332919
+export OPENSSL_VER_='1.1.0'
+export OPENSSL_HASH=f5c69ff9ac1472c80b868efc1c1c0d8dcfc746d29ebe563de2365dd56dbd8c82
 export LIBRTMP_VER_='2.4+20151223'
 export LIBRTMP_HASH=5c032f5c8cc2937eb55a81a94effdfed3b0a0304b6376147b86f951e225e3ab5
 export LIBSSH2_VER_='1.7.0'
@@ -120,6 +120,9 @@ else
    tar -xvf pack.bin > /dev/null 2>&1 || exit 1
    rm pack.bin
    rm -f -r openssl && mv openssl-* openssl
+   # Patch allowing to disable tests using the no-tests Configure option
+   curl -o openssl.diff -L --proto-redir =https https://github.com/openssl/openssl/pull/1514.diff
+   openssl dgst -sha256 openssl.diff | grep -q d2d0d529e94ed7737007d59f547bd073e164dc6c46aa915f5d713152b51f7d46 || exit 1
    [ -f "openssl${_patsuf}.diff" ] && dos2unix < "openssl${_patsuf}.diff" | patch -N -p1 -d openssl
 fi
 
@@ -164,6 +167,9 @@ fi
 tar -xvf pack.bin > /dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r curl && mv curl-* curl
+# Patch to make curl compatible with OpenSSL 1.1.0. Remove in next version.
+curl -o curl.diff -L --proto-redir =https https://github.com/curl/curl/commit/9cb851e3718a6af4ca7c42de6ff98f929b7d2f49.diff
+openssl dgst -sha256 curl.diff | grep -q a4456976ae2852852bea8341cb3ec9b0029257b174bd4ffbc15dc71c53f08856 || exit 1
 [ -f "curl${_patsuf}.diff" ] && dos2unix < "curl${_patsuf}.diff" | patch -N -p1 -d curl
 
 set +e
