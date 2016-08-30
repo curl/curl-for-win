@@ -47,6 +47,7 @@ if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] ; then
          --form "file=@${_BAS}${_suf}.7z")"
       echo "${out}"
       echo "VirusTotal URL for '${_BAS}${_suf}.7z':"
-      echo "${out}" | jq '.permalink'
+      # echo "${out}" | jq '.permalink'
+      echo "${out}" | grep -o 'https://[a-zA-Z0-9./]*'
    )
 fi
