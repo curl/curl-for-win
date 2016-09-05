@@ -43,8 +43,11 @@ _cpu="$2"
    else
       options="${options} no-filenames"
    fi
-   # Requires mingw 5.0 or upper
-   [ "${_cpu}" = '64' ] && options="${options} -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
+   if [ "${_cpu}" = '64' ] ; then
+      options="${options} enable-ec_nistp_64_gcc_128"
+      # Requires mingw 5.0 or upper
+      options="${options} -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
+   fi
 
    # AR=, NM=, RANLIB=
 
@@ -57,7 +60,6 @@ _cpu="$2"
       no-unit-test \
       no-idea \
       no-dso \
-      enable-cms \
       '--prefix=/usr/local'
    [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.1.0' ] || make depend
    make
