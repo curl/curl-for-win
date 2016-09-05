@@ -3,7 +3,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;
 [![PayPal Donate](https://img.shields.io/badge/PayPal-donate-f8981D.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2DZM6WAGRJWT6)
 
-# Automated, reproducible, transparent, Windows builds for [curl](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [libssh2](https://libssh2.org) and [OpenSSL](https://www.openssl.org/)
+# Automated, reproducible, transparent, Windows builds for [curl](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [libssh2](https://libssh2.org) and [OpenSSL 1.1](https://www.openssl.org/)
 
   - Packaging aims to follow popular binary releases found on the internet.
   - Both x86 and x64 packages are built using the same process.
