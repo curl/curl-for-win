@@ -157,7 +157,7 @@ rm pack.bin
 rm -f -r libssh2 && mv libssh2-* libssh2
 [ -f "libssh2${_patsuf}.diff" ] && dos2unix < "libssh2${_patsuf}.diff" | patch -N -p1 -d libssh2
 # Patch to make libssh2 compatible with OpenSSL 1.1.0. Remove in next version.
-curl -o libssh2.diff -L --proto-redir =https https://github.com/libssh2/libssh2/pull/121.diff
+curl -o libssh2.diff -L --proto-redir =https https://github.com/libssh2/libssh2/commit/64ebfd8182a9b6e637e65c3059e3798e199274b3.diff
 openssl dgst -sha256 libssh2.diff | grep -q 548f5b5f743f9fd30d8748acf9282a56ed3641f6a6c334010597112b7dadbb65 || exit 1
 [ -f "libssh2${_patsuf}.diff" ] && dos2unix < "libssh2${_patsuf}.diff" | patch -N -p1 -d libssh2
 
