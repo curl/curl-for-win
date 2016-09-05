@@ -57,6 +57,7 @@ _cpu="$2"
       no-unit-test \
       no-idea \
       no-dso \
+      enable-cms \
       '--prefix=/usr/local'
    [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.1.0' ] || make depend
    make
