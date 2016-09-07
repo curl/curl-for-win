@@ -19,8 +19,8 @@ export LIBRTMP_VER_='2.4+20151223'
 export LIBRTMP_HASH=5c032f5c8cc2937eb55a81a94effdfed3b0a0304b6376147b86f951e225e3ab5
 export LIBSSH2_VER_='1.7.0'
 export LIBSSH2_HASH=e4561fd43a50539a8c2ceb37841691baf03ecb7daf043766da1b112e4280d584
-export CURL_VER_='7.50.1'
-export CURL_HASH=3c12c5f54ccaa1d40abc65d672107dcc75d3e1fcb38c267484334280096e5156
+export CURL_VER_='7.50.2'
+export CURL_HASH=0c72105df4e9575d68bcf43aea1751056c1d29b1040df6194a49c5ac08f8e233
 
 # Quit if any of the lines fail
 set -e
@@ -175,9 +175,6 @@ fi
 tar -xvf pack.bin > /dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r curl && mv curl-* curl
-# Patch to make curl compatible with OpenSSL 1.1.0. Remove in next version.
-curl -o curl.diff -L --proto-redir =https https://github.com/curl/curl/commit/9cb851e3718a6af4ca7c42de6ff98f929b7d2f49.diff
-openssl dgst -sha256 curl.diff | grep -q a4456976ae2852852bea8341cb3ec9b0029257b174bd4ffbc15dc71c53f08856 || exit 1
 [ -f "curl${_patsuf}.diff" ] && dos2unix < "curl${_patsuf}.diff" | patch -N -p1 -d curl
 
 set +e
