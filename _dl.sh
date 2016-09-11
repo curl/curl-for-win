@@ -82,8 +82,8 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ] ; then
       CARES_VER_='1.11.1-dev'
       curl -o pack.bin -L --proto-redir =https https://github.com/c-ares/c-ares/archive/9642b578a2414406ed01ca5db5057adcb47cb633.tar.gz || exit 1
    else
-      curl -o pack.bin "http://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz" || exit 1
-      curl -o pack.sig "http://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
+      curl -o pack.bin "https://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz" || exit 1
+      curl -o pack.sig "https://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
       gpg_recv_keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2 914C533DF9B2ADA2204F586D78E11C6B279D5C91
       gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
       openssl dgst -sha256 pack.bin | grep -q "${CARES_HASH}" || exit 1

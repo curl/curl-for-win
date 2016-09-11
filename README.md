@@ -25,7 +25,7 @@
     applied locally if already merged upstream or &mdash; in case it's
     necessary for a successful build &mdash; had them submitted upstream
     with fair confidence of getting accepted.
-  - Optional support for [libidn](https://www.gnu.org/software/libidn/), [C-ares](http://c-ares.haxx.se), [librtmp](https://rtmpdump.mplayerhq.hu) and for [WinSSL](https://en.wikipedia.org/wiki/Cryptographic_Service_Provider) as a fall-back backend.
+  - Optional support for [libidn](https://www.gnu.org/software/libidn/), [C-ares](https://c-ares.haxx.se/), [librtmp](https://rtmpdump.mplayerhq.hu/) and for [WinSSL](https://en.wikipedia.org/wiki/Cryptographic_Service_Provider) as a fall-back backend.
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
 
 # Please donate to support maintaining these builds
