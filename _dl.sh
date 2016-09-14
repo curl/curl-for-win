@@ -19,8 +19,8 @@ export LIBRTMP_VER_='2.4+20151223'
 export LIBRTMP_HASH=5c032f5c8cc2937eb55a81a94effdfed3b0a0304b6376147b86f951e225e3ab5
 export LIBSSH2_VER_='1.7.0'
 export LIBSSH2_HASH=e4561fd43a50539a8c2ceb37841691baf03ecb7daf043766da1b112e4280d584
-export CURL_VER_='7.50.2'
-export CURL_HASH=0c72105df4e9575d68bcf43aea1751056c1d29b1040df6194a49c5ac08f8e233
+export CURL_VER_='7.50.3'
+export CURL_HASH=7b7347d976661d02c84a1f4d6daf40dee377efdc45b9e2c77dedb8acf140d8ec
 
 # Quit if any of the lines fail
 set -e
