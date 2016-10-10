@@ -96,8 +96,8 @@ fi
 
 if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ] ; then
    # libressl
-   curl -o pack.bin "https://mirrorservice.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz" || exit 1
-   curl -o pack.sig "https://mirrorservice.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz.asc" || exit 1
+   curl -o pack.bin "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz" || exit 1
+   curl -o pack.sig "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz.asc" || exit 1
    gpg_recv_keys A1EB079B8D3EB92B4EBD3139663AF51BD5E4D8D5
    gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBRESSL_HASH}" || exit 1
