@@ -17,8 +17,8 @@ export OPENSSL_VER_='1.1.0b'
 export OPENSSL_HASH=a45de072bf9be4dea437230aaf036000f0e68c6a665931c57e76b5b036cef6f7
 export LIBRTMP_VER_='2.4+20151223'
 export LIBRTMP_HASH=5c032f5c8cc2937eb55a81a94effdfed3b0a0304b6376147b86f951e225e3ab5
-export LIBSSH2_VER_='1.7.0'
-export LIBSSH2_HASH=e4561fd43a50539a8c2ceb37841691baf03ecb7daf043766da1b112e4280d584
+export LIBSSH2_VER_='1.8.0'
+export LIBSSH2_HASH=39f34e2f6835f4b992cafe8625073a88e5a28ba78f83e8099610a7b3af4676d4
 export CURL_VER_='7.50.3'
 export CURL_HASH=7b7347d976661d02c84a1f4d6daf40dee377efdc45b9e2c77dedb8acf140d8ec
 
@@ -136,22 +136,18 @@ fi
 
 # libssh2
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
-   LIBSSH2_VER_='1.7.1-dev'
+   LIBSSH2_VER_='1.8.1-dev'
    curl -o pack.bin -L --proto-redir =https https://github.com/libssh2/libssh2/archive/7934c9ce2a029c43e3642a492d3b9e494d1542be.tar.gz || exit 1
 else
    curl -o pack.bin -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz" || exit 1
    curl -o pack.sig -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz.asc" || exit 1
-   gpg_recv_keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2 914C533DF9B2ADA2204F586D78E11C6B279D5C91
+   gpg_recv_keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
    gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBSSH2_HASH}" || exit 1
 fi
 tar -xvf pack.bin > /dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r libssh2 && mv libssh2-* libssh2
-[ -f "libssh2${_patsuf}.diff" ] && dos2unix < "libssh2${_patsuf}.diff" | patch -N -p1 -d libssh2
-# Patch to make libssh2 compatible with OpenSSL 1.1.0. Remove in next version.
-curl -o libssh2.diff -L --proto-redir =https https://github.com/libssh2/libssh2/commit/64ebfd8182a9b6e637e65c3059e3798e199274b3.diff
-openssl dgst -sha256 libssh2.diff | grep -q 548f5b5f743f9fd30d8748acf9282a56ed3641f6a6c334010597112b7dadbb65 || exit 1
 [ -f "libssh2${_patsuf}.diff" ] && dos2unix < "libssh2${_patsuf}.diff" | patch -N -p1 -d libssh2
 
 # curl
