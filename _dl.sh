@@ -19,8 +19,8 @@ export LIBRTMP_VER_='2.4+20151223'
 export LIBRTMP_HASH=5c032f5c8cc2937eb55a81a94effdfed3b0a0304b6376147b86f951e225e3ab5
 export LIBSSH2_VER_='1.8.0'
 export LIBSSH2_HASH=39f34e2f6835f4b992cafe8625073a88e5a28ba78f83e8099610a7b3af4676d4
-export CURL_VER_='7.50.3'
-export CURL_HASH=7b7347d976661d02c84a1f4d6daf40dee377efdc45b9e2c77dedb8acf140d8ec
+export CURL_VER_='7.51.0'
+export CURL_HASH=7f8240048907e5030f67be0a6129bc4b333783b9cca1391026d700835a788dde
 
 # Quit if any of the lines fail
 set -e
@@ -84,7 +84,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ] ; then
    else
       curl -o pack.bin "https://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz" || exit 1
       curl -o pack.sig "https://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
-      gpg_recv_keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2 914C533DF9B2ADA2204F586D78E11C6B279D5C91
+      gpg_recv_keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
       gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
       openssl dgst -sha256 pack.bin | grep -q "${CARES_HASH}" || exit 1
    fi
@@ -152,7 +152,7 @@ rm -f -r libssh2 && mv libssh2-* libssh2
 
 # curl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
-   CURL_VER_='7.50.2-dev'
+   CURL_VER_='7.51.1-dev'
    curl -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/73878278d86f22285681db2e75eb1c711bfab41b.tar.gz || exit 1
 else
    curl -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2" || exit 1
