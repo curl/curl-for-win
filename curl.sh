@@ -127,10 +127,10 @@ _cpu="$2"
 
    # Tests
 
-   src/curl.exe -V
-
    objdump -x src/*.exe | grep -E -i "(file format|dll name)"
    objdump -x lib/*.dll | grep -E -i "(file format|dll name)"
+
+   src/curl.exe -V
 
    # Create package
 

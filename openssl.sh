@@ -89,11 +89,11 @@ _cpu="$2"
 
    # Tests
 
-   apps/openssl.exe version
-   apps/openssl.exe ciphers
-
    objdump -x apps/openssl.exe | grep -E -i "(file format|dll name)"
    objdump -x apps/*.dll       | grep -E -i "(file format|dll name)"
+
+   apps/openssl.exe version
+   apps/openssl.exe ciphers
 
    # Create package
 
