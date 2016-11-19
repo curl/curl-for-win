@@ -9,6 +9,9 @@
   - Both x86 and x64 packages are built using the same process.
   - Standalone `curl.exe` (only [`msvcrt.dll`](https://en.wikipedia.org/wiki/Microsoft_Windows_library_files#MSVCRT.DLL.2C_MSVCPP.DLL_and_CRTDLL.DLL) is required).
   - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
+  - libcurl features enabled by default:<br>
+    `dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtsp scp sftp smtp smtps telnet tftp`<br>
+    `AsynchDNS IDN IPv6 Largefile SSPI Kerberos SPNEGO NTLM SSL libz TLS-SRP HTTP2`
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the
     build [in public](https://ci.appveyor.com/project/vsz/harbour-deps),
