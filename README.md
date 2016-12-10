@@ -47,5 +47,5 @@
   * <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
 
 ---
-This document Copyright &copy;&nbsp;2014&ndash;2017 Viktor Szakáts <https://github.com/vszakats><br />
+This document &copy;&nbsp;2014&ndash;2017 Viktor Szakáts <https://github.com/vszakats><br />
 [![Creative Commons Attribution-ShareAlike 4.0](https://rawgit.com/cc-icons/cc-icons/master/fonts/cc-icons-svg/small.by-sa.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
