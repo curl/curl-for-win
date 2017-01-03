@@ -78,7 +78,6 @@ _cpu="$2"
    cp -f -p README                     "${_DST}/README.txt"
 
    unix2dos -k "${_DST}"/*.txt
-   unix2dos -k "${_DST}"/*.rst
 
 #  ../_pack.sh "$(pwd)/${_ref}"
 #  ../_ul.sh
