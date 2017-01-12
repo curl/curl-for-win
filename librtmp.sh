@@ -32,6 +32,7 @@ _cdo="$(pwd)"
    [ "${_cpu}" = '64' ] && XLDFLAGS="${XLDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x153000000"
    export LDFLAGS="${XLDFLAGS}"
    export XCFLAGS="${XCFLAGS} -fno-ident"
+   [ "${_BRANCH#*msysmingw*}" != "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && XCFLAGS="${XCFLAGS} -fno-asynchronous-unwind-tables"
 
    export CROSS_COMPILE="${_CCPREFIX}"
 

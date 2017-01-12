@@ -34,6 +34,7 @@ _cpu="$2"
 
    export LDFLAGS="-m${_cpu}"
    export CFLAGS="${LDFLAGS} -fno-ident"
+   [ "${_BRANCH#*msysmingw*}" != "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
 
    # TOFIX: Burnt-in prefix is not fully deterministic. It has 'C:/msys64' prepended.
 

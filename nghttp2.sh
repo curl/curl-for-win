@@ -29,6 +29,7 @@ _cpu="$2"
    export CC="${_CCPREFIX}gcc -static-libgcc"
    export LDFLAGS="-m${_cpu}"
    export CFLAGS="${LDFLAGS} -fno-ident -U__STRICT_ANSI__ -DNGHTTP2_STATICLIB"
+   [ "${_BRANCH#*msysmingw*}" != "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
    export CXXFLAGS="${CFLAGS}"
    ./configure \
       --disable-dependency-tracking \
