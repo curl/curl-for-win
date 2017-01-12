@@ -1,0 +1,26 @@
+diff --git a/Configure b/Configure
+index b88f6aa..74e67c4 100755
+--- a/Configure
++++ b/Configure
+@@ -377,6 +377,7 @@ my @disablables = (
+     "ssl-trace",
+     "static-engine",
+     "stdio",
++    "tests",
+     "threads",
+     "tls",
+     "ts",
+diff --git a/INSTALL b/INSTALL
+index 3655eb7..59e2d29 100644
+--- a/INSTALL
++++ b/INSTALL
+@@ -408,6 +408,9 @@
+                    the OpenSSL tests also use the command line applications the
+                    tests will also be skipped.
+ 
++  no-tests
++                   Don't build test programs or run any test.
++
+   no-threads
+                    Don't try to build with support for multi-threaded
+                    applications.

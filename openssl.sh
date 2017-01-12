@@ -58,6 +58,7 @@ _cpu="$2"
       -Wl,--nxcompat -Wl,--dynamicbase \
       no-unit-test \
       no-idea \
+      no-tests \
       '--prefix=/usr/local'
    [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.1.0' ] || make depend
    make
