@@ -16,7 +16,7 @@
     open source code, C compiler, build scripts and running the
     build [in public](https://ci.appveyor.com/project/vsz/harbour-deps),
     with open, auditable [build logs](#live-build-logs).
-  - C compiler toolchain is MinGW from MSYS2.
+  - C compiler toolchain is MinGW-w64 (non-multilib, x86 and x64) via MSYS2.
   - Binaries are built with supported [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29) options enabled.
   - Binaries are using [DWARF](https://en.wikipedia.org/wiki/DWARF) in x86 and
     [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH)
