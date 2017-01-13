@@ -46,7 +46,7 @@ else
    _patsuf=''
 fi
 
-if [ "${_BRANCH#*msysmingw*}" = "${_BRANCH}" ] ; then
+if [ "${_BRANCH#*extmingw*}" != "${_BRANCH}" ] ; then
    # mingw
    curl -o pack.bin -L 'https://downloads.sourceforge.net/mingw-w64/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/6.3.0/threads-posix/sjlj/x86_64-6.3.0-release-posix-sjlj-rt_v5-rev0.7z' || exit 1
    openssl dgst -sha256 pack.bin | grep -q 41cab7c322058bec6ff02f461cd4327ed68839719c06bfc74112614c4999aae8 || exit 1

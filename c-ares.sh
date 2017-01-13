@@ -19,7 +19,7 @@ _cpu="$2"
    # Build
 
    export CARES_CFLAG_EXTRAS="-m${_cpu} -fno-ident"
-   [ "${_BRANCH#*msysmingw*}" != "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && CARES_CFLAG_EXTRAS="${CARES_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
+   [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && CARES_CFLAG_EXTRAS="${CARES_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
    export CARES_LDFLAG_EXTRAS="-m${_cpu} -static-libgcc -Wl,--nxcompat -Wl,--dynamicbase"
    [ "${_cpu}" = '64' ] && CARES_LDFLAG_EXTRAS="${CARES_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x154000000"
 

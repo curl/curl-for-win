@@ -48,7 +48,7 @@ _cpu="$2"
       # Requires mingw 5.0 or upper
       options="${options} -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
    fi
-   [ "${_BRANCH#*msysmingw*}" != "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && options="${options} -fno-asynchronous-unwind-tables"
+   [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && options="${options} -fno-asynchronous-unwind-tables"
 
    # AR=, NM=, RANLIB=
 

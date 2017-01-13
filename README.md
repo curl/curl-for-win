@@ -16,12 +16,20 @@
     open source code, C compiler, build scripts and running the
     build [in public](https://ci.appveyor.com/project/vsz/harbour-deps),
     with open, auditable [build logs](#live-build-logs).
+  - C compiler toolchain is MinGW from MSYS2.
   - Binaries are built with supported [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29) options enabled.
-  - Binaries are currently using [SJLJ](https://stackoverflow.com/a/15685229/1732433) exception handling.
-    (steps to migrate to [DWARF](https://en.wikipedia.org/wiki/DWARF)/[SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH) are underway)
+  - Binaries are using [DWARF](https://en.wikipedia.org/wiki/DWARF) in x86 and
+    [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH)
+    in x64 builds.
   - Components are verified using SHA-256 hashes and also GPG signatures where available.
   - Generated binaries are [reproducible](https://reproducible-builds.org), meaning
     they will have the same hash given the same input sources and C compiler.
+  - Because MSYS2 is updated before each build, subsequent builds _may_ use
+    different versions/builds of the compiler toolchain. This may result in
+    different generated binaries given otherwise unchanged source code and
+    configuration, sometimes thus breaking reproducibility. This trade-off was
+    decided to be tolerable for more ideal binaries and allowing this project
+    to automatically benefit from continuous C compiler updates.
   - Generated binaries are GPG signed with Bintray's [key pair](https://bintray.com/docs/usermanual/uploads/uploads_gpgsigning.html):
     **[8756 C4F7 65C9 AC3C B6B8  5D62 379C E192 D401 AB61](https://pgp.mit.edu/pks/lookup?op=vindex&fingerprint=on&search=0x8756C4F765C9AC3CB6B85D62379CE192D401AB61)**
   - Patching policy: No locally maintained patches. Patches are only
