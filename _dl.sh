@@ -53,6 +53,16 @@ if [ "${_BRANCH#*msysmingw*}" = "${_BRANCH}" ] ; then
    # Will unpack into './mingw64'
    7z x -y pack.bin > /dev/null || exit 1
    rm pack.bin
+else
+   # Bad hack to avoid duplicate manifests being linked into slightly "off" binaries.
+   #    https://github.com/Alexpux/MSYS2-packages/issues/454
+   #    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69880
+   for file in \
+      /usr/lib/default-manifest.o \
+      /mingw32/i686-w64-mingw32/lib/default-manifest.o \
+      /mingw64/x86_64-w64-mingw32/lib/default-manifest.o ; do
+      [ -f "${file}" ] && mv -f "${file}" "${file}-ORI"
+   done
 fi
 
 # nghttp2
