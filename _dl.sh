@@ -48,8 +48,8 @@ fi
 
 if [ "${_BRANCH#*extmingw*}" != "${_BRANCH}" ] ; then
    # mingw
-   curl -o pack.bin -L 'https://downloads.sourceforge.net/mingw-w64/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/6.3.0/threads-posix/sjlj/x86_64-6.3.0-release-posix-sjlj-rt_v5-rev0.7z' || exit 1
-   openssl dgst -sha256 pack.bin | grep -q 41cab7c322058bec6ff02f461cd4327ed68839719c06bfc74112614c4999aae8 || exit 1
+   curl -o pack.bin -L 'https://downloads.sourceforge.net/mingw-w64/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/6.3.0/threads-posix/sjlj/x86_64-6.3.0-release-posix-sjlj-rt_v5-rev1.7z' || exit 1
+   openssl dgst -sha256 pack.bin | grep -q 10c40147b1781d0b915e96967becca99c6ffe2d56695a6830721051fe1b62b1f || exit 1
    # Will unpack into './mingw64'
    7z x -y pack.bin > /dev/null || exit 1
    rm pack.bin
