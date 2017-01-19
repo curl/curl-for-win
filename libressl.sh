@@ -61,6 +61,9 @@ _cpu="$2"
    ../_peclean.py "${_ref}" "${_pkg}/bin/*.exe"
    ../_peclean.py "${_ref}" "${_pkg}/bin/*.dll"
 
+   ../_sign.sh "${_pkg}/bin/*.exe"
+   ../_sign.sh "${_pkg}/bin/*.dll"
+
    touch -c -r "${_ref}" ${_pkg}/etc/ssl/cert.pem
    touch -c -r "${_ref}" ${_pkg}/etc/ssl/*.cnf
    touch -c -r "${_ref}" ${_pkg}/bin/*.exe

@@ -13,12 +13,16 @@ environment:
     secure: t0zZqLgvaePWqUGn/dLMQ50M3YkMTktXSWglL1dyaEHKTOuXYiNe070dNlJEAoi1
   VIRUSTOTAL_APIKEY:
     secure: TdJYONfrpH45DuyKxraVqgHYy25IQ/F8TKHzYf+u5zz1aiM2yR0YTMaGxyj2EMReEearSI9kD9D2ZykybSVEbRyEaotZlceUb2lPDKELl3M=
+  CODESIGN_GPG_PASS:
+    secure: pVgDvVAXHLE+EMsDNKa+VY3kz/w1DLWpIAAiaEoahY7tRx7QpMzlMDND07CN1xN+
+  CODESIGN_KEY_PASS:
+    secure: WpvrivnhUx4RI4Y02hRjj6T+7IGQADpdU5nIQh1oW8jrUaujbmUmGCxG6vANeasz
 build_script:
   - set PATH=C:\Python27-x64;C:\msys64\usr\bin;%SystemRoot%\system32
   - pacman --noconfirm --noprogressbar -S --needed mc
   - pacman --noconfirm --noprogressbar -S -yu -u
   - pacman --noconfirm --noprogressbar -S -yu -u
-  - pacman --noconfirm --noprogressbar -S --needed p7zip mingw-w64-{i686,x86_64}-jq
+  - pacman --noconfirm --noprogressbar -S --needed p7zip mingw-w64-{i686,x86_64}-{jq,osslsigncode}
   - sh -c ./_build.sh
 artifacts:
   - path: '*-*-mingw.*'

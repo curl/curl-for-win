@@ -75,8 +75,14 @@ _cpu="$2"
 
    ../_peclean.py "${_ref}" 'apps/openssl.exe'
    ../_peclean.py "${_ref}" 'apps/*.dll'
+
+   ../_sign.sh 'apps/openssl.exe'
+   ../_sign.sh 'apps/*.dll'
+
    if ls ${engdir}/*.dll > /dev/null 2>&1 ; then
       ../_peclean.py "${_ref}" "${engdir}/*.dll"
+
+      ../_sign.sh "${engdir}/*.dll"
    fi
 
    touch -c -r "${_ref}" apps/openssl.exe

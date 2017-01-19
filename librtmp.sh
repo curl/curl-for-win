@@ -47,6 +47,9 @@ _cdo="$(pwd)"
    ../_peclean.py "${_ref}" './*.exe'
    ../_peclean.py "${_ref}" 'librtmp/*.dll'
 
+   ../_sign.sh './*.exe'
+   ../_sign.sh 'librtmp/*.dll'
+
    touch -c -r "${_ref}" librtmp/*.exe
    touch -c -r "${_ref}" librtmp/*.dll
    touch -c -r "${_ref}" librtmp/*.a

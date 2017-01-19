@@ -37,6 +37,8 @@ _cpu="$2"
 
    ../_peclean.py "${_ref}" '*.exe'
 
+   ../_sign.sh '*.exe'
+
    touch -c -r "${_ref}" ./*.a
    touch -c -r "${_ref}" ./*.exe
 

@@ -40,6 +40,16 @@
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
   - If you need a download with a stable checksum, link to the penultimate version.
     Only the current latest versions are kept updated with newer dependencies.
+  - Code signing is implemented but not enabled yet for reasons below:
+    - There doesn't seem to exist a way to get _free_ code signing certificates,
+      so only a self-signed certificate could be used, which is not very useful.
+    - The portable tool used for signing (osslsigncode)
+      [will always embed](https://sourceforge.net/p/osslsigncode/bugs/8/) the
+      current timestamp in the signature, which breaks reproducibility. This
+      may be an OpenSSL bug/feature.
+    - Signed timestamp included in the signature breaks reproducibility. This
+      is an optional feature, though it appears to be good practice to include
+      it.
 
 # Please donate to support maintaining these builds
 

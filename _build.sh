@@ -13,6 +13,16 @@ which git > /dev/null && _URL="$(git ls-remote --get-url | sed 's|.git$||')"
 
 . ./_dl.sh || exit 1
 
+# decrypt code signing key
+export CODESIGN_KEY="$(realpath './vszakats.p12')"
+(
+   set +x
+   if [ -n "${CODESIGN_GPG_PASS}" ] ; then
+      gpg --batch --passphrase "${CODESIGN_GPG_PASS}" -o "${CODESIGN_KEY}" -d "${CODESIGN_KEY}.asc"
+   fi
+)
+[ -f "${CODESIGN_KEY}" ] || unset CODESIGN_KEY
+
 _ori_path="${PATH}"
 
 for _cpu in '32' '64' ; do
