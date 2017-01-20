@@ -43,7 +43,7 @@
   - Code signing is implemented but not enabled yet for reasons below:
     - There doesn't seem to exist a way to get _free_ code signing certificates,
       so only a self-signed certificate could be used, which is not very useful.
-    - The portable tool (`osslsigncode`) used for signing
+    - The portable tool `osslsigncode` used for signing
       [will always embed](https://sourceforge.net/p/osslsigncode/bugs/8/) the
       current timestamp in the signature
       ([Signing Time &ndash; OID 1.2.840.113549.1.9.5](https://oidref.com/1.2.840.113549.1.9.25)),
