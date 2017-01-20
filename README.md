@@ -46,7 +46,7 @@
     - The portable tool (`osslsigncode`) used for signing
       [will always embed](https://sourceforge.net/p/osslsigncode/bugs/8/) the
       current timestamp in the signature
-      ([Signing Time &mdash; OID 1.2.840.113549.1.9.5](https://oidref.com/1.2.840.113549.1.9.25)),
+      ([Signing Time &ndash; OID 1.2.840.113549.1.9.5](https://oidref.com/1.2.840.113549.1.9.25)),
       which breaks reproducibility. More precisely, this is added by OpenSSL's
       PKCS #7 module automatically.
     - Signed timestamp included in the signature breaks reproducibility. This
