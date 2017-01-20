@@ -45,8 +45,9 @@
       so only a self-signed certificate could be used, which is not very useful.
     - The portable tool (`osslsigncode`) used for signing
       [will always embed](https://sourceforge.net/p/osslsigncode/bugs/8/) the
-      current timestamp in the signature, which breaks reproducibility. More
-      precisely it is added by OpenSSL's PKCS #7 module.
+      current timestamp in the signature (Signing Time OID 1.2.840.113549.1.9.5),
+      which breaks reproducibility. More precisely this is added by OpenSSL's
+      PKCS #7 module automatically.
     - Signed timestamp included in the signature breaks reproducibility. This
       is an optional feature, though it appears to be good practice to include
       it.
