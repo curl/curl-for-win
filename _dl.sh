@@ -177,3 +177,5 @@ rm -f -r curl && mv curl-* curl
 [ -f "curl${_patsuf}.diff" ] && dos2unix < "curl${_patsuf}.diff" | patch -N -p1 -d curl
 
 set +e
+
+rm -f pack.bin pack.sig
