@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2014-2016 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2017 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 export _NAM
@@ -46,7 +46,7 @@ _cpu="$2"
 
    readonly _ref='ChangeLog'
 
-   strip -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
+   ${_CCPREFIX}strip -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
 
    touch -c -r "${_ref}" ${_pkg}/include/nghttp2/*.h
    touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc

@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2014-2016 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2017 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 export _NAM
@@ -66,11 +66,11 @@ _cpu="$2"
 
    # Make steps for determinism
 
-   strip -p --enable-deterministic-archives -g ./*.a
-   strip -p -s apps/openssl.exe
-   strip -p -s apps/*.dll
+   ${_CCPREFIX}strip -p --enable-deterministic-archives -g ./*.a
+   ${_CCPREFIX}strip -p -s apps/openssl.exe
+   ${_CCPREFIX}strip -p -s apps/*.dll
    if ls ${engdir}/*.dll > /dev/null 2>&1 ; then
-      strip -p -s ${engdir}/*.dll
+      ${_CCPREFIX}strip -p -s ${engdir}/*.dll
    fi
 
    ../_peclean.py "${_ref}" 'apps/openssl.exe'
@@ -96,11 +96,11 @@ _cpu="$2"
 
    # Tests
 
-   objdump -x apps/openssl.exe | grep -E -i "(file format|dll name)"
-   objdump -x apps/*.dll       | grep -E -i "(file format|dll name)"
+   ${_CCPREFIX}objdump -x apps/openssl.exe | grep -E -i "(file format|dll name)"
+   ${_CCPREFIX}objdump -x apps/*.dll       | grep -E -i "(file format|dll name)"
 
-   apps/openssl.exe version
-   apps/openssl.exe ciphers
+   ${_WINE} apps/openssl.exe version
+   ${_WINE} apps/openssl.exe ciphers
 
    # Create package
 

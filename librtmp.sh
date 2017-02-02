@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2014-2016 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2017 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 export _NAM
@@ -42,7 +42,7 @@ _cdo="$(pwd)"
 
    readonly _ref='ChangeLog'
 
-   strip -p --enable-deterministic-archives -g librtmp/*.a
+   ${_CCPREFIX}strip -p --enable-deterministic-archives -g librtmp/*.a
 
    ../_peclean.py "${_ref}" './*.exe'
    ../_peclean.py "${_ref}" 'librtmp/*.dll'

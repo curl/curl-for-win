@@ -1,9 +1,17 @@
 #!/bin/sh -x
 
-# Copyright 2014-2016 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2017 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 cd "$(dirname "$0")" || exit
+
+# Detect host OS
+case "$(uname)" in
+   *_NT*)   os='win';;
+   linux*)  os='linux';;
+   Darwin*) os='mac';;
+   *BSD)    os='bsd';;
+esac
 
 _cdo="$(pwd)"
 
@@ -36,8 +44,8 @@ find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' \;
 (
    cd "${_DST}/.." || exit
    rm -f "${_cdo}/${_BAS}.7z"
-   case "$(uname)" in
-      *_NT*) find "${_BAS}" -exec attrib +A -R {} \;
+   case "${os}" in
+      win) find "${_BAS}" -exec attrib +A -R {} \;
    esac
    # NOTE: add -stl option after updating to 15.12 or upper
    7z a -bd -r -mx "${_cdo}/${_BAS}.7z" "${_BAS}/*" > /dev/null

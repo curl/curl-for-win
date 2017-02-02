@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2014-2016 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2017 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 export _NAM
@@ -39,15 +39,15 @@ _cpu="$2"
 
    (
       cd win32 || exit
-      mingw32-make clean
-      mingw32-make
+      ${_MAKE} clean
+      ${_MAKE}
    )
 
    # Make steps for determinism
 
    readonly _ref='NEWS'
 
-   strip -p --enable-deterministic-archives -g win32/*.a
+   ${_CCPREFIX}strip -p --enable-deterministic-archives -g win32/*.a
 
    ../_peclean.py "${_ref}" 'win32/*.dll'
 

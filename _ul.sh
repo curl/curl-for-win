@@ -1,9 +1,17 @@
 #!/bin/sh
 
-# Copyright 2014-2016 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2017 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 cd "$(dirname "$0")" || exit
+
+# Detect host OS
+case "$(uname)" in
+   *_NT*)   os='win';;
+   linux*)  os='linux';;
+   Darwin*) os='mac';;
+   *BSD)    os='bsd';;
+esac
 
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] ; then
    _suf=
@@ -31,9 +39,9 @@ fi
 )
 
 # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>
-case "$(uname)" in
-   *BSD|Darwin) stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_BAS}${_suf}.7z";;
-   *)           stat -c '%n: %s bytes %y' "${_BAS}${_suf}.7z";;
+case "${os}" in
+   bsd|mac) stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_BAS}${_suf}.7z";;
+   *)       stat -c '%n: %s bytes %y' "${_BAS}${_suf}.7z";;
 esac
 
 openssl dgst -sha256 "${_BAS}${_suf}.7z" | tee -a hashes.txt

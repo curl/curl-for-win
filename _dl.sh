@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2015-2016 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2015-2017 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 export ZLIB_VER_='1.2.8'
@@ -25,6 +25,14 @@ export CURL_HASH=d16185a767cb2c1ba3d5b9096ec54e5ec198b213f45864a38b3bda4bbf87389
 # Quit if any of the lines fail
 set -e
 
+# Detect host OS
+case "$(uname)" in
+   *_NT*)   os='win';;
+   linux*)  os='linux';;
+   Darwin*) os='mac';;
+   *BSD)    os='bsd';;
+esac
+
 # Install required component
 python -m pip --disable-pip-version-check install --upgrade pip
 python -m pip install pefile
@@ -46,23 +54,25 @@ else
    _patsuf=''
 fi
 
-if [ "${_BRANCH#*extmingw*}" != "${_BRANCH}" ] ; then
-   # mingw
-   curl -o pack.bin -L 'https://downloads.sourceforge.net/mingw-w64/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/6.3.0/threads-posix/sjlj/x86_64-6.3.0-release-posix-sjlj-rt_v5-rev1.7z' || exit 1
-   openssl dgst -sha256 pack.bin | grep -q 10c40147b1781d0b915e96967becca99c6ffe2d56695a6830721051fe1b62b1f || exit 1
-   # Will unpack into './mingw64'
-   7z x -y pack.bin > /dev/null || exit 1
-   rm pack.bin
-else
-   # Bad hack to avoid duplicate manifests being linked into slightly "off" binaries.
-   #    https://github.com/Alexpux/MSYS2-packages/issues/454
-   #    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69880
-   for file in \
-      /usr/lib/default-manifest.o \
-      /mingw32/i686-w64-mingw32/lib/default-manifest.o \
-      /mingw64/x86_64-w64-mingw32/lib/default-manifest.o ; do
-      [ -f "${file}" ] && mv -f "${file}" "${file}-ORI"
-   done
+if [ "${os}" = 'win' ] ; then
+   if [ "${_BRANCH#*extmingw*}" != "${_BRANCH}" ] ; then
+      # mingw
+      curl -o pack.bin -L 'https://downloads.sourceforge.net/mingw-w64/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/6.3.0/threads-posix/sjlj/x86_64-6.3.0-release-posix-sjlj-rt_v5-rev1.7z' || exit 1
+      openssl dgst -sha256 pack.bin | grep -q 10c40147b1781d0b915e96967becca99c6ffe2d56695a6830721051fe1b62b1f || exit 1
+      # Will unpack into './mingw64'
+      7z x -y pack.bin > /dev/null || exit 1
+      rm pack.bin
+   else
+      # Bad hack to avoid duplicate manifests being linked into slightly "off" binaries.
+      #    https://github.com/Alexpux/MSYS2-packages/issues/454
+      #    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69880
+      for file in \
+         /usr/lib/default-manifest.o \
+         /mingw32/i686-w64-mingw32/lib/default-manifest.o \
+         /mingw64/x86_64-w64-mingw32/lib/default-manifest.o ; do
+         [ -f "${file}" ] && mv -f "${file}" "${file}-ORI"
+      done
+   fi
 fi
 
 # nghttp2

@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2014-2016 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2017 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 export _NAM
@@ -111,8 +111,8 @@ _cpu="$2"
 
    export CROSSPREFIX="${_CCPREFIX}"
 
-   mingw32-make mingw32-clean
-   mingw32-make "${options}"
+   ${_MAKE} mingw32-clean
+   ${_MAKE} "${options}"
 
    # Download CA bundle
    [ -f '../ca-bundle.crt' ] || \
@@ -122,7 +122,7 @@ _cpu="$2"
 
    readonly _ref='CHANGES'
 
-   strip -p --enable-deterministic-archives -g lib/*.a
+   ${_CCPREFIX}strip -p --enable-deterministic-archives -g lib/*.a
 
    ../_peclean.py "${_ref}" 'src/*.exe'
    ../_peclean.py "${_ref}" 'lib/*.dll'
@@ -137,10 +137,10 @@ _cpu="$2"
 
    # Tests
 
-   objdump -x src/*.exe | grep -E -i "(file format|dll name)"
-   objdump -x lib/*.dll | grep -E -i "(file format|dll name)"
+   ${_CCPREFIX}objdump -x src/*.exe | grep -E -i "(file format|dll name)"
+   ${_CCPREFIX}objdump -x lib/*.dll | grep -E -i "(file format|dll name)"
 
-   src/curl.exe -V
+   ${_WINE} src/curl.exe -V
 
    # Create package
 

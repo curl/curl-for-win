@@ -1,20 +1,42 @@
 #!/bin/sh -x
 
-# Copyright 2015-2016 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2015-2017 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
+
+# Requirements:
+#   Windows:
+#     MSYS2: p7zip mingw-w64-{i686,x86_64}-{jq,osslsigncode} gpg python
+#   Linux
+#     p7zip-full jq osslsigncode dos2unix binutils-mingw-w64 gcc-mingw-w64 wine
+#   Mac:
+#     MacPorts: port install mingw-w64
+#     Homebrew: install p7zip jq osslsigncode dos2unix gpg
+#     Wine: https://dl.winehq.org/wine-builds/macosx/download.html
 
 cd "$(dirname "$0")" || exit
 
 export _BRANCH="${APPVEYOR_REPO_BRANCH}${TRAVIS_BRANCH}${CI_BUILD_REF_NAME}${GIT_BRANCH}"
 [ -n "${_BRANCH}" ] || _BRANCH="$(git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')"
+[ -n "${_BRANCH}" ] || _BRANCH='master'
 export _URL=''
 which git > /dev/null && _URL="$(git ls-remote --get-url | sed 's|.git$||')"
 [ -n "${_URL}" ] || _URL="https://github.com/${APPVEYOR_REPO_NAME}${TRAVIS_REPO_SLUG}"
 
+# Detect host OS
+case "$(uname)" in
+   *_NT*)   os='win';;
+   linux*)  os='linux';;
+   Darwin*) os='mac';;
+   *BSD)    os='bsd';;
+esac
+
+rm -f ./*.7z
+
 . ./_dl.sh || exit 1
 
 # decrypt code signing key
-export CODESIGN_KEY="$(realpath './vszakats.p12')"
+export CODESIGN_KEY=
+CODESIGN_KEY="$(realpath './vszakats.p12')"
 (
    set +x
    if [ -n "${CODESIGN_GPG_PASS}" ] ; then
@@ -28,29 +50,32 @@ _ori_path="${PATH}"
 for _cpu in '32' '64' ; do
 
    export _CCPREFIX=
+   export _MAKE='make'
+   export _WINE=''
 
-   # Use custom mingw compiler package, if installed.
-   if [ -d './mingw64/bin' ] ; then
-      tmp="$(realpath './mingw64/bin')"
-   else
-      tmp="/mingw${_cpu}/bin"
-      if [ "${APPVEYOR}" = 'True' ] ; then
-         # mingw-w64 comes with its own Python copy. Override that with
-         # AppVeyor's external one, which has our extra installed 'pefile'
-         # package.
-         tmp="/c/Python27-x64:${tmp}"
+   if [ "${os}" = 'win' ] ; then
+      # Use custom mingw compiler package, if installed.
+      if [ -d './mingw64/bin' ] ; then
+         tmp="$(realpath './mingw64/bin')"
+      else
+         tmp="/mingw${_cpu}/bin"
+         if [ "${APPVEYOR}" = 'True' ] ; then
+            # mingw-w64 comes with its own Python copy. Override that with
+            # AppVeyor's external one, which has our extra installed 'pefile'
+            # package.
+            tmp="/c/Python27-x64:${tmp}"
+         fi
       fi
+      export PATH="${tmp}:${_ori_path}"
+      export _MAKE='mingw32-make'
+   else
+      # Prefixes don't work with MSYS2/mingw-w64, because `ar`, `nm` and
+      # `runlib` are missing from them. They are accessible either _without_
+      # one, or as prefix + `gcc-ar`, `gcc-nm`, `gcc-runlib`.
       [ "${_cpu}" = '32' ] && _CCPREFIX='i686-w64-mingw32-'
       [ "${_cpu}" = '64' ] && _CCPREFIX='x86_64-w64-mingw32-'
+      export _WINE='wine'
    fi
-   export PATH="${tmp}:${_ori_path}"
-
-   # Prefixes don't work with MSYS2/mingw-w64, because `ar`, `nm` and
-   # `runlib` are missing from them. They are accessible either _without_
-   # one, or as prefix + `gcc-ar`, `gcc-nm`, `gcc-runlib`.
-   case "$(uname)" in
-      *_NT*) _CCPREFIX=
-   esac
 
    ./libidn.sh     "${LIBIDN_VER_}" "${_cpu}"
    ./c-ares.sh      "${CARES_VER_}" "${_cpu}"

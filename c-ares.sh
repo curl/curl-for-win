@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2014-2016 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2017 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 export _NAM
@@ -25,15 +25,15 @@ _cpu="$2"
 
    export CROSSPREFIX="${_CCPREFIX}"
 
-   mingw32-make -f Makefile.m32 clean
-   mingw32-make -f Makefile.m32
-   mingw32-make -f Makefile.m32 demos
+   ${_MAKE} -f Makefile.m32 clean
+   ${_MAKE} -f Makefile.m32
+   ${_MAKE} -f Makefile.m32 demos
 
    # Make steps for determinism
 
    readonly _ref='NEWS'
 
-   strip -p --enable-deterministic-archives -g ./*.a
+   ${_CCPREFIX}strip -p --enable-deterministic-archives -g ./*.a
 
    ../_peclean.py "${_ref}" '*.exe'
 
