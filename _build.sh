@@ -31,6 +31,7 @@ case "$(uname)" in
 esac
 
 rm -f ./*.7z
+rm -f hashes.txt
 
 . ./_dl.sh || exit 1
 
