@@ -21,8 +21,8 @@ _cpu="$2"
    find . -name '*.o' -type f -delete
    find . -name '*.a' -type f -delete
 
-   # Set IMPLIB to something that is not found by dependents to force linking
-   # the static lib instead.
+   # Set IMPLIB to something that is not found by dependents in order to force
+   # linking the static lib instead.
    options="PREFIX=${_CCPREFIX} IMPLIB=dummy"
    export LDFLAGS="-m${_cpu} -static-libgcc"
    export LOC="${LDFLAGS} -fno-ident -D_LARGEFILE64_SOURCE=1 -D_LFS64_LARGEFILE=1"
