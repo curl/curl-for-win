@@ -78,6 +78,7 @@ for _cpu in '32' '64' ; do
       export _WINE='wine'
    fi
 
+   ./zlib.sh         "${ZLIB_VER_}" "${_cpu}"
    ./libidn.sh     "${LIBIDN_VER_}" "${_cpu}"
    ./c-ares.sh      "${CARES_VER_}" "${_cpu}"
    ./nghttp2.sh   "${NGHTTP2_VER_}" "${_cpu}"

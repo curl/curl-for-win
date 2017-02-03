@@ -62,6 +62,9 @@ _cpu="$2"
    [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
    export CXXFLAGS="${CFLAGS}"
 
+   export ZLIB_CFLAGS='-I../../zlib'
+   export ZLIB_LIBS='-L../../zlib -lz'
+
    # shellcheck disable=SC2086
    ./configure ${options} \
       --disable-dependency-tracking \

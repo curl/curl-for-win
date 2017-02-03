@@ -1,0 +1,12 @@
+diff --strip-trailing-cr -urN zlib.orig/gzlib.c zlib/gzlib.c
+--- zlib.orig/gzlib.c	2017-01-15 17:29:40.000000000 +0000
++++ zlib/gzlib.c	2017-01-15 21:36:52.000000000 +0000
+@@ -5,7 +5,7 @@
+ 
+ #include "gzguts.h"
+ 
+-#if defined(_WIN32) && !defined(__BORLANDC__) && !defined(__MINGW32__)
++#if defined(_WIN32) && !defined(__BORLANDC__)
+ #  define LSEEK _lseeki64
+ #else
+ #if defined(_LARGEFILE64_SOURCE) && _LFS64_LARGEFILE-0
