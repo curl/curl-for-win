@@ -76,7 +76,7 @@ if [ "${os}" = 'win' ] ; then
 fi
 
 # zlib
-curl -o pack.bin -L --proto-redir =https "https://github.com/madler/zlib/archive/v1.2.11.tar.gz" || exit 1
+curl -o pack.bin -L --proto-redir =https "https://github.com/madler/zlib/archive/v${ZLIB_VER_}.tar.gz" || exit 1
 openssl dgst -sha256 pack.bin | grep -q "${ZLIB_HASH}" || exit 1
 tar -xvf pack.bin > /dev/null 2>&1 || exit 1
 rm pack.bin
