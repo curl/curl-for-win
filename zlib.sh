@@ -40,8 +40,8 @@ _cpu="$2"
 
    readonly _ref='ChangeLog'
 
-   ${_CCPREFIX}strip -p --enable-deterministic-archives -g ${_pkg}/*.a
-   ${_CCPREFIX}strip -p -s *.dll
+   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ./*.a
+   "${_CCPREFIX}strip" -p -s ./*.dll
 
    ../_peclean.py "${_ref}" '*.dll'
 
@@ -52,5 +52,5 @@ _cpu="$2"
 
    # Tests
 
-   ${_CCPREFIX}objdump -x ./*.dll | grep -E -i "(file format|dll name)"
+   "${_CCPREFIX}objdump" -x ./*.dll | grep -E -i "(file format|dll name)"
 )

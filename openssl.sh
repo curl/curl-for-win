@@ -66,11 +66,11 @@ _cpu="$2"
 
    # Make steps for determinism
 
-   ${_CCPREFIX}strip -p --enable-deterministic-archives -g ./*.a
-   ${_CCPREFIX}strip -p -s apps/openssl.exe
-   ${_CCPREFIX}strip -p -s apps/*.dll
+   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ./*.a
+   "${_CCPREFIX}strip" -p -s apps/openssl.exe
+   "${_CCPREFIX}strip" -p -s apps/*.dll
    if ls ${engdir}/*.dll > /dev/null 2>&1 ; then
-      ${_CCPREFIX}strip -p -s ${engdir}/*.dll
+      "${_CCPREFIX}strip" -p -s ${engdir}/*.dll
    fi
 
    ../_peclean.py "${_ref}" 'apps/openssl.exe'
@@ -96,8 +96,8 @@ _cpu="$2"
 
    # Tests
 
-   ${_CCPREFIX}objdump -x apps/openssl.exe | grep -E -i "(file format|dll name)"
-   ${_CCPREFIX}objdump -x apps/*.dll       | grep -E -i "(file format|dll name)"
+   "${_CCPREFIX}objdump" -x apps/openssl.exe | grep -E -i "(file format|dll name)"
+   "${_CCPREFIX}objdump" -x apps/*.dll       | grep -E -i "(file format|dll name)"
 
    ${_WINE} apps/openssl.exe version
    ${_WINE} apps/openssl.exe ciphers

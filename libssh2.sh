@@ -47,7 +47,7 @@ _cpu="$2"
 
    readonly _ref='NEWS'
 
-   ${_CCPREFIX}strip -p --enable-deterministic-archives -g win32/*.a
+   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g win32/*.a
 
    ../_peclean.py "${_ref}" 'win32/*.dll'
 

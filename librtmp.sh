@@ -42,7 +42,7 @@ _cdo="$(pwd)"
 
    readonly _ref='ChangeLog'
 
-   ${_CCPREFIX}strip -p --enable-deterministic-archives -g librtmp/*.a
+   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g librtmp/*.a
 
    ../_peclean.py "${_ref}" './*.exe'
    ../_peclean.py "${_ref}" 'librtmp/*.dll'

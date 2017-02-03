@@ -33,7 +33,7 @@ _cpu="$2"
 
    readonly _ref='NEWS'
 
-   ${_CCPREFIX}strip -p --enable-deterministic-archives -g ./*.a
+   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ./*.a
 
    ../_peclean.py "${_ref}" '*.exe'
 

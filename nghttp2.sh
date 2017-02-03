@@ -82,7 +82,7 @@ _cpu="$2"
 
    readonly _ref='ChangeLog'
 
-   ${_CCPREFIX}strip -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
+   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
 
    touch -c -r "${_ref}" ${_pkg}/include/nghttp2/*.h
    touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc

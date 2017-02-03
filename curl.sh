@@ -122,7 +122,7 @@ _cpu="$2"
 
    readonly _ref='CHANGES'
 
-   ${_CCPREFIX}strip -p --enable-deterministic-archives -g lib/*.a
+   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g lib/*.a
 
    ../_peclean.py "${_ref}" 'src/*.exe'
    ../_peclean.py "${_ref}" 'lib/*.dll'
@@ -137,8 +137,8 @@ _cpu="$2"
 
    # Tests
 
-   ${_CCPREFIX}objdump -x src/*.exe | grep -E -i "(file format|dll name)"
-   ${_CCPREFIX}objdump -x lib/*.dll | grep -E -i "(file format|dll name)"
+   "${_CCPREFIX}objdump" -x src/*.exe | grep -E -i "(file format|dll name)"
+   "${_CCPREFIX}objdump" -x lib/*.dll | grep -E -i "(file format|dll name)"
 
    ${_WINE} src/curl.exe -V
 

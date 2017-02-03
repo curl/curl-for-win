@@ -47,8 +47,8 @@ _cpu="$2"
 
    readonly _ref='NEWS'
 
-   ${_CCPREFIX}strip -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
-   ${_CCPREFIX}strip -p -s ${_pkg}/bin/*.exe
+   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
+   "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.exe
 
    ../_peclean.py "${_ref}" "${_pkg}/bin/*.exe"
 

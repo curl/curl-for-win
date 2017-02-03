@@ -54,9 +54,9 @@ _cpu="$2"
 
    readonly _ref='ChangeLog'
 
-   ${_CCPREFIX}strip -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
-   ${_CCPREFIX}strip -p -s ${_pkg}/bin/*.exe
-   ${_CCPREFIX}strip -p -s ${_pkg}/bin/*.dll
+   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
+   "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.exe
+   "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.dll
 
    ../_peclean.py "${_ref}" "${_pkg}/bin/*.exe"
    ../_peclean.py "${_ref}" "${_pkg}/bin/*.dll"
