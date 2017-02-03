@@ -3,8 +3,8 @@
 # Copyright 2015-2017 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
-export ZLIB_VER_='1.2.8'
-export ZLIB_HASH=e380bd1bdb6447508beaa50efc653fe45f4edc1dafe11a251ae093e0ee97db9a
+export ZLIB_VER_='1.2.11'
+export ZLIB_HASH=629380c90a77b964d896ed37163f5c3a34f6e6d897311f1df2a7016355c45eff
 export LIBIDN_VER_='1.33'
 export LIBIDN_HASH=44a7aab635bb721ceef6beecc4d49dfd19478325e1b47f3196f7d2acc4930e19
 export NGHTTP2_VER_='1.19.0'
@@ -74,6 +74,14 @@ if [ "${os}" = 'win' ] ; then
       done
    fi
 fi
+
+# zlib
+curl -o pack.bin -L --proto-redir =https "https://github.com/madler/zlib/archive/v1.2.11.tar.gz" || exit 1
+openssl dgst -sha256 pack.bin | grep -q "${ZLIB_HASH}" || exit 1
+tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+rm pack.bin
+rm -f -r zlib && mv zlib-* zlib
+[ -f "zlib${_patsuf}.diff" ] && dos2unix < "zlib${_patsuf}.diff" | patch -N -p1 -d zlib
 
 # nghttp2
 curl -o pack.bin -L --proto-redir =https "https://github.com/nghttp2/nghttp2/releases/download/v${NGHTTP2_VER_}/nghttp2-${NGHTTP2_VER_}.tar.bz2" || exit 1
