@@ -182,6 +182,7 @@ _cpu="$2"
    cp -f -p RELEASE-NOTES            "${_DST}/RELEASE-NOTES.txt"
    cp -f -p ../ca-bundle.crt         "${_DST}/bin/curl-ca-bundle.crt"
 
+   [ -d ../zlib ]     && cp -f -p ../zlib/README      "${_DST}/COPYING-zlib.txt"
    [ -d ../libssh2 ]  && cp -f -p ../libssh2/COPYING  "${_DST}/COPYING-libssh2.txt"
    [ -d ../nghttp2 ]  && cp -f -p ../nghttp2/COPYING  "${_DST}/COPYING-nghttp2.txt"
    [ -d ../libidn ]   && cp -f -p ../libidn/COPYING   "${_DST}/COPYING-libidn.txt"

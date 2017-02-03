@@ -23,13 +23,34 @@ _cpu="$2"
 
    # Set IMPLIB to something that is not found by dependents in order to force
    # linking the static lib instead.
-   options="PREFIX=${_CCPREFIX} IMPLIB=dummy"
+   options="PREFIX=${_CCPREFIX} IMPLIB=dummy.a"
    export LDFLAGS="-m${_cpu} -static-libgcc"
    export LOC="${LDFLAGS} -fno-ident -D_LARGEFILE64_SOURCE=1 -D_LFS64_LARGEFILE=1"
    [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && LOC="${LOC} -fno-asynchronous-unwind-tables"
 
    # shellcheck disable=SC2086
-   make -f win32/makefile.gcc ${options} clean #> /dev/null
+   make -f win32/makefile.gcc ${options} clean > /dev/null
    # shellcheck disable=SC2086
-   make -f win32/makefile.gcc ${options} install #> /dev/null
+   make -f win32/makefile.gcc ${options} install > /dev/null
+
+   ls ./*.dll
+   ls ./*.a
+
+   # Make steps for determinism
+
+   readonly _ref='ChangeLog'
+
+   ${_CCPREFIX}strip -p --enable-deterministic-archives -g ${_pkg}/*.a
+   ${_CCPREFIX}strip -p -s *.dll
+
+   ../_peclean.py "${_ref}" '*.dll'
+
+   ../_sign.sh '*.dll'
+
+   touch -c -r "${_ref}" ./*.dll
+   touch -c -r "${_ref}" ./*.a
+
+   # Tests
+
+   ${_CCPREFIX}objdump -x ./*.dll | grep -E -i "(file format|dll name)"
 )
