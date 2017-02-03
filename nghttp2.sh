@@ -16,6 +16,36 @@ _cpu="$2"
 (
    cd "${_NAM}" || exit
 
+   # Cross-tasks
+
+   # Detect host OS
+   case "$(uname)" in
+      *_NT*)   os='win';;
+      linux*)  os='linux';;
+      Darwin*) os='mac';;
+      *BSD)    os='bsd';;
+   esac
+
+   # This is pretty much guesswork and and this warning remains:
+   #    `configure: WARNING: using cross tools not prefixed with host triplet`
+   # Even if `_CCPREFIX` is not omitted.
+   if [ "${os}" != 'win' ] ; then
+
+      # https://clang.llvm.org/docs/CrossCompilation.html
+      unset _HOST
+      case "${os}" in
+         win)   _HOST='x86_64-pc-mingw32';;
+         linux) _HOST='x86_64-pc-linux';;
+         mac)   _HOST='x86_64-apple-darwin';;
+         bsd)   _HOST='x86_64-pc-bsd';;
+      esac
+
+      [ "${_cpu}" = '32' ] && _TARGET='i686-w64-mingw32'
+      [ "${_cpu}" = '64' ] && _TARGET='x86_64-w64-mingw32'
+
+      options="--build=${_HOST} --host=${_TARGET}"
+   fi
+
    # Build
 
    find . -name '*.o'   -type f -delete
@@ -31,9 +61,12 @@ _cpu="$2"
    export CFLAGS="${LDFLAGS} -fno-ident -U__STRICT_ANSI__ -DNGHTTP2_STATICLIB"
    [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
    export CXXFLAGS="${CFLAGS}"
-   ./configure \
+
+   # shellcheck disable=SC2086
+   ./configure ${options} \
       --disable-dependency-tracking \
       --enable-lib-only \
+      --disable-shared \
       '--prefix=/usr/local' \
       --silent
 #  make clean > /dev/null
