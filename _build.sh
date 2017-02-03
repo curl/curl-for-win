@@ -3,7 +3,7 @@
 # Copyright 2015-2017 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
-# Requirements:
+# Requirements (not a comprehensive list at this point):
 #   Windows:
 #     MSYS2: p7zip mingw-w64-{i686,x86_64}-{jq,osslsigncode} gpg python
 #   Linux
