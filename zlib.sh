@@ -25,7 +25,7 @@ _cpu="$2"
    # the static lib instead.
    options="PREFIX=${_CCPREFIX} IMPLIB=dummy"
    export LDFLAGS="-m${_cpu} -static-libgcc"
-   export LOC="${LDFLAGS} -fno-ident"
+   export LOC="${LDFLAGS} -fno-ident -D_LARGEFILE64_SOURCE=1 -D_LFS64_LARGEFILE=1"
    [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && LOC="${LOC} -fno-asynchronous-unwind-tables"
 
    # shellcheck disable=SC2086
