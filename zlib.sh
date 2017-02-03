@@ -21,7 +21,9 @@ _cpu="$2"
    find . -name '*.o' -type f -delete
    find . -name '*.a' -type f -delete
 
-   options="PREFIX=${_CCPREFIX}"
+   # Set IMPLIB to something that is not found by dependents to force linking
+   # the static lib instead.
+   options="PREFIX=${_CCPREFIX} IMPLIB=dummy"
    export LDFLAGS="-m${_cpu} -static-libgcc"
    export LOC="${LDFLAGS} -fno-ident"
    [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && LOC="${LOC} -fno-asynchronous-unwind-tables"
