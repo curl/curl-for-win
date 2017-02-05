@@ -57,10 +57,10 @@ _cpu="$2"
    # ones from statically linked dependencies, resulting in a larger .dll,
    # an inflated implib and a non-standard list of exported functions.
    echo 'EXPORTS' > libcurl.def
-   grep '^CURL_EXTERN ' include/curl/*.h | \
-      awk 'match($0, /CURL_EXTERN ([a-zA-Z_\* ]*)[\* ]([a-z_]*)\(/, v) {print v[2]}' | \
-      grep -v '^$' | \
-      sort | tee -a libcurl.def
+   grep '^CURL_EXTERN ' include/curl/*.h \
+   | awk 'match($0, /CURL_EXTERN ([a-zA-Z_\* ]*)[\* ]([a-z_]*)\(/, v) {print v[2]}' \
+   | grep -v '^$' \
+   | sort | tee -a libcurl.def
    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} ../libcurl.def"
 
    export ZLIB_PATH=../../zlib
