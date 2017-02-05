@@ -24,8 +24,7 @@ _cpu="$2"
    # Set IMPLIB to something that is not found by dependents in order to force
    # linking the static lib instead.
    options="PREFIX=${_CCPREFIX} IMPLIB=dummy.a"
-   export LDFLAGS="-m${_cpu} -static-libgcc"
-   export LDFLAGS="${LDFLAGS} -Wl,--nxcompat -Wl,--dynamicbase"
+   export LDFLAGS="-m${_cpu} -static-libgcc -Wl,--nxcompat -Wl,--dynamicbase"
    [ "${_cpu}" = '64' ] && LDFLAGS="${LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x155000000"
    export LOC="${LDFLAGS} -fno-ident -D_LARGEFILE64_SOURCE=1 -D_LFS64_LARGEFILE=1"
    [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && LOC="${LOC} -fno-asynchronous-unwind-tables"
