@@ -67,9 +67,9 @@ if [ "${os}" = 'win' ]; then
       #    https://github.com/Alexpux/MSYS2-packages/issues/454
       #    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69880
       for file in \
-         /usr/lib/default-manifest.o \
-         /mingw32/i686-w64-mingw32/lib/default-manifest.o \
-         /mingw64/x86_64-w64-mingw32/lib/default-manifest.o ; do
+         '/usr/lib/default-manifest.o' \
+         '/mingw32/i686-w64-mingw32/lib/default-manifest.o' \
+         '/mingw64/x86_64-w64-mingw32/lib/default-manifest.o'; do
          [ -f "${file}" ] && mv -f "${file}" "${file}-ORI"
       done
    fi
