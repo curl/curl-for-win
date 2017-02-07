@@ -25,7 +25,7 @@ which git > /dev/null && _URL="$(git ls-remote --get-url | sed 's|.git$||')"
 # Detect host OS
 case "$(uname)" in
    *_NT*)   os='win';;
-   linux*)  os='linux';;
+   Linux*)  os='linux';;
    Darwin*) os='mac';;
    *BSD)    os='bsd';;
 esac
