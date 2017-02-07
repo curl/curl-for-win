@@ -70,6 +70,21 @@
 
   * <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
 
+# Guarantees and Liability
+
+  THIS SOFTWARE (INCLUDING RESULTING BINARIES) IS PROVIDED "AS IS", WITHOUT
+  WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+  WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM,
+  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+  OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+  USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+  Information in this document is subject to change without notice and does
+  not represent or imply any future commitment by the participants of the
+  project.
+
+
 ---
 This document &copy;&nbsp;2014&ndash;2017 Viktor Szakáts <https://github.com/vszakats><br />
 [![Creative Commons Attribution-ShareAlike 4.0](https://rawgit.com/cc-icons/cc-icons/master/fonts/cc-icons-svg/small.by-sa.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
