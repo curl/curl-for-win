@@ -29,7 +29,7 @@ _cpu="$2"
    # This is pretty much guesswork and and this warning remains:
    #    `configure: WARNING: using cross tools not prefixed with host triplet`
    # Even with `_CCPREFIX` provided.
-   if [ "${os}" != 'win' ] ; then
+   if [ "${os}" != 'win' ]; then
 
       # https://clang.llvm.org/docs/CrossCompilation.html
       unset _HOST

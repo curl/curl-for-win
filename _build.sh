@@ -40,7 +40,7 @@ export CODESIGN_KEY=
 CODESIGN_KEY="$(realpath './vszakats.p12')"
 (
    set +x
-   if [ -n "${CODESIGN_GPG_PASS}" ] ; then
+   if [ -n "${CODESIGN_GPG_PASS}" ]; then
       gpg --batch --passphrase "${CODESIGN_GPG_PASS}" -o "${CODESIGN_KEY}" -d "${CODESIGN_KEY}.asc"
    fi
 )
@@ -48,19 +48,19 @@ CODESIGN_KEY="$(realpath './vszakats.p12')"
 
 _ori_path="${PATH}"
 
-for _cpu in '32' '64' ; do
+for _cpu in '32' '64'; do
 
    export _CCPREFIX=
    export _MAKE='make'
    export _WINE=''
 
-   if [ "${os}" = 'win' ] ; then
+   if [ "${os}" = 'win' ]; then
       # Use custom mingw compiler package, if installed.
-      if [ -d './mingw64/bin' ] ; then
+      if [ -d './mingw64/bin' ]; then
          tmp="$(realpath './mingw64/bin')"
       else
          tmp="/mingw${_cpu}/bin"
-         if [ "${APPVEYOR}" = 'True' ] ; then
+         if [ "${APPVEYOR}" = 'True' ]; then
             # mingw-w64 comes with its own Python copy. Override that with
             # AppVeyor's external one, which has our extra installed 'pefile'
             # package.
@@ -93,7 +93,7 @@ ls -l ./*-*-mingw*.*
 cat hashes.txt
 
 # Move everything into a single artifact
-if [ "${_BRANCH#*all*}" != "${_BRANCH}" ] ; then
+if [ "${_BRANCH#*all*}" != "${_BRANCH}" ]; then
    7z a -bd -r -mx 'all-mingw.7z' ./*-*-mingw*.* > /dev/null
    rm ./*-*-mingw*.*
 fi

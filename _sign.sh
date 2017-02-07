@@ -3,7 +3,7 @@
 # Copyright 2016-2017 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
-if [ -f "${CODESIGN_KEY}" ] ; then
+if [ -f "${CODESIGN_KEY}" ]; then
    # Add code signature
    for file in $1 ; do
    (

@@ -36,7 +36,7 @@ _cpu="$2"
    export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
    export CURL_LDFLAG_EXTRAS_EXE
    export CURL_LDFLAG_EXTRAS_DLL
-   if [ "${_cpu}" = '32' ] ; then
+   if [ "${_cpu}" = '32' ]; then
       CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
    else
       CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
@@ -44,7 +44,7 @@ _cpu="$2"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
    fi
 
-   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ] ; then
+   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
       CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,-Map,curl.map"
       CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,-Map,libcurl.map"
    fi
@@ -68,7 +68,7 @@ _cpu="$2"
 
    [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
    [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
-   if [ -n "${OPENSSL_PATH}" ] ; then
+   if [ -n "${OPENSSL_PATH}" ]; then
       options="${options}-ssl"
       export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
       export OPENSSL_LIBPATH="${OPENSSL_PATH}"
@@ -76,24 +76,24 @@ _cpu="$2"
    else
       options="${options}-winssl"
    fi
-   if [ -d ../libssh2 ] ; then
+   if [ -d ../libssh2 ]; then
       options="${options}-ssh2"
       export LIBSSH2_PATH=../../libssh2
    fi
-   if [ -d ../nghttp2 ] ; then
+   if [ -d ../nghttp2 ]; then
       options="${options}-nghttp2"
       export NGHTTP2_PATH=../../nghttp2/pkg/usr/local
       CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGHTTP2_STATICLIB"
    fi
-   if [ -d ../c-ares ] ; then
+   if [ -d ../c-ares ]; then
       options="${options}-ares"
       export LIBCARES_PATH=../../c-ares
    fi
-   if [ -d ../librtmp ] ; then
+   if [ -d ../librtmp ]; then
       options="${options}-rtmp"
       export LIBRTMP_PATH=../../librtmp
    fi
-   if [ -d ../libidn ] ; then
+   if [ -d ../libidn ]; then
       options="${options}-idn"
       export LIBIDN_PATH=../../libidn/pkg/usr/local
       CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_IDN_FREE_H"
@@ -157,12 +157,12 @@ _cpu="$2"
    (
       set +x
       for file in docs/* ; do
-         if [ -f "${file}" ] && echo "${file}" | grep -v '\.' > /dev/null 2>&1 ; then
+         if [ -f "${file}" ] && echo "${file}" | grep -v '\.' > /dev/null 2>&1; then
             cp -f -p "${file}" "${_DST}/${file}.txt"
          fi
       done
       for file in docs/libcurl/* ; do
-         if [ -f "${file}" ] && echo "${file}" | grep -v '\.' > /dev/null 2>&1 ; then
+         if [ -f "${file}" ] && echo "${file}" | grep -v '\.' > /dev/null 2>&1; then
             cp -f -p "${file}" "${_DST}/${file}.txt"
          fi
       done
@@ -190,7 +190,7 @@ _cpu="$2"
    [ -d ../libressl ] && cp -f -p ../libressl/COPYING "${_DST}/COPYING-libressl.txt"
    [ -d ../openssl ]  && cp -f -p ../openssl/LICENSE  "${_DST}/LICENSE-openssl.txt"
 
-   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ] ; then
+   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
       cp -f -p src/*.map                "${_DST}/bin/"
       cp -f -p lib/*.map                "${_DST}/bin/"
    fi

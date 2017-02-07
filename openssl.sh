@@ -30,20 +30,20 @@ _cpu="$2"
 
    [ "${_cpu}" = '32' ] && options='mingw'
    [ "${_cpu}" = '64' ] && options='mingw64'
-   if [ "${_BRANCH#*lto*}" != "${_BRANCH}" ] ; then
+   if [ "${_BRANCH#*lto*}" != "${_BRANCH}" ]; then
       # Create a fixed seed based on the timestamp of the OpenSSL source package.
       options="${options} -flto -ffat-lto-objects -frandom-seed=$(stat -c %Y "${_ref}")"
       # mingw64 build (as of mingw 5.2.0) will fail without the `no-asm` option.
       [ "${_cpu}" = '64' ] && options="${options} no-asm"
    fi
-   if [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.0.2' ] ; then
+   if [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.0.2' ]; then
       [ "${_cpu}" = '32' ] && export SHARED_RCFLAGS='--target=pe-i386'
       [ "${_cpu}" = '64' ] && export SHARED_RCFLAGS='--target=pe-x86-64'
       options="${options} -m${_cpu} -static-libgcc no-rc5 no-ssl3"
    else
       options="${options} no-filenames"
    fi
-   if [ "${_cpu}" = '64' ] ; then
+   if [ "${_cpu}" = '64' ]; then
       options="${options} enable-ec_nistp_64_gcc_128"
       # Requires mingw 5.0 or upper
       options="${options} -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
@@ -69,7 +69,7 @@ _cpu="$2"
    "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ./*.a
    "${_CCPREFIX}strip" -p -s apps/openssl.exe
    "${_CCPREFIX}strip" -p -s apps/*.dll
-   if ls ${engdir}/*.dll > /dev/null 2>&1 ; then
+   if ls ${engdir}/*.dll > /dev/null 2>&1; then
       "${_CCPREFIX}strip" -p -s ${engdir}/*.dll
    fi
 
@@ -79,7 +79,7 @@ _cpu="$2"
    ../_sign.sh 'apps/openssl.exe'
    ../_sign.sh 'apps/*.dll'
 
-   if ls ${engdir}/*.dll > /dev/null 2>&1 ; then
+   if ls ${engdir}/*.dll > /dev/null 2>&1; then
       ../_peclean.py "${_ref}" "${engdir}/*.dll"
 
       ../_sign.sh "${engdir}/*.dll"
@@ -90,7 +90,7 @@ _cpu="$2"
    touch -c -r "${_ref}" include/openssl/*.h
    touch -c -r "${_ref}" ./*.a
    touch -c -r "${_ref}" ./*.pc
-   if ls ${engdir}/*.dll > /dev/null 2>&1 ; then
+   if ls ${engdir}/*.dll > /dev/null 2>&1; then
       touch -c -r "${_ref}" ${engdir}/*.dll
    fi
 
@@ -110,7 +110,7 @@ _cpu="$2"
    mkdir -p "${_DST}/include/openssl"
    mkdir -p "${_DST}/lib/pkgconfig"
 
-   if ls ${engdir}/*.dll > /dev/null 2>&1 ; then
+   if ls ${engdir}/*.dll > /dev/null 2>&1; then
       mkdir -p "${_DST}/${engdir}"
       cp -f -p ${engdir}/*.dll  "${_DST}/${engdir}/"
    fi

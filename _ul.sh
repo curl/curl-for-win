@@ -13,7 +13,7 @@ case "$(uname)" in
    *BSD)    os='bsd';;
 esac
 
-if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] ; then
+if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
    _suf=
 else
    # Do not sign test packages
@@ -46,7 +46,7 @@ esac
 
 openssl dgst -sha256 "${_BAS}${_suf}.7z" | tee -a hashes.txt
 
-if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] ; then
+if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
    (
       set +x
       out="$(curl -fsS \

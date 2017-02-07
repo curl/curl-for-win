@@ -41,21 +41,21 @@ alias curl='curl -fsS --connect-timeout 10 --retry 3'
 alias gpg='gpg --batch --keyserver-options timeout=10 --keyid-format LONG'
 
 gpg_recv_keys() {
-   if ! gpg -q --keyserver hkps://pgp.mit.edu --recv-keys "$@" ; then
+   if ! gpg -q --keyserver hkps://pgp.mit.edu --recv-keys "$@"; then
       gpg -q --keyserver hkps://sks-keyservers.net --recv-keys "$@"
    fi
 }
 
 gpg --version | grep gpg
 
-if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
+if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
    _patsuf='.dev'
 else
    _patsuf=''
 fi
 
-if [ "${os}" = 'win' ] ; then
-   if [ "${_BRANCH#*extmingw*}" != "${_BRANCH}" ] ; then
+if [ "${os}" = 'win' ]; then
+   if [ "${_BRANCH#*extmingw*}" != "${_BRANCH}" ]; then
       # mingw
       curl -o pack.bin -L 'https://downloads.sourceforge.net/mingw-w64/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/6.3.0/threads-posix/sjlj/x86_64-6.3.0-release-posix-sjlj-rt_v5-rev1.7z' || exit 1
       openssl dgst -sha256 pack.bin | grep -q 10c40147b1781d0b915e96967becca99c6ffe2d56695a6830721051fe1b62b1f || exit 1
@@ -91,7 +91,7 @@ rm pack.bin
 rm -f -r nghttp2 && mv nghttp2-* nghttp2
 
 # Will increase curl binary sizes by 1MB, so leave this optional.
-if [ "${_BRANCH#*libidn*}" != "${_BRANCH}" ] ; then
+if [ "${_BRANCH#*libidn*}" != "${_BRANCH}" ]; then
    # libidn
    curl -o pack.bin "https://ftp.gnu.org/gnu/libidn/libidn-${LIBIDN_VER_}.tar.gz" || exit 1
    curl -o pack.sig "https://ftp.gnu.org/gnu/libidn/libidn-${LIBIDN_VER_}.tar.gz.sig" || exit 1
@@ -104,9 +104,9 @@ if [ "${_BRANCH#*libidn*}" != "${_BRANCH}" ] ; then
    rm -f -r libidn && mv libidn-* libidn
 fi
 
-if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ] ; then
+if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
    # c-ares
-   if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
+   if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
       CARES_VER_='1.11.1-dev'
       curl -o pack.bin -L --proto-redir =https https://github.com/c-ares/c-ares/archive/9642b578a2414406ed01ca5db5057adcb47cb633.tar.gz || exit 1
    else
@@ -122,7 +122,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ] ; then
    [ -f "c-ares${_patsuf}.diff" ] && dos2unix < "c-ares${_patsuf}.diff" | patch -N -p1 -d c-ares
 fi
 
-if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ] ; then
+if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ]; then
    # libressl
    curl -o pack.bin "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz" || exit 1
    curl -o pack.sig "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz.asc" || exit 1
@@ -134,7 +134,7 @@ if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ] ; then
    rm -f -r libressl && mv libressl-* libressl
 else
    # openssl
-   if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
+   if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
       OPENSSL_VER_='1.1.0-dev'
       curl -o pack.bin -L --proto-redir =https https://github.com/openssl/openssl/archive/master.tar.gz || exit 1
    else
@@ -153,7 +153,7 @@ fi
 
 # Do not include this by default to avoid an unnecessary libcurl dependency
 # and potential licensing issues.
-if [ "${_BRANCH#*librtmp*}" != "${_BRANCH}" ] ; then
+if [ "${_BRANCH#*librtmp*}" != "${_BRANCH}" ]; then
    # librtmp
    curl -o pack.bin 'https://mirrorservice.org/sites/ftp.debian.org/debian/pool/main/r/rtmpdump/rtmpdump_2.4+20151223.gitfa8646d.1.orig.tar.gz' || exit 1
    openssl dgst -sha256 pack.bin | grep -q "${LIBRTMP_HASH}" || exit 1
@@ -163,7 +163,7 @@ if [ "${_BRANCH#*librtmp*}" != "${_BRANCH}" ] ; then
 fi
 
 # libssh2
-if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
+if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
    LIBSSH2_VER_='1.8.1-dev'
    curl -o pack.bin -L --proto-redir =https https://github.com/libssh2/libssh2/archive/7934c9ce2a029c43e3642a492d3b9e494d1542be.tar.gz || exit 1
 else
@@ -179,7 +179,7 @@ rm -f -r libssh2 && mv libssh2-* libssh2
 [ -f "libssh2${_patsuf}.diff" ] && dos2unix < "libssh2${_patsuf}.diff" | patch -N -p1 -d libssh2
 
 # curl
-if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] ; then
+if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
    CURL_VER_='7.51.1-dev'
    curl -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/73878278d86f22285681db2e75eb1c711bfab41b.tar.gz || exit 1
 else

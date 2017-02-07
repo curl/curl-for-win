@@ -27,7 +27,7 @@ _cpu="$2"
    export ZLIB_PATH=../../zlib
    [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
    [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
-   if [ -n "${OPENSSL_PATH}" ] ; then
+   if [ -n "${OPENSSL_PATH}" ]; then
 #     export LINK_OPENSSL_STATIC=yes; export OPENSSL_LIBS_STAT='crypto ssl'
       export OPENSSL_LIBPATH="${OPENSSL_PATH}"
       export OPENSSL_LIBS_DYN='crypto.dll ssl.dll'
@@ -70,7 +70,7 @@ _cpu="$2"
    (
       set +x
       for file in docs/* ; do
-         if [ -f "${file}" ] && echo "${file}" | grep -v '\.' > /dev/null 2>&1 ; then
+         if [ -f "${file}" ] && echo "${file}" | grep -v '\.' > /dev/null 2>&1; then
             cp -f -p "${file}" "${_DST}/${file}.txt"
          fi
       done
