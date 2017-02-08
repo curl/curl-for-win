@@ -156,12 +156,12 @@ _cpu="$2"
 
    (
       set +x
-      for file in docs/* ; do
+      for file in docs/*; do
          if [ -f "${file}" ] && echo "${file}" | grep -v '\.' > /dev/null 2>&1; then
             cp -f -p "${file}" "${_DST}/${file}.txt"
          fi
       done
-      for file in docs/libcurl/* ; do
+      for file in docs/libcurl/*; do
          if [ -f "${file}" ] && echo "${file}" | grep -v '\.' > /dev/null 2>&1; then
             cp -f -p "${file}" "${_DST}/${file}.txt"
          fi

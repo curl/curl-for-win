@@ -5,7 +5,7 @@
 
 if [ -f "${CODESIGN_KEY}" ]; then
    # Add code signature
-   for file in $1 ; do
+   for file in $1; do
    (
       set +x
       osslsigncode sign -h sha256 -in "${file}" -out "${file}-signed" \
