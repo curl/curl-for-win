@@ -98,8 +98,6 @@ _cpu="$2"
       export LIBIDN_PATH=../../libidn/pkg/usr/local
       CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_IDN_FREE_H"
    else
-      # NOTE: If Windows XP is missing `normaliz.dll`, install this package:
-      #       https://www.microsoft.com/en-us/download/details.aspx?id=734
       options="${options}-winidn"
    fi
 
