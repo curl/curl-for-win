@@ -9,9 +9,8 @@
 #   Linux
 #     p7zip-full jq osslsigncode dos2unix binutils-mingw-w64 gcc-mingw-w64 wine
 #   Mac:
-#     MacPorts: port install mingw-w64
-#     Homebrew: install p7zip jq osslsigncode dos2unix gpg
-#     Wine: https://dl.winehq.org/wine-builds/macosx/download.html
+#     Homebrew: mingw-w64 p7zip jq osslsigncode dos2unix gpg
+#     Wine from https://dl.winehq.org/wine-builds/macosx/download.html
 
 cd "$(dirname "$0")" || exit
 
