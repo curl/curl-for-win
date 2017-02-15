@@ -9,8 +9,8 @@
 #   Linux
 #     p7zip-full jq osslsigncode dos2unix binutils-mingw-w64 gcc-mingw-w64 wine
 #   Mac:
-#     brew install mingw-w64 p7zip jq osslsigncode dos2unix gpg
-#     brew cask install wine-staging
+#     brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg
+#     brew cask install wine-devel
 
 cd "$(dirname "$0")" || exit
 
