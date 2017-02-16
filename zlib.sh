@@ -60,10 +60,12 @@ _cpu="$2"
    _BAS="${_NAM}-${_VER}-win${_cpu}-mingw"
    _DST="$(mktemp -d)/${_BAS}"
 
-   cp -f -p ${_pkg}/*.h  "${_DST}/"
-   cp -f -p ${_pkg}/*.a  "${_DST}/"
-   cp -f -p ChangeLog    "${_DST}/ChangeLog.txt"
-   cp -f -p README       "${_DST}/README.txt"
+   mkdir -p "${_DST}"
+
+   cp -f -p ./*.h     "${_DST}/"
+   cp -f -p ./*.a     "${_DST}/"
+   cp -f -p ChangeLog "${_DST}/ChangeLog.txt"
+   cp -f -p README    "${_DST}/README.txt"
 
    unix2dos -k "${_DST}"/*.txt
 
