@@ -85,5 +85,5 @@
   project.
 
 ---
-This document &copy;&nbsp;2014&ndash;2017 Viktor Szakáts <https://github.com/vszakats><br />
+This document &copy;&nbsp;2014&ndash;2017 Viktor Szakats <https://vszakats.net/><br />
 [![Creative Commons Attribution-ShareAlike 4.0](https://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-sa.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
