@@ -127,7 +127,7 @@ _cpu="$2"
    cp -f -p FAQ                 "${_DST}/FAQ.txt"
    cp -f -p NEWS                "${_DST}/NEWS.txt"
 
-   # Luckily, applink is not implemented for 64-bit, omit this file then
+   # Luckily, applink is not implemented for 64-bit mingw, omit this file then
    [ "${_cpu}" = '32' ] && cp -f -p ms/applink.c "${_DST}/include/openssl/"
 
    unix2dos -k "${_DST}"/*.txt
