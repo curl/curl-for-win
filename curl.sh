@@ -165,9 +165,7 @@ _cpu="$2"
       fi
     done
   )
-  cp -f -p docs/libcurl/opts/*.html "${_DST}/docs/libcurl/opts/"
   cp -f -p docs/libcurl/*.html      "${_DST}/docs/libcurl/"
-  cp -f -p docs/*.html              "${_DST}/docs/"
   cp -f -p docs/*.md                "${_DST}/docs/"
   cp -f -p include/curl/*.h         "${_DST}/include/curl/"
   cp -f -p src/*.exe                "${_DST}/bin/"
