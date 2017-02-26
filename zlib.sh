@@ -31,8 +31,6 @@ _cpu="$2"
 
   # shellcheck disable=SC2086
   make -f win32/makefile.gcc ${options} clean > /dev/null
-  # shellcheck disable=SC2086
-  make -f win32/makefile.gcc ${options} install > /dev/null
 
   ls -l ./*.dll
   ls -l ./*.a
