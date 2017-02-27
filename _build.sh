@@ -7,7 +7,7 @@
 #   Windows:
 #     MSYS2: p7zip mingw-w64-{i686,x86_64}-{jq,osslsigncode} gpg python
 #   Linux
-#     p7zip-full jq osslsigncode dos2unix binutils-mingw-w64 gcc-mingw-w64 wine
+#     p7zip-full binutils-mingw-w64 gcc-mingw-w64 gnupg-curl jq osslsigncode dos2unix realpath wine
 #   Mac:
 #     brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg
 #     brew cask install wine-devel
@@ -36,7 +36,7 @@ rm -f hashes.txt
 
 # decrypt code signing key
 export CODESIGN_KEY=
-CODESIGN_KEY="$(realpath './vszakats.p12')"
+CODESIGN_KEY="$(realpath '.')/vszakats.p12"
 (
   set +x
   if [ -n "${CODESIGN_GPG_PASS}" ]; then
@@ -44,6 +44,7 @@ CODESIGN_KEY="$(realpath './vszakats.p12')"
   fi
 )
 [ -f "${CODESIGN_KEY}" ] || unset CODESIGN_KEY
+which osslsigncode > /dev/null || unset CODESIGN_KEY
 
 _ori_path="${PATH}"
 
