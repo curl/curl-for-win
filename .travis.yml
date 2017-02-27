@@ -4,35 +4,30 @@ branches:
   - master
   - test-travis
 language: c
-env:
-  - HB_CI_THREADS=4
-os:
-  - linux
-  - osx
-osx_image: xcode8.2
-compiler:
-  - i686-w64-mingw32-gcc
 matrix:
-  exclude:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+      compiler: i686-w64-mingw32-gcc
+      env: HB_CI_THREADS=4
     - os: osx
-      compiler: gcc
-sudo: false
+      osx_image: xcode8.2
+      compiler: i686-w64-mingw32-gcc
+      env: HB_CI_THREADS=4
 addons:
   apt:
-    sources:
-      - llvm-toolchain-precise-3.8
-      - ubuntu-toolchain-r-test
-    packages:
-      - binutils-mingw-w64
-      - gcc-mingw-w64
-      - wine
-      - p7zip-full
+    packages: [ binutils-mingw-w64, gcc-mingw-w64, p7zip-full, gnupg-curl, dos2unix, realpath ]
 before_install:
   - if [ "$TRAVIS_OS_NAME" = 'osx' ]; then
       brew update > /dev/null;
-      brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg
-      brew cask install wine-devel
-    fi
+      brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg;
+      brew cask install wine-devel;
+    elif [ "$TRAVIS_OS_NAME" = 'linux' ] && [ "$TRAVIS_SUDO" = 'true' ]; then
+      sudo dpkg --add-architecture i386;
+      sudo apt-get update;
+      sudo apt-get -yq --no-install-suggests --no-install-recommends --force-yes install wine;
+    fi;
 script:
   - if [ "$TRAVIS_OS_NAME" = 'osx' ]; then
       export PATH="/Applications/Wine Devel.app/Contents/Resources/wine/bin:${PATH}";
