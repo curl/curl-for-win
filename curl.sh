@@ -135,6 +135,11 @@ _cpu="$2"
   touch -c -r "${_ref}" lib/*.dll
   touch -c -r "${_ref}" lib/*.a
 
+  if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
+    touch -c -r "${_ref}" src/*.map
+    touch -c -r "${_ref}" lib/*.map
+  fi
+
   # Tests
 
   "${_CCPREFIX}objdump" -x src/*.exe | grep -E -i "(file format|dll name)"
