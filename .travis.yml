@@ -21,7 +21,7 @@ addons:
 before_install:
   - if [ "$TRAVIS_OS_NAME" = 'osx' ]; then
       brew update > /dev/null;
-      brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg;
+      brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg gnu-sed;
       brew cask install wine-devel;
     elif [ "$TRAVIS_OS_NAME" = 'linux' ] && [ "$TRAVIS_SUDO" = 'true' ]; then
       sudo dpkg --add-architecture i386;

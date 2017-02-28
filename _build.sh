@@ -9,7 +9,7 @@
 #   Linux
 #     p7zip-full binutils-mingw-w64 gcc-mingw-w64 gnupg-curl jq osslsigncode dos2unix realpath wine
 #   Mac:
-#     brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg
+#     brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg gnu-sed
 #     brew cask install wine-devel
 
 cd "$(dirname "$0")" || exit
@@ -45,6 +45,12 @@ CODESIGN_KEY="$(realpath '.')/vszakats.p12"
 )
 [ -f "${CODESIGN_KEY}" ] || unset CODESIGN_KEY
 
+case "${os}" in
+  mac)
+    alias sed=gsed
+    ;;
+esac
+
 _ori_path="${PATH}"
 
 for _cpu in '32' '64'; do
@@ -76,6 +82,8 @@ for _cpu in '32' '64'; do
     [ "${_cpu}" = '64' ] && _CCPREFIX='x86_64-w64-mingw32-'
     export _WINE='wine'
   fi
+
+  export _CCVER="$("${_CCPREFIX}gcc" -dumpversion | sed -e 's/\<[0-9]\>/0&/g' -e 's/\.//g')"
 
   which osslsigncode > /dev/null 2>&1 || unset CODESIGN_KEY
 
