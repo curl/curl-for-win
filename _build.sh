@@ -44,7 +44,6 @@ CODESIGN_KEY="$(realpath '.')/vszakats.p12"
   fi
 )
 [ -f "${CODESIGN_KEY}" ] || unset CODESIGN_KEY
-which osslsigncode > /dev/null || unset CODESIGN_KEY
 
 _ori_path="${PATH}"
 
@@ -77,6 +76,8 @@ for _cpu in '32' '64'; do
     [ "${_cpu}" = '64' ] && _CCPREFIX='x86_64-w64-mingw32-'
     export _WINE='wine'
   fi
+
+  which osslsigncode > /dev/null 2>&1 || unset CODESIGN_KEY
 
   ./zlib.sh         "${ZLIB_VER_}" "${_cpu}"
   ./libidn.sh     "${LIBIDN_VER_}" "${_cpu}"
