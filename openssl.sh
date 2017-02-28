@@ -41,7 +41,7 @@ _cpu="$2"
     [ "${_cpu}" = '64' ] && export SHARED_RCFLAGS='--target=pe-x86-64'
     options="${options} -m${_cpu} -static-libgcc no-rc5 no-ssl3"
   else
-     options="${options} no-filenames"
+    options="${options} no-filenames"
   fi
   if [ "${_cpu}" = '64' ]; then
     options="${options} enable-ec_nistp_64_gcc_128"
