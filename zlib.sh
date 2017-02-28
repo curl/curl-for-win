@@ -30,7 +30,7 @@ _cpu="$2"
   [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && LOC="${LOC} -fno-asynchronous-unwind-tables"
 
   # shellcheck disable=SC2086
-  make -f win32/makefile.gcc ${options} clean > /dev/null
+  make -f win32/Makefile.gcc ${options} clean > /dev/null
 
   ls -l ./*.dll
   ls -l ./*.a
