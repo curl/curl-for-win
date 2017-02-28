@@ -18,7 +18,7 @@ export _BRANCH="${APPVEYOR_REPO_BRANCH}${TRAVIS_BRANCH}${CI_BUILD_REF_NAME}${GIT
 [ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD)"
 [ -n "${_BRANCH}" ] || _BRANCH='master'
 export _URL=''
-which git > /dev/null && _URL="$(git ls-remote --get-url | sed 's|.git$||')"
+which git > /dev/null 2>&1 && _URL="$(git ls-remote --get-url | sed 's|.git$||')"
 [ -n "${_URL}" ] || _URL="https://github.com/${APPVEYOR_REPO_NAME}${TRAVIS_REPO_SLUG}"
 
 # Detect host OS
