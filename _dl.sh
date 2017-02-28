@@ -34,6 +34,7 @@ case "$(uname)" in
 esac
 
 # Install required component
+# TODO: add `--progress-bar off` when pip 9.1.0 hits the drives
 python -m pip --disable-pip-version-check install --upgrade pip
 python -m pip install pefile
 
