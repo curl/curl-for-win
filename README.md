@@ -40,8 +40,8 @@
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
   - If you need a download with a stable checksum, link to the penultimate version.
     Only the current latest versions are kept updated with newer dependencies.
-  - Build logic aims to be multi-platform and able to cross-build Windows
-    executables when run on \*nix hosts.
+  - The build process is multi-platform and able to cross-build Windows
+    executables from \*nix hosts (Linux and macOS tested).
   - Code signing is implemented but not enabled yet for reasons below:
     - There doesn't seem to exist a way to get _free_ code signing certificates,
       so only a self-signed certificate could be used, which is not very useful.
@@ -62,13 +62,16 @@
 # Binary package downloads
 
   * curl: <https://bintray.com/vszakats/generic/curl>
-  * nghttp2: <https://bintray.com/vszakats/generic/nghttp2>
-  * libssh2: <https://bintray.com/vszakats/generic/libssh2>
   * OpenSSL: <https://bintray.com/vszakats/generic/openssl>
+  * libssh2: <https://bintray.com/vszakats/generic/libssh2>
+  * nghttp2: <https://bintray.com/vszakats/generic/nghttp2>
+  * zlib: <https://bintray.com/vszakats/generic/zlib>
 
 # Live build logs
 
   * <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
+    (for published binaries)
+  * <https://travis-ci.org/vszakats/harbour-deps>
 
 # Guarantees and Liability
 
