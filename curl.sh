@@ -40,7 +40,7 @@ _cpu="$2"
     CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
   else
     CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
-    if [ "${_CCVER}" -ge '05' ]; then
+    if [ "${_CCVER}" -ge '0500' ]; then
       CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
     fi

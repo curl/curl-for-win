@@ -29,7 +29,7 @@ _cdo="$(pwd)"
   export INC='-I../../openssl/include -I../../zlib'
   export XCFLAGS="-m${_cpu}"
   export XLDFLAGS="${XCFLAGS} \"-L${_cdo}/openssl\" \"-L${_cdo}/zlib\" -static-libgcc -Wl,--nxcompat -Wl,--dynamicbase"
-  [ "${_cpu}" = '64' ] && [ "${_CCVER}" -ge '05' ] && XLDFLAGS="${XLDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x153000000"
+  [ "${_cpu}" = '64' ] && [ "${_CCVER}" -ge '0500' ] && XLDFLAGS="${XLDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x153000000"
   export LDFLAGS="${XLDFLAGS}"
   export XCFLAGS="${XCFLAGS} -fno-ident"
   [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && XCFLAGS="${XCFLAGS} -fno-asynchronous-unwind-tables"
