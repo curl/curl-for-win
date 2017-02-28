@@ -41,7 +41,7 @@
   - If you need a download with a stable checksum, link to the penultimate version.
     Only the current latest versions are kept updated with newer dependencies.
   - The build process is multi-platform and able to cross-build Windows
-    executables from \*nix hosts (Linux and macOS tested).
+    executables from \*nix hosts (Linux and macOS tested.)
   - Code signing is implemented but not enabled yet for reasons below:
     - There doesn't seem to exist a way to get _free_ code signing certificates,
       so only a self-signed certificate could be used, which is not very useful.
