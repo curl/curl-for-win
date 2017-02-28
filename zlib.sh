@@ -29,10 +29,13 @@ _cpu="$2"
   export LOC="${LDFLAGS} -fno-ident -D_LARGEFILE64_SOURCE=1 -D_LFS64_LARGEFILE=1"
   [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && LOC="${LOC} -fno-asynchronous-unwind-tables"
 
+  # Add 'all' option to build .dll
   # shellcheck disable=SC2086
   make -f win32/Makefile.gcc ${options} clean > /dev/null
 
-  ls -l ./*.dll
+  if ls ./*.dll > /dev/null 2>&1; then
+    ls -l ./*.dll
+  fi
   ls -l ./*.a
 
   # Make steps for determinism
@@ -40,18 +43,16 @@ _cpu="$2"
   readonly _ref='ChangeLog'
 
   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ./*.a
-  "${_CCPREFIX}strip" -p -s ./*.dll
-
-  ../_peclean.py "${_ref}" '*.dll'
-
-  ../_sign.sh '*.dll'
-
-  touch -c -r "${_ref}" ./*.dll
   touch -c -r "${_ref}" ./*.a
 
-  # Tests
-
-  "${_CCPREFIX}objdump" -x ./*.dll | grep -E -i "(file format|dll name)"
+  if ls ./*.dll > /dev/null 2>&1; then
+    "${_CCPREFIX}strip" -p -s ./*.dll
+    ../_peclean.py "${_ref}" '*.dll'
+    ../_sign.sh '*.dll'
+    touch -c -r "${_ref}" ./*.dll
+    # Tests
+    "${_CCPREFIX}objdump" -x ./*.dll | grep -E -i "(file format|dll name)"
+  fi
 
   # Create package
 
