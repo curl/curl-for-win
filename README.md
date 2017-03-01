@@ -3,7 +3,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;
 [![PayPal Donate](https://img.shields.io/badge/PayPal-Donate_Now-f8981d.svg?colorA=00457c)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2DZM6WAGRJWT6 "Donate Now")
 
-# Automated, reproducible, transparent, Windows builds for [curl](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [libssh2](https://libssh2.org) and [OpenSSL 1.1](https://www.openssl.org/)
+# Automated, reproducible, transparent, Windows builds for [curl](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [libssh2](https://libssh2.org/) and [OpenSSL 1.1](https://www.openssl.org/)
 
   - Packaging aims to follow popular binary releases found on the internet.
   - Both x86 and x64 packages are built using the same process.
@@ -22,7 +22,7 @@
     [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH)
     in x64 builds.
   - Components are verified using SHA-256 hashes and also GPG signatures where available.
-  - Generated binaries are [reproducible](https://reproducible-builds.org), meaning
+  - Generated binaries are [reproducible](https://reproducible-builds.org/), meaning
     they will have the same hash given the same input sources and C compiler.
   - Because MSYS2 is updated before each build, subsequent builds _may_ use
     different versions/builds of the compiler toolchain. This may result in
@@ -42,6 +42,13 @@
     Only the current latest versions are kept updated with newer dependencies.
   - The build process is multi-platform and able to cross-build Windows
     executables from \*nix hosts (Linux and macOS tested.)
+  - Reproducibility requires MinGW-w64 5.1.0 (with `binutils` ~2.25) or upper.
+    Older versions will leave certain bytes at random state in the generated
+    `.exe` file. It means that of current CI machines only the Windows and
+    macOS-based ones are usable, the newest available Linux (Ubuntu 14.04)
+    isn't. Also, because MinGW-w64 builds on different platforms generate
+    slightly different output (and possibly additionaly reasons), the packages
+    made on these different platforms won't currently have identical hashes.
   - Code signing is implemented but not enabled yet for reasons below:
     - There doesn't seem to exist a way to get _free_ code signing certificates,
       so only a self-signed certificate could be used, which is not very useful.
