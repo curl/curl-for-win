@@ -49,7 +49,7 @@ find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' \;
   esac
   # NOTE: add -stl option after updating to 15.12 or upper
   7z a -bd -r -mx "${_cdo}/${_BAS}.7z" "${_BAS}/*" > /dev/null
-  touch -c "${_cdo}/${_BAS}.7z" -r "$1"
+  touch -c -r "$1" "${_cdo}/${_BAS}.7z"
 )
 
 rm -f -r "${_DST:?}"
