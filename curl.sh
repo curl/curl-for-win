@@ -58,8 +58,7 @@ _cpu="$2"
   # leads to exporting every libcurl public function, as well as any other
   # ones from statically linked dependencies, resulting in a larger .dll,
   # an inflated implib and a non-standard list of exported functions.
-  # TOFIX: On Linux, Ubuntu 14.04 Trusty, mingw 4.8.2, binutils 2.23,
-  #        the .def file seems to be ignored or not working.
+  # TOFIX: On Linux/macOS, the .def file seems to be ignored/not-working.
   echo 'EXPORTS' > libcurl.def
   grep '^CURL_EXTERN ' include/curl/*.h \
   | awk 'match($0, /CURL_EXTERN ([a-zA-Z_\* ]*)[\* ]([a-z_]*)\(/, v) {print v[2]}' \
