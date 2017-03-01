@@ -15,6 +15,12 @@ esac
 
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
   _suf=
+
+  # Production builds are uploaded from AppVeyor
+  if [ ! "${APPVEYOR}" = 'True' ]; then
+    unset BINTRAY_USER
+    unset BINTRAY_APIKEY
+  fi
 else
   # Do not sign test packages
   GPG_PASSPHRASE=
@@ -32,10 +38,15 @@ fi
   #     - empty/no passphrase -> Warning, No signature
 
   set +x
-  curl -fsS -u "${BINTRAY_USER}:${BINTRAY_APIKEY}" \
-    -X PUT "https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_suf}/${_VER}/${_BAS}${_suf}.7z?override=1&publish=1" \
-    --data-binary "@${_BAS}${_suf}.7z" \
-    -H "X-GPG-PASSPHRASE: ${GPG_PASSPHRASE}"
+
+  if [ -n "${BINTRAY_USER}" ] && \
+     [ -n "${BINTRAY_APIKEY}" ]; then
+
+    curl -fsS -u "${BINTRAY_USER}:${BINTRAY_APIKEY}" \
+      -X PUT "https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_suf}/${_VER}/${_BAS}${_suf}.7z?override=1&publish=1" \
+      --data-binary "@${_BAS}${_suf}.7z" \
+      -H "X-GPG-PASSPHRASE: ${GPG_PASSPHRASE}"
+  fi
 )
 
 # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>
