@@ -47,8 +47,8 @@
     `.exe` file. It means that of current CI machines only the Windows and
     macOS-based ones are usable, the newest available Linux (Ubuntu 14.04)
     isn't. Also, because MinGW-w64 builds on different platforms generate
-    slightly different output (and possibly additionaly reasons), the packages
-    made on these different platforms won't currently have identical hashes.
+    slightly different output, the packages made on these different platforms
+    won't currently have identical hashes.
   - Code signing is implemented but not enabled yet for reasons below:
     - There doesn't seem to exist a way to get _free_ code signing certificates,
       so only a self-signed certificate could be used, which is not very useful.
