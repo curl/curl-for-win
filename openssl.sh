@@ -50,10 +50,11 @@ _cpu="$2"
   [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && options="${options} -fno-asynchronous-unwind-tables"
 
   # AR=, NM=, RANLIB=
-  export CC="${_CCPREFIX}gcc"
+  unset CC
 
   # shellcheck disable=SC2086
   ./Configure ${options} shared \
+    "--cross-compile-prefix=${_CCPREFIX}" \
     -fno-ident \
     -Wl,--nxcompat -Wl,--dynamicbase \
     no-unit-test \
