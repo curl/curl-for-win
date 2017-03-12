@@ -20,20 +20,14 @@ addons:
     packages: [ binutils-mingw-w64, gcc-mingw-w64, p7zip-full, gnupg-curl, dos2unix, realpath ]
 before_install:
   - if [ "$TRAVIS_OS_NAME" = 'osx' ]; then
-      brew update > /dev/null;
-      brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg gnu-sed;
-      brew cask install wine-devel;
+      brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg gnu-sed wine || true;
     elif [ "$TRAVIS_OS_NAME" = 'linux' ] && [ "$TRAVIS_SUDO" = 'true' ]; then
       sudo dpkg --add-architecture i386;
       sudo apt-get update;
       sudo apt-get -yq --no-install-suggests --no-install-recommends --force-yes install wine;
     fi;
 script:
-  - if [ "$TRAVIS_OS_NAME" = 'osx' ]; then
-      export PATH="/Applications/Wine Devel.app/Contents/Resources/wine/bin:${PATH}";
-      export DISPLAY=:88.0; wineboot;
-    fi;
-    ./_build.sh;
+  - ./_build.sh
 notifications:
   email: false
 git:
