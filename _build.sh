@@ -9,8 +9,7 @@
 #   Linux
 #     p7zip-full binutils-mingw-w64 gcc-mingw-w64 gnupg-curl jq osslsigncode dos2unix realpath wine
 #   Mac:
-#     brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg gnu-sed
-#     brew cask install wine-devel
+#     brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg gnu-sed wine
 
 cd "$(dirname "$0")" || exit
 
