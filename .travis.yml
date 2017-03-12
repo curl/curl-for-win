@@ -3,7 +3,16 @@ branches:
   only:
   - master
   - test-travis
+notifications:
+  email: false
+git:
+  depth: 8
 language: c
+
+addons:
+  apt:
+    packages: [ binutils-mingw-w64, gcc-mingw-w64, p7zip-full, gnupg-curl, dos2unix, realpath ]
+
 matrix:
   include:
     - os: linux
@@ -15,9 +24,7 @@ matrix:
       osx_image: xcode8.2
       compiler: i686-w64-mingw32-gcc
       env: HB_CI_THREADS=4
-addons:
-  apt:
-    packages: [ binutils-mingw-w64, gcc-mingw-w64, p7zip-full, gnupg-curl, dos2unix, realpath ]
+
 before_install:
   - if [ "$TRAVIS_OS_NAME" = 'osx' ]; then
       brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg gnu-sed wine || true;
@@ -26,10 +33,6 @@ before_install:
       sudo apt-get update;
       sudo apt-get -yq --no-install-suggests --no-install-recommends --force-yes install wine;
     fi;
+
 script:
   - ./_build.sh
-notifications:
-  email: false
-git:
-  submodules: false
-  depth: 8
