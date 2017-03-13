@@ -31,8 +31,8 @@ before_install:
       brew install --force-bottle --build-bottle wine || true;
     elif [ "$TRAVIS_OS_NAME" = 'linux' ] && [ "$TRAVIS_SUDO" = 'true' ]; then
       sudo dpkg --add-architecture i386;
-      sudo apt-get update;
-      sudo apt-get -yq --no-install-suggests --no-install-recommends --force-yes install wine;
+      sudo apt-get -qq update;
+      sudo apt-get -qq install wine;
     fi;
 
 script:
