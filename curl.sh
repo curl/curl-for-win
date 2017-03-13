@@ -18,7 +18,7 @@ _cpu="$2"
 
   # Prepare build
 
-  # TOFIX: This will not create a fully release-compliant file tree,
+  # FIXME: This will not create a fully release-compliant file tree,
   #        f.e. documentation will be incomplete.
   [ -f 'Makefile' ] || ./buildconf.bat
 

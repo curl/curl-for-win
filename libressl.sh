@@ -36,7 +36,7 @@ _cpu="$2"
   export CFLAGS="${LDFLAGS} -fno-ident"
   [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
 
-  # TOFIX: Burnt-in prefix is not fully deterministic. It has 'C:/msys64' prepended.
+  # FIXME: Burnt-in prefix is not fully deterministic. It has 'C:/msys64' prepended.
 
   # shellcheck disable=SC2086
   ./configure ${OPTIONS} \
