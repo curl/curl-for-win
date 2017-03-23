@@ -41,8 +41,8 @@ before_install:
         dpkg --add-architecture i386
         apt-get -qq update
         apt-get -qq install \
-          curl dirmngr git make python python-pip \
-          binutils-mingw-w64 gcc-mingw-w64 g++-mingw-w64 p7zip-full jq dos2unix realpath osslsigncode wine-stable wine64 wine32
+          curl git make python python-pip \
+          binutils-mingw-w64 gcc-mingw-w64 p7zip-full jq dos2unix realpath osslsigncode wine-stable wine64 wine32
         ./_build.sh"
     fi
 
