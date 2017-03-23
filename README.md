@@ -45,13 +45,9 @@
     dependencies.
   - The build process is multi-platform and able to cross-build Windows
     executables from \*nix hosts (Linux and macOS tested.)
-  - Reproducibility requires MinGW-w64 5.1.0 (with `binutils` ~2.25) or upper.
-    Older versions will leave certain bytes at random state in the generated
-    `.exe` file. It means that of current CI machines only the Windows and
-    macOS-based ones are usable, the newest available Linux (Ubuntu 14.04)
-    isn't. Also, because MinGW-w64 builds on different platforms generate
-    slightly different output, the packages made on these different platforms
-    won't currently have identical hashes.
+  - Packages created accross different host platforms won't currently have
+    identical hashes. The reason for this is the slightly different build
+    options and versions of the `mingw-w64` and `binutils` tools.
   - Code signing is implemented but not enabled yet for reasons below:
     - There doesn't seem to exist a way to get _free_ code signing
       certificates, so only a self-signed certificate could be used, which is

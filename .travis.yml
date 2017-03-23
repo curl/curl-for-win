@@ -19,21 +19,35 @@ matrix:
       dist: trusty
       sudo: required
       compiler: i686-w64-mingw32-gcc
-      env: HB_CI_THREADS=4
+      services: [ docker ]
+      # https://hub.docker.com/_/ubuntu/
+      env: DOCKER_IMAGE=ubuntu:rolling
     - os: osx
       osx_image: xcode8.2
       compiler: i686-w64-mingw32-gcc
-      env: HB_CI_THREADS=4
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" = 'osx' ]; then
-      brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg gnu-sed || true;
-      brew install --force-bottle --build-bottle wine || true;
-    elif [ "$TRAVIS_OS_NAME" = 'linux' ] && [ "$TRAVIS_SUDO" = 'true' ]; then
-      sudo dpkg --add-architecture i386;
-      sudo apt-get -qq update;
-      sudo apt-get -qq install wine;
-    fi;
+  - >
+    if [ "$TRAVIS_OS_NAME" = 'osx' ]; then
+      brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg gnu-sed || true
+      brew install --force-bottle --build-bottle wine || true
+    elif [ "$TRAVIS_OS_NAME" = 'linux' ]; then
+      time docker pull "${DOCKER_IMAGE}"
+      time docker run -it -v "${PWD}:${PWD}" -w "${PWD}" --env-file <(env | grep -E '^(TRAVIS|BINTRAY|GPG|VIRUSTOTAL|CODESIGN)_') \
+        "${DOCKER_IMAGE}" sh -c "
+        cat /etc/*-release
+        ulimit -a
+        df -h
+        dpkg --add-architecture i386
+        apt-get -qq update
+        apt-get -qq install \
+          curl dirmngr git make python python-pip \
+          binutils-mingw-w64 gcc-mingw-w64 g++-mingw-w64 p7zip-full jq dos2unix realpath osslsigncode wine-stable wine64 wine32
+        ./_build.sh"
+    fi
 
 script:
-  - ./_build.sh
+  - >
+    if [ "$TRAVIS_OS_NAME" = 'osx' ]; then
+      ./_build.sh
+    fi
