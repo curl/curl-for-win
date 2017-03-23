@@ -42,8 +42,9 @@ alias curl='curl -fsS --connect-timeout 15 --retry 3'
 alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format LONG'
 
 gpg_recv_keys() {
-  if ! gpg -q --keyserver hkps://pgp.mit.edu --recv-keys "$@"; then
-    gpg -q --keyserver hkps://sks-keyservers.net --recv-keys "$@"
+  req="pks/lookup?search=0x$1&op=get"
+  if ! curl "https://pgp.mit.edu/${req}" | gpg --import --status-fd 1; then
+    curl "https://sks-keyservers.net/${req}" | gpg --import --status-fd 1
   fi
 }
 
