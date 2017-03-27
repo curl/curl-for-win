@@ -43,6 +43,10 @@
   - If you need a download with a stable checksum, link to the penultimate
     version. Only the current latest versions are kept updated with newer
     dependencies.
+  - To verify the correct checksum for the latest build, you can look up the
+    correct ones in the build log as they are generated. Watch for the lines
+    starting with `SHA256(`:
+      <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
   - The build process is multi-platform and able to cross-build Windows
     executables from \*nix hosts (Linux and macOS tested.)
   - Packages created accross different host platforms won't currently have
