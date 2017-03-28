@@ -36,12 +36,14 @@ rm -f hashes.txt
 # decrypt code signing key
 export CODESIGN_KEY=
 CODESIGN_KEY="$(realpath '.')/vszakats.p12"
-(
-  set +x
-  if [ -n "${CODESIGN_GPG_PASS}" ]; then
-    gpg --batch --passphrase "${CODESIGN_GPG_PASS}" -o "${CODESIGN_KEY}" -d "${CODESIGN_KEY}.asc"
-  fi
-)
+if [ -f "${CODESIGN_KEY}.asc" ]; then
+  (
+    set +x
+    if [ -n "${CODESIGN_GPG_PASS}" ]; then
+      gpg --batch --passphrase "${CODESIGN_GPG_PASS}" -o "${CODESIGN_KEY}" -d "${CODESIGN_KEY}.asc"
+    fi
+  )
+fi
 [ -f "${CODESIGN_KEY}" ] || unset CODESIGN_KEY
 
 case "${os}" in
