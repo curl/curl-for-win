@@ -23,7 +23,7 @@ matrix:
       # https://hub.docker.com/_/ubuntu/
       env: DOCKER_IMAGE=ubuntu:rolling
     - os: osx
-      osx_image: xcode8.2
+      osx_image: xcode8.3
       compiler: i686-w64-mingw32-gcc
 
 before_install:
