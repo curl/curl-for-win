@@ -7,7 +7,7 @@
 
   - Packaging aims to follow popular binary releases found on the internet.
   - Both x86 and x64 packages are built using the same process.
-  - Standalone `curl.exe` (only [`msvcrt.dll`](https://en.wikipedia.org/wiki/Microsoft_Windows_library_files#MSVCRT.DLL.2C_MSVCPP.DLL_and_CRTDLL.DLL) is required).
+  - Standalone `curl.exe` (only [`msvcrt.dll`](https://en.wikipedia.org/wiki/Microsoft_Windows_library_files#MSVCRT.DLL.2C_MSVCPP.DLL_and_CRTDLL.DLL) is [required](https://blogs.msdn.microsoft.com/oldnewthing/20140411-00/?p=1273)).
   - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
   - curl/libcurl features enabled by default:<br>
     `dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtsp scp sftp smtp smtps telnet tftp`<br>
