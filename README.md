@@ -38,7 +38,7 @@
     applied locally if already merged upstream or &mdash; in case it's
     necessary for a successful build &mdash; had them submitted upstream
     with fair confidence of getting accepted.
-  - Optional support for [C-ares](https://c-ares.haxx.se/), [librtmp](https://rtmpdump.mplayerhq.hu/) and for [WinSSL](https://en.wikipedia.org/wiki/Cryptographic_Service_Provider) as a fall-back backend.
+  - Optional support for [C-ares](https://c-ares.haxx.se/), [librtmp](https://rtmpdump.mplayerhq.hu/) and for [WinSSL](https://en.wikipedia.org/wiki/Cryptographic_Service_Provider) as a fall-back back end.
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
   - If you need a download with a stable checksum, link to the penultimate
     version. Only the current latest versions are kept updated with newer
@@ -49,7 +49,7 @@
       <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
   - The build process is multi-platform and able to cross-build Windows
     executables from \*nix hosts (Linux and macOS tested.)
-  - Packages created accross different host platforms won't currently have
+  - Packages created across different host platforms won't currently have
     identical hashes. The reason for this is the slightly different build
     options and versions of the `mingw-w64` and `binutils` tools.
   - Code signing is implemented but not enabled yet for reasons below:
