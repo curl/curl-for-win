@@ -1,7 +1,7 @@
 The MIT License (MIT)
 =====================
 
-&copy;&nbsp;2014&ndash;2017 Viktor Szakáts
+&copy;&nbsp;2014&ndash;present Viktor Szakats
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
