@@ -57,7 +57,7 @@ else
 fi
 
 if [ "${os}" = 'win' ]; then
-  if [ "${_BRANCH#*extmingw*}" != "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*mingwext*}" != "${_BRANCH}" ]; then
     # mingw
     curl -o pack.bin -L 'https://downloads.sourceforge.net/mingw-w64/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.1.0/threads-posix/sjlj/x86_64-7.1.0-release-posix-sjlj-rt_v5-rev0.7z' || exit 1
     openssl dgst -sha256 pack.bin | grep -q a117ec6126c9cc31e89498441d66af3daef59439c36686e80cebf29786e17c13 || exit 1
