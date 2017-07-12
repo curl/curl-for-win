@@ -5,10 +5,8 @@ clone_folder: C:\w\
 build:
   verbosity: detailed
 environment:
-  BINTRAY_USER:
-    secure: jfLq1ApyVLNouxv07skhrg==
   BINTRAY_APIKEY:
-    secure: Awq2bXuEyT0/JC/phuGILqT9hj9sVslq2+btJlFhH89a1xagztNH8h3jTru5rJKd
+    secure: jT/tMOSpo6fjjKZosT3WwhN0wdsdLPtzx1inUSqidw2RqU03ibMR936e4ZYiTabT
   GPG_PASSPHRASE:
     secure: t0zZqLgvaePWqUGn/dLMQ50M3YkMTktXSWglL1dyaEHKTOuXYiNe070dNlJEAoi1
   VIRUSTOTAL_APIKEY:

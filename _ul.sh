@@ -13,6 +13,8 @@ case "$(uname)" in
   *BSD)    os='bsd';;
 esac
 
+export BINTRAY_USER='vszakats'
+
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
   _suf=
 
