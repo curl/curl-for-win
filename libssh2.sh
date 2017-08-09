@@ -25,6 +25,9 @@ _cpu="$2"
   [ "${_cpu}" = '64' ] && [ "${_CCVER}" -ge '0500' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
 
   export ZLIB_PATH=../../zlib
+  export WITH_ZLIB=1
+  export LINK_ZLIB_STATIC=1
+
   [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
   [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
   if [ -n "${OPENSSL_PATH}" ]; then
@@ -55,6 +58,10 @@ _cpu="$2"
 
   touch -c -r "${_ref}" win32/*.dll
   touch -c -r "${_ref}" win32/*.a
+
+  # Tests
+
+  "${_CCPREFIX}objdump" -x win32/*.dll | grep -E -i "(file format|dll name)"
 
   # Create package
 
