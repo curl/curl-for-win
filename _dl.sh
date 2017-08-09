@@ -52,8 +52,6 @@ gpg --version | grep gpg
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
    _patsuf='.dev'
-elif [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
-   _patsuf='.test'
 else
    _patsuf=''
 fi
@@ -180,7 +178,7 @@ rm -f -r libssh2 && mv libssh2-* libssh2
 # curl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   CURL_VER_='7.55.1-dev'
-  curl -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/73878278d86f22285681db2e75eb1c711bfab41b.tar.gz || exit 1
+  curl -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/a7bbbb7c368c6096802007f61f19a02e9d75285b.tar.gz || exit 1
 else
   curl \
     -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2" \
