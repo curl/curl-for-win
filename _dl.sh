@@ -102,8 +102,8 @@ fi
 if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
   # c-ares
   if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-    CARES_VER_='1.11.1-dev'
-    curl -o pack.bin -L --proto-redir =https https://github.com/c-ares/c-ares/archive/9642b578a2414406ed01ca5db5057adcb47cb633.tar.gz || exit 1
+    CARES_VER_='1.13.1-dev'
+    curl -o pack.bin -L --proto-redir =https https://github.com/c-ares/c-ares/archive/611a5ef938c2ca92beb51f455323cda4d40119f7.tar.gz || exit 1
   else
     curl \
       -o pack.bin "https://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz" \
@@ -132,7 +132,7 @@ if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ]; then
 else
   # openssl
   if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-    OPENSSL_VER_='1.1.0-dev'
+    OPENSSL_VER_='1.1.1-dev'
     curl -o pack.bin -L --proto-redir =https https://github.com/openssl/openssl/archive/master.tar.gz || exit 1
   else
     curl \
@@ -163,7 +163,7 @@ fi
 # libssh2
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   LIBSSH2_VER_='1.8.1-dev'
-  curl -o pack.bin -L --proto-redir =https https://github.com/libssh2/libssh2/archive/7934c9ce2a029c43e3642a492d3b9e494d1542be.tar.gz || exit 1
+  curl -o pack.bin -L --proto-redir =https https://github.com/libssh2/libssh2/archive/fe186fef3a66f68fac1de8003efd36193a3ead47.tar.gz || exit 1
 else
   curl \
     -o pack.bin -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz" \
@@ -180,7 +180,7 @@ rm -f -r libssh2 && mv libssh2-* libssh2
 # curl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   CURL_VER_='7.55.1-dev'
-  curl -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/a7bbbb7c368c6096802007f61f19a02e9d75285b.tar.gz || exit 1
+  curl -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/b93954261dfb45a0d4016cda2e02abdf5ba55a6c.tar.gz || exit 1
 else
   curl \
     -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2" \
