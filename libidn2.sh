@@ -54,14 +54,13 @@ _cpu="$2"
   [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
   # shellcheck disable=SC2086
   ./configure ${options} \
-    '--prefix=/usr/local' \
     --enable-static \
     --enable-shared \
     --disable-doc \
     --disable-rpath \
     --disable-dependency-tracking \
     --disable-silent-rules \
-    --silent
+    '--prefix=/usr/local'
 # make clean > /dev/null
   make install "DESTDIR=$(pwd)/pkg" > /dev/null
 

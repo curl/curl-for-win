@@ -163,7 +163,7 @@ fi
 # libssh2
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   LIBSSH2_VER_='1.8.1-dev'
-  curl -o pack.bin -L --proto-redir =https https://github.com/libssh2/libssh2/archive/6762664e7e82e334f6e0d0d1719f0e57c044d186.tar.gz || exit 1
+  curl -o pack.bin -L --proto-redir =https https://github.com/libssh2/libssh2/archive/fe186fef3a66f68fac1de8003efd36193a3ead47.tar.gz || exit 1
 else
   curl \
     -o pack.bin -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz" \
