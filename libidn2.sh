@@ -86,7 +86,7 @@ _cpu="$2"
 
   # Tests
 
-  ${_pkg}/bin/idn.exe -V
+  ${_pkg}/bin/idn2.exe -V
 
   # Create package
 
