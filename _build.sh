@@ -89,6 +89,7 @@ for _cpu in '32' '64'; do
   which osslsigncode > /dev/null 2>&1 || unset CODESIGN_KEY
 
   ./zlib.sh         "${ZLIB_VER_}" "${_cpu}"
+  ./libidn.sh     "${LIBIDN_VER_}" "${_cpu}"
   ./libidn2.sh   "${LIBIDN2_VER_}" "${_cpu}"
   ./c-ares.sh      "${CARES_VER_}" "${_cpu}"
   ./nghttp2.sh   "${NGHTTP2_VER_}" "${_cpu}"
