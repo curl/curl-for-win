@@ -61,7 +61,7 @@ _cpu="$2"
     no-idea \
     no-tests \
     '--prefix=/usr/local'
-  [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.1.0' ] || make depend
+  [ "$(echo "${OPENSSL_VER_}" | cut -c -4)" = '1.1.' ] || make depend
   make
 
   # Make steps for determinism
