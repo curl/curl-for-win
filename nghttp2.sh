@@ -26,7 +26,7 @@ _cpu="$2"
     *BSD)    os='bsd';;
   esac
 
-  # This is pretty much guesswork and and this warning remains:
+  # This is pretty much guesswork and this warning remains:
   #    `configure: WARNING: using cross tools not prefixed with host triplet`
   # Even with `_CCPREFIX` provided.
   if [ "${os}" != 'win' ]; then
