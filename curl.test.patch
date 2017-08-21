@@ -14,13 +14,14 @@ index 7eea5c6c5b..e8f46410bc 100644
    data-raw.d data-urlencode.d delegation.d digest.d disable.d           \
 diff --git a/docs/cmdline-opts/compressed-ssh.d b/docs/cmdline-opts/compressed-ssh.d
 new file mode 100644
-index 0000000000..beb5cb7f45
+index 0000000000..583452ae47
 --- /dev/null
 +++ b/docs/cmdline-opts/compressed-ssh.d
-@@ -0,0 +1,6 @@
+@@ -0,0 +1,7 @@
 +Long: compressed-ssh
 +Help: Enable SSH compression
 +Protocols: SCP SFTP
++Added: 7.56.0
 +---
 +Enables built-in SSH compression.
 +This is a request, not an order; the server may or may not do it.
@@ -39,7 +40,7 @@ index 26f73ee140..57623e9d9e 100644
  .IP CURLOPT_SSH_PUBLIC_KEYFILE
 diff --git a/docs/libcurl/opts/CURLOPT_SSH_COMPRESSION.3 b/docs/libcurl/opts/CURLOPT_SSH_COMPRESSION.3
 new file mode 100644
-index 0000000000..6f6abef4b6
+index 0000000000..5445cb0d2a
 --- /dev/null
 +++ b/docs/libcurl/opts/CURLOPT_SSH_COMPRESSION.3
 @@ -0,0 +1,58 @@
@@ -73,12 +74,12 @@ index 0000000000..6f6abef4b6
 +
 +CURLcode curl_easy_setopt(CURL *handle, CURLOPT_SSH_COMPRESSION, long enable);
 +.SH DESCRIPTION
-+Pass a long as parameter to enable or disable.
++Pass a long as parameter set to 1L to enable or 0L to disable.
 +
-+Enables built-in SSH compression.
-+This is a request, not an order; the server may or may not do it.
++Enables built-in SSH compression.  This is a request, not an order; the server
++may or may not do it.
 +.SH DEFAULT
-+
++0, disabled
 +.SH PROTOCOLS
 +All SSH based protocols: SCP, SFTP
 +.SH EXAMPLE
@@ -88,7 +89,7 @@ index 0000000000..6f6abef4b6
 +  curl_easy_setopt(curl, CURLOPT_URL, "sftp://example.com");
 +
 +  /* enable built-in compression */
-+  curl_easy_setopt(curl, CURLOPT_SSH_COMPRESSION, 1);
++  curl_easy_setopt(curl, CURLOPT_SSH_COMPRESSION, 1L);
 +
 +  /* Perform the request */
 +  curl_easy_perform(curl);
@@ -102,10 +103,10 @@ index 0000000000..6f6abef4b6
 +.SH "SEE ALSO"
 +.BR CURLOPT_ACCEPT_ENCODING "(3), " CURLOPT_TRANSFER_ENCODING "(3), "
 diff --git a/docs/libcurl/opts/Makefile.inc b/docs/libcurl/opts/Makefile.inc
-index c094604d9d..8796fc8bbe 100644
+index c3db5d2251..ad09dce2d3 100644
 --- a/docs/libcurl/opts/Makefile.inc
 +++ b/docs/libcurl/opts/Makefile.inc
-@@ -251,6 +251,7 @@ man_MANS =                                      \
+@@ -258,6 +258,7 @@ man_MANS =                                      \
    CURLOPT_SOCKS5_GSSAPI_NEC.3                   \
    CURLOPT_SOCKS5_GSSAPI_SERVICE.3               \
    CURLOPT_SSH_AUTH_TYPES.3                      \
@@ -140,25 +141,25 @@ index 82fb8aeb83..3936d1e43c 100644
  } CURLoption;
  
 diff --git a/lib/ssh.c b/lib/ssh.c
-index 9443e24b9f..e4e0b84412 100644
+index cc5178fe74..28f709ada7 100644
 --- a/lib/ssh.c
 +++ b/lib/ssh.c
-@@ -2935,6 +2935,13 @@ static CURLcode ssh_connect(struct connectdata *conn, bool *done)
+@@ -2942,6 +2942,13 @@ static CURLcode ssh_connect(struct connectdata *conn, bool *done)
      return CURLE_FAILED_INIT;
    }
  
++  if(data->set.ssh_compression) {
 +#if LIBSSH2_VERSION_NUM >= 0x010208
-+  if(data->set.ssh_compression &&
-+     libssh2_session_flag(ssh->ssh_session, LIBSSH2_FLAG_COMPRESS, 1) < 0) {
-+    infof(data, "Failure to enable compression for ssh session");
-+  }
++    if(libssh2_session_flag(ssh->ssh_session, LIBSSH2_FLAG_COMPRESS, 1) < 0)
 +#endif
++      infof(data, "Failed to enable compression for ssh session\n");
++  }
 +
  #ifdef HAVE_LIBSSH2_KNOWNHOST_API
    if(data->set.str[STRING_SSH_KNOWNHOSTS]) {
      int rc;
 diff --git a/lib/url.c b/lib/url.c
-index 2e7934375a..8e0bb7e1e2 100644
+index 71d4d8bb7f..32623abe59 100644
 --- a/lib/url.c
 +++ b/lib/url.c
 @@ -2936,6 +2936,9 @@ CURLcode Curl_setopt(struct Curl_easy *data, CURLoption option,
@@ -172,10 +173,10 @@ index 2e7934375a..8e0bb7e1e2 100644
      /* unknown tag and its companion, just ignore: */
      result = CURLE_UNKNOWN_OPTION;
 diff --git a/lib/urldata.h b/lib/urldata.h
-index 45ad04e0a4..ff15876f39 100644
+index e45baff17c..4772cd965f 100644
 --- a/lib/urldata.h
 +++ b/lib/urldata.h
-@@ -1736,6 +1736,7 @@ struct UserDefined {
+@@ -1742,6 +1742,7 @@ struct UserDefined {
  
    curl_sshkeycallback ssh_keyfunc; /* key matching callback */
    void *ssh_keyfunc_userp;         /* custom pointer to callback */
@@ -209,7 +210,7 @@ index 254805c8c8..2b436657f2 100644
    struct OperationConfig *prev;
    struct OperationConfig *next;   /* Always last in the struct */
 diff --git a/src/tool_getparam.c b/src/tool_getparam.c
-index cc2d816f15..fccaa3797a 100644
+index 40b39a8aa2..3dd1dec3fe 100644
 --- a/src/tool_getparam.c
 +++ b/src/tool_getparam.c
 @@ -188,6 +188,7 @@ static const struct LongShort aliases[]= {
@@ -220,7 +221,7 @@ index cc2d816f15..fccaa3797a 100644
    {"0",   "http1.0",                 ARG_NONE},
    {"01",  "http1.1",                 ARG_NONE},
    {"02",  "http2",                   ARG_NONE},
-@@ -1071,6 +1072,9 @@ ParameterError getparameter(const char *flag, /* f or -long-flag */
+@@ -1076,6 +1077,9 @@ ParameterError getparameter(const char *flag, /* f or -long-flag */
        case 'Y': /* --suppress-connect-headers */
          config->suppress_connect_headers = toggle;
          break;
@@ -231,7 +232,7 @@ index cc2d816f15..fccaa3797a 100644
        break;
      case '#': /* --progress-bar */
 diff --git a/src/tool_help.c b/src/tool_help.c
-index 42dc779595..71ccd1adbc 100644
+index a5bfaba24e..04d84dd7a8 100644
 --- a/src/tool_help.c
 +++ b/src/tool_help.c
 @@ -68,6 +68,8 @@ static const struct helptxt helptext[] = {
@@ -244,7 +245,7 @@ index 42dc779595..71ccd1adbc 100644
     "Read config from a file"},
    {"    --connect-timeout <seconds>",
 diff --git a/src/tool_operate.c b/src/tool_operate.c
-index 1e8d0073c2..bafe7b8e76 100644
+index 1e8d0073c2..3c8c6ed2fe 100644
 --- a/src/tool_operate.c
 +++ b/src/tool_operate.c
 @@ -1091,6 +1091,10 @@ static CURLcode operate_do(struct GlobalConfig *global,
@@ -253,13 +254,13 @@ index 1e8d0073c2..bafe7b8e76 100644
                          config->hostpubmd5);
 +
 +          /* new in libcurl 7.56.0 */
-+          my_setopt_str(curl, CURLOPT_SSH_COMPRESSION,
-+                        config->ssh_compression);
++          if(config->ssh_compression)
++            my_setopt(curl, CURLOPT_SSH_COMPRESSION, 1L);
          }
  
          if(config->cacert)
 diff --git a/tests/data/Makefile.inc b/tests/data/Makefile.inc
-index 35446cf71b..db8d0c6bac 100644
+index b92f7f92ff..88e5e2a9a6 100644
 --- a/tests/data/Makefile.inc
 +++ b/tests/data/Makefile.inc
 @@ -77,7 +77,7 @@ test599 test600 test601 test602 test603 test604 test605 test606 test607 \
