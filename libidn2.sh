@@ -16,6 +16,26 @@ _cpu="$2"
 (
   cd "${_NAM}" || exit
 
+  # This is pretty much guesswork and this warning remains:
+  #    `configure: WARNING: using cross tools not prefixed with host triplet`
+  # Even with `_CCPREFIX` provided.
+  if [ "${os}" != 'win' ]; then
+
+    # https://clang.llvm.org/docs/CrossCompilation.html
+    unset _HOST
+    case "${os}" in
+      win)   _HOST='x86_64-pc-mingw32';;
+      linux) _HOST='x86_64-pc-linux';;
+      mac)   _HOST='x86_64-apple-darwin';;
+      bsd)   _HOST='x86_64-pc-bsd';;
+    esac
+
+    [ "${_cpu}" = '32' ] && _TARGET='i686-w64-mingw32'
+    [ "${_cpu}" = '64' ] && _TARGET='x86_64-w64-mingw32'
+
+    options="--build=${_HOST} --host=${_TARGET}"
+  fi
+
   # Build
 
   find . -name '*.o'   -type f -delete
@@ -32,10 +52,15 @@ _cpu="$2"
   export LDFLAGS="-m${_cpu}"
   export CFLAGS="${LDFLAGS} -fno-ident"
   [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
-  ./configure \
+  # shellcheck disable=SC2086
+  ./configure ${options} \
+    '--prefix=/usr/local' \
+    --enable-static \
+    --enable-shared \
+    --disable-doc \
+    --disable-rpath \
     --disable-dependency-tracking \
     --disable-silent-rules \
-    '--prefix=/usr/local' \
     --silent
 # make clean > /dev/null
   make install "DESTDIR=$(pwd)/pkg" > /dev/null
