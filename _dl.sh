@@ -5,8 +5,6 @@
 
 export ZLIB_VER_='1.2.11'
 export ZLIB_HASH=629380c90a77b964d896ed37163f5c3a34f6e6d897311f1df2a7016355c45eff
-export LIBIDN_VER_='1.33'
-export LIBIDN_HASH=44a7aab635bb721ceef6beecc4d49dfd19478325e1b47f3196f7d2acc4930e19
 export LIBIDN2_VER_='2.0.3'
 export LIBIDN2_HASH=4335149ce7a5c615edb781574d38f658672780331064fb17354a10e11a5308cd
 export NGHTTP2_VER_='1.25.0'
@@ -86,22 +84,7 @@ tar -xvf pack.bin > /dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r nghttp2 && mv nghttp2-* nghttp2
 
-# Will increase curl binary sizes by 1MB, so leave this optional.
-if [ "${_BRANCH#*libidn*}" != "${_BRANCH}" ]; then
-  # libidn
-  curl \
-    -o pack.bin "https://ftp.gnu.org/gnu/libidn/libidn-${LIBIDN_VER_}.tar.gz" \
-    -o pack.sig "https://ftp.gnu.org/gnu/libidn/libidn-${LIBIDN_VER_}.tar.gz.sig" || exit 1
-  curl 'https://ftp.gnu.org/gnu/gnu-keyring.gpg' \
-  | gpg -q --import 2> /dev/null
-  gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
-  openssl dgst -sha256 pack.bin | grep -q "${LIBIDN_HASH}" || exit 1
-  tar -xvf pack.bin > /dev/null 2>&1 || exit 1
-  rm pack.bin
-  rm -f -r libidn && mv libidn-* libidn
-fi
-
-# Will increase curl binary sizes by ?MB, so leave this optional.
+# This significantly increases curl binary sizes, so leave it optional.
 if [ "${_BRANCH#*libidn2*}" != "${_BRANCH}" ]; then
   # libidn2
   curl \

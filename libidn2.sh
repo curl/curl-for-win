@@ -59,7 +59,7 @@ _cpu="$2"
     --disable-doc \
     --disable-rpath \
     --enable-static \
-    --disable-shared \
+    --enable-shared \
     '--prefix=/usr/local' \
     --silent
 # make clean > /dev/null
