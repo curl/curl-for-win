@@ -8,7 +8,7 @@ export ZLIB_HASH=629380c90a77b964d896ed37163f5c3a34f6e6d897311f1df2a7016355c45ef
 export LIBIDN2_VER_='2.0.3'
 export LIBIDN2_HASH=4335149ce7a5c615edb781574d38f658672780331064fb17354a10e11a5308cd
 export NGHTTP2_VER_='1.25.0'
-export NGHTTP2_HASH=045825f779e07131360fa2b6c4ced812d6d10e8f1c9b92f2a9b114c6cdcc1e24
+export NGHTTP2_HASH=9553f144e60aa0d7bc5245df1c0f6a867a9fd9dc35ed6f358c6122a844d52f62
 export CARES_VER_='1.13.0'
 export CARES_HASH=03f708f1b14a26ab26c38abd51137640cb444d3ec72380b21b20f1a8d2861da7
 export LIBRESSL_VER_='2.5.5'
@@ -20,7 +20,7 @@ export LIBRTMP_HASH=5c032f5c8cc2937eb55a81a94effdfed3b0a0304b6376147b86f951e225e
 export LIBSSH2_VER_='1.8.0'
 export LIBSSH2_HASH=39f34e2f6835f4b992cafe8625073a88e5a28ba78f83e8099610a7b3af4676d4
 export CURL_VER_='7.55.1'
-export CURL_HASH=e5b1a92ed3b0c11f149886458fa063419500819f1610c020d62f25b8e4b16cfb
+export CURL_HASH=
 
 # Quit if any of the lines fail
 set -e
@@ -78,7 +78,7 @@ rm -f -r zlib && mv zlib-* zlib
 [ -f "zlib${_patsuf}.patch" ] && dos2unix < "zlib${_patsuf}.patch" | patch -N -p1 -d zlib
 
 # nghttp2
-curl -o pack.bin -L --proto-redir =https "https://github.com/nghttp2/nghttp2/releases/download/v${NGHTTP2_VER_}/nghttp2-${NGHTTP2_VER_}.tar.bz2" || exit 1
+curl -o pack.bin -L --proto-redir =https "https://github.com/nghttp2/nghttp2/releases/download/v${NGHTTP2_VER_}/nghttp2-${NGHTTP2_VER_}.tar.xz" || exit 1
 openssl dgst -sha256 pack.bin | grep -q "${NGHTTP2_HASH}" || exit 1
 tar -xvf pack.bin > /dev/null 2>&1 || exit 1
 rm pack.bin
@@ -179,12 +179,12 @@ rm -f -r libssh2 && mv libssh2-* libssh2
 
 # curl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-  CURL_VER_='7.55.1-dev'
+  CURL_VER_='7.56.0-dev'
   curl -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/43fb867a58202bcccbbfa92fe819cec79be19468.tar.gz || exit 1
 else
   curl \
-    -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2" \
-    -o pack.sig "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.bz2.asc" || exit 1
+    -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.xz" \
+    -o pack.sig "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.xz.asc" || exit 1
   gpg_recv_keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
   openssl dgst -sha256 pack.bin | grep -q "${CURL_HASH}" || exit 1
