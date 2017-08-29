@@ -11,7 +11,9 @@
   - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
   - curl/libcurl features enabled by default:<br>
     `dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtsp scp sftp smtp smtps telnet tftp`<br>
-    `AsynchDNS IDN IPv6 Largefile SSPI Kerberos SPNEGO NTLM SSL libz TLS-SRP HTTP2 HTTPS-proxy`
+    `dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp` (upcoming)<br>
+    `AsynchDNS IDN IPv6 Largefile SSPI Kerberos SPNEGO NTLM SSL libz TLS-SRP HTTP2 HTTPS-proxy`<br>
+    `AsynchDNS IDN IPv6 Largefile SSPI Kerberos SPNEGO NTLM SSL libz TLS-SRP HTTP2 HTTPS-proxy MultiSSL` (upcoming)
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the
     build [in public](https://ci.appveyor.com/project/vsz/harbour-deps),
@@ -38,7 +40,10 @@
     applied locally if already merged upstream or &mdash; in case it's
     necessary for a successful build &mdash; had them submitted upstream
     with fair confidence of getting accepted.
-  - Optional support for [C-ares](https://c-ares.haxx.se/), [librtmp](https://rtmpdump.mplayerhq.hu/) and for [WinSSL](https://en.wikipedia.org/wiki/Cryptographic_Service_Provider) as a fall-back back end.
+  - curl/libcurl 7.56.0 and upper versions are built in MultiSSL mode, with
+    both OpenSSL and [WinSSL](https://en.wikipedia.org/wiki/Cryptographic_Service_Provider)
+    available as SSL back ends.
+  - Optional support for [C-ares](https://c-ares.haxx.se/), [librtmp](https://rtmpdump.mplayerhq.hu/).
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
   - If you need a download with a stable checksum, link to the penultimate
     version. Only the current latest versions are kept updated with newer

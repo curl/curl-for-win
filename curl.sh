@@ -75,6 +75,12 @@ _cpu="$2"
     export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
     export OPENSSL_LIBPATH="${OPENSSL_PATH}"
     export OPENSSL_LIBS='-lssl -lcrypto'
+    # This breaks pre-7.55.0 builds
+    if [ "$(echo "${CURL_VER_}" | cut -c -5)" != '7.55.' ]; then
+      options="${options}-winssl"
+      # Hack to enable SMB/SMBS when OpenSSL is also enabled
+      CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUSE_WIN32_CRYPTO"
+    fi
   else
     options="${options}-winssl"
   fi
