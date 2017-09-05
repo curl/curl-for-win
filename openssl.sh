@@ -45,7 +45,7 @@ _cpu="$2"
   fi
   if [ "${_cpu}" = '64' ]; then
     options="${options} enable-ec_nistp_64_gcc_128"
-    [ "${_CCVER}" -ge '0500' ] && options="${options} -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
+    [ "${_CCVER}" -ge '05' ] && options="${options} -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
   fi
   [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && options="${options} -fno-asynchronous-unwind-tables"
 

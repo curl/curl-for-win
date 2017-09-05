@@ -84,7 +84,7 @@ for _cpu in '32' '64'; do
     export _WINE='wine'
   fi
 
-  export _CCVER="$("${_CCPREFIX}gcc" -dumpversion | sed -e 's/\<[0-9]\>/0&/g' -e 's/\.//g')"
+  export _CCVER="$("${_CCPREFIX}gcc" -dumpversion | sed -e 's/\<[0-9]\>/0&/g' -e 's/\.//g' | cut -c -2)"
 
   which osslsigncode > /dev/null 2>&1 || unset CODESIGN_KEY
 

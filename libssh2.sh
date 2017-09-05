@@ -22,7 +22,7 @@ _cpu="$2"
   export LIBSSH2_CFLAG_EXTRAS='-fno-ident -DHAVE_STRTOI64'
   [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export LIBSSH2_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
-  [ "${_cpu}" = '64' ] && [ "${_CCVER}" -ge '0500' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
+  [ "${_cpu}" = '64' ] && [ "${_CCVER}" -ge '05' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
 
   export ZLIB_PATH=../../zlib
   export WITH_ZLIB=1
