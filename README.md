@@ -71,7 +71,7 @@
       is an optional feature, though it appears to be good practice to include
       it.
 
-# Your donation is welcome to support maintaining these builds
+# Your donation is welcome to support these builds
 
   [![PayPal](https://www.paypalobjects.com/webstatic/i/logo/rebrand/ppcom.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2DZM6WAGRJWT6)
 
