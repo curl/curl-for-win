@@ -21,7 +21,7 @@ Visit the project page for details about these builds and the list of changes:
 
    ${_URL}
 
-Please donate to support maintaining these builds:
+Your donation is welcome to support maintaining these builds:
 
    PayPal:
       https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2DZM6WAGRJWT6
