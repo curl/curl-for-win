@@ -18,6 +18,8 @@ _cpu="$2"
 
   # Prepare build
 
+  find . -name '*.dll' -type f -delete
+
   # FIXME: This will not create a fully release-compliant file tree,
   #        f.e. documentation will be incomplete.
   [ -f 'Makefile' ] || ./buildconf.bat
