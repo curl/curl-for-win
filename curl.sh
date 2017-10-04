@@ -108,6 +108,11 @@ _cpu="$2"
     options="${options}-winidn"
   fi
 
+  if [ "${_cpu}" = '64' ]; then
+    export CURL_DLL_SUFFIX=-x64
+  fi
+  export CURL_DLL_A_SUFFIX=.dll
+
   # Make sure to link zlib (and only zlib) in static mode when building
   # `libcurl.dll`, so that it wouldn't depend on a `zlib1.dll`.
   # In some build environments (such as MSYS2), `libz.dll.a` is also offered
