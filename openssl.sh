@@ -32,7 +32,7 @@ _cpu="$2"
   [ "${_cpu}" = '64' ] && options='mingw64'
   if [ "${_BRANCH#*lto*}" != "${_BRANCH}" ]; then
     # Create a fixed seed based on the timestamp of the OpenSSL source package.
-    options="${options} -flto -ffat-lto-objects -frandom-seed=$(stat -c %Y "${_ref}")"
+    options="${options} -flto -ffat-lto-objects -frandom-seed=$(TZ=UTC stat -c %Y "${_ref}")"
     # mingw64 build (as of mingw 5.2.0) will fail without the `no-asm` option.
     [ "${_cpu}" = '64' ] && options="${options} no-asm"
   fi
