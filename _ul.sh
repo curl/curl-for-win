@@ -53,8 +53,8 @@ fi
 
 # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>
 case "${os}" in
-  bsd|mac) stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_BAS}${_suf}.7z";;
-  *)       stat -c '%n: %s bytes %y' "${_BAS}${_suf}.7z";;
+  bsd|mac) TZ=UTC stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_BAS}${_suf}.7z";;
+  *)       TZ=UTC stat -c '%n: %s bytes %y' "${_BAS}${_suf}.7z";;
 esac
 
 openssl dgst -sha256 "${_BAS}${_suf}.7z" | tee -a hashes.txt
