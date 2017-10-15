@@ -81,7 +81,10 @@ _cpu="$2"
     if [ "$(echo "${CURL_VER_}" | cut -c -5)" != '7.55.' ]; then
       options="${options}-winssl"
       # Hack to enable SMB/SMBS when OpenSSL is also enabled
-      CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUSE_WIN32_CRYPTO"
+      # (not necessary after 7.56.0)
+      if [ "$(echo "${CURL_VER_}" | cut -c -6)" = '7.56.0' ]; then
+        CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUSE_WIN32_CRYPTO"
+      fi
     fi
   else
     options="${options}-winssl"
