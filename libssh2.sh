@@ -16,6 +16,10 @@ _cpu="$2"
 (
   cd "${_NAM}" || exit
 
+  # Prepare build
+
+  find . -name '*.dll' -type f -delete
+
   # Build
 
   export ARCH="w${_cpu}"
@@ -41,6 +45,11 @@ _cpu="$2"
   else
     export WITH_WINCNG=1
   fi
+
+  if [ "${_cpu}" = '64' ]; then
+    export LIBSSH2_DLL_SUFFIX=-x64
+  fi
+  export LIBSSH2_DLL_A_SUFFIX=.dll
 
   export CROSSPREFIX="${_CCPREFIX}"
 

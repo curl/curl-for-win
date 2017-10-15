@@ -124,6 +124,10 @@ _cpu="$2"
   # along with `libz.a` causing the linker to pick up the shared library.
   export DLL_LIBS='-Wl,-Bstatic -lz -Wl,-Bdynamic'
 
+  # Link libssh2 to libcurl in static mode as well.
+  # Use a hack: Delete the implib
+  rm -f "../libssh2/win32/libssh2.dll.a"
+
   export CROSSPREFIX="${_CCPREFIX}"
 
   ${_MAKE} mingw32-clean
