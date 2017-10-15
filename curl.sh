@@ -153,6 +153,7 @@ _cpu="$2"
   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
     touch -c -r "${_ref}" src/*.map
     touch -c -r "${_ref}" lib/*.map
+    touch -c -r "${_ref}" lib/*.def
   fi
 
   # Tests
@@ -211,6 +212,7 @@ _cpu="$2"
   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
     cp -f -p src/*.map                "${_DST}/bin/"
     cp -f -p lib/*.map                "${_DST}/bin/"
+    cp -f -p lib/*.def                "${_DST}/bin/"
   fi
 
   unix2dos -k "${_DST}"/*.txt

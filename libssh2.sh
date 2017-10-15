@@ -24,6 +24,10 @@ _cpu="$2"
   export LIBSSH2_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
   [ "${_cpu}" = '64' ] && [ "${_CCVER}" -ge '05' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
 
+  if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
+    LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,-Map,libssh2.map"
+  fi
+
   export ZLIB_PATH=../../zlib
   export WITH_ZLIB=1
   export LINK_ZLIB_STATIC=1
@@ -59,6 +63,11 @@ _cpu="$2"
   touch -c -r "${_ref}" win32/*.dll
   touch -c -r "${_ref}" win32/*.a
 
+  if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
+    touch -c -r "${_ref}" win32/*.map
+    touch -c -r "${_ref}" win32/*.def
+  fi
+
   # Tests
 
   "${_CCPREFIX}objdump" -x win32/*.dll | grep -E -i "(file format|dll name)"
@@ -92,6 +101,11 @@ _cpu="$2"
 
   [ -d ../libressl ] && cp -f -p ../libressl/COPYING "${_DST}/COPYING-libressl.txt"
   [ -d ../openssl ]  && cp -f -p ../openssl/LICENSE  "${_DST}/LICENSE-openssl.txt"
+
+  if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
+    cp -f -p win32/*.map   "${_DST}/bin/"
+    cp -f -p win32/*.def   "${_DST}/bin/"
+  fi
 
   unix2dos -k "${_DST}"/*.txt
   unix2dos -k "${_DST}"/docs/*.txt
