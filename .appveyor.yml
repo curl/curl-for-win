@@ -20,7 +20,13 @@ build_script:
   - pacman --noconfirm --noprogressbar -S --needed mc
   - pacman --noconfirm --noprogressbar -S -yu -u
   - pacman --noconfirm --noprogressbar -S -yu -u
-  - pacman --noconfirm --noprogressbar -S --needed p7zip mingw-w64-{i686,x86_64}-{jq,osslsigncode}
+  - pacman --noconfirm --noprogressbar -S --needed p7zip mingw-w64-{i686,x86_64}-{clang,jq,osslsigncode}
+  - set CURL_CC=clang
+  - set CURL_AR=llvm-ar
+  - set CURL_RANLIB=llvm-ranlib
+  - set LIBSSH2_CC=%CURL_CC%
+  - set LIBSSH2_AR=%CURL_AR%
+  - set LIBSSH2_RANLIB=%CURL_RANLIB%
   - sh -c ./_build.sh
 artifacts:
   - path: '*-*-mingw.*'
