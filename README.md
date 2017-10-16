@@ -32,7 +32,7 @@
     configuration, sometimes thus breaking reproducibility. This trade-off was
     decided to be tolerable for more ideal binaries and allowing this project
     to automatically benefit from continuous C compiler updates.
-  - Generated binaries are GPG signed with Bintray's [key pair](https://bintray.com/docs/usermanual/uploads/uploads_gpgsigning.html):
+  - Generated binaries are GPG signed with Bintray's [key pair](https://bintray.com/docs/usermanual/uploads/uploads_managinguploadedcontent.html#_signing_with_the_bintray_key):
     **[8756 C4F7 65C9 AC3C B6B8  5D62 379C E192 D401 AB61](https://pgp.mit.edu/pks/lookup?op=vindex&fingerprint=on&search=0x8756C4F765C9AC3CB6B85D62379CE192D401AB61)**
   - Patching policy: No locally maintained patches. Patches are only
     applied locally if already merged upstream or &mdash; in case it's
@@ -102,5 +102,5 @@
   project.
 
 ---
-This document &copy;&nbsp;2014&ndash;present Viktor Szakats <https://vszakats.net/><br />
+This document &copy;&nbsp;2014&ndash;present [Viktor Szakats](https://vszakats.net/)<br>
 [![Creative Commons Attribution-ShareAlike 4.0](https://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-sa.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
