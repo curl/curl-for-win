@@ -1,4 +1,7 @@
 version: 1.0.{build}
+branches:
+  except:
+  - test-travis
 image: Visual Studio 2017
 clone_depth: 8
 clone_folder: C:\w\
