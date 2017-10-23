@@ -26,6 +26,11 @@ matrix:
     - os: osx
       osx_image: xcode9
       compiler: i686-w64-mingw32-gcc
+      env: CPU=64
+    - os: osx
+      osx_image: xcode9
+      compiler: i686-w64-mingw32-gcc
+      env: CPU=32
 
 before_install:
   - |

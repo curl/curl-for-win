@@ -15,18 +15,21 @@ esac
 
 export BINTRAY_USER='vszakats'
 
+PUBLISH_PROD_FROM='win'
+
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
   _suf=
 
-  # Production builds are uploaded from AppVeyor
-  if [ ! "${APPVEYOR}" = 'True' ]; then
-    unset BINTRAY_USER
-    unset BINTRAY_APIKEY
+  if [ ! "${PUBLISH_PROD_FROM}" = "${os}" ]; then
+    _suf="-${os}"
+    mv "${_BAS}.7z" "${_BAS}${_suf}.7z"
+    # unset BINTRAY_USER
+    # unset BINTRAY_APIKEY
   fi
 else
   # Do not sign test packages
   GPG_PASSPHRASE=
-  _suf='-test'
+  _suf="-test-${os}"
   mv "${_BAS}.7z" "${_BAS}${_suf}.7z"
 fi
 

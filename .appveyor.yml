@@ -32,11 +32,11 @@ build_script:
   - set LIBSSH2_RANLIB=%CURL_RANLIB%
   - sh -c ./_build.sh
 artifacts:
-  - path: '*-*-mingw.*'
+  - path: '*-*-mingw*.*'
     name: master
-  - path: '*-*-mingw-libressl.*'
+  - path: '*-*-mingw-libressl*.*'
     name: master-libressl
-  - path: 'all-mingw.*'
+  - path: 'all-mingw*.*'
     name: all
 #init:
 #  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))

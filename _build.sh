@@ -54,7 +54,8 @@ esac
 
 _ori_path="${PATH}"
 
-for _cpu in '32' '64'; do
+build_single_target() {
+  _cpu="$1"
 
   export _CCPREFIX=
   export _MAKE='make'
@@ -98,7 +99,14 @@ for _cpu in '32' '64'; do
   ./librtmp.sh   "${LIBRTMP_VER_}" "${_cpu}"
   ./libssh2.sh   "${LIBSSH2_VER_}" "${_cpu}"
   ./curl.sh         "${CURL_VER_}" "${_cpu}"
-done
+}
+
+if [ -n "$CPU" ]; then
+  build_single_target "${CPU}"
+else
+  build_single_target 64
+  build_single_target 32
+fi
 
 ls -l ./*-*-mingw*.*
 cat hashes.txt
