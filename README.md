@@ -76,11 +76,11 @@
 
 # Binary package downloads
 
-  * curl: <https://bintray.com/vszakats/generic/curl>
-  * OpenSSL: <https://bintray.com/vszakats/generic/openssl>
-  * libssh2: <https://bintray.com/vszakats/generic/libssh2>
-  * nghttp2: <https://bintray.com/vszakats/generic/nghttp2>
-  * zlib: <https://bintray.com/vszakats/generic/zlib>
+  * curl: <https://bintray.com/vszakats/generic/curl/_latestVersion>
+  * OpenSSL: <https://bintray.com/vszakats/generic/openssl/_latestVersion>
+  * libssh2: <https://bintray.com/vszakats/generic/libssh2/_latestVersion>
+  * nghttp2: <https://bintray.com/vszakats/generic/nghttp2/_latestVersion>
+  * zlib: <https://bintray.com/vszakats/generic/zlib/_latestVersion>
 
 # Live build logs
 
