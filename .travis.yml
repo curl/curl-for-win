@@ -27,7 +27,7 @@ matrix:
       compiler: i686-w64-mingw32-gcc
 
 before_install:
-  - >
+  - |
     if [ "$TRAVIS_OS_NAME" = 'osx' ]; then
       brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg gnu-sed || true
       brew install --force-bottle --build-bottle wine || true
@@ -48,7 +48,7 @@ before_install:
     fi
 
 script:
-  - >
+  - |
     if [ "$TRAVIS_OS_NAME" = 'osx' ]; then
       ./_build.sh
     fi
