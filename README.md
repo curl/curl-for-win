@@ -1,4 +1,5 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
+[![Build Status](https://api.travis-ci.org/vszakats/harbour-deps.svg?branch=master)](https://travis-ci.org/vszakats/harbour-deps)
 [![Build status](https://ci.appveyor.com/api/projects/status/4bx4006pge6jbqch/branch/master?svg=true)](https://ci.appveyor.com/project/vsz/harbour-deps/branch/master)
 &nbsp;&nbsp;&nbsp;&nbsp;
 [![PayPal Donate](https://img.shields.io/badge/PayPal-Donate_Now-f8981d.svg?colorA=00457c)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2DZM6WAGRJWT6 "Donate Now")
