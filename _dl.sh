@@ -33,10 +33,13 @@ case "$(uname)" in
   *BSD)    os='bsd';;
 esac
 
+unset _sudo
+[ "${os}" = 'mac' ] && _sudo='sudo'
+
 # Install required component
 # TODO: add `--progress-bar off` when pip 9.1.0 hits the drives
-python -m pip --disable-pip-version-check install --upgrade pip
-python -m pip install pefile
+${_sudo} python -m pip --disable-pip-version-check install --upgrade pip
+${_sudo} python -m pip install pefile
 
 alias curl='curl -fsS --connect-timeout 15 --retry 3'
 alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format LONG'
