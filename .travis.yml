@@ -18,6 +18,7 @@ matrix:
     - os: linux
       dist: trusty
       sudo: required
+      group: edge
       compiler: i686-w64-mingw32-gcc
       services: [ docker ]
       # https://hub.docker.com/_/ubuntu/
