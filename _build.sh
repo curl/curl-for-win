@@ -80,7 +80,7 @@ build_single_target() {
     export PATH="${tmp}:${_ori_path}"
     export _MAKE='mingw32-make'
   else
-    if [ "${CC}" = 'mingw32-clang' ] && [ "${os}" = 'mac' ]; then
+    if [ "${CC}" = 'mingw-clang' ] && [ "${os}" = 'mac' ]; then
       export PATH="/usr/local/opt/llvm/bin:${_ori_path}"
     fi
     # Prefixes don't work with MSYS2/mingw-w64, because `ar`, `nm` and
@@ -101,7 +101,7 @@ build_single_target() {
   fi
 
   export _CCVER
-  if [ "${CC}" = 'mingw32-clang' ]; then
+  if [ "${CC}" = 'mingw-clang' ]; then
     # We don't use old mingw toolchain versions when building with clang, so this is safe:
     _CCVER='99'
   else

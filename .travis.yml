@@ -19,23 +19,23 @@ matrix:
       dist: trusty
       sudo: required
       group: edge
-      compiler: mingw32-clang
+      compiler: mingw-clang
       services: [ docker ]
       # https://hub.docker.com/_/ubuntu/
       env: DOCKER_IMAGE=ubuntu:rolling
     - os: osx
       osx_image: xcode9
-      compiler: mingw32-clang
+      compiler: mingw-clang
       env: CPU=64
     - os: osx
       osx_image: xcode9
-      compiler: mingw32-clang
+      compiler: mingw-clang
       env: CPU=32
 
 before_install:
   - |
     if [ "$TRAVIS_OS_NAME" = 'osx' ]; then
-      [ "${CC}" = 'mingw32-clang' ] && _clang='llvm'
+      [ "${CC}" = 'mingw-clang' ] && _clang='llvm'
       travis_retry brew install p7zip mingw-w64 ${_clang} jq osslsigncode dos2unix gpg gnu-sed || true
       travis_retry brew install --force-bottle --build-bottle wine || true
     elif [ "$TRAVIS_OS_NAME" = 'linux' ]; then
@@ -46,7 +46,7 @@ before_install:
         cat /etc/*-release
         ulimit -a
         df -h
-        [ "${CC}" = 'mingw32-clang' ] && _clang='clang'
+        [ "${CC}" = 'mingw-clang' ] && _clang='clang'
         dpkg --add-architecture i386
         apt-get -qq update
         apt-get -qq install \

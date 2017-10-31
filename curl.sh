@@ -126,7 +126,7 @@ _cpu="$2"
 
   export CROSSPREFIX="${_CCPREFIX}"
 
-  if [ "${CC}" = 'mingw32-clang' ]; then
+  if [ "${CC}" = 'mingw-clang' ]; then
     export CURL_CC=clang
     if [ "${os}" != 'win' ]; then
       CURL_CFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${CURL_CFLAG_EXTRAS}"
