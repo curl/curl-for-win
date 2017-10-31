@@ -54,6 +54,15 @@ _cpu="$2"
 
   export CROSSPREFIX="${_CCPREFIX}"
 
+  if [ "${CC}" = 'mingw32-clang' ]; then
+    export LIBSSH2_CC=clang
+    if [ "${os}" != 'win' ]; then
+      LIBSSH2_CFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${LIBSSH2_CFLAG_EXTRAS}"
+      [ "${os}" = 'linux' ] && LIBSSH2_LDFLAG_EXTRAS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${LIBSSH2_LDFLAG_EXTRAS}"
+      LIBSSH2_LDFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${LIBSSH2_LDFLAG_EXTRAS}"
+    fi
+  fi
+
   (
     cd win32 || exit
     ${_MAKE} clean

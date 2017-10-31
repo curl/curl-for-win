@@ -18,18 +18,14 @@ environment:
     secure: pVgDvVAXHLE+EMsDNKa+VY3kz/w1DLWpIAAiaEoahY7tRx7QpMzlMDND07CN1xN+
   CODESIGN_KEY_PASS:
     secure: WpvrivnhUx4RI4Y02hRjj6T+7IGQADpdU5nIQh1oW8jrUaujbmUmGCxG6vANeasz
+  CC: mingw32-clang
 build_script:
   - set PATH=C:\Python27-x64;C:\msys64\usr\bin;%SystemRoot%\system32
   - pacman --noconfirm --noprogressbar -S --needed mc
   - pacman --noconfirm --noprogressbar -S -yu -u
   - pacman --noconfirm --noprogressbar -S -yu -u
-  - pacman --noconfirm --noprogressbar -S --needed p7zip mingw-w64-{i686,x86_64}-{clang,jq,osslsigncode}
-  - set CURL_CC=clang
-  - set CURL_AR=llvm-ar
-  - set CURL_RANLIB=llvm-ranlib
-  - set LIBSSH2_CC=%CURL_CC%
-  - set LIBSSH2_AR=%CURL_AR%
-  - set LIBSSH2_RANLIB=%CURL_RANLIB%
+  - if "%CC%" == "mingw32-clang" set _CLANG=mingw-w64-{i686,x86_64}-clang
+  - pacman --noconfirm --noprogressbar -S --needed p7zip mingw-w64-{i686,x86_64}-{jq,osslsigncode} %_CLANG%
   - sh -c ./_build.sh
 artifacts:
   - path: '*-*-mingw*.*'

@@ -19,37 +19,40 @@ matrix:
       dist: trusty
       sudo: required
       group: edge
-      compiler: i686-w64-mingw32-gcc
+      compiler: mingw32-clang
       services: [ docker ]
       # https://hub.docker.com/_/ubuntu/
       env: DOCKER_IMAGE=ubuntu:rolling
     - os: osx
       osx_image: xcode9
-      compiler: i686-w64-mingw32-gcc
+      compiler: mingw32-clang
       env: CPU=64
     - os: osx
       osx_image: xcode9
-      compiler: i686-w64-mingw32-gcc
+      compiler: mingw32-clang
       env: CPU=32
 
 before_install:
   - |
     if [ "$TRAVIS_OS_NAME" = 'osx' ]; then
-      travis_retry brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg gnu-sed || true
+      [ "${CC}" = 'mingw32-clang' ] && _clang='llvm'
+      travis_retry brew install p7zip mingw-w64 ${_clang} jq osslsigncode dos2unix gpg gnu-sed || true
       travis_retry brew install --force-bottle --build-bottle wine || true
     elif [ "$TRAVIS_OS_NAME" = 'linux' ]; then
       time docker pull "${DOCKER_IMAGE}"
       time docker run -it -v "${PWD}:${PWD}" -w "${PWD}" \
-        --env-file <(env | grep -E '^(TRAVIS|BINTRAY|GPG|VIRUSTOTAL|CODESIGN)_') \
+        --env-file <(env | grep -E '^(TRAVIS_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC)') \
         "${DOCKER_IMAGE}" sh -c '
         cat /etc/*-release
         ulimit -a
         df -h
+        [ "${CC}" = 'mingw32-clang' ] && _clang='clang'
         dpkg --add-architecture i386
         apt-get -qq update
         apt-get -qq install \
           curl git make python python-pip \
-          binutils-mingw-w64 gcc-mingw-w64 p7zip-full jq dos2unix realpath osslsigncode wine-stable wine64 wine32
+          binutils-mingw-w64 gcc-mingw-w64 ${_clang} \
+          p7zip-full jq dos2unix realpath osslsigncode wine-stable wine64 wine32
         ./_build.sh'
     fi
 

@@ -126,6 +126,15 @@ _cpu="$2"
 
   export CROSSPREFIX="${_CCPREFIX}"
 
+  if [ "${CC}" = 'mingw32-clang' ]; then
+    export CURL_CC=clang
+    if [ "${os}" != 'win' ]; then
+      CURL_CFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${CURL_CFLAG_EXTRAS}"
+      [ "${os}" = 'linux' ] && CURL_LDFLAG_EXTRAS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${CURL_LDFLAG_EXTRAS}"
+      CURL_LDFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${CURL_LDFLAG_EXTRAS}"
+    fi
+  fi
+
   ${_MAKE} mingw32-clean
   ${_MAKE} "${options}"
 
