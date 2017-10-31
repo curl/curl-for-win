@@ -40,10 +40,7 @@ _cpu="$2"
       bsd)   _HOST='x86_64-pc-bsd';;
     esac
 
-    [ "${_cpu}" = '32' ] && _TARGET='i686-w64-mingw32'
-    [ "${_cpu}" = '64' ] && _TARGET='x86_64-w64-mingw32'
-
-    options="--build=${_HOST} --host=${_TARGET}"
+    options="--build=${_HOST} --host=${_TRIPLET}"
   fi
 
   # Build
