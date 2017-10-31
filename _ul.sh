@@ -18,17 +18,19 @@ export BINTRAY_USER='vszakats'
 PUBLISH_PROD_FROM='win'
 
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
+  _sufpkg=
   _suf=
 
   if [ ! "${PUBLISH_PROD_FROM}" = "${os}" ]; then
     _suf="-${os}"
     mv "${_BAS}.7z" "${_BAS}${_suf}.7z"
-    # unset BINTRAY_USER
-    # unset BINTRAY_APIKEY
+    unset BINTRAY_USER
+    unset BINTRAY_APIKEY
   fi
 else
   # Do not sign test packages
   GPG_PASSPHRASE=
+  _sufpkg='-test'
   _suf="-test-${os}"
   mv "${_BAS}.7z" "${_BAS}${_suf}.7z"
 fi
@@ -47,8 +49,10 @@ fi
   if [ -n "${BINTRAY_USER}" ] && \
      [ -n "${BINTRAY_APIKEY}" ]; then
 
+    echo "Uploading: '${_BAS}${_suf}.7z' to 'https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_sufpkg}/${_VER}/'"
+
     curl -fsS -u "${BINTRAY_USER}:${BINTRAY_APIKEY}" \
-      -X PUT "https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_suf}/${_VER}/${_BAS}${_suf}.7z?override=1&publish=1" \
+      -X PUT "https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_sufpkg}/${_VER}/${_BAS}${_suf}.7z?override=1&publish=1" \
       --data-binary "@${_BAS}${_suf}.7z" \
       -H "X-GPG-PASSPHRASE: ${GPG_PASSPHRASE}"
   fi
