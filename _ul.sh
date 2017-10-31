@@ -22,7 +22,7 @@ if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
   _suf=
 
   if [ ! "${PUBLISH_PROD_FROM}" = "${os}" ]; then
-    _suf="-${os}"
+    _suf="-built-on-${os}"
     mv "${_BAS}.7z" "${_BAS}${_suf}.7z"
     unset BINTRAY_USER
     unset BINTRAY_APIKEY
@@ -31,7 +31,7 @@ else
   # Do not sign test packages
   GPG_PASSPHRASE=
   _sufpkg='-test'
-  _suf="-test-${os}"
+  _suf="-test-built-on-${os}"
   mv "${_BAS}.7z" "${_BAS}${_suf}.7z"
 fi
 
