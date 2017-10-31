@@ -24,11 +24,11 @@ matrix:
       # https://hub.docker.com/_/ubuntu/
       env: DOCKER_IMAGE=ubuntu:rolling
     - os: osx
-      osx_image: xcode9
+      osx_image: &mac-image xcode9.1
       compiler: mingw-clang
       env: CPU=64
     - os: osx
-      osx_image: xcode9
+      osx_image: *mac-image
       compiler: mingw-clang
       env: CPU=32
 
