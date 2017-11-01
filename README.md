@@ -23,8 +23,10 @@
     (on Ubuntu via Docker), [MSYS2](http://msys2.github.io/) (on Windows).
     C compiler is [GCC](https://gcc.gnu.org/) and optionally
     [LLVM/Clang](https://clang.llvm.org/) for curl and libssh2.
-  - Binaries are published from Windows ([AppVeyor CI](https://www.appveyor.com/)),
-    using LLVM/Clang for curl and libssh2, and GCC for others.
+  - Binaries are published from Windows (via [AppVeyor CI](https://www.appveyor.com/)),
+    using LLVM/Clang for curl and libssh2, and GCC for others.<br>
+    Build host will be changed to macOS (via [Travis CI](https://travis-ci.org/))
+    in November 2017.
   - Binaries are built with supported [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29) options enabled.
   - Binaries are using [DWARF](https://en.wikipedia.org/wiki/DWARF) in x86 and
     [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH)
