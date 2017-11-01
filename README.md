@@ -9,7 +9,8 @@
   - Packaging aims to follow popular binary releases found on the internet.
   - Both x86 and x64 packages are built using the same process.
   - Standalone `curl.exe` (only [`msvcrt.dll`](https://en.wikipedia.org/wiki/Microsoft_Windows_library_files#MSVCRT.DLL.2C_MSVCPP.DLL_and_CRTDLL.DLL) is [required](https://blogs.msdn.microsoft.com/oldnewthing/20140411-00/?p=1273)).
-  - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
+  - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2)
+    support enabled.
   - curl/libcurl features enabled by default:
     <br>`dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
     <br>`AsynchDNS IDN IPv6 Largefile SSPI Kerberos SPNEGO NTLM SSL libz TLS-SRP HTTP2 HTTPS-proxy MultiSSL`
@@ -17,7 +18,13 @@
     open source code, C compiler, build scripts and running the
     build [in public](https://ci.appveyor.com/project/vsz/harbour-deps),
     with open, auditable [build logs](#live-build-logs).
-  - C compiler toolchain is MinGW-w64 (non-multilib, x86 and x64) via MSYS2.
+  - C compiler toolchain is MinGW-w64 (non-multilib, x86 and x64) either via
+    [Homebrew](https://brew.sh/) (on macOS), [APT](https://en.wikipedia.org/wiki/APT_(Debian))
+    (on Ubuntu via Docker), [MSYS2](http://msys2.github.io/) (on Windows).
+    C compiler is [GCC](https://gcc.gnu.org/) and optionally
+    [LLVM/Clang](https://clang.llvm.org/) for curl and libssh2.
+  - Binaries are published from Windows ([AppVeyor CI](https://www.appveyor.com/)),
+    using LLVM/Clang for curl and libssh2, and GCC for others.
   - Binaries are built with supported [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29) options enabled.
   - Binaries are using [DWARF](https://en.wikipedia.org/wiki/DWARF) in x86 and
     [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH)
@@ -27,12 +34,13 @@
   - Generated binaries are [reproducible](https://reproducible-builds.org/),
     meaning they will have the same hash given the same input sources and C
     compiler.
-  - Because MSYS2 is updated before each build, subsequent builds _may_ use
-    different versions/builds of the compiler toolchain. This may result in
-    different generated binaries given otherwise unchanged source code and
-    configuration, sometimes thus breaking reproducibility. This trade-off was
-    decided to be tolerable for more ideal binaries and allowing this project
-    to automatically benefit from continuous C compiler updates.
+  - Because the build environment is updated before each build, subsequent
+    builds _may_ use different versions/builds of the compiler toolchain.
+    This may result in different generated binaries given otherwise unchanged
+    source code and configuration, sometimes thus breaking reproducibility.
+    This trade-off was decided to be tolerable for more ideal binaries and
+    allowing this project to automatically benefit from continuous C compiler
+    updates.
   - Generated binaries are GPG signed with Bintray's [key pair](https://bintray.com/docs/usermanual/uploads/uploads_managinguploadedcontent.html#_signing_with_the_bintray_key):
     **[8756 C4F7 65C9 AC3C B6B8  5D62 379C E192 D401 AB61](https://pgp.mit.edu/pks/lookup?op=vindex&fingerprint=on&search=0x8756C4F765C9AC3CB6B85D62379CE192D401AB61)**
   - Patching policy: No locally maintained patches. Patches are only
