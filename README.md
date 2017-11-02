@@ -18,13 +18,15 @@
     open source code, C compiler, build scripts and running the
     build [in public](https://travis-ci.org/vszakats/harbour-deps/branches),
     with open, auditable [build logs](#live-build-logs).
-  - C compiler toolchain is MinGW-w64 (non-multilib, x86 and x64) either via
-    [Homebrew](https://brew.sh/) (on macOS), [APT](https://en.wikipedia.org/wiki/APT_(Debian))
-    (on Ubuntu via Docker), [MSYS2](http://msys2.github.io/) (on Windows).
+  - C compiler toolchain is latest MinGW-w64 (non-multilib, x86 and x64)
+    either via [Homebrew](https://brew.sh/) (on macOS),
+    [APT](https://en.wikipedia.org/wiki/APT_(Debian)) (on Ubuntu via Docker) or
+    [MSYS2](http://msys2.github.io/) (on Windows).
     C compiler is [GCC](https://gcc.gnu.org/) and optionally
     [LLVM/Clang](https://clang.llvm.org/) for curl and libssh2.
   - Binaries are cross-built and published from macOS
-    (via [Travis CI](https://travis-ci.org/)).
+    (via [Travis CI](https://travis-ci.org/)), using LLVM/Clang for curl and
+    libssh2, and GCC for others.
   - Binaries are built with supported [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29) options enabled.
   - Binaries are using [DWARF](https://en.wikipedia.org/wiki/DWARF) in x86 and
     [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH)
