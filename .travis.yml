@@ -38,6 +38,8 @@ before_install:
       [ "${CC}" = 'mingw-clang' ] && _clang='llvm'
       travis_retry brew install p7zip mingw-w64 ${_clang} jq osslsigncode dos2unix gpg gnu-sed || true
       travis_retry brew install --force-bottle --build-bottle wine || true
+      export DISPLAY=:1
+      wineboot
     elif [ "$TRAVIS_OS_NAME" = 'linux' ]; then
       time docker pull "${DOCKER_IMAGE}"
       time docker run -it -v "${PWD}:${PWD}" -w "${PWD}" \
