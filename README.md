@@ -16,17 +16,15 @@
     <br>`AsynchDNS IDN IPv6 Largefile SSPI Kerberos SPNEGO NTLM SSL libz TLS-SRP HTTP2 HTTPS-proxy MultiSSL`
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the
-    build [in public](https://ci.appveyor.com/project/vsz/harbour-deps),
+    build [in public](https://travis-ci.org/vszakats/harbour-deps/branches),
     with open, auditable [build logs](#live-build-logs).
   - C compiler toolchain is MinGW-w64 (non-multilib, x86 and x64) either via
     [Homebrew](https://brew.sh/) (on macOS), [APT](https://en.wikipedia.org/wiki/APT_(Debian))
     (on Ubuntu via Docker), [MSYS2](http://msys2.github.io/) (on Windows).
     C compiler is [GCC](https://gcc.gnu.org/) and optionally
     [LLVM/Clang](https://clang.llvm.org/) for curl and libssh2.
-  - Binaries are published from Windows (via [AppVeyor CI](https://www.appveyor.com/)),
-    using LLVM/Clang for curl and libssh2, and GCC for others.<br>
-    Build host will be changed to macOS (via [Travis CI](https://travis-ci.org/))
-    in November 2017.
+  - Binaries are cross-built and published from macOS
+    (via [Travis CI](https://travis-ci.org/)).
   - Binaries are built with supported [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29) options enabled.
   - Binaries are using [DWARF](https://en.wikipedia.org/wiki/DWARF) in x86 and
     [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH)
@@ -58,9 +56,9 @@
     version. Only the current latest versions are kept updated with newer
     dependencies.
   - To verify the correct checksum for the latest build, you can look up the
-    correct ones in the build log as they are generated. Watch for the lines
-    starting with `SHA256(`:
-      <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
+    correct ones in the build log as they are generated. Watch for `master`
+    branch jobs `CPU=64` and `CPU=32`, log lines starting with `SHA256(`:
+      <https://travis-ci.org/vszakats/harbour-deps/branches>
   - The build process is multi-platform and able to cross-build Windows
     executables from \*nix hosts (Linux and macOS tested.)
   - Packages created across different host platforms won't currently have
@@ -94,9 +92,9 @@
 
 # Live build logs
 
-  * <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
-    (for published binaries)
   * <https://travis-ci.org/vszakats/harbour-deps>
+    (for published binaries)
+  * <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
 
 # Guarantees and Liability
 
