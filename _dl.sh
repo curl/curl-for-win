@@ -5,6 +5,8 @@
 
 export ZLIB_VER_='1.2.11'
 export ZLIB_HASH=629380c90a77b964d896ed37163f5c3a34f6e6d897311f1df2a7016355c45eff
+export BROTLI_VER_='1.0.1'
+export BROTLI_HASH=6870f9c2c63ef58d7da36e5212a3e1358427572f6ac5a8b5a73a815cf3e0c4a6
 export LIBIDN2_VER_='2.0.3'
 export LIBIDN2_HASH=4335149ce7a5c615edb781574d38f658672780331064fb17354a10e11a5308cd
 export NGHTTP2_VER_='1.27.0'
@@ -79,6 +81,14 @@ tar -xvf pack.bin > /dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r zlib && mv zlib-* zlib
 [ -f "zlib${_patsuf}.patch" ] && dos2unix < "zlib${_patsuf}.patch" | patch -N -p1 -d zlib
+
+# brotli
+curl -o pack.bin -L --proto-redir =https "https://github.com/google/brotli/archive/v${BROTLI_VER_}.tar.gz" || exit 1
+openssl dgst -sha256 pack.bin | grep -q "${BROTLI_HASH}" || exit 1
+tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+rm pack.bin
+rm -f -r brotli && mv brotli-* brotli
+[ -f "brotli${_patsuf}.patch" ] && dos2unix < "brotli${_patsuf}.patch" | patch -N -p1 -d brotli
 
 # nghttp2
 curl -o pack.bin -L --proto-redir =https "https://github.com/nghttp2/nghttp2/releases/download/v${NGHTTP2_VER_}/nghttp2-${NGHTTP2_VER_}.tar.xz" || exit 1

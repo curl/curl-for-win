@@ -11,7 +11,7 @@ language: c
 
 addons:
   apt:
-    packages: [ binutils-mingw-w64, gcc-mingw-w64, p7zip-full, gnupg-curl, dos2unix, realpath ]
+    packages: [ binutils-mingw-w64, gcc-mingw-w64, cmake, p7zip-full, gnupg-curl, dos2unix, realpath ]
 
 matrix:
   include:
@@ -54,7 +54,7 @@ before_install:
         apt-get -qq update
         apt-get -qq install \
           curl git make python python-pip \
-          binutils-mingw-w64 gcc-mingw-w64 ${_clang} \
+          binutils-mingw-w64 gcc-mingw-w64 ${_clang} cmake \
           p7zip-full jq dos2unix realpath osslsigncode wine-stable wine64 wine32
         ./_build.sh'
     fi
