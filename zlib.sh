@@ -44,7 +44,7 @@ _cpu="$2"
   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ./*.a
   "${_CCPREFIX}strip" -p -s ./*.dll
 
-  ../_peclean.py "${_ref}" '*.dll'
+  ../_peclean.py "${_ref}" './*.dll'
 
   ../_sign.sh '*.dll'
 
