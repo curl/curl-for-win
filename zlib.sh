@@ -46,7 +46,7 @@ _cpu="$2"
 
   ../_peclean.py "${_ref}" './*.dll'
 
-  ../_sign.sh '*.dll'
+  ../_sign.sh './*.dll'
 
   touch -c -r "${_ref}" ./*.dll
   touch -c -r "${_ref}" ./*.a
