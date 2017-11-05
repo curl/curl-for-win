@@ -16,19 +16,10 @@ _cpu="$2"
 (
   cd "${_NAM}" || exit
 
-  # Cross-tasks
-
-  # Detect host OS
-  case "$(uname)" in
-    *_NT*)   os='win';;
-    Linux*)  os='linux';;
-    Darwin*) os='mac';;
-    *BSD)    os='bsd';;
-  esac
-
-  [ "${os}" != 'win' ] && export CMAKE_SYSTEM_NAME=${_TRIPLET}
-
   # Build
+
+  rm -fr CMakeFiles
+  rm -f CMakeCache.txt
 
   find . -name '*.o'   -type f -delete
   find . -name '*.a'   -type f -delete
@@ -38,18 +29,18 @@ _cpu="$2"
   find . -name '*.Plo' -type f -delete
   find . -name '*.pc'  -type f -delete
 
-  export CMAKE_C_COMPILER="${_CCPREFIX}gcc"
-  export LDFLAGS="-static-libgcc -m${_cpu}"
-  export CFLAGS="${LDFLAGS} -fno-ident"
-  [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
-  export CXXFLAGS="${CFLAGS}"
-
   unset CC
 
-  # shellcheck disable=SC2086
-  cmake . ${options} \
-    -DCMAKE_INSTALL_PREFIX=/usr/local \
-    -DCMAKE_INSTALL_LIBDIR=lib
+  _CFLAGS="-static-libgcc -m${_cpu} -fno-ident -DMINGW_HAS_SECURE_API"
+  [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
+
+  cmake . \
+    -DCMAKE_SYSTEM_NAME='Windows' \
+    -DCMAKE_C_COMPILER="${_TRIPLET}-gcc" \
+    -DCMAKE_CXX_COMPILER="${_TRIPLET}-g++" \
+    -DCMAKE_C_FLAGS="${_CFLAGS}" \
+    -DCMAKE_INSTALL_PREFIX='/usr/local' \
+    -DCMAKE_INSTALL_LIBDIR='lib'
   make
   make install "DESTDIR=$(pwd)/pkg" > /dev/null
 
