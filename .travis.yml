@@ -38,7 +38,6 @@ before_install:
       [ "${CC}" = 'mingw-clang' ] && _clang='llvm'
       export HOMEBREW_NO_AUTO_UPDATE=1
       travis_retry brew update > /dev/null
-      travis_retry brew upgrade
       travis_retry brew install p7zip mingw-w64 ${_clang} jq osslsigncode dos2unix gpg gnu-sed
       travis_retry brew install --force-bottle --build-bottle wine
       wineboot --init
