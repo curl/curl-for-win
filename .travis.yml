@@ -11,7 +11,7 @@ language: c
 
 addons:
   apt:
-    packages: [ binutils-mingw-w64, gcc-mingw-w64, cmake, p7zip-full, gnupg-curl, dos2unix, realpath ]
+    packages: [ binutils-mingw-w64, gcc-mingw-w64, cmake, p7zip-full, gnupg-curl, dos2unix, realpath, time ]
 
 matrix:
   include:

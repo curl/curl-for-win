@@ -109,16 +109,16 @@ build_single_target() {
 
   which osslsigncode > /dev/null 2>&1 || unset CODESIGN_KEY
 
-  ./zlib.sh         "${ZLIB_VER_}" "${_cpu}"
-  ./brotli.sh     "${BROTLI_VER_}" "${_cpu}"
-  ./libidn2.sh   "${LIBIDN2_VER_}" "${_cpu}"
-  ./c-ares.sh      "${CARES_VER_}" "${_cpu}"
-  ./nghttp2.sh   "${NGHTTP2_VER_}" "${_cpu}"
-  ./libressl.sh "${LIBRESSL_VER_}" "${_cpu}"
-  ./openssl.sh   "${OPENSSL_VER_}" "${_cpu}"
-  ./librtmp.sh   "${LIBRTMP_VER_}" "${_cpu}"
-  ./libssh2.sh   "${LIBSSH2_VER_}" "${_cpu}"
-  ./curl.sh         "${CURL_VER_}" "${_cpu}"
+  time ./zlib.sh         "${ZLIB_VER_}" "${_cpu}"
+  time ./brotli.sh     "${BROTLI_VER_}" "${_cpu}"
+  time ./libidn2.sh   "${LIBIDN2_VER_}" "${_cpu}"
+  time ./c-ares.sh      "${CARES_VER_}" "${_cpu}"
+  time ./nghttp2.sh   "${NGHTTP2_VER_}" "${_cpu}"
+  time ./libressl.sh "${LIBRESSL_VER_}" "${_cpu}"
+  time ./openssl.sh   "${OPENSSL_VER_}" "${_cpu}"
+  time ./librtmp.sh   "${LIBRTMP_VER_}" "${_cpu}"
+  time ./libssh2.sh   "${LIBSSH2_VER_}" "${_cpu}"
+  time ./curl.sh         "${CURL_VER_}" "${_cpu}"
 }
 
 if [ -n "$CPU" ]; then
