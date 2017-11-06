@@ -25,8 +25,8 @@ build_script:
   - pacman --noconfirm --noprogressbar -S --needed mc
   - pacman --noconfirm --noprogressbar -S -yu -u
   - pacman --noconfirm --noprogressbar -S -yu -u
-  - if "%CC%" == "mingw-clang" set _CLANG=mingw-w64-{i686,x86_64}-clang
-  - pacman --noconfirm --noprogressbar -S --needed p7zip mingw-w64-{i686,x86_64}-{cmake,jq,osslsigncode} %_CLANG%
+  - if "%CC%" == "mingw-clang" set _OPTPKG=mingw-w64-{i686,x86_64}-clang
+  - pacman --noconfirm --noprogressbar -S --needed p7zip mingw-w64-{i686,x86_64}-{cmake,jq,osslsigncode} %_OPTPKG%
   - sh -c ./_build.sh
 artifacts:
   - path: '*-*-mingw*.*'
