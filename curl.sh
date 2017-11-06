@@ -70,6 +70,11 @@ _cpu="$2"
 
   export ZLIB_PATH=../../zlib
   options="${options}-zlib"
+  if [ -d ../brotli ]; then
+    options="${options}-brotli"
+    export BROTLI_PATH=../../brotli/pkg/usr/local
+    export BROTLI_LIBS='-Wl,-Bstatic -lbrotlidec-static -lbrotlicommon-static -Wl,-Bdynamic'
+  fi
 
   [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
   [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
@@ -213,6 +218,9 @@ _cpu="$2"
   cp -f -p ../ca-bundle.crt         "${_DST}/bin/curl-ca-bundle.crt"
 
   [ -d ../zlib ]     && cp -f -p ../zlib/README      "${_DST}/COPYING-zlib.txt"
+  if [ "$(echo "${CURL_VER_}" | cut -c -5)" != '7.56.' ]; then
+    [ -d ../brotli ]   && cp -f -p ../brotli/LICENSE   "${_DST}/COPYING-brotli.txt"
+  fi
   [ -d ../libssh2 ]  && cp -f -p ../libssh2/COPYING  "${_DST}/COPYING-libssh2.txt"
   [ -d ../nghttp2 ]  && cp -f -p ../nghttp2/COPYING  "${_DST}/COPYING-nghttp2.txt"
   [ -d ../libidn2 ]  && cp -f -p ../libidn2/COPYING  "${_DST}/COPYING-libidn2.txt"
