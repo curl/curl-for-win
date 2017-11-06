@@ -29,8 +29,8 @@ _cpu="$2"
   find . -name '*.exe' -type f -delete
 
   export CC="${_CCPREFIX}gcc -static-libgcc"
-  [ "${_cpu}" = '32' ] && OPTIONS=--host=i686-w64-mingw32
-  [ "${_cpu}" = '64' ] && OPTIONS=--host=x86_64-w64-mingw32
+  [ "${_cpu}" = '32' ] && options=--host=i686-w64-mingw32
+  [ "${_cpu}" = '64' ] && options=--host=x86_64-w64-mingw32
 
   export LDFLAGS="-m${_cpu}"
   export CFLAGS="${LDFLAGS} -fno-ident"
@@ -39,7 +39,7 @@ _cpu="$2"
   # FIXME: Burnt-in prefix is not fully deterministic. It has 'C:/msys64' prepended.
 
   # shellcheck disable=SC2086
-  ./configure ${OPTIONS} \
+  ./configure ${options} \
     --disable-dependency-tracking \
     --disable-silent-rules \
     '--prefix=/usr/local' \
