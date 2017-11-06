@@ -21,9 +21,16 @@ _cpu="$2"
   find . -name '*.dll' -type f -delete
   find . -name '*.def' -type f -delete
 
-  # FIXME: This will not create a fully release-compliant file tree,
-  #        e.g. documentation will be incomplete.
-  [ -f 'Makefile' ] || ./buildconf.bat
+  if [ ! -f 'Makefile' ]; then
+    if [ "${os}" = 'win' ]; then
+      # FIXME: This will not create a fully release-compliant file tree,
+      #        e.g. documentation will be incomplete.
+      ./buildconf.bat
+    else
+      # FIXME: Replace this with `./buildconf` call
+      cp -f -p Makefile.dist Makefile
+    fi
+  fi
 
   # Build
 
