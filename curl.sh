@@ -90,13 +90,8 @@ _cpu="$2"
     export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
     export OPENSSL_LIBPATH="${OPENSSL_PATH}"
     export OPENSSL_LIBS='-lssl -lcrypto'
-    # This breaks pre-7.55.0 builds
-    if [ "$(echo "${CURL_VER_}" | cut -c -5)" != '7.55.' ]; then
-      options="${options}-winssl"
-    fi
-  else
-    options="${options}-winssl"
   fi
+  options="${options}-winssl"
   if [ -d ../libssh2 ]; then
     options="${options}-ssh2"
     export LIBSSH2_PATH=../../libssh2
