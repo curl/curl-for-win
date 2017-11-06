@@ -51,6 +51,7 @@ before_install:
         ulimit -a
         df -h
         [ "${CC}" = 'mingw-clang' ] && _clang='clang'
+        [ "${TRAVIS_BRANCH#*dev*}" != "${TRAVIS_BRANCH}" ] && _clang="${_clang} autoconf automake libtool"
         dpkg --add-architecture i386
         apt-get -qq update
         apt-get -qq install \
