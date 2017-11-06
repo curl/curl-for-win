@@ -3,6 +3,7 @@ branches:
   only:
   - master
   - test-travis
+  - dev-travis
 notifications:
   email: false
 git:
