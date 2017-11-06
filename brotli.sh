@@ -26,13 +26,17 @@ _cpu="$2"
     *BSD)    os='bsd';;
   esac
 
-  options=''
-  [ "${os}" != 'win' ] && options="${options} -DCMAKE_SYSTEM_NAME=Windows"
+  if [ "${os}" = 'win' ]; then
+    options='-GMSYS Makefiles'
+    # Without this option, the value '/usr/local' becomes 'msys64/usr/local'
+    export MSYS2_ARG_CONV_EXCL='-DCMAKE_INSTALL_PREFIX='
+  else
+    options='-DCMAKE_SYSTEM_NAME=Windows'
+  fi
 
   # Build
 
-  rm -fr CMakeFiles
-  rm -f CMakeCache.txt
+  rm -fr CMakeFiles CMakeCache.txt cmake_install.cmake
 
   find . -name '*.o'   -type f -delete
   find . -name '*.a'   -type f -delete
@@ -48,12 +52,11 @@ _cpu="$2"
   [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
   # shellcheck disable=SC2086
-  cmake . ${options} \
-    -DCMAKE_C_COMPILER="${_CCPREFIX}gcc" \
-    -DCMAKE_CXX_COMPILER="${_CCPREFIX}g++" \
-    -DCMAKE_C_FLAGS="${_CFLAGS}" \
-    -DCMAKE_INSTALL_PREFIX='/usr/local' \
-    -DCMAKE_INSTALL_LIBDIR='lib'
+  cmake . "${options}" \
+    "-DCMAKE_C_COMPILER=${_CCPREFIX}gcc" \
+    "-DCMAKE_CXX_COMPILER=${_CCPREFIX}g++" \
+    "-DCMAKE_C_FLAGS=${_CFLAGS}" \
+    '-DCMAKE_INSTALL_PREFIX=/usr/local'
   make
   make install "DESTDIR=$(pwd)/pkg" > /dev/null
 
@@ -63,7 +66,7 @@ _cpu="$2"
   # Remove '-static' suffixes from static lib names to make these behave
   # like other most other projects do.
 
-  for fn in ${_pkg}/lib/*-static.a; do mv "${fn}" "$(echo "${fn}" | sed 's|-static||')"; done
+# for fn in ${_pkg}/lib/*-static.a; do mv "${fn}" "$(echo "${fn}" | sed 's|-static||')"; done
 
   # Make steps for determinism
 
