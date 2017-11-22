@@ -53,7 +53,10 @@
   - curl/libcurl are built in MultiSSL mode, with both OpenSSL and
     [WinSSL](https://en.wikipedia.org/wiki/Cryptographic_Service_Provider)
     available as SSL backends.
-  - Optional support for [C-ares](https://c-ares.haxx.se/), [librtmp](https://rtmpdump.mplayerhq.hu/).
+  - Optional support for
+    [Brotli](https://github.com/google/brotli),
+    [C-ares](https://c-ares.haxx.se/),
+    [librtmp](https://rtmpdump.mplayerhq.hu/).
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
   - If you need a download with a stable checksum, link to the penultimate
     version. Only the current latest versions are kept updated with newer
