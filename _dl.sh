@@ -82,13 +82,17 @@ rm pack.bin
 rm -f -r zlib && mv zlib-* zlib
 [ -f "zlib${_patsuf}.patch" ] && dos2unix < "zlib${_patsuf}.patch" | patch -N -p1 -d zlib
 
-# brotli
-curl -o pack.bin -L --proto-redir =https "https://github.com/google/brotli/archive/v${BROTLI_VER_}.tar.gz" || exit 1
-openssl dgst -sha256 pack.bin | grep -q "${BROTLI_HASH}" || exit 1
-tar -xvf pack.bin > /dev/null 2>&1 || exit 1
-rm pack.bin
-rm -f -r brotli && mv brotli-* brotli
-[ -f "brotli${_patsuf}.patch" ] && dos2unix < "brotli${_patsuf}.patch" | patch -N -p1 -d brotli
+# Relatively high curl binary size + extra dependency overhead aiming mostly
+# to optimize webpage download sizes, so leave it optional.
+if [ "${_BRANCH#*brotli*}" != "${_BRANCH}" ]; then
+  # brotli
+  curl -o pack.bin -L --proto-redir =https "https://github.com/google/brotli/archive/v${BROTLI_VER_}.tar.gz" || exit 1
+  openssl dgst -sha256 pack.bin | grep -q "${BROTLI_HASH}" || exit 1
+  tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+  rm pack.bin
+  rm -f -r brotli && mv brotli-* brotli
+  [ -f "brotli${_patsuf}.patch" ] && dos2unix < "brotli${_patsuf}.patch" | patch -N -p1 -d brotli
+fi
 
 # nghttp2
 curl -o pack.bin -L --proto-redir =https "https://github.com/nghttp2/nghttp2/releases/download/v${NGHTTP2_VER_}/nghttp2-${NGHTTP2_VER_}.tar.xz" || exit 1
