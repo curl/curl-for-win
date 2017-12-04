@@ -2,6 +2,7 @@
 branches:
   only:
   - master
+  - master-brotli
   - dev-travis
   - test-travis
 notifications:
