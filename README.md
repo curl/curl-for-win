@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
-[![Build Status](https://api.travis-ci.org/vszakats/harbour-deps.svg?branch=master)](https://travis-ci.org/vszakats/harbour-deps)
-[![Build status](https://ci.appveyor.com/api/projects/status/4bx4006pge6jbqch/branch/master?svg=true)](https://ci.appveyor.com/project/vsz/harbour-deps/branch/master)
+[![Build Status](https://api.travis-ci.org/vszakats/curl-for-win.svg?branch=master)](https://travis-ci.org/vszakats/curl-for-win)
+[![Build status](https://ci.appveyor.com/api/projects/status/87v0116m4re6j8di/branch/master?svg=true)](https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master)
 &nbsp;&nbsp;&nbsp;&nbsp;
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1eaedb.svg)](https://saythanks.io/to/vszakats)
 [![PayPal Donate](https://img.shields.io/badge/PayPal-Donate_Now-f8981d.svg?colorA=00457c)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2DZM6WAGRJWT6 "Donate Now")
@@ -17,7 +17,7 @@
     <br>`AsynchDNS IDN IPv6 Largefile SSPI Kerberos SPNEGO NTLM SSL libz TLS-SRP HTTP2 HTTPS-proxy MultiSSL`
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the
-    build [in public](https://travis-ci.org/vszakats/harbour-deps/branches),
+    build [in public](https://travis-ci.org/vszakats/curl-for-win/branches),
     with open, auditable [build logs](#live-build-logs).
   - C compiler toolchain is latest MinGW-w64 (non-multilib, x86 and x64)
     either via [Homebrew](https://brew.sh/) (on macOS),
@@ -64,7 +64,7 @@
   - To verify the correct checksum for the latest build, you can look up the
     correct ones in the build log as they are generated. Watch for `master`
     branch jobs `CPU=64` and `CPU=32`, log lines starting with `SHA256(`:
-      <https://travis-ci.org/vszakats/harbour-deps/branches>
+      <https://travis-ci.org/vszakats/curl-for-win/branches>
   - The build process is multi-platform and able to cross-build Windows
     executables from \*nix hosts (Linux and macOS tested.)
   - Packages created across different host platforms won't currently have
@@ -98,9 +98,9 @@
 
 # Live build logs
 
-  * <https://travis-ci.org/vszakats/harbour-deps>
+  * <https://travis-ci.org/vszakats/curl-for-win>
     (for published binaries)
-  * <https://ci.appveyor.com/project/vsz/harbour-deps/branch/master>
+  * <https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master>
 
 # Guarantees and Liability
 
