@@ -90,12 +90,12 @@
 
 # Binary package downloads
 
-  * curl: <https://bintray.com/vszakats/generic/curl/_latestVersion>
-  * OpenSSL: <https://bintray.com/vszakats/generic/openssl/_latestVersion>
-  * libssh2: <https://bintray.com/vszakats/generic/libssh2/_latestVersion>
-  * nghttp2: <https://bintray.com/vszakats/generic/nghttp2/_latestVersion>
-  * brotli: <https://bintray.com/vszakats/generic/brotli/_latestVersion>
-  * zlib: <https://bintray.com/vszakats/generic/zlib/_latestVersion>
+  * [![Download](https://api.bintray.com/packages/vszakats/generic/curl/images/download.svg)](https://bintray.com/vszakats/generic/curl/_latestVersion) curl
+  * [![Download](https://api.bintray.com/packages/vszakats/generic/openssl/images/download.svg)](https://bintray.com/vszakats/generic/openssl/_latestVersion) openSSL
+  * [![Download](https://api.bintray.com/packages/vszakats/generic/libssh2/images/download.svg)](https://bintray.com/vszakats/generic/libssh2/_latestVersion) libssh2
+  * [![Download](https://api.bintray.com/packages/vszakats/generic/nghttp2/images/download.svg)](https://bintray.com/vszakats/generic/nghttp2/_latestVersion) nghttp2
+  * [![Download](https://api.bintray.com/packages/vszakats/generic/brotli/images/download.svg)](https://bintray.com/vszakats/generic/brotli/_latestVersion) brotli
+  * [![Download](https://api.bintray.com/packages/vszakats/generic/zlib/images/download.svg)](https://bintray.com/vszakats/generic/zlib/_latestVersion) zlib
 
 # Live build logs
 
