@@ -13,8 +13,6 @@ export NGHTTP2_VER_='1.28.0'
 export NGHTTP2_HASH=0d6c3f00614deca3935e42a27f6ad0ea87c31d8c1baa3a9c52755955c599fd8d
 export CARES_VER_='1.13.0'
 export CARES_HASH=03f708f1b14a26ab26c38abd51137640cb444d3ec72380b21b20f1a8d2861da7
-export LIBRESSL_VER_='2.5.5'
-export LIBRESSL_HASH=e57f5e3d5842a81fe9351b6e817fcaf0a749ca4ef35a91465edba9e071dce7c4
 export OPENSSL_VER_='1.1.0g'
 export OPENSSL_HASH=de4d501267da39310905cb6dc8c6121f7a2cad45a7707f76df828fe1b85073af
 export LIBRTMP_VER_='2.4+20151223'
@@ -135,36 +133,23 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
   [ -f "c-ares${_patsuf}.patch" ] && dos2unix < "c-ares${_patsuf}.patch" | patch -N -p1 -d c-ares
 fi
 
-if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ]; then
-  # libressl
-  curl \
-    -o pack.bin "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz" \
-    -o pack.sig "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER_}.tar.gz.asc" || exit 1
-  gpg_recv_keys A1EB079B8D3EB92B4EBD3139663AF51BD5E4D8D5
-  gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
-  openssl dgst -sha256 pack.bin | grep -q "${LIBRESSL_HASH}" || exit 1
-  tar -xvf pack.bin > /dev/null 2>&1 || exit 1
-  rm pack.bin
-  rm -f -r libressl && mv libressl-* libressl
+# openssl
+if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
+  OPENSSL_VER_='1.1.1-dev'
+  curl -o pack.bin -L --proto-redir =https https://github.com/openssl/openssl/archive/master.tar.gz || exit 1
 else
-  # openssl
-  if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-    OPENSSL_VER_='1.1.1-dev'
-    curl -o pack.bin -L --proto-redir =https https://github.com/openssl/openssl/archive/master.tar.gz || exit 1
-  else
-    curl \
-      -o pack.bin "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz" \
-      -o pack.sig "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz.asc" || exit 1
-    # From https://www.openssl.org/community/team.html
-    gpg_recv_keys 8657ABB260F056B1E5190839D9C4D26D0E604491
-    gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
-    openssl dgst -sha256 pack.bin | grep -q "${OPENSSL_HASH}" || exit 1
-  fi
-  tar -xvf pack.bin > /dev/null 2>&1 || exit 1
-  rm pack.bin
-  rm -f -r openssl && mv openssl-* openssl
-  [ -f "openssl${_patsuf}.patch" ] && dos2unix < "openssl${_patsuf}.patch" | patch -N -p1 -d openssl
+  curl \
+    -o pack.bin "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz" \
+    -o pack.sig "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz.asc" || exit 1
+  # From https://www.openssl.org/community/team.html
+  gpg_recv_keys 8657ABB260F056B1E5190839D9C4D26D0E604491
+  gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
+  openssl dgst -sha256 pack.bin | grep -q "${OPENSSL_HASH}" || exit 1
 fi
+tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+rm pack.bin
+rm -f -r openssl && mv openssl-* openssl
+[ -f "openssl${_patsuf}.patch" ] && dos2unix < "openssl${_patsuf}.patch" | patch -N -p1 -d openssl
 
 # Do not include this by default to avoid an unnecessary libcurl dependency
 # and potential licensing issues.

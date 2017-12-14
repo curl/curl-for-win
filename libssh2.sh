@@ -37,7 +37,6 @@ _cpu="$2"
   export WITH_ZLIB=1
   export LINK_ZLIB_STATIC=1
 
-  [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
   [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
   if [ -n "${OPENSSL_PATH}" ]; then
 #   export LINK_OPENSSL_STATIC=yes; export OPENSSL_LIBS_STAT='crypto ssl'
@@ -94,7 +93,6 @@ _cpu="$2"
   # Create package
 
   _BAS="${_NAM}-${_VER}-win${_cpu}-mingw"
-  [ -d ../libressl ] && _BAS="${_BAS}-libressl"
   _DST="$(mktemp -d)/${_BAS}"
 
   mkdir -p "${_DST}/docs"
@@ -118,8 +116,7 @@ _cpu="$2"
   cp -f -p README        "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES "${_DST}/RELEASE-NOTES.txt"
 
-  [ -d ../libressl ] && cp -f -p ../libressl/COPYING "${_DST}/COPYING-libressl.txt"
-  [ -d ../openssl ]  && cp -f -p ../openssl/LICENSE  "${_DST}/LICENSE-openssl.txt"
+  [ -d ../openssl ]  && cp -f -p ../openssl/LICENSE "${_DST}/LICENSE-openssl.txt"
 
   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
     cp -f -p win32/*.map   "${_DST}/bin/"

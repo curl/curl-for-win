@@ -31,8 +31,6 @@ build_script:
 artifacts:
   - path: '*-*-mingw*.*'
     name: master
-  - path: '*-*-mingw-libressl*.*'
-    name: master-libressl
   - path: 'all-mingw*.*'
     name: all
 #init:

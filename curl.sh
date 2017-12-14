@@ -91,8 +91,7 @@ _cpu="$2"
     export BROTLI_LIBS='-Wl,-Bstatic -lbrotlidec-static -lbrotlicommon-static -Wl,-Bdynamic'
   fi
 
-  [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
-  [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
+  [ -d ../openssl ] && export OPENSSL_PATH=../../openssl
   if [ -n "${OPENSSL_PATH}" ]; then
     options="${options}-ssl"
     export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
@@ -193,7 +192,6 @@ _cpu="$2"
 
   _BAS="${_NAM}-${_VER}-win${_cpu}-mingw"
   [ -d ../brotli ] && _BAS="${_BAS}-brotli"
-  [ -d ../libressl ] && _BAS="${_BAS}-libressl"
   [ -d ../librtmp ] && _BAS="${_BAS}-librtmp"
   _DST="$(mktemp -d)/${_BAS}"
 
@@ -232,12 +230,11 @@ _cpu="$2"
   if [ "$(echo "${CURL_VER_}" | cut -c -5)" != '7.56.' ]; then
     [ -d ../brotli ]   && cp -f -p ../brotli/LICENSE   "${_DST}/COPYING-brotli.txt"
   fi
-  [ -d ../libssh2 ]  && cp -f -p ../libssh2/COPYING  "${_DST}/COPYING-libssh2.txt"
-  [ -d ../nghttp2 ]  && cp -f -p ../nghttp2/COPYING  "${_DST}/COPYING-nghttp2.txt"
-  [ -d ../libidn2 ]  && cp -f -p ../libidn2/COPYING  "${_DST}/COPYING-libidn2.txt"
-  [ -d ../librtmp ]  && cp -f -p ../librtmp/COPYING  "${_DST}/COPYING-librtmp.txt"
-  [ -d ../libressl ] && cp -f -p ../libressl/COPYING "${_DST}/COPYING-libressl.txt"
-  [ -d ../openssl ]  && cp -f -p ../openssl/LICENSE  "${_DST}/LICENSE-openssl.txt"
+  [ -d ../libssh2 ]  && cp -f -p ../libssh2/COPYING "${_DST}/COPYING-libssh2.txt"
+  [ -d ../nghttp2 ]  && cp -f -p ../nghttp2/COPYING "${_DST}/COPYING-nghttp2.txt"
+  [ -d ../libidn2 ]  && cp -f -p ../libidn2/COPYING "${_DST}/COPYING-libidn2.txt"
+  [ -d ../librtmp ]  && cp -f -p ../librtmp/COPYING "${_DST}/COPYING-librtmp.txt"
+  [ -d ../openssl ]  && cp -f -p ../openssl/LICENSE "${_DST}/LICENSE-openssl.txt"
 
   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
     cp -f -p src/*.map                "${_DST}/bin/"
