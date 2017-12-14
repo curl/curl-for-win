@@ -20,13 +20,6 @@ cat << EOF > "${_fn}"
 Visit the project page for details about these builds and the list of changes:
 
    ${_URL}
-
-Your donation is welcome to support these builds:
-
-   PayPal:
-      https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2DZM6WAGRJWT6
-
-Thank you!
 EOF
 unix2dos -k "${_fn}"
 touch -c -r "$1" "${_fn}"
