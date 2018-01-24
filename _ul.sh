@@ -15,8 +15,7 @@ esac
 
 export BINTRAY_USER='vszakats'
 
-#PUBLISH_PROD_FROM='mac'
-PUBLISH_PROD_FROM='linux'
+PUBLISH_PROD_FROM='mac'
 
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
   _sufpkg=
