@@ -22,11 +22,11 @@ environment:
   CC: mingw-clang
 build_script:
   - set PATH=C:\Python27-x64;C:\msys64\usr\bin;%SystemRoot%\system32
-  - pacman --noconfirm --noprogressbar -S --needed mc
-  - pacman --noconfirm --noprogressbar -S -yu -u
-  - pacman --noconfirm --noprogressbar -S -yu -u
+  - pacman --noconfirm --ask 20 --noprogressbar -S --needed mc
+  - pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
+  - pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
   - if "%CC%" == "mingw-clang" set _OPTPKG=mingw-w64-{i686,x86_64}-clang
-  - pacman --noconfirm --noprogressbar -S --needed p7zip mingw-w64-{i686,x86_64}-{cmake,jq,osslsigncode} %_OPTPKG%
+  - pacman --noconfirm --ask 20 --noprogressbar -S --needed p7zip mingw-w64-{i686,x86_64}-{cmake,jq,osslsigncode} %_OPTPKG%
   - sh -c ./_build.sh
 artifacts:
   - path: '*-*-mingw*.*'
