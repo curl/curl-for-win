@@ -135,8 +135,8 @@ fi
 
 # openssl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-  OPENSSL_VER_='1.1.1-dev'
-  curl -o pack.bin -L --proto-redir =https https://github.com/openssl/openssl/archive/master.tar.gz || exit 1
+  OPENSSL_VER_='1.1.1-pre1'
+  curl -o pack.bin -L --proto-redir =https https://www.openssl.org/source/openssl-1.1.1-pre1.tar.gz || exit 1
 else
   curl \
     -o pack.bin "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz" \
