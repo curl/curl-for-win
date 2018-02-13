@@ -1,7 +1,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
 [![Build Status](https://api.travis-ci.org/vszakats/curl-for-win.svg?branch=master)](https://travis-ci.org/vszakats/curl-for-win)
 [![Build status](https://ci.appveyor.com/api/projects/status/87v0116m4re6j8di/branch/master?svg=true)](https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master)
-
+ 
 # Automated, reproducible, transparent, Windows builds for [curl](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [libssh2](https://libssh2.org/) and [OpenSSL 1.1](https://www.openssl.org/)
 
   - Packaging aims to follow popular binary releases found on the internet.
