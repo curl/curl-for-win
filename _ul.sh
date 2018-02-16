@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2014-2017 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2018 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 cd "$(dirname "$0")" || exit
@@ -14,6 +14,9 @@ case "$(uname)" in
 esac
 
 export BINTRAY_USER='vszakats'
+#[ -n "${BINTRAY_USER}" ] || BINTRAY_USER="${APPVEYOR_ACCOUNT_NAME}"
+#[ -n "${BINTRAY_USER}" ] || BINTRAY_USER="$(echo "${TRAVIS_REPO_SLUG}" | sed 's|/.*||')"
+#[ -n "${BINTRAY_USER}" ] || BINTRAY_USER="${USER}"
 
 PUBLISH_PROD_FROM='mac'
 
