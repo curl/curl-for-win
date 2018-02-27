@@ -9,8 +9,8 @@ export BROTLI_VER_='1.0.2'
 export BROTLI_HASH=c2cf2a16646b44771a4109bb21218c8e2d952babb827796eb8a800c1f94b7422
 export LIBIDN2_VER_='2.0.4'
 export LIBIDN2_HASH=644b6b03b285fb0ace02d241d59483d98bc462729d8bb3608d5cad5532f3d2f0
-export NGHTTP2_VER_='1.30.0'
-export NGHTTP2_HASH=089afb4c22a53f72384b71ea06194be255a8a73b50b1412589105d0e683c52ac
+export NGHTTP2_VER_='1.31.0'
+export NGHTTP2_HASH=36573c2dc74f0da872b02a3ccf1f1419d6b992dd4703dc866e5a289d36397ac7
 export CARES_VER_='1.13.0'
 export CARES_HASH=03f708f1b14a26ab26c38abd51137640cb444d3ec72380b21b20f1a8d2861da7
 export OPENSSL_VER_='1.1.0g'
@@ -81,8 +81,8 @@ rm -f -r zlib && mv zlib-* zlib
 [ -f "zlib${_patsuf}.patch" ] && dos2unix < "zlib${_patsuf}.patch" | patch -N -p1 -d zlib
 
 # Relatively high curl binary size + extra dependency overhead aiming mostly
-# to optimize webpage download sizes, so leave it optional.
-if [ "${_BRANCH#*brotli*}" != "${_BRANCH}" ]; then
+# to optimize webpage download sizes, so allow to disable it.
+if [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
   # brotli
   curl -o pack.bin -L --proto-redir =https "https://github.com/google/brotli/archive/v${BROTLI_VER_}.tar.gz" || exit 1
   openssl dgst -sha256 pack.bin | grep -q "${BROTLI_HASH}" || exit 1
