@@ -81,8 +81,8 @@ rm -f -r zlib && mv zlib-* zlib
 [ -f "zlib${_patsuf}.patch" ] && dos2unix < "zlib${_patsuf}.patch" | patch -N -p1 -d zlib
 
 # Relatively high curl binary size + extra dependency overhead aiming mostly
-# to optimize webpage download sizes, so allow to disable it.
-if [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
+# to optimize webpage download sizes, so leave it optional.
+if [ "${_BRANCH#*brotli*}" != "${_BRANCH}" ]; then
   # brotli
   curl -o pack.bin -L --proto-redir =https "https://github.com/google/brotli/archive/v${BROTLI_VER_}.tar.gz" || exit 1
   openssl dgst -sha256 pack.bin | grep -q "${BROTLI_HASH}" || exit 1
