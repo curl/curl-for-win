@@ -19,7 +19,7 @@
   - C compiler toolchain is latest MinGW-w64 (non-multilib, x86 and x64)
     either via [Homebrew](https://brew.sh/) (on macOS),
     [APT](https://en.wikipedia.org/wiki/APT_(Debian)) (on Ubuntu via Docker) or
-    [MSYS2](https://github.com/msys2) (on Windows).
+    [MSYS2](https://www.msys2.org/) (on Windows).
     C compiler is [GCC](https://gcc.gnu.org/) and optionally
     [LLVM/Clang](https://clang.llvm.org/) for curl and libssh2.
   - Binaries are cross-built and published from macOS
