@@ -2,7 +2,7 @@
 [![Build Status](https://api.travis-ci.org/vszakats/curl-for-win.svg?branch=master)](https://travis-ci.org/vszakats/curl-for-win)
 [![Build status](https://ci.appveyor.com/api/projects/status/87v0116m4re6j8di/branch/master?svg=true)](https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master)
 
-# Automated, reproducible, transparent, Windows builds for [curl](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [libssh2](https://libssh2.org/) and [OpenSSL 1.1](https://www.openssl.org/)
+# Automated, reproducible, transparent, Windows builds for [curl](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [brotli](https://github.com/google/brotli), [libssh2](https://libssh2.org/) and [OpenSSL 1.1](https://www.openssl.org/)
 
   - Packaging aims to follow popular binary releases found on the internet.
   - Both x86 and x64 packages are built using the same process.
@@ -51,7 +51,6 @@
     [WinSSL](https://en.wikipedia.org/wiki/Cryptographic_Service_Provider)
     available as SSL backends.
   - Optional support for
-    [Brotli](https://github.com/google/brotli),
     [C-ares](https://c-ares.haxx.se/),
     [librtmp](https://rtmpdump.mplayerhq.hu/).
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
