@@ -191,7 +191,7 @@ _cpu="$2"
   # Create package
 
   _BAS="${_NAM}-${_VER}-win${_cpu}-mingw"
-  [ -d ../brotli ] && _BAS="${_BAS}-brotli"
+  [ -d ../brotli ] || _BAS="${_BAS}-nobrotli"
   [ -d ../librtmp ] && _BAS="${_BAS}-librtmp"
   _DST="$(mktemp -d)/${_BAS}"
 
