@@ -60,6 +60,7 @@ _cpu="$2"
     no-unit-test \
     no-idea \
     no-tests \
+    no-makedepend \
     '--prefix=/usr/local'
   [ "$(echo "${OPENSSL_VER_}" | cut -c -4)" = '1.1.' ] || make depend
   make
