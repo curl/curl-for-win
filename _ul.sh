@@ -19,7 +19,7 @@ export BINTRAY_USER='vszakats'
 #[ -n "${BINTRAY_USER}" ] || BINTRAY_USER="${USER}"
 
 PUBLISH_PROD_FROM='mac'
-readonly arch_ext='.7z'
+readonly arch_ext='.zip'
 
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
   _sufpkg=

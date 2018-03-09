@@ -36,13 +36,14 @@ find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' \;
 
 (
   cd "${_DST}/.." || exit
-  rm -f "${_cdo}/${_BAS}.7z"
   case "${os}" in
     win) find "${_BAS}" -exec attrib +A -R {} \;
   esac
-  # NOTE: add -stl option after updating to 15.12 or upper
-  7z a -bd -r -mx "${_cdo}/${_BAS}.7z" "${_BAS}/*" > /dev/null
-  touch -c -r "$1" "${_cdo}/${_BAS}.7z"
+  (
+    cd "${_BAS}" || exit
+    zip -q -9 -X -r - * > "${_cdo}/${_BAS}.zip"
+  )
+  touch -c -r "$1" "${_cdo}/${_BAS}.zip"
 )
 
 rm -f -r "${_DST:?}"
