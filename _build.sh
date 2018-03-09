@@ -29,7 +29,7 @@ case "$(uname)" in
   *BSD)    os='bsd';;
 esac
 
-rm -f ./*.7z
+rm -f ./*-*-mingw*.*
 rm -f hashes.txt
 
 . ./_dl.sh || exit 1
@@ -132,6 +132,6 @@ cat hashes.txt
 
 # Move everything into a single artifact
 if [ "${_BRANCH#*all*}" != "${_BRANCH}" ]; then
-  7z a -bd -r -mx 'all-mingw.7z' ./*-*-mingw*.* > /dev/null
+  zip -q -0 -X -o 'all-mingw.zip' ./*-*-mingw*.*
   rm ./*-*-mingw*.*
 fi

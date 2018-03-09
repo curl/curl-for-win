@@ -19,6 +19,7 @@ export BINTRAY_USER='vszakats'
 #[ -n "${BINTRAY_USER}" ] || BINTRAY_USER="${USER}"
 
 PUBLISH_PROD_FROM='mac'
+readonly arch_ext='.7z'
 
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
   _sufpkg=
@@ -26,7 +27,7 @@ if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
 
   if [ ! "${PUBLISH_PROD_FROM}" = "${os}" ]; then
     _suf="-built-on-${os}"
-    mv "${_BAS}.7z" "${_BAS}${_suf}.7z"
+    mv "${_BAS}${arch_ext}" "${_BAS}${_suf}${arch_ext}"
     unset BINTRAY_USER
     unset BINTRAY_APIKEY
   fi
@@ -35,7 +36,7 @@ else
   GPG_PASSPHRASE=
   _sufpkg='-test'
   _suf="-test-built-on-${os}"
-  mv "${_BAS}.7z" "${_BAS}${_suf}.7z"
+  mv "${_BAS}${arch_ext}" "${_BAS}${_suf}${arch_ext}"
 fi
 
 (
@@ -52,26 +53,26 @@ fi
   if [ -n "${BINTRAY_USER}" ] && \
      [ -n "${BINTRAY_APIKEY}" ]; then
 
-    echo "Uploading: '${_BAS}${_suf}.7z' to 'https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_sufpkg}/${_VER}/'"
+    echo "Uploading: '${_BAS}${_suf}${arch_ext}' to 'https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_sufpkg}/${_VER}/'"
 
     # TODO: Do this before upload to avoid 403 error for
     # uploads older than 180 days:
     #   https://bintray.com/docs/api/#url_update_version
 
     curl -fsS -u "${BINTRAY_USER}:${BINTRAY_APIKEY}" \
-      -X PUT "https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_sufpkg}/${_VER}/${_BAS}${_suf}.7z?override=1&publish=1" \
-      --data-binary "@${_BAS}${_suf}.7z" \
+      -X PUT "https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_sufpkg}/${_VER}/${_BAS}${_suf}${arch_ext}?override=1&publish=1" \
+      --data-binary "@${_BAS}${_suf}${arch_ext}" \
       -H "X-GPG-PASSPHRASE: ${GPG_PASSPHRASE}"
   fi
 )
 
 # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>
 case "${os}" in
-  bsd|mac) TZ=UTC stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_BAS}${_suf}.7z";;
-  *)       TZ=UTC stat -c '%n: %s bytes %y' "${_BAS}${_suf}.7z";;
+  bsd|mac) TZ=UTC stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_BAS}${_suf}${arch_ext}";;
+  *)       TZ=UTC stat -c '%n: %s bytes %y' "${_BAS}${_suf}${arch_ext}";;
 esac
 
-openssl dgst -sha256 "${_BAS}${_suf}.7z" | tee -a hashes.txt
+openssl dgst -sha256 "${_BAS}${_suf}${arch_ext}" | tee -a hashes.txt
 
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
 (
@@ -79,9 +80,9 @@ if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
   out="$(curl -fsS \
     -X POST 'https://www.virustotal.com/vtapi/v2/file/scan' \
     --form-string "apikey=${VIRUSTOTAL_APIKEY}" \
-    --form "file=@${_BAS}${_suf}.7z")"
+    --form "file=@${_BAS}${_suf}${arch_ext}")"
   echo "${out}"
-  echo "VirusTotal URL for '${_BAS}${_suf}.7z':"
+  echo "VirusTotal URL for '${_BAS}${_suf}${arch_ext}':"
   # echo "${out}" | jq '.permalink'
   echo "${out}" | grep -o 'https://[a-zA-Z0-9./]*'
 )
