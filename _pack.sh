@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2014-2017 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2018 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 cd "$(dirname "$0")" || exit
@@ -34,16 +34,34 @@ touch -c -r "$1" "${_fn}"
 
 find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' \;
 
-(
-  cd "${_DST}/.." || exit
-  case "${os}" in
-    win) find "${_BAS}" -exec attrib +A -R {} \;
-  esac
+create_pack() {
+  arch_ext="$2"
   (
-    cd "${_BAS}" || exit
-    zip -q -9 -X -r - * > "${_cdo}/${_BAS}.zip"
+    cd "${_DST}/.." || exit
+    case "${os}" in
+      win) find "${_BAS}" -exec attrib +A -R {} \;
+    esac
+    rm -f "${_cdo}/${_BAS}${arch_ext}"
+    if [ "${arch_ext}" = '.zip' ]; then
+    (
+      cd "${_BAS}" || exit
+      zip -q -9 -X -r "${_cdo}/${_BAS}${arch_ext}" -- *
+    )
+    elif [ "${arch_ext}" = '.tar.xz' ]; then
+    (
+      cd "${_BAS}" || exit
+      tar -c ./* | xz > "${_cdo}/${_BAS}${arch_ext}"
+    )
+    elif [ "${arch_ext}" = '.7z' ]; then
+      # NOTE: add -stl option after updating to 15.12 or upper
+      7z a -bd -r -mx "${_cdo}/${_BAS}${arch_ext}" "${_BAS}/*" > /dev/null
+    fi
+    touch -c -r "$1" "${_cdo}/${_BAS}${arch_ext}"
   )
-  touch -c -r "$1" "${_cdo}/${_BAS}.zip"
-)
+}
+
+create_pack "$1" '.tar.xz'
+create_pack "$1" '.zip'
+create_pack "$1" '.7z'  # compatibility with curl download page
 
 rm -f -r "${_DST:?}"
