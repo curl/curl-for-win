@@ -5,11 +5,11 @@
 
 # Requirements (not a comprehensive list at this point):
 #   Windows:
-#     MSYS2: xz zip p7zip mingw-w64-{i686,x86_64}-{clang,jq,osslsigncode} gpg python
+#     MSYS2: zip p7zip mingw-w64-{i686,x86_64}-{clang,jq,osslsigncode} gpg python
 #   Linux
-#     p7zip-full binutils-mingw-w64 gcc-mingw-w64 gnupg-curl jq osslsigncode dos2unix realpath wine
+#     zip p7zip-full binutils-mingw-w64 gcc-mingw-w64 gnupg-curl jq osslsigncode dos2unix realpath wine
 #   Mac:
-#     brew install p7zip mingw-w64 jq osslsigncode dos2unix gpg gnu-sed wine
+#     brew install xz p7zip mingw-w64 jq osslsigncode dos2unix gpg gnu-sed wine
 
 cd "$(dirname "$0")" || exit
 
