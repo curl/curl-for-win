@@ -5,7 +5,7 @@
 
 # Requirements (not a comprehensive list at this point):
 #   Windows:
-#     MSYS2: zip p7zip mingw-w64-{i686,x86_64}-{clang,jq,osslsigncode} gpg python
+#     MSYS2: zip p7zip mingw-w64-{i686,x86_64}-{clang,jq,osslsigncode} gpg python3
 #   Linux
 #     zip p7zip-full binutils-mingw-w64 gcc-mingw-w64 gnupg-curl jq osslsigncode dos2unix realpath wine
 #   Mac:
@@ -74,7 +74,7 @@ build_single_target() {
         # mingw-w64 comes with its own Python copy. Override that with
         # AppVeyor's external one, which has our extra installed 'pefile'
         # package.
-        tmp="/c/Python27-x64:${tmp}"
+        tmp="/c/Python36-x64:${tmp}"
       fi
     fi
     export PATH="${tmp}:${_ori_path}"
