@@ -1,11 +1,11 @@
 #!/bin/sh -ex
 
-# Copyright 2015-2017 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2015-2018 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 # Requirements (not a comprehensive list at this point):
 #   Windows:
-#     MSYS2: zip p7zip mingw-w64-{i686,x86_64}-{clang,jq,osslsigncode} gpg python
+#     MSYS2: xz zip p7zip mingw-w64-{i686,x86_64}-{clang,jq,osslsigncode} gpg python
 #   Linux
 #     p7zip-full binutils-mingw-w64 gcc-mingw-w64 gnupg-curl jq osslsigncode dos2unix realpath wine
 #   Mac:

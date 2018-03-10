@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2014-2017 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2018 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 cd "$(dirname "$0")" || exit
@@ -47,7 +47,12 @@ readonly arch_ext='.7z'
     cd "${_BAS}" || exit
     zip -q -9 -X -r "${_cdo}/${_BAS}${arch_ext}" -- *
   )
-  else
+  elif [ "${arch_ext}" = '.tar.xz' ]; then
+  (
+    cd "${_BAS}" || exit
+    tar -c ./* | xz > "${_cdo}/${_BAS}${arch_ext}"
+  )
+  elif [ "${arch_ext}" = '.7z' ]; then
     # NOTE: add -stl option after updating to 15.12 or upper
     7z a -bd -r -mx "${_cdo}/${_BAS}${arch_ext}" "${_BAS}/*" > /dev/null
   fi
