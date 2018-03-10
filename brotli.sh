@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2017 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2017-2018 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 export _NAM
@@ -76,11 +76,11 @@ _cpu="$2"
   "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.exe
   "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.dll
 
-  ../_peclean.py "${_ref}" './*.exe'
-  ../_peclean.py "${_ref}" './*.dll'
+  ../_peclean.py "${_ref}" ${_pkg}'/bin/*.exe'
+  ../_peclean.py "${_ref}" ${_pkg}'/bin/*.dll'
 
-  ../_sign.sh './*.exe'
-  ../_sign.sh './*.dll'
+  ../_sign.sh ${_pkg}/bin/*.exe
+  ../_sign.sh ${_pkg}/bin/*.dll
 
   touch -c -r "${_ref}" ${_pkg}/bin/*.exe
   touch -c -r "${_ref}" ${_pkg}/bin/*.dll
