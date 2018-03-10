@@ -34,6 +34,8 @@ touch -c -r "$1" "${_fn}"
 
 find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' \;
 
+find "${_DST}" \( -name '*.exe' -or -name '*.dll' \) -exec chmod -x {} +
+
 create_pack() {
   arch_ext="$2"
   (
@@ -42,19 +44,11 @@ create_pack() {
       win) find "${_BAS}" -exec attrib +A -R {} \;
     esac
     rm -f "${_cdo}/${_BAS}${arch_ext}"
-    if [ "${arch_ext}" = '.zip' ]; then
-    (
-      cd "${_BAS}" || exit
-      zip -q -9 -X -r "${_cdo}/${_BAS}${arch_ext}" -- *
-    )
-    elif [ "${arch_ext}" = '.tar.xz' ]; then
-    (
-      cd "${_BAS}" || exit
-      tar -c ./* | xz > "${_cdo}/${_BAS}${arch_ext}"
-    )
-    elif [ "${arch_ext}" = '.7z' ]; then
-      7z a -bd -r -mx "${_cdo}/${_BAS}${arch_ext}" "${_BAS}/*" > /dev/null
-    fi
+    case "${arch_ext}" in
+      .tar.xz) tar -c "${_BAS}" | xz > "${_cdo}/${_BAS}${arch_ext}";;
+      .zip)    zip -q -9 -X -r "${_cdo}/${_BAS}${arch_ext}" "${_BAS}";;
+      .7z)     7z a -bd -r -mx "${_cdo}/${_BAS}${arch_ext}" "${_BAS}" > /dev/null;;
+    esac
     touch -c -r "$1" "${_cdo}/${_BAS}${arch_ext}"
   )
 }
