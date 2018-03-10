@@ -74,7 +74,7 @@ build_single_target() {
         # mingw-w64 comes with its own Python copy. Override that with
         # AppVeyor's external one, which has our extra installed 'pefile'
         # package.
-        tmp="/c/Python27-x64:${tmp}"
+        tmp="/c/Python36-x64:${tmp}"
       fi
     fi
     export PATH="${tmp}:${_ori_path}"

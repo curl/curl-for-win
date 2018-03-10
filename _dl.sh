@@ -38,6 +38,7 @@ unset _py
 
 # Install required component
 # TODO: add `--progress-bar off` when pip 9.1.0 hits the drives
+${_py} pip --version
 ${_py} pip --disable-pip-version-check install --user --upgrade pip
 ${_py} pip install --user pefile
 
