@@ -34,15 +34,24 @@ touch -c -r "$1" "${_fn}"
 
 find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' \;
 
+readonly arch_ext='.7z'
+
 (
   cd "${_DST}/.." || exit
-  rm -f "${_cdo}/${_BAS}.7z"
   case "${os}" in
     win) find "${_BAS}" -exec attrib +A -R {} \;
   esac
-  # NOTE: add -stl option after updating to 15.12 or upper
-  7z a -bd -r -mx "${_cdo}/${_BAS}.7z" "${_BAS}/*" > /dev/null
-  touch -c -r "$1" "${_cdo}/${_BAS}.7z"
+  rm -f "${_cdo}/${_BAS}${arch_ext}"
+  if [ "${arch_ext}" = '.zip' ]; then
+  (
+    cd "${_BAS}" || exit
+    zip -q -9 -X -r "${_cdo}/${_BAS}${arch_ext}" -- *
+  )
+  else
+    # NOTE: add -stl option after updating to 15.12 or upper
+    7z a -bd -r -mx "${_cdo}/${_BAS}${arch_ext}" "${_BAS}/*" > /dev/null
+  fi
+  touch -c -r "$1" "${_cdo}/${_BAS}${arch_ext}"
 )
 
 rm -f -r "${_DST:?}"
