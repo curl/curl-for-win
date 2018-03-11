@@ -170,7 +170,6 @@ _cpu="$2"
   ../_sign.sh 'src/*.exe'
   ../_sign.sh 'lib/*.dll'
 
-  touch -c -r "${_ref}" ../ca-bundle.crt
   touch -c -r "${_ref}" src/*.exe
   touch -c -r "${_ref}" lib/*.dll
   touch -c -r "${_ref}" lib/*.a
