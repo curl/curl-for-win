@@ -6,7 +6,7 @@
 
   - Packaging aims to follow popular binary releases found on the internet.
   - Both x86 and x64 packages are built using the same process.
-  - Binary packages are downloadable in `.tar.xz`,`.zip` and `.7z` formats.<br>
+  - Binary packages are downloadable in `.zip`, `.tar.xz` and `.7z` formats.<br>
     **Note that the `.7z` format is deprecated and will be discontinued. Please
     update your download links accordingly.**
   - Standalone `curl.exe` (only [`msvcrt.dll`](https://en.wikipedia.org/wiki/Microsoft_Windows_library_files#MSVCRT.DLL.2C_MSVCPP.DLL_and_CRTDLL.DLL) is [required](https://blogs.msdn.microsoft.com/oldnewthing/20140411-00/?p=1273)).
