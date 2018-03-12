@@ -21,7 +21,7 @@ environment:
     secure: WpvrivnhUx4RI4Y02hRjj6T+7IGQADpdU5nIQh1oW8jrUaujbmUmGCxG6vANeasz
   CC: mingw-clang
 build_script:
-  - set PATH=C:\Python36-x64;C:\msys64\usr\bin;%SystemRoot%\system32
+  - set PATH=C:\msys64\usr\bin;%SystemRoot%\system32
   - pacman --noconfirm --ask 20 --noprogressbar -S --needed mc
   - pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
   - pacman --noconfirm --ask 20 --noprogressbar -S -yu -u

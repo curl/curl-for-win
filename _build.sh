@@ -70,12 +70,6 @@ build_single_target() {
       tmp="$(realpath './mingw64/bin')"
     else
       tmp="/mingw${_cpu}/bin"
-      if [ "${APPVEYOR}" = 'True' ]; then
-        # mingw-w64 comes with its own Python copy. Override that with
-        # AppVeyor's external one, which has our extra installed 'pefile'
-        # package.
-        tmp="/c/Python36-x64:${tmp}"
-      fi
     fi
     export PATH="${tmp}:${_ori_path}"
     export _MAKE='mingw32-make'

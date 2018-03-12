@@ -33,6 +33,11 @@ case "$(uname)" in
   *BSD)    os='bsd';;
 esac
 
+python  --version
+python3 --version
+pip     --version
+pip3    --version
+
 if [ "${os}" = 'win' ]; then
   _pip='python -m pip'
 else
