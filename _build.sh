@@ -5,7 +5,7 @@
 
 # Requirements (not a comprehensive list at this point):
 #   Windows:
-#     MSYS2: zip p7zip mingw-w64-{i686,x86_64}-{clang,jq,osslsigncode} gpg python3
+#     MSYS2: zip p7zip mingw-w64-{i686,x86_64}-{clang,jq,osslsigncode,python3-pip} gpg python3
 #   Linux
 #     zip p7zip-full binutils-mingw-w64 gcc-mingw-w64 gnupg-curl jq osslsigncode dos2unix realpath wine
 #   Mac:
@@ -70,15 +70,15 @@ build_single_target() {
       tmp="$(realpath './mingw64/bin')"
     else
       tmp="/mingw${_cpu}/bin"
-      if [ "${APPVEYOR}" = 'True' ]; then
-        # mingw-w64 comes with its own Python copy. Override that with
-        # AppVeyor's external one, which has our extra installed 'pefile'
-        # package.
-        tmp="/c/Python36-x64:${tmp}"
-      fi
     fi
     export PATH="${tmp}:${_ori_path}"
     export _MAKE='mingw32-make'
+
+    # Install required component
+    # TODO: add `--progress-bar off` when pip 9.1.0 hits the drives
+    pip3 --version
+    pip3 --disable-pip-version-check install --user --upgrade pip
+    pip3 install --user pefile
   else
     if [ "${CC}" = 'mingw-clang' ] && [ "${os}" = 'mac' ]; then
       export PATH="/usr/local/opt/llvm/bin:${_ori_path}"
