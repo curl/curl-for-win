@@ -101,6 +101,7 @@ _cpu="$2"
   ../_sign.sh ${_pkg}/bin/*.exe
   ../_sign.sh ${_pkg}/bin/*.dll
 
+  touch -c -r "${_ref}" ${_pkg}/include/brotli/*.h
   touch -c -r "${_ref}" ${_pkg}/bin/*.exe
   touch -c -r "${_ref}" ${_pkg}/bin/*.dll
   touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
