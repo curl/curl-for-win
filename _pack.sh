@@ -60,6 +60,6 @@ create_pack() {
 
 create_pack "$1" '.tar.xz'
 create_pack "$1" '.zip'
-create_pack "$1" '.7z'  # compatibility with curl download page
+create_pack "$1" '.7z'  # compatibility
 
 rm -f -r "${_DST:?}"

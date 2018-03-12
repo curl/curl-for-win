@@ -42,7 +42,7 @@ before_install:
       export HOMEBREW_NO_AUTO_UPDATE=1
       time travis_retry brew update > /dev/null
       time travis_retry brew upgrade python3
-      time travis_retry brew install xz p7zip mingw-w64 ${_optpkg} jq osslsigncode dos2unix gnu-sed
+      time travis_retry brew install xz gnu-tar p7zip mingw-w64 ${_optpkg} jq osslsigncode dos2unix gnu-sed
       time travis_retry brew install --force-bottle --build-bottle wine
       time wineboot --init
     elif [ "$TRAVIS_OS_NAME" = 'linux' ]; then
