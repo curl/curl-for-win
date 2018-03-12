@@ -33,22 +33,13 @@ case "$(uname)" in
   *BSD)    os='bsd';;
 esac
 
-python  --version
-python3 --version
-pip     --version
-pip3    --version
-
-if [ "${os}" = 'win' ]; then
-  _pip='python -m pip'
-else
-  _pip='pip3'
+if [ "${os}" != 'win' ]; then
+  # Install required component
+  # TODO: add `--progress-bar off` when pip 9.1.0 hits the drives
+  pip3 --version
+  pip3 --disable-pip-version-check install --user --upgrade pip
+  pip3 install --user pefile
 fi
-
-# Install required component
-# TODO: add `--progress-bar off` when pip 9.1.0 hits the drives
-${_pip} --version
-${_pip} --disable-pip-version-check install --user --upgrade pip
-${_pip} install --user pefile
 
 alias curl='curl -fsS --connect-timeout 15 --retry 3'
 alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format LONG'
