@@ -65,13 +65,7 @@ build_single_target() {
   export _WINE=''
 
   if [ "${os}" = 'win' ]; then
-    # Use custom mingw compiler package, if installed.
-    if [ -d './mingw64/bin' ]; then
-      tmp="$(realpath './mingw64/bin')"
-    else
-      tmp="/mingw${_cpu}/bin"
-    fi
-    export PATH="${tmp}:${_ori_path}"
+    export PATH="/mingw${_cpu}/bin:${_ori_path}"
     export _MAKE='mingw32-make'
 
     # Install required component

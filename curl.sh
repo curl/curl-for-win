@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2017 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2018 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 export _NAM
@@ -50,7 +50,7 @@ _cpu="$2"
   # avoid the chance of libcurl functions getting exported from final
   # binaries when linked against static libcurl lib.
   export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -fno-ident'
-  [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
+  [ "${_cpu}" = '32' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
   export CURL_LDFLAG_EXTRAS_EXE
   export CURL_LDFLAG_EXTRAS_DLL

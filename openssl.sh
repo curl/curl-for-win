@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2017 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2018 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 export _NAM
@@ -47,7 +47,7 @@ _cpu="$2"
     options="${options} enable-ec_nistp_64_gcc_128"
     [ "${_CCVER}" -ge '05' ] && options="${options} -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
   fi
-  [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && options="${options} -fno-asynchronous-unwind-tables"
+  [ "${_cpu}" = '32' ] && options="${options} -fno-asynchronous-unwind-tables"
 
   # AR=, NM=, RANLIB=
   unset CC
