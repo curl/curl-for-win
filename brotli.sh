@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2017 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2017-2018 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 export _NAM
@@ -46,17 +46,36 @@ _cpu="$2"
   find . -name '*.Plo' -type f -delete
   find . -name '*.pc'  -type f -delete
 
-  unset CC
-
-  _CFLAGS="-static-libgcc -m${_cpu} -fno-ident -DMINGW_HAS_SECURE_API"
+  _CFLAGS="-m${_cpu} -fno-ident -DMINGW_HAS_SECURE_API"
   [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
-  # shellcheck disable=SC2086
-  cmake . "${options}" \
-    "-DCMAKE_C_COMPILER=${_CCPREFIX}gcc" \
-    "-DCMAKE_CXX_COMPILER=${_CCPREFIX}g++" \
-    "-DCMAKE_C_FLAGS=${_CFLAGS}" \
-    '-DCMAKE_INSTALL_PREFIX=/usr/local'
+  if [ "${CC}" = 'mingw-clang' ]; then
+    unset CC
+
+    [ "${os}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
+
+    cmake . "${options}" \
+      "-DCMAKE_SYSROOT=${_SYSROOT}" \
+      "-DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}" \
+      "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
+      "-DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}" \
+      "-DCMAKE_C_COMPILER=clang" \
+      "-DCMAKE_CXX_COMPILER=clang++" \
+      "-DCMAKE_C_FLAGS=${_CFLAGS}" \
+      "-DCMAKE_CXX_FLAGS=${_CFLAGS}" \
+      "-DCMAKE_EXE_LINKER_FLAGS=-static-libgcc" \
+      "-DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc" \
+      '-DCMAKE_INSTALL_PREFIX=/usr/local'
+  else
+    unset CC
+
+    cmake . "${options}" \
+      "-DCMAKE_C_COMPILER=${_CCPREFIX}gcc" \
+      "-DCMAKE_CXX_COMPILER=${_CCPREFIX}g++" \
+      "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}" \
+      '-DCMAKE_INSTALL_PREFIX=/usr/local'
+  fi
+
   make
   make install "DESTDIR=$(pwd)/pkg" > /dev/null
 
@@ -76,11 +95,11 @@ _cpu="$2"
   "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.exe
   "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.dll
 
-  ../_peclean.py "${_ref}" './*.exe'
-  ../_peclean.py "${_ref}" './*.dll'
+  ../_peclean.py "${_ref}" ${_pkg}'/bin/*.exe'
+  ../_peclean.py "${_ref}" ${_pkg}'/bin/*.dll'
 
-  ../_sign.sh './*.exe'
-  ../_sign.sh './*.dll'
+  ../_sign.sh ${_pkg}/bin/*.exe
+  ../_sign.sh ${_pkg}/bin/*.dll
 
   touch -c -r "${_ref}" ${_pkg}/bin/*.exe
   touch -c -r "${_ref}" ${_pkg}/bin/*.dll

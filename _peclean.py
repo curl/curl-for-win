@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Sets internal timestamps in PE executables
-Copyright 2015-2016 Viktor Szakats <https://github.com/vszakats>
+Copyright 2015-2018 Viktor Szakats <https://github.com/vszakats>
 See LICENSE.md
 """
 
@@ -18,7 +18,7 @@ if len(sys.argv) > 2:
         datetime.datetime.fromtimestamp(
             os.path.getmtime(sys.argv[1])).timetuple())
     for fname in glob.glob(sys.argv[2]):
-        print datetime.datetime.fromtimestamp(FTIME).isoformat() + ' -> ' + fname
+        print(datetime.datetime.fromtimestamp(FTIME).isoformat() + ' -> ' + fname)
         pe = pefile.PE(fname)
         pe.FILE_HEADER.TimeDateStamp = FTIME
         try:

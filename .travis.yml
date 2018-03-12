@@ -41,7 +41,8 @@ before_install:
       [ "${CC}" = 'mingw-clang' ] && _optpkg='llvm'
       export HOMEBREW_NO_AUTO_UPDATE=1
       time travis_retry brew update > /dev/null
-      time travis_retry brew install p7zip mingw-w64 ${_optpkg} jq osslsigncode dos2unix gpg gnu-sed
+      time travis_retry brew upgrade python3
+      time travis_retry brew install xz p7zip mingw-w64 ${_optpkg} jq osslsigncode dos2unix gnu-sed
       time travis_retry brew install --force-bottle --build-bottle wine
       time wineboot --init
     elif [ "$TRAVIS_OS_NAME" = 'linux' ]; then
@@ -57,9 +58,9 @@ before_install:
         dpkg --add-architecture i386
         apt-get -qq update
         apt-get -qq install \
-          curl git make python python-pip \
+          curl git make python3-pip \
           binutils-mingw-w64 gcc-mingw-w64 ${_optpkg} cmake \
-          p7zip-full time jq dos2unix realpath osslsigncode wine-stable wine64 wine32
+          zip p7zip-full time jq dos2unix realpath osslsigncode wine-stable wine64 wine32
         ./_build.sh'
     fi
 

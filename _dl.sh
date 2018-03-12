@@ -11,8 +11,8 @@ export LIBIDN2_VER_='2.0.4'
 export LIBIDN2_HASH=644b6b03b285fb0ace02d241d59483d98bc462729d8bb3608d5cad5532f3d2f0
 export NGHTTP2_VER_='1.31.0'
 export NGHTTP2_HASH=36573c2dc74f0da872b02a3ccf1f1419d6b992dd4703dc866e5a289d36397ac7
-export CARES_VER_='1.13.0'
-export CARES_HASH=03f708f1b14a26ab26c38abd51137640cb444d3ec72380b21b20f1a8d2861da7
+export CARES_VER_='1.14.0'
+export CARES_HASH=45d3c1fd29263ceec2afc8ff9cd06d5f8f889636eb4e80ce3cc7f0eaf7aadc6e
 export OPENSSL_VER_='1.1.0g'
 export OPENSSL_HASH=de4d501267da39310905cb6dc8c6121f7a2cad45a7707f76df828fe1b85073af
 export LIBRTMP_VER_='2.4+20151223'
@@ -33,14 +33,17 @@ case "$(uname)" in
   *BSD)    os='bsd';;
 esac
 
-unset _py
-[ "${os}" = 'win' ] && _py='python -m'
+if [ "${os}" = 'win' ]; then
+  _pip='python -m pip'
+else
+  _pip='pip3'
+fi
 
 # Install required component
 # TODO: add `--progress-bar off` when pip 9.1.0 hits the drives
-${_py} pip --version
-${_py} pip --disable-pip-version-check install --user --upgrade pip
-${_py} pip install --user pefile
+${_pip} --version
+${_pip} --disable-pip-version-check install --user --upgrade pip
+${_pip} install --user pefile
 
 alias curl='curl -fsS --connect-timeout 15 --retry 3'
 alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format LONG'
