@@ -93,4 +93,4 @@ do_upload() {
 
 do_upload '.tar.xz'
 do_upload '.zip'
-do_upload '.7z'  # compatibility with curl download page
+do_upload '.7z'  # compatibility
