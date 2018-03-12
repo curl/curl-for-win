@@ -13,6 +13,9 @@ case "$(uname)" in
   *BSD)    os='bsd';;
 esac
 
+# Map tar to GNU tar, if it exists (e.g. on macOS)
+which gtar > /dev/null && alias tar=gtar
+
 _cdo="$(pwd)"
 
 _fn="${_DST}/BUILD-README.txt"
@@ -45,7 +48,9 @@ create_pack() {
     esac
     rm -f "${_cdo}/${_BAS}${arch_ext}"
     case "${arch_ext}" in
-      .tar.xz) tar -c "${_BAS}" | xz > "${_cdo}/${_BAS}${arch_ext}";;
+      .tar.xz) tar -c \
+        --owner=0 --group=0 --numeric-owner --mode=go=rX,u+rw,a-s --sort=name \
+        "${_BAS}" | xz > "${_cdo}/${_BAS}${arch_ext}";;
       .zip)    zip -q -9 -X -r "${_cdo}/${_BAS}${arch_ext}" "${_BAS}";;
       .7z)     7z a -bd -r -mx "${_cdo}/${_BAS}${arch_ext}" "${_BAS}" > /dev/null;;
     esac
