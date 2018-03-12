@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2017 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2018 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 export _NAM
@@ -48,7 +48,7 @@ _cpu="$2"
   export CC="${_CCPREFIX}gcc -static-libgcc"
   export LDFLAGS="-m${_cpu}"
   export CFLAGS="${LDFLAGS} -fno-ident"
-  [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
+  [ "${_cpu}" = '32' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
   # shellcheck disable=SC2086
   ./configure ${options} \
     --disable-dependency-tracking \

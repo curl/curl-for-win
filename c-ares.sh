@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2017 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2018 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 export _NAM
@@ -19,7 +19,7 @@ _cpu="$2"
   # Build
 
   export CARES_CFLAG_EXTRAS="-m${_cpu} -fno-ident"
-  [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && CARES_CFLAG_EXTRAS="${CARES_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
+  [ "${_cpu}" = '32' ] && CARES_CFLAG_EXTRAS="${CARES_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export CARES_LDFLAG_EXTRAS="-m${_cpu} -static-libgcc -Wl,--nxcompat -Wl,--dynamicbase"
   [ "${_cpu}" = '64' ] && [ "${_CCVER}" -ge '05' ] && CARES_LDFLAG_EXTRAS="${CARES_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x154000000"
 

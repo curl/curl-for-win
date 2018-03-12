@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2017 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2018 Viktor Szakats <https://github.com/vszakats>
 # See LICENSE.md
 
 export _NAM
@@ -32,7 +32,7 @@ _cdo="$(pwd)"
   [ "${_cpu}" = '64' ] && [ "${_CCVER}" -ge '05' ] && XLDFLAGS="${XLDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x153000000"
   export LDFLAGS="${XLDFLAGS}"
   export XCFLAGS="${XCFLAGS} -fno-ident"
-  [ "${_BRANCH#*extmingw*}" = "${_BRANCH}" ] && [ "${_cpu}" = '32' ] && XCFLAGS="${XCFLAGS} -fno-asynchronous-unwind-tables"
+  [ "${_cpu}" = '32' ] && XCFLAGS="${XCFLAGS} -fno-asynchronous-unwind-tables"
 
   export CROSS_COMPILE="${_CCPREFIX}"
 
