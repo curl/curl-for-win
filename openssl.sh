@@ -20,6 +20,8 @@ _cpu="$2"
 
   # Build
 
+  rm -fr pkg
+
   find . -name '*.o'   -type f -delete
   find . -name '*.a'   -type f -delete
   find . -name '*.pc'  -type f -delete
@@ -64,6 +66,7 @@ _cpu="$2"
     '--prefix=/usr/local'
   [ "$(echo "${OPENSSL_VER_}" | cut -c -4)" = '1.1.' ] || make depend
   make
+# make install "DESTDIR=$(pwd)/pkg"
 
   # Make steps for determinism
 

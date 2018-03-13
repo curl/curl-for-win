@@ -29,7 +29,7 @@
     [LLVM/Clang](https://clang.llvm.org/) for projects supporting it.
   - Binaries are cross-built and published from macOS
     (via [Travis CI](https://travis-ci.org/)), using LLVM/Clang for curl,
-    libssh2, nghttp2, c-ares, brotli and zlib, and GCC for others.
+    libssh2, nghttp2, c-ares, brotli and zlib, and GCC for the remaining few.
   - Binaries are built with supported [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29) options enabled.
   - Binaries are using [DWARF](https://en.wikipedia.org/wiki/DWARF) in x86 and
     [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH)
