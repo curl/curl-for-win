@@ -53,6 +53,7 @@ _cpu="$2"
   options="${options} -DENABLE_LIB_ONLY=1"
   options="${options} -DENABLE_STATIC_LIB=1"
   options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
+  options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
   options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
 
   if [ "${CC}" = 'mingw-clang' ]; then
@@ -82,8 +83,7 @@ _cpu="$2"
       "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}"
   fi
 
-  make
-  make install "DESTDIR=$(pwd)/pkg" > /dev/null
+  make install "DESTDIR=$(pwd)/pkg"
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
   _pkg='pkg/usr/local'
