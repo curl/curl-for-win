@@ -37,6 +37,7 @@ _cpu="$2"
   rm -fr pkg CMakeFiles CMakeCache.txt cmake_install.cmake
 
   find . -name '*.o'   -type f -delete
+  find . -name '*.obj' -type f -delete
   find . -name '*.a'   -type f -delete
   find . -name '*.lo'  -type f -delete
   find . -name '*.la'  -type f -delete
