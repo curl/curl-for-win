@@ -87,6 +87,7 @@ openssl dgst -sha256 pack.bin | grep -q "${NGHTTP2_HASH}" || exit 1
 tar -xvf pack.bin > /dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r nghttp2 && mv nghttp2-* nghttp2
+[ -f "nghttp2${_patsuf}.patch" ] && dos2unix < "nghttp2${_patsuf}.patch" | patch -N -p1 -d nghttp2
 
 # This significantly increases curl binary sizes, so leave it optional.
 if [ "${_BRANCH#*libidn2*}" != "${_BRANCH}" ]; then

@@ -68,7 +68,9 @@ _cpu="$2"
       "-DCMAKE_C_COMPILER=clang" \
       "-DCMAKE_CXX_COMPILER=clang++" \
       "-DCMAKE_C_FLAGS=${_CFLAGS}" \
-      "-DCMAKE_CXX_FLAGS=${_CFLAGS}"
+      "-DCMAKE_CXX_FLAGS=${_CFLAGS}" \
+      "-DCMAKE_EXE_LINKER_FLAGS=-static-libgcc" \
+      "-DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc"
   else
     unset CC
 
@@ -76,8 +78,7 @@ _cpu="$2"
     cmake . ${options} "${opt_gmsys}" \
       "-DCMAKE_C_COMPILER=${_CCPREFIX}gcc" \
       "-DCMAKE_CXX_COMPILER=${_CCPREFIX}g++" \
-      "-DCMAKE_C_FLAGS=${_CFLAGS}" \
-      "-DCMAKE_CXX_FLAGS=${_CFLAGS}"
+      "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}"
   fi
 
   make
