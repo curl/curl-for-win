@@ -51,7 +51,7 @@ _cpu="$2"
   options="${options} -DCMAKE_BUILD_TYPE=Release"
   options="${options} -DENABLE_LIB_ONLY=1"
   options="${options} -DENABLE_STATIC_LIB=1"
-  options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}-windres"
+  options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
   options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
 
   if [ "${CC}" = '-mingw-clang' ]; then
