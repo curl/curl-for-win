@@ -96,8 +96,8 @@ _cpu="$2"
   "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.exe
   "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.dll
 
-  ../_peclean.py "${_ref}" ${_pkg}'/bin/*.exe'
-  ../_peclean.py "${_ref}" ${_pkg}'/bin/*.dll'
+  ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
+  ../_peclean.py "${_ref}" ${_pkg}/bin/*.dll
 
   ../_sign.sh ${_pkg}/bin/*.exe
   ../_sign.sh ${_pkg}/bin/*.dll

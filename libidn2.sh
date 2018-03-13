@@ -16,6 +16,14 @@ _cpu="$2"
 (
   cd "${_NAM}" || exit
 
+  # Detect host OS
+  case "$(uname)" in
+    *_NT*)   os='win';;
+    Linux*)  os='linux';;
+    Darwin*) os='mac';;
+    *BSD)    os='bsd';;
+  esac
+
   # This is pretty much guesswork and this warning remains:
   #    `configure: WARNING: using cross tools not prefixed with host triplet`
   # Even with `_CCPREFIX` provided.
@@ -72,9 +80,9 @@ _cpu="$2"
   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
   "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.exe
 
-  ../_peclean.py "${_ref}" ${_pkg}'/bin/*.exe'
+  ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
 
-  ../_sign.sh "${_pkg}/bin/*.exe"
+  ../_sign.sh ${_pkg}/bin/*.exe
 
   touch -c -r "${_ref}" ${_pkg}/bin/*.exe
   touch -c -r "${_ref}" ${_pkg}/lib/*.a

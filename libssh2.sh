@@ -74,9 +74,9 @@ _cpu="$2"
 
   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g win32/*.a
 
-  ../_peclean.py "${_ref}" 'win32/*.dll'
+  ../_peclean.py "${_ref}" win32/*.dll
 
-  ../_sign.sh 'win32/*.dll'
+  ../_sign.sh win32/*.dll
 
   touch -c -r "${_ref}" win32/*.dll
   touch -c -r "${_ref}" win32/*.a
