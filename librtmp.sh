@@ -44,11 +44,11 @@ _cdo="$(pwd)"
 
   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g librtmp/*.a
 
-  ../_peclean.py "${_ref}" './*.exe'
-  ../_peclean.py "${_ref}" 'librtmp/*.dll'
+  ../_peclean.py "${_ref}" ./*.exe
+  ../_peclean.py "${_ref}" librtmp/*.dll
 
-  ../_sign.sh './*.exe'
-  ../_sign.sh 'librtmp/*.dll'
+  ../_sign.sh ./*.exe
+  ../_sign.sh librtmp/*.dll
 
   touch -c -r "${_ref}" librtmp/*.exe
   touch -c -r "${_ref}" librtmp/*.dll

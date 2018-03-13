@@ -35,9 +35,9 @@ _cpu="$2"
 
   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ./*.a
 
-  ../_peclean.py "${_ref}" './*.exe'
+  ../_peclean.py "${_ref}" ./*.exe
 
-  ../_sign.sh './*.exe'
+  ../_sign.sh ./*.exe
 
   touch -c -r "${_ref}" ./*.a
   touch -c -r "${_ref}" ./*.exe
