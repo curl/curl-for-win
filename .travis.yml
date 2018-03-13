@@ -13,7 +13,7 @@ language: c
 
 addons:
   apt:
-    packages: [ binutils-mingw-w64, gcc-mingw-w64, cmake, p7zip-full, gnupg-curl, dos2unix, realpath ]
+    packages: [ binutils-mingw-w64, gcc-mingw-w64, cmake, gnupg-curl, dos2unix, realpath ]
 
 matrix:
   include:
@@ -42,7 +42,7 @@ before_install:
       export HOMEBREW_NO_AUTO_UPDATE=1
       time travis_retry brew update > /dev/null
       time travis_retry brew upgrade python3
-      time travis_retry brew install xz gnu-tar p7zip mingw-w64 ${_optpkg} jq osslsigncode dos2unix gnu-sed
+      time travis_retry brew install xz gnu-tar mingw-w64 ${_optpkg} jq osslsigncode dos2unix gnu-sed
       time travis_retry brew install --force-bottle --build-bottle wine
       time wineboot --init
     elif [ "$TRAVIS_OS_NAME" = 'linux' ]; then
@@ -60,7 +60,7 @@ before_install:
         apt-get -qq install \
           curl git make python3-pip \
           binutils-mingw-w64 gcc-mingw-w64 ${_optpkg} cmake \
-          zip p7zip-full time jq dos2unix realpath osslsigncode wine-stable wine64 wine32
+          zip time jq dos2unix realpath osslsigncode wine-stable wine64 wine32
         ./_build.sh'
     fi
 

@@ -24,7 +24,7 @@ _cpu="$2"
   # Build
 
   export ARCH="w${_cpu}"
-  export LIBSSH2_CFLAG_EXTRAS='-fno-ident -DHAVE_STRTOI64'
+  export LIBSSH2_CFLAG_EXTRAS='-fno-ident -DHAVE_STRTOI64 -DLIBSSH2_DH_GEX_NEW=1'
   [ "${_cpu}" = '32' ] && LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export LIBSSH2_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
   [ "${_cpu}" = '64' ] && [ "${_CCVER}" -ge '05' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
@@ -123,8 +123,8 @@ _cpu="$2"
     cp -f -p win32/*.def   "${_DST}/bin/"
   fi
 
-  unix2dos -k "${_DST}"/*.txt
-  unix2dos -k "${_DST}"/docs/*.txt
+  unix2dos -q -k "${_DST}"/*.txt
+  unix2dos -q -k "${_DST}"/docs/*.txt
 
   ../_pack.sh "$(pwd)/${_ref}"
   ../_ul.sh

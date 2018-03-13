@@ -7,8 +7,10 @@
   - Packaging aims to follow popular binary releases found on the internet.
   - Both x86 and x64 packages are built using the same process.
   - Binary packages are downloadable in `.zip`, `.tar.xz` and `.7z` formats.<br>
-    **Note that the `.7z` format is deprecated and will be discontinued. Please
-    update your download links accordingly.**
+    **Note that the `.7z` format is discontinued. Please update your download
+    links accordingly.**<br>
+    Please note that `.xz` and the resulting `.tar` file can also be
+    extracted using 7-zip on Windows.
   - Standalone `curl.exe` (only [`msvcrt.dll`](https://en.wikipedia.org/wiki/Microsoft_Windows_library_files#MSVCRT.DLL.2C_MSVCPP.DLL_and_CRTDLL.DLL) is [required](https://blogs.msdn.microsoft.com/oldnewthing/20140411-00/?p=1273)).
   - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2)
     support enabled.
@@ -24,10 +26,10 @@
     [APT](https://en.wikipedia.org/wiki/APT_(Debian)) (on Ubuntu via Docker) or
     [MSYS2](https://www.msys2.org/) (on Windows).
     C compiler is [GCC](https://gcc.gnu.org/) and optionally
-    [LLVM/Clang](https://clang.llvm.org/) for curl and libssh2.
+    [LLVM/Clang](https://clang.llvm.org/) for projects supporting it.
   - Binaries are cross-built and published from macOS
-    (via [Travis CI](https://travis-ci.org/)), using LLVM/Clang for curl and
-    libssh2, and GCC for others.
+    (via [Travis CI](https://travis-ci.org/)), using LLVM/Clang for curl,
+    libssh2, nghttp2, c-ares, brotli and zlib, and GCC for the remaining few.
   - Binaries are built with supported [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29) options enabled.
   - Binaries are using [DWARF](https://en.wikipedia.org/wiki/DWARF) in x86 and
     [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH)

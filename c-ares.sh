@@ -53,6 +53,7 @@ _cpu="$2"
   options='-DCMAKE_SYSTEM_NAME=Windows'
   options="${options} -DCARES_STATIC=1"
   options="${options} -DCARES_STATIC_PIC=1"
+  options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
   options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
 
   if [ "${CC}" = 'mingw-clang' ]; then
@@ -79,8 +80,7 @@ _cpu="$2"
       "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS}"
   fi
 
-  make
-  make install "DESTDIR=$(pwd)/pkg" > /dev/null
+  make install "DESTDIR=$(pwd)/pkg"
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
   _pkg='pkg/usr/local'
@@ -102,6 +102,8 @@ _cpu="$2"
   readonly _ref='RELEASE-NOTES'
 
   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.exe
+  "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.dll
 
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.dll
@@ -134,8 +136,8 @@ _cpu="$2"
   cp -f -p CHANGES                    "${_DST}/CHANGES.txt"
   cp -f -p RELEASE-NOTES              "${_DST}/RELEASE-NOTES.txt"
 
-  unix2dos -k "${_DST}"/*.md
-  unix2dos -k "${_DST}"/*.txt
+  unix2dos -q -k "${_DST}"/*.md
+  unix2dos -q -k "${_DST}"/*.txt
 
 # ../_pack.sh "$(pwd)/${_ref}"
 # ../_ul.sh

@@ -241,9 +241,9 @@ _cpu="$2"
     cp -f -p lib/*.def                "${_DST}/bin/"
   fi
 
-  unix2dos -k "${_DST}"/*.txt
-  unix2dos -k "${_DST}"/docs/*.md
-  unix2dos -k "${_DST}"/docs/*.txt
+  unix2dos -q -k "${_DST}"/*.txt
+  unix2dos -q -k "${_DST}"/docs/*.md
+  unix2dos -q -k "${_DST}"/docs/*.txt
 
   ../_pack.sh "$(pwd)/${_ref}"
   ../_ul.sh

@@ -48,6 +48,7 @@ _cpu="$2"
   [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
   options='-DCMAKE_SYSTEM_NAME=Windows'
+  options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
   options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
 
   if [ "${CC}" = 'mingw-clang' ]; then
@@ -77,8 +78,7 @@ _cpu="$2"
       "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}"
   fi
 
-  make
-  make install "DESTDIR=$(pwd)/pkg" > /dev/null
+  make install "DESTDIR=$(pwd)/pkg"
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
   _pkg='pkg/usr/local'
@@ -130,7 +130,7 @@ _cpu="$2"
   cp -f -p ${_pkg}/lib/*.a            "${_DST}/lib/"
   cp -f -p README.md                  "${_DST}/README.md"
 
-  unix2dos -k "${_DST}"/*.md
+  unix2dos -q -k "${_DST}"/*.md
 
   ../_pack.sh "$(pwd)/${_ref}"
   ../_ul.sh
