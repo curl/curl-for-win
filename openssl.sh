@@ -81,7 +81,7 @@ _cpu="$2"
   ../_sign.sh 'apps/*.dll'
 
   if ls ${engdir}/*.dll > /dev/null 2>&1; then
-    ../_peclean.py "${_ref}" "${engdir}/*.dll"
+    ../_peclean.py "${_ref}" ${engdir}'/*.dll'
 
     ../_sign.sh "${engdir}/*.dll"
   fi
