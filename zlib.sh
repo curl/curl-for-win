@@ -34,7 +34,7 @@ _cpu="$2"
 
   # Build
 
-  rm -fr CMakeFiles CMakeCache.txt cmake_install.cmake
+  rm -fr CMakeFiles CMakeCache.txt cmake_install.cmake pkg
 
   find . -name '*.o'   -type f -delete
   find . -name '*.a'   -type f -delete
@@ -91,9 +91,8 @@ _cpu="$2"
   # Stick to the name used by win32/Makefile.gcc
   mv -f ${_pkg}/lib/libzlibstatic.a ${_pkg}/lib/libz.a
 
-  # Hack to make libssh2 and curl makefile.m32 files
-  # be able to find these. They should be in the same
-  # directory:
+  # libssh2 and curl makefile.m32 assume the zlib headers
+  # and lib to be in the same directory:
   cp -f -p ${_pkg}/include/*.h "${_pkg}/"
   cp -f -p ${_pkg}/lib/*.a     "${_pkg}/"
 
