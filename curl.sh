@@ -83,7 +83,7 @@ _cpu="$2"
   | sort | tee -a libcurl.def
   CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} ../libcurl.def"
 
-  export ZLIB_PATH=../../zlib
+  export ZLIB_PATH=../../zlib/pkg/usr/local
   options="${options}-zlib"
   if [ -d ../brotli ]; then
     options="${options}-brotli"
