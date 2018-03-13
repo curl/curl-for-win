@@ -54,7 +54,7 @@ _cpu="$2"
   options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
   options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
 
-  if [ "${CC}" = '-mingw-clang' ]; then
+  if [ "${CC}" = 'mingw-clang' ]; then
     unset CC
 
     [ "${os}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
