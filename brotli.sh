@@ -27,11 +27,9 @@ _cpu="$2"
   esac
 
   if [ "${os}" = 'win' ]; then
-    options='-GMSYS Makefiles'
+    opt_gmsys='-GMSYS Makefiles'
     # Without this option, the value '/usr/local' becomes 'msys64/usr/local'
     export MSYS2_ARG_CONV_EXCL='-DCMAKE_INSTALL_PREFIX='
-  else
-    options='-DCMAKE_SYSTEM_NAME=Windows'
   fi
 
   # Build
@@ -49,12 +47,16 @@ _cpu="$2"
   _CFLAGS="-m${_cpu} -fno-ident -DMINGW_HAS_SECURE_API"
   [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
+  options='-DCMAKE_SYSTEM_NAME=Windows'
+  options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
+
   if [ "${CC}" = 'mingw-clang' ]; then
     unset CC
 
     [ "${os}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
 
-    cmake . "${options}" \
+    # shellcheck disable=SC2086
+    cmake . ${options} "${opt_gmsys}" \
       "-DCMAKE_SYSROOT=${_SYSROOT}" \
       "-DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}" \
       "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
@@ -64,16 +66,15 @@ _cpu="$2"
       "-DCMAKE_C_FLAGS=${_CFLAGS}" \
       "-DCMAKE_CXX_FLAGS=${_CFLAGS}" \
       "-DCMAKE_EXE_LINKER_FLAGS=-static-libgcc" \
-      "-DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc" \
-      '-DCMAKE_INSTALL_PREFIX=/usr/local'
+      "-DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc"
   else
     unset CC
 
-    cmake . "${options}" \
+    # shellcheck disable=SC2086
+    cmake . ${options} "${opt_gmsys}" \
       "-DCMAKE_C_COMPILER=${_CCPREFIX}gcc" \
       "-DCMAKE_CXX_COMPILER=${_CCPREFIX}g++" \
-      "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}" \
-      '-DCMAKE_INSTALL_PREFIX=/usr/local'
+      "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}"
   fi
 
   make
