@@ -43,6 +43,8 @@ _cpu="$2"
 
   # Build
 
+  rm -fr pkg
+
   find . -name '*.o'   -type f -delete
   find . -name '*.a'   -type f -delete
   find . -name '*.lo'  -type f -delete
