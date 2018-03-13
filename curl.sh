@@ -110,7 +110,7 @@ _cpu="$2"
   fi
   if [ -d ../c-ares ]; then
     options="${options}-ares"
-    export LIBCARES_PATH=../../c-ares
+    export LIBCARES_PATH=../../c-ares/pkg/usr/local
   fi
   if [ -d ../librtmp ]; then
     options="${options}-rtmp"
