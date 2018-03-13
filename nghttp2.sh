@@ -26,24 +26,15 @@ _cpu="$2"
     *BSD)    os='bsd';;
   esac
 
-  # This is pretty much guesswork and this warning remains:
-  #    `configure: WARNING: using cross tools not prefixed with host triplet`
-  # Even with `_CCPREFIX` provided.
-  if [ "${os}" != 'win' ]; then
-
-    # https://clang.llvm.org/docs/CrossCompilation.html
-    unset _HOST
-    case "${os}" in
-      win)   _HOST='x86_64-pc-mingw32';;
-      linux) _HOST='x86_64-pc-linux';;
-      mac)   _HOST='x86_64-apple-darwin';;
-      bsd)   _HOST='x86_64-pc-bsd';;
-    esac
-
-    options="--build=${_HOST} --host=${_TRIPLET}"
+  if [ "${os}" = 'win' ]; then
+    opt_gmsys='-GMSYS Makefiles'
+    # Without this option, the value '/usr/local' becomes 'msys64/usr/local'
+    export MSYS2_ARG_CONV_EXCL='-DCMAKE_INSTALL_PREFIX='
   fi
 
   # Build
+
+  rm -fr CMakeFiles CMakeCache.txt cmake_install.cmake
 
   find . -name '*.o'   -type f -delete
   find . -name '*.a'   -type f -delete
@@ -53,27 +44,51 @@ _cpu="$2"
   find . -name '*.Plo' -type f -delete
   find . -name '*.pc'  -type f -delete
 
-  export ZLIB_CFLAGS='-I../../zlib'
-  export ZLIB_LIBS='-L../../zlib -lz'
+  _CFLAGS="-m${_cpu} -fno-ident"
+  [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
-  export CC="${_CCPREFIX}gcc -static-libgcc"
-  export LDFLAGS="-m${_cpu}"
-  export CFLAGS="${LDFLAGS} -fno-ident -U__STRICT_ANSI__ -DNGHTTP2_STATICLIB"
-  [ "${_cpu}" = '32' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
-  export CXXFLAGS="${CFLAGS}"
+  options='-DCMAKE_SYSTEM_NAME=Windows'
+  options="${options} -DCMAKE_BUILD_TYPE=Release"
+  options="${options} -DENABLE_LIB_ONLY=1"
+  options="${options} -DENABLE_STATIC_LIB=1"
+  options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
+  options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
 
-  # shellcheck disable=SC2086
-  ./configure ${options} \
-    --disable-dependency-tracking \
-    --enable-lib-only \
-    --disable-shared \
-    '--prefix=/usr/local' \
-    --silent
-# make clean > /dev/null
+  if [ "${CC}" = 'mingw-clang' ]; then
+    unset CC
+
+    [ "${os}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
+
+    # shellcheck disable=SC2086
+    cmake . ${options} "${opt_gmsys}" \
+      "-DCMAKE_SYSROOT=${_SYSROOT}" \
+      "-DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}" \
+      "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
+      "-DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}" \
+      "-DCMAKE_C_COMPILER=clang" \
+      "-DCMAKE_CXX_COMPILER=clang++" \
+      "-DCMAKE_C_FLAGS=${_CFLAGS}" \
+      "-DCMAKE_CXX_FLAGS=${_CFLAGS}" \
+      "-DCMAKE_EXE_LINKER_FLAGS=-static-libgcc" \
+      "-DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc"
+  else
+    unset CC
+
+    # shellcheck disable=SC2086
+    cmake . ${options} "${opt_gmsys}" \
+      "-DCMAKE_C_COMPILER=${_CCPREFIX}gcc" \
+      "-DCMAKE_CXX_COMPILER=${_CCPREFIX}g++" \
+      "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}"
+  fi
+
+  make
   make install "DESTDIR=$(pwd)/pkg" > /dev/null
 
-  # DESTDIR= + --prefix=
+  # DESTDIR= + CMAKE_INSTALL_PREFIX
   _pkg='pkg/usr/local'
+
+  # Delete the implib, we need the static lib only
+  rm -f ${_pkg}/lib/*.dll.a
 
   # Make steps for determinism
 
