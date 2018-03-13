@@ -85,7 +85,6 @@ _cpu="$2"
   # DESTDIR= + CMAKE_INSTALL_PREFIX
   _pkg='pkg/usr/local'
 
-  ls -l ${_pkg}/bin/*.exe
   ls -l ${_pkg}/bin/*.dll
   ls -l ${_pkg}/lib/*.a
 
