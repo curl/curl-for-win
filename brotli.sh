@@ -130,7 +130,7 @@ _cpu="$2"
   cp -f -p ${_pkg}/lib/*.a            "${_DST}/lib/"
   cp -f -p README.md                  "${_DST}/README.md"
 
-  unix2dos -k "${_DST}"/*.md
+  unix2dos -q -k "${_DST}"/*.md
 
   ../_pack.sh "$(pwd)/${_ref}"
   ../_ul.sh

@@ -70,7 +70,7 @@ _cpu="$2"
     '--prefix=/usr/local' \
     --silent
 # make clean > /dev/null
-  make install "DESTDIR=$(pwd)/pkg" # > /dev/null
+  make install "DESTDIR=$(pwd)/pkg" # > /dev/null # V=1
 
   # DESTDIR= + --prefix=
   _pkg='pkg/usr/local'
@@ -112,7 +112,7 @@ _cpu="$2"
   cp -f -p COPYING                    "${_DST}/COPYING.txt"
   cp -f -p README                     "${_DST}/README.txt"
 
-  unix2dos -k "${_DST}"/*.txt
+  unix2dos -q -k "${_DST}"/*.txt
 
 # ../_pack.sh "$(pwd)/${_ref}"
 # ../_ul.sh

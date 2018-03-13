@@ -134,8 +134,8 @@ _cpu="$2"
   cp -f -p CHANGES                    "${_DST}/CHANGES.txt"
   cp -f -p RELEASE-NOTES              "${_DST}/RELEASE-NOTES.txt"
 
-  unix2dos -k "${_DST}"/*.md
-  unix2dos -k "${_DST}"/*.txt
+  unix2dos -q -k "${_DST}"/*.md
+  unix2dos -q -k "${_DST}"/*.txt
 
 # ../_pack.sh "$(pwd)/${_ref}"
 # ../_ul.sh

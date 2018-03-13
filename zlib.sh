@@ -131,7 +131,7 @@ _cpu="$2"
   cp -f -p ChangeLog                    "${_DST}/ChangeLog.txt"
   cp -f -p README                       "${_DST}/README.txt"
 
-  unix2dos -k "${_DST}"/*.txt
+  unix2dos -q -k "${_DST}"/*.txt
 
   ../_pack.sh "$(pwd)/${_ref}"
   ../_ul.sh

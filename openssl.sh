@@ -134,7 +134,7 @@ _cpu="$2"
   # Luckily, applink is not implemented for 64-bit mingw, omit this file then
   [ "${_cpu}" = '32' ] && cp -f -p ms/applink.c "${_DST}/include/openssl/"
 
-  unix2dos -k "${_DST}"/*.txt
+  unix2dos -q -k "${_DST}"/*.txt
 
   ../_pack.sh "$(pwd)/${_ref}"
   ../_ul.sh

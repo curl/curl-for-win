@@ -117,8 +117,8 @@ _cpu="$2"
   cp -f -p COPYING                     "${_DST}/COPYING.txt"
   cp -f -p README.rst                  "${_DST}/"
 
-  unix2dos -k "${_DST}"/*.txt
-  unix2dos -k "${_DST}"/*.rst
+  unix2dos -q -k "${_DST}"/*.txt
+  unix2dos -q -k "${_DST}"/*.rst
 
   ../_pack.sh "$(pwd)/${_ref}"
   ../_ul.sh
