@@ -25,6 +25,7 @@ _cpu="$2"
   esac
 
   if [ "${os}" = 'win' ]; then
+    # Required on MSYS2 for pod2man and pod2html in 'make install' phase
     export PATH="${PATH}:/usr/bin/core_perl"
   fi
 
@@ -77,7 +78,6 @@ _cpu="$2"
   [ "$(echo "${OPENSSL_VER_}" | cut -c -4)" = '1.1.' ] || make depend
   make
   # Install it so that it can be detected by CMake
-  # FIXME: 'pod2man: command not found' and 'pod2html: command not found' errors
   make install "DESTDIR=$(pwd)/pkg" > /dev/null # 2>&1
 
   # DESTDIR= + --prefix=
@@ -85,7 +85,7 @@ _cpu="$2"
 
   # Make steps for determinism
 
-  engdir="${_pkg}/lib/engines-1_1"
+  engdir="${_pkg}/lib/engines*"
 
   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
   "${_CCPREFIX}strip" -p -s ${_pkg}/bin/openssl.exe
@@ -113,7 +113,7 @@ _cpu="$2"
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
   touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
   if ls ${engdir}/*.dll > /dev/null 2>&1; then
-    touch -c -r "${_ref}" ${engdir}/*.dll
+    touch -c -r "${_ref}" ${engdir}/*
   fi
 
   # Tests
@@ -133,8 +133,7 @@ _cpu="$2"
   mkdir -p "${_DST}/lib/pkgconfig"
 
   if ls ${engdir}/*.dll > /dev/null 2>&1; then
-    mkdir -p "${_DST}/lib/engines"
-    cp -f -p ${engdir}/*.dll "${_DST}/lib/engines/"
+    cp -f -p -r ${engdir} "${_DST}/lib/"
   fi
 
   cp -f -p ${_pkg}/ssl/openssl.cnf     "${_DST}/"

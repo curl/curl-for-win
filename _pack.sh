@@ -37,6 +37,7 @@ touch -c -r "$1" "${_fn}"
 
 find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' \;
 
+# NOTE: This isn't effective on MSYS2
 find "${_DST}" \( -name '*.exe' -or -name '*.dll' \) -exec chmod -x {} +
 
 create_pack() {

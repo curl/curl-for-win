@@ -33,7 +33,7 @@ _cpu="$2"
     unset _HOST
     case "${os}" in
       win)   _HOST='x86_64-pc-mingw32';;
-      linux) _HOST='x86_64-pc-linux';;
+      linux) _HOST='x86_64-pc-linux';;  # x86_64-pc-linux-gnu
       mac)   _HOST='x86_64-apple-darwin';;
       bsd)   _HOST='x86_64-pc-bsd';;
     esac

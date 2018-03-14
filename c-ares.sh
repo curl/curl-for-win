@@ -51,6 +51,7 @@ _cpu="$2"
   [ "${_cpu}" = '64' ] && [ "${_CCVER}" -ge '05' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x154000000"
 
   options='-DCMAKE_SYSTEM_NAME=Windows'
+  options="${options} -DCMAKE_BUILD_TYPE=Release"
   options="${options} -DCARES_STATIC=1"
   options="${options} -DCARES_STATIC_PIC=1"
   options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
