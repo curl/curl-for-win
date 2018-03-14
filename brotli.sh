@@ -48,6 +48,7 @@ _cpu="$2"
   [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
   options='-DCMAKE_SYSTEM_NAME=Windows'
+  options="${options} -DCMAKE_BUILD_TYPE=Release"
   options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
   options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
 
