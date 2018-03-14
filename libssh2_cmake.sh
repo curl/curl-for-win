@@ -9,7 +9,7 @@ export _BAS
 export _DST
 
 _NAM="$(basename "$0")"
-_NAM="$(echo "${_NAM}" | cut -f 1 -d '.' | cut -f 1 -d '-')"
+_NAM="$(echo "${_NAM}" | cut -f 1 -d '.' | cut -f 1 -d '_')"
 _VER="$1"
 _cpu="$2"
 
@@ -94,7 +94,6 @@ _cpu="$2"
         "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
         "-DCMAKE_C_COMPILER=clang" \
         "-DCMAKE_C_FLAGS=${_CFLAGS}" \
-        "-DCMAKE_EXE_LINKER_FLAGS=-static-libgcc" \
         "-DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc ${_LDFLAGS}"
     else
       unset CC
