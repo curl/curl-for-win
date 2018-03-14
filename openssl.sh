@@ -16,6 +16,18 @@ _cpu="$2"
 (
   cd "${_NAM}" || exit 0
 
+  # Detect host OS
+  case "$(uname)" in
+    *_NT*)   os='win';;
+    Linux*)  os='linux';;
+    Darwin*) os='mac';;
+    *BSD)    os='bsd';;
+  esac
+
+  if [ "${os}" = 'win' ]; then
+    export PATH="${PATH}:/usr/bin/core_perl"
+  fi
+
   readonly _ref='CHANGES'
 
   # Build
@@ -65,7 +77,8 @@ _cpu="$2"
   [ "$(echo "${OPENSSL_VER_}" | cut -c -4)" = '1.1.' ] || make depend
   make
   # Install it so that it can be detected by CMake
-  make install "DESTDIR=$(pwd)/pkg" > /dev/null
+  # FIXME: 'pod2man: command not found' and 'pod2html: command not found' errors
+  make install "DESTDIR=$(pwd)/pkg" > /dev/null # 2>&1
 
   # DESTDIR= + --prefix=
   _pkg='pkg/usr/local'
@@ -120,8 +133,8 @@ _cpu="$2"
   mkdir -p "${_DST}/lib/pkgconfig"
 
   if ls ${engdir}/*.dll > /dev/null 2>&1; then
-    mkdir -p "${_DST}/${engdir}"
-    cp -f -p ${engdir}/*.dll  "${_DST}/${engdir}/"
+    mkdir -p "${_DST}/lib/engines"
+    cp -f -p ${engdir}/*.dll "${_DST}/lib/engines/"
   fi
 
   cp -f -p ${_pkg}/ssl/openssl.cnf     "${_DST}/"
