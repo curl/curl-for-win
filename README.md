@@ -29,7 +29,7 @@
     [LLVM/Clang](https://clang.llvm.org/) for projects supporting it.
   - Binaries are cross-built and published from macOS
     (via [Travis CI](https://travis-ci.org/)), using LLVM/Clang for curl,
-    libssh2, nghttp2, c-ares, brotli and zlib, and GCC for the remaining few.
+    libssh2, nghttp2, c-ares, brotli and zlib, and GCC for OpenSSL.
   - Binaries are built with supported [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29) options enabled.
   - Binaries are using [DWARF](https://en.wikipedia.org/wiki/DWARF) in x86 and
     [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH)
@@ -56,8 +56,7 @@
     [WinSSL](https://en.wikipedia.org/wiki/Cryptographic_Service_Provider)
     available as SSL backends.
   - Optional support for
-    [C-ares](https://c-ares.haxx.se/),
-    [librtmp](https://rtmpdump.mplayerhq.hu/).
+    [C-ares](https://c-ares.haxx.se/).
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
   - If you need a download with a stable checksum, link to the penultimate
     version. Only the current latest versions are kept updated with newer
