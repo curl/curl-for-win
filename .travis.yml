@@ -13,6 +13,8 @@ language: c
 
 addons:
   apt:
+    config:
+      retries: true
     packages: [ binutils-mingw-w64, gcc-mingw-w64, cmake, gnupg-curl, dos2unix, realpath ]
 
 matrix:
