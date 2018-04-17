@@ -133,7 +133,7 @@ _cpu="$2"
   mkdir -p "${_DST}/lib/pkgconfig"
 
   if ls ${engdir}/*.dll > /dev/null 2>&1; then
-    cp -f -p -r ${engdir} "${_DST}/lib/"
+    cp -f -p -r ${engdir} "${_DST}/"
   fi
 
   cp -f -p ${_pkg}/ssl/openssl.cnf     "${_DST}/"

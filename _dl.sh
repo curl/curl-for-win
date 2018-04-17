@@ -13,10 +13,8 @@ export NGHTTP2_VER_='1.31.0'
 export NGHTTP2_HASH=36573c2dc74f0da872b02a3ccf1f1419d6b992dd4703dc866e5a289d36397ac7
 export CARES_VER_='1.14.0'
 export CARES_HASH=45d3c1fd29263ceec2afc8ff9cd06d5f8f889636eb4e80ce3cc7f0eaf7aadc6e
-export OPENSSL_VER_='1.1.0g'
-export OPENSSL_HASH=de4d501267da39310905cb6dc8c6121f7a2cad45a7707f76df828fe1b85073af
-export LIBRTMP_VER_='2.4+20151223'
-export LIBRTMP_HASH=5c032f5c8cc2937eb55a81a94effdfed3b0a0304b6376147b86f951e225e3ab5
+export OPENSSL_VER_='1.1.0h'
+export OPENSSL_HASH=5835626cde9e99656585fc7aaa2302a73a7e1340bf8c14fd635a62c66802a517
 export LIBSSH2_VER_='1.8.0'
 export LIBSSH2_HASH=39f34e2f6835f4b992cafe8625073a88e5a28ba78f83e8099610a7b3af4676d4
 export CURL_VER_='7.59.0'
@@ -35,10 +33,9 @@ esac
 
 if [ "${os}" != 'win' ]; then
   # Install required component
-  # TODO: add `--progress-bar off` when pip 9.1.0 hits the drives
   pip3 --version
   pip3 --disable-pip-version-check install --user --upgrade pip
-  pip3 install --user pefile
+  pip3 --progress-bar off install --user pefile
 fi
 
 alias curl='curl -fsS --connect-timeout 15 --retry 3'
@@ -140,17 +137,6 @@ tar -xvf pack.bin > /dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r openssl && mv openssl-* openssl
 [ -f "openssl${_patsuf}.patch" ] && dos2unix < "openssl${_patsuf}.patch" | patch -N -p1 -d openssl
-
-# Do not include this by default to avoid an unnecessary libcurl dependency
-# and potential licensing issues.
-if [ "${_BRANCH#*librtmp*}" != "${_BRANCH}" ]; then
-  # librtmp
-  curl -o pack.bin 'https://mirrorservice.org/sites/ftp.debian.org/debian/pool/main/r/rtmpdump/rtmpdump_2.4+20151223.gitfa8646d.1.orig.tar.gz' || exit 1
-  openssl dgst -sha256 pack.bin | grep -q "${LIBRTMP_HASH}" || exit 1
-  tar -xvf pack.bin > /dev/null 2>&1 || exit 1
-  rm pack.bin
-  rm -f -r librtmp && mv rtmpdump-* librtmp
-fi
 
 # libssh2
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
