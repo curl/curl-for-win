@@ -29,7 +29,7 @@ matrix:
       env: DOCKER_IMAGE=ubuntu:rolling
     - os: osx
       # https://docs.travis-ci.com/user/reference/osx/#OS-X-Version
-      osx_image: &mac-image xcode9.2
+      osx_image: &mac-image xcode9.3
       compiler: mingw-clang
       env: CPU=64
     - os: osx
