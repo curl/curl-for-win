@@ -69,10 +69,9 @@ build_single_target() {
     export _MAKE='mingw32-make'
 
     # Install required component
-    # TODO: add `--progress-bar off` when pip 9.1.0 hits the drives
+    # TODO: add `--progress-bar off` when pip 10.0.0 is available
     pip3 --version
-    pip3 --disable-pip-version-check install --user --upgrade pip
-    pip3 install --user pefile
+    pip3 --disable-pip-version-check install --user pefile
   else
     if [ "${CC}" = 'mingw-clang' ] && [ "${os}" = 'mac' ]; then
       export PATH="/usr/local/opt/llvm/bin:${_ori_path}"

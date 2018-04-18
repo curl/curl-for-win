@@ -33,9 +33,9 @@ esac
 
 if [ "${os}" != 'win' ]; then
   # Install required component
+  # TODO: add `--progress-bar off` when pip 10.0.0 is available
   pip3 --version
-  pip3 --disable-pip-version-check install --user --upgrade pip
-  pip3 --progress-bar off install --user pefile
+  pip3 --disable-pip-version-check install --user pefile
 fi
 
 alias curl='curl -fsS --connect-timeout 15 --retry 3'
