@@ -1,9 +1,9 @@
 # https://lint.travis-ci.org/
 branches:
   only:
-  - master
-  - dev-travis
-  - test-travis
+    - master
+    - dev-travis
+    - test-travis
 notifications:
   email: false
 git:
@@ -14,7 +14,7 @@ addons:
   apt:
     config:
       retries: true
-    packages: [ binutils-mingw-w64, gcc-mingw-w64, cmake, gnupg-curl, dos2unix, realpath ]
+    packages: [binutils-mingw-w64, gcc-mingw-w64, cmake, gnupg-curl, dos2unix, realpath]
 
 matrix:
   include:
@@ -23,7 +23,7 @@ matrix:
       sudo: required
       group: edge
       compiler: mingw-clang
-      services: [ docker ]
+      services: [docker]
       # https://hub.docker.com/_/ubuntu/
       env: DOCKER_IMAGE=ubuntu:rolling
     - os: osx
