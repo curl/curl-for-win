@@ -69,7 +69,7 @@ before_install:
         apt-get -qq install \
           curl git make python3-pip \
           binutils-mingw-w64 gcc-mingw-w64 ${_optpkg} cmake \
-          zip time jq dos2unix realpath osslsigncode wine-stable wine64 wine32
+          zip time jq dos2unix osslsigncode wine-stable wine64 wine32
         ./_build.sh'
     fi
 
