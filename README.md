@@ -10,13 +10,13 @@
     **Note that the `.7z` format is discontinued. Update your download links
     accordingly.**<br>
     `.xz` files and the resulting `.tar` archive can also be extracted using
-    7-Zip on Windows.
+    [7-Zip](https://www.7-zip.org/) on Windows.
   - Standalone `curl.exe` (only [`msvcrt.dll`](https://en.wikipedia.org/wiki/Microsoft_Windows_library_files#MSVCRT.DLL.2C_MSVCPP.DLL_and_CRTDLL.DLL) is [required](https://blogs.msdn.microsoft.com/oldnewthing/20140411-00/?p=1273)).
   - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2)
     support enabled.
   - curl/libcurl features enabled by default:
     <br>`dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
-    <br>`AsynchDNS IDN IPv6 Largefile SSPI Kerberos SPNEGO NTLM SSL libz TLS-SRP HTTP2 HTTPS-proxy MultiSSL`
+    <br>`AsynchDNS IDN IPv6 Largefile SSPI Kerberos SPNEGO NTLM SSL libz brotli TLS-SRP HTTP2 HTTPS-proxy MultiSSL`
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the
     build [in public](https://travis-ci.org/vszakats/curl-for-win/branches),
