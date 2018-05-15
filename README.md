@@ -5,7 +5,7 @@
 # Automated, reproducible, transparent, Windows builds for [curl](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [brotli](https://github.com/google/brotli), [libssh2](https://libssh2.org/) and [OpenSSL 1.1](https://www.openssl.org/)
 
   - Packaging aims to follow popular binary releases found on the internet.
-  - Both x86 and x64 packages are built using the same process.
+  - Both x64 and x86 packages are built using the same process.
   - Binary packages are downloadable in `.zip`, `.tar.xz` and `.7z` formats.<br>
     **Note that the `.7z` format is discontinued. Update your download links
     accordingly.**<br>
@@ -21,7 +21,7 @@
     open source code, C compiler, build scripts and running the
     build [in public](https://travis-ci.org/vszakats/curl-for-win/branches),
     with open, auditable [build logs](#live-build-logs).
-  - C compiler toolchain is latest MinGW-w64 (non-multilib, x86 and x64)
+  - C compiler toolchain is latest MinGW-w64 (non-multilib, x64 and x86)
     either via [Homebrew](https://brew.sh/) (on macOS),
     [APT](https://en.wikipedia.org/wiki/APT_(Debian)) (on Ubuntu via Docker) or
     [MSYS2](https://www.msys2.org/) (on Windows).
