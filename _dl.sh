@@ -5,12 +5,12 @@
 
 export ZLIB_VER_='1.2.11'
 export ZLIB_HASH=629380c90a77b964d896ed37163f5c3a34f6e6d897311f1df2a7016355c45eff
-export BROTLI_VER_='1.0.3'
-export BROTLI_HASH=7948154166ef8556f8426a4ede219aaa98a81a5baffe1f7cf2523fa67d59cd1c
+export BROTLI_VER_='1.0.4'
+export BROTLI_HASH=2268a3dff1cc36e18549e89a51ee0cd9513908a977d56d6a1f9d4c61c2af37c3
 export LIBIDN2_VER_='2.0.4'
 export LIBIDN2_HASH=644b6b03b285fb0ace02d241d59483d98bc462729d8bb3608d5cad5532f3d2f0
-export NGHTTP2_VER_='1.31.0'
-export NGHTTP2_HASH=36573c2dc74f0da872b02a3ccf1f1419d6b992dd4703dc866e5a289d36397ac7
+export NGHTTP2_VER_='1.32.0'
+export NGHTTP2_HASH=700a89d59fcc55acc2b18184001bfb3220fa6a6e543486aca35f40801cba6f7d
 export CARES_VER_='1.14.0'
 export CARES_HASH=45d3c1fd29263ceec2afc8ff9cd06d5f8f889636eb4e80ce3cc7f0eaf7aadc6e
 export OPENSSL_VER_='1.1.0h'
@@ -33,9 +33,9 @@ esac
 
 if [ "${os}" != 'win' ]; then
   # Install required component
+  # TODO: add `--progress-bar off` when pip 10.0.0 is available
   pip3 --version
-  pip3 --disable-pip-version-check install --user --upgrade pip
-  pip3 --progress-bar off install --user pefile
+  pip3 --disable-pip-version-check install --user pefile
 fi
 
 alias curl='curl -fsS --connect-timeout 15 --retry 3'
