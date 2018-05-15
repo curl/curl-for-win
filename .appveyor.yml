@@ -36,7 +36,7 @@ build_script:
   - cmd: sh -c ./_build.sh
   - sh: sudo dpkg --add-architecture i386
   - sh: sudo apt-get -qq update
-  - sh: sudo apt-get -qq install curl git make python3-pip binutils-mingw-w64 gcc-mingw-w64 clang autoconf automake libtool cmake zip time jq dos2unix osslsigncode wine-stable wine64 wine32
+  - sh: sudo apt-get -qq install curl git make python3-pip binutils-mingw-w64 gcc-mingw-w64 clang autoconf automake libtool cmake zip time jq dos2unix osslsigncode
   - sh: ./_build.sh
 artifacts:
   - path: '*-*-mingw*.*'
