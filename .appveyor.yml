@@ -5,9 +5,12 @@ branches:
   except:
     - dev-travis
     - test-travis
-image: Visual Studio 2017
+image:
+  - Visual Studio 2017
+  - Ubuntu
+# services:
+#   - docker
 clone_depth: 8
-clone_folder: C:\w\
 build:
   verbosity: detailed
 environment:
@@ -21,21 +24,27 @@ environment:
     secure: pVgDvVAXHLE+EMsDNKa+VY3kz/w1DLWpIAAiaEoahY7tRx7QpMzlMDND07CN1xN+
   CODESIGN_KEY_PASS:
     secure: WpvrivnhUx4RI4Y02hRjj6T+7IGQADpdU5nIQh1oW8jrUaujbmUmGCxG6vANeasz
+  APPVEYOR_YML_DISABLE_PS_LINUX: true
   CC: mingw-clang
 build_script:
-  - set PATH=C:\msys64\usr\bin;%SystemRoot%\system32
-  - pacman --noconfirm --ask 20 --noprogressbar -S --needed mc
-  - pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
-  - pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
-  - if "%CC%" == "mingw-clang" set _OPTPKG=mingw-w64-{i686,x86_64}-clang
-  - pacman --noconfirm --ask 20 --noprogressbar -S --needed zip mingw-w64-{i686,x86_64}-{cmake,jq,osslsigncode,python3-pip} %_OPTPKG%
-  - sh -c ./_build.sh
+  - cmd: set PATH=C:\msys64\usr\bin;%SystemRoot%\system32
+  - cmd: pacman --noconfirm --ask 20 --noprogressbar -S --needed mc
+  - cmd: pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
+  - cmd: pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
+  - cmd: if "%CC%" == "mingw-clang" set _OPTPKG=mingw-w64-{i686,x86_64}-clang
+  - cmd: pacman --noconfirm --ask 20 --noprogressbar -S --needed zip mingw-w64-{i686,x86_64}-{cmake,jq,osslsigncode,python3-pip} %_OPTPKG%
+  - cmd: sh -c ./_build.sh
+  - sh: sudo dpkg --add-architecture i386
+  - sh: sudo apt-get -qq update
+  - sh: sudo apt-get -qq install curl git make python3-pip binutils-mingw-w64 gcc-mingw-w64 clang autoconf automake libtool cmake zip time jq dos2unix osslsigncode
+  - sh: ./_build.sh
 artifacts:
   - path: '*-*-mingw*.*'
     name: master
   - path: 'all-mingw*.*'
     name: all
 # init:
+#   - sh: curl -sfL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
 #   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 # on_finish:
 #   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
