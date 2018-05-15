@@ -11,7 +11,6 @@ image:
 services:
   - docker
 clone_depth: 8
-clone_folder: C:\w\
 build:
   verbosity: detailed
 environment:
