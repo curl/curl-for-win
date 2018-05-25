@@ -21,7 +21,7 @@ index 700cccfa85..33e4ecfc26 100644
  
  # We may need these someday
 diff --git a/src/curl.rc b/src/curl.rc
-index 5f49d22369..cc0bc89950 100644
+index 5f49d22369..19773abd34 100644
 --- a/src/curl.rc
 +++ b/src/curl.rc
 @@ -5,7 +5,7 @@
@@ -33,7 +33,7 @@ index 5f49d22369..cc0bc89950 100644
   *
   * This software is licensed as described in the file COPYING, which
   * you should have received as part of this distribution. The terms
-@@ -61,3 +61,53 @@ BEGIN
+@@ -61,3 +61,48 @@ BEGIN
      VALUE "Translation", 0x409, 1200
    END
  END
@@ -78,11 +78,6 @@ index 5f49d22369..cc0bc89950 100644
 +        "</requestedPrivileges>"
 +      "</security>"
 +    "</trustInfo>"
-+    "<file name=""advapi32.dll"" loadFrom=""%SystemRoot%\system32\advapi32.dll""/>"
-+    "<file name=""crypt32.dll"" loadFrom=""%SystemRoot%\system32\crypt32.dll""/>"
-+    "<file name=""kernel32.dll"" loadFrom=""%SystemRoot%\system32\kernel32.dll""/>"
-+    "<file name=""wldap32.dll"" loadFrom=""%SystemRoot%\system32\wldap32.dll""/>"
-+    "<file name=""ws2_32.dll"" loadFrom=""%SystemRoot%\system32\ws2_32.dll""/>"
 +  "</assembly>"
 +END
 +
