@@ -82,25 +82,3 @@ index 5f49d22369..19773abd34 100644
 +END
 +
 +#endif
-diff --git a/winbuild/MakefileBuild.vc b/winbuild/MakefileBuild.vc
-index bf79db3760..6c23ccaadf 100644
---- a/winbuild/MakefileBuild.vc
-+++ b/winbuild/MakefileBuild.vc
-@@ -5,7 +5,7 @@
- #                            | (__| |_| |  _ <| |___
- #                             \___|\___/|_| \_\_____|
- #
--# Copyright (C) 1999 - 2017, Daniel Stenberg, <daniel@haxx.se>, et al.
-+# Copyright (C) 1999 - 2018, Daniel Stenberg, <daniel@haxx.se>, et al.
- #
- # This software is licensed as described in the file COPYING, which
- # you should have received as part of this distribution. The terms
-@@ -352,6 +352,8 @@ GEN_PDB = true
- 
- !IFDEF EMBED_MANIFEST
- MANIFESTTOOL = $(MT) -manifest $(DIRDIST)\bin\$(PROGRAM_NAME).manifest -outputresource:$(DIRDIST)\bin\$(PROGRAM_NAME);1
-+!ELSE
-+CURL_RC_FLAGS = /dCURL_EMBED_MANIFEST $(CURL_RC_FLAGS)
- !ENDIF
- 
- # Runtime library configuration
