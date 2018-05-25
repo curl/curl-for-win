@@ -6,10 +6,10 @@ branches:
     - dev-travis
     - test-travis
 image:
-  - Ubuntu
   - Visual Studio 2017
-services:
-  - docker
+  - Ubuntu
+# services:
+#   - docker
 clone_depth: 8
 build:
   verbosity: detailed
