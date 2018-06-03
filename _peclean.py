@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """Sets internal timestamps in PE executables
-Copyright 2015-2018 Viktor Szakats <https://github.com/vszakats>
+Copyright 2015-2018 Viktor Szakats <https://vszakats.net/>
 See LICENSE.md
 """
 
