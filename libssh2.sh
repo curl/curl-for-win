@@ -16,6 +16,14 @@ _cpu="$2"
 (
   cd "${_NAM}" || exit
 
+  # Detect host OS
+  case "$(uname)" in
+    *_NT*)   os='win';;
+    Linux*)  os='linux';;
+    Darwin*) os='mac';;
+    *BSD)    os='bsd';;
+  esac
+
   # Prepare build
 
   find . -name '*.dll' -type f -delete
