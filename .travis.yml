@@ -25,6 +25,7 @@ addons:
 
 matrix:
   include:
+    # TODO: migrate to https://hub.docker.com/_/debian/ debian:stable-backports
     - os: linux
       dist: trusty
       sudo: required
@@ -33,11 +34,13 @@ matrix:
       services: [docker]
       # https://hub.docker.com/_/ubuntu/
       env: DOCKER_IMAGE=ubuntu:rolling
+    # TODO: remove after migrating to Linux builds
     - os: osx
       # https://docs.travis-ci.com/user/reference/osx/#OS-X-Version
       osx_image: &mac-image xcode9.3
       compiler: mingw-clang
       env: CPU=64
+    # TODO: remove after migrating to Linux builds
     - os: osx
       osx_image: *mac-image
       compiler: mingw-clang
