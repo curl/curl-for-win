@@ -63,7 +63,7 @@ before_install:
         --env-file <(env | grep -E '^(TRAVIS_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC)') \
         "${DOCKER_IMAGE}" sh -c '
         cat /etc/*-release
-        [ "${CC}" = 'mingw-clang' ] && _optpkg='clang'
+        [ "${CC}" = 'mingw-clang' ] && _optpkg="clang${_CCSUFFIX}"
         [ "${TRAVIS_BRANCH#*dev*}" != "${TRAVIS_BRANCH}" ] && _optpkg="${_optpkg} autoconf automake libtool"
         dpkg --add-architecture i386
         apt-get -qq update
