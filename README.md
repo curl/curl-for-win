@@ -23,14 +23,16 @@
     with open, auditable [build logs](#live-build-logs).
   - C compiler toolchain is latest MinGW-w64 (non-multilib, x64 and x86)
     either via [Homebrew](https://brew.sh/) (on macOS),
-    [APT](https://en.wikipedia.org/wiki/APT_(Debian)) (on Ubuntu via Docker) or
-    [MSYS2](https://www.msys2.org/) (on Windows).
-    C compiler is [GCC](https://gcc.gnu.org/) and optionally
+    [APT](https://en.wikipedia.org/wiki/APT_(Debian)) (on Ubuntu via Docker)
+    or [MSYS2](https://www.msys2.org/) (on Windows).
+    C compiler is [GCC](https://gcc.gnu.org/) or
     [LLVM/Clang](https://clang.llvm.org/) for projects supporting it.
   - Binaries are cross-built and published from macOS
     (via [Travis CI](https://travis-ci.org/)), using LLVM/Clang for curl,
     libssh2, nghttp2, c-ares, brotli and zlib, and GCC for OpenSSL.
-  - Binaries are built with supported [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29) options enabled.
+  - Binaries are built with supported
+    [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29)
+    options enabled.
   - Binaries are using [DWARF](https://en.wikipedia.org/wiki/DWARF) in x86 and
     [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH)
     in x64 builds.
