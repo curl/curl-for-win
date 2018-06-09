@@ -13,7 +13,7 @@ language: c
 
 matrix:
   include:
-    # TODO: migrate to https://hub.docker.com/_/debian/ debian:stable-backports
+    # TODO: remove after migrating to Debian builds
     - os: linux
       dist: trusty
       sudo: required
@@ -22,13 +22,13 @@ matrix:
       services: [docker]
       # https://hub.docker.com/_/ubuntu/
       env: DOCKER_IMAGE=ubuntu:rolling
-    # TODO: remove after migrating to Linux builds
+    # TODO: remove after migrating to Debian builds
     - os: osx
       # https://docs.travis-ci.com/user/reference/osx/#OS-X-Version
       osx_image: &mac-image xcode9.3
       compiler: mingw-clang
       env: CPU=64
-    # TODO: remove after migrating to Linux builds
+    # TODO: remove after migrating to Debian builds
     - os: osx
       osx_image: *mac-image
       compiler: mingw-clang
@@ -36,16 +36,7 @@ matrix:
 
 before_install:
   - |
-    if [ "$TRAVIS_OS_NAME" = 'osx' ]; then
-      [ "${CC}" = 'mingw-clang' ] && _optpkg='llvm'
-      export HOMEBREW_NO_AUTO_UPDATE=1
-      time travis_retry brew update > /dev/null
-      time travis_retry brew upgrade python3
-      time travis_retry brew install xz gnu-tar mingw-w64 ${_optpkg} \
-                                     jq osslsigncode dos2unix gnu-sed
-      time travis_retry brew install --force-bottle --build-bottle wine
-      time wineboot --init
-    elif [ "$TRAVIS_OS_NAME" = 'linux' && "${DOCKER_IMAGE}" = 'ubuntu:rolling' ]; then
+    if [ "$TRAVIS_OS_NAME" = 'linux' && "${DOCKER_IMAGE}" = 'ubuntu:rolling' ]; then
       time docker pull "${DOCKER_IMAGE}"
       time docker run -it -v "${PWD}:${PWD}" -w "${PWD}" \
         --env-file <(env | grep -E '^(TRAVIS_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC)') \
@@ -60,6 +51,15 @@ before_install:
           binutils-mingw-w64 gcc-mingw-w64 ${_optpkg} cmake \
           zip time jq dos2unix osslsigncode wine-stable wine64 wine32
         ./_build.sh'
+    elif [ "$TRAVIS_OS_NAME" = 'osx' ]; then
+      [ "${CC}" = 'mingw-clang' ] && _optpkg='llvm'
+      export HOMEBREW_NO_AUTO_UPDATE=1
+      time travis_retry brew update > /dev/null
+      time travis_retry brew upgrade python3
+      time travis_retry brew install xz gnu-tar mingw-w64 ${_optpkg} \
+                                     jq osslsigncode dos2unix gnu-sed
+      time travis_retry brew install --force-bottle --build-bottle wine
+      time wineboot --init
     fi
 
 script:
