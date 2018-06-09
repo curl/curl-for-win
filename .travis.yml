@@ -13,6 +13,14 @@ language: c
 
 matrix:
   include:
+    - os: linux
+      dist: trusty
+      sudo: required
+      group: edge
+      compiler: mingw-clang
+      services: [docker]
+      # https://hub.docker.com/_/debian/
+      env: DOCKER_IMAGE=debian:unstable
     # TODO: remove after migrating to Debian builds
     - os: linux
       dist: trusty
@@ -36,7 +44,23 @@ matrix:
 
 before_install:
   - |
-    if [ "$TRAVIS_OS_NAME" = 'linux' && "${DOCKER_IMAGE}" = 'ubuntu:rolling' ]; then
+    if [ "$TRAVIS_OS_NAME" = 'linux' && "${DOCKER_IMAGE}" = 'debian:unstable' ]; then
+      time docker pull "${DOCKER_IMAGE}"
+      time docker run -it -v "${PWD}:${PWD}" -w "${PWD}" \
+        --env-file <(env | grep -E '^(TRAVIS_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC)') \
+        "${DOCKER_IMAGE}" sh -c '
+        cat /etc/*-release
+        export _CCSUFFIX='-6.0'
+        [ "${CC}" = 'mingw-clang' ] && _optpkg="clang${_CCSUFFIX}"
+        [ "${TRAVIS_BRANCH#*dev*}" != "${TRAVIS_BRANCH}" ] && _optpkg="${_optpkg} autoconf automake libtool"
+        dpkg --add-architecture i386
+        apt-get -qq update
+        apt-get -qq install \
+          curl git make python3-pip \
+          gcc-mingw-w64 ${_optpkg} cmake \
+          zip time jq dos2unix osslsigncode wine64 wine32
+        ./_build.sh'
+    elif [ "$TRAVIS_OS_NAME" = 'linux' && "${DOCKER_IMAGE}" = 'ubuntu:rolling' ]; then
       time docker pull "${DOCKER_IMAGE}"
       time docker run -it -v "${PWD}:${PWD}" -w "${PWD}" \
         --env-file <(env | grep -E '^(TRAVIS_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC)') \
