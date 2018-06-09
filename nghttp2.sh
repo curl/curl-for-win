@@ -55,6 +55,9 @@ _cpu="$2"
   options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
   options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
   options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
+  # Avoid all the issues with C++ detection,
+  # we don't need it with ENABLE_LIB_ONLY.
+  options="${options} -DCMAKE_CXX_COMPILER_WORKS=1"
 
   if [ "${CC}" = 'mingw-clang' ]; then
     unset CC
@@ -66,11 +69,8 @@ _cpu="$2"
       "-DCMAKE_SYSROOT=${_SYSROOT}" \
       "-DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}" \
       "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
-      "-DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}" \
       "-DCMAKE_C_COMPILER=clang${_CCSUFFIX}" \
-      "-DCMAKE_CXX_COMPILER=clang++${_CCSUFFIX}" \
       "-DCMAKE_C_FLAGS=${_CFLAGS}" \
-      "-DCMAKE_CXX_FLAGS=${_CFLAGS}" \
       '-DCMAKE_EXE_LINKER_FLAGS=-static-libgcc' \
       '-DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc'
   else
@@ -79,7 +79,6 @@ _cpu="$2"
     # shellcheck disable=SC2086
     cmake . ${options} "${opt_gmsys}" \
       "-DCMAKE_C_COMPILER=${_CCPREFIX}gcc" \
-      "-DCMAKE_CXX_COMPILER=${_CCPREFIX}g++" \
       "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}"
   fi
 
