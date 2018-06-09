@@ -11,18 +11,6 @@ git:
   depth: 8
 language: c
 
-addons:
-  apt:
-    config:
-      retries: true
-    packages:
-      - binutils-mingw-w64
-      - gcc-mingw-w64
-      - cmake
-      - gnupg-curl
-      - dos2unix
-      - realpath
-
 matrix:
   include:
     # TODO: migrate to https://hub.docker.com/_/debian/ debian:stable-backports
