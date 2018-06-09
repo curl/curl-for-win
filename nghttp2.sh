@@ -55,8 +55,8 @@ _cpu="$2"
   options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
   options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
   options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
-  # Avoid all the issues with C++ detection,
-  # we don't need it with ENABLE_LIB_ONLY.
+  # We don't need C++ with ENABLE_LIB_ONLY, so make sure to skip the
+  # detection logic and all the potential detection issues with it.
   options="${options} -DCMAKE_CXX_COMPILER_WORKS=1"
 
   if [ "${CC}" = 'mingw-clang' ]; then
