@@ -66,7 +66,6 @@ _cpu="$2"
       "-DCMAKE_C_COMPILER=clang${_CCSUFFIX}" \
       "-DCMAKE_CXX_COMPILER=clang++${_CCSUFFIX}" \
       "-DCMAKE_C_FLAGS=${_CFLAGS}" \
-      "-DCMAKE_CXX_FLAGS=${_CFLAGS}" \
       '-DCMAKE_EXE_LINKER_FLAGS=-static-libgcc' \
       '-DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc'
   else
