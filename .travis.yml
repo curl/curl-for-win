@@ -45,7 +45,7 @@ before_install:
                                      jq osslsigncode dos2unix gnu-sed
       time travis_retry brew install --force-bottle --build-bottle wine
       time wineboot --init
-    elif [ "$TRAVIS_OS_NAME" = 'linux' ]; then
+    elif [ "$TRAVIS_OS_NAME" = 'linux' && "${DOCKER_IMAGE}" = 'ubuntu:rolling' ]; then
       time docker pull "${DOCKER_IMAGE}"
       time docker run -it -v "${PWD}:${PWD}" -w "${PWD}" \
         --env-file <(env | grep -E '^(TRAVIS_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC)') \
