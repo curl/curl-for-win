@@ -67,9 +67,9 @@ _cpu="$2"
       "-DCMAKE_SYSROOT=${_SYSROOT}" \
       "-DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}" \
       "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
-      "-DCMAKE_C_COMPILER=clang" \
+      "-DCMAKE_C_COMPILER=clang${_CCSUFFIX}" \
       "-DCMAKE_C_FLAGS=${_CFLAGS}" \
-      "-DCMAKE_EXE_LINKER_FLAGS=-static-libgcc" \
+      '-DCMAKE_EXE_LINKER_FLAGS=-static-libgcc' \
       "-DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc ${_LDFLAGS}"
   else
     unset CC
