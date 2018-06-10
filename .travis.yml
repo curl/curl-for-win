@@ -46,7 +46,7 @@ before_install:
   - |
     if [ "$TRAVIS_OS_NAME" = 'linux' && "${DOCKER_IMAGE}" = 'debian:unstable' ]; then
       time docker pull "${DOCKER_IMAGE}"
-      time docker run -it -v "${PWD}:${PWD}" -w "${PWD}" \
+      time docker run -it -v "$(pwd):$(pwd)" -w "$(pwd)" \
         --env-file <(env | grep -E '^(TRAVIS_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC)') \
         "${DOCKER_IMAGE}" sh -c '
         cat /etc/*-release
@@ -62,7 +62,7 @@ before_install:
         ./_build.sh'
     elif [ "$TRAVIS_OS_NAME" = 'linux' && "${DOCKER_IMAGE}" = 'ubuntu:rolling' ]; then
       time docker pull "${DOCKER_IMAGE}"
-      time docker run -it -v "${PWD}:${PWD}" -w "${PWD}" \
+      time docker run -it -v "$(pwd):$(pwd)" -w "$(pwd)" \
         --env-file <(env | grep -E '^(TRAVIS_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC)') \
         "${DOCKER_IMAGE}" sh -c '
         cat /etc/*-release
