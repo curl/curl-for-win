@@ -27,17 +27,19 @@ environment:
   APPVEYOR_YML_DISABLE_PS_LINUX: true
   CC: mingw-clang
 build_script:
-  - cmd: set PATH=C:\msys64\usr\bin;%SystemRoot%\system32
-  - cmd: pacman --noconfirm --ask 20 --noprogressbar -S --needed mc
-  - cmd: pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
-  - cmd: pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
-  - cmd: if "%CC%" == "mingw-clang" set _OPTPKG=mingw-w64-{i686,x86_64}-clang
-  - cmd: pacman --noconfirm --ask 20 --noprogressbar -S --needed zip mingw-w64-{i686,x86_64}-{cmake,jq,osslsigncode,python3-pip} %_OPTPKG%
-  - cmd: sh -c ./_build.sh
-  - sh: sudo dpkg --add-architecture i386
-  - sh: sudo apt-get -qq update
-  - sh: sudo apt-get -qq install curl git make python3-pip binutils-mingw-w64 gcc-mingw-w64 clang autoconf automake libtool cmake zip time jq dos2unix osslsigncode
-  - sh: ./_build.sh
+  - cmd: |
+      set PATH=C:\msys64\usr\bin;%SystemRoot%\system32
+      pacman --noconfirm --ask 20 --noprogressbar -S --needed mc
+      pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
+      pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
+      if "%CC%" == "mingw-clang" set _OPTPKG=mingw-w64-{i686,x86_64}-clang
+      pacman --noconfirm --ask 20 --noprogressbar -S --needed zip mingw-w64-{i686,x86_64}-{cmake,jq,osslsigncode,python3-pip} %_OPTPKG%
+      sh -c ./_build.sh
+  - sh: |
+      sudo dpkg --add-architecture i386
+      sudo apt-get -qq update
+      sudo apt-get -qq install curl git make python3-pip binutils-mingw-w64 gcc-mingw-w64 clang autoconf automake libtool cmake zip time jq dos2unix osslsigncode
+      ./_build.sh
 artifacts:
   - path: '*-*-mingw*.*'
     name: master
