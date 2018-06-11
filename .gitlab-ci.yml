@@ -1,0 +1,23 @@
+---
+# Docs: https://docs.gitlab.com/ce/pages/
+# yamllint disable rule:line-length
+image: docker:latest
+services:
+  - docker:dind
+
+variables:
+  GIT_DEPTH: "10"
+  DOCKER_IMAGE: debian:unstable
+
+build:
+  script:
+    - |
+      docker pull "${DOCKER_IMAGE}"
+      docker run -it -v "$(pwd):$(pwd)" -w "$(pwd)" \
+        --env-file <(env | grep -E '^(TRAVIS_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC|GITLAB_|CI_)') \
+        "${DOCKER_IMAGE}" sh -c ./_ci_linux_debian.sh
+  artifacts:
+    paths:
+      - public
+  only:
+    - test-gitlab

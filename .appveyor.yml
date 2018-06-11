@@ -32,26 +32,10 @@ build_script:
       time docker pull "${DOCKER_IMAGE}"
       time docker run -v "$(pwd):$(pwd)" -w "$(pwd)" \
         --env-file <(env | grep -E '^(APPVEYOR_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC|GITLAB_|CI_)') \
-        "${DOCKER_IMAGE}" sh -c '
-        cat /etc/*-release
-        export _CCSUFFIX='-6.0'
-        [ "${CC}" = 'mingw-clang' ] && _optpkg="clang${_CCSUFFIX}"
-        [ "${APPVEYOR_REPO_BRANCH#*dev*}" != "${APPVEYOR_REPO_BRANCH}" ] && _optpkg="${_optpkg} autoconf automake libtool"
-        dpkg --add-architecture i386
-        apt-get -qq update
-        apt-get -qq install \
-          curl git make python3-pip \
-          gcc-mingw-w64 ${_optpkg} cmake \
-          zip time jq dos2unix osslsigncode wine64 wine32
-        ./_build.sh'
+        "${DOCKER_IMAGE}" sh -c ./_ci_linux_debian.sh
   - cmd: |
       set PATH=C:\msys64\usr\bin;%SystemRoot%\system32
-      pacman --noconfirm --ask 20 --noprogressbar -S --needed mc
-      pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
-      pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
-      if "%CC%" == "mingw-clang" set _OPTPKG=mingw-w64-{i686,x86_64}-clang
-      pacman --noconfirm --ask 20 --noprogressbar -S --needed zip mingw-w64-{i686,x86_64}-{cmake,jq,osslsigncode,python3-pip} %_OPTPKG%
-      sh -c ./_build.sh
+      sh -c ./_ci_win_msys2.sh
 artifacts:
   - path: '*-*-mingw*.*'
     name: master
