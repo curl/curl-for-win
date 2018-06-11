@@ -1,5 +1,5 @@
 ---
-# Docs: https://docs.gitlab.com/ce/pages/
+# https://docs.gitlab.com/ce/ci/yaml/README.html
 # yamllint disable rule:line-length
 image: docker:latest
 services:
@@ -13,8 +13,9 @@ build:
   script:
     - |
       docker pull "${DOCKER_IMAGE}"
-      docker run -it -v "$(pwd):$(pwd)" -w "$(pwd)" \
-        --env-file <(env | grep -E '^(TRAVIS_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC|GITLAB_|CI_)') \
+      env | grep -E '^(TRAVIS_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC|GITLAB_|CI_)' > _env
+      docker run -v "$(pwd):$(pwd)" -w "$(pwd)" \
+        --env-file ./_env \
         "${DOCKER_IMAGE}" sh -c ./_ci_linux_debian.sh
   artifacts:
     paths:
