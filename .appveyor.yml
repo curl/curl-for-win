@@ -6,8 +6,8 @@ branches:
     - dev-travis
     - test-travis
 image:
-  - Visual Studio 2017
   - Ubuntu
+  - Visual Studio 2017
 services:
   - docker
 clone_depth: 8
@@ -27,14 +27,6 @@ environment:
   APPVEYOR_YML_DISABLE_PS_LINUX: true
   CC: mingw-clang
 build_script:
-  - cmd: |
-      set PATH=C:\msys64\usr\bin;%SystemRoot%\system32
-      pacman --noconfirm --ask 20 --noprogressbar -S --needed mc
-      pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
-      pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
-      if "%CC%" == "mingw-clang" set _OPTPKG=mingw-w64-{i686,x86_64}-clang
-      pacman --noconfirm --ask 20 --noprogressbar -S --needed zip mingw-w64-{i686,x86_64}-{cmake,jq,osslsigncode,python3-pip} %_OPTPKG%
-      sh -c ./_build.sh
   - sh: |
       export DOCKER_IMAGE='debian:unstable'
       time docker pull "${DOCKER_IMAGE}"
@@ -52,6 +44,14 @@ build_script:
           gcc-mingw-w64 ${_optpkg} cmake \
           zip time jq dos2unix osslsigncode wine64 wine32
         ./_build.sh'
+  - cmd: |
+      set PATH=C:\msys64\usr\bin;%SystemRoot%\system32
+      pacman --noconfirm --ask 20 --noprogressbar -S --needed mc
+      pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
+      pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
+      if "%CC%" == "mingw-clang" set _OPTPKG=mingw-w64-{i686,x86_64}-clang
+      pacman --noconfirm --ask 20 --noprogressbar -S --needed zip mingw-w64-{i686,x86_64}-{cmake,jq,osslsigncode,python3-pip} %_OPTPKG%
+      sh -c ./_build.sh
 artifacts:
   - path: '*-*-mingw*.*'
     name: master
