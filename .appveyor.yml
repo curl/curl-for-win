@@ -2,9 +2,10 @@
 # yamllint disable rule:line-length
 version: 1.0.{build}
 branches:
-  except:
-    - dev-travis
-    - test-travis
+  only:
+    - master
+    - dev-appveyor
+    - test-appveyor
 image:
   - Ubuntu
   - Visual Studio 2017

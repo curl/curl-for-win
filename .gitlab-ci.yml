@@ -20,4 +20,6 @@ build:
     paths:
       - public
   only:
+    - master
+    - dev-gitlab
     - test-gitlab
