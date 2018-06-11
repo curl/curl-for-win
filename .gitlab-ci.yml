@@ -1,25 +1,21 @@
 ---
 # https://docs.gitlab.com/ce/ci/yaml/README.html
 # yamllint disable rule:line-length
-image: docker:latest
-services:
-  - docker:dind
 
 variables:
+  GIT_STRATEGY: fetch
   GIT_DEPTH: "8"
-  DOCKER_IMAGE: debian:unstable
 
 build:
+  image: debian:unstable
+  variables:
+    CC: mingw-clang
   script:
-    - |
-      docker pull "${DOCKER_IMAGE}"
-      env | grep -E '^(TRAVIS_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC|GITLAB_|CI_)' > _env
-      docker run -v "$(pwd):$(pwd)" -w "$(pwd)" \
-        --env-file ./_env \
-        "${DOCKER_IMAGE}" sh -c ./_ci_linux_debian.sh
+    - ./_ci_linux_debian.sh
   artifacts:
+    expire_in: 13 weeks
     paths:
-      - public
+      - "*-*-mingw*.*"
   only:
     - master
     - dev-gitlab
