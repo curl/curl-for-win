@@ -1,6 +1,5 @@
 ---
 # https://docs.gitlab.com/ce/ci/yaml/README.html
-# yamllint disable rule:line-length
 
 variables:
   GIT_STRATEGY: fetch
