@@ -6,7 +6,7 @@ services:
   - docker:dind
 
 variables:
-  GIT_DEPTH: "10"
+  GIT_DEPTH: "8"
   DOCKER_IMAGE: debian:unstable
 
 build:
