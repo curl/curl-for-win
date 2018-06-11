@@ -15,8 +15,8 @@ dpkg --add-architecture i386
 apt-get -qq update
 # shellcheck disable=SC2086
 apt-get -qq install \
-  curl git make python3-pip \
-  gcc-mingw-w64 ${_optpkg} cmake \
+  curl git gpg python3-pip make cmake \
+  gcc-mingw-w64 ${_optpkg} \
   zip time jq dos2unix osslsigncode wine64 wine32
 
 ./_build.sh
