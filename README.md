@@ -24,7 +24,7 @@
     with open, auditable [build logs](#live-build-logs).
   - C compiler toolchain is latest MinGW-w64 (non-multilib, x64 and x86)
     either via [Homebrew](https://brew.sh/) (on macOS),
-    [APT](https://en.wikipedia.org/wiki/APT_(Debian)) (on Ubuntu via Docker)
+    [APT](https://en.wikipedia.org/wiki/APT_(Debian)) (on Debian via Docker)
     or [MSYS2](https://www.msys2.org/) (on Windows).
     C compiler is [GCC](https://gcc.gnu.org/) or
     [LLVM/Clang](https://clang.llvm.org/) for projects supporting it.
