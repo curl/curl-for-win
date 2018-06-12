@@ -2,14 +2,15 @@
 # yamllint disable rule:line-length
 version: 1.0.{build}
 branches:
-  except:
-    - dev-travis
-    - test-travis
+  only:
+    - master
+    - dev-appveyor
+    - test-appveyor
 image:
-  - Visual Studio 2017
   - Ubuntu
-# services:
-#   - docker
+  - Visual Studio 2017
+services:
+  - docker
 clone_depth: 8
 build:
   verbosity: detailed
@@ -27,17 +28,18 @@ environment:
   APPVEYOR_YML_DISABLE_PS_LINUX: true
   CC: mingw-clang
 build_script:
-  - cmd: set PATH=C:\msys64\usr\bin;%SystemRoot%\system32
-  - cmd: pacman --noconfirm --ask 20 --noprogressbar -S --needed mc
-  - cmd: pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
-  - cmd: pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
-  - cmd: if "%CC%" == "mingw-clang" set _OPTPKG=mingw-w64-{i686,x86_64}-clang
-  - cmd: pacman --noconfirm --ask 20 --noprogressbar -S --needed zip mingw-w64-{i686,x86_64}-{cmake,jq,osslsigncode,python3-pip} %_OPTPKG%
-  - cmd: sh -c ./_build.sh
-  - sh: sudo dpkg --add-architecture i386
-  - sh: sudo apt-get -qq update
-  - sh: sudo apt-get -qq install curl git make python3-pip binutils-mingw-w64 gcc-mingw-w64 clang autoconf automake libtool cmake zip time jq dos2unix osslsigncode
-  - sh: ./_build.sh
+  - sh: |
+      echo "|${APPVEYOR_REPO_PROVIDER}|"
+      export DOCKER_IMAGE='debian:unstable'
+      time docker pull "${DOCKER_IMAGE}"
+      time docker run -v "$(pwd):$(pwd)" -w "$(pwd)" \
+        --env-file <(env | grep -E '^(APPVEYOR_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC|GITLAB_|CI_)') \
+        "${DOCKER_IMAGE}" \
+        sh -c ./_ci_linux_debian.sh
+  - cmd: |
+      echo "|${APPVEYOR_REPO_PROVIDER}|"
+      set PATH=C:\msys64\usr\bin;%SystemRoot%\system32
+      sh -c ./_ci_win_msys2.sh
 artifacts:
   - path: '*-*-mingw*.*'
     name: master

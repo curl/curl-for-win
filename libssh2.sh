@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2018 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2018 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
 
 export _NAM
@@ -15,6 +15,14 @@ _cpu="$2"
 
 (
   cd "${_NAM}" || exit
+
+  # Detect host OS
+  case "$(uname)" in
+    *_NT*)   os='win';;
+    Linux*)  os='linux';;
+    Darwin*) os='mac';;
+    *BSD)    os='bsd';;
+  esac
 
   # Prepare build
 
@@ -54,7 +62,7 @@ _cpu="$2"
   export CROSSPREFIX="${_CCPREFIX}"
 
   if [ "${CC}" = 'mingw-clang' ]; then
-    export LIBSSH2_CC=clang
+    export LIBSSH2_CC="clang${_CCSUFFIX}"
     if [ "${os}" != 'win' ]; then
       LIBSSH2_CFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${LIBSSH2_CFLAG_EXTRAS}"
       [ "${os}" = 'linux' ] && LIBSSH2_LDFLAG_EXTRAS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${LIBSSH2_LDFLAG_EXTRAS}"

@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2018 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2018 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
 
 export _NAM
@@ -55,6 +55,9 @@ _cpu="$2"
   options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
   options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
   options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
+  # We don't need C++ with ENABLE_LIB_ONLY, so make sure to skip the
+  # detection logic and all the potential detection issues with it.
+  options="${options} -DCMAKE_CXX_COMPILER_WORKS=1"
 
   if [ "${CC}" = 'mingw-clang' ]; then
     unset CC
@@ -66,20 +69,16 @@ _cpu="$2"
       "-DCMAKE_SYSROOT=${_SYSROOT}" \
       "-DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}" \
       "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
-      "-DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}" \
-      "-DCMAKE_C_COMPILER=clang" \
-      "-DCMAKE_CXX_COMPILER=clang++" \
+      "-DCMAKE_C_COMPILER=clang${_CCSUFFIX}" \
       "-DCMAKE_C_FLAGS=${_CFLAGS}" \
-      "-DCMAKE_CXX_FLAGS=${_CFLAGS}" \
-      "-DCMAKE_EXE_LINKER_FLAGS=-static-libgcc" \
-      "-DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc"
+      '-DCMAKE_EXE_LINKER_FLAGS=-static-libgcc' \
+      '-DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc'
   else
     unset CC
 
     # shellcheck disable=SC2086
     cmake . ${options} "${opt_gmsys}" \
       "-DCMAKE_C_COMPILER=${_CCPREFIX}gcc" \
-      "-DCMAKE_CXX_COMPILER=${_CCPREFIX}g++" \
       "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}"
   fi
 

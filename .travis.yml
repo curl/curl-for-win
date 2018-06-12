@@ -11,18 +11,6 @@ git:
   depth: 8
 language: c
 
-addons:
-  apt:
-    config:
-      retries: true
-    packages:
-      - binutils-mingw-w64
-      - gcc-mingw-w64
-      - cmake
-      - gnupg-curl
-      - dos2unix
-      - realpath
-
 matrix:
   include:
     - os: linux
@@ -31,50 +19,28 @@ matrix:
       group: edge
       compiler: mingw-clang
       services: [docker]
-      # https://hub.docker.com/_/ubuntu/
-      env: DOCKER_IMAGE=ubuntu:rolling
+      # https://hub.docker.com/_/debian/
+      env: DOCKER_IMAGE=debian:unstable
+    # TODO: remove after migrating to Debian builds
     - os: osx
       # https://docs.travis-ci.com/user/reference/osx/#OS-X-Version
       osx_image: &mac-image xcode9.3
       compiler: mingw-clang
       env: CPU=64
+    # TODO: remove after migrating to Debian builds
     - os: osx
       osx_image: *mac-image
       compiler: mingw-clang
       env: CPU=32
 
-before_install:
-  - |
-    if [ "$TRAVIS_OS_NAME" = 'osx' ]; then
-      [ "${CC}" = 'mingw-clang' ] && _optpkg='llvm'
-      export HOMEBREW_NO_AUTO_UPDATE=1
-      time travis_retry brew update > /dev/null
-      time travis_retry brew upgrade python3
-      time travis_retry brew install xz gnu-tar mingw-w64 ${_optpkg} \
-                                     jq osslsigncode dos2unix gnu-sed
-      time travis_retry brew install --force-bottle --build-bottle wine
-      time wineboot --init
-    elif [ "$TRAVIS_OS_NAME" = 'linux' ]; then
-      time docker pull "${DOCKER_IMAGE}"
-      time docker run -it -v "${PWD}:${PWD}" -w "${PWD}" \
-        --env-file <(env | grep -E '^(TRAVIS_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC)') \
-        "${DOCKER_IMAGE}" sh -c '
-        cat /etc/*-release
-        ulimit -a
-        df -h
-        [ "${CC}" = 'mingw-clang' ] && _optpkg='clang'
-        [ "${TRAVIS_BRANCH#*dev*}" != "${TRAVIS_BRANCH}" ] && _optpkg="${_optpkg} autoconf automake libtool"
-        dpkg --add-architecture i386
-        apt-get -qq update
-        apt-get -qq install \
-          curl git make python3-pip \
-          binutils-mingw-w64 gcc-mingw-w64 ${_optpkg} cmake \
-          zip time jq dos2unix osslsigncode wine-stable wine64 wine32
-        ./_build.sh'
-    fi
-
 script:
   - |
-    if [ "$TRAVIS_OS_NAME" = 'osx' ]; then
-      ./_build.sh
+    if [ "$TRAVIS_OS_NAME" = 'linux' ]; then
+      time docker pull "${DOCKER_IMAGE}"
+      time docker run -it -v "$(pwd):$(pwd)" -w "$(pwd)" \
+        --env-file <(env | grep -E '^(TRAVIS_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC)') \
+        "${DOCKER_IMAGE}" \
+        sh -c ./_ci_linux_debian.sh
+    elif [ "$TRAVIS_OS_NAME" = 'osx' ]; then
+      ./_ci_mac_homebrew.sh
     fi

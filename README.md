@@ -1,13 +1,14 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
-[![Build Status](https://api.travis-ci.org/vszakats/curl-for-win.svg?branch=master)](https://travis-ci.org/vszakats/curl-for-win)
 [![Build status](https://ci.appveyor.com/api/projects/status/87v0116m4re6j8di/branch/master?svg=true)](https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master)
+[![Build Status](https://api.travis-ci.org/vszakats/curl-for-win.svg?branch=master)](https://travis-ci.org/vszakats/curl-for-win)
+[![Build Status](https://gitlab.com/vszakats/curl-for-win/badges/master/pipeline.svg)](https://gitlab.com/vszakats/curl-for-win/pipelines)
 
 # Automated, reproducible, transparent, Windows builds for [curl](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [brotli](https://github.com/google/brotli), [libssh2](https://libssh2.org/) and [OpenSSL 1.1](https://www.openssl.org/)
 
   - Packaging aims to follow popular binary releases found on the internet.
   - Both x64 and x86 packages are built using the same process.
-  - Binary packages are downloadable in `.zip`, `.tar.xz` and `.7z` formats.<br>
-    **Note that the `.7z` format is discontinued. Update your download links
+  - Binary packages are downloadable in `.zip` and `.tar.xz` formats.<br>
+    **Note that the `.7z` format was discontinued. Update your download links
     accordingly.**<br>
     `.xz` files and the resulting `.tar` archive can also be extracted using
     [7-Zip](https://www.7-zip.org/) on Windows.
@@ -18,19 +19,21 @@
     <br>`dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
     <br>`AsynchDNS IDN IPv6 Largefile SSPI Kerberos SPNEGO NTLM SSL libz brotli TLS-SRP HTTP2 HTTPS-proxy MultiSSL`
   - The build process is fully transparent by using publicly available
-    open source code, C compiler, build scripts and running the
-    build [in public](https://travis-ci.org/vszakats/curl-for-win/branches),
+    open source code, C compiler, build scripts and running the build
+    [in public](https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master),
     with open, auditable [build logs](#live-build-logs).
   - C compiler toolchain is latest MinGW-w64 (non-multilib, x64 and x86)
     either via [Homebrew](https://brew.sh/) (on macOS),
-    [APT](https://en.wikipedia.org/wiki/APT_(Debian)) (on Ubuntu via Docker) or
-    [MSYS2](https://www.msys2.org/) (on Windows).
-    C compiler is [GCC](https://gcc.gnu.org/) and optionally
+    [APT](https://en.wikipedia.org/wiki/APT_(Debian)) (on Debian via Docker)
+    or [MSYS2](https://www.msys2.org/) (on Windows).
+    C compiler is [GCC](https://gcc.gnu.org/) or
     [LLVM/Clang](https://clang.llvm.org/) for projects supporting it.
-  - Binaries are cross-built and published from macOS
-    (via [Travis CI](https://travis-ci.org/)), using LLVM/Clang for curl,
-    libssh2, nghttp2, c-ares, brotli and zlib, and GCC for OpenSSL.
-  - Binaries are built with supported [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29) options enabled.
+  - Binaries are cross-built and published from Linux (Debian)
+    (via [AppVeyor CI](https://www.appveyor.com/)), using LLVM/Clang for
+    curl, libssh2, nghttp2, c-ares, brotli and zlib, and GCC for OpenSSL.
+  - Binaries are built with supported
+    [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29)
+    options enabled.
   - Binaries are using [DWARF](https://en.wikipedia.org/wiki/DWARF) in x86 and
     [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH)
     in x64 builds.
@@ -63,8 +66,8 @@
     dependencies.
   - To verify the correct checksum for the latest build, you can look up the
     correct ones in the build log as they are generated. Watch for `master`
-    branch jobs `CPU=64` and `CPU=32`, log lines starting with `SHA256(`:
-      <https://travis-ci.org/vszakats/curl-for-win/branches>
+    branch job `Image: Ubuntu`, log lines starting with `SHA256(`:
+      <https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master>
   - The build process is multi-platform and able to cross-build Windows
     executables from \*nix hosts (Linux and macOS tested.)
   - Packages created across different host platforms won't currently have
@@ -95,9 +98,10 @@
 
 # Live build logs
 
-  * <https://travis-ci.org/vszakats/curl-for-win>
-    (for published binaries)
   * <https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master>
+    (Image: Ubuntu) (for published binaries)
+  * <https://travis-ci.org/vszakats/curl-for-win>
+  * <https://gitlab.com/vszakats/curl-for-win/-/jobs>
 
 # Guarantees and Liability
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2014-2018 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2018 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
 
 cd "$(dirname "$0")" || exit
@@ -13,12 +13,12 @@ case "$(uname)" in
   *BSD)    os='bsd';;
 esac
 
+echo "|1|${APPVEYOR_REPO_PROVIDER}|"
+
 export BINTRAY_USER='vszakats'
 #[ -n "${BINTRAY_USER}" ] || BINTRAY_USER="${APPVEYOR_ACCOUNT_NAME}"
 #[ -n "${BINTRAY_USER}" ] || BINTRAY_USER="$(echo "${TRAVIS_REPO_SLUG}" | sed 's|/.*||')"
 #[ -n "${BINTRAY_USER}" ] || BINTRAY_USER="${USER}"
-
-PUBLISH_PROD_FROM='mac'
 
 do_upload() {
   arch_ext="$1"
@@ -27,7 +27,12 @@ do_upload() {
     _sufpkg=
     _suf=
 
-    if [ ! "${PUBLISH_PROD_FROM}" = "${os}" ]; then
+    echo "|2|${APPVEYOR_REPO_PROVIDER}|"
+    [ "${APPVEYOR_REPO_PROVIDER}" = 'github' ] && PUBLISH_PROD_FROM='linux'
+
+    echo "|3|${PUBLISH_PROD_FROM}|${os}|"
+
+    if [ "${PUBLISH_PROD_FROM}" != "${os}" ]; then
       _suf="-built-on-${os}"
       mv "${_BAS}${arch_ext}" "${_BAS}${_suf}${arch_ext}"
       unset BINTRAY_USER

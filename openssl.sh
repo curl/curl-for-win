@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2018 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2018 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
 
 export _NAM
@@ -90,8 +90,8 @@ _cpu="$2"
   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
   "${_CCPREFIX}strip" -p -s ${_pkg}/bin/openssl.exe
   "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.dll
-  if ls ${engdir}/*.dll > /dev/null 2>&1; then
-    "${_CCPREFIX}strip" -p -s ${engdir}/*.dll
+  if ls "${engdir}"/*.dll > /dev/null 2>&1; then
+    "${_CCPREFIX}strip" -p -s "${engdir}"/*.dll
   fi
 
   ../_peclean.py "${_ref}" ${_pkg}/bin/openssl.exe
@@ -100,10 +100,10 @@ _cpu="$2"
   ../_sign.sh ${_pkg}/bin/openssl.exe
   ../_sign.sh ${_pkg}/bin/*.dll
 
-  if ls ${engdir}/*.dll > /dev/null 2>&1; then
-    ../_peclean.py "${_ref}" ${engdir}/*.dll
+  if ls "${engdir}"/*.dll > /dev/null 2>&1; then
+    ../_peclean.py "${_ref}" "${engdir}"/*.dll
 
-    ../_sign.sh ${engdir}/*.dll
+    ../_sign.sh "${engdir}"/*.dll
   fi
 
   touch -c -r "${_ref}" ${_pkg}/ssl/openssl.cnf
@@ -112,8 +112,8 @@ _cpu="$2"
   touch -c -r "${_ref}" ${_pkg}/include/openssl/*.h
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
   touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
-  if ls ${engdir}/*.dll > /dev/null 2>&1; then
-    touch -c -r "${_ref}" ${engdir}/*
+  if ls "${engdir}"/*.dll > /dev/null 2>&1; then
+    touch -c -r "${_ref}" "${engdir}"/*
   fi
 
   # Tests
@@ -132,8 +132,8 @@ _cpu="$2"
   mkdir -p "${_DST}/include/openssl"
   mkdir -p "${_DST}/lib/pkgconfig"
 
-  if ls ${engdir}/*.dll > /dev/null 2>&1; then
-    cp -f -p -r ${engdir} "${_DST}/"
+  if ls "${engdir}"/*.dll > /dev/null 2>&1; then
+    cp -f -p -r "${engdir}" "${_DST}/"
   fi
 
   cp -f -p ${_pkg}/ssl/openssl.cnf     "${_DST}/"

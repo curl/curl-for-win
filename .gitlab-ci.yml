@@ -1,0 +1,21 @@
+---
+# https://docs.gitlab.com/ce/ci/yaml/README.html
+
+variables:
+  GIT_STRATEGY: fetch
+  GIT_DEPTH: "8"
+
+build:
+  image: debian:unstable
+  variables:
+    CC: mingw-clang
+  script:
+    - ./_ci_linux_debian.sh
+  artifacts:
+    expire_in: 13 weeks
+    paths:
+      - "*-*-mingw*.*"
+  only:
+    - master
+    - dev-gitlab
+    - test-gitlab

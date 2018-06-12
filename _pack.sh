@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2014-2018 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2014-2018 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
 
 cd "$(dirname "$0")" || exit
@@ -14,7 +14,7 @@ case "$(uname)" in
 esac
 
 # Map tar to GNU tar, if it exists (e.g. on macOS)
-which gtar > /dev/null && alias tar=gtar
+command -v gtar > /dev/null && alias tar=gtar
 
 _cdo="$(pwd)"
 

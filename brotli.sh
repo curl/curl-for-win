@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2017-2018 Viktor Szakats <https://github.com/vszakats>
+# Copyright 2017-2018 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
 
 export _NAM
@@ -63,12 +63,11 @@ _cpu="$2"
       "-DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}" \
       "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
       "-DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}" \
-      "-DCMAKE_C_COMPILER=clang" \
-      "-DCMAKE_CXX_COMPILER=clang++" \
+      "-DCMAKE_C_COMPILER=clang${_CCSUFFIX}" \
+      "-DCMAKE_CXX_COMPILER=clang++${_CCSUFFIX}" \
       "-DCMAKE_C_FLAGS=${_CFLAGS}" \
-      "-DCMAKE_CXX_FLAGS=${_CFLAGS}" \
-      "-DCMAKE_EXE_LINKER_FLAGS=-static-libgcc" \
-      "-DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc"
+      '-DCMAKE_EXE_LINKER_FLAGS=-static-libgcc' \
+      '-DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc'
   else
     unset CC
 
