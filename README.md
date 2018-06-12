@@ -19,8 +19,8 @@
     <br>`dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
     <br>`AsynchDNS IDN IPv6 Largefile SSPI Kerberos SPNEGO NTLM SSL libz brotli TLS-SRP HTTP2 HTTPS-proxy MultiSSL`
   - The build process is fully transparent by using publicly available
-    open source code, C compiler, build scripts and running the
-    build [in public](https://travis-ci.org/vszakats/curl-for-win/branches),
+    open source code, C compiler, build scripts and running the build
+    [in public](https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master),
     with open, auditable [build logs](#live-build-logs).
   - C compiler toolchain is latest MinGW-w64 (non-multilib, x64 and x86)
     either via [Homebrew](https://brew.sh/) (on macOS),
@@ -29,7 +29,7 @@
     C compiler is [GCC](https://gcc.gnu.org/) or
     [LLVM/Clang](https://clang.llvm.org/) for projects supporting it.
   - Binaries are cross-built and published from Linux (Debian)
-    (via [Travis CI](https://travis-ci.org/)), using LLVM/Clang for curl,
+    (via [AppVeyor CI](https://www.appveyor.com/)), using LLVM/Clang for curl,
     libssh2, nghttp2, c-ares, brotli and zlib, and GCC for OpenSSL.
   - Binaries are built with supported
     [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29)
@@ -66,8 +66,8 @@
     dependencies.
   - To verify the correct checksum for the latest build, you can look up the
     correct ones in the build log as they are generated. Watch for `master`
-    branch jobs `CPU=64` and `CPU=32`, log lines starting with `SHA256(`:
-      <https://travis-ci.org/vszakats/curl-for-win/branches>
+    branch job `Image: Ubuntu`, log lines starting with `SHA256(`:
+      <https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master>
   - The build process is multi-platform and able to cross-build Windows
     executables from \*nix hosts (Linux and macOS tested.)
   - Packages created across different host platforms won't currently have
