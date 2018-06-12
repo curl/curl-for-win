@@ -44,7 +44,9 @@ alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format LONG'
 gpg_recv_keys() {
   req="pks/lookup?search=0x$1&op=get"
   if ! curl "https://pgp.mit.edu/${req}" | gpg --import --status-fd 1; then
-    curl "https://sks-keyservers.net/${req}" | gpg --import --status-fd 1
+    if ! curl "https://sks-keyservers.net/${req}" | gpg --import --status-fd 1; then
+      curl "https://keyserver.ubuntu.com/${req}" | gpg --import --status-fd 1
+    fi
   fi
 }
 
