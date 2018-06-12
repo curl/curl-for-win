@@ -29,8 +29,8 @@
     C compiler is [GCC](https://gcc.gnu.org/) or
     [LLVM/Clang](https://clang.llvm.org/) for projects supporting it.
   - Binaries are cross-built and published from Linux (Debian)
-    (via [AppVeyor CI](https://www.appveyor.com/)), using LLVM/Clang for curl,
-    libssh2, nghttp2, c-ares, brotli and zlib, and GCC for OpenSSL.
+    (via [AppVeyor CI](https://www.appveyor.com/)), using LLVM/Clang for
+    curl, libssh2, nghttp2, c-ares, brotli and zlib, and GCC for OpenSSL.
   - Binaries are built with supported
     [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29)
     options enabled.

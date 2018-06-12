@@ -29,7 +29,6 @@ environment:
   CC: mingw-clang
 build_script:
   - sh: |
-      [ "${APPVEYOR_REPO_PROVIDER}" = 'github' ] && export PUBLISH_PROD_FROM='linux'
       export DOCKER_IMAGE='debian:unstable'
       time docker pull "${DOCKER_IMAGE}"
       time docker run -v "$(pwd):$(pwd)" -w "$(pwd)" \
