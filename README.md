@@ -28,7 +28,7 @@
     or [MSYS2](https://www.msys2.org/) (on Windows).
     C compiler is [GCC](https://gcc.gnu.org/) or
     [LLVM/Clang](https://clang.llvm.org/) for projects supporting it.
-  - Binaries are cross-built and published from macOS
+  - Binaries are cross-built and published from Linux (Debian)
     (via [Travis CI](https://travis-ci.org/)), using LLVM/Clang for curl,
     libssh2, nghttp2, c-ares, brotli and zlib, and GCC for OpenSSL.
   - Binaries are built with supported
@@ -99,8 +99,8 @@
 # Live build logs
 
   * <https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master>
+    (Image: Ubuntu) (for published binaries)
   * <https://travis-ci.org/vszakats/curl-for-win>
-    (for published binaries)
   * <https://gitlab.com/vszakats/curl-for-win/-/jobs>
 
 # Guarantees and Liability
