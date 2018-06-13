@@ -12,9 +12,9 @@ export _CCSUFFIX='-6.0'
 [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] && _optpkg="${_optpkg} autoconf automake libtool"
 
 dpkg --add-architecture i386
-apt-get -qq update
+apt-get -qq -o=Dpkg::Use-Pty=0 update
 # shellcheck disable=SC2086
-apt-get -qq install \
+apt-get -qq -o=Dpkg::Use-Pty=0 install \
   curl git gpg python3-pip make cmake \
   gcc-mingw-w64 ${_optpkg} \
   zip time jq dos2unix osslsigncode wine64 wine32
