@@ -23,8 +23,8 @@ matrix:
       env: DOCKER_IMAGE=debian:unstable
     # TODO: remove after migrating to Debian builds
     - os: osx
-      # https://docs.travis-ci.com/user/reference/osx/#OS-X-Version
-      osx_image: &mac-image xcode9.3
+      # https://docs.travis-ci.com/user/reference/osx/#using-os-x
+      osx_image: &mac-image xcode9.4
       compiler: mingw-clang
       env: CPU=64
     # TODO: remove after migrating to Debian builds
