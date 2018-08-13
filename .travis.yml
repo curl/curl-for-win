@@ -9,6 +9,7 @@ notifications:
   email: false
 git:
   depth: 8
+  quiet: true
 language: c
 
 matrix:
