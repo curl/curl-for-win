@@ -56,16 +56,16 @@ case "${os}" in
     ;;
 esac
 
+if [ "${CC}" = 'mingw-clang' ]; then
+  echo ".clang$("clang${_CCSUFFIX}" --version | grep -o -E ' [0-9]*\.[0-9]*[\.][0-9]*')" >> "${_BLD}"
+fi
+
 case "${os}" in
   mac)   ver="$(brew info --json=v1 mingw-w64 | jq -r '.[] | select(.name == "mingw-w64") | .versions.stable')";;
   linux) ver="$(apt-cache show mingw-w64 | grep '^Version:' | cut -c 10-)";;
   *)     ver='';;
 esac
 [ -n "${ver}" ] && echo ".mingw-w64 ${ver}" >> "${_BLD}"
-
-if [ "${CC}" = 'mingw-clang' ]; then
-  echo ".clang$("clang${_CCSUFFIX}" --version | grep -o -E ' [0-9]*\.[0-9]*[\.][0-9]*')" >> "${_BLD}"
-fi
 
 _ori_path="${PATH}"
 
