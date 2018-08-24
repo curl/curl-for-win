@@ -137,7 +137,17 @@ else
   build_single_target 32
 fi
 
-# Test
+ls -l ./*-*-mingw*.*
+cat hashes.txt
+cat ./build*.txt
+
+# Move everything into a single artifact
+if [ "${_BRANCH#*all*}" != "${_BRANCH}" ]; then
+  zip -q -0 -X -o 'all-mingw.zip' ./*-*-mingw*.*
+  rm ./*-*-mingw*.*
+fi
+
+# Test deploy
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
 (
   set +x
@@ -159,14 +169,4 @@ if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
     scp -o BatchMode=yes -o StrictHostKeyChecking=yes -i "${DEPLOY_KEY}" "${_BLD}" curl-for-win@haxx.se:.
   fi
 )
-fi
-
-ls -l ./*-*-mingw*.*
-cat hashes.txt
-cat ./build*.txt
-
-# Move everything into a single artifact
-if [ "${_BRANCH#*all*}" != "${_BRANCH}" ]; then
-  zip -q -0 -X -o 'all-mingw.zip' ./*-*-mingw*.*
-  rm ./*-*-mingw*.*
 fi
