@@ -56,6 +56,17 @@ case "${os}" in
     ;;
 esac
 
+case "${os}" in
+  mac)   ver="$(brew info --json=v1 mingw-w64 | jq -r '.[] | select(.name == "mingw-w64") | .versions.stable')";;
+  linux) ver="$(apt-cache show mingw-w64 | grep '^Version:' | cut -c 10-)";;
+  *)     ver='';;
+esac
+[ -n "${ver}" ] && echo ".mingw-w64 ${ver}" >> "${_BLD}"
+
+if [ "${CC}" = 'mingw-clang' ]; then
+  echo ".clang $("clang${_CCSUFFIX}" -dumpversion)" >> "${_BLD}"
+fi
+
 _ori_path="${PATH}"
 
 build_single_target() {
@@ -66,6 +77,9 @@ build_single_target() {
   export _CCPREFIX=
   export _MAKE='make'
   export _WINE=''
+
+  [ "${_cpu}" = '32' ] && _machine='i686'
+  [ "${_cpu}" = '64' ] && _machine='x86_64'
 
   if [ "${os}" = 'win' ]; then
     export PATH="/mingw${_cpu}/bin:${_ori_path}"
@@ -79,8 +93,6 @@ build_single_target() {
     if [ "${CC}" = 'mingw-clang' ] && [ "${os}" = 'mac' ]; then
       export PATH="/usr/local/opt/llvm/bin:${_ori_path}"
     fi
-    [ "${_cpu}" = '32' ] && _machine='i686'
-    [ "${_cpu}" = '64' ] && _machine='x86_64'
     _TRIPLET="${_machine}-w64-mingw32"
     # Prefixes don't work with MSYS2/mingw-w64, because `ar`, `nm` and
     # `runlib` are missing from them. They are accessible either _without_
@@ -103,19 +115,8 @@ build_single_target() {
     _CCVER="$("${_CCPREFIX}gcc" -dumpversion | sed -e 's/\<[0-9]\>/0&/g' -e 's/\.//g' | cut -c -2)"
   fi
 
-  case "${os}" in
-    mac)   ver="$(brew info --json=v1 mingw-w64 | jq -r '.[] | select(.name == "mingw-w64") | .versions.stable')";;
-    linux) ver="$(apt-cache show mingw-w64 | grep '^Version:' | cut -c 10-)";;
-    *)     ver='';;
-  esac
-  [ -n "${ver}" ] && echo ".mingw-w64 ${ver}" >> "${_BLD}"
-
-  echo ".binutils-mingw-w64 $(x86_64-w64-mingw32-ar V | grep -o -E '[0-9]+\.[0-9]+[\.][0-9]*')" >> "${_BLD}"
-  echo ".gcc-mingw-w64 $(x86_64-w64-mingw32-gcc -dumpversion)" >> "${_BLD}"
-
-  if [ "${CC}" = 'mingw-clang' ]; then
-    echo ".clang $(clang -dumpversion)" >> "${_BLD}"
-  fi
+  echo ".gcc-mingw-w64-${_machine} $(${_CCPREFIX}gcc -dumpversion)" >> "${_BLD}"
+  echo ".binutils-mingw-w64-${_machine} $(${_CCPREFIX}ar V | grep -o -E '[0-9]+\.[0-9]+[\.][0-9]*')" >> "${_BLD}"
 
   command -v osslsigncode > /dev/null 2>&1 || unset CODESIGN_KEY
 
