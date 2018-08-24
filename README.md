@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
 [![Build status](https://ci.appveyor.com/api/projects/status/87v0116m4re6j8di/branch/master?svg=true)](https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master)
-[![Build Status](https://api.travis-ci.org/vszakats/curl-for-win.svg?branch=master)](https://travis-ci.org/vszakats/curl-for-win)
+[![Build Status](https://api.travis-ci.org/curl/curl-for-win.svg?branch=master)](https://travis-ci.org/curl/curl-for-win)
 
 # Automated, reproducible, transparent, Windows builds for [curl](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [brotli](https://github.com/google/brotli), [libssh2](https://libssh2.org/) and [OpenSSL 1.1](https://www.openssl.org/)
 
@@ -103,7 +103,7 @@
 
   * <https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master>
     (Image: Ubuntu) (for published binaries)
-  * <https://travis-ci.org/vszakats/curl-for-win>
+  * <https://travis-ci.org/curl/curl-for-win>
 
 # Guarantees and Liability
 
