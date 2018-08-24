@@ -1,5 +1,5 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
-[![Build status](https://ci.appveyor.com/api/projects/status/87v0116m4re6j8di/branch/master?svg=true)](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/8yf6xjgq7u0cm013/branch/master?svg=true)](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master)
 [![Build Status](https://api.travis-ci.org/curl/curl-for-win.svg?branch=master)](https://travis-ci.org/curl/curl-for-win)
 
 # Automated, reproducible, transparent, Windows builds for [curl](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [brotli](https://github.com/google/brotli), [libssh2](https://libssh2.org/) and [OpenSSL 1.1](https://www.openssl.org/)
