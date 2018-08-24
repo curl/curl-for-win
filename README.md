@@ -1,5 +1,5 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
-[![Build status](https://ci.appveyor.com/api/projects/status/87v0116m4re6j8di/branch/master?svg=true)](https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/87v0116m4re6j8di/branch/master?svg=true)](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master)
 [![Build Status](https://api.travis-ci.org/curl/curl-for-win.svg?branch=master)](https://travis-ci.org/curl/curl-for-win)
 
 # Automated, reproducible, transparent, Windows builds for [curl](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [brotli](https://github.com/google/brotli), [libssh2](https://libssh2.org/) and [OpenSSL 1.1](https://www.openssl.org/)
@@ -19,7 +19,7 @@
     <br>`AsynchDNS IDN IPv6 Largefile SSPI Kerberos SPNEGO NTLM SSL libz brotli TLS-SRP HTTP2 HTTPS-proxy MultiSSL`
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the build
-    [in public](https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master),
+    [in public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master),
     with open, auditable [build logs](#live-build-logs).
   - C compiler toolchain is latest MinGW-w64 (non-multilib, x64 and x86)
     either via [Homebrew](https://brew.sh/) (on macOS),
@@ -70,7 +70,7 @@
   - To verify the correct checksum for the latest build, you can look up the
     correct ones in the build log as they are generated. Watch for `master`
     branch job `Image: Ubuntu`, log lines starting with `SHA256(`:
-      <https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master>
+      <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master>
   - The build process is multi-platform and able to cross-build Windows
     executables from \*nix hosts (Linux and macOS tested.)
   - Packages created across different host platforms won't currently have
