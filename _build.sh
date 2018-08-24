@@ -178,13 +178,10 @@ ls -l ./*-*-mingw*.*
 cat hashes.txt
 cat ./build*.txt
 
-# Move everything into a single artifact
-if [ "${_BRANCH#*all*}" != "${_BRANCH}" ]; then
-  zip -q -0 -X -o 'all-mingw.zip' ./*-*-mingw*.* hashes.txt "${_BLD}"
-  rm ./*-*-mingw*.*
-fi
+# Create an artifact that includes all packages
+zip -q -0 -X -o 'all-mingw.zip' ./*-*-mingw*.* hashes.txt "${_BLD}"
 
-# "Official" deploy
+# Official deploy
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
    [ "${PUBLISH_PROD_FROM}" = "${os}" ]; then
 (
