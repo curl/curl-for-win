@@ -66,6 +66,14 @@ do_upload() {
     fi
   )
 
+  (
+    set +x
+    if [ -f "${DEPLOY_KEY}" ]; then
+      echo "Uploading: '${_BAS}${_suf}${arch_ext}'"
+      scp -p -B -o BatchMode=yes -o StrictHostKeyChecking=yes -i "${DEPLOY_KEY}" ${_BAS}${_suf}${arch_ext} curl-for-win@haxx.se:.
+    fi
+  )
+
   # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>
   case "${os}" in
     bsd|mac) TZ=UTC stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_BAS}${_suf}${arch_ext}";;

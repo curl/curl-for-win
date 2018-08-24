@@ -68,6 +68,14 @@ if [ -f "${DEPLOY_KEY}.asc" ]; then
   )
 fi
 
+# add deploy target to known hosts
+if [ -f "${DEPLOY_KEY}" ]; then
+  readonly host_key='haxx.se ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEAo2NVLAYjIPAEuGtdG4EZDIEdpOREiBdo/KE51s5bX1zXJOOlxXmyB53CdWVpi1CR/EDQaEbsXE3gWRb3guOnXlzB3A4bzBa4H25BISeTJf4a7nBz5nUY8JYfcOxD5gIySvnJB/O7GxbU5mHLgvpixTuYeyE5T1AwZgDTAoJio0M='
+  if ! grep "${host_key}" "${HOME}/.ssh/known_hosts" > /dev/null; then
+    echo "${host_key}" >> "${HOME}/.ssh/known_hosts"
+  fi
+fi
+
 case "${os}" in
   mac)
     alias sed=gsed
@@ -165,20 +173,14 @@ if [ "${_BRANCH#*all*}" != "${_BRANCH}" ]; then
   rm ./*-*-mingw*.*
 fi
 
-# Test deploy
+# Deploy ./build*.txt
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
    [ "${PUBLISH_PROD_FROM}" = "${os}" ]; then
 (
   set +x
-
   if [ -f "${DEPLOY_KEY}" ]; then
-    readonly host_key='haxx.se ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEAo2NVLAYjIPAEuGtdG4EZDIEdpOREiBdo/KE51s5bX1zXJOOlxXmyB53CdWVpi1CR/EDQaEbsXE3gWRb3guOnXlzB3A4bzBa4H25BISeTJf4a7nBz5nUY8JYfcOxD5gIySvnJB/O7GxbU5mHLgvpixTuYeyE5T1AwZgDTAoJio0M='
-
-    if ! grep "${host_key}" ~/.ssh/known_hosts > /dev/null; then
-      echo "${host_key}" >> ~/.ssh/known_hosts
-    fi
-
-    scp -o BatchMode=yes -o StrictHostKeyChecking=yes -i "${DEPLOY_KEY}" "${_BLD}" curl-for-win@haxx.se:.
+    echo "Uploading: '${_BLD}'"
+    scp -p -B -o BatchMode=yes -o StrictHostKeyChecking=yes -i "${DEPLOY_KEY}" "${_BLD}" curl-for-win@haxx.se:.
   fi
 )
 fi
