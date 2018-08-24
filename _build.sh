@@ -184,14 +184,19 @@ if [ "${_BRANCH#*all*}" != "${_BRANCH}" ]; then
   rm ./*-*-mingw*.*
 fi
 
-# Deploy ./build*.txt
+# "Official" deploy
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
    [ "${PUBLISH_PROD_FROM}" = "${os}" ]; then
 (
   set +x
   if [ -f "${DEPLOY_KEY}" ]; then
-    echo "Uploading: '${_BLD}'"
-    scp -p -B -o BatchMode=yes -o StrictHostKeyChecking=yes -i "${DEPLOY_KEY}" "${_BLD}" curl-for-win@haxx.se:.
+    echo "Uploading: 'all-mingw.zip'"
+    scp -p -B -i "${DEPLOY_KEY}" \
+      -o BatchMode=yes \
+      -o StrictHostKeyChecking=yes \
+      -o ConnectTimeout=20 \
+      -o ConnectionAttempts=5 \
+      'all-mingw.zip' curl-for-win@haxx.se:.
   fi
 )
 fi
