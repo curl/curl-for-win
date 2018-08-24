@@ -176,7 +176,7 @@ cat ./build*.txt
 
 # Move everything into a single artifact
 if [ "${_BRANCH#*all*}" != "${_BRANCH}" ]; then
-  zip -q -0 -X -o 'all-mingw.zip' ./*-*-mingw*.*
+  zip -q -0 -X -o 'all-mingw.zip' ./*-*-mingw*.* hashes.txt "${_BLD}"
   rm ./*-*-mingw*.*
 fi
 
