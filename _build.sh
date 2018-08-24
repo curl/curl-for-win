@@ -137,6 +137,30 @@ else
   build_single_target 32
 fi
 
+# Test
+if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
+(
+  set +x
+
+  # decrypt deploy key
+  DEPLOY_KEY="$(realpath '.')/deploy.key"
+  if [ -f "${DEPLOY_KEY}.asc" ] && [ -n "${DEPLOY_GPG_PASS}" ]; then
+    rm -f "${DEPLOY_KEY}"
+    gpg --batch --passphrase "${DEPLOY_GPG_PASS}" -o "${DEPLOY_KEY}" -d "${DEPLOY_KEY}.asc"
+    chmod 600 "${DEPLOY_KEY}"
+  fi
+  if [ -f "${DEPLOY_KEY}" ]; then
+    host_key='haxx.se ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEAo2NVLAYjIPAEuGtdG4EZDIEdpOREiBdo/KE51s5bX1zXJOOlxXmyB53CdWVpi1CR/EDQaEbsXE3gWRb3guOnXlzB3A4bzBa4H25BISeTJf4a7nBz5nUY8JYfcOxD5gIySvnJB/O7GxbU5mHLgvpixTuYeyE5T1AwZgDTAoJio0M='
+
+    if ! grep "${host_key}" ~/.ssh/known_hosts > /dev/null; then
+      echo ${host_key} >> ~/.ssh/known_hosts
+    fi
+
+    scp -o BatchMode=yes -o StrictHostKeyChecking=yes -i "${DEPLOY_KEY}" "${_BLD}" curl-for-win@haxx.se:.
+  fi
+)
+fi
+
 ls -l ./*-*-mingw*.*
 cat hashes.txt
 cat ./build*.txt
