@@ -31,6 +31,9 @@ esac
 
 rm -f ./*-*-mingw*.*
 rm -f hashes.txt
+rm -f ./build*.txt
+
+export _BLD='build.txt'
 
 . ./_dl.sh || exit 1
 
@@ -100,6 +103,20 @@ build_single_target() {
     _CCVER="$("${_CCPREFIX}gcc" -dumpversion | sed -e 's/\<[0-9]\>/0&/g' -e 's/\.//g' | cut -c -2)"
   fi
 
+  case "${os}" in
+    mac)   ver="$(brew info --json=v1 mingw-w64 | jq -r '.[] | select(.name == "mingw-w64") | .versions.stable')";;
+    linux) ver="$(apt-cache show mingw-w64 | grep '^Version:' | cut -c 10-)";;
+    *)     ver='';;
+  esac
+  [ -n "${ver}" ] && echo ".mingw-w64 ${ver}" >> "${_BLD}"
+
+  echo ".binutils-mingw-w64 $(x86_64-w64-mingw32-ar V | grep -o -E '[0-9]+\.[0-9]+[\.][0-9]*')" >> "${_BLD}"
+  echo ".gcc-mingw-w64 $(x86_64-w64-mingw32-gcc -dumpversion)" >> "${_BLD}"
+
+  if [ "${CC}" = 'mingw-clang' ]; then
+    echo ".clang $(clang -dumpversion)" >> "${_BLD}"
+  fi
+
   command -v osslsigncode > /dev/null 2>&1 || unset CODESIGN_KEY
 
   time ./zlib.sh       "${ZLIB_VER_}" "${_cpu}"
@@ -121,6 +138,7 @@ fi
 
 ls -l ./*-*-mingw*.*
 cat hashes.txt
+cat ./build*.txt
 
 # Move everything into a single artifact
 if [ "${_BRANCH#*all*}" != "${_BRANCH}" ]; then
