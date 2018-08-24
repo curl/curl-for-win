@@ -34,7 +34,7 @@ build_script:
       export DOCKER_IMAGE='debian:unstable'
       time docker pull "${DOCKER_IMAGE}"
       time docker run -v "$(pwd):$(pwd)" -w "$(pwd)" \
-        --env-file <(env | grep -E '^(APPVEYOR_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|CC|GITLAB_|CI_)') \
+        --env-file <(env | grep -E '^(APPVEYOR_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|DEPLOY_|CC|GITLAB_|CI_)') \
         "${DOCKER_IMAGE}" \
         sh -c ./_ci_linux_debian.sh
   - cmd: |
