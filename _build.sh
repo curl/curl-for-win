@@ -13,6 +13,10 @@
 
 cd "$(dirname "$0")" || exit
 
+LC_ALL=C
+LC_MESSAGES=C
+LANG=C
+
 export _BRANCH="${APPVEYOR_REPO_BRANCH}${TRAVIS_BRANCH}${CI_COMMIT_REF_NAME}${GIT_BRANCH}"
 [ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD)"
 [ -n "${_BRANCH}" ] || _BRANCH='master'
@@ -162,6 +166,9 @@ else
   build_single_target 64
   build_single_target 32
 fi
+
+sort "${_BLD}" > "${_BLD}.sorted"
+mv -f "${_BLD}.sorted" "${_BLD}"
 
 ls -l ./*-*-mingw*.*
 cat hashes.txt
