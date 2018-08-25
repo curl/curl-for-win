@@ -180,6 +180,12 @@ ls -l ./*-*-mingw*.*
 cat hashes.txt
 cat ./build*.txt
 
+# Strip '-built-on-*' suffix for the single-file artifact,
+# and also add revision to filenames.
+for f in ./*-*-mingw*.*; do
+  mv -f "${f}" "$(echo "${f}" | sed "s|-win|${_REV}-win|g" | sed 's|-built-on-[^.]*||g')"
+done
+
 # Create an artifact that includes all packages
 _ALL="all-mingw${_REV}.zip"
 zip -q -0 -X -o "${_ALL}" ./*-*-mingw*.* hashes.txt "${_BLD}"
