@@ -186,6 +186,10 @@ for f in ./*-*-mingw*.*; do
   mv -f "${f}" "$(echo "${f}" | sed "s|-win|${_REV}-win|g" | sed 's|-built-on-[^.]*||g')"
 done
 
+cat hashes.txt | sed "s|-win|${_REV}-win|g" | sed 's|-built-on-[^.]*||g' > hashes.txt.all
+touch -r hashes.txt hashes.txt.all
+mv -f hashes.txt.all hashes.txt
+
 # Create an artifact that includes all packages
 _ALL="all-mingw${_REV}.zip"
 zip -q -0 -X -o "${_ALL}" ./*-*-mingw*.* hashes.txt "${_BLD}"
