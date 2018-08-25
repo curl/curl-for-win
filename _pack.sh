@@ -72,7 +72,7 @@ create_pack "$1" '.zip'
 
 ver="${_NAM} ${_VER}"
 if ! grep "${ver}" "${_BLD}" > /dev/null; then
-  echo ${ver} >> "${_BLD}"
+  echo "${ver}" >> "${_BLD}"
 fi
 
 rm -f -r "${_DST:?}"
