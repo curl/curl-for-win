@@ -47,14 +47,21 @@ create_pack() {
     case "${os}" in
       win) find "${_BAS}" -exec attrib +A -R {} \;
     esac
+  )
+
+  _LST="$(dirname "$0")/_files"
+  (
+    cd "${_BAS}" || exit
+    find . -type f | sort > "${_LST}"
+
     rm -f "${_cdo}/${_BAS}${arch_ext}"
     case "${arch_ext}" in
-      .tar.xz) tar -c \
-        --owner=0 --group=0 --numeric-owner --mode=go=rX,u+rw,a-s --sort=name \
-        "${_BAS}" | xz > "${_cdo}/${_BAS}${arch_ext}";;
-      .zip)    zip -q -9 -X -r "${_cdo}/${_BAS}${arch_ext}" "${_BAS}";;
+      .tar.xz) tar -c -T "${_LST}" \
+        --owner=0 --group=0 --numeric-owner --mode=go=rX,u+rw,a-s \
+        | xz > "${_cdo}/${_BAS}${arch_ext}";;
+      .zip)    zip -q -9 -X -@ - < "${_LST}" > "${_cdo}/${_BAS}${arch_ext}";;
       # Requires: p7zip (MSYS2, Homebrew, Linux rpm), p7zip-full (Linux deb)
-      .7z)     7z a -bd -r -mx "${_cdo}/${_BAS}${arch_ext}" "${_BAS}" > /dev/null;;
+      .7z)     7z a -bd -r -mx "${_cdo}/${_BAS}${arch_ext}" "@${_LST}" > /dev/null;;
     esac
     touch -c -r "$1" "${_cdo}/${_BAS}${arch_ext}"
   )
