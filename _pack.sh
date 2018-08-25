@@ -50,7 +50,7 @@ create_pack() {
       win) find "${_BAS}" -exec attrib +A -R {} \;
     esac
 
-    find "${_BAS}" | sort > "${_LST}"
+    find "${_BAS}" -type f | sort > "${_LST}"
 
     rm -f "${_cdo}/${_BAS}${arch_ext}"
     case "${arch_ext}" in
