@@ -42,17 +42,15 @@ find "${_DST}" \( -name '*.exe' -or -name '*.dll' -or -name '*.a' \) -exec chmod
 
 create_pack() {
   arch_ext="$2"
+  _LST="$(dirname "$0")/_files"
+
   (
     cd "${_DST}/.." || exit
     case "${os}" in
       win) find "${_BAS}" -exec attrib +A -R {} \;
     esac
-  )
 
-  _LST="$(dirname "$0")/_files"
-  (
-    cd "${_BAS}" || exit
-    find . -type f | sort > "${_LST}"
+    find "${_BAS}" | sort > "${_LST}"
 
     rm -f "${_cdo}/${_BAS}${arch_ext}"
     case "${arch_ext}" in
