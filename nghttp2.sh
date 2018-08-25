@@ -45,7 +45,7 @@ _cpu="$2"
   find . -name '*.Plo' -type f -delete
   find . -name '*.pc'  -type f -delete
 
-  _CFLAGS="-m${_cpu} -fno-ident"
+  _CFLAGS="-m${_cpu} -fno-ident -DNDEBUG"
   [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
   options='-DCMAKE_SYSTEM_NAME=Windows'
