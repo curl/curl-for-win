@@ -51,9 +51,8 @@ if [ -f "${CODESIGN_KEY}.asc" ]; then
   (
     set +x
     if [ -n "${CODESIGN_GPG_PASS}" ]; then
-      rm -f "${CODESIGN_KEY}"
-      gpg --batch --passphrase "${CODESIGN_GPG_PASS}" -o "${CODESIGN_KEY}" -d "${CODESIGN_KEY}.asc"
-      chmod 600 "${CODESIGN_KEY}"
+      install -m 600 /dev/null "${CODESIGN_KEY}"
+      gpg --batch --passphrase "${CODESIGN_GPG_PASS}" -d "${CODESIGN_KEY}.asc" >> "${CODESIGN_KEY}"
     fi
   )
 fi
@@ -65,9 +64,8 @@ if [ -f "${DEPLOY_KEY}.asc" ]; then
   (
     set +x
     if [ -n "${DEPLOY_GPG_PASS}" ]; then
-      rm -f "${DEPLOY_KEY}"
-      gpg --batch --passphrase "${DEPLOY_GPG_PASS}" -o "${DEPLOY_KEY}" -d "${DEPLOY_KEY}.asc"
-      chmod 600 "${DEPLOY_KEY}"
+      install -m 600 /dev/null "${DEPLOY_KEY}"
+      gpg --batch --passphrase "${DEPLOY_GPG_PASS}" -d "${DEPLOY_KEY}.asc" >> "${DEPLOY_KEY}"
     fi
   )
 fi

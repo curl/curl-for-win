@@ -20,6 +20,10 @@ export LIBSSH2_HASH=39f34e2f6835f4b992cafe8625073a88e5a28ba78f83e8099610a7b3af46
 export CURL_VER_='7.61.0'
 export CURL_HASH=ef6e55192d04713673b4409ccbcb4cb6cd723137d6e10ca45b0c593a454e1720
 
+# Create revision string
+export _REV
+_REV="-$(TZ=UTC date +'%Y%m%d%H%M')"
+
 # Quit if any of the lines fail
 set -e
 
