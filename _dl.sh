@@ -22,7 +22,9 @@ export CURL_HASH=ef6e55192d04713673b4409ccbcb4cb6cd723137d6e10ca45b0c593a454e172
 
 # Create revision string
 export _REV
-_REV="-$(TZ=UTC date +'%Y%m%d%H%M')"
+_REV="$(TZ=UTC date +'%Y%m%d%H%M')"
+
+[ -z "${_REV}" ] || _REV="-${_REV}"
 
 # Quit if any of the lines fail
 set -e

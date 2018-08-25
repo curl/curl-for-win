@@ -177,7 +177,8 @@ cat hashes.txt
 cat ./build*.txt
 
 # Create an artifact that includes all packages
-zip -q -0 -X -o 'all-mingw.zip' ./*-*-mingw*.* hashes.txt "${_BLD}"
+_ALL="all-mingw${_REV}.zip"
+zip -q -0 -X -o "${_ALL}" ./*-*-mingw*.* hashes.txt "${_BLD}"
 
 # Official deploy
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
@@ -185,13 +186,13 @@ if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
 (
   set +x
   if [ -f "${DEPLOY_KEY}" ]; then
-    echo "Uploading: 'all-mingw.zip'"
+    echo "Uploading: "${_ALL}""
     scp -p -B -i "${DEPLOY_KEY}" \
       -o BatchMode=yes \
       -o StrictHostKeyChecking=yes \
       -o ConnectTimeout=20 \
       -o ConnectionAttempts=5 \
-      'all-mingw.zip' curl-for-win@haxx.se:.
+      "${_ALL}" curl-for-win@haxx.se:
   fi
 )
 fi
