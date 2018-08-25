@@ -8,7 +8,7 @@ branches:
     - test-appveyor
 image:
   - Ubuntu
-  - Visual Studio 2017
+# - Visual Studio 2017
 services:
   - docker
 clone_depth: 8

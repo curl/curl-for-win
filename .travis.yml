@@ -22,17 +22,15 @@ matrix:
       services: [docker]
       # https://hub.docker.com/_/debian/
       env: DOCKER_IMAGE=debian:unstable
-    # TODO: remove after migrating to Debian builds
-    - os: osx
-      # https://docs.travis-ci.com/user/reference/osx/#using-os-x
-      osx_image: &mac-image xcode9.4
-      compiler: mingw-clang
-      env: CPU=64
-    # TODO: remove after migrating to Debian builds
-    - os: osx
-      osx_image: *mac-image
-      compiler: mingw-clang
-      env: CPU=32
+#   - os: osx
+#     # https://docs.travis-ci.com/user/reference/osx/#using-os-x
+#     osx_image: &mac-image xcode9.4
+#     compiler: mingw-clang
+#     env: CPU=64
+#   - os: osx
+#     osx_image: *mac-image
+#     compiler: mingw-clang
+#     env: CPU=32
 
 script:
   - |

@@ -180,6 +180,13 @@ cat ./build*.txt
 _ALL="all-mingw${_REV}.zip"
 zip -q -0 -X -o "${_ALL}" ./*-*-mingw*.* hashes.txt "${_BLD}"
 
+unset _ALLSUFF
+# Upload Travis/Linux builds too as a test
+if [ "$TRAVIS_OS_NAME" = 'linux' ]; then
+  PUBLISH_PROD_FROM="${os}"
+  _ALLSUFF="-built-on-${os}"
+fi
+
 # Official deploy
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
    [ "${PUBLISH_PROD_FROM}" = "${os}" ]; then
@@ -192,7 +199,7 @@ if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
       -o StrictHostKeyChecking=yes \
       -o ConnectTimeout=20 \
       -o ConnectionAttempts=5 \
-      "${_ALL}" curl-for-win@haxx.se:
+      "${_ALL}" curl-for-win@haxx.se:"${_ALL}{_ALLSUFF}"
   fi
 )
 fi
