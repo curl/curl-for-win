@@ -9,8 +9,8 @@ export BROTLI_VER_='1.0.5'
 export BROTLI_HASH=3d5bedd48edb909fe3b87cb99f7d139b987ef6f1616b7e22d74e928270a2fd20
 export LIBIDN2_VER_='2.0.4'
 export LIBIDN2_HASH=644b6b03b285fb0ace02d241d59483d98bc462729d8bb3608d5cad5532f3d2f0
-export NGHTTP2_VER_='1.32.0'
-export NGHTTP2_HASH=700a89d59fcc55acc2b18184001bfb3220fa6a6e543486aca35f40801cba6f7d
+export NGHTTP2_VER_='1.32.1'
+export NGHTTP2_HASH=71ad04489b8e52df23a80166dfbf29d39bc48e39bc081e1e83ca8c94feeab7d0
 export CARES_VER_='1.14.0'
 export CARES_HASH=45d3c1fd29263ceec2afc8ff9cd06d5f8f889636eb4e80ce3cc7f0eaf7aadc6e
 export OPENSSL_VER_='1.1.0i'
@@ -22,7 +22,8 @@ export CURL_HASH=ef6e55192d04713673b4409ccbcb4cb6cd723137d6e10ca45b0c593a454e172
 
 # Create revision string
 export _REV
-_REV="$(TZ=UTC date +'%Y%m%d%H%M')"
+#_REV="$(TZ=UTC date +'%Y%m%d%H%M')"
+_REV=4
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
