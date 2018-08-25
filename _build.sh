@@ -173,7 +173,9 @@ sort "${_BLD}" > "${_BLD}.sorted"
 mv -f "${_BLD}.sorted" "${_BLD}"
 
 # Use the newest package timestamp for supplementary files
+# shellcheck disable=SC2012
 touch -r "$(ls -1 -t ./*-*-mingw*.* | head -1)" hashes.txt
+# shellcheck disable=SC2012
 touch -r "$(ls -1 -t ./*-*-mingw*.* | head -1)" ./build*.txt
 
 ls -l ./*-*-mingw*.*
@@ -186,13 +188,9 @@ for f in ./*-*-mingw*.*; do
   mv -f "${f}" "$(echo "${f}" | sed "s|-win|${_REV}-win|g" | sed 's|-built-on-[^.]*||g')"
 done
 
-cat hashes.txt | sed "s|-win|${_REV}-win|g" | sed 's|-built-on-[^.]*||g' > hashes.txt.all
+sed "s|-win|${_REV}-win|g" hashes.txt | sed 's|-built-on-[^.]*||g' | sort > hashes.txt.all
 touch -r hashes.txt hashes.txt.all
 mv -f hashes.txt.all hashes.txt
-
-# Create an artifact that includes all packages
-_ALL="all-mingw${_REV}.zip"
-zip -q -0 -X -o "${_ALL}" ./*-*-mingw*.* hashes.txt "${_BLD}"
 
 unset _ALLSUFF
 # Upload Travis/Linux builds too as a test
@@ -200,6 +198,12 @@ unset _ALLSUFF
 #   PUBLISH_PROD_FROM="${os}"
 #   _ALLSUFF=".travis-${os}"
 # fi
+
+# Create an artifact that includes all packages
+_ALL="all-mingw${CURL_VER_}${_REV}${_ALLSUFF}.zip"
+zip -q -0 -X -o "${_ALL}" ./*-*-mingw*.* hashes.txt "${_BLD}"
+
+openssl dgst -sha256 "${_ALL}" | tee "${_ALL}.txt"
 
 # Official deploy
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
@@ -213,7 +217,8 @@ if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
       -o StrictHostKeyChecking=yes \
       -o ConnectTimeout=20 \
       -o ConnectionAttempts=5 \
-      "${_ALL}" "curl-for-win@haxx.se:${_ALL}${_ALLSUFF}"
+      "${_ALL}" "${_ALL}.txt" \
+      "curl-for-win@haxx.se"
   fi
 )
 fi
