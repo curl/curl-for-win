@@ -184,7 +184,7 @@ unset _ALLSUFF
 # Upload Travis/Linux builds too as a test
 if [ "$TRAVIS_OS_NAME" = 'linux' ]; then
   PUBLISH_PROD_FROM="${os}"
-  _ALLSUFF="-built-on-${os}"
+  _ALLSUFF=".${os}"
 fi
 
 # Official deploy
