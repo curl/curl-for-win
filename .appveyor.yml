@@ -16,15 +16,15 @@ build:
   verbosity: detailed
 environment:
   BINTRAY_APIKEY:
-    secure: jT/tMOSpo6fjjKZosT3WwhN0wdsdLPtzx1inUSqidw2RqU03ibMR936e4ZYiTabT
+    secure: ZZ33lWAHzAtktHVhpJaW1haOMRRcw5GMcnK8kJkkklPyK1F/C2F8GLxS3ZEdJf+F
   GPG_PASSPHRASE:
-    secure: t0zZqLgvaePWqUGn/dLMQ50M3YkMTktXSWglL1dyaEHKTOuXYiNe070dNlJEAoi1
+    secure:
   VIRUSTOTAL_APIKEY:
     secure: 9SXnYhOkq6CP97zQ+dUc+NzKpKVIoVACMi0wwtLkaUv9y8BimLo5B7XSWBQ9lYwKbQY8JSJ10JFtyxrKRN6O0PK5U7i6bhg4/B6c40ieHHw=
   CODESIGN_GPG_PASS:
-    secure: pVgDvVAXHLE+EMsDNKa+VY3kz/w1DLWpIAAiaEoahY7tRx7QpMzlMDND07CN1xN+
+    secure:
   CODESIGN_KEY_PASS:
-    secure: WpvrivnhUx4RI4Y02hRjj6T+7IGQADpdU5nIQh1oW8jrUaujbmUmGCxG6vANeasz
+    secure:
   DEPLOY_GPG_PASS:
     secure: WHnaUtu4NM46WEgLhxUyPBShvzLNwRoR5v0Z3+/UqM0nMzrUGieb+tJKX/AZLFkx
   APPVEYOR_YML_DISABLE_PS_LINUX: true
