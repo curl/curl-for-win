@@ -172,6 +172,10 @@ fi
 sort "${_BLD}" > "${_BLD}.sorted"
 mv -f "${_BLD}.sorted" "${_BLD}"
 
+# Use the newest package timestamp for supplementary files
+touch -r "$(ls -1 -t ./*-*-mingw*.* | head -1)" hashes.txt
+touch -r "$(ls -1 -t ./*-*-mingw*.* | head -1)" ./build*.txt
+
 ls -l ./*-*-mingw*.*
 cat hashes.txt
 cat ./build*.txt
