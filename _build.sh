@@ -193,13 +193,13 @@ if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
 (
   set +x
   if [ -f "${DEPLOY_KEY}" ]; then
-    echo "Uploading: "${_ALL}""
+    echo "Uploading: '${_ALL}'"
     scp -p -B -i "${DEPLOY_KEY}" \
       -o BatchMode=yes \
       -o StrictHostKeyChecking=yes \
       -o ConnectTimeout=20 \
       -o ConnectionAttempts=5 \
-      "${_ALL}" curl-for-win@haxx.se:"${_ALL}{_ALLSUFF}"
+      "${_ALL}" "curl-for-win@haxx.se:${_ALL}${_ALLSUFF}"
   fi
 )
 fi
