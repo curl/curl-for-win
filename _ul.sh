@@ -73,6 +73,7 @@ do_upload() {
   esac
 
   openssl dgst -sha256 "${_BAS}${_suf}${arch_ext}" | tee -a hashes.txt
+  openssl dgst -sha512 "${_BAS}${_suf}${arch_ext}" | tee -a hashes.txt
 
   if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
   (

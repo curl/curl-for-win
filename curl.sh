@@ -153,6 +153,7 @@ _cpu="$2"
     curl -R -fsS -o '../ca-bundle.crt' 'https://curl.haxx.se/ca/cacert.pem'
 
   openssl dgst -sha256 '../ca-bundle.crt'
+  openssl dgst -sha512 '../ca-bundle.crt'
 
   # Make steps for determinism
 

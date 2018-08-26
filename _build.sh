@@ -202,6 +202,7 @@ _ALL="all-mingw-${CURL_VER_}${_REV}${_ALLSUFF}.zip"
 zip -q -0 -X -o "${_ALL}" ./*-*-mingw*.* hashes.txt "${_BLD}"
 
 openssl dgst -sha256 "${_ALL}" | tee "${_ALL}.txt"
+openssl dgst -sha512 "${_ALL}" | tee -a "${_ALL}.txt"
 
 # Official deploy
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
