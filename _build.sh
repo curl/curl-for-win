@@ -218,7 +218,7 @@ if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
       -o ConnectTimeout=20 \
       -o ConnectionAttempts=5 \
       "${_ALL}" "${_ALL}.txt" \
-      "curl-for-win@haxx.se"
+      "curl-for-win@haxx.se:."
   fi
 )
 fi
