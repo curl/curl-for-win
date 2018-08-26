@@ -26,6 +26,7 @@ else
   # TODO: https://docs.gitlab.com/ce/ci/variables/README.html
   echo > "${_LOG}"
 fi
+cat "${_LOG}"
 
 export _BRANCH="${APPVEYOR_REPO_BRANCH}${TRAVIS_BRANCH}${CI_COMMIT_REF_NAME}${GIT_BRANCH}"
 [ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD)"
@@ -187,7 +188,6 @@ touch -r "$(ls -1 -t ./*-*-mingw*.* | head -1)" hashes.txt "${_BLD}" "${_LOG}"
 ls -l ./*-*-mingw*.*
 cat hashes.txt
 cat "${_BLD}"
-cat "${_LOG}"
 
 # Strip '-built-on-*' suffix for the single-file artifact,
 # and also add revision to filenames.
