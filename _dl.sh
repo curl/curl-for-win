@@ -21,9 +21,10 @@ export CURL_VER_='7.61.0'
 export CURL_HASH=ef6e55192d04713673b4409ccbcb4cb6cd723137d6e10ca45b0c593a454e1720
 
 # Create revision string
-export _REV
-#_REV="$(TZ=UTC date +'%Y%m%d%H%M')"
-_REV=4
+# NOTE: Set _REV to empty after bumping CURL_VER_, and
+#       set it to 1 then increment by 1 each time bumping a dependency
+#       version or pushing a CI rebuild for the master branch.
+export _REV='4'
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
