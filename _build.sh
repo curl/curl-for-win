@@ -19,14 +19,16 @@ LANG=C
 
 readonly _LOG='logurl.txt'
 if [ -n "${APPVEYOR_ACCOUNT_NAME}" ]; then
-  echo "https://ci.appveyor.com/project/${APPVEYOR_ACCOUNT_NAME}/${APPVEYOR_PROJECT_SLUG}/build/${APPVEYOR_BUILD_VERSION}/job/${APPVEYOR_JOB_ID}" > "${_LOG}"
+  _LOGURL="https://ci.appveyor.com/project/${APPVEYOR_ACCOUNT_NAME}/${APPVEYOR_PROJECT_SLUG}/build/${APPVEYOR_BUILD_VERSION}/job/${APPVEYOR_JOB_ID}"
+# _LOGURL="https://ci.appveyor.com/api/buildjobs/${APPVEYOR_JOB_ID}/log"
 elif [ -n "${TRAVIS_REPO_SLUG}" ]; then
-  echo "https://travis-ci.org/${TRAVIS_REPO_SLUG}/jobs/${TRAVIS_JOB_ID}" > "${_LOG}"
+  _LOGURL="https://travis-ci.org/${TRAVIS_REPO_SLUG}/jobs/${TRAVIS_JOB_ID}"
+# _LOGURL="https://api.travis-ci.org/v3/job/420845912/log.txt"
 else
   # TODO: https://docs.gitlab.com/ce/ci/variables/README.html
-  echo > "${_LOG}"
+  _LOGURL=''
 fi
-cat "${_LOG}"
+echo "${_LOGURL}" | tee "${_LOG}"
 
 export _BRANCH="${APPVEYOR_REPO_BRANCH}${TRAVIS_BRANCH}${CI_COMMIT_REF_NAME}${GIT_BRANCH}"
 [ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD)"
