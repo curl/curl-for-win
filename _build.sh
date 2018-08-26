@@ -36,11 +36,11 @@ esac
 export PUBLISH_PROD_FROM
 [ "${APPVEYOR_REPO_PROVIDER}" = 'gitHub' ] && PUBLISH_PROD_FROM='linux'
 
+export _BLD='build.txt'
+
 rm -f ./*-*-mingw*.*
 rm -f hashes.txt
-rm -f ./build*.txt
-
-export _BLD='build.txt'
+rm -f "${_BLD}"
 
 . ./_dl.sh || exit 1
 
@@ -83,9 +83,7 @@ if [ -f "${DEPLOY_KEY}" ]; then
 fi
 
 case "${os}" in
-  mac)
-    alias sed=gsed
-    ;;
+  mac) alias sed=gsed;;
 esac
 
 if [ "${CC}" = 'mingw-clang' ]; then
@@ -176,11 +174,11 @@ mv -f "${_BLD}.sorted" "${_BLD}"
 # shellcheck disable=SC2012
 touch -r "$(ls -1 -t ./*-*-mingw*.* | head -1)" hashes.txt
 # shellcheck disable=SC2012
-touch -r "$(ls -1 -t ./*-*-mingw*.* | head -1)" ./build*.txt
+touch -r "$(ls -1 -t ./*-*-mingw*.* | head -1)" "${_BLD}"
 
 ls -l ./*-*-mingw*.*
 cat hashes.txt
-cat ./build*.txt
+cat "${_BLD}"
 
 # Strip '-built-on-*' suffix for the single-file artifact,
 # and also add revision to filenames.
@@ -218,7 +216,7 @@ if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
       -o ConnectTimeout=20 \
       -o ConnectionAttempts=5 \
       "${_ALL}" "${_ALL}.txt" \
-      "curl-for-win@haxx.se:."
+      'curl-for-win@haxx.se:.'
   fi
 )
 fi
