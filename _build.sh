@@ -200,7 +200,7 @@ unset _ALLSUFF
 # fi
 
 # Create an artifact that includes all packages
-_ALL="all-mingw${CURL_VER_}${_REV}${_ALLSUFF}.zip"
+_ALL="all-mingw-${CURL_VER_}${_REV}${_ALLSUFF}.zip"
 zip -q -0 -X -o "${_ALL}" ./*-*-mingw*.* hashes.txt "${_BLD}"
 
 openssl dgst -sha256 "${_ALL}" | tee "${_ALL}.txt"
