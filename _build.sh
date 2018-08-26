@@ -170,15 +170,25 @@ fi
 sort "${_BLD}" > "${_BLD}.sorted"
 mv -f "${_BLD}.sorted" "${_BLD}"
 
+_LOG='logurl.txt'
+
+if [ -n "${APPVEYOR_ACCOUNT_NAME}" ]; then
+  echo "https://ci.appveyor.com/project/${APPVEYOR_ACCOUNT_NAME}/${APPVEYOR_PROJECT_SLUG}/build/${APPVEYOR_BUILD_VERSION}/job/${APPVEYOR_JOB_ID}" > "${_LOG}"
+elif [ -n "${TRAVIS_REPO_SLUG}" ]; then
+  echo "https://travis-ci.org/${TRAVIS_REPO_SLUG}/jobs/${TRAVIS_JOB_ID}" > "${_LOG}"
+else
+  # TODO: https://docs.gitlab.com/ce/ci/variables/README.html
+  echo > "${_LOG}"
+fi
+
 # Use the newest package timestamp for supplementary files
 # shellcheck disable=SC2012
-touch -r "$(ls -1 -t ./*-*-mingw*.* | head -1)" hashes.txt
-# shellcheck disable=SC2012
-touch -r "$(ls -1 -t ./*-*-mingw*.* | head -1)" "${_BLD}"
+touch -r "$(ls -1 -t ./*-*-mingw*.* | head -1)" hashes.txt "${_BLD}" "${_LOG}"
 
 ls -l ./*-*-mingw*.*
 cat hashes.txt
 cat "${_BLD}"
+cat "${_LOG}"
 
 # Strip '-built-on-*' suffix for the single-file artifact,
 # and also add revision to filenames.
@@ -199,7 +209,7 @@ unset _ALLSUFF
 
 # Create an artifact that includes all packages
 _ALL="all-mingw-${CURL_VER_}${_REV}${_ALLSUFF}.zip"
-zip -q -0 -X -o "${_ALL}" ./*-*-mingw*.* hashes.txt "${_BLD}"
+zip -q -0 -X -o "${_ALL}" ./*-*-mingw*.* hashes.txt "${_BLD}" "${_LOG}"
 
 openssl dgst -sha256 "${_ALL}" | tee "${_ALL}.txt"
 openssl dgst -sha512 "${_ALL}" | tee -a "${_ALL}.txt"
