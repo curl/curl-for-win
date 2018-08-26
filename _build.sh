@@ -17,6 +17,16 @@ LC_ALL=C
 LC_MESSAGES=C
 LANG=C
 
+readonly _LOG='logurl.txt'
+if [ -n "${APPVEYOR_ACCOUNT_NAME}" ]; then
+  echo "https://ci.appveyor.com/project/${APPVEYOR_ACCOUNT_NAME}/${APPVEYOR_PROJECT_SLUG}/build/${APPVEYOR_BUILD_VERSION}/job/${APPVEYOR_JOB_ID}" > "${_LOG}"
+elif [ -n "${TRAVIS_REPO_SLUG}" ]; then
+  echo "https://travis-ci.org/${TRAVIS_REPO_SLUG}/jobs/${TRAVIS_JOB_ID}" > "${_LOG}"
+else
+  # TODO: https://docs.gitlab.com/ce/ci/variables/README.html
+  echo > "${_LOG}"
+fi
+
 export _BRANCH="${APPVEYOR_REPO_BRANCH}${TRAVIS_BRANCH}${CI_COMMIT_REF_NAME}${GIT_BRANCH}"
 [ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD)"
 [ -n "${_BRANCH}" ] || _BRANCH='master'
@@ -169,17 +179,6 @@ fi
 
 sort "${_BLD}" > "${_BLD}.sorted"
 mv -f "${_BLD}.sorted" "${_BLD}"
-
-_LOG='logurl.txt'
-
-if [ -n "${APPVEYOR_ACCOUNT_NAME}" ]; then
-  echo "https://ci.appveyor.com/project/${APPVEYOR_ACCOUNT_NAME}/${APPVEYOR_PROJECT_SLUG}/build/${APPVEYOR_BUILD_VERSION}/job/${APPVEYOR_JOB_ID}" > "${_LOG}"
-elif [ -n "${TRAVIS_REPO_SLUG}" ]; then
-  echo "https://travis-ci.org/${TRAVIS_REPO_SLUG}/jobs/${TRAVIS_JOB_ID}" > "${_LOG}"
-else
-  # TODO: https://docs.gitlab.com/ce/ci/variables/README.html
-  echo > "${_LOG}"
-fi
 
 # Use the newest package timestamp for supplementary files
 # shellcheck disable=SC2012
