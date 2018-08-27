@@ -105,6 +105,7 @@ fi
 
 case "${os}" in
   mac)   ver="$(brew info --json=v1 mingw-w64 | jq -r '.[] | select(.name == "mingw-w64") | .versions.stable')";;
+  # FIXME: Linux-distro specific
   linux) ver="$(apt-cache show mingw-w64 | grep '^Version:' | cut -c 10-)";;
   *)     ver='';;
 esac
