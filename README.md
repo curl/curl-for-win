@@ -70,7 +70,8 @@
     dependencies.
   - To verify the correct checksum for the latest build, you can look up the
     correct ones in the build log as they are generated. Watch for `master`
-    branch job `Image: Ubuntu`, log lines starting with `SHA256(`:
+    branch job `Image: Ubuntu`, log lines starting with
+    `SHA256(` or `SHA512(`:
       <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master>
   - The build process is multi-platform and able to cross-build Windows
     executables from \*nix hosts (Linux and macOS tested.)
