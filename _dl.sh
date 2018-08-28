@@ -28,6 +28,8 @@ export _REV='4'
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
+echo "Build: REV(${_REV})"
+
 # Quit if any of the lines fail
 set -e
 
