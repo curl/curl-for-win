@@ -19,6 +19,10 @@ export LIBSSH2_VER_='1.8.0'
 export LIBSSH2_HASH=39f34e2f6835f4b992cafe8625073a88e5a28ba78f83e8099610a7b3af4676d4
 export CURL_VER_='7.61.0'
 export CURL_HASH=ef6e55192d04713673b4409ccbcb4cb6cd723137d6e10ca45b0c593a454e1720
+export OSSLSIGNCODE_VER_='1.7.1'
+export OSSLSIGNCODE_HASH='f9a8cdb38b9c309326764ebc937cba1523a3a751a7ab05df3ecc99d18ae466c9'
+
+  url "https://downloads.sourceforge.net/project/osslsigncode/osslsigncode/osslsigncode-1.7.1.tar.gz"
 
 # Create revision string
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
@@ -183,6 +187,14 @@ tar -xvf pack.bin > /dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r curl && mv curl-* curl
 [ -f "curl${_patsuf}.patch" ] && dos2unix < "curl${_patsuf}.patch" | patch --batch -N -p1 -d curl
+
+# osslsigncode
+curl -o pack.bin "https://downloads.sourceforge.net/project/osslsigncode/osslsigncode/osslsigncode-1.7.1.tar.gz" || exit 1
+openssl dgst -sha256 pack.bin | grep -q "${OSSLSIGNCODE_HASH}" || exit 1
+tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+rm pack.bin
+rm -f -r osslsigncode && mv osslsigncode-* osslsigncode
+[ -f "osslsigncode${_patsuf}.patch" ] && dos2unix < "osslsigncode${_patsuf}.patch" | patch --batch -N -p1 -d osslsigncode
 
 set +e
 

@@ -1,0 +1,68 @@
+--- osslsigncode.c.orig	2014-07-11 04:56:40.000000000 +0000
++++ osslsigncode.c	2018-08-29 14:23:44.000000000 +0000
+@@ -451,6 +451,16 @@
+ 	return (p[1]&0x80) ? (2 + (p[1]&0x7f)) : 2;
+ }
+ 
++// Add an empty (unix time = 0) timestamp to the PKCS7 structure to
++// prevent OpenSSL adding the current time. This allows to create a
++// deterministic signature when no trusted timestamp server was
++// specified, making osslsigncode behaviour similar to signtool.exe.
++static int pkcs7_add_dummy_time(PKCS7_SIGNER_INFO *si)
++{
++	ASN1_TIME *t = ASN1_TIME_adj(NULL, (time_t)0, 0, 0);
++	return PKCS7_add_signed_attribute(si, NID_pkcs9_signingTime, V_ASN1_UTCTIME, t);
++}
++
+ static void tohex(const unsigned char *v, unsigned char *b, int len)
+ {
+ 	int i;
+@@ -1146,7 +1156,7 @@
+ 
+ // pkcs7_set_nested_signature adds the p7nest signature to p7
+ // as a nested signature (SPC_NESTED_SIGNATURE).
+-static int pkcs7_set_nested_signature(PKCS7 *p7, PKCS7 *p7nest) {
++static int pkcs7_set_nested_signature(PKCS7 *p7, PKCS7 *p7nest, int no_ts) {
+ 	u_char *p = NULL;
+ 	int len = 0;
+ 
+@@ -1161,6 +1171,10 @@
+ 	OPENSSL_free(p);
+ 
+ 	PKCS7_SIGNER_INFO *si = sk_PKCS7_SIGNER_INFO_value(p7->d.sign->signer_info, 0);
++
++	if (no_ts)
++		pkcs7_add_dummy_time(si);
++
+ 	if (PKCS7_add_attribute(si, OBJ_txt2nid(SPC_NESTED_SIGNATURE_OBJID), V_ASN1_SEQUENCE, astr) == 0)
+ 		return 0;
+ 
+@@ -2895,13 +2909,18 @@
+ 	PKCS7_set_type(sig, NID_pkcs7_signed);
+ 
+ 	si = NULL;
+-	if (cert != NULL)
++	if (cert != NULL) {
+ 		si = PKCS7_add_signature(sig, cert, pkey, md);
++		if (nturl == 0 && ntsurl == 0)
++			pkcs7_add_dummy_time(si);
++	}
+ 	if (si == NULL) {
+ 		for (i=0; i<sk_X509_num(certs); i++) {
+ 			X509 *signcert = sk_X509_value(certs, i);
+ 			/* X509_print_fp(stdout, signcert); */
+ 			si = PKCS7_add_signature(sig, signcert, pkey, md);
++			if (nturl == 0 && ntsurl == 0)
++				pkcs7_add_dummy_time(si);
+ 			if (si != NULL) break;
+ 		}
+ 	}
+@@ -3043,7 +3062,7 @@
+ 		if (cursig == NULL) {
+ 			DO_EXIT_0("no 'cursig' was extracted. this points to a bug in the code. aborting...\n")
+ 		}
+-		if (pkcs7_set_nested_signature(cursig, sig) == 0)
++		if (pkcs7_set_nested_signature(cursig, sig, (nturl == 0 && ntsurl == 0)) == 0)
+ 			DO_EXIT_0("unable to append the nested signature to the current signature\n");
+ 		outsig = cursig;
+ 	} else {
