@@ -89,8 +89,9 @@
       [will always embed](https://sourceforge.net/p/osslsigncode/bugs/8/) the
       current timestamp
       ([Signing Time &ndash; OID 1.2.840.113549.1.9.5](https://oidref.com/1.2.840.113549.1.9.25))
-      in the signature, which breaks reproducibility. More precisely, this is
-      added by OpenSSL's PKCS #7 module unconditionally.
+      in the signature, which breaks reproducibility. There is a patch for
+      `osslsigncode` to address this, but it's not yet upstreamed:
+      <https://gist.github.com/vszakats/b9b2a861afcf129c2a205b33085cbf09>
     - Trusted timestamp included in the signature breaks reproducibility. This
       is an optional feature, though it appears to be good practice to include
       it.
