@@ -71,6 +71,11 @@ if [ -f "${CODESIGN_KEY}.asc" ]; then
 fi
 [ -f "${CODESIGN_KEY}" ] || unset CODESIGN_KEY
 
+if [ -f "${CODESIGN_KEY}" ]; then
+  # build a patched binary of osslsigncode
+  ./osslsigncode.sh
+fi
+
 # decrypt deploy key
 DEPLOY_KEY="$(realpath '.')/deploy.key"
 if [ -f "${DEPLOY_KEY}.asc" ]; then
