@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 
 # Copyright 2016-2018 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
@@ -29,7 +29,7 @@ _VER="$1"
 
   if [ "${os}" = 'mac' ]; then
     # options="-I/usr/local/opt/curl/include -L/usr/local/opt/curl/lib"
-    options="${options} -I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib"
+    options="${options} -I/usr/local/opt/openssl@1.1/include -L/usr/local/opt/openssl@1.1/lib"
   fi
 
   # shellcheck disable=SC2086
