@@ -59,7 +59,7 @@ rm -f "${_BLD}"
 
 # decrypt code signing key
 export CODESIGN_KEY=
-CODESIGN_KEY="$(realpath '.')/vszakats.p12"
+CODESIGN_KEY="$(realpath '.')/codesign.p12"
 if [ -f "${CODESIGN_KEY}.asc" ]; then
   (
     set +x
