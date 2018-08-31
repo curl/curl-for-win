@@ -187,7 +187,7 @@ rm -f -r curl && mv curl-* curl
 [ -f "curl${_patsuf}.patch" ] && dos2unix < "curl${_patsuf}.patch" | patch --batch -N -p1 -d curl
 
 # osslsigncode
-curl -L -o pack.bin "https://downloads.sourceforge.net/project/osslsigncode/osslsigncode/osslsigncode-${OSSLSIGNCODE_VER_}.tar.gz" || exit 1
+curl -o pack.bin -L --proto-redir =https "https://downloads.sourceforge.net/project/osslsigncode/osslsigncode/osslsigncode-${OSSLSIGNCODE_VER_}.tar.gz" || exit 1
 openssl dgst -sha256 pack.bin | grep -q "${OSSLSIGNCODE_HASH}" || exit 1
 tar -xvf pack.bin > /dev/null 2>&1 || exit 1
 rm pack.bin
