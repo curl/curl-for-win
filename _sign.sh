@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2016-2017 Viktor Szakats <https://vszakats.net/>
+# Copyright 2016-2018 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
 
 if [ -f "${CODESIGN_KEY}" ] && \
