@@ -81,20 +81,10 @@
   - Binaries distributed via Bintray are GPG signed with Bintray's
     [key pair](https://bintray.com/docs/usermanual/uploads/uploads_managinguploadedcontent.html#_signing_with_the_bintray_key):
     **[8756 C4F7 65C9 AC3C B6B8  5D62 379C E192 D401 AB61](https://pgp.mit.edu/pks/lookup?op=vindex&fingerprint=on&search=0x8756C4F765C9AC3CB6B85D62379CE192D401AB61)**
-  - Code signing is implemented but not enabled yet for reasons below:
-    - There doesn't seem to exist a way to get _free_ code signing
-      certificates, so only a self-signed certificate could be used, which is
-      not very useful.
-    - The portable tool `osslsigncode` used for signing
-      [will always embed](https://sourceforge.net/p/osslsigncode/bugs/8/) the
-      current timestamp
-      ([Signing Time &ndash; OID 1.2.840.113549.1.9.5](https://oidref.com/1.2.840.113549.1.9.25))
-      in the signature, which breaks reproducibility. There is a patch for
-      `osslsigncode` to address this, but it's not yet upstreamed:
-      <https://gist.github.com/vszakats/b9b2a861afcf129c2a205b33085cbf09>
-    - Trusted timestamp included in the signature breaks reproducibility. This
-      is an optional feature, though it appears to be good practice to include
-      it.
+  - Code signing is implemented and enabled with a self-signed certificate.
+    The signature intentionally omits a trusted timestamp to retain
+    reproducibility. Signing is done using a custom patched `osslsigncode`
+    build to enforce a constant non-trusted timestamp for reproducibility.
 
 # Binary package downloads
 
