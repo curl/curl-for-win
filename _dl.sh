@@ -9,8 +9,8 @@ export BROTLI_VER_='1.0.5'
 export BROTLI_HASH=3d5bedd48edb909fe3b87cb99f7d139b987ef6f1616b7e22d74e928270a2fd20
 export LIBIDN2_VER_='2.0.4'
 export LIBIDN2_HASH=644b6b03b285fb0ace02d241d59483d98bc462729d8bb3608d5cad5532f3d2f0
-export NGHTTP2_VER_='1.32.1'
-export NGHTTP2_HASH=71ad04489b8e52df23a80166dfbf29d39bc48e39bc081e1e83ca8c94feeab7d0
+export NGHTTP2_VER_='1.33.0'
+export NGHTTP2_HASH=4879ce9ff3320f5344b910ee1c46ed5e366edc2272620cf17d8e762724d7df1e
 export CARES_VER_='1.14.0'
 export CARES_HASH=45d3c1fd29263ceec2afc8ff9cd06d5f8f889636eb4e80ce3cc7f0eaf7aadc6e
 export OPENSSL_VER_='1.1.0i'
@@ -26,7 +26,7 @@ export OSSLSIGNCODE_HASH=f9a8cdb38b9c309326764ebc937cba1523a3a751a7ab05df3ecc99d
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the master branch.
-export _REV='4'
+export _REV='5'
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
