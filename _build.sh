@@ -23,7 +23,7 @@ if [ -n "${APPVEYOR_ACCOUNT_NAME}" ]; then
 # _LOGURL="https://ci.appveyor.com/api/buildjobs/${APPVEYOR_JOB_ID}/log"
 elif [ -n "${TRAVIS_REPO_SLUG}" ]; then
   _LOGURL="https://travis-ci.org/${TRAVIS_REPO_SLUG}/jobs/${TRAVIS_JOB_ID}"
-# _LOGURL="https://api.travis-ci.org/v3/job/420845912/log.txt"
+# _LOGURL="https://api.travis-ci.org/v3/job/${TRAVIS_JOB_ID}/log.txt"
 else
   # TODO: https://docs.gitlab.com/ce/ci/variables/README.html
   _LOGURL=''
