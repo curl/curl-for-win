@@ -66,7 +66,8 @@
     [C-ares](https://c-ares.haxx.se/).
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
   - If you need a download with a stable checksum, link to the penultimate
-    version. Only the current latest versions are kept updated with newer
+    version (or the revisioned binaries on the official download page).
+    Only the current latest versions are kept updated with newer
     dependencies.
   - To verify the correct checksum for the latest build, you can look up the
     correct ones in the build log as they are generated. Watch for `master`
