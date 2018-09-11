@@ -8,7 +8,7 @@ pacman --noconfirm --ask 20 --noprogressbar -S --needed \
 pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
 pacman --noconfirm --ask 20 --noprogressbar -S -yu -u
 pacman --noconfirm --ask 20 --noprogressbar -S --needed \
-  mingw-w64-{i686,x86_64}-{cmake,jq,osslsigncode,python3-pip} \
+  mingw-w64-{i686,x86_64}-{cmake,jq,python3-pip} \
   zip
 
 [ "${CC}" = 'mingw-clang' ] && \
