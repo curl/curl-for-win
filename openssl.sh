@@ -38,6 +38,7 @@ _cpu="$2"
   find . -name '*.o'   -type f -delete
   find . -name '*.a'   -type f -delete
   find . -name '*.pc'  -type f -delete
+  find . -name '*.def' -type f -delete
   find . -name '*.dll' -type f -delete
   find . -name '*.exe' -type f -delete
 
