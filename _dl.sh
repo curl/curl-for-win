@@ -43,9 +43,12 @@ case "$(uname)" in
   *BSD)    os='bsd';;
 esac
 
-if [ "${os}" != 'win' ]; then
-  # Install required component
-  # TODO: add `--progress-bar off` when pip 10.0.0 is available
+# Install required component
+# TODO: add `--progress-bar off` when pip 10.0.0 is available
+if [ "${os}" = 'linux' ]; then
+  pip --version
+  pip --disable-pip-version-check install --user pefile
+elif [ "${os}" = 'mac' ]; then
   pip3 --version
   pip3 --disable-pip-version-check install --user pefile
 fi
