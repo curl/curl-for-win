@@ -21,7 +21,7 @@ matrix:
       compiler: mingw-clang
       services: [docker]
       # https://hub.docker.com/_/debian/
-      env: DOCKER_IMAGE=debian:unstable
+      env: DOCKER_IMAGE=debian:testing
 #   - os: osx
 #     # https://docs.travis-ci.com/user/reference/osx/#using-os-x
 #     osx_image: &mac-image xcode9.4
