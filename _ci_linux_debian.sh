@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 
 # Copyright 2017-2018 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
@@ -12,9 +12,10 @@ export _CCSUFFIX='-6.0'
 [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] && _optpkg="${_optpkg} autoconf automake libtool"
 
 dpkg --add-architecture i386
-apt-get -qq -o=Dpkg::Use-Pty=0 update
+apt-get update
+apt-get autoremove
 # shellcheck disable=SC2086
-apt-get -qq -o=Dpkg::Use-Pty=0 install \
+apt-get install \
   curl git gpg python3-pip make cmake \
   libssl-dev \
   gcc-mingw-w64 ${_optpkg} \
