@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh
 
 # Copyright 2017-2018 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
