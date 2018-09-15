@@ -50,17 +50,8 @@ _cpu="$2"
     # mingw64 build (as of mingw 5.2.0) will fail without the `no-asm` option.
     [ "${_cpu}" = '64' ] && options="${options} no-asm"
   fi
-  if [ "$(echo "${OPENSSL_VER_}" | cut -c -5)" = '1.0.2' ]; then
-    [ "${_cpu}" = '32' ] && export SHARED_RCFLAGS='--target=pe-i386'
-    [ "${_cpu}" = '64' ] && export SHARED_RCFLAGS='--target=pe-x86-64'
-    options="${options} -m${_cpu} -static-libgcc no-rc5 no-ssl3"
-  else
-    options="${options} no-filenames"
-  fi
-  if [ "${_cpu}" = '64' ]; then
-    options="${options} enable-ec_nistp_64_gcc_128"
-    [ "${_CCVER}" -ge '05' ] && options="${options} -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
-  fi
+  options="${options} no-filenames"
+  [ "${_cpu}" = '64' ] && options="${options} enable-ec_nistp_64_gcc_128 -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
   [ "${_cpu}" = '32' ] && options="${options} -fno-asynchronous-unwind-tables"
 
   # AR=, NM=, RANLIB=
@@ -76,7 +67,6 @@ _cpu="$2"
     no-tests \
     no-makedepend \
     '--prefix=/usr/local'
-  [ "$(echo "${OPENSSL_VER_}" | cut -c -4)" = '1.1.' ] || make depend
   make
   # Install it so that it can be detected by CMake
   make install "DESTDIR=$(pwd)/pkg" > /dev/null # 2>&1

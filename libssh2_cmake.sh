@@ -53,7 +53,7 @@ _cpu="$2"
     _CFLAGS="-m${_cpu} -fno-ident"
     [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
     _LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
-    [ "${_cpu}" = '64' ] && [ "${_CCVER}" -ge '05' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
+    [ "${_cpu}" = '64' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
     if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
       _LDFLAGS="${_LDFLAGS} -Wl,-Map,libssh2.map"
     fi

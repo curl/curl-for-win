@@ -48,7 +48,7 @@ _cpu="$2"
   _CFLAGS="-m${_cpu} -fno-ident -D_LARGEFILE64_SOURCE=1 -D_LFS64_LARGEFILE=1"
   [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
   _LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
-  [ "${_cpu}" = '64' ] && [ "${_CCVER}" -ge '05' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x155000000"
+  [ "${_cpu}" = '64' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x155000000"
 
   options='-DCMAKE_SYSTEM_NAME=Windows'
   options="${options} -DCMAKE_BUILD_TYPE=Release"

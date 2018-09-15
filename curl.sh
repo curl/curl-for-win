@@ -58,10 +58,8 @@ _cpu="$2"
     CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
   else
     CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
-    if [ "${_CCVER}" -ge '05' ]; then
-      CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
-    fi
+    CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
+    CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
   fi
 
   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
@@ -220,10 +218,8 @@ _cpu="$2"
   cp -f -p RELEASE-NOTES            "${_DST}/RELEASE-NOTES.txt"
   cp -f -p ../ca-bundle.crt         "${_DST}/bin/curl-ca-bundle.crt"
 
-  [ -d ../zlib ]     && cp -f -p ../zlib/README      "${_DST}/COPYING-zlib.txt"
-  if [ "$(echo "${CURL_VER_}" | cut -c -5)" != '7.56.' ]; then
-    [ -d ../brotli ]   && cp -f -p ../brotli/LICENSE   "${_DST}/COPYING-brotli.txt"
-  fi
+  [ -d ../zlib ]     && cp -f -p ../zlib/README     "${_DST}/COPYING-zlib.txt"
+  [ -d ../brotli ]   && cp -f -p ../brotli/LICENSE  "${_DST}/COPYING-brotli.txt"
   [ -d ../libssh2 ]  && cp -f -p ../libssh2/COPYING "${_DST}/COPYING-libssh2.txt"
   [ -d ../nghttp2 ]  && cp -f -p ../nghttp2/COPYING "${_DST}/COPYING-nghttp2.txt"
   [ -d ../libidn2 ]  && cp -f -p ../libidn2/COPYING "${_DST}/COPYING-libidn2.txt"
