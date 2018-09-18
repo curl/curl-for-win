@@ -31,6 +31,11 @@ _cpu="$2"
 
   readonly _ref='CHANGES'
 
+  case "$(os)" in
+    bsd|mac) unixts=$("TZ=UTC stat -f '%m' ${_ref}");;
+    *)       unixts=$("TZ=UTC stat -c '%Y' ${_ref}");;
+  esac
+
   # Build
 
   rm -fr pkg
@@ -46,7 +51,7 @@ _cpu="$2"
   [ "${_cpu}" = '64' ] && options='mingw64'
   if [ "${_BRANCH#*lto*}" != "${_BRANCH}" ]; then
     # Create a fixed seed based on the timestamp of the OpenSSL source package.
-    options="${options} -flto -ffat-lto-objects -frandom-seed=$(TZ=UTC stat -c %Y "${_ref}")"
+    options="${options} -flto -ffat-lto-objects -frandom-seed=${unixts}"
     # mingw64 build (as of mingw 5.2.0) will fail without the `no-asm` option.
     [ "${_cpu}" = '64' ] && options="${options} no-asm"
   fi
@@ -67,7 +72,7 @@ _cpu="$2"
     no-tests \
     no-makedepend \
     '--prefix=/usr/local'
-  make
+  SOURCE_DATE_EPOCH=${unixts} TZ=UTC make
   # Install it so that it can be detected by CMake
   make install "DESTDIR=$(pwd)/pkg" > /dev/null # 2>&1
 
