@@ -31,9 +31,9 @@ _cpu="$2"
 
   readonly _ref='CHANGES'
 
-  case "$(os)" in
-    bsd|mac) unixts=$("TZ=UTC stat -f '%m' ${_ref}");;
-    *)       unixts=$("TZ=UTC stat -c '%Y' ${_ref}");;
+  case "${os}" in
+    bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${_ref}")";;
+    *)       unixts="$(TZ=UTC stat -c '%Y' "${_ref}")";;
   esac
 
   # Build
