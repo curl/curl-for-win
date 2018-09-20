@@ -34,7 +34,7 @@
     (via [AppVeyor CI](https://www.appveyor.com/)), using LLVM/Clang for
     curl, libssh2, nghttp2, c-ares, brotli and zlib, and GCC for OpenSSL.
     <br>Exact OS image used for the builds is
-    [`debian:testing`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing)
+    [`debian:unstable`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/unstable)
     (a [reproducible](https://github.com/debuerreotype/debuerreotype) image)
     via [Docker](https://hub.docker.com/_/debian/).
   - Binaries are built with supported
