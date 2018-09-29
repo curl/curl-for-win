@@ -24,7 +24,7 @@ matrix:
       env: DOCKER_IMAGE=debian:unstable
 #   - os: osx
 #     # https://docs.travis-ci.com/user/reference/osx/#using-os-x
-#     osx_image: &mac-image xcode9.4
+#     osx_image: &mac-image xcode10
 #     compiler: mingw-clang
 #     env: CPU=64
 #   - os: osx
