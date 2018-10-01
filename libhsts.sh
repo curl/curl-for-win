@@ -55,8 +55,6 @@ _cpu="$2"
   find . -name '*.dll' -type f -delete
   find . -name '*.exe' -type f -delete
 
-#    --disable-asan
-
   export CC="${_CCPREFIX}gcc -static-libgcc"
   export LDFLAGS="-m${_cpu}"
   export CFLAGS="${LDFLAGS} -fno-ident"
@@ -67,7 +65,6 @@ _cpu="$2"
     --disable-silent-rules \
     --disable-doc \
     --disable-rpath \
-    --disable-tests \
     --enable-static \
     --enable-shared \
     '--prefix=/usr/local' \
