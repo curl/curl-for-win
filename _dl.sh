@@ -5,6 +5,8 @@
 
 export ZLIB_VER_='1.2.11'
 export ZLIB_HASH=629380c90a77b964d896ed37163f5c3a34f6e6d897311f1df2a7016355c45eff
+export LIBHSTS_VER_='0.1.0'
+export LIBHSTS_HASH=e1125e0395b4777361eafafd61fff2b516d3f2fb57d56e40cb554a6cd8c024e0
 export BROTLI_VER_='1.0.6'
 export BROTLI_HASH=ce94b7f48af5e8f444c3949ca93201c1b4bb40da633db084e900133ce87848db
 export LIBIDN2_VER_='2.0.4'
@@ -185,6 +187,15 @@ tar -xvf pack.bin > /dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r curl && mv curl-* curl
 [ -f "curl${_patsuf}.patch" ] && dos2unix < "curl${_patsuf}.patch" | patch --batch -N -p1 -d curl
+
+# libhsts
+curl \
+  -o pack.bin "https://gitlab.com/rockdaboot/libhsts/uploads/4753f61b5a3c6253acf4934217816e3f/libhsts-${LIBHSTS_VER_}.tar.gz" || exit 1
+openssl dgst -sha256 pack.bin | grep -q "${LIBHSTS_HASH}" || exit 1
+tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+rm pack.bin
+rm -f -r libhsts && mv libhsts-* libhsts
+[ -f "libhsts${_patsuf}.patch" ] && dos2unix < "libhsts${_patsuf}.patch" | patch --batch -N -p1 -d libhsts
 
 # osslsigncode
 curl -o pack.bin -L --proto-redir =https "https://deb.debian.org/debian/pool/main/o/osslsigncode/osslsigncode_${OSSLSIGNCODE_VER_}.orig.tar.gz" || exit 1
