@@ -27,6 +27,8 @@ environment:
     secure: vvbDZUlaB2WICMOD2zqO3MyPRpy3S06hE3ShA0q+YXWDdj4GX+am+RepjZIlpxtB
   DEPLOY_GPG_PASS:
     secure: WHnaUtu4NM46WEgLhxUyPBShvzLNwRoR5v0Z3+/UqM0nMzrUGieb+tJKX/AZLFkx
+  APPVEYOR_RDP_PASSWORD:
+    secure:
   APPVEYOR_YML_DISABLE_PS_LINUX: true
   CC: mingw-clang
 build_script:
