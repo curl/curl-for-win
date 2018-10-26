@@ -84,7 +84,7 @@ _cpu="$2"
 
   ../_peclean.py "${_ref}" win32/*.dll
 
-  ../_sign.sh win32/*.dll
+  ../_sign.sh "${_ref}" win32/*.dll
 
   touch -c -r "${_ref}" win32/*.dll
   touch -c -r "${_ref}" win32/*.a

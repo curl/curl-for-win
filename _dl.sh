@@ -28,7 +28,7 @@ export OSSLSIGNCODE_HASH=f9a8cdb38b9c309326764ebc937cba1523a3a751a7ab05df3ecc99d
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the master branch.
-export _REV='7'
+export _REV='8'
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
@@ -203,7 +203,7 @@ openssl dgst -sha256 pack.bin | grep -q "${OSSLSIGNCODE_HASH}" || exit 1
 tar -xvf pack.bin > /dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r osslsigncode && mv osslsigncode-* osslsigncode
-[ -f "osslsigncode${_patsuf}.patch" ] && dos2unix < "osslsigncode${_patsuf}.patch" | patch --batch -N -p1 -d osslsigncode
+[ -f 'osslsigncode.patch' ] && dos2unix < 'osslsigncode.patch' | patch --batch -N -p1 -d osslsigncode
 
 set +e
 

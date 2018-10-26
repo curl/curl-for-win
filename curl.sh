@@ -162,8 +162,8 @@ _cpu="$2"
   ../_peclean.py "${_ref}" src/*.exe
   ../_peclean.py "${_ref}" lib/*.dll
 
-  ../_sign.sh src/*.exe
-  ../_sign.sh lib/*.dll
+  ../_sign.sh "${_ref}" src/*.exe
+  ../_sign.sh "${_ref}" lib/*.dll
 
   touch -c -r "${_ref}" src/*.exe
   touch -c -r "${_ref}" lib/*.dll

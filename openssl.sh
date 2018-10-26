@@ -95,8 +95,8 @@ _cpu="$2"
   ../_peclean.py "${_ref}" ${_pkg}/bin/openssl.exe
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.dll
 
-  ../_sign.sh ${_pkg}/bin/openssl.exe
-  ../_sign.sh ${_pkg}/bin/*.dll
+  ../_sign.sh "${_ref}" ${_pkg}/bin/openssl.exe
+  ../_sign.sh "${_ref}" ${_pkg}/bin/*.dll
 
   # shellcheck disable=SC2086
   if ls ${engdir}/*.dll > /dev/null 2>&1; then
@@ -104,7 +104,7 @@ _cpu="$2"
     ../_peclean.py "${_ref}" ${engdir}/*.dll
 
     # shellcheck disable=SC2086
-    ../_sign.sh ${engdir}/*.dll
+    ../_sign.sh "${_ref}" ${engdir}/*.dll
   fi
 
   touch -c -r "${_ref}" ${_pkg}/ssl/openssl.cnf

@@ -1,5 +1,5 @@
 --- a/osslsigncode.c	2014-07-11 04:56:40.000000000 +0000
-+++ b/osslsigncode.c	2018-08-29 14:23:44.000000000 +0000
++++ b/osslsigncode.c	2018-10-26 14:30:36.000000000 +0000
 @@ -451,6 +451,16 @@
  	return (p[1]&0x80) ? (2 + (p[1]&0x7f)) : 2;
  }
@@ -8,36 +8,62 @@
 +// prevent OpenSSL adding the current time. This allows to create a
 +// deterministic signature when no trusted timestamp server was
 +// specified, making osslsigncode behaviour similar to signtool.exe.
-+static int pkcs7_add_dummy_time(PKCS7_SIGNER_INFO *si)
++static int pkcs7_add_custom_time(PKCS7_SIGNER_INFO *si, time_t customtimeutc)
 +{
-+	ASN1_TIME *t = ASN1_TIME_adj(NULL, (time_t)0, 0, 0);
++	ASN1_TIME *t = ASN1_TIME_adj(NULL, customtimeutc, 0, 0);
 +	return PKCS7_add_signed_attribute(si, NID_pkcs9_signingTime, V_ASN1_UTCTIME, t);
 +}
 +
  static void tohex(const unsigned char *v, unsigned char *b, int len)
  {
  	int i;
-@@ -1146,7 +1156,7 @@
+@@ -765,6 +775,7 @@
+ 			"\t\t[ -t <timestampurl> [ -t ... ] [ -p <proxy> ]]\n"
+ 			"\t\t[ -ts <timestampurl> [ -ts ... ] [ -p <proxy> ]]\n"
+ #endif
++			"\t\t[ -st <unix-time>\n"
+ 			"\t\t[ -nest ]\n\n"
+ 			"\t\tMSI specific:\n"
+ 			"\t\t[ -add-msi-dse ]\n\n"
+@@ -1146,7 +1157,7 @@
  
  // pkcs7_set_nested_signature adds the p7nest signature to p7
  // as a nested signature (SPC_NESTED_SIGNATURE).
 -static int pkcs7_set_nested_signature(PKCS7 *p7, PKCS7 *p7nest) {
-+static int pkcs7_set_nested_signature(PKCS7 *p7, PKCS7 *p7nest, int no_ts) {
++static int pkcs7_set_nested_signature(PKCS7 *p7, PKCS7 *p7nest, int custom_ts, time_t customtimeutc) {
  	u_char *p = NULL;
  	int len = 0;
  
-@@ -1161,6 +1171,10 @@
+@@ -1161,6 +1172,10 @@
  	OPENSSL_free(p);
  
  	PKCS7_SIGNER_INFO *si = sk_PKCS7_SIGNER_INFO_value(p7->d.sign->signer_info, 0);
 +
-+	if (no_ts)
-+		pkcs7_add_dummy_time(si);
++	if (custom_ts)
++		pkcs7_add_custom_time(si, customtimeutc);
 +
  	if (PKCS7_add_attribute(si, OBJ_txt2nid(SPC_NESTED_SIGNATURE_OBJID), V_ASN1_SEQUENCE, astr) == 0)
  		return 0;
  
-@@ -2895,13 +2909,18 @@
+@@ -2283,6 +2298,7 @@
+ 	PKCS7_SIGNER_INFO *si;
+ 	ASN1_STRING *astr;
+ 	const EVP_MD *md;
++	time_t customtimeutc = (time_t)0;
+ 
+ 	const char *argv0 = argv[0];
+ 	static char buf[64*1024];
+@@ -2420,6 +2436,9 @@
+ 		} else if ((cmd == CMD_SIGN) && !strcmp(*argv, "-i")) {
+ 			if (--argc < 1) usage(argv0);
+ 			url = *(++argv);
++		} else if ((cmd == CMD_SIGN) && !strcmp(*argv, "-st")) {
++			if (--argc < 1) usage(argv0);
++			customtimeutc = (time_t)strtoul(*(++argv), NULL, 10);
+ #ifdef ENABLE_CURL
+ 		} else if ((cmd == CMD_SIGN) && !strcmp(*argv, "-t")) {
+ 			if (--argc < 1) usage(argv0);
+@@ -2895,13 +2914,18 @@
  	PKCS7_set_type(sig, NID_pkcs7_signed);
  
  	si = NULL;
@@ -45,7 +71,7 @@
 +	if (cert != NULL) {
  		si = PKCS7_add_signature(sig, cert, pkey, md);
 +		if (nturl == 0 && ntsurl == 0)
-+			pkcs7_add_dummy_time(si);
++			pkcs7_add_custom_time(si, customtimeutc);
 +	}
  	if (si == NULL) {
  		for (i=0; i<sk_X509_num(certs); i++) {
@@ -53,21 +79,21 @@
  			/* X509_print_fp(stdout, signcert); */
  			si = PKCS7_add_signature(sig, signcert, pkey, md);
 +			if (nturl == 0 && ntsurl == 0)
-+				pkcs7_add_dummy_time(si);
++				pkcs7_add_custom_time(si, customtimeutc);
  			if (si != NULL) break;
  		}
  	}
-@@ -3043,7 +3062,7 @@
+@@ -3043,7 +3067,7 @@
  		if (cursig == NULL) {
  			DO_EXIT_0("no 'cursig' was extracted. this points to a bug in the code. aborting...\n")
  		}
 -		if (pkcs7_set_nested_signature(cursig, sig) == 0)
-+		if (pkcs7_set_nested_signature(cursig, sig, (nturl == 0 && ntsurl == 0)) == 0)
++		if (pkcs7_set_nested_signature(cursig, sig, (nturl == 0 && ntsurl == 0), customtimeutc) == 0)
  			DO_EXIT_0("unable to append the nested signature to the current signature\n");
  		outsig = cursig;
  	} else {
---- a/osslsigncode.c	2018-08-31 17:43:11.000000000 +0000
-+++ b/osslsigncode.c	2018-08-31 18:26:05.000000000 +0000
+--- a/osslsigncode.c	2018-10-26 14:30:36.000000000 +0000
++++ b/osslsigncode.c	2018-10-26 14:31:49.000000000 +0000
 @@ -108,6 +108,15 @@
  #include <openssl/engine.h>
  #endif
@@ -147,7 +173,7 @@
  #ifdef ENABLE_CURL
  			"\t\t[ -t <timestampurl> [ -t ... ] [ -p <proxy> ]]\n"
  			"\t\t[ -ts <timestampurl> [ -ts ... ] [ -p <proxy> ]]\n"
-@@ -840,6 +850,7 @@
+@@ -841,6 +851,7 @@
  	return link;
  }
  
@@ -155,7 +181,7 @@
  static const unsigned char classid_page_hash[] = {
  	0xA6, 0xB5, 0x86, 0xD5, 0xB4, 0xA1, 0x24, 0x66,
  	0xAE, 0x05, 0xA2, 0x17, 0xDA, 0x8E, 0x60, 0xD6
-@@ -848,7 +859,7 @@
+@@ -849,7 +860,7 @@
  static unsigned char *calc_page_hash(char *indata, unsigned int peheader, int pe32plus,
  									 unsigned int sigpos, int phtype, unsigned int *phlen);
  
@@ -164,7 +190,7 @@
  #ifndef sk_ASN1_OCTET_STRING_new_null
  #define sk_ASN1_OCTET_STRING_new_null() SKM_sk_new_null(ASN1_OCTET_STRING)
  #define sk_ASN1_OCTET_STRING_free(st) SKM_sk_free(ASN1_OCTET_STRING, (st))
-@@ -857,7 +868,7 @@
+@@ -858,7 +869,7 @@
  	SKM_ASN1_SET_OF_i2d(ASN1_OCTET_STRING, (st), (pp), (i2d_func), (ex_tag), (ex_class), (is_set))
  #endif
  
@@ -173,7 +199,7 @@
  #ifndef sk_SpcAttributeTypeAndOptionalValue_new_null
  #define sk_SpcAttributeTypeAndOptionalValue_new_null() SKM_sk_new_null(SpcAttributeTypeAndOptionalValue)
  #define sk_SpcAttributeTypeAndOptionalValue_free(st) SKM_sk_free(SpcAttributeTypeAndOptionalValue, (st))
-@@ -875,8 +886,8 @@
+@@ -876,8 +887,8 @@
  		exit(-1);
  	}
  
@@ -184,7 +210,7 @@
  	free(ph);
  
  	STACK_OF(ASN1_OCTET_STRING) *oset = sk_ASN1_OCTET_STRING_new_null();
-@@ -910,8 +921,8 @@
+@@ -911,8 +922,8 @@
  	SpcAttributeTypeAndOptionalValue_free(aval);
  
  	SpcSerializedObject *so = SpcSerializedObject_new();
@@ -195,7 +221,7 @@
  	OPENSSL_free(p);
  
  	SpcLink *link = SpcLink_new();
-@@ -919,6 +930,7 @@
+@@ -920,6 +931,7 @@
  	link->value.moniker = so;
  	return link;
  }
@@ -203,7 +229,7 @@
  
  static void get_indirect_data_blob(u_char **blob, int *len, const EVP_MD *md, file_type_t type,
  								   int pagehash, char *indata, unsigned int peheader, int pe32plus,
-@@ -948,12 +960,16 @@
+@@ -949,12 +961,16 @@
  	} else if (type == FILE_TYPE_PE) {
  		SpcPeImageData *pid = SpcPeImageData_new();
  		ASN1_BIT_STRING_set(pid->flags, (unsigned char*)"0", 0);
@@ -220,7 +246,7 @@
  			pid->file = get_obsolete_link();
  		}
  		l = i2d_SpcPeImageData(pid, NULL);
-@@ -970,7 +986,7 @@
+@@ -971,7 +987,7 @@
  		ASN1_INTEGER_set(si->d, 0);
  		ASN1_INTEGER_set(si->e, 0);
  		ASN1_INTEGER_set(si->f, 0);
@@ -229,7 +255,7 @@
  		l = i2d_SpcSipInfo(si, NULL);
  		p = OPENSSL_malloc(l);
  		i2d_SpcSipInfo(si, &p);
-@@ -992,7 +1008,7 @@
+@@ -993,7 +1009,7 @@
  	hashlen = EVP_MD_size(md);
  	hash = OPENSSL_malloc(hashlen);
  	memset(hash, 0, hashlen);
@@ -238,7 +264,7 @@
  	OPENSSL_free(hash);
  
  	*len  = i2d_SpcIndirectDataContent(idc, NULL);
-@@ -1841,19 +1857,18 @@
+@@ -1842,19 +1858,18 @@
  						   unsigned int peheader, int pe32plus, unsigned int fileend)
  {
  	static unsigned char bfb[16*1024*1024];
@@ -262,7 +288,7 @@
  	BIO_read(bio, bfb, 8);
  
  	unsigned int n = peheader + 88 + 4 + 60+pe32plus*16 + 8;
-@@ -1864,14 +1879,16 @@
+@@ -1865,14 +1880,16 @@
  		int l = BIO_read(bio, bfb, want);
  		if (l <= 0)
  			break;
@@ -281,7 +307,7 @@
  static void	extract_page_hash (SpcAttributeTypeAndOptionalValue *obj,
  							   unsigned char **ph, unsigned int *phlen, int *phtype)
  {
-@@ -1937,16 +1954,15 @@
+@@ -1938,16 +1955,15 @@
  	int phlen = pphlen * (3 + nsections + sigpos / pagesize);
  	unsigned char *res = malloc(phlen);
  	unsigned char *zeroes = calloc(pagesize, 1);
@@ -305,7 +331,7 @@
  
  	unsigned short sizeofopthdr = GET_UINT16_LE(indata + peheader + 20);
  	char *sections = indata + peheader + 24 + sizeofopthdr;
-@@ -1958,14 +1974,14 @@
+@@ -1959,14 +1975,14 @@
  		unsigned int l;
  		for (l=0; l < rs; l+=pagesize, pi++) {
  			PUT_UINT32_LE(ro + l, res + pi*pphlen);
@@ -325,7 +351,7 @@
  		}
  		lastpos = ro + rs;
  		sections += 40;
-@@ -1975,8 +1991,10 @@
+@@ -1976,8 +1992,10 @@
  	pi++;
  	free(zeroes);
  	*rphlen = pi*pphlen;
@@ -336,7 +362,7 @@
  
  static int verify_pe_pkcs7(PKCS7 *p7, char *indata, unsigned int peheader, int pe32plus,
  						   unsigned int sigpos, unsigned int siglen, char *leafhash,
-@@ -1999,7 +2017,9 @@
+@@ -2000,7 +2018,9 @@
  		const unsigned char *p = astr->data;
  		SpcIndirectDataContent *idc = d2i_SpcIndirectDataContent(NULL, &p, astr->length);
  		if (idc) {
@@ -346,7 +372,7 @@
  			if (idc->messageDigest && idc->messageDigest->digest && idc->messageDigest->digestAlgorithm) {
  				mdtype = OBJ_obj2nid(idc->messageDigest->digestAlgorithm->algorithm);
  				memcpy(mdbuf, idc->messageDigest->digest->data, idc->messageDigest->digest->length);
-@@ -2028,6 +2048,7 @@
+@@ -2029,6 +2049,7 @@
  	if (!mdok) ret = 1;
  	printf("Calculated message digest : %s%s\n\n", hexbuf, mdok?"":"    MISMATCH!!!");
  
@@ -354,7 +380,7 @@
  	if (phlen > 0) {
  		printf("Page hash algorithm  : %s\n", OBJ_nid2sn(phtype));
  		tohex(ph, hexbuf, (phlen < 32) ? phlen : 32);
-@@ -2040,6 +2061,7 @@
+@@ -2041,6 +2062,7 @@
  		free(ph);
  		free(cph);
  	}
