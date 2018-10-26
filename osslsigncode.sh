@@ -34,7 +34,7 @@ _VER="$1"
 
   # shellcheck disable=SC2086
   gcc -O3 \
-    osslsigncode.c -o ../osslsigncode-determ \
+    osslsigncode.c -o "$(dirname "$0")/osslsigncode-determ" \
     -DHAVE_SYS_MMAN_H \
     ${options} \
     '-DPACKAGE_BUGREPORT="none"' \
