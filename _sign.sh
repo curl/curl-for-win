@@ -23,7 +23,7 @@ if [ -f "${CODESIGN_KEY}" ] && \
   esac
 
   # Add code signature
-  for file in $@; do
+  for file in "$@"; do
   (
     echo "Code signing: '${file}'"
     set +x
