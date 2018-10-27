@@ -85,7 +85,7 @@
   - Code signing is implemented and enabled with a self-signed certificate.
     The signature intentionally omits a trusted timestamp to retain
     reproducibility. Signing is done using a custom patched `osslsigncode`
-    build to enforce a constant non-trusted timestamp for reproducibility.
+    build to enforce a stable non-trusted timestamp for reproducibility.
 
 # Binary package downloads
 
