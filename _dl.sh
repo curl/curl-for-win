@@ -11,12 +11,12 @@ export BROTLI_VER_='1.0.7'
 export BROTLI_HASH=4c61bfb0faca87219ea587326c467b95acb25555b53d1a421ffa3c8a9296ee2c
 export LIBIDN2_VER_='2.0.5'
 export LIBIDN2_HASH=53f69170886f1fa6fa5b332439c7a77a7d22626a82ef17e2c1224858bb4ca2b8
-export NGHTTP2_VER_='1.34.0'
-export NGHTTP2_HASH=ecb0c013141495e24bd6deca022b5a92097a7848a0c17c4e5af1243a97fa622e
+export NGHTTP2_VER_='1.35.0'
+export NGHTTP2_HASH=23610ddd446bf1a9ae12905b0e7f283afd46249794868b7acd581e693900544c
 export CARES_VER_='1.15.0'
 export CARES_HASH=6cdb97871f2930530c97deb7cf5c8fa4be5a0b02c7cea6e7c7667672a39d6852
-export OPENSSL_VER_='1.1.1'
-export OPENSSL_HASH=2836875a0f89c03d0fdf483941512613a50cfb421d6fd94b9f41d7279d586a3d
+export OPENSSL_VER_='1.1.1a'
+export OPENSSL_HASH=fc20130f8b7cbd2fb918b2f14e2f429e109c31ddd0fb38fc5d71d9ffed3f9f41
 export LIBSSH2_VER_='1.8.0'
 export LIBSSH2_HASH=39f34e2f6835f4b992cafe8625073a88e5a28ba78f83e8099610a7b3af4676d4
 export CURL_VER_='7.62.0'
@@ -28,7 +28,7 @@ export OSSLSIGNCODE_HASH=f9a8cdb38b9c309326764ebc937cba1523a3a751a7ab05df3ecc99d
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the master branch.
-export _REV=''
+export _REV='1'
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
