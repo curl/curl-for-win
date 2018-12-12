@@ -19,8 +19,8 @@ export OPENSSL_VER_='1.1.1a'
 export OPENSSL_HASH=fc20130f8b7cbd2fb918b2f14e2f429e109c31ddd0fb38fc5d71d9ffed3f9f41
 export LIBSSH2_VER_='1.8.0'
 export LIBSSH2_HASH=39f34e2f6835f4b992cafe8625073a88e5a28ba78f83e8099610a7b3af4676d4
-export CURL_VER_='7.62.0'
-export CURL_HASH=dab5643a5fe775ae92570b9f3df6b0ef4bc2a827a959361fb130c73b721275c1
+export CURL_VER_='7.63.0'
+export CURL_HASH=9600234c794bfb8a0d3f138e9294d60a20e7a5f10e35ece8cf518e2112d968c4
 export OSSLSIGNCODE_VER_='1.7.1'
 export OSSLSIGNCODE_HASH=f9a8cdb38b9c309326764ebc937cba1523a3a751a7ab05df3ecc99d18ae466c9
 
@@ -28,7 +28,7 @@ export OSSLSIGNCODE_HASH=f9a8cdb38b9c309326764ebc937cba1523a3a751a7ab05df3ecc99d
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the master branch.
-export _REV='1'
+export _REV=''
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
