@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2015-2018 Viktor Szakats <https://vszakats.net/>
+# Copyright 2015-2019 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
 
 export ZLIB_VER_='1.2.11'
