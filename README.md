@@ -14,7 +14,7 @@
   - Standalone `curl.exe` (only
     [`msvcrt.dll`](https://en.wikipedia.org/wiki/Microsoft_Windows_library_files#MSVCRT.DLL.2C_MSVCPP.DLL_and_CRTDLL.DLL)
     is
-    [required](https://blogs.msdn.microsoft.com/oldnewthing/20140411-00/?p=1273)).
+    [required](https://devblogs.microsoft.com/oldnewthing/?p=1273)).
   - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2)
     support enabled.
   - curl/libcurl features enabled by default:
