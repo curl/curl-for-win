@@ -15,7 +15,7 @@ language: c
 matrix:
   include:
     - os: linux
-      dist: trusty
+      dist: xenial
       sudo: required
       group: edge
       compiler: mingw-clang
