@@ -52,7 +52,7 @@ if [ "${os}" != 'win' ]; then
   pip3 --disable-pip-version-check install --user pefile
 fi
 
-alias curl='curl -fsS --connect-timeout 15 --retry 3'
+alias curl='curl -fsS --connect-timeout 15 -m 20 --retry 3'
 alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format LONG'
 
 gpg_recv_keys() {
