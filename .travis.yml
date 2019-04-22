@@ -34,12 +34,12 @@ matrix:
 
 script:
   - |
-    if [ "$TRAVIS_OS_NAME" = 'linux' ]; then
+    if [ "${TRAVIS_OS_NAME}" = 'linux' ]; then
       time docker pull "${DOCKER_IMAGE}"
       time docker run -it -v "$(pwd):$(pwd)" -w "$(pwd)" \
         --env-file <(env | grep -E '^(TRAVIS_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|DEPLOY_|CC)') \
         "${DOCKER_IMAGE}" \
         sh -c ./_ci_linux_debian.sh
-    elif [ "$TRAVIS_OS_NAME" = 'osx' ]; then
+    elif [ "${TRAVIS_OS_NAME}" = 'osx' ]; then
       ./_ci_mac_homebrew.sh
     fi
