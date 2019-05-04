@@ -23,8 +23,8 @@ matrix:
       # https://hub.docker.com/_/debian/
       env: DOCKER_IMAGE=debian:unstable
 #   - os: osx
-#     # https://docs.travis-ci.com/user/reference/osx/#using-os-x
-#     osx_image: &mac-image xcode10.1
+#     # https://docs.travis-ci.com/user/reference/osx/#macos-version
+#     osx_image: &mac-image xcode10.2
 #     compiler: mingw-clang
 #     env: CPU=64
 #   - os: osx
