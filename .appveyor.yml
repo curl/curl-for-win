@@ -8,7 +8,7 @@ branches:
     - test-appveyor
 # https://www.appveyor.com/docs/build-environment/#build-worker-images
 image:
-  - Ubuntu
+  - Ubuntu1804
 # - Visual Studio 2017
 services:
   - docker
