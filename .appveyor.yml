@@ -6,6 +6,7 @@ branches:
     - master
     - dev-appveyor
     - test-appveyor
+# https://www.appveyor.com/docs/build-environment/#build-worker-images
 image:
   - Ubuntu
 # - Visual Studio 2017
