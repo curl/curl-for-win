@@ -100,8 +100,8 @@ do_upload() {
           echo "https://www.virustotal.com/file/${hshr}/analysis/"
         else
           echo "VirusTotal hash mismatch with local hash:"
-          echo "Remote: ${hshr} vs."
-          echo " Local: ${hshl}"
+          echo "Remote: '${hshr}' vs."
+          echo " Local: '${hshl}'"
         fi
       else
         echo "Error querying VirusTotal upload: $?"
