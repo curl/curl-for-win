@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2014-2018 Viktor Szakats <https://vszakats.net/>
+# Copyright 2014-2019 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
 
 cd "$(dirname "$0")" || exit
@@ -78,14 +78,37 @@ do_upload() {
   if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
   (
     set +x
+
+    hshl="$(openssl dgst -sha256 "${_BAS}${_suf}${arch_ext}" \
+      | sed -n -E 's,.+= ([0-9a-fA-F]{64}),\1,p')"
+    # https://developers.virustotal.com/v3.0/reference
     out="$(curl -fsS \
-      -X POST 'https://www.virustotal.com/vtapi/v2/file/scan' \
-      --form-string "apikey=${VIRUSTOTAL_APIKEY}" \
+      -X POST 'https://www.virustotal.com/api/v3/files' \
+      --header "x-apikey: ${VIRUSTOTAL_APIKEY}" \
       --form "file=@${_BAS}${_suf}${arch_ext}")"
-    echo "${out}"
-    echo "VirusTotal URL for '${_BAS}${_suf}${arch_ext}':"
-    # echo "${out}" | jq '.permalink'
-    echo "${out}" | grep -o 'https://[a-zA-Z0-9./]*'
+    # shellcheck disable=SC2181
+    if [ "$?" = 0 ]; then
+      id="$(echo "${out}" | jq -r '.data.id')"
+      out="$(curl -fsS \
+        -X GET "https://www.virustotal.com/api/v3/analyses/${id}" \
+        --header "x-apikey: ${VIRUSTOTAL_APIKEY}")"
+      # shellcheck disable=SC2181
+      if [ "$?" = 0 ]; then
+        hshr="$(echo "${out}" | jq -r '.data.meta.file_info.sha256')"
+        if [ "${hshr}" = "${hshl}" ]; then
+          echo "VirusTotal URL for '${_BAS}${_suf}${arch_ext}':"
+          echo "https://www.virustotal.com/file/${hshr}/analysis/"
+        else
+          echo "VirusTotal hash mismatch with local hash:"
+          echo "Remote: ${hshr} vs."
+          echo " Local: ${hshl}"
+        fi
+      else
+        echo "Error querying VirusTotal upload: $?"
+      fi
+    else
+      echo "Error uploading to VirusTotal: $?"
+    fi
   )
   fi
 }
