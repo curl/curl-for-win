@@ -57,11 +57,9 @@ alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format LONG'
 
 gpg_recv_keys() {
   req="pks/lookup?search=0x$1&op=get"
-  if ! curl "https://pgp.mit.edu/${req}" | gpg --import --status-fd 1; then
-    if ! curl "https://sks-keyservers.net/${req}" | gpg --import --status-fd 1; then
-      curl "https://keyserver.ubuntu.com/${req}" | gpg --import --status-fd 1
-    fi
-  fi
+  curl "https://pgp.mit.edu/${req}"          | gpg --import --status-fd 1 || \
+  curl "https://pgpkeys.eu/${req}"           | gpg --import --status-fd 1 || \
+  curl "https://keyserver.ubuntu.com/${req}" | gpg --import --status-fd 1
 }
 
 gpg --version | grep gpg
@@ -144,8 +142,11 @@ else
   curl \
     -o pack.bin "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz" \
     -o pack.sig "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz.asc" || exit 1
-  # From https://www.openssl.org/community/team.html
+  # From:
+  #   https://www.openssl.org/source/
+  #   https://www.openssl.org/community/omc.html
   gpg_recv_keys 8657ABB260F056B1E5190839D9C4D26D0E604491
+  gpg_recv_keys 7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
   openssl dgst -sha256 pack.bin | grep -q "${OPENSSL_HASH}" || exit 1
 fi
