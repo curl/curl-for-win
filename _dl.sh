@@ -179,7 +179,10 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
 else
   curl \
     -o pack.bin "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.xz" \
-    -o pack.sig "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.xz.asc" || exit 1
+    -o pack.sig "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.xz.asc" || \
+  curl \
+    -o pack.bin -L --proto-redir =https "https://github.com/curl/curl/releases/download/curl-$(echo "${CURL_VER_}" | tr '.' '_')/curl-${CURL_VER_}.tar.xz" \
+    -o pack.sig -L --proto-redir =https "https://github.com/curl/curl/releases/download/curl-$(echo "${CURL_VER_}" | tr '.' '_')/curl-${CURL_VER_}.tar.xz.asc" || exit 1
   gpg_recv_keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
   openssl dgst -sha256 pack.bin | grep -q "${CURL_HASH}" || exit 1
