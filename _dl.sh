@@ -55,7 +55,7 @@ fi
 alias curl='curl -fsS --connect-timeout 15 -m 20 --retry 3'
 alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format LONG'
 
-gpg_recv_keys() {
+gpg_recv_key() {
   req="pks/lookup?search=0x$1&op=get"
   curl "https://pgp.mit.edu/${req}"          | gpg --import --status-fd 1 || \
   curl "https://pgpkeys.eu/${req}"           | gpg --import --status-fd 1 || \
@@ -124,7 +124,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
     curl \
       -o pack.bin "https://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz" \
       -o pack.sig "https://c-ares.haxx.se/download/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
-    gpg_recv_keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+    gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
     gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
     openssl dgst -sha256 pack.bin | grep -q "${CARES_HASH}" || exit 1
   fi
@@ -145,8 +145,8 @@ else
   # From:
   #   https://www.openssl.org/source/
   #   https://www.openssl.org/community/omc.html
-  gpg_recv_keys 8657ABB260F056B1E5190839D9C4D26D0E604491
-  gpg_recv_keys 7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C
+  gpg_recv_key 8657ABB260F056B1E5190839D9C4D26D0E604491
+  gpg_recv_key 7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
   openssl dgst -sha256 pack.bin | grep -q "${OPENSSL_HASH}" || exit 1
 fi
@@ -163,7 +163,7 @@ else
   curl \
     -o pack.bin -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz" \
     -o pack.sig -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz.asc" || exit 1
-  gpg_recv_keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+  gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
   openssl dgst -sha256 pack.bin | grep -q "${LIBSSH2_HASH}" || exit 1
 fi
@@ -183,7 +183,7 @@ else
   curl \
     -o pack.bin -L --proto-redir =https "https://github.com/curl/curl/releases/download/curl-$(echo "${CURL_VER_}" | tr '.' '_')/curl-${CURL_VER_}.tar.xz" \
     -o pack.sig -L --proto-redir =https "https://github.com/curl/curl/releases/download/curl-$(echo "${CURL_VER_}" | tr '.' '_')/curl-${CURL_VER_}.tar.xz.asc" || exit 1
-  gpg_recv_keys 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+  gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
   openssl dgst -sha256 pack.bin | grep -q "${CURL_HASH}" || exit 1
 fi
