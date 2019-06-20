@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2018 Viktor Szakats <https://vszakats.net/>
+# Copyright 2014-2019 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
 
 export _NAM
@@ -62,8 +62,20 @@ _cpu="$2"
   # AR=, NM=, RANLIB=
   unset CC
 
+  # Patch OpenSSL ./Configure to make it accept Windows-style absolute
+  # paths as --prefix. Without the patch it misidentifies all such
+  # absolute paths as relative ones and aborts.
+  sed 's|die "Directory given with --prefix|print "Directory given with --prefix|g' \
+    < ./Configure > ./Configure-patched
+  chmod +x ./Configure-patched
+
+  # Space or backslash not allowed. Needs to be a folder restricted
+  # to Administrators across majority of Windows installations, versions
+  # and configurations.
+  _prefix='C:/Windows/System32/OpenSSL'
+
   # shellcheck disable=SC2086
-  ./Configure ${options} shared \
+  ./Configure-patched ${options} shared \
     "--cross-compile-prefix=${_CCPREFIX}" \
     -fno-ident \
     -Wl,--nxcompat -Wl,--dynamicbase \
@@ -71,13 +83,14 @@ _cpu="$2"
     no-idea \
     no-tests \
     no-makedepend \
-    '--prefix=/usr/local'
+    "--prefix=${_prefix}"
   SOURCE_DATE_EPOCH=${unixts} TZ=UTC make
   # Install it so that it can be detected by CMake
-  make install "DESTDIR=$(pwd)/pkg" > /dev/null # 2>&1
+  # (ending slash required)
+  make install "DESTDIR=$(pwd)/pkg/" > /dev/null # 2>&1
 
   # DESTDIR= + --prefix=
-  _pkg='pkg/usr/local'
+  _pkg="pkg/${_prefix}"
 
   # Make steps for determinism
 

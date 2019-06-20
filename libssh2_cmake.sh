@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2018 Viktor Szakats <https://vszakats.net/>
+# Copyright 2014-2019 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
 
 export _NAM
@@ -68,10 +68,10 @@ _cpu="$2"
     options="${options} -DZLIB_INCLUDE_DIR:PATH=$(pwd)/../zlib/pkg/usr/local/include"
     options="${options} -DZLIB_LIBRARY:FILEPATH=$(pwd)/../zlib/pkg/usr/local/lib/libz.a"
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
-    options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../openssl/pkg/usr/local/"
-    options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../openssl/pkg/usr/local/include"
-    options="${options} -DOPENSSL_LIBRARIES=$(pwd)/../openssl/pkg/usr/local/lib"
-    options="${options} -DOPENSSL_CRYPTO_LIBRARY=$(pwd)/../openssl/pkg/usr/local/lib"
+    options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/"
+    options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/include"
+    options="${options} -DOPENSSL_LIBRARIES=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/lib"
+    options="${options} -DOPENSSL_CRYPTO_LIBRARY=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/lib"
     options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
     options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
     options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"

@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2018 Viktor Szakats <https://vszakats.net/>
+# Copyright 2014-2019 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
 
 export _NAM
@@ -49,7 +49,7 @@ _cpu="$2"
   # public libcurl functions being marked as 'exported'. It's useful to
   # avoid the chance of libcurl functions getting exported from final
   # binaries when linked against static libcurl lib.
-  export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -fno-ident -DCURL_DISABLE_SSL_AUTO_LOAD_CONFIG'
+  export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -fno-ident'
   [ "${_cpu}" = '32' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
   export CURL_LDFLAG_EXTRAS_EXE
@@ -91,6 +91,7 @@ _cpu="$2"
 
   [ -d ../openssl ] && export OPENSSL_PATH=../../openssl
   if [ -n "${OPENSSL_PATH}" ]; then
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
     options="${options}-ssl"
     export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
     export OPENSSL_LIBPATH="${OPENSSL_PATH}"
