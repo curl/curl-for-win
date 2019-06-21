@@ -17,8 +17,8 @@ export CARES_VER_='1.15.0'
 export CARES_HASH=6cdb97871f2930530c97deb7cf5c8fa4be5a0b02c7cea6e7c7667672a39d6852
 export OPENSSL_VER_='1.1.1c'
 export OPENSSL_HASH=f6fb3079ad15076154eda9413fed42877d668e7069d9b87396d0804fdb3f4c90
-export LIBSSH2_VER_='1.8.2'
-export LIBSSH2_HASH=088307d9f6b6c4b8c13f34602e8ff65d21c2dc4d55284dfe15d502c4ee190d67
+export LIBSSH2_VER_='1.9.0'
+export LIBSSH2_HASH=d5fb8bd563305fd1074dda90bd053fb2d29fc4bce048d182f96eaa466dfadafd
 export CURL_VER_='7.65.1'
 export CURL_HASH=f6c22074877f235aebc7c53057dbc7ee82358f8ae58bfb767e955c18c859a77a
 export OSSLSIGNCODE_VER_='1.7.1'
@@ -28,7 +28,7 @@ export OSSLSIGNCODE_HASH=f9a8cdb38b9c309326764ebc937cba1523a3a751a7ab05df3ecc99d
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the master branch.
-export _REV='2'
+export _REV='3'
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
@@ -157,8 +157,8 @@ rm -f -r openssl && mv openssl-* openssl
 
 # libssh2
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-  LIBSSH2_VER_='1.8.1-dev'
-  curl -o pack.bin -L --proto-redir =https https://github.com/libssh2/libssh2/archive/bcd492163b71608f8e46cdc864741d6c566ce9bc.tar.gz || exit 1
+  LIBSSH2_VER_='1.9.1-dev'
+  curl -o pack.bin -L --proto-redir =https https://github.com/libssh2/libssh2/archive/53ff2e6da450ac1801704b35b3360c9488161342.tar.gz || exit 1
 else
   curl \
     -o pack.bin -L --proto-redir =https "https://libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz" \
