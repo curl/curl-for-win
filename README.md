@@ -6,8 +6,8 @@
 
   - **SECURITY NOTICE: It is strongly recommended to upgrade to curl 7.65.1_2
     and OpenSSL 1.1.1c_2, released on 2019-06-20, or newer. Previous releases
-    were discovered to have a code injection and potentential privilege
-    escalation vulnerability triggered via OpenSSL's build configuration
+    were discovered to have a code injection (and potential privilege
+    escalation) vulnerability triggered via OpenSSL's build configuration
     defaults when using certain Windows compilers, including MinGW. The issue
     has been fixed by applying a local OpenSSL patch along with the required
     build configuration change.
