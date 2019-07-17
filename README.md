@@ -16,8 +16,6 @@
   - Packaging aims to follow popular binary releases found on the internet.
   - Both x64 and x86 packages are built using the same process.
   - Binary packages are downloadable in `.zip` and `.tar.xz` formats.<br>
-    **Note that the `.7z` format was discontinued. Update your download links
-    accordingly.**<br>
     `.xz` files and the resulting `.tar` archive can also be extracted using
     [7-Zip](https://www.7-zip.org/) on Windows.
   - Standalone `curl.exe` (only
