@@ -6,7 +6,7 @@ variables:
   GIT_DEPTH: "8"
 
 build:
-  image: debian:unstable
+  image: debian:testing
   variables:
     CC: mingw-clang
   script:
