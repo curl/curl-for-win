@@ -69,7 +69,7 @@ create_pack "$1" '.tar.xz'
 create_pack "$1" '.zip'
 
 ver="${_NAM} ${_VER}"
-if ! grep "${ver}" "${_BLD}" > /dev/null; then
+if ! grep -q -F "${ver}" "${_BLD}"; then
   echo "${ver}" >> "${_BLD}"
 fi
 

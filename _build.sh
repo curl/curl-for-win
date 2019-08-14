@@ -97,7 +97,7 @@ if [ -f "${DEPLOY_KEY}" ]; then
     mkdir -m 700 "${HOME}/.ssh"
     install -m 600 /dev/null "${HOME}/.ssh/known_hosts"
   fi
-  if ! grep "${host_key}" "${HOME}/.ssh/known_hosts" > /dev/null; then
+  if ! grep -q -F "${host_key}" "${HOME}/.ssh/known_hosts"; then
     echo "${host_key}" >> "${HOME}/.ssh/known_hosts"
   fi
 fi

@@ -161,7 +161,7 @@ _cpu="$2"
   (
     set +x
     for file in docs/*; do
-      if [ -f "${file}" ] && [ "${file}" != 'Makefile' ] && echo "${file}" | grep -q -v '\.'; then
+      if [ -f "${file}" ] && [ "${file}" != 'Makefile' ] && echo "${file}" | grep -q -v -F '.'; then
         cp -f -p "${file}" "${_DST}/${file}.txt"
       fi
     done
