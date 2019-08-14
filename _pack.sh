@@ -38,7 +38,7 @@ touch -c -r "$1" "${_fn}"
 find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' \;
 
 # NOTE: This isn't effective on MSYS2
-find "${_DST}" \( -name '*.exe' -or -name '*.dll' -or -name '*.a' \) -exec chmod -x {} +
+find "${_DST}" \( -name '*.exe' -or -name '*.dll' -or -name '*.a' \) -exec chmod a-x {} +
 
 create_pack() {
   arch_ext="$2"

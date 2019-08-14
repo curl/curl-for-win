@@ -67,7 +67,7 @@ _cpu="$2"
   # absolute paths as relative ones and aborts.
   sed 's|die "Directory given with --prefix|print "Directory given with --prefix|g' \
     < ./Configure > ./Configure-patched
-  chmod +x ./Configure-patched
+  chmod a+x ./Configure-patched
 
   # Space or backslash not allowed. Needs to be a folder restricted
   # to Administrators across majority of Windows installations, versions
