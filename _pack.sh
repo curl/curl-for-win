@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2014-2018 Viktor Szakats <https://vszakats.net/>
+# Copyright 2014-2019 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
 
 cd "$(dirname "$0")" || exit
