@@ -24,7 +24,7 @@ matrix:
       env: DOCKER_IMAGE=debian:testing
 #   - os: osx
 #     # https://docs.travis-ci.com/user/reference/osx/#macos-version
-#     osx_image: &mac-image xcode10.2
+#     osx_image: &mac-image xcode11
 #     compiler: mingw-clang
 #     env: CPU=64
 #   - os: osx
