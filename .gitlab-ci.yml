@@ -10,7 +10,7 @@ build:
   variables:
     CC: mingw-clang
   script:
-    - ./_ci_linux_debian.sh
+    - ./_ci-linux-debian.sh
   artifacts:
     expire_in: 13 weeks
     paths:

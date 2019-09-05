@@ -39,10 +39,10 @@ build_script:
       time docker run -v "$(pwd):$(pwd)" -w "$(pwd)" \
         --env-file <(env | grep -E '^(APPVEYOR_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|DEPLOY_|CC|GITLAB_|CI_)') \
         "${DOCKER_IMAGE}" \
-        sh -c ./_ci_linux_debian.sh
+        sh -c ./_ci-linux-debian.sh
   - cmd: |
       set PATH=C:\msys64\usr\bin;%SystemRoot%\system32
-      sh -c ./_ci_win_msys2.sh
+      sh -c ./_ci-win-msys2.sh
 artifacts:
   - path: '*-*-mingw*.*'
     name: master
