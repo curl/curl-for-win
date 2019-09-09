@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2016-2018 Viktor Szakats <https://vszakats.net/>
+# Copyright 2016-2019 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
 
 export _NAM
@@ -23,7 +23,7 @@ _VER="$1"
 
   options=''
 
-  # curl only required to talk with the timestamp server which we don't
+  # curl only required to talk to the timestamp server which we don't
   # use at the moment to remain deterministic.
   # options="${options} -DENABLE_CURL -lcurl"
 

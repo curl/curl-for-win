@@ -202,6 +202,7 @@ rm -f -r libhsts && mv libhsts-* libhsts
 [ -f "libhsts${_patsuf}.patch" ] && dos2unix < "libhsts${_patsuf}.patch" | patch --batch -N -p1 -d libhsts
 
 # osslsigncode
+# NOTE: https://github.com/mtrojnar/osslsigncode/archive/2.0.tar.gz
 curl -o pack.bin -L --proto-redir =https "https://deb.debian.org/debian/pool/main/o/osslsigncode/osslsigncode_${OSSLSIGNCODE_VER_}.orig.tar.gz" || exit 1
 openssl dgst -sha256 pack.bin | grep -q "${OSSLSIGNCODE_HASH}" || exit 1
 tar -xvf pack.bin > /dev/null 2>&1 || exit 1
