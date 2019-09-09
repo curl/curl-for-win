@@ -21,7 +21,7 @@
  			"\t\t[ -t <timestampurl> [ -t ... ] [ -p <proxy> ]]\n"
  			"\t\t[ -ts <timestampurl> [ -ts ... ] [ -p <proxy> ]]\n"
  #endif
-+			"\t\t[ -st <unix-time>\n"
++			"\t\t[ -st <unix-time> ]\n"
  			"\t\t[ -nest ]\n\n"
  			"\t\tMSI specific:\n"
  			"\t\t[ -add-msi-dse ]\n\n"
