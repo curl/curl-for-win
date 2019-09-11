@@ -77,8 +77,11 @@ _cpu="$2"
   make install "DESTDIR=$(pwd)/pkg/" > /dev/null # 2>&1
 
   # DESTDIR= + default prefixes (assumes OpenSSL 1.1.1d or upper)
-  _pkg='pkg/Program Files/OpenSSL'
-  _pks='pkg/Program Files/Common Files/SSL'
+  _pkr='pkg'
+  [ "${_cpu}" = '32' ] && _pkr="${_pkr}/Program Files (x86)"
+  [ "${_cpu}" = '64' ] && _pkr="${_pkr}/Program Files"
+  _pkg="${_pkr}/OpenSSL"
+  _pks="${_pkr}/Common Files/SSL"
 
   # Make steps for determinism
 
