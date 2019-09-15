@@ -26,8 +26,7 @@ _cpu="$2"
 
   # Prepare build
 
-  find . -name '*.dll' -type f -delete
-  find . -name '*.def' -type f -delete
+  find . -type f -regex '.*\.(def|dll)' -delete
 
   if [ ! -f 'Makefile' ]; then
     if [ "${os}" = 'win' ]; then

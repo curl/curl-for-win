@@ -35,20 +35,12 @@ _cpu="$2"
   # Build
 
   rm -fr pkg
-
-  find . -name '*.a'   -type f -delete
-  find . -name '*.pc'  -type f -delete
+  find . -type f -regex '.*\.(a|pc)' -delete
 
   for pass in 'static' 'shared'; do
 
     rm -fr CMakeFiles CMakeCache.txt cmake_install.cmake
-
-    find . -name '*.o'   -type f -delete
-    find . -name '*.obj' -type f -delete
-    find . -name '*.lo'  -type f -delete
-    find . -name '*.la'  -type f -delete
-    find . -name '*.lai' -type f -delete
-    find . -name '*.Plo' -type f -delete
+    find . -type f -regex '.*\.(o|obj|lo|la|lai|Plo)' -delete
 
     _CFLAGS="-m${_cpu} -fno-ident"
     [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"

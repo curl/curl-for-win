@@ -44,16 +44,7 @@ _cpu="$2"
   # Build
 
   rm -fr pkg
-
-  find . -name '*.o'   -type f -delete
-  find . -name '*.a'   -type f -delete
-  find . -name '*.lo'  -type f -delete
-  find . -name '*.la'  -type f -delete
-  find . -name '*.lai' -type f -delete
-  find . -name '*.Plo' -type f -delete
-  find . -name '*.pc'  -type f -delete
-  find . -name '*.dll' -type f -delete
-  find . -name '*.exe' -type f -delete
+  find . -type f -regex '.*\.(o|a|lo|la|lai|Plo|pc|dll|exe)' -delete
 
   export CC="${_CCPREFIX}gcc -static-libgcc"
   export LDFLAGS="-m${_cpu}"
