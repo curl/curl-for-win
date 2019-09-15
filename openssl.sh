@@ -39,7 +39,13 @@ _cpu="$2"
   # Build
 
   rm -fr pkg
-  find . -type f -regex '.*\.(o|a|pc|def|dll|exe)' -delete
+
+  find . -name '*.o'   -type f -delete
+  find . -name '*.a'   -type f -delete
+  find . -name '*.pc'  -type f -delete
+  find . -name '*.def' -type f -delete
+  find . -name '*.dll' -type f -delete
+  find . -name '*.exe' -type f -delete
 
   [ "${_cpu}" = '32' ] && options='mingw'
   [ "${_cpu}" = '64' ] && options='mingw64'

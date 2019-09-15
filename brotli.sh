@@ -35,7 +35,14 @@ _cpu="$2"
   # Build
 
   rm -fr pkg CMakeFiles CMakeCache.txt cmake_install.cmake
-  find . -type f -regex '.*\.(o|a|lo|la|lai|Plo|pc)' -delete
+
+  find . -name '*.o'   -type f -delete
+  find . -name '*.a'   -type f -delete
+  find . -name '*.lo'  -type f -delete
+  find . -name '*.la'  -type f -delete
+  find . -name '*.lai' -type f -delete
+  find . -name '*.Plo' -type f -delete
+  find . -name '*.pc'  -type f -delete
 
   _CFLAGS="-m${_cpu} -fno-ident -DMINGW_HAS_SECURE_API"
   [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"

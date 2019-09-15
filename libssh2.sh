@@ -26,7 +26,8 @@ _cpu="$2"
 
   # Prepare build
 
-  find . -type f -regex '.*\.(def|dll)' -delete
+  find . -name '*.dll' -type f -delete
+  find . -name '*.def' -type f -delete
 
   # Build
 
