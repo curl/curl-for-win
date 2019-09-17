@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# Copyright 2016-2018 Viktor Szakats <https://vszakats.net/>
+# Copyright 2016-2019 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
 
 if [ -f "${CODESIGN_KEY}" ] && \
-   ls "$(dirname "$0")/osslsigncode-determ"* > /dev/null 2>&1; then
+   ls "$(dirname "$0")/osslsigncode-determ"* >/dev/null 2>&1; then
 
   # Detect host OS
   case "$(uname)" in

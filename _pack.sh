@@ -14,7 +14,7 @@ case "$(uname)" in
 esac
 
 # Map tar to GNU tar, if it exists (e.g. on macOS)
-command -v gtar > /dev/null && alias tar=gtar
+command -v gtar >/dev/null && alias tar=gtar
 
 _cdo="$(pwd)"
 
@@ -59,7 +59,7 @@ create_pack() {
         | xz > "${_cdo}/${_BAS}${arch_ext}";;
       .zip)    zip -q -9 -X -@ - < "${_LST}" > "${_cdo}/${_BAS}${arch_ext}";;
       # Requires: p7zip (MSYS2, Homebrew, Linux rpm), p7zip-full (Linux deb)
-      .7z)     7z a -bd -r -mx "${_cdo}/${_BAS}${arch_ext}" "@${_LST}" > /dev/null;;
+      .7z)     7z a -bd -r -mx "${_cdo}/${_BAS}${arch_ext}" "@${_LST}" >/dev/null;;
     esac
     touch -c -r "$1" "${_cdo}/${_BAS}${arch_ext}"
   )

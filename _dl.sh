@@ -75,7 +75,7 @@ fi
 # zlib
 curl -o pack.bin -L --proto-redir =https "https://github.com/madler/zlib/archive/v${ZLIB_VER_}.tar.gz" || exit 1
 openssl dgst -sha256 pack.bin | grep -q "${ZLIB_HASH}" || exit 1
-tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r zlib && mv zlib-* zlib
 [ -f "zlib${_patsuf}.patch" ] && dos2unix < "zlib${_patsuf}.patch" | patch --batch -N -p1 -d zlib
@@ -86,7 +86,7 @@ if [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
   # brotli
   curl -o pack.bin -L --proto-redir =https "https://github.com/google/brotli/archive/v${BROTLI_VER_}.tar.gz" || exit 1
   openssl dgst -sha256 pack.bin | grep -q "${BROTLI_HASH}" || exit 1
-  tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+  tar -xvf pack.bin >/dev/null 2>&1 || exit 1
   rm pack.bin
   rm -f -r brotli && mv brotli-* brotli
   [ -f "brotli${_patsuf}.patch" ] && dos2unix < "brotli${_patsuf}.patch" | patch --batch -N -p1 -d brotli
@@ -95,7 +95,7 @@ fi
 # nghttp2
 curl -o pack.bin -L --proto-redir =https "https://github.com/nghttp2/nghttp2/releases/download/v${NGHTTP2_VER_}/nghttp2-${NGHTTP2_VER_}.tar.xz" || exit 1
 openssl dgst -sha256 pack.bin | grep -q "${NGHTTP2_HASH}" || exit 1
-tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r nghttp2 && mv nghttp2-* nghttp2
 [ -f "nghttp2${_patsuf}.patch" ] && dos2unix < "nghttp2${_patsuf}.patch" | patch --batch -N -p1 -d nghttp2
@@ -107,10 +107,10 @@ if [ "${_BRANCH#*libidn2*}" != "${_BRANCH}" ]; then
     -o pack.bin "https://ftp.gnu.org/gnu/libidn/libidn2-${LIBIDN2_VER_}.tar.gz" \
     -o pack.sig "https://ftp.gnu.org/gnu/libidn/libidn2-${LIBIDN2_VER_}.tar.gz.sig" || exit 1
   curl 'https://ftp.gnu.org/gnu/gnu-keyring.gpg' \
-  | gpg -q --import 2> /dev/null
+  | gpg -q --import 2>/dev/null
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
   openssl dgst -sha256 pack.bin | grep -q "${LIBIDN2_HASH}" || exit 1
-  tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+  tar -xvf pack.bin >/dev/null 2>&1 || exit 1
   rm pack.bin
   rm -f -r libidn2 && mv libidn2-* libidn2
 fi
@@ -128,7 +128,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
     gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
     openssl dgst -sha256 pack.bin | grep -q "${CARES_HASH}" || exit 1
   fi
-  tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+  tar -xvf pack.bin >/dev/null 2>&1 || exit 1
   rm pack.bin
   rm -f -r c-ares && mv c-ares-* c-ares
   [ -f "c-ares${_patsuf}.patch" ] && dos2unix < "c-ares${_patsuf}.patch" | patch --batch -N -p1 -d c-ares
@@ -150,7 +150,7 @@ else
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
   openssl dgst -sha256 pack.bin | grep -q "${OPENSSL_HASH}" || exit 1
 fi
-tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r openssl && mv openssl-* openssl
 [ -f "openssl${_patsuf}.patch" ] && dos2unix < "openssl${_patsuf}.patch" | patch --batch -N -p1 -d openssl
@@ -167,7 +167,7 @@ else
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
   openssl dgst -sha256 pack.bin | grep -q "${LIBSSH2_HASH}" || exit 1
 fi
-tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r libssh2 && mv libssh2-* libssh2
 [ -f "libssh2${_patsuf}.patch" ] && dos2unix < "libssh2${_patsuf}.patch" | patch --batch -N -p1 -d libssh2
@@ -184,7 +184,7 @@ else
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
   openssl dgst -sha256 pack.bin | grep -q "${CURL_HASH}" || exit 1
 fi
-tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r curl && mv curl-* curl
 [ -f "curl${_patsuf}.patch" ] && dos2unix < "curl${_patsuf}.patch" | patch --batch -N -p1 -d curl
@@ -193,7 +193,7 @@ rm -f -r curl && mv curl-* curl
 curl \
   -o pack.bin "https://gitlab.com/rockdaboot/libhsts/uploads/4753f61b5a3c6253acf4934217816e3f/libhsts-${LIBHSTS_VER_}.tar.gz" || exit 1
 openssl dgst -sha256 pack.bin | grep -q "${LIBHSTS_HASH}" || exit 1
-tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r libhsts && mv libhsts-* libhsts
 [ -f "libhsts${_patsuf}.patch" ] && dos2unix < "libhsts${_patsuf}.patch" | patch --batch -N -p1 -d libhsts
@@ -202,7 +202,7 @@ rm -f -r libhsts && mv libhsts-* libhsts
 # NOTE: "https://github.com/mtrojnar/osslsigncode/archive/${OSSLSIGNCODE_VER_}.tar.gz"
 curl -o pack.bin -L --proto-redir =https "https://deb.debian.org/debian/pool/main/o/osslsigncode/osslsigncode_${OSSLSIGNCODE_VER_}.orig.tar.gz" || exit 1
 openssl dgst -sha256 pack.bin | grep -q "${OSSLSIGNCODE_HASH}" || exit 1
-tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r osslsigncode && mv osslsigncode-* osslsigncode
 [ -f 'osslsigncode.patch' ] && dos2unix < 'osslsigncode.patch' | patch --batch -N -p1 -d osslsigncode

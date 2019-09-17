@@ -74,7 +74,7 @@ _cpu="$2"
   SOURCE_DATE_EPOCH=${unixts} TZ=UTC make
   # Install it so that it can be detected by CMake
   # (ending slash required)
-  make install "DESTDIR=$(pwd)/pkg/" > /dev/null # 2>&1
+  make install "DESTDIR=$(pwd)/pkg/" >/dev/null # 2>&1
 
   # DESTDIR= + default prefixes (assumes OpenSSL 1.1.1d or upper)
   _pkr='pkg'
@@ -88,7 +88,7 @@ _cpu="$2"
   "${_CCPREFIX}strip" -p --enable-deterministic-archives -g "${_pkg}"/lib/*.a
   "${_CCPREFIX}strip" -p -s "${_pkg}"/bin/openssl.exe
   "${_CCPREFIX}strip" -p -s "${_pkg}"/bin/*.dll
-  if ls "${_pkg}"/lib/engines*/*.dll > /dev/null 2>&1; then
+  if ls "${_pkg}"/lib/engines*/*.dll >/dev/null 2>&1; then
     "${_CCPREFIX}strip" -p -s "${_pkg}"/lib/engines*/*.dll
   fi
 
@@ -98,7 +98,7 @@ _cpu="$2"
   ../_sign.sh "${_ref}" "${_pkg}"/bin/openssl.exe
   ../_sign.sh "${_ref}" "${_pkg}"/bin/*.dll
 
-  if ls "${_pkg}"/lib/engines*/*.dll > /dev/null 2>&1; then
+  if ls "${_pkg}"/lib/engines*/*.dll >/dev/null 2>&1; then
     ../_peclean.py "${_ref}" "${_pkg}"/lib/engines*/*.dll
 
     ../_sign.sh "${_ref}" "${_pkg}"/lib/engines*/*.dll
@@ -113,7 +113,7 @@ _cpu="$2"
   touch -c -r "${_ref}" "${_pkg}"/include/openssl/*.h
   touch -c -r "${_ref}" "${_pkg}"/lib/*.a
   touch -c -r "${_ref}" "${_pkg}"/lib/pkgconfig/*.pc
-  if ls "${_pkg}"/lib/engines*/*.dll > /dev/null 2>&1; then
+  if ls "${_pkg}"/lib/engines*/*.dll >/dev/null 2>&1; then
     touch -c -r "${_ref}" "${_pkg}"/lib/engines*/*
   fi
 
@@ -133,7 +133,7 @@ _cpu="$2"
   mkdir -p "${_DST}/include/openssl"
   mkdir -p "${_DST}/lib/pkgconfig"
 
-  if ls "${_pkg}"/lib/engines*/*.dll > /dev/null 2>&1; then
+  if ls "${_pkg}"/lib/engines*/*.dll >/dev/null 2>&1; then
     cp -f -p -r "${_pkg}"/lib/engines* "${_DST}/"
   fi
 

@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2018 Viktor Szakats <https://vszakats.net/>
+# Copyright 2014-2019 Viktor Szakats <https://vszakats.net/>
 # See LICENSE.md
 
 export _NAM
@@ -69,8 +69,8 @@ _cpu="$2"
     --enable-shared \
     '--prefix=/usr/local' \
     --silent
-# make clean > /dev/null
-  make install "DESTDIR=$(pwd)/pkg" # > /dev/null # V=1
+# make clean >/dev/null
+  make install "DESTDIR=$(pwd)/pkg" # >/dev/null # V=1
 
   # DESTDIR= + --prefix=
   _pkg='pkg/usr/local'
