@@ -155,7 +155,11 @@ build_single_target() {
     else
       _SYSROOT="/usr/${_TRIPLET}"
     fi
-    export _WINE='wine'
+    if [ "${os}" = 'mac' ]; then
+      _WINE='wine64'
+    else
+      _WINE='wine'
+    fi
   fi
 
   export _CCVER
