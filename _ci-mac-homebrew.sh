@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2017-2019 Viktor Szakats <https://vszakats.net/>
+# Copyright 2017-2019 Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
 [ "${CC}" = 'mingw-clang' ] && _optpkg='llvm'

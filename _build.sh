@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2015-2019 Viktor Szakats <https://vszakats.net/>
+# Copyright 2015-2019 Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
 # Requirements (not a comprehensive list at this point):

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2016-2018 Viktor Szakats <https://vszakats.net/>
+# Copyright 2016-2018 Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
 pacman --noconfirm --ask 20 --noprogressbar -S --needed \
