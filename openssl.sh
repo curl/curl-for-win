@@ -62,8 +62,16 @@ _cpu="$2"
   # AR=, NM=, RANLIB=
   unset CC
 
+  # Patch OpenSSL ./Configure to make it accept Windows-style absolute
+  # paths as --prefix. Without the patch it misidentifies all such
+  # absolute paths as relative ones and aborts.
+  # Reported: https://github.com/openssl/openssl/issues/9520
+  sed 's|die "Directory given with --prefix|print "Directory given with --prefix|g' \
+    < ./Configure > ./Configure-patched
+  chmod a+x ./Configure-patched
+
   # shellcheck disable=SC2086
-  ./Configure ${options} shared \
+  ./Configure-patched ${options} shared \
     "--cross-compile-prefix=${_CCPREFIX}" \
     -fno-ident \
     -Wl,--nxcompat -Wl,--dynamicbase \
