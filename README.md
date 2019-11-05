@@ -19,7 +19,7 @@
     `.xz` files and the resulting `.tar` archive can also be extracted using
     [7-Zip](https://www.7-zip.org/) on Windows.
   - Standalone `curl.exe` (only
-    [`msvcrt.dll`](https://en.wikipedia.org/wiki/Microsoft_Windows_library_files#MSVCRT.DLL.2C_MSVCPP.DLL_and_CRTDLL.DLL)
+    [`msvcrt.dll`](https://en.wikipedia.org/wiki/Microsoft_Windows_library_files#MSVCRT.DLL,_MSVCP*.DLL_and_CRTDLL.DLL)
     is
     [required](https://devblogs.microsoft.com/oldnewthing/?p=1273)).
   - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2)
@@ -87,8 +87,8 @@
     identical hashes. The reason for this is the slightly different build
     options and versions of the `mingw-w64` and `binutils` tools.
   - Binaries distributed via Bintray are GPG signed with Bintray's
-    [key pair](https://bintray.com/docs/usermanual/uploads/uploads_managinguploadedcontent.html#_signing_with_the_bintray_key):
-    **[8756 C4F7 65C9 AC3C B6B8  5D62 379C E192 D401 AB61](https://pgp.mit.edu/pks/lookup?op=vindex&fingerprint=on&search=0x8756C4F765C9AC3CB6B85D62379CE192D401AB61)**
+    [key pair](https://www.jfrog.com/confluence/display/BT/Managing+Uploaded+Content#ManagingUploadedContent-SigningwiththeBintrayKey):
+    **[8756 C4F7 65C9 AC3C B6B8  5D62 379C E192 D401 AB61](https://pgpkeys.eu/pks/lookup?op=vindex&fingerprint=on&search=0x8756C4F765C9AC3CB6B85D62379CE192D401AB61)**
   - Code signing is implemented and enabled with a self-signed certificate.
     The signature intentionally omits a trusted timestamp to retain
     reproducibility. Signing is done using a custom patched `osslsigncode`
