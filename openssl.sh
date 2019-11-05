@@ -70,6 +70,20 @@ _cpu="$2"
     < ./Configure > ./Configure-patched
   chmod a+x ./Configure-patched
 
+  # Space or backslash not allowed. Needs to be a folder restricted
+  # to Administrators across majority of Windows installations, versions
+  # and configurations. We do avoid using the new default prefix set since
+  # OpenSSL 1.1.1d, because by using the C:\Program Files*\ value, the
+  # prefix remains vulnerable on localized Windows versions and for 32-bit
+  # OpenSSL builds executed on 64-bit Windows systems. I believe that the
+  # default below will give a "more secure" configuration for most Windows
+  # installations. Also notice that said OpenSSL default breaks OpenSSL's
+  # own build system when used in cross-build scenarios. The working patch
+  # was submitted, but closed subsequently due to mixed/no response.
+  # The secure solution would be to disable loading anything from hard-coded
+  # disk locations, something that is not supported by OpenSSL at present.
+  _prefix='C:/Windows/System32/OpenSSL'
+
   # shellcheck disable=SC2086
   ./Configure-patched ${options} shared \
     "--cross-compile-prefix=${_CCPREFIX}" \
@@ -78,18 +92,15 @@ _cpu="$2"
     no-unit-test \
     no-idea \
     no-tests \
-    no-makedepend
+    no-makedepend \
+    "--prefix=${_prefix}"
   SOURCE_DATE_EPOCH=${unixts} TZ=UTC make
   # Install it so that it can be detected by CMake
   # (ending slash required)
   make install "DESTDIR=$(pwd)/pkg/" >/dev/null # 2>&1
 
-  # DESTDIR= + default prefixes (assumes OpenSSL 1.1.1d or upper)
-  _pkr='pkg'
-  [ "${_cpu}" = '32' ] && _pkr="${_pkr}/Program Files (x86)"
-  [ "${_cpu}" = '64' ] && _pkr="${_pkr}/Program Files"
-  _pkg="${_pkr}/OpenSSL"
-  _pks="${_pkr}/Common Files/SSL"
+  # DESTDIR= + --prefix=
+  _pkg="pkg/${_prefix}"
 
   # Make steps for determinism
 
