@@ -50,7 +50,7 @@ _cpu="$2"
   _LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
   [ "${_cpu}" = '64' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x154000000"
 
-  options='--parallel 2'
+  options=''
   options="${options} -DCMAKE_SYSTEM_NAME=Windows"
   options="${options} -DCMAKE_BUILD_TYPE=Release"
   options="${options} -DCARES_STATIC=1"
@@ -82,7 +82,7 @@ _cpu="$2"
       "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS}"
   fi
 
-  make install "DESTDIR=$(pwd)/pkg"
+  make -j 2 install "DESTDIR=$(pwd)/pkg"
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
   _pkg='pkg/usr/local'

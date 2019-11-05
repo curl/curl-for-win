@@ -48,7 +48,7 @@ _cpu="$2"
   _CFLAGS="-m${_cpu} -fno-ident -DNDEBUG"
   [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
-  options='--parallel 2'
+  options=''
   options="${options} -DCMAKE_SYSTEM_NAME=Windows"
   options="${options} -DCMAKE_BUILD_TYPE=Release"
   options="${options} -DENABLE_LIB_ONLY=1"
@@ -83,7 +83,7 @@ _cpu="$2"
       "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}"
   fi
 
-  make install "DESTDIR=$(pwd)/pkg"
+  make -j 2 install "DESTDIR=$(pwd)/pkg"
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
   _pkg='pkg/usr/local'

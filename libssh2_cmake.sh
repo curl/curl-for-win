@@ -58,7 +58,7 @@ _cpu="$2"
       _LDFLAGS="${_LDFLAGS} -Wl,-Map,libssh2.map"
     fi
 
-    options='--parallel 2'
+    options=''
     options="${options} -DCMAKE_SYSTEM_NAME=Windows"
     options="${options} -DCMAKE_BUILD_TYPE=Release"
     [ "${pass}" = 'static' ] && options="${options} -DBUILD_SHARED_LIBS=0"
@@ -106,7 +106,7 @@ _cpu="$2"
         "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS}"
     fi
 
-    make install "DESTDIR=$(pwd)/pkg"  # VERBOSE=1
+    make -j 2 install "DESTDIR=$(pwd)/pkg"  # VERBOSE=1
   done
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
