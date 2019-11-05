@@ -7,7 +7,7 @@ _BRANCH="${APPVEYOR_REPO_BRANCH}${TRAVIS_BRANCH}${CI_COMMIT_REF_NAME}${GIT_BRANC
 
 cat /etc/*-release
 
-export _CCSUFFIX='-8'
+export _CCSUFFIX=''
 [ "${CC}" = 'mingw-clang' ] && _optpkg="clang${_CCSUFFIX}"
 [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] && _optpkg="${_optpkg} autoconf automake libtool"
 
