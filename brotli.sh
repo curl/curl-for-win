@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2017-2018 Viktor Szakats <https://vsz.me/>
+# Copyright 2017-2019 Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
 export _NAM
@@ -47,7 +47,8 @@ _cpu="$2"
   _CFLAGS="-m${_cpu} -fno-ident -DMINGW_HAS_SECURE_API"
   [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
-  options='-DCMAKE_SYSTEM_NAME=Windows'
+  options='--parallel 2'
+  options="${options} -DCMAKE_SYSTEM_NAME=Windows"
   options="${options} -DCMAKE_BUILD_TYPE=Release"
   options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
   options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"

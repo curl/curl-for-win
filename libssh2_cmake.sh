@@ -58,7 +58,8 @@ _cpu="$2"
       _LDFLAGS="${_LDFLAGS} -Wl,-Map,libssh2.map"
     fi
 
-    options='-DCMAKE_SYSTEM_NAME=Windows'
+    options='--parallel 2'
+    options="${options} -DCMAKE_SYSTEM_NAME=Windows"
     options="${options} -DCMAKE_BUILD_TYPE=Release"
     [ "${pass}" = 'static' ] && options="${options} -DBUILD_SHARED_LIBS=0"
     [ "${pass}" = 'shared' ] && options="${options} -DBUILD_SHARED_LIBS=1"

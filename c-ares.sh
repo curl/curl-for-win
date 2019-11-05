@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2018 Viktor Szakats <https://vsz.me/>
+# Copyright 2014-2019 Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
 export _NAM
@@ -50,7 +50,8 @@ _cpu="$2"
   _LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
   [ "${_cpu}" = '64' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x154000000"
 
-  options='-DCMAKE_SYSTEM_NAME=Windows'
+  options='--parallel 2'
+  options="${options} -DCMAKE_SYSTEM_NAME=Windows"
   options="${options} -DCMAKE_BUILD_TYPE=Release"
   options="${options} -DCARES_STATIC=1"
   options="${options} -DCARES_STATIC_PIC=1"

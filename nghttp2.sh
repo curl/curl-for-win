@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2018 Viktor Szakats <https://vsz.me/>
+# Copyright 2014-2019 Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
 export _NAM
@@ -48,7 +48,8 @@ _cpu="$2"
   _CFLAGS="-m${_cpu} -fno-ident -DNDEBUG"
   [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
-  options='-DCMAKE_SYSTEM_NAME=Windows'
+  options='--parallel 2'
+  options="${options} -DCMAKE_SYSTEM_NAME=Windows"
   options="${options} -DCMAKE_BUILD_TYPE=Release"
   options="${options} -DENABLE_LIB_ONLY=1"
   options="${options} -DENABLE_STATIC_LIB=1"
