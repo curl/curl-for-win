@@ -97,7 +97,7 @@ _cpu="$2"
   SOURCE_DATE_EPOCH=${unixts} TZ=UTC make
   # Install it so that it can be detected by CMake
   # (ending slash required)
-  make install "DESTDIR=$(pwd)/pkg/" >/dev/null # 2>&1
+  make -j 2 install "DESTDIR=$(pwd)/pkg/" >/dev/null # 2>&1
 
   # DESTDIR= + --prefix=
   _pkg="pkg/${_prefix}"
