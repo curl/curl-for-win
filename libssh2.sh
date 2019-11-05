@@ -72,8 +72,8 @@ _cpu="$2"
 
   (
     cd win32 || exit
-    ${_MAKE} clean
-    ${_MAKE}
+    ${_MAKE} -j 2 clean
+    ${_MAKE} -j 2
   )
 
   # Make steps for determinism

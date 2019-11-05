@@ -144,8 +144,8 @@ _cpu="$2"
     fi
   fi
 
-  ${_MAKE} mingw32-clean
-  ${_MAKE} "${options}"
+  ${_MAKE} -j 2 mingw32-clean
+  ${_MAKE} -j 2 "${options}"
 
   # Download CA bundle
   [ -f '../ca-bundle.crt' ] || \
