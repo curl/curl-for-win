@@ -58,7 +58,7 @@ alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format LONG'
 gpg_recv_key() {
   # https://keys.openpgp.org/about/api
   req="pks/lookup?op=get&options=mr&exact=on&search=0x$1"
-  curl "https://keys.openpgp.org/${req}"     | gpg --import --status-fd 1 || \
+# curl "https://keys.openpgp.org/${req}"     | gpg --import --status-fd 1 || \
   curl "https://pgpkeys.eu/${req}"           | gpg --import --status-fd 1 || \
   curl "https://keyserver.ubuntu.com/${req}" | gpg --import --status-fd 1
 }
