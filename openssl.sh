@@ -83,6 +83,7 @@ _cpu="$2"
   # The secure solution would be to disable loading anything from hard-coded
   # disk locations, something that is not supported by OpenSSL at present.
   _prefix='C:/Windows/System32/OpenSSL'
+  _pkr='pkg'
 
   # shellcheck disable=SC2086
   ./Configure-patched ${options} shared \
@@ -98,10 +99,11 @@ _cpu="$2"
   SOURCE_DATE_EPOCH=${unixts} TZ=UTC make -j 2
   # Install it so that it can be detected by CMake
   # (ending slash required)
-  make -j 2 install "DESTDIR=$(pwd)/pkg/" >/dev/null # 2>&1
+  make -j 2 install "DESTDIR=$(pwd)/${_pkr}/" >/dev/null # 2>&1
 
-  # DESTDIR= + --prefix=
-  _pkg="pkg/${_prefix}"
+  # DESTDIR= + --prefix= (OpenSSL 1.1.1d and newer strips the drive letter)
+  _pkg="${_pkr}/$(echo "${_prefix}" | sed 's|[a-zA-Z]:/||')"
+  _pks="${_pkr}/$(echo "${_prefix}" | sed 's|[a-zA-Z]:/||')/ssl"
 
   # Make steps for determinism
 
