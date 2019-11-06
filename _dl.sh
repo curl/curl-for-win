@@ -56,11 +56,11 @@ alias curl='curl -fsS --connect-timeout 15 -m 20 --retry 3'
 alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format LONG'
 
 gpg_recv_key() {
-  key="$1"
-  req="pks/lookup?search=0x${key}&fingerprint=on&exact=on&op=get"
-  curl "https://keys.openpgp.org/vks/v1/by-fingerprint/${key}" | gpg --import --status-fd 1 || \
-  curl "https://pgpkeys.eu/${req}"                             | gpg --import --status-fd 1 || \
-  curl "https://keyserver.ubuntu.com/${req}"                   | gpg --import --status-fd 1
+  # https://keys.openpgp.org/about/api
+  req="pks/lookup?op=get&options=mr&exact=on&search=0x$1"
+  curl "https://keys.openpgp.org/${req}"     | gpg --import --status-fd 1 || \
+  curl "https://pgpkeys.eu/${req}"           | gpg --import --status-fd 1 || \
+  curl "https://keyserver.ubuntu.com/${req}" | gpg --import --status-fd 1
 }
 
 gpg --version | grep gpg
