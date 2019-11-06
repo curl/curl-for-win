@@ -87,6 +87,8 @@ _cpu="$2"
   ../_sign.sh "${_ref}" ${_pkg}/bin/*.dll
   ../_sign.sh "${_ref}" ${_pkg}/bin/*.exe
 
+  touch -c -r "${_ref}" ${_pkg}/bin/*.dll
+  touch -c -r "${_ref}" ${_pkg}/bin/*.exe
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
   touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
   touch -c -r "${_ref}" ${_pkg}/include/*.h
