@@ -93,7 +93,8 @@ _cpu="$2"
     no-idea \
     no-tests \
     no-makedepend \
-    "--prefix=${_prefix}"
+    "--prefix=${_prefix}" \
+    "--openssldir=${_prefix}/ssl"
   SOURCE_DATE_EPOCH=${unixts} TZ=UTC make
   # Install it so that it can be detected by CMake
   # (ending slash required)
