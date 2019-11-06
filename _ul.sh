@@ -94,7 +94,7 @@ do_upload() {
         --header "x-apikey: ${VIRUSTOTAL_APIKEY}")"
       # shellcheck disable=SC2181
       if [ "$?" = 0 ]; then
-        hshr="$(echo "${out}" | jq -r '.data.meta.file_info.sha256')"
+        hshr="$(echo "${out}" | jq -r '.meta.file_info.sha256')"
         if [ "${hshr}" = "${hshl}" ]; then
           echo "VirusTotal URL for '${_BAS}${_suf}${arch_ext}':"
           echo "https://www.virustotal.com/file/${hshr}/analysis/"
