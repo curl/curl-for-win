@@ -95,7 +95,7 @@ _cpu="$2"
     no-makedepend \
     "--prefix=${_prefix}" \
     "--openssldir=${_prefix}/ssl"
-  SOURCE_DATE_EPOCH=${unixts} TZ=UTC make
+  SOURCE_DATE_EPOCH=${unixts} TZ=UTC make -j 2
   # Install it so that it can be detected by CMake
   # (ending slash required)
   make -j 2 install "DESTDIR=$(pwd)/pkg/" >/dev/null # 2>&1
