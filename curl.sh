@@ -149,7 +149,7 @@ _cpu="$2"
 
   # Download CA bundle
   [ -f '../ca-bundle.crt' ] || \
-    curl -R -fsS -o '../ca-bundle.crt' 'https://curl.haxx.se/ca/cacert.pem'
+    curl -R --xattr -fsS -o '../ca-bundle.crt' 'https://curl.haxx.se/ca/cacert.pem'
 
   openssl dgst -sha256 '../ca-bundle.crt'
   openssl dgst -sha512 '../ca-bundle.crt'
