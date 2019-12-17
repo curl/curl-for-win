@@ -7,7 +7,7 @@
 
 export HOMEBREW_NO_AUTO_UPDATE=1
 time brew update >/dev/null
-time brew upgrade python3
+time brew upgrade python
 time brew install xz gnu-tar mingw-w64 ${_optpkg} \
                   jq dos2unix gnu-sed openssl@1.1
 time brew cask install wine-stable
