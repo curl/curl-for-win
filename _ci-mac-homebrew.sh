@@ -10,7 +10,7 @@ time brew update >/dev/null
 time brew upgrade python3
 time brew install xz gnu-tar mingw-w64 ${_optpkg} \
                   jq dos2unix gnu-sed openssl@1.1
-time brew install --force-bottle --build-bottle wine
+time brew cask install wine-stable
 time wineboot --init
 
 ./_build.sh
