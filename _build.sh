@@ -1,15 +1,15 @@
 #!/bin/sh -ex
 
-# Copyright 2015-2019 Viktor Szakats <https://vsz.me/>
+# Copyright 2015-2020 Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
 # Requirements (not a comprehensive list at this point):
 #   Windows:
-#     MSYS2: zip mingw-w64-{i686,x86_64}-{clang,jq,osslsigncode,python3-pip} gpg python3
+#     MSYS2: zip zstd mingw-w64-{i686,x86_64}-{clang,jq,osslsigncode,python3-pip} gpg python3
 #   Linux
-#     zip binutils-mingw-w64 gcc-mingw-w64 gnupg-curl jq osslsigncode dos2unix realpath wine
+#     zip zstd binutils-mingw-w64 gcc-mingw-w64 gnupg-curl jq osslsigncode dos2unix realpath wine
 #   Mac:
-#     brew install xz gnu-tar mingw-w64 jq osslsigncode dos2unix gpg gnu-sed wine
+#     brew install xz zstd gnu-tar mingw-w64 jq osslsigncode dos2unix gpg gnu-sed wine
 
 cd "$(dirname "$0")" || exit
 
