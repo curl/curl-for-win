@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2015-2019 Viktor Szakats <https://vsz.me/>
+# Copyright 2015-2020 Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
 export ZLIB_VER_='1.2.11'
@@ -19,8 +19,8 @@ export OPENSSL_VER_='1.1.1d'
 export OPENSSL_HASH=1e3a91bc1f9dfce01af26026f856e064eab4c8ee0a8f457b5ae30b40b8b711f2
 export LIBSSH2_VER_='1.9.0'
 export LIBSSH2_HASH=d5fb8bd563305fd1074dda90bd053fb2d29fc4bce048d182f96eaa466dfadafd
-export CURL_VER_='7.67.0'
-export CURL_HASH=f5d2e7320379338c3952dcc7566a140abb49edb575f9f99272455785c40e536c
+export CURL_VER_='7.68.0'
+export CURL_HASH=b724240722276a27f6e770b952121a3afd097129d8c9fe18e6272dc34192035a
 export OSSLSIGNCODE_VER_='1.7.1'
 export OSSLSIGNCODE_HASH=f9a8cdb38b9c309326764ebc937cba1523a3a751a7ab05df3ecc99d18ae466c9
 
@@ -28,7 +28,7 @@ export OSSLSIGNCODE_HASH=f9a8cdb38b9c309326764ebc937cba1523a3a751a7ab05df3ecc99d
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the master branch.
-export _REV='5'
+export _REV=''
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
