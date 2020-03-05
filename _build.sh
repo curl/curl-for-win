@@ -171,7 +171,7 @@ build_single_target() {
   fi
 
   echo ".gcc-mingw-w64-${_machine} $(${_CCPREFIX}gcc -dumpversion)" >> "${_BLD}"
-  echo ".binutils-mingw-w64-${_machine} $(${_CCPREFIX}ar V | grep -o -E '[0-9]+\.[0-9]+[\.][0-9]*')" >> "${_BLD}"
+  echo ".binutils-mingw-w64-${_machine} $(${_CCPREFIX}ar V | grep -o -E '[0-9]+\.[0-9]+(\.[0-9]+)?')" >> "${_BLD}"
 
   command -v "$(dirname "$0")/osslsigncode-determ" >/dev/null 2>&1 || unset CODESIGN_KEY
 
