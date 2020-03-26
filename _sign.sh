@@ -27,7 +27,7 @@ if [ -f "${CODESIGN_KEY}" ] && \
   (
     echo "Code signing: '${file}'"
     set +x
-    # -ts 'http://timestamp.digicert.com'
+    # -ts 'https://freetsa.org/tsr'
     "$(dirname "$0")/osslsigncode-determ" sign -h sha256 \
       -in "${file}" -out "${file}-signed" \
       -st "${unixts}" \
