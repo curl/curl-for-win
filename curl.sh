@@ -49,6 +49,8 @@ _cpu="$2"
   # public libcurl functions being marked as 'exported'. It is useful to
   # avoid the chance of libcurl functions getting exported from final
   # binaries when linked against static libcurl lib.
+  # TODO:
+  #   Enable UNICODE builds: -DUNICODE -D_UNICODE
   export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -fno-ident'
   [ "${_cpu}" = '32' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
