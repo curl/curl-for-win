@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2019 Viktor Szakats <https://vsz.me/>
+# Copyright 2014-2020 Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
 export _NAM
@@ -141,8 +141,8 @@ _cpu="$2"
 
   # Tests
 
-  "${_CCPREFIX}objdump" -x "${_pkg}"/bin/openssl.exe | grep -E -i "(file format|dll name)"
-  "${_CCPREFIX}objdump" -x "${_pkg}"/bin/*.dll       | grep -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" -x "${_pkg}"/bin/openssl.exe | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" -x "${_pkg}"/bin/*.dll       | grep -a -E -i "(file format|dll name)"
 
   ${_WINE} "${_pkg}"/bin/openssl.exe version
   ${_WINE} "${_pkg}"/bin/openssl.exe ciphers

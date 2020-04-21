@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2017-2019 Viktor Szakats <https://vsz.me/>
+# Copyright 2017-2020 Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
 export _NAM
@@ -111,8 +111,8 @@ _cpu="$2"
 
   # Tests
 
-  "${_CCPREFIX}objdump" -x ${_pkg}/bin/*.exe | grep -E -i "(file format|dll name)"
-  "${_CCPREFIX}objdump" -x ${_pkg}/bin/*.dll | grep -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" -x ${_pkg}/bin/*.exe | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" -x ${_pkg}/bin/*.dll | grep -a -E -i "(file format|dll name)"
 
   # Create package
 

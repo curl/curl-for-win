@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2019 Viktor Szakats <https://vsz.me/>
+# Copyright 2014-2020 Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
 export _NAM
@@ -146,7 +146,7 @@ _cpu="$2"
 
   # Tests
 
-  "${_CCPREFIX}objdump" -x ${_pkg}/bin/*.dll | grep -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" -x ${_pkg}/bin/*.dll | grep -a -E -i "(file format|dll name)"
 
   # Create package
 
@@ -162,7 +162,7 @@ _cpu="$2"
   (
     set +x
     for file in docs/*; do
-      if [ -f "${file}" ] && [ "${file}" != 'Makefile' ] && echo "${file}" | grep -q -v -F '.'; then
+      if [ -f "${file}" ] && [ "${file}" != 'Makefile' ] && echo "${file}" | grep -q -a -v -F '.'; then
         cp -f -p "${file}" "${_DST}/${file}.txt"
       fi
     done

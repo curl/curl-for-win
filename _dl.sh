@@ -63,7 +63,7 @@ gpg_recv_key() {
   curl "https://keyserver.ubuntu.com/${req}" | gpg --import --status-fd 1
 }
 
-gpg --version | grep gpg
+gpg --version | grep -a gpg
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   _patsuf='.dev'
@@ -75,7 +75,7 @@ fi
 
 # zlib
 curl -o pack.bin -L --proto-redir =https "https://github.com/madler/zlib/archive/v${ZLIB_VER_}.tar.gz" || exit 1
-openssl dgst -sha256 pack.bin | grep -q "${ZLIB_HASH}" || exit 1
+openssl dgst -sha256 pack.bin | grep -q -a "${ZLIB_HASH}" || exit 1
 tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r zlib && mv zlib-* zlib
@@ -86,7 +86,7 @@ rm -f -r zlib && mv zlib-* zlib
 if [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
   # brotli
   curl -o pack.bin -L --proto-redir =https "https://github.com/google/brotli/archive/v${BROTLI_VER_}.tar.gz" || exit 1
-  openssl dgst -sha256 pack.bin | grep -q "${BROTLI_HASH}" || exit 1
+  openssl dgst -sha256 pack.bin | grep -q -a "${BROTLI_HASH}" || exit 1
   tar -xvf pack.bin >/dev/null 2>&1 || exit 1
   rm pack.bin
   rm -f -r brotli && mv brotli-* brotli
@@ -95,7 +95,7 @@ fi
 
 # nghttp2
 curl -o pack.bin -L --proto-redir =https "https://github.com/nghttp2/nghttp2/releases/download/v${NGHTTP2_VER_}/nghttp2-${NGHTTP2_VER_}.tar.xz" || exit 1
-openssl dgst -sha256 pack.bin | grep -q "${NGHTTP2_HASH}" || exit 1
+openssl dgst -sha256 pack.bin | grep -q -a "${NGHTTP2_HASH}" || exit 1
 tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r nghttp2 && mv nghttp2-* nghttp2
@@ -110,7 +110,7 @@ if [ "${_BRANCH#*libidn2*}" != "${_BRANCH}" ]; then
   curl 'https://ftp.gnu.org/gnu/gnu-keyring.gpg' \
   | gpg -q --import 2>/dev/null
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
-  openssl dgst -sha256 pack.bin | grep -q "${LIBIDN2_HASH}" || exit 1
+  openssl dgst -sha256 pack.bin | grep -q -a "${LIBIDN2_HASH}" || exit 1
   tar -xvf pack.bin >/dev/null 2>&1 || exit 1
   rm pack.bin
   rm -f -r libidn2 && mv libidn2-* libidn2
@@ -127,7 +127,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
       -o pack.sig -L --proto-redir =https "https://github.com/c-ares/c-ares/releases/download/cares-$(echo "${CARES_VER_}" | tr '.' '_')/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
     gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
     gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
-    openssl dgst -sha256 pack.bin | grep -q "${CARES_HASH}" || exit 1
+    openssl dgst -sha256 pack.bin | grep -q -a "${CARES_HASH}" || exit 1
   fi
   tar -xvf pack.bin >/dev/null 2>&1 || exit 1
   rm pack.bin
@@ -149,7 +149,7 @@ else
   gpg_recv_key 8657ABB260F056B1E5190839D9C4D26D0E604491
   gpg_recv_key 7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
-  openssl dgst -sha256 pack.bin | grep -q "${OPENSSL_HASH}" || exit 1
+  openssl dgst -sha256 pack.bin | grep -q -a "${OPENSSL_HASH}" || exit 1
 fi
 tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
@@ -166,7 +166,7 @@ else
     -o pack.sig -L --proto-redir =https "https://github.com/libssh2/libssh2/releases/download/libssh2-${LIBSSH2_VER_}/libssh2-${LIBSSH2_VER_}.tar.gz.asc" || exit 1
   gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
-  openssl dgst -sha256 pack.bin | grep -q "${LIBSSH2_HASH}" || exit 1
+  openssl dgst -sha256 pack.bin | grep -q -a "${LIBSSH2_HASH}" || exit 1
 fi
 tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
@@ -183,7 +183,7 @@ else
     -o pack.sig -L --proto-redir =https "https://github.com/curl/curl/releases/download/curl-$(echo "${CURL_VER_}" | tr '.' '_')/curl-${CURL_VER_}.tar.xz.asc" || exit 1
   gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
-  openssl dgst -sha256 pack.bin | grep -q "${CURL_HASH}" || exit 1
+  openssl dgst -sha256 pack.bin | grep -q -a "${CURL_HASH}" || exit 1
 fi
 tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
@@ -193,7 +193,7 @@ rm -f -r curl && mv curl-* curl
 # libhsts
 curl \
   -o pack.bin "https://gitlab.com/rockdaboot/libhsts/uploads/4753f61b5a3c6253acf4934217816e3f/libhsts-${LIBHSTS_VER_}.tar.gz" || exit 1
-openssl dgst -sha256 pack.bin | grep -q "${LIBHSTS_HASH}" || exit 1
+openssl dgst -sha256 pack.bin | grep -q -a "${LIBHSTS_HASH}" || exit 1
 tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r libhsts && mv libhsts-* libhsts
@@ -202,7 +202,7 @@ rm -f -r libhsts && mv libhsts-* libhsts
 # osslsigncode
 # NOTE: "https://github.com/mtrojnar/osslsigncode/archive/${OSSLSIGNCODE_VER_}.tar.gz"
 curl -o pack.bin -L --proto-redir =https "https://deb.debian.org/debian/pool/main/o/osslsigncode/osslsigncode_${OSSLSIGNCODE_VER_}.orig.tar.gz" || exit 1
-openssl dgst -sha256 pack.bin | grep -q "${OSSLSIGNCODE_HASH}" || exit 1
+openssl dgst -sha256 pack.bin | grep -q -a "${OSSLSIGNCODE_HASH}" || exit 1
 tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r osslsigncode && mv osslsigncode-* osslsigncode

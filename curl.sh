@@ -77,9 +77,9 @@ _cpu="$2"
   # ones from statically linked dependencies, resulting in a larger .dll,
   # an inflated implib and a non-standard list of exported functions.
   echo 'EXPORTS' > libcurl.def
-  grep -h '^CURL_EXTERN ' include/curl/*.h \
+  grep -a -h '^CURL_EXTERN ' include/curl/*.h \
   | sed 's/CURL_EXTERN \([a-zA-Z_\* ]*\)[\* ]\([a-z_]*\)(\(.*\)$/\2/g' \
-  | grep -v '^$' \
+  | grep -a -v '^$' \
   | sort | tee -a libcurl.def
   CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} ../libcurl.def"
 
@@ -180,8 +180,8 @@ _cpu="$2"
 
   # Tests
 
-  "${_CCPREFIX}objdump" -x src/*.exe | grep -E -i "(file format|dll name)"
-  "${_CCPREFIX}objdump" -x lib/*.dll | grep -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" -x src/*.exe | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" -x lib/*.dll | grep -a -E -i "(file format|dll name)"
 
   ${_WINE} src/curl.exe -V
 
@@ -199,12 +199,12 @@ _cpu="$2"
   (
     set +x
     for file in docs/*; do
-      if [ -f "${file}" ] && echo "${file}" | grep -q -v -F '.'; then
+      if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -F '.'; then
         cp -f -p "${file}" "${_DST}/${file}.txt"
       fi
     done
     for file in docs/libcurl/*; do
-      if [ -f "${file}" ] && echo "${file}" | grep -q -v -F '.'; then
+      if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -F '.'; then
         cp -f -p "${file}" "${_DST}/${file}.txt"
       fi
     done

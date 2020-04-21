@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2014-2019 Viktor Szakats <https://vsz.me/>
+# Copyright 2014-2020 Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
 cd "$(dirname "$0")" || exit
@@ -69,7 +69,7 @@ create_pack "$1" '.tar.xz'
 create_pack "$1" '.zip'
 
 ver="${_NAM} ${_VER}"
-if ! grep -q -F "${ver}" "${_BLD}"; then
+if ! grep -q -a -F "${ver}" "${_BLD}"; then
   echo "${ver}" >> "${_BLD}"
 fi
 

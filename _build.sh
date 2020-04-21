@@ -97,7 +97,7 @@ if [ -f "${DEPLOY_KEY}" ]; then
     mkdir -m 700 "${HOME}/.ssh"
     install -m 600 /dev/null "${HOME}/.ssh/known_hosts"
   fi
-  if ! grep -q -F "${host_key}" "${HOME}/.ssh/known_hosts"; then
+  if ! grep -q -a -F "${host_key}" "${HOME}/.ssh/known_hosts"; then
     echo "${host_key}" >> "${HOME}/.ssh/known_hosts"
   fi
 fi
@@ -107,13 +107,13 @@ case "${os}" in
 esac
 
 if [ "${CC}" = 'mingw-clang' ]; then
-  echo ".clang$("clang${_CCSUFFIX}" --version | grep -o -E ' [0-9]*\.[0-9]*[\.][0-9]*')" >> "${_BLD}"
+  echo ".clang$("clang${_CCSUFFIX}" --version | grep -o -a -E ' [0-9]*\.[0-9]*[\.][0-9]*')" >> "${_BLD}"
 fi
 
 case "${os}" in
   mac)   ver="$(brew info --json=v1 mingw-w64 | jq -r '.[] | select(.name == "mingw-w64") | .versions.stable')";;
   # FIXME: Linux-distro specific
-  linux) ver="$(apt-cache show mingw-w64 | grep '^Version:' | cut -c 10-)";;
+  linux) ver="$(apt-cache show mingw-w64 | grep -a '^Version:' | cut -c 10-)";;
   *)     ver='';;
 esac
 [ -n "${ver}" ] && echo ".mingw-w64 ${ver}" >> "${_BLD}"
@@ -171,7 +171,7 @@ build_single_target() {
   fi
 
   echo ".gcc-mingw-w64-${_machine} $(${_CCPREFIX}gcc -dumpversion)" >> "${_BLD}"
-  echo ".binutils-mingw-w64-${_machine} $(${_CCPREFIX}ar V | grep -o -E '[0-9]+\.[0-9]+(\.[0-9]+)?')" >> "${_BLD}"
+  echo ".binutils-mingw-w64-${_machine} $(${_CCPREFIX}ar V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')" >> "${_BLD}"
 
   command -v "$(dirname "$0")/osslsigncode-determ" >/dev/null 2>&1 || unset CODESIGN_KEY
 
