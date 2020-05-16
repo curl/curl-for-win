@@ -12,12 +12,11 @@ git:
   quiet: true
 language: c
 
-matrix:
+jobs:
   include:
     - os: linux
-      dist: xenial
       sudo: required
-      group: edge
+      group: travis_latest
       compiler: mingw-clang
       services: [docker]
       # https://hub.docker.com/_/debian/
