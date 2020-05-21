@@ -51,6 +51,8 @@ _cpu="$2"
   # binaries when linked against static libcurl lib.
   # TODO:
   #   Enable UNICODE builds: -DUNICODE -D_UNICODE
+  #   Enable: -DHAVE_ATOMIC
+  #      Ref: https://github.com/curl/curl/pull/5017
   export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -DCURL_ENABLE_MQTT -fno-ident'
   [ "${_cpu}" = '32' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
