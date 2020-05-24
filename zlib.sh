@@ -63,6 +63,9 @@ _cpu="$2"
 
     [ "${os}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
 
+  # _CFLAGS="${_CFLAGS} -Xclang -cfguard"
+  # _LDFLAGS="${_LDFLAGS} -Xlinker -guard:cf"
+
     # shellcheck disable=SC2086
     cmake . ${options} "${opt_gmsys}" \
       "-DCMAKE_SYSROOT=${_SYSROOT}" \
