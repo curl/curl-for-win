@@ -50,9 +50,8 @@ _cpu="$2"
   # avoid the chance of libcurl functions getting exported from final
   # binaries when linked against static libcurl lib.
   # TODO:
-  #   Enable UNICODE builds: -DUNICODE -D_UNICODE
-  #   Enable: -DHAVE_ATOMIC
-  #      Ref: https://github.com/curl/curl/pull/5017
+  #   - Enable after 7.71.0: -DHAVE_ATOMIC
+  #     Ref: https://github.com/curl/curl/pull/5017
   export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -DCURL_ENABLE_MQTT -fno-ident'
   [ "${_cpu}" = '32' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
@@ -64,6 +63,11 @@ _cpu="$2"
     CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
     CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
     CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
+  fi
+
+  if [ "$(echo "${CURL_VER_}" | cut -c -5)" = '7.71.' ]; then
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUNICODE -D_UNICODE"
+    CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -municode"
   fi
 
   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
