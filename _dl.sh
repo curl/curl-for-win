@@ -11,15 +11,14 @@ export BROTLI_VER_='1.0.7'
 export BROTLI_HASH=4c61bfb0faca87219ea587326c467b95acb25555b53d1a421ffa3c8a9296ee2c
 export LIBIDN2_VER_='2.3.0'
 export LIBIDN2_HASH=e1cb1db3d2e249a6a3eb6f0946777c2e892d5c5dc7bd91c74394fc3a01cab8b5
-export NGHTTP2_VER_='1.40.0'
-export NGHTTP2_HASH=09fc43d428ff237138733c737b29fb1a7e49d49de06d2edbed3bc4cdcee69073
+export NGHTTP2_VER_='1.41.0'
+export NGHTTP2_HASH=abc25b8dc601f5b3fefe084ce50fcbdc63e3385621bee0cbfa7b57f9ec3e67c2
 export CARES_VER_='1.16.1'
 export CARES_HASH=d08312d0ecc3bd48eee0a4cc0d2137c9f194e0a28de2028928c0f6cae85f86ce
 export OPENSSL_VER_='1.1.1g'
 export OPENSSL_HASH=ddb04774f1e32f0c49751e21b67216ac87852ceb056b75209af2443400636d46
 export LIBSSH2_VER_='1.9.0'
 export LIBSSH2_HASH=d5fb8bd563305fd1074dda90bd053fb2d29fc4bce048d182f96eaa466dfadafd
-# TODO: enable UNICODE in curl.sh on 7.71.0 upgrade
 export CURL_VER_='7.70.0'
 export CURL_HASH=032f43f2674008c761af19bf536374128c16241fb234699a55f9fb603fcfbae7
 export OSSLSIGNCODE_VER_='1.7.1'
@@ -29,7 +28,7 @@ export OSSLSIGNCODE_HASH=f9a8cdb38b9c309326764ebc937cba1523a3a751a7ab05df3ecc99d
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the master branch.
-export _REV=''
+export _REV='1'
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
