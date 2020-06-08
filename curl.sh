@@ -180,12 +180,12 @@ _cpu="$2"
 
   touch -c -r "${_ref}" src/*.exe
   touch -c -r "${_ref}" lib/*.dll
+  touch -c -r "${_ref}" lib/*.def
   touch -c -r "${_ref}" lib/*.a
 
   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
     touch -c -r "${_ref}" src/*.map
     touch -c -r "${_ref}" lib/*.map
-    touch -c -r "${_ref}" lib/*.def
   fi
 
   # Tests
@@ -223,6 +223,7 @@ _cpu="$2"
   cp -f -p include/curl/*.h         "${_DST}/include/curl/"
   cp -f -p src/*.exe                "${_DST}/bin/"
   cp -f -p lib/*.dll                "${_DST}/bin/"
+  cp -f -p lib/*.def                "${_DST}/bin/"
   cp -f -p lib/*.a                  "${_DST}/lib/"
   cp -f -p lib/mk-ca-bundle.pl      "${_DST}/"
   cp -f -p CHANGES                  "${_DST}/CHANGES.txt"
@@ -241,7 +242,6 @@ _cpu="$2"
   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
     cp -f -p src/*.map                "${_DST}/bin/"
     cp -f -p lib/*.map                "${_DST}/bin/"
-    cp -f -p lib/*.def                "${_DST}/bin/"
   fi
 
   unix2dos -q -k "${_DST}"/*.txt

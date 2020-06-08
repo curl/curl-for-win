@@ -89,11 +89,11 @@ _cpu="$2"
   ../_sign.sh "${_ref}" win32/*.dll
 
   touch -c -r "${_ref}" win32/*.dll
+  touch -c -r "${_ref}" win32/*.def
   touch -c -r "${_ref}" win32/*.a
 
   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
     touch -c -r "${_ref}" win32/*.map
-    touch -c -r "${_ref}" win32/*.def
   fi
 
   # Tests
@@ -120,6 +120,7 @@ _cpu="$2"
   )
   cp -f -p include/*.h   "${_DST}/include/"
   cp -f -p win32/*.dll   "${_DST}/bin/"
+  cp -f -p win32/*.def   "${_DST}/bin/"
   cp -f -p win32/*.a     "${_DST}/lib/"
   cp -f -p NEWS          "${_DST}/NEWS.txt"
   cp -f -p COPYING       "${_DST}/COPYING.txt"
@@ -130,7 +131,6 @@ _cpu="$2"
 
   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
     cp -f -p win32/*.map   "${_DST}/bin/"
-    cp -f -p win32/*.def   "${_DST}/bin/"
   fi
 
   unix2dos -q -k "${_DST}"/*.txt
