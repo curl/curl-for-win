@@ -59,7 +59,7 @@ do_upload() {
       # uploads older than 180 days:
       #   https://bintray.com/docs/api/#url_update_version
 
-      curl -fsS -u "${BINTRAY_USER}:${BINTRAY_APIKEY}" \
+      curl -A curl -fsS -u "${BINTRAY_USER}:${BINTRAY_APIKEY}" \
         -X PUT "https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_sufpkg}/${_VER}/${_BAS}${_suf}${arch_ext}?override=1&publish=1" \
         --data-binary "@${_BAS}${_suf}${arch_ext}" \
         -H "X-GPG-PASSPHRASE: ${GPG_PASSPHRASE}"
@@ -82,14 +82,14 @@ do_upload() {
     hshl="$(openssl dgst -sha256 "${_BAS}${_suf}${arch_ext}" \
       | sed -n -E 's,.+= ([0-9a-fA-F]{64}),\1,p')"
     # https://developers.virustotal.com/v3.0/reference
-    out="$(curl -fsS \
+    out="$(curl -A curl -fsS \
       -X POST 'https://www.virustotal.com/api/v3/files' \
       --header "x-apikey: ${VIRUSTOTAL_APIKEY}" \
       --form "file=@${_BAS}${_suf}${arch_ext}")"
     # shellcheck disable=SC2181
     if [ "$?" = 0 ]; then
       id="$(echo "${out}" | jq -r '.data.id')"
-      out="$(curl -fsS \
+      out="$(curl -A curl -fsS \
         -X GET "https://www.virustotal.com/api/v3/analyses/${id}" \
         --header "x-apikey: ${VIRUSTOTAL_APIKEY}")"
       # shellcheck disable=SC2181
