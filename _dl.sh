@@ -19,8 +19,8 @@ export OPENSSL_VER_='1.1.1g'
 export OPENSSL_HASH=ddb04774f1e32f0c49751e21b67216ac87852ceb056b75209af2443400636d46
 export LIBSSH2_VER_='1.9.0'
 export LIBSSH2_HASH=d5fb8bd563305fd1074dda90bd053fb2d29fc4bce048d182f96eaa466dfadafd
-export CURL_VER_='7.70.0'
-export CURL_HASH=032f43f2674008c761af19bf536374128c16241fb234699a55f9fb603fcfbae7
+export CURL_VER_='7.71.0'
+export CURL_HASH=cdf18794393d8bead915312708a9e5d819c6e9919de14b20d5c8e7987abd9772
 export OSSLSIGNCODE_VER_='1.7.1'
 export OSSLSIGNCODE_HASH=f9a8cdb38b9c309326764ebc937cba1523a3a751a7ab05df3ecc99d18ae466c9
 
@@ -28,7 +28,7 @@ export OSSLSIGNCODE_HASH=f9a8cdb38b9c309326764ebc937cba1523a3a751a7ab05df3ecc99d
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the master branch.
-export _REV='2'
+export _REV=''
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
@@ -179,8 +179,8 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   curl -o pack.bin -L --proto-redir =https https://github.com/curl/curl/archive/63f6b3b22077c6fd4a75ce4ceac7258509af412c.tar.gz || exit 1
 else
   curl \
-    -o pack.bin -L --proto-redir =https "https://github.com/curl/curl/releases/download/curl-$(echo "${CURL_VER_}" | tr '.' '_')/curl-${CURL_VER_}.tar.xz" \
-    -o pack.sig -L --proto-redir =https "https://github.com/curl/curl/releases/download/curl-$(echo "${CURL_VER_}" | tr '.' '_')/curl-${CURL_VER_}.tar.xz.asc" || exit 1
+    -o pack.bin -L --proto-redir =https "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.xz" \
+    -o pack.sig -L --proto-redir =https "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.xz.asc" || exit 1
   gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
   openssl dgst -sha256 pack.bin | grep -q -a "${CURL_HASH}" || exit 1
