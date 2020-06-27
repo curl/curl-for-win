@@ -1,6 +1,6 @@
 ---
 # https://help.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow
-name: main
+name: build
 on:
   push:
     branches:
