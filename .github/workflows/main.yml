@@ -1,0 +1,27 @@
+---
+# https://help.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow
+name: main
+on:
+  push:
+    branches:
+      - master
+      - dev-github
+      - test-github
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 8
+      - name: build
+        env:
+          CC: mingw-clang
+        run: |
+          export DOCKER_IMAGE='debian:testing'
+          time docker pull "${DOCKER_IMAGE}"
+          time docker run -v "$(pwd):$(pwd)" -w "$(pwd)" \
+            --env-file <(env | grep -a \
+              -E '^(BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|DEPLOY_|CC|GITHUB_)') \
+            "${DOCKER_IMAGE}" \
+            sh -c ./_ci-linux-debian.sh

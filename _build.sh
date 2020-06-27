@@ -24,18 +24,21 @@ if [ -n "${APPVEYOR_ACCOUNT_NAME}" ]; then
 elif [ -n "${TRAVIS_REPO_SLUG}" ]; then
   _LOGURL="https://travis-ci.org/${TRAVIS_REPO_SLUG}/jobs/${TRAVIS_JOB_ID}"
 # _LOGURL="https://api.travis-ci.org/v3/job/${TRAVIS_JOB_ID}/log.txt"
+elif [ -n "${GITHUB_RUN_ID}" ]; then
+  # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
+  _LOGURL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 else
   # TODO: https://docs.gitlab.com/ce/ci/variables/README.html
   _LOGURL=''
 fi
 echo "${_LOGURL}" | tee "${_LOG}"
 
-export _BRANCH="${APPVEYOR_REPO_BRANCH}${TRAVIS_BRANCH}${CI_COMMIT_REF_NAME}${GIT_BRANCH}"
+export _BRANCH="${APPVEYOR_REPO_BRANCH}${TRAVIS_BRANCH}${CI_COMMIT_REF_NAME}${GITHUB_REF}${GIT_BRANCH}"
 [ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD)"
 [ -n "${_BRANCH}" ] || _BRANCH='master'
 export _URL=''
 command -v git >/dev/null 2>&1 && _URL="$(git ls-remote --get-url | sed 's|.git$||')"
-[ -n "${_URL}" ] || _URL="https://github.com/${APPVEYOR_REPO_NAME}${TRAVIS_REPO_SLUG}"
+[ -n "${_URL}" ] || _URL="https://github.com/${APPVEYOR_REPO_NAME}${TRAVIS_REPO_SLUG}${GITHUB_REPOSITORY}"
 
 # Detect host OS
 export os
@@ -47,7 +50,10 @@ case "$(uname)" in
 esac
 
 export PUBLISH_PROD_FROM
-[ "${APPVEYOR_REPO_PROVIDER}" = 'gitHub' ] && PUBLISH_PROD_FROM='linux'
+if [ "${APPVEYOR_REPO_PROVIDER}" = 'gitHub' ] || \
+   [ -n "${GITHUB_RUN_ID}" ]; then
+  PUBLISH_PROD_FROM='linux'
+fi
 
 export _BLD='build.txt'
 
