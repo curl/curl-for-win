@@ -5,6 +5,8 @@
 
 export ZLIB_VER_='1.2.11'
 export ZLIB_HASH=629380c90a77b964d896ed37163f5c3a34f6e6d897311f1df2a7016355c45eff
+export ZSTD_VER_='1.4.5'
+export ZSTD_HASH=2c2366874bc449ff539614266d8c0d6ecdb4baf30bb65609c239ab4ed23c03c7
 export LIBHSTS_VER_='0.1.0'
 export LIBHSTS_HASH=e1125e0395b4777361eafafd61fff2b516d3f2fb57d56e40cb554a6cd8c024e0
 export BROTLI_VER_='1.0.7'
@@ -54,6 +56,7 @@ fi
 
 alias curl='curl -A curl -fsS --connect-timeout 15 -m 20 --retry 3'
 alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format LONG'
+[ "${os}" = 'mac' ] && alias tar='gtar'
 
 gpg_recv_key() {
   # https://keys.openpgp.org/about/api
@@ -80,6 +83,14 @@ tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
 rm -f -r zlib && mv zlib-* zlib
 [ -f "zlib${_patsuf}.patch" ] && dos2unix < "zlib${_patsuf}.patch" | patch --batch -N -p1 -d zlib
+
+# zstd
+curl -o pack.bin -L --proto-redir =https "https://github.com/facebook/zstd/releases/download/v${ZSTD_VER_}/zstd-${ZSTD_VER_}.tar.zst" || exit 1
+openssl dgst -sha256 pack.bin | grep -q -a "${ZSTD_HASH}" || exit 1
+tar -xvf pack.bin >/dev/null 2>&1 || exit 1
+rm pack.bin
+rm -f -r zstd && mv zstd-* zstd
+[ -f "zstd${_patsuf}.patch" ] && dos2unix < "zstd${_patsuf}.patch" | patch --batch -N -p1 -d zstd
 
 # Relatively high curl binary size + extra dependency overhead aiming mostly
 # to optimize webpage download sizes, so allow to disable it.

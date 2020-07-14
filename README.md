@@ -40,7 +40,7 @@
     [LLVM/Clang](https://clang.llvm.org/) for projects supporting it.
   - Binaries are cross-built and published from Linux
     (via [AppVeyor CI](https://www.appveyor.com/)), using LLVM/Clang for
-    curl, libssh2, nghttp2, c-ares, brotli and zlib, and GCC for OpenSSL.
+    curl, libssh2, nghttp2, c-ares, brotli, zstd and zlib, and GCC for OpenSSL.
     <br>Exact OS image used for the builds is
     [`debian:testing`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing)
     (a [reproducible](https://github.com/debuerreotype/debuerreotype) image)
@@ -105,6 +105,7 @@
     * [![Download](https://api.bintray.com/packages/vszakats/generic/libssh2/images/download.svg)](https://bintray.com/vszakats/generic/libssh2/_latestVersion) libssh2
     * [![Download](https://api.bintray.com/packages/vszakats/generic/nghttp2/images/download.svg)](https://bintray.com/vszakats/generic/nghttp2/_latestVersion) nghttp2
     * [![Download](https://api.bintray.com/packages/vszakats/generic/brotli/images/download.svg)](https://bintray.com/vszakats/generic/brotli/_latestVersion) brotli
+    * [![Download](https://api.bintray.com/packages/vszakats/generic/zstd/images/download.svg)](https://bintray.com/vszakats/generic/zstd/_latestVersion) zstd
     * [![Download](https://api.bintray.com/packages/vszakats/generic/zlib/images/download.svg)](https://bintray.com/vszakats/generic/zlib/_latestVersion) zlib
 
 # Live build logs

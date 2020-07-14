@@ -182,6 +182,7 @@ build_single_target() {
   command -v "$(dirname "$0")/osslsigncode-determ" >/dev/null 2>&1 || unset CODESIGN_KEY
 
   time ./zlib.sh       "${ZLIB_VER_}" "${_cpu}"
+  time ./zstd.sh       "${ZSTD_VER_}" "${_cpu}"
   time ./libhsts.sh "${LIBHSTS_VER_}" "${_cpu}"
   time ./brotli.sh   "${BROTLI_VER_}" "${_cpu}"
   time ./libidn2.sh "${LIBIDN2_VER_}" "${_cpu}"
