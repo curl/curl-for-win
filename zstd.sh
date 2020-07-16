@@ -1,0 +1,174 @@
+#!/bin/sh -ex
+
+# Copyright 2017-2020 Viktor Szakats <https://vsz.me/>
+# See LICENSE.md
+
+export _NAM
+export _VER
+export _BAS
+export _DST
+
+_NAM="$(basename "$0")"
+_NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
+_VER="$1"
+_cpu="$2"
+
+(
+  cd "${_NAM}" || exit
+
+  # Cross-tasks
+
+  # Detect host OS
+  case "$(uname)" in
+    *_NT*)   os='win';;
+    Linux*)  os='linux';;
+    Darwin*) os='mac';;
+    *BSD)    os='bsd';;
+  esac
+
+  if [ "${os}" = 'win' ]; then
+    opt_gmsys='-GMSYS Makefiles'
+    # Without this option, the value '/usr/local' becomes 'msys64/usr/local'
+    export MSYS2_ARG_CONV_EXCL='-DCMAKE_INSTALL_PREFIX='
+  fi
+
+  # Build
+
+  cd build/cmake
+
+  rm -fr pkg CMakeFiles CMakeCache.txt cmake_install.cmake lib/CMakeFiles
+
+  find . -name 'Makefile'              -type f -delete
+  find . -name 'cmake_install.cmake'   -type f -delete
+  find . -name 'cmake_uninstall.cmake' -type f -delete
+  find . -name '*.dll'                 -type f -delete
+  find . -name '*.o'                   -type f -delete
+  find . -name '*.obj'                 -type f -delete
+  find . -name '*.a'                   -type f -delete
+  find . -name '*.lo'                  -type f -delete
+  find . -name '*.la'                  -type f -delete
+  find . -name '*.lai'                 -type f -delete
+  find . -name '*.Plo'                 -type f -delete
+  find . -name '*.pc'                  -type f -delete
+
+  # -D_LARGEFILE64_SOURCE=1 -D_LFS64_LARGEFILE=1
+  _CFLAGS="-m${_cpu} -fno-ident -target ${_TRIPLET}"
+  [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
+  _LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
+  [ "${_cpu}" = '64' ] && [ "${_CCVER}" -ge '05' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x153000000"
+
+  options=''
+  options="${options} -DCMAKE_SYSTEM_NAME=Windows"
+  options="${options} -DCMAKE_BUILD_TYPE:STRING=Release"
+  options="${options} -DCMAKE_EXECUTABLE_FORMAT:STRING=PE"
+  options="${options} -DZSTD_BUILD_CONTRIB:BOOL=OFF"
+  options="${options} -DZSTD_BUILD_TESTS:BOOL=OFF"
+  options="${options} -DZSTD_LEGACY_SUPPORT:BOOL=OFF"
+  # Not required for curl itself, but doesn't take much extra time, so let's build it
+  options="${options} -DZSTD_BUILD_PROGRAMS:BOOL=ON"
+  options="${options} -DZSTD_PROGRAMS_LINK_SHARED:BOOL=ON"
+  options="${options} -DZSTD_BUILD_SHARED:BOOL=ON"
+  options="${options} -DZSTD_BUILD_STATIC:BOOL=ON"
+  options="${options} -DZSTD_MULTITHREAD_SUPPORT:BOOL=OFF"
+  options="${options} -DZSTD_LZ4_SUPPORT:BOOL=OFF"
+  options="${options} -DZSTD_LZMA_SUPPORT:BOOL=OFF"
+  options="${options} -DZSTD_ZLIB_SUPPORT:BOOL=OFF"
+  options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
+  options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
+
+  if [ "${CC}" = 'mingw-clang' ]; then
+    unset CC
+
+    [ "${os}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
+
+  # _CFLAGS="${_CFLAGS} -Xclang -cfguard"
+  # _LDFLAGS="${_LDFLAGS} -Xlinker -guard:cf"
+
+    # shellcheck disable=SC2086
+    cmake . ${options} "${opt_gmsys}" \
+      "-DCMAKE_SYSROOT=${_SYSROOT}" \
+      "-DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}" \
+      "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
+      "-DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}" \
+      "-DCMAKE_C_COMPILER=clang${_CCSUFFIX}" \
+      "-DCMAKE_CXX_COMPILER=clang++${_CCSUFFIX}" \
+      "-DCMAKE_C_FLAGS=${_CFLAGS}" \
+      "-DCMAKE_CXX_FLAGS=${_CFLAGS}" \
+      '-DCMAKE_EXE_LINKER_FLAGS=-static-libgcc' \
+      "-DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc ${_LDFLAGS}"
+  else
+    unset CC
+
+    # shellcheck disable=SC2086
+    cmake . ${options} "${opt_gmsys}" \
+      "-DCMAKE_C_COMPILER=${_CCPREFIX}gcc" \
+      "-DCMAKE_CXX_COMPILER=${_CCPREFIX}g++" \
+      "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}" \
+      "-DCMAKE_CXX_FLAGS=${_CFLAGS}" \
+      "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS}"
+  fi
+
+  make -j 2 install "DESTDIR=$(pwd)/pkg"
+
+  cd ../..
+
+  # DESTDIR= + CMAKE_INSTALL_PREFIX
+  _pkg='build/cmake/pkg/usr/local'
+
+  ls -l ${_pkg}/bin/*.exe
+  ls -l ${_pkg}/lib/*.a
+  ls -l ${_pkg}/../../../lib/*.dll
+
+  # libssh2 and curl makefile.m32 assume the headers and lib to be in the
+  # same directory. Make sure to copy the static library only:
+# cp -f -p ${_pkg}/include/*.h   "${_pkg}/"
+# cp -f -p ${_pkg}/lib/libzstd.a "${_pkg}/"
+
+  # Make steps for determinism
+
+  readonly _ref='CHANGELOG'
+
+  "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.exe
+  "${_CCPREFIX}strip" -p -s ${_pkg}/../../../lib/*.dll
+
+  ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
+  ../_peclean.py "${_ref}" ${_pkg}/../../../lib/*.dll
+
+  ../_sign.sh "${_ref}" ${_pkg}/bin/*.exe
+  ../_sign.sh "${_ref}" ${_pkg}/../../../lib/*.dll
+
+  touch -c -r "${_ref}" ${_pkg}/include/*.h
+  touch -c -r "${_ref}" ${_pkg}/bin/*.exe
+  touch -c -r "${_ref}" ${_pkg}/../../../lib/*.dll
+  touch -c -r "${_ref}" ${_pkg}/lib/*.a
+
+  # Tests
+
+  "${_CCPREFIX}objdump" -x ${_pkg}/bin/*.exe          | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" -x ${_pkg}/../../../lib/*.dll | grep -a -E -i "(file format|dll name)"
+
+  # Create package
+
+  _BAS="${_NAM}-${_VER}-win${_cpu}-mingw"
+  _DST="$(mktemp -d)/${_BAS}"
+
+  mkdir -p "${_DST}"
+
+  mkdir -p "${_DST}/bin"
+  mkdir -p "${_DST}/include"
+  mkdir -p "${_DST}/lib"
+
+  cp -f -p ${_pkg}/include/*.h        "${_DST}/include/"
+  cp -f -p ${_pkg}/lib/*.a            "${_DST}/lib/"
+  cp -f -p ${_pkg}/bin/*.exe          "${_DST}/bin/"
+  cp -f -p ${_pkg}/../../../lib/*.dll "${_DST}/bin/"
+  cp -f -p CHANGELOG                  "${_DST}/ChangeLog.txt"
+  cp -f -p README.md                  "${_DST}/README.md"
+
+  unix2dos -q -k "${_DST}"/*.txt
+  unix2dos -q -k "${_DST}"/*.md
+
+  ../_pack.sh "$(pwd)/${_ref}"
+  ../_ul.sh
+)
