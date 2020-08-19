@@ -57,7 +57,7 @@ do_upload() {
       echo "Uploading: '${_BAS}${_suf}${arch_ext}' to 'https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_sufpkg}/${_VER}/'"
 
       # TODO: Do this before upload to avoid 403 error for
-      # uploads older than 180 days:
+      # uploads older than 365 days:
       #   https://bintray.com/docs/api/#url_update_version
 
       curl -A curl -fsS -u "${BINTRAY_USER}:${BINTRAY_APIKEY}" \

@@ -49,10 +49,7 @@ _cpu="$2"
   # public libcurl functions being marked as 'exported'. It is useful to
   # avoid the chance of libcurl functions getting exported from final
   # binaries when linked against static libcurl lib.
-  # TODO:
-  #   - Enable after 7.71.0: -DHAVE_ATOMIC
-  #     Ref: https://github.com/curl/curl/pull/5017
-  export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -DCURL_ENABLE_MQTT -fno-ident'
+  export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -DCURL_ENABLE_MQTT -fno-ident -DHAVE_ATOMIC'
   [ "${_cpu}" = '32' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
   export CURL_LDFLAG_EXTRAS_EXE
@@ -65,10 +62,8 @@ _cpu="$2"
     CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
   fi
 
-  if [ "$(echo "${CURL_VER_}" | cut -c -5)" = '7.71.' ]; then
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUNICODE -D_UNICODE"
-    CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -municode"
-  fi
+  CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUNICODE -D_UNICODE"
+  CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -municode"
 
   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
     CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,-Map,curl.map"
@@ -95,6 +90,11 @@ _cpu="$2"
     options="${options}-brotli"
     export BROTLI_PATH=../../brotli/pkg/usr/local
     export BROTLI_LIBS='-Wl,-Bstatic -lbrotlidec-static -lbrotlicommon-static -Wl,-Bdynamic'
+  fi
+  if [ -d ../zstd ]; then
+    options="${options}-zstd"
+    export ZSTD_PATH=../../zstd/build/cmake/pkg/usr/local
+    export ZSTD_LIBS='-Wl,-Bstatic -lzstd -Wl,-Bdynamic'
   fi
 
   [ -d ../openssl ] && export OPENSSL_PATH=../../openssl
