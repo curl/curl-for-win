@@ -3,7 +3,7 @@
 [![Build Status](https://api.travis-ci.org/curl/curl-for-win.svg?branch=master)](https://travis-ci.org/curl/curl-for-win)
 [![Build Status](https://github.com/curl/curl-for-win/workflows/build/badge.svg?branch=master)](https://github.com/curl/curl-for-win/actions?query=branch%3Amaster)
 
-# Automated, reproducible, transparent, Windows builds for [curl](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [brotli](https://github.com/google/brotli), [libssh2](https://libssh2.org/) and [OpenSSL 1.1](https://www.openssl.org/)
+# Automated, reproducible, transparent, Windows builds for [curl](https://curl.haxx.se/), [nghttp2](https://nghttp2.org/), [brotli](https://github.com/google/brotli), [zstd](https://github.com/facebook/zstd), [libssh2](https://libssh2.org/) and [OpenSSL 1.1](https://www.openssl.org/)
 
   - **SECURITY NOTICE: It is strongly recommended to upgrade to curl 7.65.1_2
     and OpenSSL 1.1.1c_2, released on 2019-06-20, or newer. Previous releases
@@ -27,7 +27,7 @@
     support enabled.
   - curl/libcurl features enabled by default:
     <br>`dict file ftp ftps gopher http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
-    <br>`AsynchDNS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile MultiSSL NTLM SPNEGO SSL SSPI TLS-SRP Unicode UnixSockets brotli libz`
+    <br>`AsynchDNS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile MultiSSL NTLM SPNEGO SSL SSPI TLS-SRP Unicode UnixSockets brotli libz zstd`
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the build
     [in public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master),
