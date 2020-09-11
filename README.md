@@ -112,8 +112,6 @@
 
   * <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master>
     (Image: Ubuntu) (for published binaries)
-  * <https://ci.appveyor.com/project/vszakats/curl-for-win/branch/master>
-    (historical)
   * <https://travis-ci.org/curl/curl-for-win>
   * <https://github.com/curl/curl-for-win/actions?query=branch%3Amaster>
 
