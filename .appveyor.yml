@@ -9,7 +9,7 @@ branches:
 # https://www.appveyor.com/docs/build-environment/#build-worker-images
 image:
   - Ubuntu1804
-# - Visual Studio 2017
+# - Visual Studio 2019
 services:
   - docker
 clone_depth: 8

@@ -23,7 +23,7 @@ jobs:
       env: DOCKER_IMAGE=debian:testing
 #   - os: osx
 #     # https://docs.travis-ci.com/user/reference/osx/#macos-version
-#     osx_image: &mac-image xcode11.5
+#     osx_image: &mac-image xcode12
 #     compiler: mingw-clang
 #     env: CPU=64
 #   - os: osx
