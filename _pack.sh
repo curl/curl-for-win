@@ -42,7 +42,7 @@ find "${_DST}" \( -name '*.exe' -or -name '*.dll' -or -name '*.a' \) -exec chmod
 
 create_pack() {
   arch_ext="$2"
-  _LST="$(dirname "$0")/_files"
+  _FLS="$(dirname "$0")/_files"
 
   (
     cd "${_DST}/.." || exit
@@ -50,16 +50,16 @@ create_pack() {
       win) find "${_BAS}" -exec attrib +A -R {} \;
     esac
 
-    find "${_BAS}" -type f | sort > "${_LST}"
+    find "${_BAS}" -type f | sort > "${_FLS}"
 
     rm -f "${_cdo}/${_BAS}${arch_ext}"
     case "${arch_ext}" in
-      .tar.xz) tar -c -T "${_LST}" \
+      .tar.xz) tar -c -T "${_FLS}" \
         --owner=0 --group=0 --numeric-owner --mode=go=rX,u+rw,a-s \
         | xz > "${_cdo}/${_BAS}${arch_ext}";;
-      .zip)    zip -q -9 -X -@ - < "${_LST}" > "${_cdo}/${_BAS}${arch_ext}";;
+      .zip)    zip -q -9 -X -@ - < "${_FLS}" > "${_cdo}/${_BAS}${arch_ext}";;
       # Requires: p7zip (MSYS2, Homebrew, Linux rpm), p7zip-full (Linux deb)
-      .7z)     7z a -bd -r -mx "${_cdo}/${_BAS}${arch_ext}" "@${_LST}" >/dev/null;;
+      .7z)     7z a -bd -r -mx "${_cdo}/${_BAS}${arch_ext}" "@${_FLS}" >/dev/null;;
     esac
     touch -c -r "$1" "${_cdo}/${_BAS}${arch_ext}"
   )
