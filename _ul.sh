@@ -60,17 +60,19 @@ do_upload() {
       # uploads older than 365 days:
       #   https://bintray.com/docs/api/#url_update_version
 
-      curl -A curl -fsS -u "${BINTRAY_USER}:${BINTRAY_APIKEY}" \
-        -X PUT "https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_sufpkg}/${_VER}/${_BAS}${_suf}${arch_ext}?override=1&publish=1" \
+      curl --user-agent curl \
+        --fail --silent --show-error \
+        --user "${BINTRAY_USER}:${BINTRAY_APIKEY}" \
+        --request PUT "https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_sufpkg}/${_VER}/${_BAS}${_suf}${arch_ext}?override=1&publish=1" \
         --data-binary "@${_BAS}${_suf}${arch_ext}" \
-        -H "X-GPG-PASSPHRASE: ${GPG_PASSPHRASE}"
+        --header "X-GPG-PASSPHRASE: ${GPG_PASSPHRASE}"
     fi
   )
 
   # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>
   case "${os}" in
     bsd|mac) TZ=UTC stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_BAS}${_suf}${arch_ext}";;
-    *)       TZ=UTC stat -c '%n: %s bytes %y' "${_BAS}${_suf}${arch_ext}";;
+    *)       TZ=UTC stat --format '%n: %s bytes %y' "${_BAS}${_suf}${arch_ext}";;
   esac
 
   openssl dgst -sha256 "${_BAS}${_suf}${arch_ext}" | tee -a hashes.txt
@@ -83,19 +85,21 @@ do_upload() {
     hshl="$(openssl dgst -sha256 "${_BAS}${_suf}${arch_ext}" \
       | sed -n -E 's,.+= ([0-9a-fA-F]{64}),\1,p')"
     # https://developers.virustotal.com/v3.0/reference
-    out="$(curl -A curl -fsS \
-      -X POST 'https://www.virustotal.com/api/v3/files' \
+    out="$(curl --user-agent curl \
+      --fail --silent --show-error \
+      --request POST 'https://www.virustotal.com/api/v3/files' \
       --header "x-apikey: ${VIRUSTOTAL_APIKEY}" \
       --form "file=@${_BAS}${_suf}${arch_ext}")"
     # shellcheck disable=SC2181
     if [ "$?" = 0 ]; then
-      id="$(echo "${out}" | jq -r '.data.id')"
-      out="$(curl -A curl -fsS \
-        -X GET "https://www.virustotal.com/api/v3/analyses/${id}" \
+      id="$(echo "${out}" | jq --raw-output '.data.id')"
+      out="$(curl --user-agent curl \
+        --fail --silent --show-error \
+        --request GET "https://www.virustotal.com/api/v3/analyses/${id}" \
         --header "x-apikey: ${VIRUSTOTAL_APIKEY}")"
       # shellcheck disable=SC2181
       if [ "$?" = 0 ]; then
-        hshr="$(echo "${out}" | jq -r '.meta.file_info.sha256')"
+        hshr="$(echo "${out}" | jq --raw-output '.meta.file_info.sha256')"
         if [ "${hshr}" = "${hshl}" ]; then
           echo "VirusTotal URL for '${_BAS}${_suf}${arch_ext}':"
           echo "https://www.virustotal.com/file/${hshr}/analysis/"

@@ -71,7 +71,7 @@ if [ -f "${CODESIGN_KEY}.asc" ]; then
     set +x
     if [ -n "${CODESIGN_GPG_PASS}" ]; then
       install -m 600 /dev/null "${CODESIGN_KEY}"
-      gpg --batch --passphrase "${CODESIGN_GPG_PASS}" -d "${CODESIGN_KEY}.asc" >> "${CODESIGN_KEY}"
+      gpg --batch --passphrase "${CODESIGN_GPG_PASS}" --decrypt "${CODESIGN_KEY}.asc" >> "${CODESIGN_KEY}"
     fi
   )
 fi
@@ -91,7 +91,7 @@ if [ -f "${DEPLOY_KEY}.asc" ]; then
     set +x
     if [ -n "${DEPLOY_GPG_PASS}" ]; then
       install -m 600 /dev/null "${DEPLOY_KEY}"
-      gpg --batch --passphrase "${DEPLOY_GPG_PASS}" -d "${DEPLOY_KEY}.asc" >> "${DEPLOY_KEY}"
+      gpg --batch --passphrase "${DEPLOY_GPG_PASS}" --decrypt "${DEPLOY_KEY}.asc" >> "${DEPLOY_KEY}"
     fi
   )
 fi
@@ -117,7 +117,7 @@ if [ "${CC}" = 'mingw-clang' ]; then
 fi
 
 case "${os}" in
-  mac)   ver="$(brew info --json=v1 mingw-w64 | jq -r '.[] | select(.name == "mingw-w64") | .versions.stable')";;
+  mac)   ver="$(brew info --json=v1 mingw-w64 | jq --raw-output '.[] | select(.name == "mingw-w64") | .versions.stable')";;
   # FIXME: Linux-distro specific
   linux) ver="$(apt-cache show mingw-w64 | grep -a '^Version:' | cut -c 10-)";;
   *)     ver='';;
@@ -230,9 +230,9 @@ unset _ALLSUFF
 
 # Create an artifact that includes all packages
 _ALL="all-mingw-${CURL_VER_}${_REV}${_ALLSUFF}.zip"
-zip -q -0 -X -o "${_ALL}" ./*-*-mingw*.* hashes.txt "${_BLD}" "${_LOG}"
+zip --quiet -0 --no-extra --latest-time "${_ALL}" ./*-*-mingw*.* hashes.txt "${_BLD}" "${_LOG}"
 
-openssl dgst -sha256 "${_ALL}" | tee "${_ALL}.txt"
+openssl dgst -sha256 "${_ALL}" | tee    "${_ALL}.txt"
 openssl dgst -sha512 "${_ALL}" | tee -a "${_ALL}.txt"
 
 # Official deploy

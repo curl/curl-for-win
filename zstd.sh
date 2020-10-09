@@ -36,7 +36,7 @@ _cpu="$2"
 
   cd build/cmake
 
-  rm -fr pkg CMakeFiles CMakeCache.txt cmake_install.cmake lib/CMakeFiles
+  rm -f -r pkg CMakeFiles CMakeCache.txt cmake_install.cmake lib/CMakeFiles
 
   find . -name 'Makefile'              -type f -delete
   find . -name 'cmake_install.cmake'   -type f -delete
@@ -108,7 +108,7 @@ _cpu="$2"
       "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS}"
   fi
 
-  make -j 2 install "DESTDIR=$(pwd)/pkg"
+  make --jobs 2 install "DESTDIR=$(pwd)/pkg"
 
   cd ../..
 
@@ -128,9 +128,9 @@ _cpu="$2"
 
   readonly _ref='CHANGELOG'
 
-  "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
-  "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.exe
-  "${_CCPREFIX}strip" -p -s ${_pkg}/../../../lib/*.dll
+  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --strip-all ${_pkg}/bin/*.exe
+  "${_CCPREFIX}strip" --preserve-dates --strip-all ${_pkg}/../../../lib/*.dll
 
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
   ../_peclean.py "${_ref}" ${_pkg}/../../../lib/*.dll
@@ -145,8 +145,8 @@ _cpu="$2"
 
   # Tests
 
-  "${_CCPREFIX}objdump" -x ${_pkg}/bin/*.exe          | grep -a -E -i "(file format|dll name)"
-  "${_CCPREFIX}objdump" -x ${_pkg}/../../../lib/*.dll | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" --all-headers ${_pkg}/bin/*.exe          | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" --all-headers ${_pkg}/../../../lib/*.dll | grep -a -E -i "(file format|dll name)"
 
   # Create package
 
@@ -166,8 +166,8 @@ _cpu="$2"
   cp -f -p CHANGELOG                  "${_DST}/ChangeLog.txt"
   cp -f -p README.md                  "${_DST}/README.md"
 
-  unix2dos -q -k "${_DST}"/*.txt
-  unix2dos -q -k "${_DST}"/*.md
+  unix2dos --quiet --keepdate "${_DST}"/*.txt
+  unix2dos --quiet --keepdate "${_DST}"/*.md
 
   ../_pack.sh "$(pwd)/${_ref}"
   ../_ul.sh

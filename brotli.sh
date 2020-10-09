@@ -34,7 +34,7 @@ _cpu="$2"
 
   # Build
 
-  rm -fr pkg CMakeFiles CMakeCache.txt cmake_install.cmake
+  rm -f -r pkg CMakeFiles CMakeCache.txt cmake_install.cmake
 
   find . -name '*.o'   -type f -delete
   find . -name '*.a'   -type f -delete
@@ -83,7 +83,7 @@ _cpu="$2"
       "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}"
   fi
 
-  make -j 2 install "DESTDIR=$(pwd)/pkg"
+  make --jobs 2 install "DESTDIR=$(pwd)/pkg"
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
   _pkg='pkg/usr/local'
@@ -97,9 +97,9 @@ _cpu="$2"
 
   readonly _ref='docs/brotli.1'
 
-  "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
-  "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.exe
-  "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.dll
+  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --strip-all ${_pkg}/bin/*.exe
+  "${_CCPREFIX}strip" --preserve-dates --strip-all ${_pkg}/bin/*.dll
 
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.dll
@@ -115,8 +115,8 @@ _cpu="$2"
 
   # Tests
 
-  "${_CCPREFIX}objdump" -x ${_pkg}/bin/*.exe | grep -a -E -i "(file format|dll name)"
-  "${_CCPREFIX}objdump" -x ${_pkg}/bin/*.dll | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" --all-headers ${_pkg}/bin/*.exe | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" --all-headers ${_pkg}/bin/*.dll | grep -a -E -i "(file format|dll name)"
 
   # Create package
 
@@ -135,7 +135,7 @@ _cpu="$2"
   cp -f -p ${_pkg}/lib/*.a            "${_DST}/lib/"
   cp -f -p README.md                  "${_DST}/README.md"
 
-  unix2dos -q -k "${_DST}"/*.md
+  unix2dos --quiet --keepdate "${_DST}"/*.md
 
   ../_pack.sh "$(pwd)/${_ref}"
   ../_ul.sh

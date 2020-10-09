@@ -36,8 +36,9 @@ build_script:
   - sh: |
       export DOCKER_IMAGE='debian:testing'
       time docker pull "${DOCKER_IMAGE}"
-      time docker run -v "$(pwd):$(pwd)" -w "$(pwd)" \
-        --env-file <(env | grep -a -E '^(APPVEYOR_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|DEPLOY_|CC|GITLAB_|CI_)') \
+      time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+        --env-file <(env | grep -a -E \
+          '^(APPVEYOR_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|DEPLOY_|CC|GITLAB_|CI_)') \
         "${DOCKER_IMAGE}" \
         sh -c ./_ci-linux-debian.sh
   - cmd: |
@@ -49,7 +50,7 @@ artifacts:
   - path: 'all-mingw*.*'
     name: all
 # init:
-#   - sh: curl -sfL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
+#   - sh: curl --fail --silent --location --proto-redir =https 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
 #   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 # on_finish:
 #   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))

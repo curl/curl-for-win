@@ -161,7 +161,9 @@ _cpu="$2"
 
   # Download CA bundle
   [ -f '../ca-bundle.crt' ] || \
-    curl -R --xattr -fsS -o '../ca-bundle.crt' 'https://curl.haxx.se/ca/cacert.pem'
+    curl --fail --silent --show-error --remote-time --xattr \
+      --output '../ca-bundle.crt' \
+      'https://curl.haxx.se/ca/cacert.pem'
 
   openssl dgst -sha256 '../ca-bundle.crt'
   openssl dgst -sha512 '../ca-bundle.crt'
@@ -170,7 +172,7 @@ _cpu="$2"
 
   readonly _ref='CHANGES'
 
-  "${_CCPREFIX}strip" -p --enable-deterministic-archives -g lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives lib/*.a
 
   ../_peclean.py "${_ref}" src/*.exe
   ../_peclean.py "${_ref}" lib/*.dll
@@ -190,10 +192,10 @@ _cpu="$2"
 
   # Tests
 
-  "${_CCPREFIX}objdump" -x src/*.exe | grep -a -E -i "(file format|dll name)"
-  "${_CCPREFIX}objdump" -x lib/*.dll | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" --all-headers src/*.exe | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" --all-headers lib/*.dll | grep -a -E -i "(file format|dll name)"
 
-  ${_WINE} src/curl.exe -V
+  ${_WINE} src/curl.exe --version
 
   # Create package
 
@@ -244,9 +246,9 @@ _cpu="$2"
     cp -f -p lib/*.map                "${_DST}/bin/"
   fi
 
-  unix2dos -q -k "${_DST}"/*.txt
-  unix2dos -q -k "${_DST}"/docs/*.md
-  unix2dos -q -k "${_DST}"/docs/*.txt
+  unix2dos --quiet --keepdate "${_DST}"/*.txt
+  unix2dos --quiet --keepdate "${_DST}"/docs/*.md
+  unix2dos --quiet --keepdate "${_DST}"/docs/*.txt
 
   ../_pack.sh "$(pwd)/${_ref}"
   ../_ul.sh

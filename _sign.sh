@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2016-2019 Viktor Szakats <https://vsz.me/>
+# Copyright 2016-2020 Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
 if [ -f "${CODESIGN_KEY}" ] && \
@@ -19,7 +19,7 @@ if [ -f "${CODESIGN_KEY}" ] && \
 
   case "${os}" in
     bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${_ref}")";;
-    *)       unixts="$(TZ=UTC stat -c '%Y' "${_ref}")";;
+    *)       unixts="$(TZ=UTC stat --format '%Y' "${_ref}")";;
   esac
 
   # Add code signature

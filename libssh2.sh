@@ -82,7 +82,7 @@ _cpu="$2"
 
   readonly _ref='NEWS'
 
-  "${_CCPREFIX}strip" -p --enable-deterministic-archives -g win32/*.a
+  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives win32/*.a
 
   ../_peclean.py "${_ref}" win32/*.dll
 
@@ -98,7 +98,7 @@ _cpu="$2"
 
   # Tests
 
-  "${_CCPREFIX}objdump" -x win32/*.dll | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" --all-headers win32/*.dll | grep -a -E -i "(file format|dll name)"
 
   # Create package
 
@@ -133,8 +133,8 @@ _cpu="$2"
     cp -f -p win32/*.map   "${_DST}/bin/"
   fi
 
-  unix2dos -q -k "${_DST}"/*.txt
-  unix2dos -q -k "${_DST}"/docs/*.txt
+  unix2dos --quiet --keepdate "${_DST}"/*.txt
+  unix2dos --quiet --keepdate "${_DST}"/docs/*.txt
 
   ../_pack.sh "$(pwd)/${_ref}"
   ../_ul.sh

@@ -12,9 +12,9 @@ export _CCSUFFIX=''
 [ "${_BRANCH#*dev*}" != "${_BRANCH}" ] && _optpkg="${_optpkg} autoconf automake libtool"
 
 dpkg --add-architecture i386
-apt-get -qq -o=Dpkg::Use-Pty=0 update
+apt-get --quiet 2 --option Dpkg::Use-Pty=0 update
 # shellcheck disable=SC2086
-apt-get -qq -o=Dpkg::Use-Pty=0 install \
+apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
   curl git gpg python3-pip make cmake \
   libssl-dev \
   gcc-mingw-w64 g++-mingw-w64 ${_optpkg} \

@@ -34,14 +34,14 @@ _cpu="$2"
 
   # Build
 
-  rm -fr pkg
+  rm -f -r pkg
 
   find . -name '*.a'   -type f -delete
   find . -name '*.pc'  -type f -delete
 
   for pass in 'static' 'shared'; do
 
-    rm -fr CMakeFiles CMakeCache.txt cmake_install.cmake
+    rm -f -r CMakeFiles CMakeCache.txt cmake_install.cmake
 
     find . -name '*.o'   -type f -delete
     find . -name '*.obj' -type f -delete
@@ -106,7 +106,7 @@ _cpu="$2"
         "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS}"
     fi
 
-    make -j 2 install "DESTDIR=$(pwd)/pkg"  # VERBOSE=1
+    make --jobs 2 install "DESTDIR=$(pwd)/pkg"  # VERBOSE=1
   done
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
@@ -128,8 +128,8 @@ _cpu="$2"
 
   readonly _ref='NEWS'
 
-  "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
-  "${_CCPREFIX}strip" -p -s ${_pkg}/bin/*.dll
+  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --strip-all ${_pkg}/bin/*.dll
 
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.dll
 
@@ -146,7 +146,7 @@ _cpu="$2"
 
   # Tests
 
-  "${_CCPREFIX}objdump" -x ${_pkg}/bin/*.dll | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" --all-headers ${_pkg}/bin/*.dll | grep -a -E -i "(file format|dll name)"
 
   # Create package
 
@@ -183,8 +183,8 @@ _cpu="$2"
     cp -f -p ${_pkg}/bin/*.def   "${_DST}/bin/" || true
   fi
 
-  unix2dos -q -k "${_DST}"/*.txt
-  unix2dos -q -k "${_DST}"/docs/*.txt
+  unix2dos --quiet --keepdate "${_DST}"/*.txt
+  unix2dos --quiet --keepdate "${_DST}"/docs/*.txt
 
   ../_pack.sh "$(pwd)/${_ref}"
   ../_ul.sh

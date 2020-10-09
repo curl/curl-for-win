@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2019 Viktor Szakats <https://vsz.me/>
+# Copyright 2014-2020 Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
 export _NAM
@@ -34,7 +34,7 @@ _cpu="$2"
 
   # Build
 
-  rm -fr pkg CMakeFiles CMakeCache.txt cmake_install.cmake
+  rm -f -r pkg CMakeFiles CMakeCache.txt cmake_install.cmake
 
   find . -name '*.o'   -type f -delete
   find . -name '*.obj' -type f -delete
@@ -87,7 +87,7 @@ _cpu="$2"
       "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}"
   fi
 
-  make -j 2 install "DESTDIR=$(pwd)/pkg"
+  make --jobs 2 install "DESTDIR=$(pwd)/pkg"
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
   _pkg='pkg/usr/local'
@@ -99,7 +99,7 @@ _cpu="$2"
 
   readonly _ref='ChangeLog'
 
-  "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
 
   touch -c -r "${_ref}" ${_pkg}/include/nghttp2/*.h
   touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
@@ -121,8 +121,8 @@ _cpu="$2"
   cp -f -p COPYING                     "${_DST}/COPYING.txt"
   cp -f -p README.rst                  "${_DST}/"
 
-  unix2dos -q -k "${_DST}"/*.txt
-  unix2dos -q -k "${_DST}"/*.rst
+  unix2dos --quiet --keepdate "${_DST}"/*.txt
+  unix2dos --quiet --keepdate "${_DST}"/*.rst
 
   ../_pack.sh "$(pwd)/${_ref}"
   ../_ul.sh

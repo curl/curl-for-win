@@ -1,6 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-2019 Viktor Szakats <https://vsz.me/>
+# Copyright 2014-2020 Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
 export _NAM
@@ -43,7 +43,7 @@ _cpu="$2"
 
   # Build
 
-  rm -fr pkg
+  rm -f -r pkg
 
   find . -name '*.o'   -type f -delete
   find . -name '*.a'   -type f -delete
@@ -79,7 +79,7 @@ _cpu="$2"
 
   readonly _ref='NEWS'
 
-  "${_CCPREFIX}strip" -p --enable-deterministic-archives -g ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
 
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.dll
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
@@ -110,7 +110,7 @@ _cpu="$2"
   cp -f -p AUTHORS                    "${_DST}/AUTHORS.txt"
   cp -f -p LICENSE                    "${_DST}/LICENSE.txt"
 
-  unix2dos -q -k "${_DST}"/*.txt
+  unix2dos --quiet --keepdate "${_DST}"/*.txt
 
   ../_pack.sh "$(pwd)/${_ref}"
   ../_ul.sh

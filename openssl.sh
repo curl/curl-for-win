@@ -33,12 +33,12 @@ _cpu="$2"
 
   case "${os}" in
     bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${_ref}")";;
-    *)       unixts="$(TZ=UTC stat -c '%Y' "${_ref}")";;
+    *)       unixts="$(TZ=UTC stat --format '%Y' "${_ref}")";;
   esac
 
   # Build
 
-  rm -fr pkg
+  rm -f -r pkg
 
   find . -name '*.o'   -type f -delete
   find . -name '*.a'   -type f -delete
@@ -96,10 +96,10 @@ _cpu="$2"
     no-makedepend \
     "--prefix=${_prefix}" \
     "--openssldir=${_prefix}/ssl"
-  SOURCE_DATE_EPOCH=${unixts} TZ=UTC make -j 2
+  SOURCE_DATE_EPOCH=${unixts} TZ=UTC make --jobs 2
   # Install it so that it can be detected by CMake
   # (ending slash required)
-  make -j 2 install "DESTDIR=$(pwd)/${_pkr}/" >/dev/null # 2>&1
+  make --jobs 2 install "DESTDIR=$(pwd)/${_pkr}/" >/dev/null # 2>&1
 
   # DESTDIR= + --prefix= (OpenSSL 1.1.1d and newer strips the drive letter)
   _pkg="${_pkr}/$(echo "${_prefix}" | sed 's|[a-zA-Z]:/||')"
@@ -107,11 +107,11 @@ _cpu="$2"
 
   # Make steps for determinism
 
-  "${_CCPREFIX}strip" -p --enable-deterministic-archives -g "${_pkg}"/lib/*.a
-  "${_CCPREFIX}strip" -p -s "${_pkg}"/bin/openssl.exe
-  "${_CCPREFIX}strip" -p -s "${_pkg}"/bin/*.dll
+  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives "${_pkg}"/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --strip-all "${_pkg}"/bin/openssl.exe
+  "${_CCPREFIX}strip" --preserve-dates --strip-all "${_pkg}"/bin/*.dll
   if ls "${_pkg}"/lib/engines*/*.dll >/dev/null 2>&1; then
-    "${_CCPREFIX}strip" -p -s "${_pkg}"/lib/engines*/*.dll
+    "${_CCPREFIX}strip" --preserve-dates --strip-all "${_pkg}"/lib/engines*/*.dll
   fi
 
   ../_peclean.py "${_ref}" "${_pkg}"/bin/openssl.exe
@@ -141,8 +141,8 @@ _cpu="$2"
 
   # Tests
 
-  "${_CCPREFIX}objdump" -x "${_pkg}"/bin/openssl.exe | grep -a -E -i "(file format|dll name)"
-  "${_CCPREFIX}objdump" -x "${_pkg}"/bin/*.dll       | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" --all-headers "${_pkg}"/bin/openssl.exe | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" --all-headers "${_pkg}"/bin/*.dll       | grep -a -E -i "(file format|dll name)"
 
   ${_WINE} "${_pkg}"/bin/openssl.exe version
   ${_WINE} "${_pkg}"/bin/openssl.exe ciphers
@@ -177,7 +177,7 @@ _cpu="$2"
   # Luckily, applink is not implemented for 64-bit mingw, omit this file then
   [ "${_cpu}" = '32' ] && cp -f -p ms/applink.c "${_DST}/include/openssl/"
 
-  unix2dos -q -k "${_DST}"/*.txt
+  unix2dos --quiet --keepdate "${_DST}"/*.txt
 
   ../_pack.sh "$(pwd)/${_ref}"
   ../_ul.sh
