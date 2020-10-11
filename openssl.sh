@@ -29,7 +29,12 @@ _cpu="$2"
     export PATH="${PATH}:/usr/bin/core_perl"
   fi
 
-  readonly _ref='CHANGES'
+  if [ -f 'CHANGES.md' ]; then
+    # OpenSSL 3.x
+    readonly _ref='CHANGES.md'
+  else
+    readonly _ref='CHANGES'
+  fi
 
   case "${os}" in
     bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${_ref}")";;
@@ -40,12 +45,14 @@ _cpu="$2"
 
   rm -f -r pkg
 
-  find . -name '*.o'   -type f -delete
-  find . -name '*.a'   -type f -delete
-  find . -name '*.pc'  -type f -delete
-  find . -name '*.def' -type f -delete
-  find . -name '*.dll' -type f -delete
-  find . -name '*.exe' -type f -delete
+  find . -name '*.o'   -delete
+  find . -name '*.obj' -delete
+  find . -name '*.a'   -delete
+  find . -name '*.pc'  -delete
+  find . -name '*.def' -delete
+  find . -name '*.dll' -delete
+  find . -name '*.exe' -delete
+  find . -name '*.tmp' -delete
 
   [ "${_cpu}" = '32' ] && options='mingw'
   [ "${_cpu}" = '64' ] && options='mingw64'
@@ -83,6 +90,12 @@ _cpu="$2"
   # The secure solution would be to disable loading anything from hard-coded
   # disk locations, something that is not supported by OpenSSL at present.
   _prefix='C:/Windows/System32/OpenSSL'
+  if [ -f 'CHANGES.md' ]; then
+    # OpenSSL 3.x
+    _ssldir="ssl"
+  else
+    _ssldir="${_prefix}/ssl"
+  fi
   _pkr='pkg'
 
   # shellcheck disable=SC2086
@@ -95,15 +108,22 @@ _cpu="$2"
     no-tests \
     no-makedepend \
     "--prefix=${_prefix}" \
-    "--openssldir=${_prefix}/ssl"
+    "--openssldir=${_ssldir}"
   SOURCE_DATE_EPOCH=${unixts} TZ=UTC make --jobs 2
   # Install it so that it can be detected by CMake
   # (ending slash required)
   make --jobs 2 install "DESTDIR=$(pwd)/${_pkr}/" >/dev/null # 2>&1
 
-  # DESTDIR= + --prefix= (OpenSSL 1.1.1d and newer strips the drive letter)
-  _pkg="${_pkr}/$(echo "${_prefix}" | sed 's|[a-zA-Z]:/||')"
-  _pks="${_pkr}/$(echo "${_prefix}" | sed 's|[a-zA-Z]:/||')/ssl"
+  # DESTDIR= + --prefix=
+  # OpenSSL 1.1.1d and newer strips the drive letter.
+  # OpenSSL 3.x does not. (openssl/pkg/C:/Windows/System32/OpenSSL)
+  if [ -f 'CHANGES.md' ]; then
+    _pkg="${_pkr}/${_prefix}"
+    _pks="${_pkr}/${_prefix}/${_ssldir}"
+  else
+    _pkg="${_pkr}/$(echo "${_prefix}" | sed 's|[a-zA-Z]:/||')"
+    _pks="${_pkr}/$(echo "${_ssldir}" | sed 's|[a-zA-Z]:/||')"
+  fi
 
   # Make steps for determinism
 
@@ -168,11 +188,20 @@ _cpu="$2"
   cp -f -p "${_pkg}"/include/openssl/*.h  "${_DST}/include/openssl/"
   cp -f -p "${_pkg}"/lib/*.a              "${_DST}/lib/"
   cp -f -p "${_pkg}"/lib/pkgconfig/*.pc   "${_DST}/lib/pkgconfig/"
-  cp -f -p CHANGES                        "${_DST}/CHANGES.txt"
-  cp -f -p LICENSE                        "${_DST}/LICENSE.txt"
-  cp -f -p README                         "${_DST}/README.txt"
-  cp -f -p FAQ                            "${_DST}/FAQ.txt"
-  cp -f -p NEWS                           "${_DST}/NEWS.txt"
+  if [ -f 'CHANGES.md' ]; then
+    # OpenSSL 3.x
+    cp -f -p CHANGES.md  "${_DST}/"
+    cp -f -p LICENSE.txt "${_DST}/"
+    cp -f -p README.md   "${_DST}/"
+    cp -f -p FAQ.md      "${_DST}/"
+    cp -f -p NEWS.md     "${_DST}/"
+  else
+    cp -f -p CHANGES     "${_DST}/CHANGES.txt"
+    cp -f -p LICENSE     "${_DST}/LICENSE.txt"
+    cp -f -p README      "${_DST}/README.txt"
+    cp -f -p FAQ         "${_DST}/FAQ.txt"
+    cp -f -p NEWS        "${_DST}/NEWS.txt"
+  fi
 
   # Luckily, applink is not implemented for 64-bit mingw, omit this file then
   [ "${_cpu}" = '32' ] && cp -f -p ms/applink.c "${_DST}/include/openssl/"

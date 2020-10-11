@@ -239,7 +239,10 @@ _cpu="$2"
   [ -d ../libssh2 ]  && cp -f -p ../libssh2/COPYING "${_DST}/COPYING-libssh2.txt"
   [ -d ../nghttp2 ]  && cp -f -p ../nghttp2/COPYING "${_DST}/COPYING-nghttp2.txt"
   [ -d ../libidn2 ]  && cp -f -p ../libidn2/COPYING "${_DST}/COPYING-libidn2.txt"
-  [ -d ../openssl ]  && cp -f -p ../openssl/LICENSE "${_DST}/LICENSE-openssl.txt"
+  # OpenSSL 3.x
+  [ -d ../openssl ] && [ -f ../openssl/LICENSE.txt ] && cp -f -p ../openssl/LICENSE.txt "${_DST}/LICENSE-openssl.txt"
+  # OpenSSL 1.x
+  [ -d ../openssl ] && [ -f ../openssl/LICENSE     ] && cp -f -p ../openssl/LICENSE     "${_DST}/LICENSE-openssl.txt"
 
   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
     cp -f -p src/*.map                "${_DST}/bin/"
