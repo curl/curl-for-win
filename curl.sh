@@ -78,10 +78,14 @@ _cpu="$2"
   # ones from statically linked dependencies, resulting in a larger .dll,
   # an inflated implib and a non-standard list of exported functions.
   echo 'EXPORTS' > libcurl.def
-  grep -a -h '^CURL_EXTERN ' include/curl/*.h \
-  | sed 's/CURL_EXTERN \([a-zA-Z_\* ]*\)[\* ]\([a-z_]*\)(\(.*\)$/\2/g' \
-  | grep -a -v '^$' \
-  | sort | tee -a libcurl.def
+  {
+    # CURL_EXTERN CURLcode curl_easy_send(CURL *curl, const void *buffer,
+    grep -a -h '^CURL_EXTERN ' include/curl/*.h | grep -a -h -F '(' \
+      | sed 's/CURL_EXTERN \([a-zA-Z_\* ]*\)[\* ]\([a-z_]*\)(\(.*\)$/\2/g'
+    # curl_easy_option_by_name(const char *name);
+    grep -a -h -E '^ *\*? *[a-z_]+ *\(.+\);$' include/curl/*.h \
+      | sed -E 's|^ *\*? *([a-z_]+) *\(.+$|\1|g'
+  } | grep -a -v '^$' | sort | tee -a libcurl.def
   CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} ../libcurl.def"
 
   export ZLIB_PATH=../../zlib/pkg/usr/local
