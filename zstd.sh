@@ -38,18 +38,18 @@ _cpu="$2"
 
   rm -f -r pkg CMakeFiles CMakeCache.txt cmake_install.cmake lib/CMakeFiles
 
-  find . -name 'Makefile'              -type f -delete
-  find . -name 'cmake_install.cmake'   -type f -delete
-  find . -name 'cmake_uninstall.cmake' -type f -delete
-  find . -name '*.dll'                 -type f -delete
-  find . -name '*.o'                   -type f -delete
-  find . -name '*.obj'                 -type f -delete
-  find . -name '*.a'                   -type f -delete
-  find . -name '*.lo'                  -type f -delete
-  find . -name '*.la'                  -type f -delete
-  find . -name '*.lai'                 -type f -delete
-  find . -name '*.Plo'                 -type f -delete
-  find . -name '*.pc'                  -type f -delete
+  find . -name 'Makefile'              -delete
+  find . -name 'cmake_install.cmake'   -delete
+  find . -name 'cmake_uninstall.cmake' -delete
+  find . -name '*.dll'                 -delete
+  find . -name '*.o'                   -delete
+  find . -name '*.obj'                 -delete
+  find . -name '*.a'                   -delete
+  find . -name '*.lo'                  -delete
+  find . -name '*.la'                  -delete
+  find . -name '*.lai'                 -delete
+  find . -name '*.Plo'                 -delete
+  find . -name '*.pc'                  -delete
 
   # -D_LARGEFILE64_SOURCE=1 -D_LFS64_LARGEFILE=1
   _CFLAGS="-m${_cpu} -fno-ident -target ${_TRIPLET}"
@@ -164,7 +164,7 @@ _cpu="$2"
   cp -f -p ${_pkg}/bin/*.exe          "${_DST}/bin/"
   cp -f -p ${_pkg}/../../../lib/*.dll "${_DST}/bin/"
   cp -f -p CHANGELOG                  "${_DST}/ChangeLog.txt"
-  cp -f -p README.md                  "${_DST}/README.md"
+  cp -f -p README.md                  "${_DST}/"
 
   unix2dos --quiet --keepdate "${_DST}"/*.txt
   unix2dos --quiet --keepdate "${_DST}"/*.md

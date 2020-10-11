@@ -36,14 +36,14 @@ _cpu="$2"
 
   rm -f -r pkg CMakeFiles CMakeCache.txt cmake_install.cmake
 
-  find . -name '*.o'   -type f -delete
-  find . -name '*.obj' -type f -delete
-  find . -name '*.a'   -type f -delete
-  find . -name '*.lo'  -type f -delete
-  find . -name '*.la'  -type f -delete
-  find . -name '*.lai' -type f -delete
-  find . -name '*.Plo' -type f -delete
-  find . -name '*.pc'  -type f -delete
+  find . -name '*.o'   -delete
+  find . -name '*.obj' -delete
+  find . -name '*.a'   -delete
+  find . -name '*.lo'  -delete
+  find . -name '*.la'  -delete
+  find . -name '*.lai' -delete
+  find . -name '*.Plo' -delete
+  find . -name '*.pc'  -delete
 
   _CFLAGS="-m${_cpu} -fno-ident -DNDEBUG"
   [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
