@@ -34,7 +34,7 @@ _cpu="$2"
 
   # Build
 
-  rm -f -r pkg CMakeFiles CMakeCache.txt cmake_install.cmake
+  rm -r -f pkg CMakeFiles CMakeCache.txt cmake_install.cmake
 
   find . -name '*.o'   -delete
   find . -name '*.a'   -delete

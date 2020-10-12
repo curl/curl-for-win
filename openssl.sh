@@ -43,7 +43,7 @@ _cpu="$2"
 
   # Build
 
-  rm -f -r pkg
+  rm -r -f pkg
 
   find . -name '*.o'   -delete
   find . -name '*.obj' -delete

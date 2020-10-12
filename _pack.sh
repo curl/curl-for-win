@@ -73,4 +73,4 @@ if ! grep -q -a -F "${ver}" -- "${_BLD}"; then
   echo "${ver}" >> "${_BLD}"
 fi
 
-rm -f -r "${_DST:?}"
+rm -r -f "${_DST:?}"

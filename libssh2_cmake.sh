@@ -34,14 +34,14 @@ _cpu="$2"
 
   # Build
 
-  rm -f -r pkg
+  rm -r -f pkg
 
   find . -name '*.a'  -delete
   find . -name '*.pc' -delete
 
   for pass in 'static' 'shared'; do
 
-    rm -f -r CMakeFiles CMakeCache.txt cmake_install.cmake
+    rm -r -f CMakeFiles CMakeCache.txt cmake_install.cmake
 
     find . -name '*.o'   -delete
     find . -name '*.obj' -delete

@@ -81,7 +81,7 @@ curl --output pack.bin --location --proto-redir =https "https://github.com/madle
 openssl dgst -sha256 pack.bin | grep -q -a "${ZLIB_HASH}" || exit 1
 tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
-rm -f -r zlib && mv zlib-* zlib
+rm -r -f zlib && mv zlib-* zlib
 [ -f "zlib${_patsuf}.patch" ] && dos2unix < "zlib${_patsuf}.patch" | patch --batch -N -p1 -d zlib
 
 # zstd
@@ -89,7 +89,7 @@ curl --output pack.bin --location --proto-redir =https "https://github.com/faceb
 openssl dgst -sha256 pack.bin | grep -q -a "${ZSTD_HASH}" || exit 1
 tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
-rm -f -r zstd && mv zstd-* zstd
+rm -r -f zstd && mv zstd-* zstd
 [ -f "zstd${_patsuf}.patch" ] && dos2unix < "zstd${_patsuf}.patch" | patch --batch -N -p1 -d zstd
 
 # Relatively high curl binary size + extra dependency overhead aiming mostly
@@ -100,7 +100,7 @@ if [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
   openssl dgst -sha256 pack.bin | grep -q -a "${BROTLI_HASH}" || exit 1
   tar -xvf pack.bin >/dev/null 2>&1 || exit 1
   rm pack.bin
-  rm -f -r brotli && mv brotli-* brotli
+  rm -r -f brotli && mv brotli-* brotli
   [ -f "brotli${_patsuf}.patch" ] && dos2unix < "brotli${_patsuf}.patch" | patch --batch -N -p1 -d brotli
 fi
 
@@ -109,7 +109,7 @@ curl --output pack.bin --location --proto-redir =https "https://github.com/nghtt
 openssl dgst -sha256 pack.bin | grep -q -a "${NGHTTP2_HASH}" || exit 1
 tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
-rm -f -r nghttp2 && mv nghttp2-* nghttp2
+rm -r -f nghttp2 && mv nghttp2-* nghttp2
 [ -f "nghttp2${_patsuf}.patch" ] && dos2unix < "nghttp2${_patsuf}.patch" | patch --batch -N -p1 -d nghttp2
 
 # This significantly increases curl binary sizes, so leave it optional.
@@ -124,7 +124,7 @@ if [ "${_BRANCH#*libidn2*}" != "${_BRANCH}" ]; then
   openssl dgst -sha256 pack.bin | grep -q -a "${LIBIDN2_HASH}" || exit 1
   tar -xvf pack.bin >/dev/null 2>&1 || exit 1
   rm pack.bin
-  rm -f -r libidn2 && mv libidn2-* libidn2
+  rm -r -f libidn2 && mv libidn2-* libidn2
 fi
 
 if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
@@ -142,7 +142,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
   fi
   tar -xvf pack.bin >/dev/null 2>&1 || exit 1
   rm pack.bin
-  rm -f -r c-ares && mv c-ares-* c-ares
+  rm -r -f c-ares && mv c-ares-* c-ares
   [ -f "c-ares${_patsuf}.patch" ] && dos2unix < "c-ares${_patsuf}.patch" | patch --batch -N -p1 -d c-ares
 fi
 
@@ -164,7 +164,7 @@ else
 fi
 tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
-rm -f -r openssl && mv openssl-* openssl
+rm -r -f openssl && mv openssl-* openssl
 [ -f "openssl${_patsuf}.patch" ] && dos2unix < "openssl${_patsuf}.patch" | patch --batch -N -p1 -d openssl
 
 # libssh2
@@ -181,7 +181,7 @@ else
 fi
 tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
-rm -f -r libssh2 && mv libssh2-* libssh2
+rm -r -f libssh2 && mv libssh2-* libssh2
 [ -f "libssh2${_patsuf}.patch" ] && dos2unix < "libssh2${_patsuf}.patch" | patch --batch -N -p1 -d libssh2
 
 # curl
@@ -198,7 +198,7 @@ else
 fi
 tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
-rm -f -r curl && mv curl-* curl
+rm -r -f curl && mv curl-* curl
 [ -f "curl${_patsuf}.patch" ] && dos2unix < "curl${_patsuf}.patch" | patch --batch -N -p1 -d curl
 
 # libhsts
@@ -207,7 +207,7 @@ curl \
 openssl dgst -sha256 pack.bin | grep -q -a "${LIBHSTS_HASH}" || exit 1
 tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
-rm -f -r libhsts && mv libhsts-* libhsts
+rm -r -f libhsts && mv libhsts-* libhsts
 [ -f "libhsts${_patsuf}.patch" ] && dos2unix < "libhsts${_patsuf}.patch" | patch --batch -N -p1 -d libhsts
 
 # osslsigncode
@@ -216,7 +216,7 @@ curl --output pack.bin --location --proto-redir =https "https://deb.debian.org/d
 openssl dgst -sha256 pack.bin | grep -q -a "${OSSLSIGNCODE_HASH}" || exit 1
 tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
-rm -f -r osslsigncode && mv osslsigncode-* osslsigncode
+rm -r -f osslsigncode && mv osslsigncode-* osslsigncode
 [ -f 'osslsigncode.patch' ] && dos2unix < 'osslsigncode.patch' | patch --batch -N -p1 -d osslsigncode
 
 set +e

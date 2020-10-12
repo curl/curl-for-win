@@ -36,7 +36,7 @@ _cpu="$2"
 
   cd build/cmake
 
-  rm -f -r pkg CMakeFiles CMakeCache.txt cmake_install.cmake lib/CMakeFiles
+  rm -r -f pkg CMakeFiles CMakeCache.txt cmake_install.cmake lib/CMakeFiles
 
   find . -name 'Makefile'              -delete
   find . -name 'cmake_install.cmake'   -delete
