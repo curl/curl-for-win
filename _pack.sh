@@ -57,7 +57,7 @@ create_pack() {
       .tar.xz) tar --create --files-from "${_FLS}" \
         --owner 0 --group 0 --numeric-owner --mode go=rX,u+rw,a-s \
         | xz > "${_cdo}/${_BAS}${arch_ext}";;
-      .zip)    zip --quiet --no-extra -9 -@ - < "${_FLS}" > "${_cdo}/${_BAS}${arch_ext}";;
+      .zip)    zip --quiet -X -9 -@ - < "${_FLS}" > "${_cdo}/${_BAS}${arch_ext}";;
       # Requires: p7zip (MSYS2, Homebrew, Linux rpm), p7zip-full (Linux deb)
       .7z)     7z a -bd -r -mx "${_cdo}/${_BAS}${arch_ext}" "@${_FLS}" >/dev/null;;
     esac
