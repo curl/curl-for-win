@@ -198,7 +198,7 @@ else
 fi
 tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
-rm -r -f curl && mv curl-* curl
+rm -r -f curl && mv curl-7* curl
 [ -f "curl${_patsuf}.patch" ] && dos2unix < "curl${_patsuf}.patch" | patch --batch -N -p1 -d curl
 
 # libhsts
