@@ -188,7 +188,9 @@ build_single_target() {
   time ./libidn2.sh "${LIBIDN2_VER_}" "${_cpu}"
   time ./c-ares.sh    "${CARES_VER_}" "${_cpu}"
   time ./nghttp2.sh "${NGHTTP2_VER_}" "${_cpu}"
+  time ./nghttp3.sh "${NGHTTP3_VER_}" "${_cpu}"
   time ./openssl.sh "${OPENSSL_VER_}" "${_cpu}"
+  time ./ngtcp2.sh   "${NGTCP2_VER_}" "${_cpu}"
   time ./libssh2.sh "${LIBSSH2_VER_}" "${_cpu}"
   time ./curl.sh       "${CURL_VER_}" "${_cpu}"
 }

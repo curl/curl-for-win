@@ -123,6 +123,14 @@ _cpu="$2"
     export NGHTTP2_PATH=../../nghttp2/pkg/usr/local
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGHTTP2_STATICLIB"
   fi
+  if [ -d ../nghttp3 ]; then
+    options="${options}-nghttp3-ngtcp2"
+    export NGHTTP3_PATH=../../nghttp3/pkg/usr/local
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGHTTP3_STATICLIB"
+    export NGTCP2_PATH=../../ngtcp2/pkg/usr/local
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGTCP2_STATICLIB"
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUSE_ALTSVC=1"
+  fi
   if [ -d ../c-ares ]; then
     options="${options}-ares"
     export LIBCARES_PATH=../../c-ares/pkg/usr/local
@@ -246,6 +254,8 @@ _cpu="$2"
   [ -d ../brotli ]   && cp -f -p ../brotli/LICENSE  "${_DST}/COPYING-brotli.txt"
   [ -d ../libssh2 ]  && cp -f -p ../libssh2/COPYING "${_DST}/COPYING-libssh2.txt"
   [ -d ../nghttp2 ]  && cp -f -p ../nghttp2/COPYING "${_DST}/COPYING-nghttp2.txt"
+  [ -d ../nghttp3 ]  && cp -f -p ../nghttp3/COPYING "${_DST}/COPYING-nghttp3.txt"
+  [ -d ../ngtcp2 ]   && cp -f -p ../ngtcp2/COPYING  "${_DST}/COPYING-ngtcp2.txt"
   [ -d ../libidn2 ]  && cp -f -p ../libidn2/COPYING "${_DST}/COPYING-libidn2.txt"
   # OpenSSL 3.x
   [ -d ../openssl ] && [ -f ../openssl/LICENSE.txt ] && cp -f -p ../openssl/LICENSE.txt "${_DST}/LICENSE-openssl.txt"
