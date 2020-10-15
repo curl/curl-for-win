@@ -195,6 +195,7 @@ _cpu="$2"
     cp -f -p README.md   "${_DST}/"
     cp -f -p FAQ.md      "${_DST}/"
     cp -f -p NEWS.md     "${_DST}/"
+    unix2dos --quiet --keepdate "${_DST}"/*.md
   else
     cp -f -p CHANGES     "${_DST}/CHANGES.txt"
     cp -f -p LICENSE     "${_DST}/LICENSE.txt"
