@@ -66,8 +66,24 @@ _cpu="$2"
   [ "${_cpu}" = '64' ] && options="${options} enable-ec_nistp_64_gcc_128 -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
   [ "${_cpu}" = '32' ] && options="${options} -fno-asynchronous-unwind-tables"
 
-  # AR=, NM=, RANLIB=
-  unset CC
+  if [ -f 'CHANGES.md' ] && [ "${CC}" = 'mingw-clang' ]; then
+    # OpenSSL 3.x
+    # To avoid warnings when passing C compiler options to the linker
+    options="${options} -Wno-unused-command-line-argument"
+    export CC=clang
+    if [ "${os}" != 'win' ]; then
+      export options="${options} --target=${_TRIPLET} --sysroot=${_SYSROOT}"
+      [ "${os}" = 'linux' ] && options="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${options}"
+    # export LDFLAGS="--target=${_TRIPLET} --sysroot=${_SYSROOT} ${LDFLAGS}"
+    fi
+    export AR=${_CCPREFIX}ar
+    export NM=${_CCPREFIX}nm
+    export RANLIB=${_CCPREFIX}ranlib
+    export RC=${_CCPREFIX}windres
+    unset _CCPREFIX
+  else
+    unset CC
+  fi
 
   # Patch OpenSSL ./Configure to make it accept Windows-style absolute
   # paths as --prefix. Without the patch it misidentifies all such
