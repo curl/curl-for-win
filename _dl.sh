@@ -7,8 +7,6 @@ export ZLIB_VER_='1.2.11'
 export ZLIB_HASH=629380c90a77b964d896ed37163f5c3a34f6e6d897311f1df2a7016355c45eff
 export ZSTD_VER_='1.4.5'
 export ZSTD_HASH=2c2366874bc449ff539614266d8c0d6ecdb4baf30bb65609c239ab4ed23c03c7
-export LIBHSTS_VER_='0.1.0'
-export LIBHSTS_HASH=e1125e0395b4777361eafafd61fff2b516d3f2fb57d56e40cb554a6cd8c024e0
 export BROTLI_VER_='1.0.9'
 export BROTLI_HASH=f9e8d81d0405ba66d181529af42a3354f838c939095ff99930da6aa9cdf6fe46
 export LIBIDN2_VER_='2.3.0'
@@ -204,15 +202,6 @@ tar -xvf pack.bin >/dev/null 2>&1 || exit 1
 rm pack.bin
 rm -r -f curl && mv curl-7* curl
 [ -f "curl${_patsuf}.patch" ] && dos2unix < "curl${_patsuf}.patch" | patch --batch -N -p1 -d curl
-
-# libhsts
-curl \
-  --output pack.bin "https://gitlab.com/rockdaboot/libhsts/uploads/4753f61b5a3c6253acf4934217816e3f/libhsts-${LIBHSTS_VER_}.tar.gz" || exit 1
-openssl dgst -sha256 pack.bin | grep -q -a "${LIBHSTS_HASH}" || exit 1
-tar -xvf pack.bin >/dev/null 2>&1 || exit 1
-rm pack.bin
-rm -r -f libhsts && mv libhsts-* libhsts
-[ -f "libhsts${_patsuf}.patch" ] && dos2unix < "libhsts${_patsuf}.patch" | patch --batch -N -p1 -d libhsts
 
 # osslsigncode
 # NOTE: "https://github.com/mtrojnar/osslsigncode/archive/${OSSLSIGNCODE_VER_}.tar.gz"
