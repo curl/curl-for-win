@@ -81,7 +81,7 @@ fi
 # zlib
 curl --output pack.bin --location --proto-redir =https "https://github.com/madler/zlib/archive/v${ZLIB_VER_}.tar.gz" || exit 1
 openssl dgst -sha256 pack.bin | grep -q -a "${ZLIB_HASH}" || exit 1
-tar -xvf pack.bin >/dev/null 2>&1 || exit 1
+tar -xf pack.bin || exit 1
 rm pack.bin
 rm -r -f zlib && mv zlib-* zlib
 [ -f "zlib${_patsuf}.patch" ] && dos2unix < "zlib${_patsuf}.patch" | patch --batch -N -p1 -d zlib
@@ -89,7 +89,7 @@ rm -r -f zlib && mv zlib-* zlib
 # zstd
 curl --output pack.bin --location --proto-redir =https "https://github.com/facebook/zstd/releases/download/v${ZSTD_VER_}/zstd-${ZSTD_VER_}.tar.zst" || exit 1
 openssl dgst -sha256 pack.bin | grep -q -a "${ZSTD_HASH}" || exit 1
-tar -xvf pack.bin >/dev/null 2>&1 || exit 1
+tar -xf pack.bin || exit 1
 rm pack.bin
 rm -r -f zstd && mv zstd-* zstd
 [ -f "zstd${_patsuf}.patch" ] && dos2unix < "zstd${_patsuf}.patch" | patch --batch -N -p1 -d zstd
@@ -100,7 +100,7 @@ if [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
   # brotli
   curl --output pack.bin --location --proto-redir =https "https://github.com/google/brotli/archive/v${BROTLI_VER_}.tar.gz" || exit 1
   openssl dgst -sha256 pack.bin | grep -q -a "${BROTLI_HASH}" || exit 1
-  tar -xvf pack.bin >/dev/null 2>&1 || exit 1
+  tar -xf pack.bin || exit 1
   rm pack.bin
   rm -r -f brotli && mv brotli-* brotli
   [ -f "brotli${_patsuf}.patch" ] && dos2unix < "brotli${_patsuf}.patch" | patch --batch -N -p1 -d brotli
@@ -109,7 +109,7 @@ fi
 # nghttp2
 curl --output pack.bin --location --proto-redir =https "https://github.com/nghttp2/nghttp2/releases/download/v${NGHTTP2_VER_}/nghttp2-${NGHTTP2_VER_}.tar.xz" || exit 1
 openssl dgst -sha256 pack.bin | grep -q -a "${NGHTTP2_HASH}" || exit 1
-tar -xvf pack.bin >/dev/null 2>&1 || exit 1
+tar -xf pack.bin || exit 1
 rm pack.bin
 rm -r -f nghttp2 && mv nghttp2-* nghttp2
 [ -f "nghttp2${_patsuf}.patch" ] && dos2unix < "nghttp2${_patsuf}.patch" | patch --batch -N -p1 -d nghttp2
@@ -124,7 +124,7 @@ if [ "${_BRANCH#*libidn2*}" != "${_BRANCH}" ]; then
   | gpg --quiet --import 2>/dev/null
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
   openssl dgst -sha256 pack.bin | grep -q -a "${LIBIDN2_HASH}" || exit 1
-  tar -xvf pack.bin >/dev/null 2>&1 || exit 1
+  tar -xf pack.bin || exit 1
   rm pack.bin
   rm -r -f libidn2 && mv libidn2-* libidn2
 fi
@@ -142,7 +142,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
     gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
     openssl dgst -sha256 pack.bin | grep -q -a "${CARES_HASH}" || exit 1
   fi
-  tar -xvf pack.bin >/dev/null 2>&1 || exit 1
+  tar -xf pack.bin || exit 1
   rm pack.bin
   rm -r -f c-ares && mv c-ares-* c-ares
   [ -f "c-ares${_patsuf}.patch" ] && dos2unix < "c-ares${_patsuf}.patch" | patch --batch -N -p1 -d c-ares
@@ -164,7 +164,7 @@ else
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
   openssl dgst -sha256 pack.bin | grep -q -a "${OPENSSL_HASH}" || exit 1
 fi
-tar -xvf pack.bin >/dev/null 2>&1 || exit 1
+tar -xf pack.bin || exit 1
 rm pack.bin
 rm -r -f openssl && mv openssl-* openssl
 [ -f "openssl${_patsuf}.patch" ] && dos2unix < "openssl${_patsuf}.patch" | patch --batch -N -p1 -d openssl
@@ -181,7 +181,7 @@ else
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
   openssl dgst -sha256 pack.bin | grep -q -a "${LIBSSH2_HASH}" || exit 1
 fi
-tar -xvf pack.bin >/dev/null 2>&1 || exit 1
+tar -xf pack.bin || exit 1
 rm pack.bin
 rm -r -f libssh2 && mv libssh2-* libssh2
 [ -f "libssh2${_patsuf}.patch" ] && dos2unix < "libssh2${_patsuf}.patch" | patch --batch -N -p1 -d libssh2
@@ -198,7 +198,7 @@ else
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
   openssl dgst -sha256 pack.bin | grep -q -a "${CURL_HASH}" || exit 1
 fi
-tar -xvf pack.bin >/dev/null 2>&1 || exit 1
+tar -xf pack.bin || exit 1
 rm pack.bin
 rm -r -f curl && mv curl-7* curl
 [ -f "curl${_patsuf}.patch" ] && dos2unix < "curl${_patsuf}.patch" | patch --batch -N -p1 -d curl
@@ -207,7 +207,7 @@ rm -r -f curl && mv curl-7* curl
 # NOTE: "https://github.com/mtrojnar/osslsigncode/archive/${OSSLSIGNCODE_VER_}.tar.gz"
 curl --output pack.bin --location --proto-redir =https "https://deb.debian.org/debian/pool/main/o/osslsigncode/osslsigncode_${OSSLSIGNCODE_VER_}.orig.tar.gz" || exit 1
 openssl dgst -sha256 pack.bin | grep -q -a "${OSSLSIGNCODE_HASH}" || exit 1
-tar -xvf pack.bin >/dev/null 2>&1 || exit 1
+tar -xf pack.bin || exit 1
 rm pack.bin
 rm -r -f osslsigncode && mv osslsigncode-* osslsigncode
 [ -f 'osslsigncode.patch' ] && dos2unix < 'osslsigncode.patch' | patch --batch -N -p1 -d osslsigncode
