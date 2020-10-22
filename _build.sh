@@ -98,7 +98,8 @@ fi
 
 # add deploy target to known hosts
 if [ -f "${DEPLOY_KEY}" ]; then
-  readonly host_key='haxx.se ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEAo2NVLAYjIPAEuGtdG4EZDIEdpOREiBdo/KE51s5bX1zXJOOlxXmyB53CdWVpi1CR/EDQaEbsXE3gWRb3guOnXlzB3A4bzBa4H25BISeTJf4a7nBz5nUY8JYfcOxD5gIySvnJB/O7GxbU5mHLgvpixTuYeyE5T1AwZgDTAoJio0M='
+  # ssh-keyscan silly.haxx.se
+  readonly host_key='silly.haxx.se ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFVVUP9dpjNl2qbHkDYMDS+cTOfxFytjkC04Oh9RNJBg'
   if [ ! -f "${HOME}/.ssh/known_hosts" ]; then
     mkdir -m 700 "${HOME}/.ssh"
     install -m 600 /dev/null "${HOME}/.ssh/known_hosts"
@@ -249,7 +250,7 @@ if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
       -o ConnectTimeout=20 \
       -o ConnectionAttempts=5 \
       "${_ALL}" "${_ALL}.txt" \
-      'curl-for-win@haxx.se:.'
+      'curl-for-win@silly.haxx.se:.'
   fi
 )
 fi
