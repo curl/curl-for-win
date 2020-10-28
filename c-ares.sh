@@ -140,6 +140,7 @@ _cpu="$2"
   cp -f -p README.md                  "${_DST}/"
   cp -f -p CHANGES                    "${_DST}/CHANGES.txt"
   cp -f -p RELEASE-NOTES              "${_DST}/RELEASE-NOTES.txt"
+  cp -f -p LICENSE.md                 "${_DST}/"
 
   unix2dos --quiet --keepdate "${_DST}"/*.md
   unix2dos --quiet --keepdate "${_DST}"/*.txt

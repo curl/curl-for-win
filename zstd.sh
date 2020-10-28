@@ -163,8 +163,9 @@ _cpu="$2"
   cp -f -p ${_pkg}/lib/*.a            "${_DST}/lib/"
   cp -f -p ${_pkg}/bin/*.exe          "${_DST}/bin/"
   cp -f -p ${_pkg}/../../../lib/*.dll "${_DST}/bin/"
-  cp -f -p CHANGELOG                  "${_DST}/ChangeLog.txt"
+  cp -f -p CHANGELOG                  "${_DST}/CHANGELOG.txt"
   cp -f -p README.md                  "${_DST}/"
+  cp -f -p LICENSE                    "${_DST}/LICENSE.txt"
 
   unix2dos --quiet --keepdate "${_DST}"/*.txt
   unix2dos --quiet --keepdate "${_DST}"/*.md

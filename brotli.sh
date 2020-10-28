@@ -134,8 +134,10 @@ _cpu="$2"
   cp -f -p ${_pkg}/lib/pkgconfig/*.pc "${_DST}/lib/pkgconfig/"
   cp -f -p ${_pkg}/lib/*.a            "${_DST}/lib/"
   cp -f -p README.md                  "${_DST}/"
+  cp -f -p LICENSE                    "${_DST}/LICENSE.txt"
 
   unix2dos --quiet --keepdate "${_DST}"/*.md
+  unix2dos --quiet --keepdate "${_DST}"/*.txt
 
   ../_pack.sh "$(pwd)/${_ref}"
   ../_ul.sh
