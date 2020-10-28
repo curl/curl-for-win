@@ -252,16 +252,21 @@ _cpu="$2"
   cp -f -p ../ca-bundle.crt         "${_DST}/bin/curl-ca-bundle.crt"
 
   [ -d ../zlib ]     && cp -f -p ../zlib/README     "${_DST}/COPYING-zlib.txt"
+  [ -d ../zstd ]     && cp -f -p ../zstd/LICENSE    "${_DST}/COPYING-zstd.txt"
   [ -d ../brotli ]   && cp -f -p ../brotli/LICENSE  "${_DST}/COPYING-brotli.txt"
   [ -d ../libssh2 ]  && cp -f -p ../libssh2/COPYING "${_DST}/COPYING-libssh2.txt"
   [ -d ../nghttp2 ]  && cp -f -p ../nghttp2/COPYING "${_DST}/COPYING-nghttp2.txt"
   [ -d ../nghttp3 ]  && cp -f -p ../nghttp3/COPYING "${_DST}/COPYING-nghttp3.txt"
   [ -d ../ngtcp2 ]   && cp -f -p ../ngtcp2/COPYING  "${_DST}/COPYING-ngtcp2.txt"
   [ -d ../libidn2 ]  && cp -f -p ../libidn2/COPYING "${_DST}/COPYING-libidn2.txt"
+  if [ -d ../cares ]; then
+    cp -f -p ../c-ares/LICENSE.md "${_DST}/COPYING-c-ares.md"
+    unix2dos --quiet --keepdate "${_DST}"/*.md
+  fi
   # OpenSSL 3.x
-  [ -d ../openssl ] && [ -f ../openssl/LICENSE.txt ] && cp -f -p ../openssl/LICENSE.txt "${_DST}/LICENSE-openssl.txt"
+  [ -d ../openssl ] && [ -f ../openssl/LICENSE.txt ] && cp -f -p ../openssl/LICENSE.txt "${_DST}/COPYING-openssl.txt"
   # OpenSSL 1.x
-  [ -d ../openssl ] && [ -f ../openssl/LICENSE     ] && cp -f -p ../openssl/LICENSE     "${_DST}/LICENSE-openssl.txt"
+  [ -d ../openssl ] && [ -f ../openssl/LICENSE     ] && cp -f -p ../openssl/LICENSE     "${_DST}/COPYING-openssl.txt"
 
   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
     cp -f -p src/*.map                "${_DST}/bin/"
