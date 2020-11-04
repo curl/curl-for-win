@@ -192,8 +192,8 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   curl --output pack.bin --location --proto-redir =https 'https://github.com/curl/curl/archive/63f6b3b22077c6fd4a75ce4ceac7258509af412c.tar.gz' || exit 1
 else
   curl \
-    --output pack.bin --location --proto-redir =https "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.xz" \
-    --output pack.sig --location --proto-redir =https "https://curl.haxx.se/download/curl-${CURL_VER_}.tar.xz.asc" || exit 1
+    --output pack.bin --location --proto-redir =https "https://curl.se/download/curl-${CURL_VER_}.tar.xz" \
+    --output pack.sig --location --proto-redir =https "https://curl.se/download/curl-${CURL_VER_}.tar.xz.asc" || exit 1
   gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   gpg --verify-options show-primary-uid-only --verify pack.sig pack.bin || exit 1
   openssl dgst -sha256 pack.bin | grep -q -a "${CURL_HASH}" || exit 1

@@ -180,7 +180,7 @@ _cpu="$2"
   [ -f '../ca-bundle.crt' ] || \
     curl --fail --silent --show-error --remote-time --xattr \
       --output '../ca-bundle.crt' \
-      'https://curl.haxx.se/ca/cacert.pem'
+      'https://curl.se/ca/cacert.pem'
 
   openssl dgst -sha256 '../ca-bundle.crt'
   openssl dgst -sha512 '../ca-bundle.crt'
