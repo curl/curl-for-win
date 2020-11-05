@@ -68,7 +68,7 @@
     necessary for a successful build &mdash; had them submitted upstream
     with fair confidence of getting accepted.
   - curl/libcurl are built in MultiSSL mode, with both OpenSSL and
-    [WinSSL](https://en.wikipedia.org/wiki/Cryptographic_Service_Provider)
+    [Schannel](https://docs.microsoft.com/windows/win32/com/schannel)
     available as SSL backends.
   - Optional support for
     [C-ares](https://c-ares.haxx.se/).
