@@ -101,7 +101,7 @@
     <https://curl.se/windows/>
   * Bintray, for specific versions:
     * [![Download](https://api.bintray.com/packages/vszakats/generic/curl/images/download.svg)](https://bintray.com/vszakats/generic/curl/_latestVersion) curl
-    * [![Download](https://api.bintray.com/packages/vszakats/generic/openssl/images/download.svg)](https://bintray.com/vszakats/generic/openssl/_latestVersion) OpenSSL
+    * [![Download](https://api.bintray.com/packages/vszakats/generic/openssl/images/download.svg)](https://bintray.com/vszakats/generic/openssl/_latestVersion) openssl
     * [![Download](https://api.bintray.com/packages/vszakats/generic/libssh2/images/download.svg)](https://bintray.com/vszakats/generic/libssh2/_latestVersion) libssh2
     * [![Download](https://api.bintray.com/packages/vszakats/generic/nghttp2/images/download.svg)](https://bintray.com/vszakats/generic/nghttp2/_latestVersion) nghttp2
     * [![Download](https://api.bintray.com/packages/vszakats/generic/brotli/images/download.svg)](https://bintray.com/vszakats/generic/brotli/_latestVersion) brotli
@@ -110,10 +110,8 @@
 
 # Live build logs
 
-  * <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master>
-    (Image: Ubuntu) (for published binaries)
-  * <https://travis-ci.org/curl/curl-for-win>
-  * <https://github.com/curl/curl-for-win/actions?query=branch%3Amaster>
+  <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master>
+  (Image: Ubuntu)
 
 # Guarantees and Liability
 
