@@ -234,12 +234,16 @@ if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
   set +x
   if [ -f "${DEPLOY_KEY}" ]; then
     echo "Uploading: '${_ALL}'"
-    scp -p -B -i "${DEPLOY_KEY}" \
-      -o BatchMode=yes \
-      -o StrictHostKeyChecking=yes \
-      -o ConnectTimeout=20 \
-      -o ConnectionAttempts=5 \
-      "${_ALL}" "${_ALL}.txt" \
+    rsync \
+      --archive \
+      --rsh "ssh \
+        -i '${DEPLOY_KEY}' \
+        -o BatchMode=yes \
+        -o StrictHostKeyChecking=yes \
+        -o ConnectTimeout=20 \
+        -o ConnectionAttempts=5" \
+      "${_ALL}" \
+      "${_ALL}.txt" \
       'curl-for-win@silly.haxx.se:.'
   fi
 )
