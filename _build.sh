@@ -21,9 +21,6 @@ readonly _LOG='logurl.txt'
 if [ -n "${APPVEYOR_ACCOUNT_NAME}" ]; then
   _LOGURL="https://ci.appveyor.com/project/${APPVEYOR_ACCOUNT_NAME}/${APPVEYOR_PROJECT_SLUG}/build/${APPVEYOR_BUILD_VERSION}/job/${APPVEYOR_JOB_ID}"
 # _LOGURL="https://ci.appveyor.com/api/buildjobs/${APPVEYOR_JOB_ID}/log"
-elif [ -n "${TRAVIS_REPO_SLUG}" ]; then
-  _LOGURL="https://travis-ci.org/${TRAVIS_REPO_SLUG}/jobs/${TRAVIS_JOB_ID}"
-# _LOGURL="https://api.travis-ci.org/v3/job/${TRAVIS_JOB_ID}/log.txt"
 elif [ -n "${GITHUB_RUN_ID}" ]; then
   # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
   _LOGURL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
@@ -33,12 +30,12 @@ else
 fi
 echo "${_LOGURL}" | tee "${_LOG}"
 
-export _BRANCH="${APPVEYOR_REPO_BRANCH}${TRAVIS_BRANCH}${CI_COMMIT_REF_NAME}${GITHUB_REF}${GIT_BRANCH}"
+export _BRANCH="${APPVEYOR_REPO_BRANCH}${CI_COMMIT_REF_NAME}${GITHUB_REF}${GIT_BRANCH}"
 [ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD)"
 [ -n "${_BRANCH}" ] || _BRANCH='master'
 export _URL=''
 command -v git >/dev/null 2>&1 && _URL="$(git ls-remote --get-url | sed 's|.git$||')"
-[ -n "${_URL}" ] || _URL="https://github.com/${APPVEYOR_REPO_NAME}${TRAVIS_REPO_SLUG}${GITHUB_REPOSITORY}"
+[ -n "${_URL}" ] || _URL="https://github.com/${APPVEYOR_REPO_NAME}${GITHUB_REPOSITORY}"
 
 # Detect host OS
 export os
@@ -223,15 +220,8 @@ sed "s|-win|${_REV}-win|g" hashes.txt | sed 's|-built-on-[^.]*||g' | sort > hash
 touch -r hashes.txt hashes.txt.all
 mv -f hashes.txt.all hashes.txt
 
-unset _ALLSUFF
-# Upload Travis/Linux builds too as a test
-# if [ "$TRAVIS_OS_NAME" = 'linux' ]; then
-#   PUBLISH_PROD_FROM="${os}"
-#   _ALLSUFF=".travis-${os}"
-# fi
-
 # Create an artifact that includes all packages
-_ALL="all-mingw-${CURL_VER_}${_REV}${_ALLSUFF}.zip"
+_ALL="all-mingw-${CURL_VER_}${_REV}.zip"
 zip --quiet -0 -X --latest-time "${_ALL}" ./*-*-mingw*.* hashes.txt "${_BLD}" "${_LOG}"
 
 openssl dgst -sha256 "${_ALL}" | tee    "${_ALL}.txt"
