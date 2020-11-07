@@ -26,7 +26,6 @@ environment:
     secure: HG8kU4lcuXvIp0Eu37fntEe9J2AeuQAsiqxcUyheeo8WiJ/PYNNO5wTtIU9OaNqq
   DEPLOY_GPG_PASS:
     secure: WHnaUtu4NM46WEgLhxUyPBShvzLNwRoR5v0Z3+/UqM0nMzrUGieb+tJKX/AZLFkx
-  APPVEYOR_YML_DISABLE_PS_LINUX: true
   CC: mingw-clang
 build_script:
   - sh: |
