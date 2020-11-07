@@ -7,7 +7,7 @@ branches:
     - dev-appveyor
     - test-appveyor
 # https://www.appveyor.com/docs/build-environment/#build-worker-images
-image: Ubuntu1804
+image: Ubuntu2004
 services:
   - docker
 clone_depth: 8
