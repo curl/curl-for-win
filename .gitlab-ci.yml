@@ -10,6 +10,7 @@ build:
   variables:
     CC: mingw-clang
   script:
+    - docker images --digests
     - ./_ci-linux-debian.sh
   artifacts:
     expire_in: 13 weeks

@@ -21,6 +21,7 @@ jobs:
         run: |
           export DOCKER_IMAGE='debian:testing'
           time docker pull "${DOCKER_IMAGE}"
+          docker images --digests
           time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|DEPLOY_|CC|GITHUB_)') \
