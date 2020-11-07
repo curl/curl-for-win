@@ -7,9 +7,7 @@ branches:
     - dev-appveyor
     - test-appveyor
 # https://www.appveyor.com/docs/build-environment/#build-worker-images
-image:
-  - Ubuntu1804
-# - Visual Studio 2019
+image: Ubuntu1804
 services:
   - docker
 clone_depth: 8
@@ -28,8 +26,6 @@ environment:
     secure: HG8kU4lcuXvIp0Eu37fntEe9J2AeuQAsiqxcUyheeo8WiJ/PYNNO5wTtIU9OaNqq
   DEPLOY_GPG_PASS:
     secure: WHnaUtu4NM46WEgLhxUyPBShvzLNwRoR5v0Z3+/UqM0nMzrUGieb+tJKX/AZLFkx
-  APPVEYOR_RDP_PASSWORD:
-    secure:
   APPVEYOR_YML_DISABLE_PS_LINUX: true
   CC: mingw-clang
 build_script:
@@ -42,9 +38,6 @@ build_script:
           '^(APPVEYOR_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|DEPLOY_|CC|GITLAB_|CI_)') \
         "${DOCKER_IMAGE}" \
         sh -c ./_ci-linux-debian.sh
-  - cmd: |
-      set PATH=C:\msys64\usr\bin;%SystemRoot%\system32
-      sh -c ./_ci-win-msys2.sh
 artifacts:
   - path: '*-*-mingw*.*'
     name: master
@@ -52,6 +45,3 @@ artifacts:
     name: all
 # init:
 #   - sh: curl --fail --silent --location --proto-redir =https 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
-#   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-# on_finish:
-#   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
