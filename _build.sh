@@ -143,7 +143,7 @@ build_single_target() {
     # Install required component
     # TODO: add `--progress-bar off` when pip 10.0.0 is available
     pip3 --version
-    pip3 --disable-pip-version-check install --user pefile
+    pip3 --disable-pip-version-check --no-cache-dir install --user pefile
   else
     if [ "${CC}" = 'mingw-clang' ] && [ "${os}" = 'mac' ]; then
       export PATH="/usr/local/opt/llvm/bin:${_ori_path}"

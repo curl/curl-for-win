@@ -53,7 +53,7 @@ esac
 # TODO: add `--progress-bar off` when pip 10.0.0 is available
 if [ "${os}" != 'win' ]; then
   pip3 --version
-  pip3 --disable-pip-version-check install --user pefile
+  pip3 --disable-pip-version-check --no-cache-dir install --user pefile
 fi
 
 alias curl='curl --user-agent curl --fail --silent --show-error --connect-timeout 15 --max-time 20 --retry 3'
