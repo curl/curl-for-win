@@ -25,8 +25,8 @@ export LIBSSH2_VER_='1.9.0'
 export LIBSSH2_HASH=d5fb8bd563305fd1074dda90bd053fb2d29fc4bce048d182f96eaa466dfadafd
 export CURL_VER_='7.73.0'
 export CURL_HASH=7c4c7ca4ea88abe00fea4740dcf81075c031b1d0bb23aff2d5efde20a3c2408a
-export OSSLSIGNCODE_VER_='2.0'
-export OSSLSIGNCODE_HASH=5a60e0a4b3e0b4d655317b2f12a810211c50242138322b16e7e01c6fbb89d92f
+export OSSLSIGNCODE_VER_='2.1.0'
+export OSSLSIGNCODE_HASH=c512931b6fe151297a1c689f88501e20ffc204c4ffe30e7392eb3decf195065b
 
 # Create revision string
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
@@ -204,8 +204,7 @@ rm -r -f curl && mv curl-7* curl
 [ -f "curl${_patsuf}.patch" ] && dos2unix < "curl${_patsuf}.patch" | patch --batch -N -p1 -d curl
 
 # osslsigncode
-# NOTE: "https://github.com/mtrojnar/osslsigncode/archive/${OSSLSIGNCODE_VER_}.tar.gz"
-curl --output pack.bin --location --proto-redir =https "https://deb.debian.org/debian/pool/main/o/osslsigncode/osslsigncode_${OSSLSIGNCODE_VER_}.orig.tar.gz" || exit 1
+curl --output pack.bin --location --proto-redir =https "https://github.com/mtrojnar/osslsigncode/releases/download/2.1/osslsigncode-${OSSLSIGNCODE_VER_}.tar.gz" || exit 1
 openssl dgst -sha256 pack.bin | grep -q -a "${OSSLSIGNCODE_HASH}" || exit 1
 tar -xf pack.bin || exit 1
 rm pack.bin

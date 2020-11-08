@@ -37,7 +37,8 @@ _VER="$1"
     osslsigncode.c -o ../osslsigncode-determ \
     -DHAVE_SYS_MMAN_H \
     ${options} \
-    '-DPACKAGE_BUGREPORT="none"' \
-    "-DPACKAGE_STRING=\"osslsigncode ${_VER}-determfix\"" \
+    "-DPACKAGE_VERSION=\"${_VER}\"" \
+    "-DPACKAGE_STRING=\"osslsigncode ${_VER}\"" \
+    '-DPACKAGE_BUGREPORT="Michal.Trojnara@stunnel.org"' \
     -lcrypto
 )
