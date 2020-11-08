@@ -25,8 +25,8 @@ export LIBSSH2_VER_='1.9.0'
 export LIBSSH2_HASH=d5fb8bd563305fd1074dda90bd053fb2d29fc4bce048d182f96eaa466dfadafd
 export CURL_VER_='7.73.0'
 export CURL_HASH=7c4c7ca4ea88abe00fea4740dcf81075c031b1d0bb23aff2d5efde20a3c2408a
-export OSSLSIGNCODE_VER_='1.7.1'
-export OSSLSIGNCODE_HASH=f9a8cdb38b9c309326764ebc937cba1523a3a751a7ab05df3ecc99d18ae466c9
+export OSSLSIGNCODE_VER_='2.0'
+export OSSLSIGNCODE_HASH=5a60e0a4b3e0b4d655317b2f12a810211c50242138322b16e7e01c6fbb89d92f
 
 # Create revision string
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
