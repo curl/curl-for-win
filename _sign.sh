@@ -4,7 +4,7 @@
 # See LICENSE.md
 
 if [ -f "${CODESIGN_KEY}" ] && \
-   ls "$(dirname "$0")/osslsigncode-determ"* >/dev/null 2>&1; then
+   ls "$(dirname "$0")/osslsigncode-local"* >/dev/null 2>&1; then
 
   # Detect host OS
   case "$(uname)" in
@@ -28,7 +28,7 @@ if [ -f "${CODESIGN_KEY}" ] && \
     echo "Code signing: '${file}'"
     set +x
     # -ts 'https://freetsa.org/tsr'
-    "$(dirname "$0")/osslsigncode-determ" sign -h sha256 \
+    "$(dirname "$0")/osslsigncode-local" sign -h sha256 \
       -in "${file}" -out "${file}-signed" \
       -st "${unixts}" \
       -pkcs12 "${CODESIGN_KEY}" -pass "${CODESIGN_KEY_PASS}"
