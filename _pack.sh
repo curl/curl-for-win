@@ -63,6 +63,8 @@ create_pack() {
     esac
     touch -c -r "$1" "${_cdo}/${_BAS}${arch_ext}"
   )
+
+  ./_signpack.sh "${_cdo}/${_BAS}${arch_ext}"
 }
 
 create_pack "$1" '.tar.xz'

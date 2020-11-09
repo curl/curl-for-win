@@ -60,6 +60,19 @@ rm -f "${_BLD}"
 
 . ./_dl.sh || exit 1
 
+# Decrypt package signing key
+PACKSIGN_KEY='signpack.gpg.asc'
+if [ -f "${PACKSIGN_KEY}" ]; then
+(
+  set +x
+  gpg --batch --passphrase "${PACKSIGN_GPG_PASS}" --decrypt "${PACKSIGN_KEY}" | \
+  gpg --batch --quiet --import
+)
+else
+  export PACKSIGN_KEY_ID
+  unset PACKSIGN_KEY_ID
+fi
+
 # decrypt code signing key
 export CODESIGN_KEY=
 CODESIGN_KEY="$(realpath '.')/codesign.p12"
@@ -223,6 +236,7 @@ mv -f hashes.txt.all hashes.txt
 # Create an artifact that includes all packages
 _ALL="all-mingw-${CURL_VER_}${_REV}.zip"
 zip --quiet -0 -X --latest-time "${_ALL}" ./*-*-mingw*.* hashes.txt "${_BLD}" "${_LOG}"
+./_signpack "${_ALL}"
 
 openssl dgst -sha256 "${_ALL}" | tee    "${_ALL}.txt"
 openssl dgst -sha512 "${_ALL}" | tee -a "${_ALL}.txt"
@@ -243,6 +257,7 @@ if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
         -o ConnectTimeout=20 \
         -o ConnectionAttempts=5" \
       "${_ALL}" \
+      "${_ALL}.asc" \
       "${_ALL}.txt" \
       'curl-for-win@silly.haxx.se:.'
   fi
