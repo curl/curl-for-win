@@ -62,7 +62,7 @@ rm -f "${_BLD}"
 
 # Decrypt package signing key
 PACKSIGN_KEY='signpack.gpg.asc'
-if [ -f "${PACKSIGN_KEY}" ]; then
+if [ -f "${PACKSIGN_KEY}" ] && [ "${PACKSIGN_KEY_ID}" ]; then
 (
   set +x
   gpg --batch --passphrase "${PACKSIGN_GPG_PASS}" --decrypt "${PACKSIGN_KEY}" | \
