@@ -39,6 +39,6 @@ _VER="$1"
     ${options} \
     "-DPACKAGE_VERSION=\"${_VER}\"" \
     "-DPACKAGE_STRING=\"osslsigncode ${_VER}\"" \
-    '-DPACKAGE_BUGREPORT="Michal.Trojnara@stunnel.org"' \
+    '-DPACKAGE_BUGREPORT="none"' \
     -lcrypto
 )
