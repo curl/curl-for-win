@@ -68,9 +68,6 @@ if [ -f "${PACKSIGN_KEY}" ] && [ "${PACKSIGN_KEY_ID}" ]; then
   gpg --batch --passphrase "${PACKSIGN_GPG_PASS}" --decrypt "${PACKSIGN_KEY}" | \
   gpg --batch --quiet --import
 )
-else
-  export PACKSIGN_KEY_ID
-  unset PACKSIGN_KEY_ID
 fi
 
 # decrypt code signing key

@@ -6,7 +6,7 @@
 cd "$(dirname "$0")" || exit
 
 # Create signature for package
-if [ "${PACKSIGN_KEY_ID}" ]; then
+if gpg --list-public-keys "${PACKSIGN_KEY_ID}" >/dev/null 2>&1; then
 (
   set +x
   file="$1"
