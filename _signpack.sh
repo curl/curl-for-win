@@ -17,5 +17,6 @@ if gpg --list-public-keys "${PACKSIGN_KEY_ID}" >/dev/null 2>&1; then
     --pinentry-mode loopback --passphrase-fd 0 \
     --keyid-format 0xlong \
     --detach-sign --armor --local-user "${PACKSIGN_KEY_ID}" "${file}"
+  touch -c -r "${file}" "${file}.asc"
 )
 fi
