@@ -104,8 +104,8 @@ _cpu="$2"
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.dll
 
-  ../_sign.sh "${_ref}" ${_pkg}/bin/*.exe
-  ../_sign.sh "${_ref}" ${_pkg}/bin/*.dll
+  ../_signcode.sh "${_ref}" ${_pkg}/bin/*.exe
+  ../_signcode.sh "${_ref}" ${_pkg}/bin/*.dll
 
   touch -c -r "${_ref}" ${_pkg}/include/brotli/*.h
   touch -c -r "${_ref}" ${_pkg}/bin/*.exe

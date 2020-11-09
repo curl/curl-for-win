@@ -75,15 +75,15 @@ fi
 
 # decrypt code signing key
 export CODESIGN_KEY=
-CODESIGN_KEY="$(realpath '.')/codesign.p12"
+CODESIGN_KEY="$(realpath '.')/signcode.p12"
 if [ -f "${CODESIGN_KEY}.asc" ]; then
-  (
-    set +x
-    if [ -n "${CODESIGN_GPG_PASS}" ]; then
-      install -m 600 /dev/null "${CODESIGN_KEY}"
-      gpg --batch --passphrase "${CODESIGN_GPG_PASS}" --decrypt "${CODESIGN_KEY}.asc" >> "${CODESIGN_KEY}"
-    fi
-  )
+(
+  set +x
+  if [ -n "${CODESIGN_GPG_PASS}" ]; then
+    install -m 600 /dev/null "${CODESIGN_KEY}"
+    gpg --batch --passphrase "${CODESIGN_GPG_PASS}" --decrypt "${CODESIGN_KEY}.asc" >> "${CODESIGN_KEY}"
+  fi
+)
 fi
 [ -f "${CODESIGN_KEY}" ] || unset CODESIGN_KEY
 
@@ -97,13 +97,13 @@ ls -l "$(dirname "$0")/osslsigncode-local"*
 # decrypt deploy key
 DEPLOY_KEY="$(realpath '.')/deploy.key"
 if [ -f "${DEPLOY_KEY}.asc" ]; then
-  (
-    set +x
-    if [ -n "${DEPLOY_GPG_PASS}" ]; then
-      install -m 600 /dev/null "${DEPLOY_KEY}"
-      gpg --batch --passphrase "${DEPLOY_GPG_PASS}" --decrypt "${DEPLOY_KEY}.asc" >> "${DEPLOY_KEY}"
-    fi
-  )
+(
+  set +x
+  if [ -n "${DEPLOY_GPG_PASS}" ]; then
+    install -m 600 /dev/null "${DEPLOY_KEY}"
+    gpg --batch --passphrase "${DEPLOY_GPG_PASS}" --decrypt "${DEPLOY_KEY}.asc" >> "${DEPLOY_KEY}"
+  fi
+)
 fi
 
 # add deploy target to known hosts

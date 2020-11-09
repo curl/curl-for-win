@@ -84,7 +84,7 @@ _cpu="$2"
 
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
 
-  ../_sign.sh "${_ref}" ${_pkg}/bin/*.exe
+  ../_signcode.sh "${_ref}" ${_pkg}/bin/*.exe
 
   touch -c -r "${_ref}" ${_pkg}/bin/*.exe
   touch -c -r "${_ref}" ${_pkg}/lib/*.a

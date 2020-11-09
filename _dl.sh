@@ -133,7 +133,8 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
   # c-ares
   if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
     CARES_VER_='1.13.1-dev'
-    curl --output pack.bin --location --proto-redir =https 'https://github.com/c-ares/c-ares/archive/611a5ef938c2ca92beb51f455323cda4d40119f7.tar.gz' || exit 1
+    curl \
+      --output pack.bin --location --proto-redir =https 'https://github.com/c-ares/c-ares/archive/611a5ef938c2ca92beb51f455323cda4d40119f7.tar.gz' || exit 1
   else
     curl \
       --output pack.bin --location --proto-redir =https "https://github.com/c-ares/c-ares/releases/download/cares-$(echo "${CARES_VER_}" | tr '.' '_')/c-ares-${CARES_VER_}.tar.gz" \
@@ -151,7 +152,8 @@ fi
 # openssl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   OPENSSL_VER_='1.1.1-pre1'
-  curl --output pack.bin --location --proto-redir =https 'https://www.openssl.org/source/openssl-1.1.1-pre1.tar.gz' || exit 1
+  curl --location --proto-redir =https \
+    --output pack.bin 'https://www.openssl.org/source/openssl-1.1.1-pre1.tar.gz' || exit 1
 else
   curl \
     --output pack.bin "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz" \
@@ -172,7 +174,8 @@ rm -r -f openssl && mv openssl-* openssl
 # libssh2
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   LIBSSH2_VER_='1.9.1-dev'
-  curl --output pack.bin --location --proto-redir =https 'https://github.com/libssh2/libssh2/archive/53ff2e6da450ac1801704b35b3360c9488161342.tar.gz' || exit 1
+  curl \
+    --output pack.bin --location --proto-redir =https 'https://github.com/libssh2/libssh2/archive/53ff2e6da450ac1801704b35b3360c9488161342.tar.gz' || exit 1
 else
   curl \
     --output pack.bin --location --proto-redir =https "https://github.com/libssh2/libssh2/releases/download/libssh2-${LIBSSH2_VER_}/libssh2-${LIBSSH2_VER_}.tar.gz" \
@@ -189,7 +192,8 @@ rm -r -f libssh2 && mv libssh2-* libssh2
 # curl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   CURL_VER_='7.59.0-dev'
-  curl --output pack.bin --location --proto-redir =https 'https://github.com/curl/curl/archive/63f6b3b22077c6fd4a75ce4ceac7258509af412c.tar.gz' || exit 1
+  curl \
+    --output pack.bin --location --proto-redir =https 'https://github.com/curl/curl/archive/63f6b3b22077c6fd4a75ce4ceac7258509af412c.tar.gz' || exit 1
 else
   curl \
     --output pack.bin --location --proto-redir =https "https://curl.se/download/curl-${CURL_VER_}.tar.xz" \
