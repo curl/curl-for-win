@@ -96,16 +96,14 @@
 
 # Binary package downloads
 
-  * Official page, for the latest version:<br>
+  * Official page, latest version:<br>
     <https://curl.se/windows/>
-  * Bintray, for specific versions:
-    * [![Download](https://api.bintray.com/packages/vszakats/generic/curl/images/download.svg)](https://bintray.com/vszakats/generic/curl/_latestVersion) curl
-    * [![Download](https://api.bintray.com/packages/vszakats/generic/openssl/images/download.svg)](https://bintray.com/vszakats/generic/openssl/_latestVersion) openssl
-    * [![Download](https://api.bintray.com/packages/vszakats/generic/libssh2/images/download.svg)](https://bintray.com/vszakats/generic/libssh2/_latestVersion) libssh2
-    * [![Download](https://api.bintray.com/packages/vszakats/generic/nghttp2/images/download.svg)](https://bintray.com/vszakats/generic/nghttp2/_latestVersion) nghttp2
-    * [![Download](https://api.bintray.com/packages/vszakats/generic/brotli/images/download.svg)](https://bintray.com/vszakats/generic/brotli/_latestVersion) brotli
-    * [![Download](https://api.bintray.com/packages/vszakats/generic/zstd/images/download.svg)](https://bintray.com/vszakats/generic/zstd/_latestVersion) zstd
-    * [![Download](https://api.bintray.com/packages/vszakats/generic/zlib/images/download.svg)](https://bintray.com/vszakats/generic/zlib/_latestVersion) zlib
+  * Official page, specific versions (back to 7.66.0):<br>
+    `https://curl.se/windows/dl-<curl-version>[_<build-number>]/`
+    <br>Examples:
+    <br><https://curl.se/windows/dl-7.73.0/>
+    <br><https://curl.se/windows/dl-7.73.0_1/>
+    <br>(`bintray.com` downloads are deprecated and will not be updated anymore)
 
 # Live build logs
 
