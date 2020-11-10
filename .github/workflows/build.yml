@@ -24,6 +24,6 @@ jobs:
           docker images --digests
           time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|DEPLOY_|CC|GITHUB_)') \
+              '^(GPG_|VIRUSTOTAL_|CODESIGN_|DEPLOY_|CC|GITHUB_)') \
             "${DOCKER_IMAGE}" \
             sh -c ./_ci-linux-debian.sh

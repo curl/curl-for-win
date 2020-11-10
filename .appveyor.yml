@@ -14,8 +14,6 @@ clone_depth: 8
 build:
   verbosity: detailed
 environment:
-  BINTRAY_APIKEY:
-    secure: ZZ33lWAHzAtktHVhpJaW1haOMRRcw5GMcnK8kJkkklPyK1F/C2F8GLxS3ZEdJf+F
   GPG_PASSPHRASE:
     secure:
   VIRUSTOTAL_APIKEY:
@@ -39,7 +37,7 @@ build_script:
       docker images --digests
       time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
         --env-file <(env | grep -a -E \
-          '^(APPVEYOR_|BINTRAY_|GPG_|VIRUSTOTAL_|CODESIGN_|DEPLOY_|CC|GITLAB_|CI_)') \
+          '^(APPVEYOR_|GPG_|VIRUSTOTAL_|CODESIGN_|DEPLOY_|CC|GITLAB_|CI_)') \
         "${DOCKER_IMAGE}" \
         sh -c ./_ci-linux-debian.sh
 artifacts:

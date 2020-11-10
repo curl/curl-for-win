@@ -81,9 +81,6 @@
     The signature intentionally omits a trusted timestamp to retain
     reproducibility. Signing is done using a custom patched `osslsigncode`
     build to enforce a stable non-trusted timestamp for reproducibility.
-  - Binaries distributed via Bintray are GPG signed with Bintray's
-    [key pair](https://www.jfrog.com/confluence/display/BT/Managing+Uploaded+Content#ManagingUploadedContent-SigningwiththeBintrayKey):
-    **[8756 C4F7 65C9 AC3C B6B8  5D62 379C E192 D401 AB61](https://pgpkeys.eu/pks/lookup?op=vindex&fingerprint=on&search=0x8756C4F765C9AC3CB6B85D62379CE192D401AB61)**
 
 # Binary package downloads
 

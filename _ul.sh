@@ -13,61 +13,21 @@ case "$(uname)" in
   *BSD)    os='bsd';;
 esac
 
-export BINTRAY_USER='vszakats'
-#[ -n "${BINTRAY_USER}" ] || BINTRAY_USER="${APPVEYOR_ACCOUNT_NAME}"
-#[ -n "${BINTRAY_USER}" ] || BINTRAY_USER="$(echo "${GITHUB_REPOSITORY}" | sed 's|/.*||')"
-#[ -n "${BINTRAY_USER}" ] || BINTRAY_USER="${USER}"
-
 do_upload() {
   arch_ext="$1"
 
   if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
-    _sufpkg=
     _suf=
-
     if [ ! "${PUBLISH_PROD_FROM}" = "${os}" ]; then
       _suf="-built-on-${os}"
       mv "${_BAS}${arch_ext}" "${_BAS}${_suf}${arch_ext}"
-      unset BINTRAY_USER
-      unset BINTRAY_APIKEY
     fi
   else
     # Do not sign test packages
     GPG_PASSPHRASE=
-    _sufpkg='-test'
     _suf="-test-built-on-${os}"
     mv "${_BAS}${arch_ext}" "${_BAS}${_suf}${arch_ext}"
   fi
-
-  (
-    # - Bintray behavior when passphrased private key is provided:
-    #   - Repository option: "GPG sign uploaded files using Bintray's public/private key pair."
-    #     - passphrase set      -> Success, Bintray signature
-    #     - empty/no passphrase -> Warning, Bintray signature
-    #   - Repository option: "GPG Sign uploaded files automatically."
-    #     - passphrase set      -> Success, Custom signature
-    #     - empty/no passphrase -> Warning, No signature
-
-    set +x
-
-    if [ -n "${BINTRAY_USER}" ] && \
-       [ -n "${BINTRAY_APIKEY}" ]; then
-
-      echo "Uploading: '${_BAS}${_suf}${arch_ext}' to 'https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_sufpkg}/${_VER}/'"
-
-      # Do this before upload to avoid 403 error for
-      # uploads older than 365 days:
-      #   https://bintray.com/docs/api/#url_update_version
-      # [This loophole/bug was fixed as of 2020-10]
-
-      curl --user-agent curl \
-        --fail --silent --show-error \
-        --user "${BINTRAY_USER}:${BINTRAY_APIKEY}" \
-        --request PUT "https://api.bintray.com/content/${BINTRAY_USER}/generic/${_NAM}${_sufpkg}/${_VER}/${_BAS}${_suf}${arch_ext}?override=1&publish=1" \
-        --data-binary "@${_BAS}${_suf}${arch_ext}" \
-        --header "X-GPG-PASSPHRASE: ${GPG_PASSPHRASE}"
-    fi
-  )
 
   # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>
   case "${os}" in
