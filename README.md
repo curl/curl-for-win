@@ -4,8 +4,8 @@
 
 # Automated, reproducible, transparent, Windows builds for [curl](https://curl.se/), [nghttp2](https://nghttp2.org/), [brotli](https://github.com/google/brotli), [zstd](https://github.com/facebook/zstd), [libssh2](https://libssh2.org/) and [OpenSSL 1.1](https://www.openssl.org/)
 
-  - **DEPRECATION NOTE: The `bintray.com` repositories for binary downloads
-    are deprecated and will no longer be update. Please use
+  - **DEPRECATION NOTE: Our `bintray.com` repositories for binary downloads
+    are deprecated and will no longer be updated. Please use
     [these](#binary-package-downloads) URLs to download the latest or specific
     past versions.**
   - Packaging aims to follow popular binary releases found on the internet.
