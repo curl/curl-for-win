@@ -104,5 +104,4 @@ _cpu="$2"
   unix2dos --quiet --keepdate "${_DST}"/*.rst
 
   ../_pack.sh "$(pwd)/${_ref}"
-  ../_ul.sh
 )
