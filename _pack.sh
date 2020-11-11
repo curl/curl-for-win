@@ -34,6 +34,9 @@ find "${_DST}" \( -name '*.exe' -o -name '*.dll' -o -name '*.a' \) -exec chmod a
 
 create_pack() {
   arch_ext="$2"
+
+  _pkg="${_BAS}${arch_ext}"
+
   _FLS="$(dirname "$0")/_files"
 
   (
@@ -44,27 +47,28 @@ create_pack() {
 
     find "${_BAS}" -type f | sort > "${_FLS}"
 
-    rm -f "${_cdo}/${_BAS}${arch_ext}"
+    rm -f "${_cdo}/${_pkg}"
     case "${arch_ext}" in
       .tar.xz) tar --create --files-from "${_FLS}" \
         --owner 0 --group 0 --numeric-owner --mode go=rX,u+rw,a-s \
-        | xz > "${_cdo}/${_BAS}${arch_ext}";;
-      .zip)    zip --quiet -X -9 -@ - < "${_FLS}" > "${_cdo}/${_BAS}${arch_ext}";;
+        | xz > "${_cdo}/${_pkg}";;
+      .zip)    zip --quiet -X -9 -@ - < "${_FLS}" > "${_cdo}/${_pkg}";;
       # Requires: p7zip (MSYS2, Homebrew, Linux rpm), p7zip-full (Linux deb)
-      .7z)     7z a -bd -r -mx "${_cdo}/${_BAS}${arch_ext}" "@${_FLS}" >/dev/null;;
+      .7z)     7z a -bd -r -mx "${_cdo}/${_pkg}" "@${_FLS}" >/dev/null;;
     esac
-    touch -c -r "$1" "${_cdo}/${_BAS}${arch_ext}"
+    touch -c -r "$1" "${_cdo}/${_pkg}"
   )
 
-  ./_signpack.sh "${_cdo}/${_BAS}${arch_ext}"
+  ./_signpack.sh "${_pkg}"
 }
 
 do_post_pack() {
   arch_ext="$1"
 
   if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
-    _suf=
-    if [ ! "${PUBLISH_PROD_FROM}" = "${_OS}" ]; then
+    if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ]; then
+      _suf=''
+    else
       _suf="-built-on-${_OS}"
       mv "${_BAS}${arch_ext}" "${_BAS}${_suf}${arch_ext}"
     fi
@@ -74,27 +78,29 @@ do_post_pack() {
     mv "${_BAS}${arch_ext}" "${_BAS}${_suf}${arch_ext}"
   fi
 
+  _pkg="${_BAS}${_suf}${arch_ext}"
+
   # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>
   case "${_OS}" in
-    bsd|mac) TZ=UTC stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_BAS}${_suf}${arch_ext}";;
-    *)       TZ=UTC stat --format '%n: %s bytes %y' "${_BAS}${_suf}${arch_ext}";;
+    bsd|mac) TZ=UTC stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_pkg}";;
+    *)       TZ=UTC stat --format '%n: %s bytes %y' "${_pkg}";;
   esac
 
-  openssl dgst -sha256 "${_BAS}${_suf}${arch_ext}" | tee -a hashes.txt
-  openssl dgst -sha512 "${_BAS}${_suf}${arch_ext}" | tee -a hashes.txt
+  openssl dgst -sha256 "${_pkg}" | tee -a hashes.txt
+  openssl dgst -sha512 "${_pkg}" | tee -a hashes.txt
 
   if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
   (
     set +x
 
-    hshl="$(openssl dgst -sha256 "${_BAS}${_suf}${arch_ext}" \
+    hshl="$(openssl dgst -sha256 "${_pkg}" \
       | sed -n -E 's,.+= ([0-9a-fA-F]{64}),\1,p')"
     # https://developers.virustotal.com/v3.0/reference
     out="$(curl --user-agent curl \
       --fail --silent --show-error \
       --request POST 'https://www.virustotal.com/api/v3/files' \
       --header "x-apikey: ${VIRUSTOTAL_APIKEY}" \
-      --form "file=@${_BAS}${_suf}${arch_ext}")"
+      --form "file=@${_pkg}")"
     # shellcheck disable=SC2181
     if [ "$?" = 0 ]; then
       id="$(echo "${out}" | jq --raw-output '.data.id')"
@@ -106,7 +112,7 @@ do_post_pack() {
       if [ "$?" = 0 ]; then
         hshr="$(echo "${out}" | jq --raw-output '.meta.file_info.sha256')"
         if [ "${hshr}" = "${hshl}" ]; then
-          echo "VirusTotal URL for '${_BAS}${_suf}${arch_ext}':"
+          echo "VirusTotal URL for '${_pkg}':"
           echo "https://www.virustotal.com/file/${hshr}/analysis/"
         else
           echo "VirusTotal hash mismatch with local hash:"
