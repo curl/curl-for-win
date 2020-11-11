@@ -14,8 +14,6 @@ clone_depth: 8
 build:
   verbosity: detailed
 environment:
-  GPG_PASSPHRASE:
-    secure:
   VIRUSTOTAL_APIKEY:
     secure: 9SXnYhOkq6CP97zQ+dUc+NzKpKVIoVACMi0wwtLkaUv9y8BimLo5B7XSWBQ9lYwKbQY8JSJ10JFtyxrKRN6O0PK5U7i6bhg4/B6c40ieHHw=
   CODESIGN_GPG_PASS:
@@ -37,7 +35,7 @@ build_script:
       docker images --digests
       time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
         --env-file <(env | grep -a -E \
-          '^(CC|GPG_|VIRUSTOTAL_|CODESIGN_|PACKSIGN_|DEPLOY_|APPVEYOR_|GITLAB_|CI_)') \
+          '^(CC|VIRUSTOTAL_|CODESIGN_|PACKSIGN_|DEPLOY_|APPVEYOR_|GITLAB_|CI_)') \
         "${DOCKER_IMAGE}" \
         sh -c ./_ci-linux-debian.sh
 artifacts:

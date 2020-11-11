@@ -24,7 +24,6 @@ do_upload() {
     fi
   else
     # Do not sign test packages
-    GPG_PASSPHRASE=
     _suf="-test-built-on-${os}"
     mv "${_BAS}${arch_ext}" "${_BAS}${_suf}${arch_ext}"
   fi
