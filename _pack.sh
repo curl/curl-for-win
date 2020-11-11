@@ -35,7 +35,18 @@ find "${_DST}" \( -name '*.exe' -o -name '*.dll' -o -name '*.a' \) -exec chmod a
 create_pack() {
   arch_ext="$2"
 
-  _pkg="${_BAS}${arch_ext}"
+  # Alter filename for non-release packages
+  if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
+    if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ]; then
+      _suf=''
+    else
+      _suf="-built-on-${_OS}"
+    fi
+  else
+    _suf="-test-built-on-${_OS}"
+  fi
+
+  _pkg="${_BAS}${_suf}${arch_ext}"
 
   _FLS="$(dirname "$0")/_files"
 
@@ -59,27 +70,6 @@ create_pack() {
     touch -c -r "$1" "${_cdo}/${_pkg}"
   )
 
-  ./_signpack.sh "${_pkg}"
-}
-
-do_post_pack() {
-  arch_ext="$1"
-
-  if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
-    if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ]; then
-      _suf=''
-    else
-      _suf="-built-on-${_OS}"
-      mv "${_BAS}${arch_ext}" "${_BAS}${_suf}${arch_ext}"
-    fi
-  else
-    # Do not sign test packages
-    _suf="-test-built-on-${_OS}"
-    mv "${_BAS}${arch_ext}" "${_BAS}${_suf}${arch_ext}"
-  fi
-
-  _pkg="${_BAS}${_suf}${arch_ext}"
-
   # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>
   case "${_OS}" in
     bsd|mac) TZ=UTC stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_pkg}";;
@@ -89,6 +79,12 @@ do_post_pack() {
   openssl dgst -sha256 "${_pkg}" | tee -a hashes.txt
   openssl dgst -sha512 "${_pkg}" | tee -a hashes.txt
 
+  # Sign releases only
+  if [ -z "${_suf}" ]; then
+    ./_signpack.sh "${_pkg}"
+  fi
+
+  # Upload master builds to VirusTotal
   if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
   (
     set +x
@@ -138,6 +134,3 @@ if ! grep -q -a -F "${ver}" -- "${_BLD}"; then
 fi
 
 rm -r -f "${_DST:?}"
-
-do_post_pack '.tar.xz'
-do_post_pack '.zip'
