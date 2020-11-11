@@ -205,7 +205,7 @@ build_single_target() {
 }
 
 # Build binaries
-if [ -n "$CPU" ]; then
+if [ -n "${CPU}" ]; then
   build_single_target "${CPU}"
 else
   build_single_target 64
