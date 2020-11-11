@@ -13,21 +13,13 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  # Detect host OS
-  case "$(uname)" in
-    *_NT*)   os='win';;
-    Linux*)  os='linux';;
-    Darwin*) os='mac';;
-    *BSD)    os='bsd';;
-  esac
-
   options=''
 
   # curl only required to talk to the timestamp server which we don't
   # use at the moment to remain deterministic.
   # options="${options} -DENABLE_CURL -lcurl"
 
-  if [ "${os}" = 'mac' ]; then
+  if [ "${_OS}" = 'mac' ]; then
     # options="-I/usr/local/opt/curl/include -L/usr/local/opt/curl/lib"
     options="${options} -I/usr/local/opt/openssl@1.1/include -L/usr/local/opt/openssl@1.1/lib"
   fi

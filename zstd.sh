@@ -18,15 +18,7 @@ _cpu="$2"
 
   # Cross-tasks
 
-  # Detect host OS
-  case "$(uname)" in
-    *_NT*)   os='win';;
-    Linux*)  os='linux';;
-    Darwin*) os='mac';;
-    *BSD)    os='bsd';;
-  esac
-
-  if [ "${os}" = 'win' ]; then
+  if [ "${_OS}" = 'win' ]; then
     opt_gmsys='-GMSYS Makefiles'
     # Without this option, the value '/usr/local' becomes 'msys64/usr/local'
     export MSYS2_ARG_CONV_EXCL='-DCMAKE_INSTALL_PREFIX='
@@ -79,7 +71,7 @@ _cpu="$2"
   if [ "${CC}" = 'mingw-clang' ]; then
     unset CC
 
-    [ "${os}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
+    [ "${_OS}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
 
   # _CFLAGS="${_CFLAGS} -Xclang -cfguard"
   # _LDFLAGS="${_LDFLAGS} -Xlinker -guard:cf"

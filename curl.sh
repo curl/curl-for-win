@@ -16,21 +16,13 @@ _cpu="$2"
 (
   cd "${_NAM}" || exit
 
-  # Detect host OS
-  case "$(uname)" in
-    *_NT*)   os='win';;
-    Linux*)  os='linux';;
-    Darwin*) os='mac';;
-    *BSD)    os='bsd';;
-  esac
-
   # Prepare build
 
   find . -name '*.dll' -delete
   find . -name '*.def' -delete
 
   if [ ! -f 'Makefile' ]; then
-    if [ "${os}" = 'win' ]; then
+    if [ "${_OS}" = 'win' ]; then
       # FIXME: This will not create a fully release-compliant file tree,
       #        e.g. documentation will be incomplete.
       ./buildconf.bat
@@ -162,9 +154,9 @@ _cpu="$2"
 
   if [ "${CC}" = 'mingw-clang' ]; then
     export CURL_CC="clang${_CCSUFFIX}"
-    if [ "${os}" != 'win' ]; then
+    if [ "${_OS}" != 'win' ]; then
       CURL_CFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${CURL_CFLAG_EXTRAS}"
-      [ "${os}" = 'linux' ] && CURL_LDFLAG_EXTRAS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${CURL_LDFLAG_EXTRAS}"
+      [ "${_OS}" = 'linux' ] && CURL_LDFLAG_EXTRAS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${CURL_LDFLAG_EXTRAS}"
       CURL_LDFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${CURL_LDFLAG_EXTRAS}"
     fi
     # This doesn't work yet, due to:

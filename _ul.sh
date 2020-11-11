@@ -5,31 +5,23 @@
 
 cd "$(dirname "$0")" || exit
 
-# Detect host OS
-case "$(uname)" in
-  *_NT*)   os='win';;
-  Linux*)  os='linux';;
-  Darwin*) os='mac';;
-  *BSD)    os='bsd';;
-esac
-
 do_upload() {
   arch_ext="$1"
 
   if [ "${_BRANCH#*master*}" != "${_BRANCH}" ]; then
     _suf=
-    if [ ! "${PUBLISH_PROD_FROM}" = "${os}" ]; then
-      _suf="-built-on-${os}"
+    if [ ! "${PUBLISH_PROD_FROM}" = "${_OS}" ]; then
+      _suf="-built-on-${_OS}"
       mv "${_BAS}${arch_ext}" "${_BAS}${_suf}${arch_ext}"
     fi
   else
     # Do not sign test packages
-    _suf="-test-built-on-${os}"
+    _suf="-test-built-on-${_OS}"
     mv "${_BAS}${arch_ext}" "${_BAS}${_suf}${arch_ext}"
   fi
 
   # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>
-  case "${os}" in
+  case "${_OS}" in
     bsd|mac) TZ=UTC stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_BAS}${_suf}${arch_ext}";;
     *)       TZ=UTC stat --format '%n: %s bytes %y' "${_BAS}${_suf}${arch_ext}";;
   esac

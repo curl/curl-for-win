@@ -6,18 +6,10 @@
 if [ -f "${CODESIGN_KEY}" ] && \
    ls "$(dirname "$0")/osslsigncode-local"* >/dev/null 2>&1; then
 
-  # Detect host OS
-  case "$(uname)" in
-    *_NT*)   os='win';;
-    Linux*)  os='linux';;
-    Darwin*) os='mac';;
-    *BSD)    os='bsd';;
-  esac
-
   _ref="$1"
   shift
 
-  case "${os}" in
+  case "${_OS}" in
     bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${_ref}")";;
     *)       unixts="$(TZ=UTC stat --format '%Y' "${_ref}")";;
   esac

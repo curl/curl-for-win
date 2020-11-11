@@ -16,15 +16,7 @@ _cpu="$2"
 (
   cd "${_NAM}" || exit 0
 
-  # Detect host OS
-  case "$(uname)" in
-    *_NT*)   os='win';;
-    Linux*)  os='linux';;
-    Darwin*) os='mac';;
-    *BSD)    os='bsd';;
-  esac
-
-  if [ "${os}" = 'win' ]; then
+  if [ "${_OS}" = 'win' ]; then
     # Required on MSYS2 for pod2man and pod2html in 'make install' phase
     export PATH="${PATH}:/usr/bin/core_perl"
   fi
@@ -36,7 +28,7 @@ _cpu="$2"
     readonly _ref='CHANGES'
   fi
 
-  case "${os}" in
+  case "${_OS}" in
     bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${_ref}")";;
     *)       unixts="$(TZ=UTC stat --format '%Y' "${_ref}")";;
   esac
@@ -71,9 +63,9 @@ _cpu="$2"
     # To avoid warnings when passing C compiler options to the linker
     options="${options} -Wno-unused-command-line-argument"
     export CC=clang
-    if [ "${os}" != 'win' ]; then
+    if [ "${_OS}" != 'win' ]; then
       export options="${options} --target=${_TRIPLET} --sysroot=${_SYSROOT}"
-      [ "${os}" = 'linux' ] && options="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${options}"
+      [ "${_OS}" = 'linux' ] && options="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${options}"
     # export LDFLAGS="--target=${_TRIPLET} --sysroot=${_SYSROOT} ${LDFLAGS}"
     fi
     export AR=${_CCPREFIX}ar

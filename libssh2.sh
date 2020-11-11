@@ -16,14 +16,6 @@ _cpu="$2"
 (
   cd "${_NAM}" || exit
 
-  # Detect host OS
-  case "$(uname)" in
-    *_NT*)   os='win';;
-    Linux*)  os='linux';;
-    Darwin*) os='mac';;
-    *BSD)    os='bsd';;
-  esac
-
   # Prepare build
 
   find . -name '*.dll' -delete
@@ -63,9 +55,9 @@ _cpu="$2"
 
   if [ "${CC}" = 'mingw-clang' ]; then
     export LIBSSH2_CC="clang${_CCSUFFIX}"
-    if [ "${os}" != 'win' ]; then
+    if [ "${_OS}" != 'win' ]; then
       LIBSSH2_CFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${LIBSSH2_CFLAG_EXTRAS}"
-      [ "${os}" = 'linux' ] && LIBSSH2_LDFLAG_EXTRAS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${LIBSSH2_LDFLAG_EXTRAS}"
+      [ "${_OS}" = 'linux' ] && LIBSSH2_LDFLAG_EXTRAS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${LIBSSH2_LDFLAG_EXTRAS}"
       LIBSSH2_LDFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${LIBSSH2_LDFLAG_EXTRAS}"
     fi
   # LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -Xclang -cfguard"

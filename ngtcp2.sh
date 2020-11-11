@@ -16,22 +16,14 @@ _cpu="$2"
 (
   cd "${_NAM}" || exit
 
-  # Detect host OS
-  case "$(uname)" in
-    *_NT*)   os='win';;
-    Linux*)  os='linux';;
-    Darwin*) os='mac';;
-    *BSD)    os='bsd';;
-  esac
-
   # This is pretty much guesswork and this warning remains:
   #    `configure: WARNING: using cross tools not prefixed with host triplet`
   # Even with `_CCPREFIX` provided.
-  if [ "${os}" != 'win' ]; then
+  if [ "${_OS}" != 'win' ]; then
 
     # https://clang.llvm.org/docs/CrossCompilation.html
     unset _HOST
-    case "${os}" in
+    case "${_OS}" in
       win)   _HOST='x86_64-pc-mingw32';;
       linux) _HOST='x86_64-pc-linux';;  # x86_64-pc-linux-gnu
       mac)   _HOST='x86_64-apple-darwin';;

@@ -38,12 +38,13 @@ command -v git >/dev/null 2>&1 && _URL="$(git ls-remote --get-url | sed 's|.git$
 [ -n "${_URL}" ] || _URL="https://github.com/${APPVEYOR_REPO_NAME}${GITHUB_REPOSITORY}"
 
 # Detect host OS
-export os
+export _OS
 case "$(uname)" in
-  *_NT*)   os='win';;
-  Linux*)  os='linux';;
-  Darwin*) os='mac';;
-  *BSD)    os='bsd';;
+  *_NT*)   _OS='win';;
+  Linux*)  _OS='linux';;
+  Darwin*) _OS='mac';;
+  *BSD)    _OS='bsd';;
+  *)       _OS='unrecognized';;
 esac
 
 export PUBLISH_PROD_FROM
@@ -116,7 +117,7 @@ if [ -f "${DEPLOY_KEY}" ]; then
   fi
 fi
 
-case "${os}" in
+case "${_OS}" in
   mac) alias sed=gsed;;
 esac
 
@@ -124,7 +125,7 @@ if [ "${CC}" = 'mingw-clang' ]; then
   echo ".clang$("clang${_CCSUFFIX}" --version | grep -o -a -E ' [0-9]*\.[0-9]*[\.][0-9]*')" >> "${_BLD}"
 fi
 
-case "${os}" in
+case "${_OS}" in
   mac)   ver="$(brew info --json=v1 mingw-w64 | jq --raw-output '.[] | select(.name == "mingw-w64") | .versions.stable')";;
   # FIXME: Linux-distro specific
   linux) ver="$(apt-cache show mingw-w64 | grep -a '^Version:' | cut -c 10-)";;
@@ -146,7 +147,7 @@ build_single_target() {
   [ "${_cpu}" = '32' ] && _machine='i686'
   [ "${_cpu}" = '64' ] && _machine='x86_64'
 
-  if [ "${os}" = 'win' ]; then
+  if [ "${_OS}" = 'win' ]; then
     export PATH="/mingw${_cpu}/bin:${_ori_path}"
     export _MAKE='mingw32-make'
 
@@ -155,7 +156,7 @@ build_single_target() {
     pip3 --version
     pip3 --disable-pip-version-check --no-cache-dir install --user pefile
   else
-    if [ "${CC}" = 'mingw-clang' ] && [ "${os}" = 'mac' ]; then
+    if [ "${CC}" = 'mingw-clang' ] && [ "${_OS}" = 'mac' ]; then
       export PATH="/usr/local/opt/llvm/bin:${_ori_path}"
     fi
     _TRIPLET="${_machine}-w64-mingw32"
@@ -164,12 +165,12 @@ build_single_target() {
     # one, or as prefix + `gcc-ar`, `gcc-nm`, `gcc-runlib`.
     _CCPREFIX="${_TRIPLET}-"
     # mingw-w64 sysroots
-    if [ "${os}" = 'mac' ]; then
+    if [ "${_OS}" = 'mac' ]; then
       _SYSROOT="/usr/local/opt/mingw-w64/toolchain-${_machine}"
     else
       _SYSROOT="/usr/${_TRIPLET}"
     fi
-    if [ "${os}" = 'mac' ]; then
+    if [ "${_OS}" = 'mac' ]; then
       _WINE='wine64'
     else
       _WINE='wine'
@@ -241,7 +242,7 @@ openssl dgst -sha512 "${_ALL}" | tee -a "${_ALL}.txt"
 
 # Official deploy
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
-   [ "${PUBLISH_PROD_FROM}" = "${os}" ]; then
+   [ "${PUBLISH_PROD_FROM}" = "${_OS}" ]; then
 (
   set +x
   if [ -f "${DEPLOY_KEY}" ]; then

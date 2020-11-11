@@ -5,14 +5,6 @@
 
 cd "$(dirname "$0")" || exit
 
-# Detect host OS
-case "$(uname)" in
-  *_NT*)   os='win';;
-  Linux*)  os='linux';;
-  Darwin*) os='mac';;
-  *BSD)    os='bsd';;
-esac
-
 # Map tar to GNU tar, if it exists (e.g. on macOS)
 command -v gtar >/dev/null && alias tar=gtar
 
@@ -46,7 +38,7 @@ create_pack() {
 
   (
     cd "${_DST}/.." || exit
-    case "${os}" in
+    case "${_OS}" in
       win) find "${_BAS}" -exec attrib +A -R {} \;
     esac
 

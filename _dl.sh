@@ -41,24 +41,16 @@ echo "Build: REV(${_REV})"
 # Quit if any of the lines fail
 set -e
 
-# Detect host OS
-case "$(uname)" in
-  *_NT*)   os='win';;
-  Linux*)  os='linux';;
-  Darwin*) os='mac';;
-  *BSD)    os='bsd';;
-esac
-
 # Install required component
 # TODO: add `--progress-bar off` when pip 10.0.0 is available
-if [ "${os}" != 'win' ]; then
+if [ "${_OS}" != 'win' ]; then
   pip3 --version
   pip3 --disable-pip-version-check --no-cache-dir install --user pefile
 fi
 
 alias curl='curl --user-agent curl --fail --silent --show-error --connect-timeout 15 --max-time 20 --retry 3'
 alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format long'
-[ "${os}" = 'mac' ] && alias tar='gtar'
+[ "${_OS}" = 'mac' ] && alias tar='gtar'
 
 gpg_recv_key() {
   # https://keys.openpgp.org/about/api
