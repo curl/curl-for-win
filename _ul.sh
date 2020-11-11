@@ -14,15 +14,12 @@ ls -l ./*-*-mingw*.*
 cat hashes.txt
 cat "${_BLD}"
 
-# TODO: Move adding ${_REV} to the filename into _pack.sh.
-
-# Strip '-built-on-*' suffix for the single-file artifact,
-# and also add revision to filenames.
+# Strip '-built-on-*' suffix for the single-file artifact.
 for f in ./*-*-mingw*.*; do
-  mv -f "${f}" "$(echo "${f}" | sed "s|-win|${_REV}-win|g" | sed 's|-built-on-[^.]*||g')"
+  mv -f "${f}" "$(echo "${f}" | sed 's|-built-on-[^.]*||g')"
 done
 
-sed "s|-win|${_REV}-win|g" hashes.txt | sed 's|-built-on-[^.]*||g' | sort > hashes.txt.all
+sed 's|-built-on-[^.]*||g' hashes.txt | sort > hashes.txt.all
 touch -r hashes.txt hashes.txt.all
 mv -f hashes.txt.all hashes.txt
 
