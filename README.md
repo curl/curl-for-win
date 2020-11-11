@@ -2,7 +2,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/8yf6xjgq7u0cm013/branch/master?svg=true)](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master)
 [![Build Status](https://github.com/curl/curl-for-win/workflows/build/badge.svg?branch=master)](https://github.com/curl/curl-for-win/actions?query=branch%3Amaster)
 
-# Automated, reproducible, transparent, Windows builds for [curl](https://curl.se/), [nghttp2](https://nghttp2.org/), [brotli](https://github.com/google/brotli), [zstd](https://github.com/facebook/zstd), [libssh2](https://libssh2.org/) and [OpenSSL 1.1](https://www.openssl.org/)
+# Automated, reproducible, transparent, Windows builds for [curl](https://curl.se/), [nghttp2](https://nghttp2.org/), [brotli](https://github.com/google/brotli), [zstd](https://github.com/facebook/zstd), [libssh2](https://libssh2.org/) and [OpenSSL](https://www.openssl.org/)
 
   - **DEPRECATION NOTE: Our `bintray.com` repositories for binary downloads
     are deprecated and will no longer be updated. Please use
