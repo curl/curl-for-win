@@ -14,6 +14,8 @@ ls -l ./*-*-mingw*.*
 cat hashes.txt
 cat "${_BLD}"
 
+# TODO: Move adding ${_REV} to the filename into _pack.sh.
+
 # Strip '-built-on-*' suffix for the single-file artifact,
 # and also add revision to filenames.
 for f in ./*-*-mingw*.*; do
@@ -26,7 +28,14 @@ mv -f hashes.txt.all hashes.txt
 
 # Create an artifact that includes all packages
 _ALL="all-mingw-${CURL_VER_}${_REV}.zip"
-zip --quiet -0 -X --latest-time "${_ALL}" ./*-*-mingw*.* hashes.txt "${_BLD}" "${_LOG}"
+{
+  ls -l ./*-*-mingw*.*
+  echo 'hashes.txt'
+  echo "${_BLD}"
+  echo "${_LOG}"
+} | sort | \
+zip --quiet -0 -X -@ - > "${_ALL}"
+zip --latest-time "${_ALL}"
 
 openssl dgst -sha256 "${_ALL}" | tee    "${_ALL}.txt"
 openssl dgst -sha512 "${_ALL}" | tee -a "${_ALL}.txt"
