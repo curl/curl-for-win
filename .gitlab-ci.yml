@@ -4,12 +4,12 @@
 variables:
   GIT_STRATEGY: fetch
   GIT_DEPTH: "8"
+  DO_NOT_TRACK: 1
 
 build:
   image: debian:testing
   variables:
     CC: mingw-clang
-    DO_NOT_TRACK: 1
   script:
     - docker images --digests
     - ./_ci-linux-debian.sh
