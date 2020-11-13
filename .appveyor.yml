@@ -28,6 +28,7 @@ environment:
   DEPLOY_GPG_PASS:
     secure: WHnaUtu4NM46WEgLhxUyPBShvzLNwRoR5v0Z3+/UqM0nMzrUGieb+tJKX/AZLFkx
   CC: mingw-clang
+  DO_NOT_TRACK: 1
 build_script:
   - sh: |
       export DOCKER_IMAGE='debian:testing'
@@ -35,7 +36,7 @@ build_script:
       docker images --digests
       time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
         --env-file <(env | grep -a -E \
-          '^(CC|VIRUSTOTAL_|CODESIGN_|PACKSIGN_|DEPLOY_|APPVEYOR_|GITLAB_|CI_)') \
+          '^(CC|DO_NOT_TRACK|VIRUSTOTAL_|CODESIGN_|PACKSIGN_|DEPLOY_|APPVEYOR_|GITLAB_|CI_)') \
         "${DOCKER_IMAGE}" \
         sh -c ./_ci-linux-debian.sh
 artifacts:

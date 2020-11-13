@@ -9,6 +9,7 @@ build:
   image: debian:testing
   variables:
     CC: mingw-clang
+    DO_NOT_TRACK: 1
   script:
     - docker images --digests
     - ./_ci-linux-debian.sh
