@@ -101,7 +101,6 @@
 # Live build logs
 
   <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master>
-  (Image: Ubuntu)
 
 # Guarantees and Liability
 
