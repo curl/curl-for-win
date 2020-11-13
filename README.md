@@ -59,8 +59,8 @@
     updates.
   - Patching policy: No locally maintained patches. Patches are only
     applied locally if already merged upstream or &mdash; in case it's
-    necessary for a successful build &mdash; had them submitted upstream
-    with fair confidence of getting accepted.
+    necessary for a successful build &mdash; had them submitted upstream with
+    fair confidence of getting accepted.
   - curl/libcurl are built in MultiSSL mode, with both OpenSSL and
     [Schannel](https://docs.microsoft.com/windows/win32/com/schannel)
     available as SSL backends.
@@ -69,8 +69,7 @@
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
   - If you need a download with a stable checksum, link to the penultimate
     version (or the revisioned binaries on the official download page).
-    Only the current latest versions are kept updated with newer
-    dependencies.
+    Only the current latest versions are kept updated with newer dependencies.
   - To verify the correct checksum for the latest build, you can look up the
     correct ones in the build log as they are generated. Watch for `master`
     branch job `Image: Ubuntu`, log lines starting with
