@@ -13,8 +13,8 @@
   - Packaging aims to follow popular binary releases found on the internet.
   - Both x64 and x86 packages are built using the same process.
   - Binary packages are downloadable in `.zip` and `.tar.xz` formats.<br>
-    `.xz` files and the resulting `.tar` archive can also be extracted using
-    [7-Zip](https://www.7-zip.org/) on Windows.
+    `.xz` files and the resulting `.tar` archive can be extracted using
+    [7-Zip](https://www.7-zip.org/).
   - Standalone `curl.exe` (only
     [`msvcrt.dll`](https://en.wikipedia.org/wiki/Microsoft_Windows_library_files#MSVCRT.DLL,_MSVCP*.DLL_and_CRTDLL.DLL)
     is
@@ -31,7 +31,7 @@
   - C compiler toolchain is latest MinGW-w64 (non-multilib, x64 and x86)
     either via [Homebrew](https://brew.sh/) (on macOS),
     [APT](https://en.wikipedia.org/wiki/APT_(Debian)) (on Debian via Docker)
-    or [MSYS2](https://www.msys2.org/) (on Windows).
+    or [MSYS2](https://www.msys2.org/).
     C compiler is [GCC](https://gcc.gnu.org/) or
     [LLVM/Clang](https://clang.llvm.org/) for projects supporting it.
   - Binaries are cross-built and published from Linux
