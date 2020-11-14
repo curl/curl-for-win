@@ -6,7 +6,7 @@
 
   - **DEPRECATION NOTE: Our `bintray.com` repositories for binary downloads
     will no longer be updated and the archive will be deleted on 2021-03-01.
-    Please switch to the new, [official](#binary-package-downloads) URLs to
+    Please switch to the new, [official](#binary-package-download) URLs to
     download the latest or specific past versions. The versions offered there
     are all immune to [CVE-2019-5443](https://curl.se/docs/CVE-2019-5443.html),
     making this a good time to update to a recent, safe version.**
@@ -27,7 +27,7 @@
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the build
     [in public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master),
-    with open, auditable [build logs](#live-build-logs).
+    with open, auditable [build logs](#build-logs).
   - C compiler toolchain is latest MinGW-w64 (non-multilib, x64 and x86)
     either via [Homebrew](https://brew.sh/) (on macOS),
     [APT](https://en.wikipedia.org/wiki/APT_(Debian)) (on Debian via Docker)
@@ -84,7 +84,7 @@
     reproducibility. Signing is done using a custom patched `osslsigncode`
     build to enforce a stable non-trusted timestamp for reproducibility.
 
-# Binary package downloads
+# Binary package download
 
   * Official page, latest version:<br>
     <https://curl.se/windows/>
@@ -98,7 +98,7 @@
     > They will not be updated anymore and the archive will be deleted on
     > 2021-03-01.**
 
-# Live build logs
+# Build logs
 
   <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master>
 
