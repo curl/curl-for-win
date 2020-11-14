@@ -96,7 +96,10 @@
     <br>Examples:
     <br><https://curl.se/windows/dl-7.73.0/>
     <br><https://curl.se/windows/dl-7.73.0_1/>
-    <br>(`bintray.com` downloads are deprecated and will not be updated anymore)
+
+    > **DEPRECATION NOTE: Our `bintray.com` downloads are deprecated.
+    > They will not be updated anymore and the archive will be deleted on
+    > 2021-03-01.**
 
 # Live build logs
 
