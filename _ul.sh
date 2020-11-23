@@ -26,7 +26,7 @@ mv -f hashes.txt.all hashes.txt
 # Create an artifact that includes all packages
 _ALL="all-mingw-${CURL_VER_}${_REV}.zip"
 {
-  ls -l ./*-*-mingw*.*
+  ls -1 ./*-*-mingw*.*
   echo 'hashes.txt'
   echo "${_BLD}"
   echo "${_LOG}"
