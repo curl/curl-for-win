@@ -6,7 +6,7 @@
 pacman --noconfirm --ask 20 --noprogressbar --sync --refresh --sysupgrade --sysupgrade
 pacman --noconfirm --ask 20 --noprogressbar --sync --refresh --sysupgrade --sysupgrade
 pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
-  mingw-w64-{i686,x86_64}-{cmake,jq,python3-pip} \
+  mingw-w64-{i686,x86_64}-{cmake,jq,python3-pip,rsync} \
   zip zstd
 
 [ "${CC}" = 'mingw-clang' ] && \
