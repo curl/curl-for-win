@@ -16,7 +16,8 @@ cat "${_BLD}"
 
 # Strip '-built-on-*' suffix for the single-file artifact.
 for f in ./*-*-mingw*.*; do
-  mv -f "${f}" "$(echo "${f}" | sed 's|-built-on-[^.]*||g')"
+  new="$(echo "${f}" | sed 's|-built-on-[^.]*||g')"
+  [ "${f}" = "${new}" ] || mv -f "${f}" "${new}"
 done
 
 sed 's|-built-on-[^.]*||g' hashes.txt | sort > hashes.txt.all
