@@ -145,13 +145,13 @@ _cpu="$2"
   ../_peclean.py "${_ref}" "${_pkg}"/bin/openssl.exe
   ../_peclean.py "${_ref}" "${_pkg}"/bin/*.dll
 
-  ../_signcode.sh "${_ref}" "${_pkg}"/bin/openssl.exe
-  ../_signcode.sh "${_ref}" "${_pkg}"/bin/*.dll
+  ../_sign-code.sh "${_ref}" "${_pkg}"/bin/openssl.exe
+  ../_sign-code.sh "${_ref}" "${_pkg}"/bin/*.dll
 
   if ls "${_pkg}"/lib/engines*/*.dll >/dev/null 2>&1; then
     ../_peclean.py "${_ref}" "${_pkg}"/lib/engines*/*.dll
 
-    ../_signcode.sh "${_ref}" "${_pkg}"/lib/engines*/*.dll
+    ../_sign-code.sh "${_ref}" "${_pkg}"/lib/engines*/*.dll
   fi
 
   touch -c -r "${_ref}" "${_pks}"/ct_log_list.cnf

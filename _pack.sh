@@ -81,7 +81,7 @@ create_pack() {
 
   # Sign releases only
   if [ -z "${_suf}" ]; then
-    ./_signpack.sh "${_pkg}"
+    ./_sign-pack.sh "${_pkg}"
   fi
 
   # Upload master builds to VirusTotal

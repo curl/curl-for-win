@@ -125,7 +125,7 @@ _cpu="$2"
 
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.dll
 
-  ../_signcode.sh "${_ref}" ${_pkg}/bin/*.dll
+  ../_sign-code.sh "${_ref}" ${_pkg}/bin/*.dll
 
   touch -c -r "${_ref}" ${_pkg}/bin/*.dll
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
