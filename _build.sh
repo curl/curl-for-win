@@ -63,7 +63,7 @@ rm -f "${_BLD}"
 . ./_dl.sh || exit 1
 
 # Decrypt package signing key
-PACKSIGN_KEY='sign-pack.gpg.asc'
+PACKSIGN_KEY='sign-pkg.gpg.asc'
 if [ -f "${PACKSIGN_KEY}" ] && [ "${PACKSIGN_KEY_ID}" ]; then
 (
   set +x

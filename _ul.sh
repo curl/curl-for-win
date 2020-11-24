@@ -38,7 +38,7 @@ zip --latest-time "${_ALL}"
 openssl dgst -sha256 "${_ALL}" | tee    "${_ALL}.txt"
 openssl dgst -sha512 "${_ALL}" | tee -a "${_ALL}.txt"
 
-./_sign-pack.sh "${_ALL}"
+./_sign-pkg.sh "${_ALL}"
 
 # Official deploy
 if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
