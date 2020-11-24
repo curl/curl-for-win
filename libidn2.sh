@@ -106,5 +106,5 @@ _cpu="$2"
 
   unix2dos --quiet --keepdate "${_DST}"/*.txt
 
-# ../_pack.sh "$(pwd)/${_ref}"
+# ../_pkg.sh "$(pwd)/${_ref}"
 )
