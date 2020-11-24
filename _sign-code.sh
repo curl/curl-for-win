@@ -3,7 +3,7 @@
 # Copyright 2016-present Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
-if [ -f "${CODESIGN_KEY}" ] && \
+if [ -f "${SIGN_CODE_KEY}" ] && \
    ls "$(dirname "$0")/osslsigncode-local"* >/dev/null 2>&1; then
 
   _ref="$1"
@@ -23,7 +23,7 @@ if [ -f "${CODESIGN_KEY}" ] && \
     "$(dirname "$0")/osslsigncode-local" sign -h sha256 \
       -in "${file}" -out "${file}-signed" \
       -st "${unixts}" \
-      -pkcs12 "${CODESIGN_KEY}" -pass "${CODESIGN_KEY_PASS}"
+      -pkcs12 "${SIGN_CODE_KEY}" -pass "${SIGN_CODE_KEY_PASS}"
     mv -f "${file}-signed" "${file}"
   )
   done

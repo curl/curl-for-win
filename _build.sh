@@ -73,20 +73,20 @@ if [ -f "${SIGN_PKG_KEY}" ] && [ "${SIGN_PKG_KEY_ID}" ]; then
 fi
 
 # decrypt code signing key
-export CODESIGN_KEY=
-CODESIGN_KEY="$(realpath '.')/sign-code.p12"
-if [ -f "${CODESIGN_KEY}.asc" ]; then
+export SIGN_CODE_KEY=
+SIGN_CODE_KEY="$(realpath '.')/sign-code.p12"
+if [ -f "${SIGN_CODE_KEY}.asc" ]; then
 (
   set +x
-  if [ -n "${CODESIGN_GPG_PASS}" ]; then
-    install -m 600 /dev/null "${CODESIGN_KEY}"
-    gpg --batch --passphrase "${CODESIGN_GPG_PASS}" --decrypt "${CODESIGN_KEY}.asc" >> "${CODESIGN_KEY}"
+  if [ -n "${SIGN_CODE_GPG_PASS}" ]; then
+    install -m 600 /dev/null "${SIGN_CODE_KEY}"
+    gpg --batch --passphrase "${SIGN_CODE_GPG_PASS}" --decrypt "${SIGN_CODE_KEY}.asc" >> "${SIGN_CODE_KEY}"
   fi
 )
 fi
-[ -f "${CODESIGN_KEY}" ] || unset CODESIGN_KEY
+[ -f "${SIGN_CODE_KEY}" ] || unset SIGN_CODE_KEY
 
-if [ -f "${CODESIGN_KEY}" ]; then
+if [ -f "${SIGN_CODE_KEY}" ]; then
   # build a patched binary of osslsigncode
   ./osslsigncode.sh
 fi
@@ -189,7 +189,7 @@ build_single_target() {
   echo ".gcc-mingw-w64-${_machine} $(${_CCPREFIX}gcc -dumpversion)" >> "${_BLD}"
   echo ".binutils-mingw-w64-${_machine} $(${_CCPREFIX}ar V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')" >> "${_BLD}"
 
-  command -v "$(dirname "$0")/osslsigncode-local" >/dev/null 2>&1 || unset CODESIGN_KEY
+  command -v "$(dirname "$0")/osslsigncode-local" >/dev/null 2>&1 || unset SIGN_CODE_KEY
 
   time ./zlib.sh       "${ZLIB_VER_}" "${_cpu}"
   time ./zstd.sh       "${ZSTD_VER_}" "${_cpu}"

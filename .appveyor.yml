@@ -16,9 +16,9 @@ build:
 environment:
   VIRUSTOTAL_APIKEY:
     secure: 9SXnYhOkq6CP97zQ+dUc+NzKpKVIoVACMi0wwtLkaUv9y8BimLo5B7XSWBQ9lYwKbQY8JSJ10JFtyxrKRN6O0PK5U7i6bhg4/B6c40ieHHw=
-  CODESIGN_GPG_PASS:
+  SIGN_CODE_GPG_PASS:
     secure: N+xoeCLwFHPsb/KBdgOIvJ0NnbVrBI/PLcPkPBTBmedgDVUBlbEZu7HrJcEHNyuR
-  CODESIGN_KEY_PASS:
+  SIGN_CODE_KEY_PASS:
     secure: vvbDZUlaB2WICMOD2zqO3MyPRpy3S06hE3ShA0q+YXWDdj4GX+am+RepjZIlpxtB
   SIGN_PKG_KEY_ID: 002C168965BAC2202118408B4ED85DF9BB3D0DE8
   SIGN_PKG_GPG_PASS:
@@ -36,7 +36,7 @@ build_script:
       docker images --digests
       time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
         --env-file <(env | grep -a -E \
-          '^(CC|DO_NOT_TRACK|VIRUSTOTAL_|CODESIGN_|SIGN_PKG_|DEPLOY_|APPVEYOR_|GITLAB_|CI_)') \
+          '^(CC|DO_NOT_TRACK|VIRUSTOTAL_|SIGN_CODE_|SIGN_PKG_|DEPLOY_|APPVEYOR_|GITLAB_|CI_)') \
         "${DOCKER_IMAGE}" \
         sh -c ./_ci-linux-debian.sh
 artifacts:
