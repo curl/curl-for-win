@@ -32,7 +32,7 @@ find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' \;
 # NOTE: This isn't effective on MSYS2
 find "${_DST}" \( -name '*.exe' -o -name '*.dll' -o -name '*.a' \) -exec chmod a-x {} +
 
-create_pack() {
+create_pkg() {
   arch_ext="$2"
 
   # Alter filename for non-release packages
@@ -125,8 +125,8 @@ create_pack() {
   fi
 }
 
-create_pack "$1" '.tar.xz'
-create_pack "$1" '.zip'
+create_pkg "$1" '.tar.xz'
+create_pkg "$1" '.zip'
 
 ver="${_NAM} ${_VER}"
 if ! grep -q -a -F "${ver}" -- "${_BLD}"; then
