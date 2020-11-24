@@ -48,6 +48,7 @@ if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
   if [ -f "${DEPLOY_KEY}" ]; then
     echo "Uploading: '${_ALL}'"
     rsync \
+      --checksum \
       --archive \
       --rsh "ssh \
         -i '${DEPLOY_KEY}' \
