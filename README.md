@@ -16,7 +16,7 @@
     `.xz` files and the resulting `.tar` archive can be extracted using
     [7-Zip](https://www.7-zip.org/).
   - Binary packages are signed with PGP key [EXPERIMENTAL]:
-    <https://raw.githubusercontent.com/curl/curl-for-win/master/sign-pkg-public.asc>
+    <br><https://raw.githubusercontent.com/curl/curl-for-win/master/sign-pkg-public.asc>
     <br>`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`
   - Standalone `curl.exe` (only
     [`msvcrt.dll`](https://en.wikipedia.org/wiki/Microsoft_Windows_library_files#MSVCRT.DLL,_MSVCP*.DLL_and_CRTDLL.DLL)
