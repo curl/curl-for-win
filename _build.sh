@@ -63,7 +63,7 @@ rm -f "${_BLD}"
 . ./_dl.sh || exit 1
 
 # Decrypt package signing key
-PACKSIGN_KEY='signpack.gpg.asc'
+PACKSIGN_KEY='sign-pack.gpg.asc'
 if [ -f "${PACKSIGN_KEY}" ] && [ "${PACKSIGN_KEY_ID}" ]; then
 (
   set +x
@@ -74,7 +74,7 @@ fi
 
 # decrypt code signing key
 export CODESIGN_KEY=
-CODESIGN_KEY="$(realpath '.')/signcode.p12"
+CODESIGN_KEY="$(realpath '.')/sign-code.p12"
 if [ -f "${CODESIGN_KEY}.asc" ]; then
 (
   set +x
