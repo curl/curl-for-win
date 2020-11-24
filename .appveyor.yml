@@ -20,10 +20,10 @@ environment:
     secure: N+xoeCLwFHPsb/KBdgOIvJ0NnbVrBI/PLcPkPBTBmedgDVUBlbEZu7HrJcEHNyuR
   CODESIGN_KEY_PASS:
     secure: vvbDZUlaB2WICMOD2zqO3MyPRpy3S06hE3ShA0q+YXWDdj4GX+am+RepjZIlpxtB
-  PACKSIGN_KEY_ID: 002C168965BAC2202118408B4ED85DF9BB3D0DE8
-  PACKSIGN_GPG_PASS:
+  SIGN_PKG_KEY_ID: 002C168965BAC2202118408B4ED85DF9BB3D0DE8
+  SIGN_PKG_GPG_PASS:
     secure: YlApXMCfpUnsOjXyLc9mgEnIoaUShFBc5dhHVOo6KpgSEmWpevGLWd0RDORsD9ex
-  PACKSIGN_KEY_PASS:
+  SIGN_PKG_KEY_PASS:
     secure: 9FJBUF1mskStuU+7o9r6hsQub+XWNiXWtznlEYbFzv2Gl7bneSt44KBrstMLTDUj
   DEPLOY_GPG_PASS:
     secure: WHnaUtu4NM46WEgLhxUyPBShvzLNwRoR5v0Z3+/UqM0nMzrUGieb+tJKX/AZLFkx
@@ -36,7 +36,7 @@ build_script:
       docker images --digests
       time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
         --env-file <(env | grep -a -E \
-          '^(CC|DO_NOT_TRACK|VIRUSTOTAL_|CODESIGN_|PACKSIGN_|DEPLOY_|APPVEYOR_|GITLAB_|CI_)') \
+          '^(CC|DO_NOT_TRACK|VIRUSTOTAL_|CODESIGN_|SIGN_PKG_|DEPLOY_|APPVEYOR_|GITLAB_|CI_)') \
         "${DOCKER_IMAGE}" \
         sh -c ./_ci-linux-debian.sh
 artifacts:

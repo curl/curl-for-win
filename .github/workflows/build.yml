@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 8
       - name: build
         env:
-          PACKSIGN_KEY_ID: 002C168965BAC2202118408B4ED85DF9BB3D0DE8
+          SIGN_PKG_KEY_ID: 002C168965BAC2202118408B4ED85DF9BB3D0DE8
           CC: mingw-clang
           DO_NOT_TRACK: 1
         run: |
@@ -27,6 +27,6 @@ jobs:
           docker images --digests
           time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CC|DO_NOT_TRACK|VIRUSTOTAL_|CODESIGN_|PACKSIGN_|DEPLOY_|GITHUB_)') \
+              '^(CC|DO_NOT_TRACK|VIRUSTOTAL_|CODESIGN_|SIGN_PKG_|DEPLOY_|GITHUB_)') \
             "${DOCKER_IMAGE}" \
             sh -c ./_ci-linux-debian.sh

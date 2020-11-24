@@ -63,11 +63,11 @@ rm -f "${_BLD}"
 . ./_dl.sh || exit 1
 
 # Decrypt package signing key
-PACKSIGN_KEY='sign-pkg.gpg.asc'
-if [ -f "${PACKSIGN_KEY}" ] && [ "${PACKSIGN_KEY_ID}" ]; then
+SIGN_PKG_KEY='sign-pkg.gpg.asc'
+if [ -f "${SIGN_PKG_KEY}" ] && [ "${SIGN_PKG_KEY_ID}" ]; then
 (
   set +x
-  gpg --batch --quiet --passphrase "${PACKSIGN_GPG_PASS}" --decrypt "${PACKSIGN_KEY}" | \
+  gpg --batch --quiet --passphrase "${SIGN_PKG_GPG_PASS}" --decrypt "${SIGN_PKG_KEY}" | \
   gpg --batch --quiet --import
 )
 fi
