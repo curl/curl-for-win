@@ -19,8 +19,8 @@ export NGTCP2_VER_='0.1.90'
 export NGTCP2_HASH=
 export CARES_VER_='1.17.1'
 export CARES_HASH=d73dd0f6de824afd407ce10750ea081af47eba52b8a6cb307d220131ad93fc40
-export OPENSSL_VER_='1.1.1h'
-export OPENSSL_HASH=5c9ca8774bd7b03e5784f26ae9e9e6d749c9da2438545077e6b3d755a06595d9
+export OPENSSL_VER_='1.1.1i'
+export OPENSSL_HASH=e8be6a35fe41d10603c3cc635e93289ed00bf34b79671a3a4de64fcee00d5242
 export LIBSSH2_VER_='1.9.0'
 export LIBSSH2_HASH=d5fb8bd563305fd1074dda90bd053fb2d29fc4bce048d182f96eaa466dfadafd
 export CURL_VER_='7.73.0'
@@ -32,7 +32,7 @@ export OSSLSIGNCODE_HASH=c512931b6fe151297a1c689f88501e20ffc204c4ffe30e7392eb3de
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the master branch.
-export _REV='5'
+export _REV='6'
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
@@ -145,7 +145,7 @@ fi
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   OPENSSL_VER_='1.1.1-pre1'
   curl --location --proto-redir =https \
-    --output pkg.bin 'https://www.openssl.org/source/openssl-1.1.1-pre1.tar.gz' || exit 1
+    --output pkg.bin 'https://www.openssl.org/source/openssl-3.0.0-alpha9.tar.gz' || exit 1
 else
   curl \
     --output pkg.bin "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz" \
