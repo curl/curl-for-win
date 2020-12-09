@@ -121,8 +121,6 @@ _cpu="$2"
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGHTTP3_STATICLIB"
     export NGTCP2_PATH=../../ngtcp2/pkg/usr/local
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGTCP2_STATICLIB"
-    # TODO: Remove with curl 7.74.0
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUSE_ALTSVC=1"
   fi
   if [ -d ../c-ares ]; then
     options="${options}-ares"
