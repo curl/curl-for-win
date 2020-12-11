@@ -60,7 +60,7 @@ gpg_recv_key() {
   curl "https://keyserver.ubuntu.com/${req}" | gpg --import --status-fd 1
 }
 
-gpg --version | grep -a gpg
+gpg --version | grep -a -F gpg
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   _patsuf='.dev'
@@ -72,7 +72,7 @@ fi
 
 # zlib
 curl --output pkg.bin --location --proto-redir =https "https://github.com/madler/zlib/archive/v${ZLIB_VER_}.tar.gz" || exit 1
-openssl dgst -sha256 pkg.bin | grep -q -a "${ZLIB_HASH}" || exit 1
+openssl dgst -sha256 pkg.bin | grep -q -a -F "${ZLIB_HASH}" || exit 1
 tar -xf pkg.bin || exit 1
 rm pkg.bin
 rm -r -f zlib && mv zlib-* zlib
@@ -80,7 +80,7 @@ rm -r -f zlib && mv zlib-* zlib
 
 # zstd
 curl --output pkg.bin --location --proto-redir =https "https://github.com/facebook/zstd/releases/download/v${ZSTD_VER_}/zstd-${ZSTD_VER_}.tar.zst" || exit 1
-openssl dgst -sha256 pkg.bin | grep -q -a "${ZSTD_HASH}" || exit 1
+openssl dgst -sha256 pkg.bin | grep -q -a -F "${ZSTD_HASH}" || exit 1
 tar -xf pkg.bin || exit 1
 rm pkg.bin
 rm -r -f zstd && mv zstd-* zstd
@@ -91,7 +91,7 @@ rm -r -f zstd && mv zstd-* zstd
 if [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
   # brotli
   curl --output pkg.bin --location --proto-redir =https "https://github.com/google/brotli/archive/v${BROTLI_VER_}.tar.gz" || exit 1
-  openssl dgst -sha256 pkg.bin | grep -q -a "${BROTLI_HASH}" || exit 1
+  openssl dgst -sha256 pkg.bin | grep -q -a -F "${BROTLI_HASH}" || exit 1
   tar -xf pkg.bin || exit 1
   rm pkg.bin
   rm -r -f brotli && mv brotli-* brotli
@@ -100,7 +100,7 @@ fi
 
 # nghttp2
 curl --output pkg.bin --location --proto-redir =https "https://github.com/nghttp2/nghttp2/releases/download/v${NGHTTP2_VER_}/nghttp2-${NGHTTP2_VER_}.tar.xz" || exit 1
-openssl dgst -sha256 pkg.bin | grep -q -a "${NGHTTP2_HASH}" || exit 1
+openssl dgst -sha256 pkg.bin | grep -q -a -F "${NGHTTP2_HASH}" || exit 1
 tar -xf pkg.bin || exit 1
 rm pkg.bin
 rm -r -f nghttp2 && mv nghttp2-* nghttp2
@@ -115,7 +115,7 @@ if [ "${_BRANCH#*libidn2*}" != "${_BRANCH}" ]; then
   curl 'https://ftp.gnu.org/gnu/gnu-keyring.gpg' \
   | gpg --quiet --import 2>/dev/null
   gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-  openssl dgst -sha256 pkg.bin | grep -q -a "${LIBIDN2_HASH}" || exit 1
+  openssl dgst -sha256 pkg.bin | grep -q -a -F "${LIBIDN2_HASH}" || exit 1
   tar -xf pkg.bin || exit 1
   rm pkg.bin
   rm -r -f libidn2 && mv libidn2-* libidn2
@@ -133,7 +133,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
       --output pkg.sig --location --proto-redir =https "https://github.com/c-ares/c-ares/releases/download/cares-$(echo "${CARES_VER_}" | tr '.' '_')/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
     gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
     gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-    openssl dgst -sha256 pkg.bin | grep -q -a "${CARES_HASH}" || exit 1
+    openssl dgst -sha256 pkg.bin | grep -q -a -F "${CARES_HASH}" || exit 1
   fi
   tar -xf pkg.bin || exit 1
   rm pkg.bin
@@ -156,7 +156,7 @@ else
   gpg_recv_key 8657ABB260F056B1E5190839D9C4D26D0E604491
   gpg_recv_key 7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C
   gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-  openssl dgst -sha256 pkg.bin | grep -q -a "${OPENSSL_HASH}" || exit 1
+  openssl dgst -sha256 pkg.bin | grep -q -a -F "${OPENSSL_HASH}" || exit 1
 fi
 tar -xf pkg.bin || exit 1
 rm pkg.bin
@@ -174,7 +174,7 @@ else
     --output pkg.sig --location --proto-redir =https "https://github.com/libssh2/libssh2/releases/download/libssh2-${LIBSSH2_VER_}/libssh2-${LIBSSH2_VER_}.tar.gz.asc" || exit 1
   gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-  openssl dgst -sha256 pkg.bin | grep -q -a "${LIBSSH2_HASH}" || exit 1
+  openssl dgst -sha256 pkg.bin | grep -q -a -F "${LIBSSH2_HASH}" || exit 1
 fi
 tar -xf pkg.bin || exit 1
 rm pkg.bin
@@ -192,7 +192,7 @@ else
     --output pkg.sig --location --proto-redir =https "https://curl.se/download/curl-${CURL_VER_}.tar.xz.asc" || exit 1
   gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-  openssl dgst -sha256 pkg.bin | grep -q -a "${CURL_HASH}" || exit 1
+  openssl dgst -sha256 pkg.bin | grep -q -a -F "${CURL_HASH}" || exit 1
 fi
 tar -xf pkg.bin || exit 1
 rm pkg.bin
@@ -201,7 +201,7 @@ rm -r -f curl && mv curl-7* curl
 
 # osslsigncode
 curl --output pkg.bin --location --proto-redir =https "https://github.com/mtrojnar/osslsigncode/releases/download/2.1/osslsigncode-${OSSLSIGNCODE_VER_}.tar.gz" || exit 1
-openssl dgst -sha256 pkg.bin | grep -q -a "${OSSLSIGNCODE_HASH}" || exit 1
+openssl dgst -sha256 pkg.bin | grep -q -a -F "${OSSLSIGNCODE_HASH}" || exit 1
 tar -xf pkg.bin || exit 1
 rm pkg.bin
 rm -r -f osslsigncode && mv osslsigncode-* osslsigncode
