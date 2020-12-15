@@ -24,8 +24,8 @@
     [required](https://devblogs.microsoft.com/oldnewthing/?p=1273)).
   - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2)
     support enabled.
-  - curl/libcurl features enabled by default:
-    <br>`dict file ftp ftps gopher http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
+  - curl/libcurl features enabled by default (`{upcoming}`):
+    <br>`dict file ftp ftps gopher {gophers} http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
     <br>`AsynchDNS HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile MultiSSL NTLM SPNEGO SSL SSPI TLS-SRP Unicode UnixSockets alt-svc brotli libz zstd`
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the build
