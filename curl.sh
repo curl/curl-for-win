@@ -203,6 +203,7 @@ _cpu="$2"
   "${_CCPREFIX}objdump" --all-headers lib/*.dll | grep -a -E -i "(file format|dll name)"
 
   ${_WINE} src/curl.exe --version
+  ${_WINE} src/curl.exe --dump-module-paths
 
   # Create package
 
