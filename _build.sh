@@ -25,8 +25,8 @@ elif [ -n "${GITHUB_RUN_ID}" ]; then
   # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
   _LOGURL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 else
-  # TODO: https://docs.gitlab.com/ce/ci/variables/README.html
-  _LOGURL=''
+  # https://docs.gitlab.com/ce/ci/variables/README.html
+  _LOGURL="https://gitlab.com/${CI_PROJECT_PATH}/-/jobs/${CI_JOB_ID}/raw"
 fi
 echo "${_LOGURL}" | tee "${_LOG}"
 
