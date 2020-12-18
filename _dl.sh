@@ -64,7 +64,7 @@ gpg --version | grep -a -F gpg
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   _patsuf='.dev'
-elif [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
+elif [ "${_BRANCH#*master*}" = "${_BRANCH}" ] && [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
   _patsuf='.test'
 else
   _patsuf=''

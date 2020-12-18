@@ -41,25 +41,26 @@ openssl dgst -sha512 "${_ALL}" | tee -a "${_ALL}.txt"
 ./_sign-pkg.sh "${_ALL}"
 
 # Official deploy
-if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] && \
-   [ "${PUBLISH_PROD_FROM}" = "${_OS}" ]; then
-(
-  set +x
-  if [ -f "${DEPLOY_KEY}" ]; then
-    echo "Uploading: '${_ALL}'"
-    rsync \
-      --checksum \
-      --archive \
-      --rsh "ssh \
-        -i '${DEPLOY_KEY}' \
-        -o BatchMode=yes \
-        -o StrictHostKeyChecking=yes \
-        -o ConnectTimeout=20 \
-        -o ConnectionAttempts=5" \
-      "${_ALL}" \
-      "${_ALL}.asc" \
-      "${_ALL}.txt" \
-      'curl-for-win@silly.haxx.se:.'
+if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ]; then
+  if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] || [ "${_BRANCH#*main*}" != "${_BRANCH}" ]; then
+  (
+    set +x
+    if [ -f "${DEPLOY_KEY}" ]; then
+      echo "Uploading: '${_ALL}'"
+      rsync \
+        --checksum \
+        --archive \
+        --rsh "ssh \
+          -i '${DEPLOY_KEY}' \
+          -o BatchMode=yes \
+          -o StrictHostKeyChecking=yes \
+          -o ConnectTimeout=20 \
+          -o ConnectionAttempts=5" \
+        "${_ALL}" \
+        "${_ALL}.asc" \
+        "${_ALL}.txt" \
+        'curl-for-win@silly.haxx.se:.'
+    fi
+  )
   fi
-)
 fi

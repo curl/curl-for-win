@@ -46,7 +46,7 @@ _cpu="$2"
     [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
     _LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
     [ "${_cpu}" = '64' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
-    if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
+    if [ "${_BRANCH#*master*}" = "${_BRANCH}" ] && [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
       _LDFLAGS="${_LDFLAGS} -Wl,-Map,libssh2.map"
     fi
 
@@ -131,7 +131,7 @@ _cpu="$2"
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
   touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
 
-  if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*master*}" = "${_BRANCH}" ] && [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     touch -c -r "${_ref}" ${_pkg}/bin/*.map
     touch -c -r "${_ref}" ${_pkg}/bin/*.def || true
   fi
@@ -173,7 +173,7 @@ _cpu="$2"
   # OpenSSL 1.x
   [ -d ../openssl ] && [ -f ../openssl/LICENSE     ] && cp -f -p ../openssl/LICENSE     "${_DST}/COPYING-openssl.txt"
 
-  if [ "${_BRANCH#*master*}" = "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*master*}" = "${_BRANCH}" ] && [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     cp -f -p ${_pkg}/bin/*.map   "${_DST}/bin/"
     cp -f -p ${_pkg}/bin/*.def   "${_DST}/bin/" || true
   fi
