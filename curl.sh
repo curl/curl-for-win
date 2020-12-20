@@ -5,7 +5,7 @@
 
 export _NAM
 export _VER
-export _PKG
+export _OUT
 export _BAS
 export _DST
 
@@ -208,9 +208,9 @@ _cpu="$2"
 
   # Create package
 
-  _PKG="${_NAM}-${_VER}${_REV}-win${_cpu}-mingw"
+  _OUT="${_NAM}-${_VER}${_REV}-win${_cpu}-mingw"
   _BAS="${_NAM}-${_VER}-win${_cpu}-mingw"
-  [ -d ../brotli ] || _PKG="${_PKG}-nobrotli"
+  [ -d ../brotli ] || _OUT="${_OUT}-nobrotli"
   [ -d ../brotli ] || _BAS="${_BAS}-nobrotli"
   _DST="$(mktemp -d)/${_BAS}"
 

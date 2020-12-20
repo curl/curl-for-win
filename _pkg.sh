@@ -46,7 +46,7 @@ create_pkg() {
     _suf="-test-built-on-${_OS}"
   fi
 
-  _pkg="${_PKG}${_suf}${arch_ext}"
+  _pkg="${_OUT}${_suf}${arch_ext}"
 
   _FLS="$(dirname "$0")/_files"
 
