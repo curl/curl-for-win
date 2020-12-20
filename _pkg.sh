@@ -60,10 +60,11 @@ create_pkg() {
 
     rm -f "${_cdo}/${_pkg}"
     case "${arch_ext}" in
-      .tar.xz) tar --create --files-from "${_FLS}" \
+      .tar.xz) tar --create \
         --owner 0 --group 0 --numeric-owner --mode go=rX,u+rw,a-s \
-        | xz > "${_cdo}/${_pkg}";;
-      .zip)    zip --quiet --strip-extra -9 --names-stdin - < "${_FLS}" > "${_cdo}/${_pkg}";;
+        --files-from "${_FLS}" | xz > "${_cdo}/${_pkg}";;
+      .zip)    zip --quiet -9 --strip-extra \
+        --names-stdin - < "${_FLS}" > "${_cdo}/${_pkg}";;
       # Requires: p7zip (MSYS2, Homebrew, Linux rpm), p7zip-full (Linux deb)
       .7z)     7z a -bd -r -mx "${_cdo}/${_pkg}" "@${_FLS}" >/dev/null;;
     esac
