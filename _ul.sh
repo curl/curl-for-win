@@ -32,7 +32,7 @@ _ALL="all-mingw-${CURL_VER_}${_REV}.zip"
   echo "${_BLD}"
   echo "${_LOG}"
 } | sort | \
-zip --quiet -0 --strip-extra -@ - > "${_ALL}"
+zip --quiet -0 --strip-extra --names-stdin - > "${_ALL}"
 zip --latest-time "${_ALL}"
 
 openssl dgst -sha256 "${_ALL}" | tee    "${_ALL}.txt"

@@ -63,7 +63,7 @@ create_pkg() {
       .tar.xz) tar --create --files-from "${_FLS}" \
         --owner 0 --group 0 --numeric-owner --mode go=rX,u+rw,a-s \
         | xz > "${_cdo}/${_pkg}";;
-      .zip)    zip --quiet --strip-extra -9 -@ - < "${_FLS}" > "${_cdo}/${_pkg}";;
+      .zip)    zip --quiet --strip-extra -9 --names-stdin - < "${_FLS}" > "${_cdo}/${_pkg}";;
       # Requires: p7zip (MSYS2, Homebrew, Linux rpm), p7zip-full (Linux deb)
       .7z)     7z a -bd -r -mx "${_cdo}/${_pkg}" "@${_FLS}" >/dev/null;;
     esac
