@@ -6,7 +6,7 @@
 cd "$(dirname "$0")" || exit
 
 # Map tar to GNU tar, if it exists (e.g. on macOS)
-command -v gtar >/dev/null && alias tar=gtar
+command -v gtar >/dev/null 2>&1 && alias tar=gtar
 
 _cdo="$(pwd)"
 
