@@ -20,7 +20,7 @@ if [ -f "${SIGN_CODE_KEY}" ] && \
     echo "Code signing: '${file}'"
     set +x
     # -ts 'https://freetsa.org/tsr'
-    "$(dirname "$0")/osslsigncode-local" sign -h sha256 \
+    "$(dirname "$0")/osslsigncode-local" sign -h sha512 \
       -in "${file}" -out "${file}-signed" \
       -st "${unixts}" \
       -pkcs12 "${SIGN_CODE_KEY}" -pass "${SIGN_CODE_KEY_PASS}"
