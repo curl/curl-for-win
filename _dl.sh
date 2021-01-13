@@ -41,12 +41,9 @@ echo "Build: REV(${_REV})"
 # Quit if any of the lines fail
 set -e
 
-# Install required component
-# TODO: add `--progress-bar off` when pip 10.0.0 is available
-if [ "${_OS}" != 'win' ]; then
-  pip3 --version
-  pip3 --disable-pip-version-check --no-cache-dir install --user pefile
-fi
+# Install required component(s)
+pip3 --version
+pip3 --disable-pip-version-check --no-cache-dir install --user pefile
 
 alias curl='curl --user-agent curl --fail --silent --show-error --connect-timeout 15 --max-time 20 --retry 3'
 alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format long'
