@@ -154,7 +154,6 @@ build_single_target() {
     export _MAKE='mingw32-make'
 
     # Install required component
-    # TODO: add `--progress-bar off` when pip 10.0.0 is available
     pip3 --version
     pip3 --disable-pip-version-check --no-cache-dir install --user pefile
   else
