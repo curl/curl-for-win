@@ -9,6 +9,8 @@ export ZSTD_VER_='1.4.8'
 export ZSTD_HASH=c7ea10e20dd61b457220455e3cf553069987b968b7c63d1b9d46acbdb45623eb
 export BROTLI_VER_='1.0.9'
 export BROTLI_HASH=f9e8d81d0405ba66d181529af42a3354f838c939095ff99930da6aa9cdf6fe46
+export LIBGSASL_VER_='1.10.0'
+export LIBGSASL_VER_=f1b553384dedbd87478449775546a358d6f5140c15cccc8fb574136fdc77329f
 export LIBIDN2_VER_='2.3.0'
 export LIBIDN2_HASH=e1cb1db3d2e249a6a3eb6f0946777c2e892d5c5dc7bd91c74394fc3a01cab8b5
 export NGHTTP2_VER_='1.43.0'
@@ -105,14 +107,24 @@ rm pkg.bin
 rm -r -f nghttp2 && mv nghttp2-* nghttp2
 [ -f "nghttp2${_patsuf}.patch" ] && dos2unix < "nghttp2${_patsuf}.patch" | patch --batch -N -p1 -d nghttp2
 
+# libgsasl
+curl \
+  --output pkg.bin "https://ftp.gnu.org/gnu/gsasl/libgsasl-${LIBGSASL_VER_}.tar.gz" \
+  --output pkg.sig "https://ftp.gnu.org/gnu/gsasl/libgsasl-${LIBGSASL_VER_}.tar.gz.sig" || exit 1
+curl 'https://ftp.gnu.org/gnu/gnu-keyring.gpg' \
+| gpg --quiet --import 2>/dev/null
+gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
+openssl dgst -sha256 pkg.bin | grep -q -a -F "${LIBGSASL_HASH}" || exit 1
+tar -xf pkg.bin || exit 1
+rm pkg.bin
+rm -r -f libgsasl && mv libgsasl-* libgsasl
+
 # This significantly increases curl binary sizes, so leave it optional.
 if [ "${_BRANCH#*libidn2*}" != "${_BRANCH}" ]; then
   # libidn2
   curl \
     --output pkg.bin "https://ftp.gnu.org/gnu/libidn/libidn2-${LIBIDN2_VER_}.tar.gz" \
     --output pkg.sig "https://ftp.gnu.org/gnu/libidn/libidn2-${LIBIDN2_VER_}.tar.gz.sig" || exit 1
-  curl 'https://ftp.gnu.org/gnu/gnu-keyring.gpg' \
-  | gpg --quiet --import 2>/dev/null
   gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
   openssl dgst -sha256 pkg.bin | grep -q -a -F "${LIBIDN2_HASH}" || exit 1
   tar -xf pkg.bin || exit 1
