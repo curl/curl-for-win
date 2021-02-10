@@ -67,15 +67,16 @@ _cpu="$2"
     if [ "${_OS}" != 'win' ]; then
       export options="${options} --target=${_TRIPLET} --sysroot=${_SYSROOT}"
       [ "${_OS}" = 'linux' ] && options="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${options}"
-    # export LDFLAGS="--target=${_TRIPLET} --sysroot=${_SYSROOT} ${LDFLAGS}"
+    # export LDFLAGS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${LDFLAGS}"
     fi
     export AR=${_CCPREFIX}ar
     export NM=${_CCPREFIX}nm
     export RANLIB=${_CCPREFIX}ranlib
     export RC=${_CCPREFIX}windres
-    unset _CCPREFIX
+    _CONF_CCPREFIX=
   else
     unset CC
+    _CONF_CCPREFIX="${_CCPREFIX}"
   fi
 
   # Patch OpenSSL ./Configure to make it accept Windows-style absolute
@@ -109,7 +110,7 @@ _cpu="$2"
 
   # shellcheck disable=SC2086
   ./Configure-patched ${options} shared \
-    "--cross-compile-prefix=${_CCPREFIX}" \
+    "--cross-compile-prefix=${_CONF_CCPREFIX}" \
     -fno-ident \
     -Wl,--nxcompat -Wl,--dynamicbase \
     no-unit-test \
