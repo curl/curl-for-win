@@ -17,9 +17,6 @@ _cpu="$2"
 (
   cd "${_NAM}" || exit
 
-  # This is pretty much guesswork and this warning remains:
-  #    `configure: WARNING: using cross tools not prefixed with host triplet`
-  # Even with `_CCPREFIX` provided.
   if [ "${_OS}" != 'win' ]; then
 
     # https://clang.llvm.org/docs/CrossCompilation.html
@@ -43,7 +40,7 @@ _cpu="$2"
   # No success in convincing the build system to work correctly with clang:
   if [ "${CC}" = 'mingw-clang' ]; then
 
-    # Skip 'gltests' builds due to errors like this:
+    # Skip 'gltests' build due to errors like this:
     #   ./signal.h:922:3: error: unknown type name 'uid_t'; did you mean 'pid_t'?
     sed -i '' -E 's| gltests||g' ./Makefile.am
 
