@@ -153,7 +153,9 @@ _cpu="$2"
   # deleting their implibs:
   rm -f \
     '../libssh2/win32/libssh2.dll.a' \
-    '../libgsasl/pkg/usr/local/lib/libgsasl.dll.a'
+    '../libgsasl/pkg/usr/local/lib/libgsasl.dll.a' \
+    '../openssl/libcrypto.dll.a' \
+    '../openssl/libssl.dll.a'
 
   export CROSSPREFIX="${_CCPREFIX}"
 
