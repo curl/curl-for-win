@@ -36,6 +36,7 @@ _cpu="$2"
   rm -r -f pkg
 
   export LDFLAGS="-m${_cpu}"
+  unset ldonly
 
   # No success in convincing the build system to work correctly with clang:
   if [ "${CC}" = 'mingw-clang' ]; then
@@ -48,7 +49,7 @@ _cpu="$2"
     if [ "${_OS}" != 'win' ]; then
       export options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
       LDFLAGS="${LDFLAGS} -target ${_TRIPLET} --sysroot ${_SYSROOT}"
-      [ "${_OS}" = 'linux' ] && LDFLAGS="${LDFLAGS} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
+      [ "${_OS}" = 'linux' ] && ldonly="${ldonly} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
     fi
     export AR=${_CCPREFIX}ar
     export NM=${_CCPREFIX}nm
@@ -59,6 +60,7 @@ _cpu="$2"
   fi
 
   export CFLAGS="${LDFLAGS} -fno-ident"
+  LDFLAGS="${LDFLAGS}${ldonly}"
   [ "${_cpu}" = '32' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
   # shellcheck disable=SC2086
   ./configure ${options} \
