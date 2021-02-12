@@ -45,10 +45,10 @@ _cpu="$2"
     sed -i.bak -E 's| gltests||g' ./Makefile.am
 
     export CC='clang'
-    if [ "${os}" != 'win' ]; then
+    if [ "${_OS}" != 'win' ]; then
       export options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
       LDFLAGS="${LDFLAGS} -target ${_TRIPLET} --sysroot ${_SYSROOT}"
-      [ "${os}" = 'linux' ] && options="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${options}"
+      [ "${_OS}" = 'linux' ] && options="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${options}"
     fi
     export AR=${_CCPREFIX}ar
     export NM=${_CCPREFIX}nm
