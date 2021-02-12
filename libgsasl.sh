@@ -42,7 +42,7 @@ _cpu="$2"
 
     # Skip 'gltests' build due to errors like this:
     #   ./signal.h:922:3: error: unknown type name 'uid_t'; did you mean 'pid_t'?
-    sed -i '' -E 's| gltests||g' ./Makefile.am
+    sed -i.bak -E 's| gltests||g' ./Makefile.am
 
     export CC='clang'
     if [ "${os}" != 'win' ]; then
@@ -84,7 +84,7 @@ _cpu="$2"
   # libgsasl configure misdetects CC=clang as MSVC and then uses '.lib'
   # extension. So rename these to '.a':
   if [ -f "${_pkg}/lib/libgsasl.lib" ]; then
-    sed -i '' -E "s|\.lib'$|.a'|g" "${_pkg}/lib/libgsasl.la"
+    sed -i.bak -E "s|\.lib'$|.a'|g" "${_pkg}/lib/libgsasl.la"
     mv "${_pkg}/lib/libgsasl.lib" "${_pkg}/lib/libgsasl.a"
   fi
 
