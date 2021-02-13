@@ -138,7 +138,7 @@ esac
 _ori_path="${PATH}"
 
 build_single_target() {
-  _cpu="$1"
+  export _CPU="$1"
 
   export _TRIPLET=
   export _SYSROOT=
@@ -146,11 +146,11 @@ build_single_target() {
   export _MAKE='make'
   export _WINE=''
 
-  [ "${_cpu}" = '32' ] && _machine='i686'
-  [ "${_cpu}" = '64' ] && _machine='x86_64'
+  [ "${_CPU}" = '32' ] && _machine='i686'
+  [ "${_CPU}" = '64' ] && _machine='x86_64'
 
   if [ "${_OS}" = 'win' ]; then
-    export PATH="/mingw${_cpu}/bin:${_ori_path}"
+    export PATH="/mingw${_CPU}/bin:${_ori_path}"
     export _MAKE='mingw32-make'
 
     # Install required component
@@ -191,27 +191,23 @@ build_single_target() {
 
   command -v "$(dirname "$0")/osslsigncode-local" >/dev/null 2>&1 || unset SIGN_CODE_KEY
 
-  time ./zlib.sh         "${ZLIB_VER_}" "${_cpu}"
-  time ./zstd.sh         "${ZSTD_VER_}" "${_cpu}"
-  time ./brotli.sh     "${BROTLI_VER_}" "${_cpu}"
-  time ./libgsasl.sh "${LIBGSASL_VER_}" "${_cpu}"
-  time ./libidn2.sh   "${LIBIDN2_VER_}" "${_cpu}"
-  time ./c-ares.sh      "${CARES_VER_}" "${_cpu}"
-  time ./nghttp2.sh   "${NGHTTP2_VER_}" "${_cpu}"
-  time ./nghttp3.sh   "${NGHTTP3_VER_}" "${_cpu}"
-  time ./openssl.sh   "${OPENSSL_VER_}" "${_cpu}"
-  time ./ngtcp2.sh     "${NGTCP2_VER_}" "${_cpu}"
-  time ./libssh2.sh   "${LIBSSH2_VER_}" "${_cpu}"
-  time ./curl.sh         "${CURL_VER_}" "${_cpu}"
+  time ./zlib.sh         "${ZLIB_VER_}"
+  time ./zstd.sh         "${ZSTD_VER_}"
+  time ./brotli.sh     "${BROTLI_VER_}"
+  time ./libgsasl.sh "${LIBGSASL_VER_}"
+  time ./libidn2.sh   "${LIBIDN2_VER_}"
+  time ./c-ares.sh      "${CARES_VER_}"
+  time ./nghttp2.sh   "${NGHTTP2_VER_}"
+  time ./nghttp3.sh   "${NGHTTP3_VER_}"
+  time ./openssl.sh   "${OPENSSL_VER_}"
+  time ./ngtcp2.sh     "${NGTCP2_VER_}"
+  time ./libssh2.sh   "${LIBSSH2_VER_}"
+  time ./curl.sh         "${CURL_VER_}"
 }
 
 # Build binaries
-if [ -n "${CPU}" ]; then
-  build_single_target "${CPU}"
-else
   build_single_target 64
   build_single_target 32
-fi
 
 # Upload/deploy binaries
 . ./_ul.sh || exit 1

@@ -12,7 +12,6 @@ export _DST
 _NAM="$(basename "$0")"
 _NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
 _VER="$1"
-_cpu="$2"
 
 (
   cd "${_NAM}" || exit
@@ -55,9 +54,9 @@ _cpu="$2"
   fi
 
   export CC="${_CCPREFIX}gcc -static-libgcc"
-  export LDFLAGS="-m${_cpu}"
+  export LDFLAGS="-m${_CPU}"
   export CFLAGS="${LDFLAGS} -fno-ident"
-  [ "${_cpu}" = '32' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
+  [ "${_CPU}" = '32' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
 
   # shellcheck disable=SC2086
   ./configure ${options} \
@@ -87,8 +86,8 @@ _cpu="$2"
 
   # Create package
 
-  _OUT="${_NAM}-${_VER}${_REV}-win${_cpu}-mingw"
-  _BAS="${_NAM}-${_VER}-win${_cpu}-mingw"
+  _OUT="${_NAM}-${_VER}${_REV}-win${_CPU}-mingw"
+  _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
   _DST="$(mktemp -d)/${_BAS}"
 
   mkdir -p "${_DST}/include/ngtcp2"

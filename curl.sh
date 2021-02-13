@@ -12,7 +12,6 @@ export _DST
 _NAM="$(basename "$0")"
 _NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
 _VER="$1"
-_cpu="$2"
 
 (
   cd "${_NAM}" || exit
@@ -37,17 +36,17 @@ _cpu="$2"
 
   options='mingw32-ipv6-sspi-ldaps-srp'
 
-  export ARCH="w${_cpu}"
+  export ARCH="w${_CPU}"
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
   # public libcurl functions being marked as 'exported'. It is useful to
   # avoid the chance of libcurl functions getting exported from final
   # binaries when linked against static libcurl lib.
   export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -DCURL_ENABLE_MQTT -fno-ident -DHAVE_ATOMIC -DUSE_HSTS'
-  [ "${_cpu}" = '32' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
+  [ "${_CPU}" = '32' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
   export CURL_LDFLAG_EXTRAS_EXE
   export CURL_LDFLAG_EXTRAS_DLL
-  if [ "${_cpu}" = '32' ]; then
+  if [ "${_CPU}" = '32' ]; then
     CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
   else
     CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
@@ -138,7 +137,7 @@ _cpu="$2"
     options="${options}-winidn"
   fi
 
-  if [ "${_cpu}" = '64' ]; then
+  if [ "${_CPU}" = '64' ]; then
     export CURL_DLL_SUFFIX=-x64
   fi
   export CURL_DLL_A_SUFFIX=.dll
@@ -216,8 +215,8 @@ _cpu="$2"
 
   # Create package
 
-  _OUT="${_NAM}-${_VER}${_REV}-win${_cpu}-mingw"
-  _BAS="${_NAM}-${_VER}-win${_cpu}-mingw"
+  _OUT="${_NAM}-${_VER}${_REV}-win${_CPU}-mingw"
+  _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
   [ -d ../brotli ] || _OUT="${_OUT}-nobrotli"
   [ -d ../brotli ] || _BAS="${_BAS}-nobrotli"
   _DST="$(mktemp -d)/${_BAS}"

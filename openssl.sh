@@ -12,7 +12,6 @@ export _DST
 _NAM="$(basename "$0")"
 _NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
 _VER="$1"
-_cpu="$2"
 
 (
   cd "${_NAM}" || exit 0
@@ -47,17 +46,17 @@ _cpu="$2"
   find . -name '*.exe' -delete
   find . -name '*.tmp' -delete
 
-  [ "${_cpu}" = '32' ] && options='mingw'
-  [ "${_cpu}" = '64' ] && options='mingw64'
+  [ "${_CPU}" = '32' ] && options='mingw'
+  [ "${_CPU}" = '64' ] && options='mingw64'
   if [ "${_BRANCH#*lto*}" != "${_BRANCH}" ]; then
     # Create a fixed seed based on the timestamp of the OpenSSL source package.
     options="${options} -flto -ffat-lto-objects -frandom-seed=${unixts}"
     # mingw64 build (as of mingw 5.2.0) will fail without the `no-asm` option.
-    [ "${_cpu}" = '64' ] && options="${options} no-asm"
+    [ "${_CPU}" = '64' ] && options="${options} no-asm"
   fi
   options="${options} no-filenames"
-  [ "${_cpu}" = '64' ] && options="${options} enable-ec_nistp_64_gcc_128 -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
-  [ "${_cpu}" = '32' ] && options="${options} -fno-asynchronous-unwind-tables"
+  [ "${_CPU}" = '64' ] && options="${options} enable-ec_nistp_64_gcc_128 -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
+  [ "${_CPU}" = '32' ] && options="${options} -fno-asynchronous-unwind-tables"
 
   if [ -f 'CHANGES.md' ] && [ "${CC}" = 'mingw-clang' ]; then
     # OpenSSL 3.x
@@ -179,8 +178,8 @@ _cpu="$2"
 
   # Create package
 
-  _OUT="${_NAM}-${_VER}${_REV}-win${_cpu}-mingw"
-  _BAS="${_NAM}-${_VER}-win${_cpu}-mingw"
+  _OUT="${_NAM}-${_VER}${_REV}-win${_CPU}-mingw"
+  _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
   _DST="$(mktemp -d)/${_BAS}"
 
   mkdir -p "${_DST}/include/openssl"
@@ -216,7 +215,7 @@ _cpu="$2"
   fi
 
   # Luckily, applink is not implemented for 64-bit mingw, omit this file then
-  [ "${_cpu}" = '32' ] && cp -f -p ms/applink.c "${_DST}/include/openssl/"
+  [ "${_CPU}" = '32' ] && cp -f -p ms/applink.c "${_DST}/include/openssl/"
 
   unix2dos --quiet --keepdate "${_DST}"/*.txt
 

@@ -12,7 +12,6 @@ export _DST
 _NAM="$(basename "$0")"
 _NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
 _VER="$1"
-_cpu="$2"
 
 (
   cd "${_NAM}" || exit
@@ -45,10 +44,10 @@ _cpu="$2"
   find . -name '*.pc'                  -delete
 
   # -D_LARGEFILE64_SOURCE=1 -D_LFS64_LARGEFILE=1
-  _CFLAGS="-m${_cpu} -fno-ident -target ${_TRIPLET}"
-  [ "${_cpu}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
+  _CFLAGS="-m${_CPU} -fno-ident -target ${_TRIPLET}"
+  [ "${_CPU}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
   _LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
-  [ "${_cpu}" = '64' ] && [ "${_CCVER}" -ge '05' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x153000000"
+  [ "${_CPU}" = '64' ] && [ "${_CCVER}" -ge '05' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x153000000"
 
   options=''
   options="${options} -DCMAKE_SYSTEM_NAME=Windows"
@@ -143,8 +142,8 @@ _cpu="$2"
 
   # Create package
 
-  _OUT="${_NAM}-${_VER}${_REV}-win${_cpu}-mingw"
-  _BAS="${_NAM}-${_VER}-win${_cpu}-mingw"
+  _OUT="${_NAM}-${_VER}${_REV}-win${_CPU}-mingw"
+  _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
   _DST="$(mktemp -d)/${_BAS}"
 
   mkdir -p "${_DST}"
