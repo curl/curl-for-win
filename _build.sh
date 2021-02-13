@@ -128,7 +128,7 @@ if [ "${CC}" = 'mingw-clang' ]; then
 fi
 
 case "${_OS}" in
-  mac)   ver="$(brew info --json=v1 mingw-w64 | jq --raw-output '.[] | select(.name == "mingw-w64") | .versions.stable')";;
+  mac)   ver="$(brew info --json=v2 mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
   # FIXME: Linux-distro specific
   linux) ver="$(apt-cache show mingw-w64 | grep -a '^Version:' | cut -c 10-)";;
   *)     ver='';;
