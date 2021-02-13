@@ -114,7 +114,7 @@ curl \
 curl 'https://ftp.gnu.org/gnu/gnu-keyring.gpg' \
 | gpg --quiet --import 2>/dev/null
 gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-openssl dgst -sha256 pkg.bin | grep -q -a -F "${LIBGSASL_HASH}" || exit 1
+openssl dgst -sha256 pkg.bin | grep -q -a -F "${LIBGSASL_HASH_}" || exit 1
 tar -xf pkg.bin || exit 1
 rm pkg.bin
 rm -r -f libgsasl && mv libgsasl-* libgsasl
