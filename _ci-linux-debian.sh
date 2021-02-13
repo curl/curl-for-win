@@ -3,8 +3,6 @@
 # Copyright 2017-present Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
-_BRANCH="${APPVEYOR_REPO_BRANCH}${CI_COMMIT_REF_NAME}${GITHUB_REF}${GIT_BRANCH}"
-
 cat /etc/*-release
 
 export _CCSUFFIX=''
