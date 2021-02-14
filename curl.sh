@@ -217,8 +217,6 @@ _VER="$1"
 
   _OUT="${_NAM}-${_VER}${_REV}-win${_CPU}-mingw"
   _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
-  [ -d ../brotli ] || _OUT="${_OUT}-nobrotli"
-  [ -d ../brotli ] || _BAS="${_BAS}-nobrotli"
   _DST="$(mktemp -d)/${_BAS}"
 
   mkdir -p "${_DST}/docs/libcurl/opts"
