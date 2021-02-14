@@ -34,7 +34,7 @@ _VER="$1"
 
   rm -r -f pkg
 
-  export LDFLAGS="-m${_CPU}"
+  export LDFLAGS="${_OPTM}"
   unset ldonly
 
   # No success in convincing the build system to work correctly with clang:

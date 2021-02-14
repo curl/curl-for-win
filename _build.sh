@@ -146,6 +146,10 @@ build_single_target() {
   export _MAKE='make'
   export _WINE=''
 
+  export _OPTM=
+  [ "${_CPU}" = '32' ] && _OPTM='-m32'
+  [ "${_CPU}" = '64' ] && _OPTM='-m64'
+
   [ "${_CPU}" = '32' ] && _machine='i686'
   [ "${_CPU}" = '64' ] && _machine='x86_64'
 

@@ -42,7 +42,7 @@ _VER="$1"
     find . -name '*.lai' -delete
     find . -name '*.Plo' -delete
 
-    _CFLAGS="-m${_CPU} -fno-ident"
+    _CFLAGS="${_OPTM} -fno-ident"
     [ "${_CPU}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
     _LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
     [ "${_CPU}" = '64' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"

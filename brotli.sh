@@ -36,7 +36,7 @@ _VER="$1"
   find . -name '*.Plo' -delete
   find . -name '*.pc'  -delete
 
-  _CFLAGS="-m${_CPU} -fno-ident -DMINGW_HAS_SECURE_API"
+  _CFLAGS="${_OPTM} -fno-ident -DMINGW_HAS_SECURE_API"
   [ "${_CPU}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
   options=''

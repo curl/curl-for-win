@@ -48,7 +48,7 @@ _VER="$1"
   find . -name '*.exe' -delete
 
   export CC="${_CCPREFIX}gcc -static-libgcc"
-  export LDFLAGS="-m${_CPU}"
+  export LDFLAGS="${_OPTM}"
   export CFLAGS="${LDFLAGS} -fno-ident"
   [ "${_CPU}" = '32' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
   # shellcheck disable=SC2086
