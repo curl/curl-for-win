@@ -22,14 +22,7 @@ _VER="$1"
   find . -name '*.def' -delete
 
   if [ ! -f 'Makefile' ]; then
-    if [ "${_OS}" = 'win' ]; then
-      # FIXME: This will not create a fully release-compliant file tree,
-      #        e.g. documentation will be incomplete.
-      ./buildconf.bat
-    else
-      # FIXME: Replace this with `./buildconf` call
-      cp -f -p Makefile.dist Makefile
-    fi
+    autoreconf -fi
   fi
 
   # Build
