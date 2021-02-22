@@ -127,11 +127,16 @@ if [ "${CC}" = 'mingw-clang' ]; then
   echo ".clang$("clang${_CCSUFFIX}" --version | grep -o -a -E ' [0-9]*\.[0-9]*[\.][0-9]*')" >> "${_BLD}"
 fi
 
+unset ver
 case "${_OS}" in
-  mac)   ver="$(brew info --json=v2 mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
-  # FIXME: Linux-distro specific
-  linux) ver="$(apt-cache show mingw-w64 | grep -a '^Version:' | cut -c 10-)";;
-  *)     ver='';;
+  mac)
+    ver="$(brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
+  linux)
+    [ -n "${ver}" ] || ver="$(dpkg   --status       mingw-w64)"
+    [ -n "${ver}" ] || ver="$(rpm    --query        mingw-w64)"
+    [ -n "${ver}" ] || ver="$(pacman --query --info mingw-w64)"
+    ver="$(printf '%s' "${ver}" | sed -E 's|^(Version ?:) *(.+)$|\2|g')"
+    ;;
 esac
 [ -n "${ver}" ] && echo ".mingw-w64 ${ver}" >> "${_BLD}"
 
