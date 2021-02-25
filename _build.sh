@@ -158,8 +158,14 @@ build_single_target() {
   [ "${_CPU}" = '32' ] && _machine='i686'
   [ "${_CPU}" = '64' ] && _machine='x86_64'
 
+  export _PKGSUFFIX
+  [ "${_CPU}" = '32' ] && _PKGSUFFIX="-win32-mingw"
+  [ "${_CPU}" = '64' ] && _PKGSUFFIX="-win64-mingw"
+
   if [ "${_OS}" = 'win' ]; then
-    export PATH="/mingw${_CPU}/bin:${_ori_path}"
+    export PATH
+    [ "${_CPU}" = '32' ] && PATH="/mingw32/bin:${_ori_path}"
+    [ "${_CPU}" = '64' ] && PATH="/mingw64/bin:${_ori_path}"
     export _MAKE='mingw32-make'
 
     # Install required component

@@ -116,8 +116,8 @@ _VER="$1"
 
   # Create package
 
-  _OUT="${_NAM}-${_VER}${_REV}-win${_CPU}-mingw"
-  _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
+  _OUT="${_NAM}-${_VER}${_REV}${_PKGSUFFIX}"
+  _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(mktemp -d)/${_BAS}"
 
   mkdir -p "${_DST}"

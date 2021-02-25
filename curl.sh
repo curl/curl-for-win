@@ -29,7 +29,10 @@ _VER="$1"
 
   options='mingw32-ipv6-sspi-ldaps-srp'
 
-  export ARCH="w${_CPU}"
+  export ARCH
+  [ "${_CPU}" = '32' ] && ARCH="w32"
+  [ "${_CPU}" = '64' ] && ARCH="w64"
+
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
   # public libcurl functions being marked as 'exported'. It is useful to
   # avoid the chance of libcurl functions getting exported from final
@@ -208,8 +211,8 @@ _VER="$1"
 
   # Create package
 
-  _OUT="${_NAM}-${_VER}${_REV}-win${_CPU}-mingw"
-  _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
+  _OUT="${_NAM}-${_VER}${_REV}${_PKGSUFFIX}"
+  _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(mktemp -d)/${_BAS}"
 
   mkdir -p "${_DST}/docs/libcurl/opts"

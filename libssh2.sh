@@ -23,7 +23,10 @@ _VER="$1"
 
   # Build
 
-  export ARCH="w${_CPU}"
+  export ARCH
+  [ "${_CPU}" = '32' ] && ARCH="w32"
+  [ "${_CPU}" = '64' ] && ARCH="w64"
+
   export LIBSSH2_CFLAG_EXTRAS='-fno-ident -DHAVE_STRTOI64 -DLIBSSH2_DH_GEX_NEW=1 -DHAVE_DECL_SECUREZEROMEMORY=1'
   [ "${_CPU}" = '32' ] && LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export LIBSSH2_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
@@ -94,8 +97,8 @@ _VER="$1"
 
   # Create package
 
-  _OUT="${_NAM}-${_VER}${_REV}-win${_CPU}-mingw"
-  _BAS="${_NAM}-${_VER}-win${_CPU}-mingw"
+  _OUT="${_NAM}-${_VER}${_REV}${_PKGSUFFIX}"
+  _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(mktemp -d)/${_BAS}"
 
   mkdir -p "${_DST}/docs"
