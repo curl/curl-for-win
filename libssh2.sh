@@ -49,9 +49,7 @@ _VER="$1"
     export WITH_WINCNG=1
   fi
 
-  if [ "${_CPU}" = 'x64' ]; then
-    export LIBSSH2_DLL_SUFFIX=-x64
-  fi
+  [ "${_CPU}" = 'x64' ] && export LIBSSH2_DLL_SUFFIX=-x64
   export LIBSSH2_DLL_A_SUFFIX=.dll
 
   export CROSSPREFIX="${_CCPREFIX}"

@@ -47,7 +47,7 @@ _VER="$1"
   _CFLAGS="${_OPTM} -fno-ident -target ${_TRIPLET}"
   [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
   _LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
-  [ "${_CPU}" = 'x64' ] && [ "${_CCVER}" -ge '05' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x153000000"
+  [ "${_CPU}" = 'x64' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x153000000"
 
   options=''
   options="${options} -DCMAKE_SYSTEM_NAME=Windows"
