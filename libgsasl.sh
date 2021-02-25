@@ -60,7 +60,7 @@ _VER="$1"
 
   export CFLAGS="${LDFLAGS} -fno-ident"
   LDFLAGS="${LDFLAGS}${ldonly}"
-  [ "${_CPU}" = '32' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
+  [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
   # shellcheck disable=SC2086
   ./configure ${options} \
     --disable-dependency-tracking \

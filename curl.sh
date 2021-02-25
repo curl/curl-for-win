@@ -30,19 +30,19 @@ _VER="$1"
   options='mingw32-ipv6-sspi-ldaps-srp'
 
   export ARCH
-  [ "${_CPU}" = '32' ] && ARCH="w32"
-  [ "${_CPU}" = '64' ] && ARCH="w64"
+  [ "${_CPU}" = 'x86' ] && ARCH="w32"
+  [ "${_CPU}" = 'x64' ] && ARCH="w64"
 
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
   # public libcurl functions being marked as 'exported'. It is useful to
   # avoid the chance of libcurl functions getting exported from final
   # binaries when linked against static libcurl lib.
   export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -DCURL_ENABLE_MQTT -fno-ident -DHAVE_ATOMIC -DUSE_HSTS'
-  [ "${_CPU}" = '32' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
+  [ "${_CPU}" = 'x86' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
   export CURL_LDFLAG_EXTRAS_EXE
   export CURL_LDFLAG_EXTRAS_DLL
-  if [ "${_CPU}" = '32' ]; then
+  if [ "${_CPU}" = 'x86' ]; then
     CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
   else
     CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
@@ -133,7 +133,7 @@ _VER="$1"
     options="${options}-winidn"
   fi
 
-  if [ "${_CPU}" = '64' ]; then
+  if [ "${_CPU}" = 'x64' ]; then
     export CURL_DLL_SUFFIX=-x64
   fi
   export CURL_DLL_A_SUFFIX=.dll

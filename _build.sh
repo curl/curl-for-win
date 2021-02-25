@@ -152,20 +152,20 @@ build_single_target() {
   export _WINE=''
 
   export _OPTM=
-  [ "${_CPU}" = '32' ] && _OPTM='-m32'
-  [ "${_CPU}" = '64' ] && _OPTM='-m64'
+  [ "${_CPU}" = 'x86' ] && _OPTM='-m32'
+  [ "${_CPU}" = 'x64' ] && _OPTM='-m64'
 
-  [ "${_CPU}" = '32' ] && _machine='i686'
-  [ "${_CPU}" = '64' ] && _machine='x86_64'
+  [ "${_CPU}" = 'x86' ] && _machine='i686'
+  [ "${_CPU}" = 'x64' ] && _machine='x86_64'
 
   export _PKGSUFFIX
-  [ "${_CPU}" = '32' ] && _PKGSUFFIX="-win32-mingw"
-  [ "${_CPU}" = '64' ] && _PKGSUFFIX="-win64-mingw"
+  [ "${_CPU}" = 'x86' ] && _PKGSUFFIX="-win32-mingw"
+  [ "${_CPU}" = 'x64' ] && _PKGSUFFIX="-win64-mingw"
 
   if [ "${_OS}" = 'win' ]; then
     export PATH
-    [ "${_CPU}" = '32' ] && PATH="/mingw32/bin:${_ori_path}"
-    [ "${_CPU}" = '64' ] && PATH="/mingw64/bin:${_ori_path}"
+    [ "${_CPU}" = 'x86' ] && PATH="/mingw32/bin:${_ori_path}"
+    [ "${_CPU}" = 'x64' ] && PATH="/mingw64/bin:${_ori_path}"
     export _MAKE='mingw32-make'
 
     # Install required component
@@ -221,8 +221,8 @@ build_single_target() {
 }
 
 # Build binaries
-  build_single_target 64
-  build_single_target 32
+  build_single_target x64
+  build_single_target x86
 
 # Upload/deploy binaries
 . ./_ul.sh || exit 1

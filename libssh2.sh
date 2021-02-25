@@ -24,13 +24,13 @@ _VER="$1"
   # Build
 
   export ARCH
-  [ "${_CPU}" = '32' ] && ARCH="w32"
-  [ "${_CPU}" = '64' ] && ARCH="w64"
+  [ "${_CPU}" = 'x86' ] && ARCH="w32"
+  [ "${_CPU}" = 'x64' ] && ARCH="w64"
 
   export LIBSSH2_CFLAG_EXTRAS='-fno-ident -DHAVE_STRTOI64 -DLIBSSH2_DH_GEX_NEW=1 -DHAVE_DECL_SECUREZEROMEMORY=1'
-  [ "${_CPU}" = '32' ] && LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
+  [ "${_CPU}" = 'x86' ] && LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export LIBSSH2_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
-  [ "${_CPU}" = '64' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
+  [ "${_CPU}" = 'x64' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
 
   if [ "${_BRANCH#*master*}" = "${_BRANCH}" ] && [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,-Map,libssh2.map"
@@ -49,7 +49,7 @@ _VER="$1"
     export WITH_WINCNG=1
   fi
 
-  if [ "${_CPU}" = '64' ]; then
+  if [ "${_CPU}" = 'x64' ]; then
     export LIBSSH2_DLL_SUFFIX=-x64
   fi
   export LIBSSH2_DLL_A_SUFFIX=.dll

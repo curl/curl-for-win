@@ -38,9 +38,9 @@ _VER="$1"
   find . -name '*.pc'  -delete
 
   _CFLAGS="${_OPTM} -fno-ident -D_LARGEFILE64_SOURCE=1 -D_LFS64_LARGEFILE=1"
-  [ "${_CPU}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
+  [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
   _LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
-  [ "${_CPU}" = '64' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x155000000"
+  [ "${_CPU}" = 'x64' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x155000000"
 
   options=''
   options="${options} -DCMAKE_SYSTEM_NAME=Windows"

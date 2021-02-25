@@ -43,9 +43,9 @@ _VER="$1"
     find . -name '*.Plo' -delete
 
     _CFLAGS="${_OPTM} -fno-ident"
-    [ "${_CPU}" = '32' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
+    [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
     _LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
-    [ "${_CPU}" = '64' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
+    [ "${_CPU}" = 'x64' ] && _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
     if [ "${_BRANCH#*master*}" = "${_BRANCH}" ] && [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
       _LDFLAGS="${_LDFLAGS} -Wl,-Map,libssh2.map"
     fi
@@ -70,7 +70,7 @@ _VER="$1"
     options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
 
     # https://cmake.org/cmake/help/v3.11/manual/cmake-properties.7.html#properties-on-targets
-    [ "${pass}" = 'shared' ] && [ "${_CPU}" = '64' ] && options="${options} -DCMAKE_RELEASE_POSTFIX=-x64"
+    [ "${pass}" = 'shared' ] && [ "${_CPU}" = 'x64' ] && options="${options} -DCMAKE_RELEASE_POSTFIX=-x64"
 
     if [ "${CC}" = 'mingw-clang' ]; then
       unset CC
@@ -108,8 +108,8 @@ _VER="$1"
   ls -l ${_pkg}/lib/*.a
 
   # Stick to the name used by GNU Make builds
-  [ "${_CPU}" = '32' ] && mv -f ${_pkg}/lib/liblibssh2.dll.a     ${_pkg}/lib/libssh2.dll.a
-  [ "${_CPU}" = '64' ] && mv -f ${_pkg}/lib/liblibssh2-x64.dll.a ${_pkg}/lib/libssh2.dll.a
+  [ "${_CPU}" = 'x86' ] && mv -f ${_pkg}/lib/liblibssh2.dll.a     ${_pkg}/lib/libssh2.dll.a
+  [ "${_CPU}" = 'x64' ] && mv -f ${_pkg}/lib/liblibssh2-x64.dll.a ${_pkg}/lib/libssh2.dll.a
 
   # curl makefile.m32 assumes a certain layout.
   # Also make sure to copy the static library only:
