@@ -174,7 +174,7 @@ _VER="$1"
   "${_CCPREFIX}objdump" --all-headers "${_pkg}"/bin/*.dll       | grep -a -E -i "(file format|dll name)"
 
   ${_WINE} "${_pkg}"/bin/openssl.exe version -a
-  ${_WINE} "${_pkg}"/bin/openssl.exe ciphers
+  ${_WINE} "${_pkg}"/bin/openssl.exe ciphers -s -V -stdname
 
   # Create package
 
