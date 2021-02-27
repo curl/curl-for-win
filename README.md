@@ -4,9 +4,6 @@
 
 # Automated, reproducible, transparent, Windows builds for [curl](https://curl.se/), [nghttp2](https://nghttp2.org/), [brotli](https://github.com/google/brotli), [zstd](https://github.com/facebook/zstd), [libssh2](https://libssh2.org/) and [OpenSSL](https://www.openssl.org/)
 
-> **DEPRECATION NOTE: The `bintray.com` binary downloads will be deleted
-> on 2021-03-01. Please point your URLs to the official download server.**
-
   - Packaging aims to follow popular binary releases found on the internet.
   - Both x64 and x86 packages are built using the same process.
   - Binary packages are downloadable in `.zip` and `.tar.xz` formats.<br>
