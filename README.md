@@ -1,4 +1,4 @@
-[![License](https://raw.githubusercontent.com/curl/curl-for-win/master/LICENSE-MIT.svg?sanitize=1)](LICENSE.txt)
+[![License](https://raw.githubusercontent.com/curl/curl-for-win/master/LICENSE-MIT.svg?sanitize=1)](LICENSE.md)
 [![Build status](https://ci.appveyor.com/api/projects/status/8yf6xjgq7u0cm013/branch/master?svg=true)](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master)
 [![Build Status](https://github.com/curl/curl-for-win/workflows/build/badge.svg?branch=master)](https://github.com/curl/curl-for-win/actions?query=branch%3Amaster)
 
