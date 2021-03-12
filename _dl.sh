@@ -156,6 +156,8 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   curl --location --proto-redir =https \
     --output pkg.bin 'https://www.openssl.org/source/openssl-3.0.0-alpha9.tar.gz' || exit 1
 else
+  # QUIC fork:
+  #   https://github.com/quictls/openssl.git
   curl \
     --output pkg.bin "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz" \
     --output pkg.sig "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz.asc" || exit 1
