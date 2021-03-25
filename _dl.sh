@@ -21,8 +21,8 @@ export NGTCP2_VER_='0.1.90'
 export NGTCP2_HASH=
 export CARES_VER_='1.17.1'
 export CARES_HASH=d73dd0f6de824afd407ce10750ea081af47eba52b8a6cb307d220131ad93fc40
-export OPENSSL_VER_='1.1.1j'
-export OPENSSL_HASH=aaf2fcb575cdf6491b98ab4829abf78a3dec8402b8b81efc8f23c00d443981bf
+export OPENSSL_VER_='1.1.1k'
+export OPENSSL_HASH=892a0875b9872acd04a9fde79b1f943075d5ea162415de3047c327df33fbaee5
 export LIBSSH2_VER_='1.9.0'
 export LIBSSH2_HASH=d5fb8bd563305fd1074dda90bd053fb2d29fc4bce048d182f96eaa466dfadafd
 export CURL_VER_='7.75.0'
@@ -34,7 +34,7 @@ export OSSLSIGNCODE_HASH=c512931b6fe151297a1c689f88501e20ffc204c4ffe30e7392eb3de
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the master branch.
-export _REV='4'
+export _REV='5'
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
