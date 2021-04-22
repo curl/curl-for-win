@@ -57,7 +57,7 @@
     allowing this project to automatically benefit from continuous C compiler
     updates.
   - Patching policy: No locally maintained patches. Patches are only
-    applied locally if already merged upstream or &mdash; in case it's
+    applied locally if already merged upstream or &mdash; in case it is
     necessary for a successful build &mdash; had them submitted upstream with
     fair confidence of getting accepted.
   - curl/libcurl are built in MultiSSL mode, with both OpenSSL and
@@ -73,7 +73,7 @@
       <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master>
   - The build process is multi-platform and able to cross-build Windows
     executables from \*nix hosts (Linux and macOS tested.)
-  - Packages created across different host platforms won't currently have
+  - Packages created across different host platforms will not currently have
     identical hashes. The reason for this is the slightly different build
     options and versions of the `mingw-w64` and `binutils` tools.
   - Code signing is implemented and enabled with a self-signed certificate.
