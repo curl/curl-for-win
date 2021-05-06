@@ -48,6 +48,8 @@ _VER="$1"
   # A bizarre fix that became required around year 2021 to not fail instantly
   # on macOS. Likely not the correct/complete fix.
   [ "${os}" = 'mac' ] && options="${options} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
+  options="${options} -DZLIB_COMPAT=1"
+  options="${options} -DZLIB_ENABLE_TESTS=0"
   options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
   options="${options} -DCMAKE_RC_FLAGS=-DGCC_WINDRES"
   options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
@@ -90,8 +92,8 @@ _VER="$1"
 
   # Delete the implib, we need the static lib only
   rm -f ${_pkg}/lib/*.dll.a
-  # Stick to the name used by win32/Makefile.gcc
-  mv -f ${_pkg}/lib/libzlibstatic.a ${_pkg}/lib/libz.a
+  # Stick to the name used by original zlib's win32/Makefile.gcc
+  mv -f ${_pkg}/lib/libzlib.a ${_pkg}/lib/libz.a
 
   # libssh2 and curl makefile.m32 assume the headers and lib to be in the
   # same directory. Make sure to copy the static library only:
@@ -100,7 +102,7 @@ _VER="$1"
 
   # Make steps for determinism
 
-  readonly _ref='ChangeLog'
+  readonly _ref='README.md'
 
   "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
   "${_CCPREFIX}strip" --preserve-dates --strip-all ${_pkg}/bin/*.dll
@@ -111,7 +113,7 @@ _VER="$1"
 
   touch -c -r "${_ref}" ${_pkg}/include/*.h
   touch -c -r "${_ref}" ${_pkg}/bin/*.dll
-# touch -c -r "${_ref}" ${_pkg}/share/pkgconfig/*.pc
+# touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
 
   # Tests
@@ -126,13 +128,13 @@ _VER="$1"
 
   mkdir -p "${_DST}"
 
-  cp -f -p ${_pkg}/include/*.h          "${_DST}/"
-# cp -f -p ${_pkg}/share/pkgconfig/*.pc "${_DST}/"
-  cp -f -p ${_pkg}/lib/*.a              "${_DST}/"
-  cp -f -p ChangeLog                    "${_DST}/ChangeLog.txt"
-  cp -f -p README                       "${_DST}/README.txt"
+  cp -f -p ${_pkg}/include/*.h        "${_DST}/"
+# cp -f -p ${_pkg}/lib/pkgconfig/*.pc "${_DST}/"
+  cp -f -p ${_pkg}/lib/*.a            "${_DST}/"
+  cp -f -p LICENSE.md                 "${_DST}/"
+  cp -f -p README.md                  "${_DST}/"
 
-  unix2dos --quiet --keepdate "${_DST}"/*.txt
+  unix2dos --quiet --keepdate "${_DST}"/*.md
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

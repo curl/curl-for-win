@@ -5,6 +5,8 @@
 
 export ZLIB_VER_='1.2.11'
 export ZLIB_HASH=629380c90a77b964d896ed37163f5c3a34f6e6d897311f1df2a7016355c45eff
+export ZLIBNG_VER_='2.0.2'
+export ZLIBNG_HASH=dd37886f22ca6890e403ea6c1d60f36eab1d08d2f232a35f5b02126621149d28
 export ZSTD_VER_='1.4.9'
 export ZSTD_HASH=61dce0e9a5036d7fb9b5709ee6567c2c8a1b4ba48a8e43afe9ae355cc37bb494
 export BROTLI_VER_='1.0.9'
@@ -71,13 +73,23 @@ else
   _patsuf=''
 fi
 
-# zlib
-curl --output pkg.bin --location --proto-redir =https "https://github.com/madler/zlib/archive/v${ZLIB_VER_}.tar.gz" || exit 1
-openssl dgst -sha256 pkg.bin | grep -q -a -F "${ZLIB_HASH}" || exit 1
-tar -xf pkg.bin || exit 1
-rm pkg.bin
-rm -r -f zlib && mv zlib-* zlib
-[ -f "zlib${_patsuf}.patch" ] && dos2unix < "zlib${_patsuf}.patch" | patch --batch -N -p1 -d zlib
+if [ "${_BRANCH#*zlibng*}" != "${_BRANCH}" ] || true; then
+  # zlib-ng
+  curl -o pack.bin -L --proto-redir =https "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/${ZLIBNG_VER_}.tar.gz" || exit 1
+  openssl dgst -sha256 pack.bin | grep -q "${ZLIBNG_HASH}" || exit 1
+  tar -xvf pack.bin > /dev/null 2>&1 || exit 1
+  rm pack.bin
+  rm -f -r zlib-ng && mv zlib-ng-* zlib-ng
+  [ -f "zlib-ng${_patsuf}.patch" ] && dos2unix < "zlib-ng${_patsuf}.patch" | patch -N -p1 -d zlib-ng
+else
+  # zlib
+  curl --output pkg.bin --location --proto-redir =https "https://github.com/madler/zlib/archive/v${ZLIB_VER_}.tar.gz" || exit 1
+  openssl dgst -sha256 pkg.bin | grep -q -a -F "${ZLIB_HASH}" || exit 1
+  tar -xf pkg.bin || exit 1
+  rm pkg.bin
+  rm -r -f zlib && mv zlib-* zlib
+  [ -f "zlib${_patsuf}.patch" ] && dos2unix < "zlib${_patsuf}.patch" | patch --batch -N -p1 -d zlib
+fi
 
 # zstd
 curl --output pkg.bin --location --proto-redir =https "https://github.com/facebook/zstd/releases/download/v${ZSTD_VER_}/zstd-${ZSTD_VER_}.tar.zst" || exit 1

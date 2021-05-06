@@ -76,7 +76,11 @@ _VER="$1"
   } | grep -a -v '^$' | sort | tee -a libcurl.def
   CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} ../libcurl.def"
 
-  export ZLIB_PATH=../../zlib/pkg/usr/local
+  if [ -d ../zlib-ng ]; then
+    export ZLIB_PATH=../../zlib-ng/pkg/usr/local
+  else
+    export ZLIB_PATH=../../zlib/pkg/usr/local
+  fi
   options="${options}-zlib"
   if [ -d ../brotli ]; then
     options="${options}-brotli"
@@ -246,14 +250,15 @@ _VER="$1"
   cp -f -p RELEASE-NOTES            "${_DST}/RELEASE-NOTES.txt"
   cp -f -p ../ca-bundle.crt         "${_DST}/bin/curl-ca-bundle.crt"
 
-  [ -d ../zlib ]     && cp -f -p ../zlib/README     "${_DST}/COPYING-zlib.txt"
-  [ -d ../zstd ]     && cp -f -p ../zstd/LICENSE    "${_DST}/COPYING-zstd.txt"
-  [ -d ../brotli ]   && cp -f -p ../brotli/LICENSE  "${_DST}/COPYING-brotli.txt"
-  [ -d ../libssh2 ]  && cp -f -p ../libssh2/COPYING "${_DST}/COPYING-libssh2.txt"
-  [ -d ../nghttp2 ]  && cp -f -p ../nghttp2/COPYING "${_DST}/COPYING-nghttp2.txt"
-  [ -d ../nghttp3 ]  && cp -f -p ../nghttp3/COPYING "${_DST}/COPYING-nghttp3.txt"
-  [ -d ../ngtcp2 ]   && cp -f -p ../ngtcp2/COPYING  "${_DST}/COPYING-ngtcp2.txt"
-  [ -d ../libidn2 ]  && cp -f -p ../libidn2/COPYING "${_DST}/COPYING-libidn2.txt"
+  [ -d ../zlib-ng ]  && cp -f -p ../zlib-ng/LICENSE.md "${_DST}/COPYING-zlib-ng.md"
+  [ -d ../zlib ]     && cp -f -p ../zlib/README        "${_DST}/COPYING-zlib.txt"
+  [ -d ../zstd ]     && cp -f -p ../zstd/LICENSE       "${_DST}/COPYING-zstd.txt"
+  [ -d ../brotli ]   && cp -f -p ../brotli/LICENSE     "${_DST}/COPYING-brotli.txt"
+  [ -d ../libssh2 ]  && cp -f -p ../libssh2/COPYING    "${_DST}/COPYING-libssh2.txt"
+  [ -d ../nghttp2 ]  && cp -f -p ../nghttp2/COPYING    "${_DST}/COPYING-nghttp2.txt"
+  [ -d ../nghttp3 ]  && cp -f -p ../nghttp3/COPYING    "${_DST}/COPYING-nghttp3.txt"
+  [ -d ../ngtcp2 ]   && cp -f -p ../ngtcp2/COPYING     "${_DST}/COPYING-ngtcp2.txt"
+  [ -d ../libidn2 ]  && cp -f -p ../libidn2/COPYING    "${_DST}/COPYING-libidn2.txt"
   if [ -d ../cares ]; then
     cp -f -p ../c-ares/LICENSE.md "${_DST}/COPYING-c-ares.md"
     unix2dos --quiet --keepdate "${_DST}"/*.md
@@ -268,6 +273,7 @@ _VER="$1"
     cp -f -p lib/*.map                "${_DST}/bin/"
   fi
 
+  [ -d ../zlib-ng ] && unix2dos --quiet --keepdate "${_DST}"/*.md
   unix2dos --quiet --keepdate "${_DST}"/*.txt
   unix2dos --quiet --keepdate "${_DST}"/docs/*.md
   unix2dos --quiet --keepdate "${_DST}"/docs/*.txt

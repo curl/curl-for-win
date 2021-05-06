@@ -36,7 +36,11 @@ _VER="$1"
     LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,-Map,libssh2.map"
   fi
 
-  export ZLIB_PATH=../../zlib/pkg/usr/local
+  if [ -d ../zlib-ng ]; then
+    export ZLIB_PATH=../../zlib-ng/pkg/usr/local
+  else
+    export ZLIB_PATH=../../zlib/pkg/usr/local
+  fi
   export WITH_ZLIB=1
   export LINK_ZLIB_STATIC=1
 
