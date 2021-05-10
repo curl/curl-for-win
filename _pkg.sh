@@ -93,16 +93,14 @@ create_pkg() {
     hshl="$(openssl dgst -sha256 "${_pkg}" \
       | sed -n -E 's,.+= ([0-9a-fA-F]{64}),\1,p')"
     # https://developers.virustotal.com/v3.0/reference
-    out="$(curl --user-agent curl \
-      --fail --silent --show-error \
+    out="$(curl --user-agent curl --fail --silent --show-error \
       'https://www.virustotal.com/api/v3/files' \
       --header "x-apikey: ${VIRUSTOTAL_APIKEY}" \
       --form "file=@${_pkg}")"
     # shellcheck disable=SC2181
     if [ "$?" = 0 ]; then
       id="$(echo "${out}" | jq --raw-output '.data.id')"
-      out="$(curl --user-agent curl \
-        --fail --silent --show-error \
+      out="$(curl --user-agent curl --fail --silent --show-error \
         "https://www.virustotal.com/api/v3/analyses/${id}" \
         --header "x-apikey: ${VIRUSTOTAL_APIKEY}")"
       # shellcheck disable=SC2181
