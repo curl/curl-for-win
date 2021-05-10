@@ -95,7 +95,7 @@ create_pkg() {
     # https://developers.virustotal.com/v3.0/reference
     out="$(curl --user-agent curl \
       --fail --silent --show-error \
-      --request POST 'https://www.virustotal.com/api/v3/files' \
+      'https://www.virustotal.com/api/v3/files' \
       --header "x-apikey: ${VIRUSTOTAL_APIKEY}" \
       --form "file=@${_pkg}")"
     # shellcheck disable=SC2181
@@ -103,7 +103,7 @@ create_pkg() {
       id="$(echo "${out}" | jq --raw-output '.data.id')"
       out="$(curl --user-agent curl \
         --fail --silent --show-error \
-        --request GET "https://www.virustotal.com/api/v3/analyses/${id}" \
+        "https://www.virustotal.com/api/v3/analyses/${id}" \
         --header "x-apikey: ${VIRUSTOTAL_APIKEY}")"
       # shellcheck disable=SC2181
       if [ "$?" = 0 ]; then
