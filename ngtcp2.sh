@@ -101,8 +101,5 @@ _VER="$1"
   cp -f -p COPYING                    "${_DST}/COPYING.txt"
   cp -f -p README.rst                 "${_DST}/"
 
-  unix2dos --quiet --keepdate "${_DST}"/*.txt
-  unix2dos --quiet --keepdate "${_DST}"/*.rst
-
   ../_pkg.sh "$(pwd)/${_ref}"
 )

@@ -205,7 +205,6 @@ _VER="$1"
     cp -f -p README.md   "${_DST}/"
     cp -f -p FAQ.md      "${_DST}/"
     cp -f -p NEWS.md     "${_DST}/"
-    unix2dos --quiet --keepdate "${_DST}"/*.md
   else
     cp -f -p CHANGES     "${_DST}/CHANGES.txt"
     cp -f -p LICENSE     "${_DST}/LICENSE.txt"
@@ -216,8 +215,6 @@ _VER="$1"
 
   # Luckily, applink is not implemented for 64-bit mingw, omit this file then
   [ "${_CPU}" = 'x86' ] && cp -f -p ms/applink.c "${_DST}/include/openssl/"
-
-  unix2dos --quiet --keepdate "${_DST}"/*.txt
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

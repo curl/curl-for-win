@@ -135,8 +135,5 @@ _VER="$1"
   cp -f -p RELEASE-NOTES              "${_DST}/RELEASE-NOTES.txt"
   cp -f -p LICENSE.md                 "${_DST}/"
 
-  unix2dos --quiet --keepdate "${_DST}"/*.md
-  unix2dos --quiet --keepdate "${_DST}"/*.txt
-
 # ../_pkg.sh "$(pwd)/${_ref}"
 )

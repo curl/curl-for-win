@@ -132,7 +132,5 @@ _VER="$1"
   cp -f -p ChangeLog                    "${_DST}/ChangeLog.txt"
   cp -f -p README                       "${_DST}/README.txt"
 
-  unix2dos --quiet --keepdate "${_DST}"/*.txt
-
   ../_pkg.sh "$(pwd)/${_ref}"
 )

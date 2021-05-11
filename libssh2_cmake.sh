@@ -1,5 +1,7 @@
 #!/bin/sh -ex
 
+# WORK-IN-SLOW-PROGRESS
+
 # Copyright 2014-present Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
@@ -183,9 +185,6 @@ _VER="$1"
     cp -f -p ${_pkg}/bin/*.map   "${_DST}/bin/"
     cp -f -p ${_pkg}/bin/*.def   "${_DST}/bin/" || true
   fi
-
-  unix2dos --quiet --keepdate "${_DST}"/*.txt
-  unix2dos --quiet --keepdate "${_DST}"/docs/*.txt
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

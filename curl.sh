@@ -259,10 +259,7 @@ _VER="$1"
   [ -d ../nghttp3 ]  && cp -f -p ../nghttp3/COPYING    "${_DST}/COPYING-nghttp3.txt"
   [ -d ../ngtcp2 ]   && cp -f -p ../ngtcp2/COPYING     "${_DST}/COPYING-ngtcp2.txt"
   [ -d ../libidn2 ]  && cp -f -p ../libidn2/COPYING    "${_DST}/COPYING-libidn2.txt"
-  if [ -d ../cares ]; then
-    cp -f -p ../c-ares/LICENSE.md "${_DST}/COPYING-c-ares.md"
-    unix2dos --quiet --keepdate "${_DST}"/*.md
-  fi
+  [ -d ../cares ]    && cp -f -p ../c-ares/LICENSE.md  "${_DST}/COPYING-c-ares.md"
   # OpenSSL 3.x
   [ -d ../openssl ] && [ -f ../openssl/LICENSE.txt ] && cp -f -p ../openssl/LICENSE.txt "${_DST}/COPYING-openssl.txt"
   # OpenSSL 1.x
@@ -272,11 +269,6 @@ _VER="$1"
     cp -f -p src/*.map                "${_DST}/bin/"
     cp -f -p lib/*.map                "${_DST}/bin/"
   fi
-
-  [ -d ../zlib-ng ] && unix2dos --quiet --keepdate "${_DST}"/*.md
-  unix2dos --quiet --keepdate "${_DST}"/*.txt
-  unix2dos --quiet --keepdate "${_DST}"/docs/*.md
-  unix2dos --quiet --keepdate "${_DST}"/docs/*.txt
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

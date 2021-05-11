@@ -160,8 +160,5 @@ _VER="$1"
   cp -f -p README.md                  "${_DST}/"
   cp -f -p LICENSE                    "${_DST}/LICENSE.txt"
 
-  unix2dos --quiet --keepdate "${_DST}"/*.txt
-  unix2dos --quiet --keepdate "${_DST}"/*.md
-
   ../_pkg.sh "$(pwd)/${_ref}"
 )

@@ -134,8 +134,5 @@ _VER="$1"
     cp -f -p win32/*.map   "${_DST}/bin/"
   fi
 
-  unix2dos --quiet --keepdate "${_DST}"/*.txt
-  unix2dos --quiet --keepdate "${_DST}"/docs/*.txt
-
   ../_pkg.sh "$(pwd)/${_ref}"
 )

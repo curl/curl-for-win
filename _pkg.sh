@@ -16,7 +16,6 @@ Visit the project page for details about these builds and the list of changes:
 
    ${_URL}
 EOF
-unix2dos --quiet --keepdate "${_fn}"
 touch -c -r "$1" "${_fn}"
 
 _fn="${_DST}/BUILD-HOMEPAGE.url"
@@ -27,10 +26,10 @@ EOF
 unix2dos --quiet --keepdate "${_fn}"
 touch -c -r "$1" "${_fn}"
 
+find "${_DST}" -name '*.md' -o -name '*.txt' -exec unix2dos --quiet --keepdate {} +
 find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' \;
-
-# NOTE: This isn't effective on MSYS2
-find "${_DST}" \( -name '*.exe' -o -name '*.dll' -o -name '*.a' \) -exec chmod a-x {} +
+# NOTE: This isn't effective on MSYS2:
+find "${_DST}" -name '*.exe' -o -name '*.dll' -o -name '*.a' -exec chmod a-x {} +
 
 create_pkg() {
   arch_ext="$2"
