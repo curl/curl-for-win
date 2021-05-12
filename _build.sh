@@ -15,8 +15,6 @@
 #   - Enable Control Flow Guard (once FLOSS toolchains support it)
 #   - ARM64 builds (once FLOSS toolchains support it)
 #   - Switch to libssh from libssh2?
-#   - Migrate curl and libssh2 from Makefile.m32 to CMake
-#   - Migrate OpenSSL from gcc to clang (required OpenSSL 3.x)
 
 # Tools:
 #                compiler        build
@@ -178,8 +176,9 @@ build_single_target() {
   [ "${_CPU}" = 'x86' ] && _OPTM='-m32'
   [ "${_CPU}" = 'x64' ] && _OPTM='-m64'
 
-  [ "${_CPU}" = 'x86' ] && _machine='i686'
-  [ "${_CPU}" = 'x64' ] && _machine='x86_64'
+  [ "${_CPU}" = 'x86' ]   && _machine='i686'
+  [ "${_CPU}" = 'x64' ]   && _machine='x86_64'
+  [ "${_CPU}" = 'arm64' ] && _machine="${_CPU}"
 
   export _PKGSUFFIX
   [ "${_CPU}" = 'x86' ] && _PKGSUFFIX="-win32-mingw"
@@ -247,6 +246,7 @@ build_single_target() {
 # Build binaries
   build_single_target x64
   build_single_target x86
+# build_single_target arm64
 
 # Upload/deploy binaries
 . ./_ul.sh || exit 1
