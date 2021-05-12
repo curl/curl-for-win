@@ -105,5 +105,5 @@ _VER="$1"
   cp -f -p COPYING                    "${_DST}/COPYING.txt"
   cp -f -p README                     "${_DST}/README.txt"
 
-# ../_pkg.sh "$(pwd)/${_ref}"
+  ../_pkg.sh "$(pwd)/${_ref}"
 )
