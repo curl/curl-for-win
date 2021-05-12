@@ -4,12 +4,35 @@
 # See LICENSE.md
 
 # Requirements (not a comprehensive list at this point):
-#   Windows:
-#     MSYS2: zip zstd mingw-w64-{i686,x86_64}-{clang,jq,osslsigncode,python3-pip} gpg python3
 #   Linux
 #     zip zstd binutils-mingw-w64 gcc-mingw-w64 gnupg-curl jq osslsigncode dos2unix realpath wine
 #   Mac:
 #     brew install xz zstd gnu-tar mingw-w64 jq osslsigncode dos2unix gpg gnu-sed wine
+#   Windows:
+#     MSYS2: zip zstd mingw-w64-{i686,x86_64}-{clang,jq,osslsigncode,python3-pip} gpg python3
+
+# TODO:
+#   - Enable Control Flow Guard (once FLOSS toolchains support it)
+#   - ARM64 builds (once FLOSS toolchains support it)
+#   - Switch to libssh from libssh2?
+#   - Migrate curl and libssh2 from Makefile.m32 to CMake
+#   - Migrate OpenSSL from gcc to clang (required OpenSSL 3.x)
+
+# Tools:
+#                compiler        build
+#                --------------- ----------
+#   brotli.sh    clang           cmake
+#   nghttp2.sh   clang           cmake
+#   nghttp3.sh   clang           cmake
+#   zlib.sh      clang           cmake
+#   zstd.sh      clang           cmake
+#   c-ares.sh    clang           cmake
+#   ngtcp2.sh    gcc             autotools  TODO: move to cmake and clang (couldn't detect openssl, and even configure needs a manual patch)
+#   curl.sh      clang           make       TODO: move to cmake
+#   libssh2.sh   clang           make       TODO: move to cmake
+#   libgsasl.sh  clang           autotools
+#   libidn2.sh   gcc             autotools  TODO: move to clang
+#   openssl.sh   gcc/clang (v3)  autotools
 
 cd "$(dirname "$0")" || exit
 
