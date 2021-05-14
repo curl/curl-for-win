@@ -36,7 +36,7 @@ export OSSLSIGNCODE_HASH=c512931b6fe151297a1c689f88501e20ffc204c4ffe30e7392eb3de
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the master branch.
-export _REV='1'
+export _REV='2'
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
@@ -73,7 +73,7 @@ else
   _patsuf=''
 fi
 
-if [ "${_BRANCH#*zlibng*}" != "${_BRANCH}" ] || true; then
+if [ "${_BRANCH#*zlibng*}" != "${_BRANCH}" ]; then
   # zlib-ng
   curl -o pack.bin -L --proto-redir =https "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/${ZLIBNG_VER_}.tar.gz" || exit 1
   openssl dgst -sha256 pack.bin | grep -q "${ZLIBNG_HASH}" || exit 1
