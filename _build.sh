@@ -228,8 +228,8 @@ build_single_target() {
 
   command -v "$(dirname "$0")/osslsigncode-local" >/dev/null 2>&1 || unset SIGN_CODE_KEY
 
-  time ./zlib-ng.sh    "${ZLIBNG_VER_}"
   time ./zlib.sh         "${ZLIB_VER_}"
+  time ./zlibng.sh     "${ZLIBNG_VER_}"
   time ./zstd.sh         "${ZSTD_VER_}"
   time ./brotli.sh     "${BROTLI_VER_}"
   time ./libgsasl.sh "${LIBGSASL_VER_}"
