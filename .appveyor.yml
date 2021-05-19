@@ -42,7 +42,7 @@ build_script:
         sh -c ./_ci-linux-debian.sh
 artifacts:
   - path: '*-*-mingw*.*'
-    name: master
+    name: package
   - path: 'all-mingw*.*'
     name: all
 # init:
