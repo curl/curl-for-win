@@ -19,5 +19,6 @@ build:
       - "*-*-mingw*.*"
   only:
     - master
+    - main
     - dev-gitlab
     - test-gitlab

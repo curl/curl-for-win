@@ -35,7 +35,7 @@ export OSSLSIGNCODE_HASH=c512931b6fe151297a1c689f88501e20ffc204c4ffe30e7392eb3de
 # Create revision string
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
-#       version or pushing a CI rebuild for the master branch.
+#       version or pushing a CI rebuild for the master/main branch.
 export _REV='2'
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
