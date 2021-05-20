@@ -5,7 +5,6 @@ name: build
 on:
   push:
     branches:
-      - master
       - main
       - dev-github
       - test-github

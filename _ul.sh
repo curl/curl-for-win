@@ -42,7 +42,7 @@ openssl dgst -sha512 "${_ALL}" | tee -a "${_ALL}.txt"
 
 # Official deploy
 if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ]; then
-  if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] || [ "${_BRANCH#*main*}" != "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*main*}" != "${_BRANCH}" ]; then
   (
     set +x
     if [ -f "${DEPLOY_KEY}" ]; then

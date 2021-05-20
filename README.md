@@ -1,5 +1,5 @@
-[![License](https://raw.githubusercontent.com/curl/curl-for-win/master/MIT.svg?sanitize=1)](LICENSE.md)
-[![Build status](https://ci.appveyor.com/api/projects/status/8yf6xjgq7u0cm013/branch/master?svg=true)](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master)
+[![License](https://raw.githubusercontent.com/curl/curl-for-win/main/MIT.svg?sanitize=1)](LICENSE.md)
+[![Build status](https://ci.appveyor.com/api/projects/status/8yf6xjgq7u0cm013/branch/main?svg=true)](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main)
 
 # Automated, reproducible, transparent, Windows builds for [curl](https://curl.se/) and [OpenSSL](https://www.openssl.org/), [libssh2](https://libssh2.org/), [nghttp2](https://nghttp2.org/), [brotli](https://github.com/google/brotli), [zstd](https://github.com/facebook/zstd), [zlib-ng](https://github.com/zlib-ng/zlib-ng)/[zlib](https://github.com/madler/zlib), [libgsasl](https://www.gnu.org/software/gsasl/)
 
@@ -9,7 +9,7 @@
     `.xz` files and the resulting `.tar` archive can be extracted using
     [7-Zip](https://www.7-zip.org/).
   - Binary packages are signed with PGP key [EXPERIMENTAL]:
-    <br><https://raw.githubusercontent.com/curl/curl-for-win/master/sign-pkg-public.asc>
+    <br><https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc>
     <br>`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`
   - Standalone `curl.exe` and `libcurl.dll` (only
     [`msvcrt.dll`](https://en.wikipedia.org/wiki/Microsoft_Windows_library_files#MSVCRT.DLL,_MSVCP*.DLL_and_CRTDLL.DLL)
@@ -22,7 +22,7 @@
     <br>`alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI TLS-SRP Unicode UnixSockets zstd`
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the build
-    [in public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master),
+    [in public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
     with open, auditable [build logs](#build-logs).
   - C compiler toolchain is latest MinGW-w64 (non-multilib, x64 and x86)
     either via [Homebrew](https://brew.sh/) (on macOS),
@@ -67,10 +67,10 @@
     [C-ares](https://c-ares.haxx.se/).
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
   - To verify the correct checksum for the latest build, you can look up the
-    correct ones in the build log as they are generated. Watch for `master`
+    correct ones in the build log as they are generated. Watch for `main`
     branch job `Image: Ubuntu`, log lines starting with
     `SHA256(` or `SHA512(`:
-      <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master>
+      <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main>
   - The build process is multi-platform and able to cross-build Windows
     executables from \*nix hosts (Linux and macOS tested.)
   - Packages created across different host platforms will not currently have
@@ -93,7 +93,7 @@
 
 # Build logs
 
-  <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/master>
+  <https://ci.appveyor.com/project/curlorg/curl-for-win/history>
 
 # Guarantees and Liability
 
@@ -111,4 +111,4 @@
 
 ---
 This document &copy;&nbsp;2014&ndash;present [Viktor Szakats](https://vsz.me/)<br>
-[![Creative Commons Attribution-ShareAlike 4.0](https://raw.githubusercontent.com/curl/curl-for-win/master/cc-by-sa.svg?sanitize=1)](https://creativecommons.org/licenses/by-sa/4.0/)
+[![Creative Commons Attribution-ShareAlike 4.0](https://raw.githubusercontent.com/curl/curl-for-win/main/cc-by-sa.svg?sanitize=1)](https://creativecommons.org/licenses/by-sa/4.0/)

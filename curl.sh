@@ -53,7 +53,7 @@ _VER="$1"
   CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUNICODE -D_UNICODE"
   CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -municode"
 
-  if [ "${_BRANCH#*master*}" = "${_BRANCH}" ] && [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,-Map,curl.map"
     CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,-Map,libcurl.map"
   fi
@@ -200,7 +200,7 @@ _VER="$1"
   touch -c -r "${_ref}" lib/*.def
   touch -c -r "${_ref}" lib/*.a
 
-  if [ "${_BRANCH#*master*}" = "${_BRANCH}" ] && [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     touch -c -r "${_ref}" src/*.map
     touch -c -r "${_ref}" lib/*.map
   fi
@@ -265,7 +265,7 @@ _VER="$1"
   # OpenSSL 1.x
   [ -d ../openssl ] && [ -f ../openssl/LICENSE     ] && cp -f -p ../openssl/LICENSE     "${_DST}/COPYING-openssl.txt"
 
-  if [ "${_BRANCH#*master*}" = "${_BRANCH}" ] && [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     cp -f -p src/*.map                "${_DST}/bin/"
     cp -f -p lib/*.map                "${_DST}/bin/"
   fi

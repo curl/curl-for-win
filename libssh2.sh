@@ -32,7 +32,7 @@ _VER="$1"
   export LIBSSH2_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
   [ "${_CPU}" = 'x64' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
 
-  if [ "${_BRANCH#*master*}" = "${_BRANCH}" ] && [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,-Map,libssh2.map"
   fi
 
@@ -89,7 +89,7 @@ _VER="$1"
   touch -c -r "${_ref}" win32/*.def
   touch -c -r "${_ref}" win32/*.a
 
-  if [ "${_BRANCH#*master*}" = "${_BRANCH}" ] && [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     touch -c -r "${_ref}" win32/*.map
   fi
 
@@ -130,7 +130,7 @@ _VER="$1"
   # OpenSSL 1.x
   [ -d ../openssl ] && [ -f ../openssl/LICENSE     ] && cp -f -p ../openssl/LICENSE     "${_DST}/COPYING-openssl.txt"
 
-  if [ "${_BRANCH#*master*}" = "${_BRANCH}" ] && [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     cp -f -p win32/*.map   "${_DST}/bin/"
   fi
 

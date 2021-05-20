@@ -35,7 +35,7 @@ create_pkg() {
   arch_ext="$2"
 
   # Alter filename for non-release packages
-  if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] || [ "${_BRANCH#*main*}" != "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*main*}" != "${_BRANCH}" ]; then
     if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ]; then
       _suf=''
     else
@@ -85,7 +85,7 @@ create_pkg() {
   fi
 
   # Upload builds to VirusTotal
-  if [ "${_BRANCH#*master*}" != "${_BRANCH}" ] || [ "${_BRANCH#*main*}" != "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*main*}" != "${_BRANCH}" ]; then
   (
     set +x
 

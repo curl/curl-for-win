@@ -54,7 +54,7 @@ echo "${_LOGURL}" | tee "${_LOG}"
 
 export _BRANCH="${APPVEYOR_REPO_BRANCH}${CI_COMMIT_REF_NAME}${GITHUB_REF}${GIT_BRANCH}"
 [ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD)"
-[ -n "${_BRANCH}" ] || _BRANCH='master'
+[ -n "${_BRANCH}" ] || _BRANCH='main'
 export _URL=''
 command -v git >/dev/null 2>&1 && _URL="$(git ls-remote --get-url | sed 's|.git$||')"
 [ -n "${_URL}" ] || _URL="https://github.com/${APPVEYOR_REPO_NAME}${GITHUB_REPOSITORY}"
