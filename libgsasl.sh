@@ -72,7 +72,7 @@ _VER="$1"
     --enable-scram-sha256 \
     --disable-obsolete \
     --disable-valgrind-tests \
-    '--prefix=/usr/local' \
+    --prefix=/usr/local \
     --silent
   make --jobs 2 clean >/dev/null
   make --jobs 2 install "DESTDIR=$(pwd)/pkg" # >/dev/null # V=1

@@ -66,7 +66,7 @@ _VER="$1"
     --disable-shared \
     --enable-static \
     --with-openssl \
-    '--prefix=/usr/local' \
+    --prefix=/usr/local \
     --silent
 # make --jobs 2 clean >/dev/null
   make --jobs 2 install "DESTDIR=$(pwd)/pkg"  # >/dev/null # V=1
