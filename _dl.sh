@@ -77,26 +77,23 @@ if [ "${_BRANCH#*zlibng*}" != "${_BRANCH}" ]; then
   # zlib-ng
   curl -o pkg.bin -L --proto-redir =https "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/${ZLIBNG_VER_}.tar.gz" || exit 1
   openssl dgst -sha256 pkg.bin | grep -q "${ZLIBNG_HASH}" || exit 1
-  tar -xvf pkg.bin > /dev/null 2>&1 || exit 1
+  rm -f -r zlib-ng && mkdir zlib-ng && tar --strip-components 1 -xf pkg.bin -C zlib-ng || exit 1
   rm pkg.bin
-  rm -f -r zlib-ng && mv zlib-ng-* zlib-ng
   [ -f "zlib-ng${_patsuf}.patch" ] && dos2unix < "zlib-ng${_patsuf}.patch" | patch -N -p1 -d zlib-ng
 else
   # zlib
   curl --output pkg.bin --location --proto-redir =https "https://github.com/madler/zlib/archive/v${ZLIB_VER_}.tar.gz" || exit 1
   openssl dgst -sha256 pkg.bin | grep -q -a -F "${ZLIB_HASH}" || exit 1
-  tar -xf pkg.bin || exit 1
+  rm -f -r zlib && mkdir zlib && tar --strip-components 1 -xf pkg.bin -C zlib || exit 1
   rm pkg.bin
-  rm -r -f zlib && mv zlib-* zlib
   [ -f "zlib${_patsuf}.patch" ] && dos2unix < "zlib${_patsuf}.patch" | patch --batch -N -p1 -d zlib
 fi
 
 # zstd
 curl --output pkg.bin --location --proto-redir =https "https://github.com/facebook/zstd/releases/download/v${ZSTD_VER_}/zstd-${ZSTD_VER_}.tar.zst" || exit 1
 openssl dgst -sha256 pkg.bin | grep -q -a -F "${ZSTD_HASH}" || exit 1
-tar -xf pkg.bin || exit 1
+rm -f -r zstd && mkdir zstd && tar --strip-components 1 -xf pkg.bin -C zstd || exit 1
 rm pkg.bin
-rm -r -f zstd && mv zstd-* zstd
 [ -f "zstd${_patsuf}.patch" ] && dos2unix < "zstd${_patsuf}.patch" | patch --batch -N -p1 -d zstd
 
 # brotli
@@ -104,17 +101,15 @@ rm -r -f zstd && mv zstd-* zstd
 # to optimize webpage download sizes.
 curl --output pkg.bin --location --proto-redir =https "https://github.com/google/brotli/archive/v${BROTLI_VER_}.tar.gz" || exit 1
 openssl dgst -sha256 pkg.bin | grep -q -a -F "${BROTLI_HASH}" || exit 1
-tar -xf pkg.bin || exit 1
+rm -f -r brotli && mkdir brotli && tar --strip-components 1 -xf pkg.bin -C brotli || exit 1
 rm pkg.bin
-rm -r -f brotli && mv brotli-* brotli
 [ -f "brotli${_patsuf}.patch" ] && dos2unix < "brotli${_patsuf}.patch" | patch --batch -N -p1 -d brotli
 
 # nghttp2
 curl --output pkg.bin --location --proto-redir =https "https://github.com/nghttp2/nghttp2/releases/download/v${NGHTTP2_VER_}/nghttp2-${NGHTTP2_VER_}.tar.xz" || exit 1
 openssl dgst -sha256 pkg.bin | grep -q -a -F "${NGHTTP2_HASH}" || exit 1
-tar -xf pkg.bin || exit 1
+rm -f -r nghttp2 && mkdir nghttp2 && tar --strip-components 1 -xf pkg.bin -C nghttp2 || exit 1
 rm pkg.bin
-rm -r -f nghttp2 && mv nghttp2-* nghttp2
 [ -f "nghttp2${_patsuf}.patch" ] && dos2unix < "nghttp2${_patsuf}.patch" | patch --batch -N -p1 -d nghttp2
 
 # libgsasl
@@ -125,9 +120,8 @@ curl 'https://ftp.gnu.org/gnu/gnu-keyring.gpg' \
 | gpg --quiet --import 2>/dev/null
 gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
 openssl dgst -sha256 pkg.bin | grep -q -a -F "${LIBGSASL_HASH_}" || exit 1
-tar -xf pkg.bin || exit 1
+rm -f -r libgsasl && mkdir libgsasl && tar --strip-components 1 -xf pkg.bin -C libgsasl || exit 1
 rm pkg.bin
-rm -r -f libgsasl && mv libgsasl-* libgsasl
 
 # This significantly increases curl binary sizes, so leave it optional.
 if [ "${_BRANCH#*libidn2*}" != "${_BRANCH}" ]; then
@@ -137,9 +131,8 @@ if [ "${_BRANCH#*libidn2*}" != "${_BRANCH}" ]; then
     --output pkg.sig "https://ftp.gnu.org/gnu/libidn/libidn2-${LIBIDN2_VER_}.tar.gz.sig" || exit 1
   gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
   openssl dgst -sha256 pkg.bin | grep -q -a -F "${LIBIDN2_HASH}" || exit 1
-  tar -xf pkg.bin || exit 1
+  rm -f -r libidn2 && mkdir libidn2 && tar --strip-components 1 -xf pkg.bin -C libidn2 || exit 1
   rm pkg.bin
-  rm -r -f libidn2 && mv libidn2-* libidn2
 fi
 
 if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
@@ -156,9 +149,8 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
     gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
     openssl dgst -sha256 pkg.bin | grep -q -a -F "${CARES_HASH}" || exit 1
   fi
-  tar -xf pkg.bin || exit 1
+  rm -f -r c-ares && mkdir c-ares && tar --strip-components 1 -xf pkg.bin -C c-ares || exit 1
   rm pkg.bin
-  rm -r -f c-ares && mv c-ares-* c-ares
   [ -f "c-ares${_patsuf}.patch" ] && dos2unix < "c-ares${_patsuf}.patch" | patch --batch -N -p1 -d c-ares
 fi
 
@@ -181,9 +173,8 @@ else
   gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
   openssl dgst -sha256 pkg.bin | grep -q -a -F "${OPENSSL_HASH}" || exit 1
 fi
-tar -xf pkg.bin || exit 1
+rm -f -r openssl && mkdir openssl && tar --strip-components 1 -xf pkg.bin -C openssl || exit 1
 rm pkg.bin
-rm -r -f openssl && mv openssl-* openssl
 [ -f "openssl${_patsuf}.patch" ] && dos2unix < "openssl${_patsuf}.patch" | patch --batch -N -p1 -d openssl
 
 # libssh2
@@ -199,9 +190,8 @@ else
   gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
   openssl dgst -sha256 pkg.bin | grep -q -a -F "${LIBSSH2_HASH}" || exit 1
 fi
-tar -xf pkg.bin || exit 1
+rm -f -r libssh2 && mkdir libssh2 && tar --strip-components 1 -xf pkg.bin -C libssh2 || exit 1
 rm pkg.bin
-rm -r -f libssh2 && mv libssh2-* libssh2
 [ -f "libssh2${_patsuf}.patch" ] && dos2unix < "libssh2${_patsuf}.patch" | patch --batch -N -p1 -d libssh2
 
 # curl
@@ -217,17 +207,15 @@ else
   gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
   openssl dgst -sha256 pkg.bin | grep -q -a -F "${CURL_HASH}" || exit 1
 fi
-tar -xf pkg.bin || exit 1
+rm -f -r curl && mkdir curl && tar --strip-components 1 -xf pkg.bin -C curl || exit 1
 rm pkg.bin
-rm -r -f curl && mv curl-7* curl
 [ -f "curl${_patsuf}.patch" ] && dos2unix < "curl${_patsuf}.patch" | patch --batch -N -p1 -d curl
 
 # osslsigncode
 curl --output pkg.bin --location --proto-redir =https "https://github.com/mtrojnar/osslsigncode/releases/download/2.1/osslsigncode-${OSSLSIGNCODE_VER_}.tar.gz" || exit 1
 openssl dgst -sha256 pkg.bin | grep -q -a -F "${OSSLSIGNCODE_HASH}" || exit 1
-tar -xf pkg.bin || exit 1
+rm -f -r osslsigncode && mkdir osslsigncode && tar --strip-components 1 -xf pkg.bin -C osslsigncode || exit 1
 rm pkg.bin
-rm -r -f osslsigncode && mv osslsigncode-* osslsigncode
 [ -f 'osslsigncode.patch' ] && dos2unix < 'osslsigncode.patch' | patch --batch -N -p1 -d osslsigncode
 
 set +e
