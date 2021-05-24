@@ -75,10 +75,10 @@ fi
 
 if [ "${_BRANCH#*zlibng*}" != "${_BRANCH}" ]; then
   # zlib-ng
-  curl -o pack.bin -L --proto-redir =https "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/${ZLIBNG_VER_}.tar.gz" || exit 1
-  openssl dgst -sha256 pack.bin | grep -q "${ZLIBNG_HASH}" || exit 1
-  tar -xvf pack.bin > /dev/null 2>&1 || exit 1
-  rm pack.bin
+  curl -o pkg.bin -L --proto-redir =https "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/${ZLIBNG_VER_}.tar.gz" || exit 1
+  openssl dgst -sha256 pkg.bin | grep -q "${ZLIBNG_HASH}" || exit 1
+  tar -xvf pkg.bin > /dev/null 2>&1 || exit 1
+  rm pkg.bin
   rm -f -r zlib-ng && mv zlib-ng-* zlib-ng
   [ -f "zlib-ng${_patsuf}.patch" ] && dos2unix < "zlib-ng${_patsuf}.patch" | patch -N -p1 -d zlib-ng
 else
