@@ -19,18 +19,19 @@
 # Tools:
 #                compiler        build
 #                --------------- ----------
-#   brotli.sh    clang           cmake
-#   nghttp2.sh   clang           cmake
-#   nghttp3.sh   clang           cmake
 #   zlib.sh      clang           cmake
+#   zlibng.sh    clang           cmake
 #   zstd.sh      clang           cmake
-#   c-ares.sh    clang           cmake
-#   ngtcp2.sh    gcc             autotools  TODO: move to cmake and clang (couldn't detect openssl, and even configure needs a manual patch)
-#   curl.sh      clang           make       TODO: move to cmake
-#   libssh2.sh   clang           make       TODO: move to cmake
+#   brotli.sh    clang           cmake
 #   libgsasl.sh  clang           autotools
 #   libidn2.sh   gcc             autotools  TODO: move to clang
+#   nghttp2.sh   clang           cmake
+#   nghttp3.sh   clang           cmake
+#   c-ares.sh    clang           cmake
 #   openssl.sh   gcc/clang (v3)  autotools
+#   ngtcp2.sh    gcc             autotools  TODO: move to cmake and clang (couldn't detect openssl, and even configure needs a manual patch)
+#   libssh2.sh   clang           make       TODO: move to cmake
+#   curl.sh      clang           make       TODO: move to cmake
 
 cd "$(dirname "$0")" || exit
 
@@ -234,9 +235,9 @@ build_single_target() {
   time ./brotli.sh     "${BROTLI_VER_}"
   time ./libgsasl.sh "${LIBGSASL_VER_}"
   time ./libidn2.sh   "${LIBIDN2_VER_}"
-  time ./c-ares.sh      "${CARES_VER_}"
   time ./nghttp2.sh   "${NGHTTP2_VER_}"
   time ./nghttp3.sh   "${NGHTTP3_VER_}"
+  time ./c-ares.sh      "${CARES_VER_}"
   time ./openssl.sh   "${OPENSSL_VER_}"
   time ./ngtcp2.sh     "${NGTCP2_VER_}"
   time ./libssh2.sh   "${LIBSSH2_VER_}"
