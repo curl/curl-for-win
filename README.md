@@ -33,7 +33,7 @@
   - Binaries are cross-built and published from Linux
     (via [AppVeyor CI](https://www.appveyor.com/)), using LLVM/Clang for
     curl, libssh2, nghttp2, c-ares, libgsasl, brotli, zstd, zlib-ng/zlib,
-    expat, libmetalink, and GCC for OpenSSL)
+    expat, libmetalink, and GCC for OpenSSL.
     <br>Exact OS image used for the builds is
     [`debian:testing`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing)
     (a [reproducible](https://github.com/debuerreotype/debuerreotype) image)
