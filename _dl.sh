@@ -15,6 +15,10 @@ export LIBGSASL_VER_='1.10.0'
 export LIBGSASL_HASH_=f1b553384dedbd87478449775546a358d6f5140c15cccc8fb574136fdc77329f
 export LIBIDN2_VER_='2.3.1'
 export LIBIDN2_HASH=8af684943836b8b53965d5f5b6714ef13c26c91eaa36ce7d242e3d21f5d40f2d
+export EXPAT_VER_='2.4.1'
+export EXPAT_HASH_=2f9b6a580b94577b150a7d5617ad4643a4301a6616ff459307df3e225bcfbf40
+export LIBMETALINK_VER_='0.1.3'
+export LIBMETALINK_HASH_=86312620c5b64c694b91f9cc355eabbd358fa92195b3e99517504076bf9fe33a
 export NGHTTP2_VER_='1.43.0'
 export NGHTTP2_HASH=f7d54fa6f8aed29f695ca44612136fa2359013547394d5dffeffca9e01a26b0f
 export NGHTTP3_VER_='0.1.90'
@@ -36,7 +40,7 @@ export OSSLSIGNCODE_HASH=c512931b6fe151297a1c689f88501e20ffc204c4ffe30e7392eb3de
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='2'
+export _REV='3'
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
@@ -134,6 +138,20 @@ if [ "${_BRANCH#*libidn2*}" != "${_BRANCH}" ]; then
   rm -f -r libidn2 && mkdir libidn2 && tar --strip-components 1 -xf pkg.bin -C libidn2 || exit 1
   rm pkg.bin
 fi
+
+# expat
+curl --output pkg.bin --location --proto-redir =https "https://github.com/libexpat/libexpat/releases/download/R_$(echo "${EXPAT_VER_}" | tr '.' '_')/expat-${EXPAT_VER_}.tar.bz2" || exit 1
+openssl dgst -sha256 pkg.bin | grep -q -a -F "${EXPAT_HASH}" || exit 1
+rm -f -r expat && mkdir expat && tar --strip-components 1 -xf pkg.bin -C expat || exit 1
+rm pkg.bin
+[ -f "expat${_patsuf}.patch" ] && dos2unix < "expat${_patsuf}.patch" | patch --batch -N -p1 -d expat
+
+# libmetalink
+curl --output pkg.bin --location --proto-redir =https "https://launchpad.net/libmetalink/trunk/libmetalink-${LIBMETALINK_VER_}/+download/libmetalink-${LIBMETALINK_VER_}.tar.xz" || exit 1
+openssl dgst -sha256 pkg.bin | grep -q -a -F "${LIBMETALINK_HASH}" || exit 1
+rm -f -r libmetalink && mkdir libmetalink && tar --strip-components 1 -xf pkg.bin -C libmetalink || exit 1
+rm pkg.bin
+[ -f "libmetalink${_patsuf}.patch" ] && dos2unix < "libmetalink${_patsuf}.patch" | patch --batch -N -p1 -d libmetalink
 
 if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
   # c-ares
