@@ -10,7 +10,7 @@
 export _REV=''
 
 export CURL_VER_='7.77.0'
-export CURL_HASH=
+export CURL_HASH=0f64582c54282f31c0de9f0a1a596b182776bd4df9a4c4a2a41bbeb54f62594b
 export LIBSSH2_VER_='1.9.0'
 export LIBSSH2_HASH=d5fb8bd563305fd1074dda90bd053fb2d29fc4bce048d182f96eaa466dfadafd
 export NGTCP2_VER_='0.1.90'
