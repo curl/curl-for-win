@@ -16,19 +16,7 @@ _VER="$1"
 (
   cd "${_NAM}" || exit
 
-  if [ "${_OS}" != 'win' ]; then
-
-    # https://clang.llvm.org/docs/CrossCompilation.html
-    unset _HOST
-    case "${_OS}" in
-      win)   _HOST='x86_64-pc-mingw32';;
-      linux) _HOST='x86_64-pc-linux';;  # x86_64-pc-linux-gnu
-      mac)   _HOST='x86_64-apple-darwin';;
-      bsd)   _HOST='x86_64-pc-bsd';;
-    esac
-
-    options="--build=${_HOST} --host=${_TRIPLET}"
-  fi
+  [ "${_OS}" != 'win' ] && options="--build=${_CROSS_HOST} --host=${_TRIPLET}"
 
   # Build
 

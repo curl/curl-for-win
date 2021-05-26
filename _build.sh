@@ -72,6 +72,21 @@ case "$(uname)" in
   *)       _OS='unrecognized';;
 esac
 
+# For 'configure'-based builds.
+# This is more or less guesswork and this warning remains:
+#    `configure: WARNING: using cross tools not prefixed with host triplet`
+# Even with `_CCPREFIX` provided.
+if [ "${_OS}" != 'win' ]; then
+  # https://clang.llvm.org/docs/CrossCompilation.html
+  unset _CROSS_HOST
+  case "${_OS}" in
+    win)   _CROSS_HOST='x86_64-pc-mingw32';;
+    linux) _CROSS_HOST='x86_64-pc-linux';;  # x86_64-pc-linux-gnu
+    mac)   _CROSS_HOST='x86_64-apple-darwin';;
+    bsd)   _CROSS_HOST='x86_64-pc-bsd';;
+  esac
+fi
+
 export PUBLISH_PROD_FROM
 if [ "${APPVEYOR_REPO_PROVIDER}" = 'gitHub' ] || \
    [ -n "${GITHUB_RUN_ID}" ]; then
