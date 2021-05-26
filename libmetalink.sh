@@ -37,7 +37,6 @@ _VER="$1"
   export LDFLAGS="${_OPTM}"
   unset ldonly
 
-  # No success in convincing the build system to work correctly with clang:
   if [ "${CC}" = 'mingw-clang' ]; then
     export CC='clang'
     if [ "${_OS}" != 'win' ]; then
