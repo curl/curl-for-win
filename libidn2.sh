@@ -73,19 +73,26 @@ _VER="$1"
 
   "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
   "${_CCPREFIX}strip" --preserve-dates --strip-all ${_pkg}/bin/*.exe
+  "${_CCPREFIX}strip" --preserve-dates --strip-all ${_pkg}/bin/*.dll
 
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
+  ../_peclean.py "${_ref}" ${_pkg}/bin/*.dll
 
   ../_sign-code.sh "${_ref}" ${_pkg}/bin/*.exe
+  ../_sign-code.sh "${_ref}" ${_pkg}/bin/*.dll
 
   touch -c -r "${_ref}" ${_pkg}/bin/*.exe
+  touch -c -r "${_ref}" ${_pkg}/bin/*.dll
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
   touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
   touch -c -r "${_ref}" ${_pkg}/include/*.h
 
   # Tests
 
-  ${_pkg}/bin/idn2.exe --version
+  "${_CCPREFIX}objdump" --all-headers ${_pkg}/bin/*.dll | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" --all-headers ${_pkg}/bin/*.exe | grep -a -E -i "(file format|dll name)"
+
+  ${_WINE} ${_pkg}/bin/idn2.exe --version
 
   # Create package
 
@@ -96,6 +103,7 @@ _VER="$1"
   mkdir -p "${_DST}/include"
   mkdir -p "${_DST}/lib/pkgconfig"
 
+  cp -f -p ${_pkg}/bin/*.dll          "${_DST}/"
   cp -f -p ${_pkg}/bin/*.exe          "${_DST}/"
   cp -f -p ${_pkg}/lib/*.a            "${_DST}/lib/"
   cp -f -p ${_pkg}/lib/pkgconfig/*.pc "${_DST}/lib/pkgconfig/"
