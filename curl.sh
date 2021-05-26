@@ -158,6 +158,7 @@ _VER="$1"
   # deleting their implibs:
   rm -f \
     '../libssh2/win32/libssh2.dll.a' \
+    '../libidn2/pkg/usr/local/lib/libidn2.dll.a' \
     '../libgsasl/pkg/usr/local/lib/libgsasl.dll.a' \
     '../openssl/libcrypto.dll.a' \
     '../openssl/libssl.dll.a'

@@ -239,6 +239,7 @@ _VER="$1"
   # deleting their implibs:
   rm -f \
     '../libssh2/win32/libssh2.dll.a' \
+    '../libidn2/pkg/usr/local/lib/libidn2.dll.a' \
     '../libgsasl/pkg/usr/local/lib/libgsasl.dll.a' \
     '../openssl/libcrypto.dll.a' \
     '../openssl/libssl.dll.a'
@@ -258,6 +259,8 @@ _VER="$1"
   readonly _ref='CHANGES'
 
   "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --strip-all src/*.exe
+  "${_CCPREFIX}strip" --preserve-dates --strip-all lib/*.dll
 
   ../_peclean.py "${_ref}" src/*.exe
   ../_peclean.py "${_ref}" lib/*.dll
