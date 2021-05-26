@@ -16,9 +16,6 @@ _VER="$1"
 (
   cd "${_NAM}" || exit
 
-  # This is pretty much guesswork and this warning remains:
-  #    `configure: WARNING: using cross tools not prefixed with host triplet`
-  # Even with `_CCPREFIX` provided.
   if [ "${_OS}" != 'win' ]; then
 
     # https://clang.llvm.org/docs/CrossCompilation.html

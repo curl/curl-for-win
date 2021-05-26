@@ -7,10 +7,10 @@
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='4'
+export _REV=''
 
-export CURL_VER_='7.76.1'
-export CURL_HASH=64bb5288c39f0840c07d077e30d9052e1cbb9fa6c2dc52523824cc859e679145
+export CURL_VER_='7.77.0'
+export CURL_HASH=
 export LIBSSH2_VER_='1.9.0'
 export LIBSSH2_HASH=d5fb8bd563305fd1074dda90bd053fb2d29fc4bce048d182f96eaa466dfadafd
 export NGTCP2_VER_='0.1.90'
