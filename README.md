@@ -1,7 +1,7 @@
 [![License](https://raw.githubusercontent.com/curl/curl-for-win/main/MIT.svg?sanitize=1)](LICENSE.md)
 [![Build status](https://ci.appveyor.com/api/projects/status/8yf6xjgq7u0cm013/branch/main?svg=true)](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main)
 
-# Automated, reproducible, transparent, Windows builds for [curl](https://curl.se/) and [OpenSSL](https://www.openssl.org/), [libssh2](https://libssh2.org/), [nghttp2](https://nghttp2.org/), [brotli](https://github.com/google/brotli), [zstd](https://github.com/facebook/zstd), [zlib-ng](https://github.com/zlib-ng/zlib-ng)/[zlib](https://github.com/madler/zlib), [libgsasl](https://www.gnu.org/software/gsasl/)
+# Automated, reproducible, transparent, Windows builds for [curl](https://curl.se/) and [OpenSSL](https://www.openssl.org/), [libssh2](https://libssh2.org/) and dependencies
 
   - Packaging aims to follow popular binary releases found on the internet.
   - Both x64 and x86 packages are built using the same process.
@@ -32,8 +32,17 @@
     [LLVM/Clang](https://clang.llvm.org/) for projects supporting it.
   - Binaries are cross-built and published from Linux
     (via [AppVeyor CI](https://www.appveyor.com/)), using LLVM/Clang for
-    curl, libssh2, nghttp2, c-ares, libgsasl, brotli, zstd, zlib-ng/zlib,
-    expat, libmetalink, and GCC for OpenSSL.
+    curl, libssh2,
+    [c-ares](https://c-ares.haxx.se/),
+    [nghttp2](https://nghttp2.org/),
+    [libmetalink](https://launchpad.net/libmetalink),
+    [expat](https://libexpat.github.io/),
+    [libidn2](https://www.gnu.org/software/libidn/#libidn2),
+    [libgsasl](https://www.gnu.org/software/gsasl/),
+    [brotli](https://github.com/google/brotli),
+    [zstd](https://github.com/facebook/zstd),
+    [zlib-ng](https://github.com/zlib-ng/zlib-ng)/[zlib](https://github.com/madler/zlib),
+    and GCC for OpenSSL)
     <br>Exact OS image used for the builds is
     [`debian:testing`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing)
     (a [reproducible](https://github.com/debuerreotype/debuerreotype) image)

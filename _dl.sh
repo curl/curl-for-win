@@ -40,7 +40,7 @@ export OSSLSIGNCODE_HASH=c512931b6fe151297a1c689f88501e20ffc204c4ffe30e7392eb3de
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='3'
+export _REV='4'
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
@@ -127,8 +127,7 @@ openssl dgst -sha256 pkg.bin | grep -q -a -F "${LIBGSASL_HASH_}" || exit 1
 rm -f -r libgsasl && mkdir libgsasl && tar --strip-components 1 -xf pkg.bin -C libgsasl || exit 1
 rm pkg.bin
 
-# This significantly increases curl binary sizes, so leave it optional.
-if [ "${_BRANCH#*libidn2*}" != "${_BRANCH}" ]; then
+if [ "${_BRANCH#*winidn*}" = "${_BRANCH}" ]; then
   # libidn2
   curl \
     --output pkg.bin "https://ftp.gnu.org/gnu/libidn/libidn2-${LIBIDN2_VER_}.tar.gz" \
