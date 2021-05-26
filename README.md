@@ -37,12 +37,12 @@
     [nghttp2](https://nghttp2.org/),
     [libmetalink](https://launchpad.net/libmetalink),
     [expat](https://libexpat.github.io/),
+    [libidn2](https://www.gnu.org/software/libidn/#libidn2),
     [libgsasl](https://www.gnu.org/software/gsasl/),
     [brotli](https://github.com/google/brotli),
     [zstd](https://github.com/facebook/zstd),
     [zlib-ng](https://github.com/zlib-ng/zlib-ng)/[zlib](https://github.com/madler/zlib),
-    and GCC for OpenSSL,
-    [libidn2](https://www.gnu.org/software/libidn/#libidn2).
+    and GCC for OpenSSL.
     <br>Exact OS image used for the builds is
     [`debian:testing`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing)
     (a [reproducible](https://github.com/debuerreotype/debuerreotype) image)

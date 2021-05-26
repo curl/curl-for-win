@@ -24,7 +24,7 @@
 #   zstd.sh         clang           cmake
 #   brotli.sh       clang           cmake
 #   libgsasl.sh     clang           autotools
-#   libidn2.sh      gcc             autotools  TODO: move to clang
+#   libidn2.sh      clang           autotools
 #   expat.sh        clang           cmake
 #   libmetalink.sh  clang           autotools
 #   nghttp2.sh      clang           cmake
