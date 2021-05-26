@@ -78,34 +78,34 @@ else
   _patsuf=''
 fi
 
+my_unpack() {
+  pkg="$1"
+  openssl dgst -sha256 pkg.bin | grep -q -a -F "${2:-}" || exit 1
+  rm -f -r "${pkg}" && mkdir "${pkg}" && tar --strip-components 1 -xf pkg.bin -C "${pkg}" || exit 1
+  rm -f pkg.bin pkg.sig
+  [ -f "${pkg}${_patsuf}.patch" ] && dos2unix < "${pkg}${_patsuf}.patch" | patch -N -p1 -d "${pkg}"
+  return 0
+}
+
 if [ "${_BRANCH#*zlibng*}" != "${_BRANCH}" ]; then
   # zlib-ng
   curl --location --proto-redir =https \
     --output pkg.bin \
     "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/${ZLIBNG_VER_}.tar.gz" || exit 1
-  openssl dgst -sha256 pkg.bin | grep -q -a -F "${ZLIBNG_HASH}" || exit 1
-  rm -f -r zlib-ng && mkdir zlib-ng && tar --strip-components 1 -xf pkg.bin -C zlib-ng || exit 1
-  rm pkg.bin
-  [ -f "zlib-ng${_patsuf}.patch" ] && dos2unix < "zlib-ng${_patsuf}.patch" | patch -N -p1 -d zlib-ng
+  my_unpack zlib-ng "${ZLIBNG_HASH}"
 else
   # zlib
   curl --location --proto-redir =https \
     --output pkg.bin \
     "https://github.com/madler/zlib/archive/v${ZLIB_VER_}.tar.gz" || exit 1
-  openssl dgst -sha256 pkg.bin | grep -q -a -F "${ZLIB_HASH}" || exit 1
-  rm -f -r zlib && mkdir zlib && tar --strip-components 1 -xf pkg.bin -C zlib || exit 1
-  rm pkg.bin
-  [ -f "zlib${_patsuf}.patch" ] && dos2unix < "zlib${_patsuf}.patch" | patch --batch -N -p1 -d zlib
+  my_unpack zlib "${ZLIB_HASH}"
 fi
 
 # zstd
 curl --location --proto-redir =https \
   --output pkg.bin \
   "https://github.com/facebook/zstd/releases/download/v${ZSTD_VER_}/zstd-${ZSTD_VER_}.tar.zst" || exit 1
-openssl dgst -sha256 pkg.bin | grep -q -a -F "${ZSTD_HASH}" || exit 1
-rm -f -r zstd && mkdir zstd && tar --strip-components 1 -xf pkg.bin -C zstd || exit 1
-rm pkg.bin
-[ -f "zstd${_patsuf}.patch" ] && dos2unix < "zstd${_patsuf}.patch" | patch --batch -N -p1 -d zstd
+my_unpack zstd "${ZSTD_HASH}"
 
 # brotli
 # Relatively high curl binary size + extra dependency overhead aiming mostly
@@ -113,19 +113,13 @@ rm pkg.bin
 curl --location --proto-redir =https \
   --output pkg.bin \
   "https://github.com/google/brotli/archive/v${BROTLI_VER_}.tar.gz" || exit 1
-openssl dgst -sha256 pkg.bin | grep -q -a -F "${BROTLI_HASH}" || exit 1
-rm -f -r brotli && mkdir brotli && tar --strip-components 1 -xf pkg.bin -C brotli || exit 1
-rm pkg.bin
-[ -f "brotli${_patsuf}.patch" ] && dos2unix < "brotli${_patsuf}.patch" | patch --batch -N -p1 -d brotli
+my_unpack brotli "${BROTLI_HASH}"
 
 # nghttp2
 curl --location --proto-redir =https \
   --output pkg.bin \
   "https://github.com/nghttp2/nghttp2/releases/download/v${NGHTTP2_VER_}/nghttp2-${NGHTTP2_VER_}.tar.xz" || exit 1
-openssl dgst -sha256 pkg.bin | grep -q -a -F "${NGHTTP2_HASH}" || exit 1
-rm -f -r nghttp2 && mkdir nghttp2 && tar --strip-components 1 -xf pkg.bin -C nghttp2 || exit 1
-rm pkg.bin
-[ -f "nghttp2${_patsuf}.patch" ] && dos2unix < "nghttp2${_patsuf}.patch" | patch --batch -N -p1 -d nghttp2
+my_unpack nghttp2 "${NGHTTP2_HASH}"
 
 # libgsasl
 curl \
@@ -136,9 +130,7 @@ curl \
 curl 'https://ftp.gnu.org/gnu/gnu-keyring.gpg' \
 | gpg --quiet --import 2>/dev/null
 gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-openssl dgst -sha256 pkg.bin | grep -q -a -F "${LIBGSASL_HASH_}" || exit 1
-rm -f -r libgsasl && mkdir libgsasl && tar --strip-components 1 -xf pkg.bin -C libgsasl || exit 1
-rm pkg.bin
+my_unpack libgsasl "${LIBGSASL_HASH}"
 
 if [ "${_BRANCH#*winidn*}" = "${_BRANCH}" ]; then
   # libidn2
@@ -148,28 +140,20 @@ if [ "${_BRANCH#*winidn*}" = "${_BRANCH}" ]; then
     --output pkg.sig \
     "https://ftp.gnu.org/gnu/libidn/libidn2-${LIBIDN2_VER_}.tar.gz.sig" || exit 1
   gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-  openssl dgst -sha256 pkg.bin | grep -q -a -F "${LIBIDN2_HASH}" || exit 1
-  rm -f -r libidn2 && mkdir libidn2 && tar --strip-components 1 -xf pkg.bin -C libidn2 || exit 1
-  rm pkg.bin
+  my_unpack libidn2 "${LIBIDN2_HASH}"
 fi
 
 # expat
 curl --location --proto-redir =https \
   --output pkg.bin \
   "https://github.com/libexpat/libexpat/releases/download/R_$(echo "${EXPAT_VER_}" | tr '.' '_')/expat-${EXPAT_VER_}.tar.bz2" || exit 1
-openssl dgst -sha256 pkg.bin | grep -q -a -F "${EXPAT_HASH}" || exit 1
-rm -f -r expat && mkdir expat && tar --strip-components 1 -xf pkg.bin -C expat || exit 1
-rm pkg.bin
-[ -f "expat${_patsuf}.patch" ] && dos2unix < "expat${_patsuf}.patch" | patch --batch -N -p1 -d expat
+my_unpack expat "${EXPAT_HASH}"
 
 # libmetalink
 curl --location --proto-redir =https \
   --output pkg.bin \
   "https://launchpad.net/libmetalink/trunk/libmetalink-${LIBMETALINK_VER_}/+download/libmetalink-${LIBMETALINK_VER_}.tar.xz" || exit 1
-openssl dgst -sha256 pkg.bin | grep -q -a -F "${LIBMETALINK_HASH}" || exit 1
-rm -f -r libmetalink && mkdir libmetalink && tar --strip-components 1 -xf pkg.bin -C libmetalink || exit 1
-rm pkg.bin
-[ -f "libmetalink${_patsuf}.patch" ] && dos2unix < "libmetalink${_patsuf}.patch" | patch --batch -N -p1 -d libmetalink
+my_unpack libmetalink "${LIBMETALINK_HASH}"
 
 if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
   # c-ares
@@ -178,6 +162,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
     curl --location --proto-redir =https \
       --output pkg.bin \
       'https://github.com/c-ares/c-ares/archive/611a5ef938c2ca92beb51f455323cda4d40119f7.tar.gz' || exit 1
+    my_unpack cares
   else
     curl --location --proto-redir =https \
       --output pkg.bin \
@@ -186,11 +171,8 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
       "https://github.com/c-ares/c-ares/releases/download/cares-$(echo "${CARES_VER_}" | tr '.' '_')/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
     gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
     gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-    openssl dgst -sha256 pkg.bin | grep -q -a -F "${CARES_HASH}" || exit 1
+    my_unpack cares "${CARES_HASH}"
   fi
-  rm -f -r c-ares && mkdir c-ares && tar --strip-components 1 -xf pkg.bin -C c-ares || exit 1
-  rm pkg.bin
-  [ -f "c-ares${_patsuf}.patch" ] && dos2unix < "c-ares${_patsuf}.patch" | patch --batch -N -p1 -d c-ares
 fi
 
 # openssl
@@ -199,6 +181,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   curl --location --proto-redir =https \
     --output pkg.bin \
     'https://www.openssl.org/source/openssl-3.0.0-alpha9.tar.gz' || exit 1
+  my_unpack openssl
 else
   # QUIC fork:
   #   https://github.com/quictls/openssl.git
@@ -213,11 +196,8 @@ else
   gpg_recv_key 8657ABB260F056B1E5190839D9C4D26D0E604491
   gpg_recv_key 7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C
   gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-  openssl dgst -sha256 pkg.bin | grep -q -a -F "${OPENSSL_HASH}" || exit 1
+  my_unpack openssl "${OPENSSL_HASH}"
 fi
-rm -f -r openssl && mkdir openssl && tar --strip-components 1 -xf pkg.bin -C openssl || exit 1
-rm pkg.bin
-[ -f "openssl${_patsuf}.patch" ] && dos2unix < "openssl${_patsuf}.patch" | patch --batch -N -p1 -d openssl
 
 # libssh2
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
@@ -225,6 +205,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   curl --location --proto-redir =https \
     --output pkg.bin \
     'https://github.com/libssh2/libssh2/archive/53ff2e6da450ac1801704b35b3360c9488161342.tar.gz' || exit 1
+  my_unpack libssh2
 else
   curl --location --proto-redir =https \
     --output pkg.bin \
@@ -233,11 +214,8 @@ else
     "https://github.com/libssh2/libssh2/releases/download/libssh2-${LIBSSH2_VER_}/libssh2-${LIBSSH2_VER_}.tar.gz.asc" || exit 1
   gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-  openssl dgst -sha256 pkg.bin | grep -q -a -F "${LIBSSH2_HASH}" || exit 1
+  my_unpack libssh2 "${LIBSSH2_HASH}"
 fi
-rm -f -r libssh2 && mkdir libssh2 && tar --strip-components 1 -xf pkg.bin -C libssh2 || exit 1
-rm pkg.bin
-[ -f "libssh2${_patsuf}.patch" ] && dos2unix < "libssh2${_patsuf}.patch" | patch --batch -N -p1 -d libssh2
 
 # curl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
@@ -245,6 +223,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   curl --location --proto-redir =https \
     --output pkg.bin \
     'https://github.com/curl/curl/archive/63f6b3b22077c6fd4a75ce4ceac7258509af412c.tar.gz' || exit 1
+  my_unpack curl
 else
   curl --location --proto-redir =https \
     --output pkg.bin \
@@ -253,21 +232,13 @@ else
     "https://curl.se/download/curl-${CURL_VER_}.tar.xz.asc" || exit 1
   gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-  openssl dgst -sha256 pkg.bin | grep -q -a -F "${CURL_HASH}" || exit 1
+  my_unpack curl "${CURL_HASH}"
 fi
-rm -f -r curl && mkdir curl && tar --strip-components 1 -xf pkg.bin -C curl || exit 1
-rm pkg.bin
-[ -f "curl${_patsuf}.patch" ] && dos2unix < "curl${_patsuf}.patch" | patch --batch -N -p1 -d curl
 
 # osslsigncode
 curl --location --proto-redir =https \
   --output pkg.bin \
   "https://github.com/mtrojnar/osslsigncode/releases/download/2.1/osslsigncode-${OSSLSIGNCODE_VER_}.tar.gz" || exit 1
-openssl dgst -sha256 pkg.bin | grep -q -a -F "${OSSLSIGNCODE_HASH}" || exit 1
-rm -f -r osslsigncode && mkdir osslsigncode && tar --strip-components 1 -xf pkg.bin -C osslsigncode || exit 1
-rm pkg.bin
-[ -f 'osslsigncode.patch' ] && dos2unix < 'osslsigncode.patch' | patch --batch -N -p1 -d osslsigncode
+my_unpack osslsigncode "${OSSLSIGNCODE_HASH}"
 
 set +e
-
-rm -f pkg.bin pkg.sig
