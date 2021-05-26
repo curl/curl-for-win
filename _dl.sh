@@ -56,7 +56,7 @@ if [ "${_OS}" != 'win' ]; then
   pip3 --disable-pip-version-check --no-cache-dir install --user pefile
 fi
 
-alias curl='curl --user-agent curl --fail --silent --show-error --connect-timeout 15 --max-time 20 --retry 3'
+alias curl='curl --user-agent curl --fail --silent --show-error --connect-timeout 15 --max-time 20 --retry 3 --max-redirs 10'
 alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format long'
 [ "${_OS}" = 'mac' ] && alias tar='gtar'
 
