@@ -30,10 +30,10 @@
 #   nghttp2.sh      clang           cmake
 #   nghttp3.sh      clang           cmake
 #   c-ares.sh       clang           cmake
-#   openssl.sh      gcc/clang (v3)  autotools
-#   ngtcp2.sh       gcc             autotools  TODO: move to cmake and clang (couldn't detect openssl, and even configure needs a manual patch)
-#   libssh2.sh      clang           make       TODO: move to cmake
-#   curl.sh         clang           make       TODO: move to cmake
+#   openssl.sh      gcc/clang (v3)  proprietary
+#   ngtcp2.sh       gcc             autotools    TODO: move to cmake and clang (couldn't detect openssl, and even configure needs a manual patch)
+#   libssh2.sh      clang           make         TODO: move to cmake
+#   curl.sh         clang           make         TODO: move to cmake
 
 cd "$(dirname "$0")" || exit
 
