@@ -78,7 +78,7 @@ esac
 # Even with `_CCPREFIX` provided.
 if [ "${_OS}" != 'win' ]; then
   # https://clang.llvm.org/docs/CrossCompilation.html
-  unset _CROSS_HOST
+  export _CROSS_HOST
   case "${_OS}" in
     win)   _CROSS_HOST='x86_64-pc-mingw32';;
     linux) _CROSS_HOST='x86_64-pc-linux';;  # x86_64-pc-linux-gnu
