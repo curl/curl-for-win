@@ -73,7 +73,7 @@
     [Schannel](https://docs.microsoft.com/windows/win32/com/schannel)
     available as SSL backends.
   - Optional support for
-    [C-ares](https://c-ares.haxx.se/).
+    [c-ares](https://c-ares.haxx.se/).
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
   - To verify the correct checksum for the latest build, you can look up the
     correct ones in the build log as they are generated. Watch for `main`
