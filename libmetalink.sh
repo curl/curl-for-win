@@ -58,9 +58,6 @@ _VER="$1"
   # Disable _mkgmtime() in 32-bit build for compatibility with old Windows
   # versions where msvcrt.dll does not export function _mkgmtime32(), that
   # this function is being mapped to.
-  # WARNING: Besides being ugly, this is also a _destructive_ patch and will
-  #          affect all subsequent build targets. x86 is the last build now,
-  #          so this is fine.
   [ "${_CPU}" = 'x86' ] && sed -i.bak 's|_mkgmtime|_mkgmtime_do_not_detect|g' ./configure
 
   # shellcheck disable=SC2086
@@ -75,6 +72,8 @@ _VER="$1"
     --prefix=/usr/local
   make --jobs 2 clean >/dev/null
   make --jobs 2 install "DESTDIR=$(pwd)/pkg" # >/dev/null # V=1
+
+  [ "${_CPU}" = 'x86' ] && mv ./configure.bak ./configure
 
   # DESTDIR= + --prefix=
   _pkg='pkg/usr/local'
