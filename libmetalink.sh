@@ -54,6 +54,15 @@ _VER="$1"
   export CFLAGS="${LDFLAGS} -fno-ident -DXML_STATIC"
   LDFLAGS="${LDFLAGS}${ldonly}"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
+
+  # Disable _mkgmtime() in 32-bit build for compatibility with old Windows
+  # versions where msvcrt.dll does not export function _mkgmtime32(), that
+  # this function is being mapped to.
+  # WARNING: Besides being ugly, this is also a _destructive_ patch and will
+  #          affect all subsequent build targets. x86 is the last build now,
+  #          so this is fine.
+  [ "${_CPU}" = 'x86' ] && sed -i.bak 's|_mkgmtime|_mkgmtime_do_not_detect|g' ./configure
+
   # shellcheck disable=SC2086
   ./configure ${options} \
     --disable-dependency-tracking \

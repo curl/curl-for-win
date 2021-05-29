@@ -264,9 +264,9 @@ build_single_target() {
 }
 
 # Build binaries
+# build_single_target arm64
   build_single_target x64
   build_single_target x86
-# build_single_target arm64
 
 # Upload/deploy binaries
 . ./_ul.sh || exit 1
