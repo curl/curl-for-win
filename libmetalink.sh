@@ -49,7 +49,7 @@ _VER="$1"
   sed -i.bak "s|1.14.1|$("${ACLOCAL}" --version | head -1 | grep -a -o -E '[0-9.]+')|g" ./aclocal.m4
 
   # Skip building example tool. There is no 'configure' option for this.
-  sed -i.bak 's|SUBDIRS = examples man3|SUBDIRS = man3|g' doc/Makefile.am
+  sed -i.bak 's| examples||g' doc/Makefile.am
 
   export CFLAGS="${LDFLAGS} -fno-ident -DXML_STATIC"
   LDFLAGS="${LDFLAGS}${ldonly}"
