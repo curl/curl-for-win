@@ -162,28 +162,20 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
 fi
 
 # openssl
-if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-  OPENSSL_VER_='1.1.1-pre1'
-  curl --location --proto-redir =https \
-    --output pkg.bin \
-    'https://www.openssl.org/source/openssl-3.0.0-alpha9.tar.gz' || exit 1
-  my_unpack openssl
-else
-  # QUIC fork:
-  #   https://github.com/quictls/openssl.git
-  curl \
-    --output pkg.bin \
-    "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz" \
-    --output pkg.sig \
-    "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz.asc" || exit 1
-  # From:
-  #   https://www.openssl.org/source/
-  #   https://www.openssl.org/community/omc.html
-  gpg_recv_key 8657ABB260F056B1E5190839D9C4D26D0E604491
-  gpg_recv_key 7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C
-  gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-  my_unpack openssl "${OPENSSL_HASH}"
-fi
+[ "${_BRANCH#*dev*}" != "${_BRANCH}" ] && OPENSSL_VER_='3.0.0-alpha9'
+# QUIC fork:
+#   https://github.com/quictls/openssl.git
+curl \
+  --output pkg.bin \
+  "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz" \
+  --output pkg.sig \
+  "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz.asc" || exit 1
+# Via:
+#   https://www.openssl.org/community/omc.html
+gpg_recv_key 8657ABB260F056B1E5190839D9C4D26D0E604491
+gpg_recv_key 7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C
+gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
+my_unpack openssl "${OPENSSL_HASH}"
 
 # libssh2
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
