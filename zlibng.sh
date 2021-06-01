@@ -47,7 +47,7 @@ _VER="$1"
   options="${options} -DCMAKE_BUILD_TYPE=Release"
   # A bizarre fix that became required around year 2021 to not fail instantly
   # on macOS. Likely not the correct/complete fix.
-  [ "${os}" = 'mac' ] && options="${options} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
+  [ "${_OS}" = 'mac' ] && options="${options} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
   options="${options} -DZLIB_COMPAT=1"
   options="${options} -DZLIB_ENABLE_TESTS=0"
   options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
