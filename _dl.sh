@@ -7,7 +7,7 @@
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='1'
+export _REV='2'
 
 export CURL_VER_='7.77.0'
 export CURL_HASH=0f64582c54282f31c0de9f0a1a596b182776bd4df9a4c4a2a41bbeb54f62594b
@@ -23,10 +23,6 @@ export NGHTTP3_VER_='0.1.90'
 export NGHTTP3_HASH=
 export NGHTTP2_VER_='1.43.0'
 export NGHTTP2_HASH=f7d54fa6f8aed29f695ca44612136fa2359013547394d5dffeffca9e01a26b0f
-export LIBMETALINK_VER_='0.1.3'
-export LIBMETALINK_HASH=86312620c5b64c694b91f9cc355eabbd358fa92195b3e99517504076bf9fe33a
-export EXPAT_VER_='2.4.1'
-export EXPAT_HASH=2f9b6a580b94577b150a7d5617ad4643a4301a6616ff459307df3e225bcfbf40
 export LIBIDN2_VER_='2.3.1'
 export LIBIDN2_HASH=8af684943836b8b53965d5f5b6714ef13c26c91eaa36ce7d242e3d21f5d40f2d
 export LIBGSASL_VER_='1.10.0'
@@ -144,18 +140,6 @@ if [ "${_BRANCH#*winidn*}" = "${_BRANCH}" ]; then
   gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
   my_unpack libidn2 "${LIBIDN2_HASH}"
 fi
-
-# expat
-curl --location --proto-redir =https \
-  --output pkg.bin \
-  "https://github.com/libexpat/libexpat/releases/download/R_$(echo "${EXPAT_VER_}" | tr '.' '_')/expat-${EXPAT_VER_}.tar.bz2" || exit 1
-my_unpack expat "${EXPAT_HASH}"
-
-# libmetalink
-curl --location --proto-redir =https \
-  --output pkg.bin \
-  "https://launchpad.net/libmetalink/trunk/libmetalink-${LIBMETALINK_VER_}/+download/libmetalink-${LIBMETALINK_VER_}.tar.xz" || exit 1
-my_unpack libmetalink "${LIBMETALINK_HASH}"
 
 if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
   # c-ares
