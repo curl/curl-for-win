@@ -70,6 +70,9 @@ _VER="$1"
 
     options='-DCMAKE_SYSTEM_NAME=Windows'
     options="${options} -DCMAKE_BUILD_TYPE=Release"
+    # A bizarre fix that became required around year 2021 to not fail instantly
+    # on macOS. Likely not the correct/complete fix.
+    [ "${_OS}" = 'mac' ] && options="${options} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
     [ "${pass}" = 'static' ] && options="${options} -DBUILD_SHARED_LIBS=0"
     [ "${pass}" = 'shared' ] && options="${options} -DBUILD_SHARED_LIBS=1"
     options="${options} -DCURL_STATIC_CRT=1"
@@ -77,10 +80,11 @@ _VER="$1"
     options="${options} -DCMAKE_USE_OPENSSL=1"
     options="${options} -DZLIB_INCLUDE_DIR:PATH=$(pwd)/../zlib/pkg/usr/local/include"
     options="${options} -DZLIB_LIBRARY:FILEPATH=$(pwd)/../zlib/pkg/usr/local/lib/libz.a"
-    options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../openssl/pkg/usr/local/"
-    options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../openssl/pkg/usr/local/include"
-    options="${options} -DOPENSSL_LIBRARIES=$(pwd)/../openssl/pkg/usr/local/lib"
-    options="${options} -DOPENSSL_CRYPTO_LIBRARY=$(pwd)/../openssl/pkg/usr/local/lib"
+    # For OpenSSL 3.x
+    options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/"
+    options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/include"
+    options="${options} -DOPENSSL_LIBRARIES=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/lib"
+    options="${options} -DOPENSSL_CRYPTO_LIBRARY=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/lib"
     options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
     options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
     options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
