@@ -62,10 +62,10 @@ create_pkg() {
       .tar.xz) tar --create \
         --owner 0 --group 0 --numeric-owner --mode go=rX,u+rw,a-s \
         --files-from "${_FLS}" | xz > "${_cdo}/${_pkg}";;
-      .zip)    zip --quiet -9 --strip-extra \
+      .zip) zip --quiet -9 --strip-extra \
         --names-stdin - < "${_FLS}" > "${_cdo}/${_pkg}";;
       # Requires: p7zip (MSYS2, Homebrew, Linux rpm), p7zip-full (Linux deb)
-      .7z)     7z a -bd -r -mx "${_cdo}/${_pkg}" "@${_FLS}" >/dev/null;;
+      .7z) 7z a -bd -r -mx "${_cdo}/${_pkg}" "@${_FLS}" >/dev/null;;
     esac
     touch -c -r "$1" "${_cdo}/${_pkg}"
   )
