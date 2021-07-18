@@ -7,7 +7,7 @@
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='2'
+export _REV='3'
 
 export CURL_VER_='7.77.0'
 export CURL_HASH=0f64582c54282f31c0de9f0a1a596b182776bd4df9a4c4a2a41bbeb54f62594b
@@ -21,8 +21,8 @@ export CARES_VER_='1.17.1'
 export CARES_HASH=d73dd0f6de824afd407ce10750ea081af47eba52b8a6cb307d220131ad93fc40
 export NGHTTP3_VER_='0.1.90'
 export NGHTTP3_HASH=
-export NGHTTP2_VER_='1.43.0'
-export NGHTTP2_HASH=f7d54fa6f8aed29f695ca44612136fa2359013547394d5dffeffca9e01a26b0f
+export NGHTTP2_VER_='1.44.0'
+export NGHTTP2_HASH=5699473b29941e8dafed10de5c8cb37a3581edf62ba7d04b911ca247d4de3c5d
 export LIBIDN2_VER_='2.3.1'
 export LIBIDN2_HASH=8af684943836b8b53965d5f5b6714ef13c26c91eaa36ce7d242e3d21f5d40f2d
 export LIBGSASL_VER_='1.10.0'
