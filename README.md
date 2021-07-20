@@ -19,7 +19,7 @@
     support enabled.
   - curl/libcurl features enabled by default (`{upcoming}`):
     <br>`dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
-    <br>`alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI TLS-SRP Unicode UnixSockets zstd`
+    <br>`alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI TLS-SRP UnixSockets zstd`
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the build
     [in public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
