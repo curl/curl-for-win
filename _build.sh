@@ -15,6 +15,8 @@
 #   - Enable Control Flow Guard (once FLOSS toolchains support it)
 #   - ARM64 builds (once FLOSS toolchains support it)
 #   - Switch to libssh from libssh2?
+#   - LLVM -mretpoline
+#   - GCC -mindirect-branch -mfunction-return -mindirect-branch-register
 
 # Tools:
 #                compiler        build

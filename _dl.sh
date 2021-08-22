@@ -36,8 +36,8 @@ export ZLIBNG_HASH=eca3fe72aea7036c31d00ca120493923c4d5b99fe02e6d3322f7c88dbdcd0
 export ZLIB_VER_='1.2.11'
 export ZLIB_HASH=629380c90a77b964d896ed37163f5c3a34f6e6d897311f1df2a7016355c45eff
 
-export OSSLSIGNCODE_VER_='2.1.0'
-export OSSLSIGNCODE_HASH=c512931b6fe151297a1c689f88501e20ffc204c4ffe30e7392eb3decf195065b
+export OSSLSIGNCODE_VER_='2.2.0'
+export OSSLSIGNCODE_HASH=51694331952b3e8b3b20d5de155c6bedb286583c6863ab4bd679c3f288c9b8d1
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
@@ -216,7 +216,7 @@ fi
 # osslsigncode
 curl --location --proto-redir =https \
   --output pkg.bin \
-  "https://github.com/mtrojnar/osslsigncode/releases/download/2.1/osslsigncode-${OSSLSIGNCODE_VER_}.tar.gz" || exit 1
+  "https://github.com/mtrojnar/osslsigncode/releases/download/$(echo "${OSSLSIGNCODE_VER_}" | cut -d . -f -2)/osslsigncode-${OSSLSIGNCODE_VER_}.tar.gz" || exit 1
 my_unpack osslsigncode "${OSSLSIGNCODE_HASH}"
 
 set +e

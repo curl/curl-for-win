@@ -26,7 +26,7 @@ _VER="$1"
 
   # shellcheck disable=SC2086
   gcc -O3 \
-    osslsigncode.c -o ../osslsigncode-local \
+    osslsigncode.c msi.c -o ../osslsigncode-local \
     -DHAVE_SYS_MMAN_H \
     ${options} \
     "-DPACKAGE_VERSION=\"${_VER}\"" \
