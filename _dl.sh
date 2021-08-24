@@ -53,7 +53,7 @@ if [ "${_OS}" != 'win' ]; then
 fi
 
 alias curl='curl --user-agent curl --fail --silent --show-error --connect-timeout 15 --max-time 20 --retry 3 --max-redirs 10'
-alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format long'
+alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format 0xlong'
 [ "${_OS}" = 'mac' ] && alias tar='gtar'
 
 gpg_recv_key() {
