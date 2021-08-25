@@ -26,11 +26,11 @@ EOF
 unix2dos --quiet --keepdate "${_fn}"
 touch -c -r "$1" "${_fn}"
 
-find "${_DST}" \( -name '*.txt' -o -name '*.md' -o -name '*.rst' \) -exec unix2dos --quiet --keepdate {} +
+find "${_DST}" \( -name '*.txt' -o -name '*.md' -o -name '*.rst' \) -exec unix2dos --quiet --keepdate '{}' +
 find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' \;
 # NOTE: This isn't effective on MSYS2:
-find "${_DST}" -name '*.a' -exec chmod a-x {} +
-find "${_DST}" \( -name '*.exe' -o -name '*.dll' \) -exec chmod a+x {} +
+find "${_DST}" -name '*.a' -exec chmod a-x '{}' +
+find "${_DST}" \( -name '*.exe' -o -name '*.dll' \) -exec chmod a+x '{}' +
 
 create_pkg() {
   arch_ext="$2"
@@ -53,7 +53,7 @@ create_pkg() {
   (
     cd "${_DST}/.." || exit
     case "${_OS}" in
-      win) find "${_BAS}" -exec attrib +A -R {} \;
+      win) find "${_BAS}" -exec attrib +A -R '{}' \;
     esac
 
     find "${_BAS}" -type f | sort > "${_FLS}"
