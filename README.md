@@ -95,8 +95,8 @@
   * Official page, specific versions (back to 7.66.0):<br>
     `https://curl.se/windows/dl-<curl-version>[_<build-number>]/`
     <br>Examples:
-    <br><https://curl.se/windows/dl-7.73.0/>
-    <br><https://curl.se/windows/dl-7.73.0_1/>
+    <br><https://curl.se/windows/dl-7.77.0/>
+    <br><https://curl.se/windows/dl-7.77.0_1/>
 
 # Build logs
 
