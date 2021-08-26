@@ -144,10 +144,10 @@ fi
 if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
   # c-ares
   if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-    CARES_VER_='1.13.1-dev'
+    CARES_VER_='1.17.2-dev'
     curl --location --proto-redir =https \
       --output pkg.bin \
-      'https://github.com/c-ares/c-ares/archive/611a5ef938c2ca92beb51f455323cda4d40119f7.tar.gz' || exit 1
+      'https://github.com/c-ares/c-ares/archive/6ce842ff936116b8c1026ecaafdc06468af47e6c.tar.gz' || exit 1
     my_unpack cares
   else
     curl --location --proto-redir =https \
@@ -182,7 +182,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   LIBSSH2_VER_='1.9.1-dev'
   curl --location --proto-redir =https \
     --output pkg.bin \
-    'https://github.com/libssh2/libssh2/archive/53ff2e6da450ac1801704b35b3360c9488161342.tar.gz' || exit 1
+    'https://github.com/libssh2/libssh2/archive/a88a727c2a1840f979b34f12bcce3d55dcd7ea6e.tar.gz' || exit 1
   my_unpack libssh2
 else
   curl --location --proto-redir =https \
@@ -197,10 +197,10 @@ fi
 
 # curl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-  CURL_VER_='7.59.0-dev'
+  CURL_VER_='7.79.0-dev'
   curl --location --proto-redir =https \
     --output pkg.bin \
-    'https://github.com/curl/curl/archive/63f6b3b22077c6fd4a75ce4ceac7258509af412c.tar.gz' || exit 1
+    'https://github.com/curl/curl/archive/5dc594e44f73b1726cabca6a4395323f972e416d.tar.gz' || exit 1
   my_unpack curl
 else
   curl --location --proto-redir =https \
