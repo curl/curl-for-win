@@ -162,7 +162,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
 fi
 
 # openssl
-[ "${_BRANCH#*dev*}" != "${_BRANCH}" ] && OPENSSL_VER_='3.0.0-alpha9'
+[ "${_BRANCH#*dev*}" != "${_BRANCH}" ] && OPENSSL_VER_='3.0.0-beta2'
 # QUIC fork:
 #   https://github.com/quictls/openssl.git
 curl \
