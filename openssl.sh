@@ -102,8 +102,11 @@ _VER="$1"
   if [ -f 'CHANGES.md' ]; then
     # OpenSSL 3.x
     _ssldir="ssl"
+    _lib='/lib'
+    [ "${_CPU}" = 'x64' ] && _lib='/lib64'
   else
     _ssldir="${_prefix}/ssl"
+    _lib='/lib'
   fi
   _pkr='pkg'
 
@@ -136,11 +139,14 @@ _VER="$1"
 
   # Make steps for determinism
 
-  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives "${_pkg}"/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives "${_pkg}${_lib}"/*.a
   "${_CCPREFIX}strip" --preserve-dates --strip-all "${_pkg}"/bin/openssl.exe
   "${_CCPREFIX}strip" --preserve-dates --strip-all "${_pkg}"/bin/*.dll
-  if ls "${_pkg}"/lib/engines*/*.dll >/dev/null 2>&1; then
-    "${_CCPREFIX}strip" --preserve-dates --strip-all "${_pkg}"/lib/engines*/*.dll
+  if ls "${_pkg}${_lib}"/ossl-modules/*.dll >/dev/null 2>&1; then
+    "${_CCPREFIX}strip" --preserve-dates --strip-all "${_pkg}${_lib}"/ossl-modules/*.dll
+  fi
+  if ls "${_pkg}${_lib}"/engines*/*.dll >/dev/null 2>&1; then
+    "${_CCPREFIX}strip" --preserve-dates --strip-all "${_pkg}${_lib}"/engines*/*.dll
   fi
 
   ../_peclean.py "${_ref}" "${_pkg}"/bin/openssl.exe
@@ -149,10 +155,15 @@ _VER="$1"
   ../_sign-code.sh "${_ref}" "${_pkg}"/bin/openssl.exe
   ../_sign-code.sh "${_ref}" "${_pkg}"/bin/*.dll
 
-  if ls "${_pkg}"/lib/engines*/*.dll >/dev/null 2>&1; then
-    ../_peclean.py "${_ref}" "${_pkg}"/lib/engines*/*.dll
+  if ls "${_pkg}${_lib}"/ossl-modules/*.dll >/dev/null 2>&1; then
+    ../_peclean.py "${_ref}" "${_pkg}${_lib}"/ossl-modules/*.dll
 
-    ../_sign-code.sh "${_ref}" "${_pkg}"/lib/engines*/*.dll
+    ../_sign-code.sh "${_ref}" "${_pkg}${_lib}"/ossl-modules/*.dll
+  fi
+  if ls "${_pkg}${_lib}"/engines*/*.dll >/dev/null 2>&1; then
+    ../_peclean.py "${_ref}" "${_pkg}${_lib}"/engines*/*.dll
+
+    ../_sign-code.sh "${_ref}" "${_pkg}${_lib}"/engines*/*.dll
   fi
 
   touch -c -r "${_ref}" "${_pks}"/ct_log_list.cnf
@@ -162,10 +173,13 @@ _VER="$1"
   touch -c -r "${_ref}" "${_pkg}"/bin/openssl.exe
   touch -c -r "${_ref}" "${_pkg}"/bin/*.dll
   touch -c -r "${_ref}" "${_pkg}"/include/openssl/*.h
-  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
-  touch -c -r "${_ref}" "${_pkg}"/lib/pkgconfig/*.pc
-  if ls "${_pkg}"/lib/engines*/*.dll >/dev/null 2>&1; then
-    touch -c -r "${_ref}" "${_pkg}"/lib/engines*/*
+  touch -c -r "${_ref}" "${_pkg}${_lib}"/*.a
+  touch -c -r "${_ref}" "${_pkg}${_lib}"/pkgconfig/*.pc
+  if ls "${_pkg}${_lib}"/ossl-modules/*.dll >/dev/null 2>&1; then
+    touch -c -r "${_ref}" "${_pkg}${_lib}"/ossl-modules/*
+  fi
+  if ls "${_pkg}${_lib}"/engines*/*.dll >/dev/null 2>&1; then
+    touch -c -r "${_ref}" "${_pkg}${_lib}"/engines*/*
   fi
 
   # Tests
@@ -185,19 +199,28 @@ _VER="$1"
   mkdir -p "${_DST}/include/openssl"
   mkdir -p "${_DST}/lib/pkgconfig"
 
-  if ls "${_pkg}"/lib/engines*/*.dll >/dev/null 2>&1; then
-    cp -f -p -r "${_pkg}"/lib/engines* "${_DST}/"
+  if ls "${_pkg}${_lib}"/ossl-modules/*.dll >/dev/null 2>&1; then
+    cp -f -p -r "${_pkg}${_lib}"/ossl-modules "${_DST}/"
+  fi
+  if ls "${_pkg}${_lib}"/engines*/*.dll >/dev/null 2>&1; then
+    cp -f -p -r "${_pkg}${_lib}"/engines* "${_DST}/"
   fi
 
-  cp -f -p "${_pks}"/ct_log_list.cnf      "${_DST}/"
-  cp -f -p "${_pks}"/ct_log_list.cnf.dist "${_DST}/"
-  cp -f -p "${_pks}"/openssl.cnf          "${_DST}/"
-  cp -f -p "${_pks}"/openssl.cnf.dist     "${_DST}/"
-  cp -f -p "${_pkg}"/bin/openssl.exe      "${_DST}/"
-  cp -f -p "${_pkg}"/bin/*.dll            "${_DST}/"
-  cp -f -p "${_pkg}"/include/openssl/*.h  "${_DST}/include/openssl/"
-  cp -f -p "${_pkg}"/lib/*.a              "${_DST}/lib/"
-  cp -f -p "${_pkg}"/lib/pkgconfig/*.pc   "${_DST}/lib/pkgconfig/"
+  # 3.x fixup: rename lib64 back to lib
+  if [ -d "${_DST}/lib64" ]; then
+    mv "${_DST}/lib64" "${_DST}/lib"
+    sed -i.bak 's|/lib64|/lib|g' "${_pkg}${_lib}"/pkgconfig/*.pc
+  fi
+
+  cp -f -p "${_pks}"/ct_log_list.cnf       "${_DST}/"
+  cp -f -p "${_pks}"/ct_log_list.cnf.dist  "${_DST}/"
+  cp -f -p "${_pks}"/openssl.cnf           "${_DST}/"
+  cp -f -p "${_pks}"/openssl.cnf.dist      "${_DST}/"
+  cp -f -p "${_pkg}"/bin/openssl.exe       "${_DST}/"
+  cp -f -p "${_pkg}"/bin/*.dll             "${_DST}/"
+  cp -f -p "${_pkg}"/include/openssl/*.h   "${_DST}/include/openssl/"
+  cp -f -p "${_pkg}${_lib}"/*.a            "${_DST}/lib/"
+  cp -f -p "${_pkg}${_lib}"/pkgconfig/*.pc "${_DST}/lib/pkgconfig/"
   if [ -f 'CHANGES.md' ]; then
     # OpenSSL 3.x
     cp -f -p CHANGES.md  "${_DST}/"
