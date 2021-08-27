@@ -56,7 +56,7 @@ _VER="$1"
     options="${options} -DCMAKE_SYSTEM_NAME=Windows"
     options="${options} -DCMAKE_BUILD_TYPE=Release"
     # A bizarre fix that became required around year 2021 to not fail instantly
-    # on macOS. Likely not the correct/complete fix.
+    # on macOS when using clang. Likely not the correct/complete fix.
     [ "${_OS}" = 'mac' ] && options="${options} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
     [ "${pass}" = 'static' ] && options="${options} -DBUILD_SHARED_LIBS=0"
     [ "${pass}" = 'shared' ] && options="${options} -DBUILD_SHARED_LIBS=1"
