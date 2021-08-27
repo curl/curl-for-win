@@ -227,7 +227,13 @@ build_single_target() {
       _SYSROOT="/usr/${_TRIPLET}"
     fi
     if [ "${_OS}" = 'mac' ]; then
-      _WINE='wine64'
+      if [ "${_CPU}" = 'x64' ] && \
+         [ "$(uname -m)" = 'x86_64' ] && \
+         [ "$(sysctl -i -n sysctl.proc_translated)" != '1' ]; then
+        _WINE='wine64'
+      else
+        _WINE='echo'
+      fi
     else
       _WINE='wine'
     fi
