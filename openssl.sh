@@ -196,7 +196,6 @@ _VER="$1"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(mktemp -d)/${_BAS}"
 
-  mkdir -p "${_DST}/include/openssl"
   mkdir -p "${_DST}/lib/pkgconfig"
 
   if ls "${_pkg}${_lib}"/ossl-modules/*.dll >/dev/null 2>&1; then
@@ -212,15 +211,15 @@ _VER="$1"
     sed -i.bak 's|/lib64|/lib|g' "${_pkg}${_lib}"/pkgconfig/*.pc
   fi
 
-  cp -f -p "${_pks}"/ct_log_list.cnf       "${_DST}/"
-  cp -f -p "${_pks}"/ct_log_list.cnf.dist  "${_DST}/"
-  cp -f -p "${_pks}"/openssl.cnf           "${_DST}/"
-  cp -f -p "${_pks}"/openssl.cnf.dist      "${_DST}/"
-  cp -f -p "${_pkg}"/bin/openssl.exe       "${_DST}/"
-  cp -f -p "${_pkg}"/bin/*.dll             "${_DST}/"
-  cp -f -p "${_pkg}"/include/openssl/*.h   "${_DST}/include/openssl/"
-  cp -f -p "${_pkg}${_lib}"/*.a            "${_DST}/lib/"
-  cp -f -p "${_pkg}${_lib}"/pkgconfig/*.pc "${_DST}/lib/pkgconfig/"
+  cp -f -p    "${_pks}"/ct_log_list.cnf       "${_DST}/"
+  cp -f -p    "${_pks}"/ct_log_list.cnf.dist  "${_DST}/"
+  cp -f -p    "${_pks}"/openssl.cnf           "${_DST}/"
+  cp -f -p    "${_pks}"/openssl.cnf.dist      "${_DST}/"
+  cp -f -p    "${_pkg}"/bin/openssl.exe       "${_DST}/"
+  cp -f -p    "${_pkg}"/bin/*.dll             "${_DST}/"
+  cp -f -p -r "${_pkg}"/include               "${_DST}/"
+  cp -f -p    "${_pkg}${_lib}"/*.a            "${_DST}/lib/"
+  cp -f -p    "${_pkg}${_lib}"/pkgconfig/*.pc "${_DST}/lib/pkgconfig/"
   if [ -f 'CHANGES.md' ]; then
     # OpenSSL 3.x
     cp -f -p CHANGES.md  "${_DST}/"
