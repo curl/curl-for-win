@@ -196,7 +196,7 @@ _VER="$1"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(mktemp -d)/${_BAS}"
 
-  mkdir -p "${_DST}/lib/pkgconfig"
+  mkdir -p "${_DST}"
 
   if ls "${_pkg}${_lib}"/ossl-modules/*.dll >/dev/null 2>&1; then
     cp -f -p -r "${_pkg}${_lib}"/ossl-modules "${_DST}/"
@@ -206,10 +206,12 @@ _VER="$1"
   fi
 
   # 3.x fixup: rename lib64 back to lib
+  sed -i.bak 's|/lib64|/lib|g' "${_pkg}${_lib}"/pkgconfig/*.pc
   if [ -d "${_DST}/lib64" ]; then
     mv "${_DST}/lib64" "${_DST}/lib"
-    sed -i.bak 's|/lib64|/lib|g' "${_pkg}${_lib}"/pkgconfig/*.pc
   fi
+
+  mkdir -p "${_DST}/lib/pkgconfig"
 
   cp -f -p    "${_pks}"/ct_log_list.cnf       "${_DST}/"
   cp -f -p    "${_pks}"/ct_log_list.cnf.dist  "${_DST}/"
