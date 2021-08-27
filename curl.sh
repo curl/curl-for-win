@@ -23,6 +23,7 @@ _VER="$1"
 
   if [ ! -f 'Makefile' ]; then
     autoreconf -fi
+    cp -f -p Makefile.dist Makefile
   fi
 
   # Build
