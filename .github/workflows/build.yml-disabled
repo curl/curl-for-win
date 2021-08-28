@@ -1,6 +1,6 @@
 ---
 # yamllint disable rule:truthy
-# https://help.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow
+# https://docs.github.com/actions/learn-github-actions
 name: build
 on:
   push:

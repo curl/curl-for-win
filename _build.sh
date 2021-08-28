@@ -47,10 +47,10 @@ if [ -n "${APPVEYOR_ACCOUNT_NAME}" ]; then
   _LOGURL="${APPVEYOR_URL}/project/${APPVEYOR_ACCOUNT_NAME}/${APPVEYOR_PROJECT_SLUG}/build/${APPVEYOR_BUILD_VERSION}/job/${APPVEYOR_JOB_ID}"
 # _LOGURL="${APPVEYOR_URL}/api/buildjobs/${APPVEYOR_JOB_ID}/log"
 elif [ -n "${GITHUB_RUN_ID}" ]; then
-  # https://help.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables
+  # https://docs.github.com/actions/reference/environment-variables
   _LOGURL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 else
-  # https://docs.gitlab.com/ce/ci/variables/README.html
+  # https://docs.gitlab.com/ce/ci/variables/index.html
   _LOGURL="${CI_SERVER_URL}/${CI_PROJECT_PATH}/-/jobs/${CI_JOB_ID}/raw"
 fi
 echo "${_LOGURL}" | tee "${_LOG}"
