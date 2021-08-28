@@ -196,40 +196,39 @@ _VER="$1"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(mktemp -d)/${_BAS}"
 
-  mkdir -p "${_DST}"
-
-  if ls "${_pkg}${_lib}"/ossl-modules/*.dll >/dev/null 2>&1; then
-    cp -f -p -r "${_pkg}${_lib}"/ossl-modules "${_DST}/"
-  fi
-  if ls "${_pkg}${_lib}"/engines*/*.dll >/dev/null 2>&1; then
-    cp -f -p -r "${_pkg}${_lib}"/engines* "${_DST}/"
-  fi
-
-  # 3.x fixup: rename lib64 back to lib
-  sed -i.bak 's|/lib64|/lib|g' "${_pkg}${_lib}"/pkgconfig/*.pc
-  if [ -d "${_DST}/lib64" ]; then
-    mv "${_DST}/lib64" "${_DST}/lib"
-  fi
-
-  mkdir -p "${_DST}/lib/pkgconfig"
-
-  cp -f -p    "${_pks}"/ct_log_list.cnf       "${_DST}/"
-  cp -f -p    "${_pks}"/ct_log_list.cnf.dist  "${_DST}/"
-  cp -f -p    "${_pks}"/openssl.cnf           "${_DST}/"
-  cp -f -p    "${_pks}"/openssl.cnf.dist      "${_DST}/"
-  cp -f -p    "${_pkg}"/bin/openssl.exe       "${_DST}/"
-  cp -f -p    "${_pkg}"/bin/*.dll             "${_DST}/"
-  cp -f -p -r "${_pkg}"/include               "${_DST}/"
-  cp -f -p    "${_pkg}${_lib}"/*.a            "${_DST}/lib/"
-  cp -f -p    "${_pkg}${_lib}"/pkgconfig/*.pc "${_DST}/lib/pkgconfig/"
+  cp -f -p    "${_pks}"/ct_log_list.cnf      "${_DST}/"
+  cp -f -p    "${_pks}"/ct_log_list.cnf.dist "${_DST}/"
+  cp -f -p    "${_pks}"/openssl.cnf          "${_DST}/"
+  cp -f -p    "${_pks}"/openssl.cnf.dist     "${_DST}/"
+  cp -f -p    "${_pkg}"/bin/openssl.exe      "${_DST}/"
+  cp -f -p    "${_pkg}"/bin/*.dll            "${_DST}/"
+  cp -f -p -r "${_pkg}"/include              "${_DST}/"
   if [ -f 'CHANGES.md' ]; then
     # OpenSSL 3.x
+
+    cp -f -p -r "${_pkg}${_lib}" "${_DST}/"
+
+    # Fixup: rename lib64 back to lib
+    if [ -d "${_DST}/lib64" ]; then
+      mv "${_DST}/lib64" "${_DST}/lib"
+      sed -i.bak 's|/lib64|/lib|g' "${_DST}"/lib/pkgconfig/*.pc
+    fi
+
     cp -f -p CHANGES.md  "${_DST}/"
     cp -f -p LICENSE.txt "${_DST}/"
     cp -f -p README.md   "${_DST}/"
     cp -f -p FAQ.md      "${_DST}/"
     cp -f -p NEWS.md     "${_DST}/"
   else
+    if ls "${_pkg}${_lib}"/engines*/*.dll >/dev/null 2>&1; then
+      cp -f -p -r "${_pkg}${_lib}"/engines* "${_DST}/"
+    fi
+
+    mkdir -p "${_DST}/lib/pkgconfig"
+
+    cp -f -p "${_pkg}${_lib}"/*.a            "${_DST}/lib/"
+    cp -f -p "${_pkg}${_lib}"/pkgconfig/*.pc "${_DST}/lib/pkgconfig/"
+
     cp -f -p CHANGES     "${_DST}/CHANGES.txt"
     cp -f -p LICENSE     "${_DST}/LICENSE.txt"
     cp -f -p README      "${_DST}/README.txt"
