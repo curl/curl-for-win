@@ -208,12 +208,6 @@ _VER="$1"
 
     cp -f -p -r "${_pkg}${_lib}" "${_DST}/"
 
-    # Fixup: rename lib64 back to lib
-    if [ -d "${_DST}/lib64" ]; then
-      mv "${_DST}/lib64" "${_DST}/lib"
-      sed -i.bak 's|/lib64|/lib|g' "${_DST}"/lib/pkgconfig/*.pc
-    fi
-
     cp -f -p CHANGES.md  "${_DST}/"
     cp -f -p LICENSE.txt "${_DST}/"
     cp -f -p README.md   "${_DST}/"
