@@ -116,7 +116,7 @@ _VER="$1"
     -fno-ident \
     -Wl,--nxcompat -Wl,--dynamicbase \
     no-unit-test \
-    no-idea \
+    no-idea no-legacy \
     no-tests \
     no-makedepend \
     "--prefix=${_prefix}" \
