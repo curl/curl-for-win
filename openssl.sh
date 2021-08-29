@@ -104,9 +104,11 @@ _VER="$1"
     _ssldir="ssl"
     _lib='/lib'
     [ "${_CPU}" = 'x64' ] && _lib='/lib64'
+    options="${options} no-legacy"
   else
     _ssldir="${_prefix}/ssl"
     _lib='/lib'
+    options="${options} no-idea"
   fi
   _pkr='pkg'
 
@@ -116,7 +118,6 @@ _VER="$1"
     -fno-ident \
     -Wl,--nxcompat -Wl,--dynamicbase \
     no-unit-test \
-    no-idea no-legacy \
     no-tests \
     no-makedepend \
     "--prefix=${_prefix}" \
