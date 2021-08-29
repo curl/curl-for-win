@@ -196,6 +196,8 @@ _VER="$1"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(mktemp -d)/${_BAS}"
 
+  mkdir -p "${_DST}"
+
   cp -f -p    "${_pks}"/ct_log_list.cnf      "${_DST}/"
   cp -f -p    "${_pks}"/ct_log_list.cnf.dist "${_DST}/"
   cp -f -p    "${_pks}"/openssl.cnf          "${_DST}/"
