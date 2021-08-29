@@ -108,7 +108,6 @@ _VER="$1"
   else
     _ssldir="${_prefix}/ssl"
     _lib='/lib'
-    options="${options} no-idea"
   fi
   _pkr='pkg'
 
@@ -117,6 +116,7 @@ _VER="$1"
     "--cross-compile-prefix=${_CONF_CCPREFIX}" \
     -fno-ident \
     -Wl,--nxcompat -Wl,--dynamicbase \
+    no-idea \
     no-unit-test \
     no-tests \
     no-makedepend \
