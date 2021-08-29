@@ -166,10 +166,7 @@ _VER="$1"
     ../_sign-code.sh "${_ref}" "${_pkg}${_lib}"/engines*/*.dll
   fi
 
-  touch -c -r "${_ref}" "${_pks}"/ct_log_list.cnf
-  touch -c -r "${_ref}" "${_pks}"/ct_log_list.cnf.dist
-  touch -c -r "${_ref}" "${_pks}"/openssl.cnf
-  touch -c -r "${_ref}" "${_pks}"/openssl.cnf.dist
+  touch -c -r "${_ref}" "${_pks}"/*.cnf*
   touch -c -r "${_ref}" "${_pkg}"/bin/openssl.exe
   touch -c -r "${_ref}" "${_pkg}"/bin/*.dll
   touch -c -r "${_ref}" "${_pkg}"/include/openssl/*.h
@@ -198,17 +195,19 @@ _VER="$1"
 
   mkdir -p "${_DST}"
 
-  cp -f -p    "${_pks}"/ct_log_list.cnf      "${_DST}/"
-  cp -f -p    "${_pks}"/ct_log_list.cnf.dist "${_DST}/"
-  cp -f -p    "${_pks}"/openssl.cnf          "${_DST}/"
-  cp -f -p    "${_pks}"/openssl.cnf.dist     "${_DST}/"
-  cp -f -p    "${_pkg}"/bin/openssl.exe      "${_DST}/"
-  cp -f -p    "${_pkg}"/bin/*.dll            "${_DST}/"
-  cp -f -p -r "${_pkg}"/include              "${_DST}/"
+  cp -f -p -r "${_pkg}"/include "${_DST}/"
+
   if [ -f 'CHANGES.md' ]; then
     # OpenSSL 3.x
 
+    mkdir -p "${_DST}/bin"
+    cp -f -p "${_pkg}"/bin/openssl.exe "${_DST}/bin/"
+    cp -f -p "${_pkg}"/bin/*.dll       "${_DST}/bin/"
+
     cp -f -p -r "${_pkg}${_lib}" "${_DST}/"
+
+    mkdir -p "${_DST}/ssl"
+    cp -f -p "${_pks}"/*.cnf* "${_DST}/ssl/"
 
     cp -f -p CHANGES.md  "${_DST}/"
     cp -f -p LICENSE.txt "${_DST}/"
@@ -224,6 +223,10 @@ _VER="$1"
 
     cp -f -p "${_pkg}${_lib}"/*.a            "${_DST}/lib/"
     cp -f -p "${_pkg}${_lib}"/pkgconfig/*.pc "${_DST}/lib/pkgconfig/"
+
+    cp -f -p "${_pks}"/*.cnf*                "${_DST}/"
+    cp -f -p "${_pkg}"/bin/openssl.exe       "${_DST}/"
+    cp -f -p "${_pkg}"/bin/*.dll             "${_DST}/"
 
     cp -f -p CHANGES     "${_DST}/CHANGES.txt"
     cp -f -p LICENSE     "${_DST}/LICENSE.txt"
