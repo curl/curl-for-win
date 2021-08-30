@@ -24,7 +24,8 @@ if [ -f "${SIGN_CODE_KEY}" ] && \
       -in "${file}" -out "${file}-signed" \
       -st "${unixts}" \
       -pkcs12 "${SIGN_CODE_KEY}" -pass "${SIGN_CODE_KEY_PASS}"
-    mv -f "${file}-signed" "${file}"
+    cp -f "${file}-signed" "${file}"
+    rm -f "${file}-signed"
   )
   done
 fi
