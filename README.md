@@ -1,7 +1,7 @@
 [![License](https://raw.githubusercontent.com/curl/curl-for-win/main/MIT.svg?sanitize=1)](LICENSE.md)
 [![Build status](https://ci.appveyor.com/api/projects/status/8yf6xjgq7u0cm013/branch/main?svg=true)](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main)
 
-# Automated, reproducible, transparent, Windows builds for [curl](https://curl.se/) and [OpenSSL](https://www.openssl.org/), [libssh2](https://libssh2.org/) and dependencies
+# Automated, reproducible, transparent, Windows builds for [curl](https://curl.se/) and dependencies
 
   - Packaging aims to follow popular binary releases found on the internet.
   - Both x64 and x86 packages are built using the same process.
