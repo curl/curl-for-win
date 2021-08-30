@@ -170,15 +170,10 @@ _VER="$1"
   touch -c -r "${_ref}" "${_pks}"/*.cnf*
   touch -c -r "${_ref}" "${_pkg}"/bin/openssl.exe
   touch -c -r "${_ref}" "${_pkg}"/bin/*.dll
-  touch -c -r "${_ref}" "${_pkg}"/include/openssl/*.h
   touch -c -r "${_ref}" "${_pkg}${_lib}"/*.a
   touch -c -r "${_ref}" "${_pkg}${_lib}"/pkgconfig/*.pc
-  if ls "${_pkg}${_lib}"/ossl-modules/*.dll >/dev/null 2>&1; then
-    touch -c -r "${_ref}" "${_pkg}${_lib}"/ossl-modules/*
-  fi
-  if ls "${_pkg}${_lib}"/engines*/*.dll >/dev/null 2>&1; then
-    touch -c -r "${_ref}" "${_pkg}${_lib}"/engines*/*
-  fi
+  find "${_pkg}"/include/openssl -exec touch -c -r "${_ref}" '{}' \;
+  find "${_pkg}${_lib}" -exec touch -c -r "${_ref}" '{}' \;
 
   # Tests
 
@@ -196,7 +191,7 @@ _VER="$1"
 
   mkdir -p "${_DST}"
 
-  cp -f -p -r "${_pkg}"/include "${_DST}/"
+  cp -f -p -r "${_pkg}"/include/openssl "${_DST}/"
 
   if [ -f 'CHANGES.md' ]; then
     # OpenSSL 3.x
@@ -234,12 +229,6 @@ _VER="$1"
     cp -f -p README      "${_DST}/README.txt"
     cp -f -p FAQ         "${_DST}/FAQ.txt"
     cp -f -p NEWS        "${_DST}/NEWS.txt"
-  fi
-
-  # Luckily, applink is not implemented for 64-bit mingw, omit this file then
-  if [ "${_CPU}" = 'x86' ] && [ -r ms/applink.c ]; then
-    touch -c -r "${_ref}" ms/applink.c
-    cp -f -p ms/applink.c "${_DST}/include/openssl/"
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"
