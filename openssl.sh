@@ -237,7 +237,10 @@ _VER="$1"
   fi
 
   # Luckily, applink is not implemented for 64-bit mingw, omit this file then
-  [ "${_CPU}" = 'x86' ] && cp -f -p ms/applink.c "${_DST}/include/openssl/"
+  if [ "${_CPU}" = 'x86' ] && [ -r ms/applink.c ]; then
+    touch -c -r "${_ref}" ms/applink.c
+    cp -f -p ms/applink.c "${_DST}/include/openssl/"
+  fi
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )
