@@ -254,6 +254,10 @@ build_single_target() {
   build_single_target x64
   build_single_target x86
 
+case "${_OS}" in
+  mac)   rm -f -P "${SIGN_CODE_KEY}";;
+  linux) [ -w "${SIGN_CODE_KEY}" ] && srm "${SIGN_CODE_KEY}";;
+esac
 rm -f "${SIGN_CODE_KEY}"
 
 # Upload/deploy binaries

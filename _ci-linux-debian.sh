@@ -16,6 +16,6 @@ apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
   libssl-dev \
   gcc-mingw-w64 g++-mingw-w64 ${_optpkg} \
   autoconf automake libtool \
-  zip zstd time jq dos2unix wine64 wine32
+  zip zstd time jq dos2unix secure-delete wine64 wine32
 
 ./_build.sh

@@ -89,5 +89,10 @@ if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ] && \
       'curl-for-win@silly.haxx.se:.'
   )
   fi
+
+  case "${_OS}" in
+    mac)   rm -f -P "${DEPLOY_KEY}";;
+    linux) [ -w "${DEPLOY_KEY}" ] && srm "${DEPLOY_KEY}";;
+  esac
   rm -f "${DEPLOY_KEY}"
 fi
