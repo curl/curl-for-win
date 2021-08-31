@@ -94,7 +94,7 @@ create_pkg() {
       | sed -n -E 's,.+= ([0-9a-fA-F]{64}),\1,p')"
     # https://developers.virustotal.com/v3.0/reference
     out="$(echo "x-apikey: ${VIRUSTOTAL_APIKEY}" | curl \
-      --user-agent curl --fail --silent --show-error \
+      --disable --user-agent curl --fail --silent --show-error \
       --request POST 'https://www.virustotal.com/api/v3/files' \
       --header @/dev/stdin \
       --form "file=@${_pkg}")"
@@ -102,7 +102,7 @@ create_pkg() {
     if [ "$?" = 0 ]; then
       id="$(echo "${out}" | jq --raw-output '.data.id')"
       out="$(echo "x-apikey: ${VIRUSTOTAL_APIKEY}" | curl \
-        --user-agent curl --fail --silent --show-error \
+        --disable --user-agent curl --fail --silent --show-error \
         "https://www.virustotal.com/api/v3/analyses/${id}" \
         --header @/dev/stdin)"
       # shellcheck disable=SC2181

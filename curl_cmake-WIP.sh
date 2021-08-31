@@ -251,7 +251,8 @@ _VER="$1"
 
   # Download CA bundle
   [ -f '../ca-bundle.crt' ] || \
-    curl --user-agent curl --fail --silent --show-error --remote-time --xattr \
+    curl --disable --user-agent curl --fail --silent --show-error \
+      --remote-time --xattr \
       --output '../ca-bundle.crt' \
       'https://curl.se/ca/cacert.pem'
 
