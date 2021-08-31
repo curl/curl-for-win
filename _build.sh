@@ -140,34 +140,6 @@ fi
 
 ls -l "$(dirname "$0")/osslsigncode-local"*
 
-# decrypt deploy key
-DEPLOY_KEY="$(realpath '.')/deploy.key"
-if [ -f "${DEPLOY_KEY}.asc" ]; then
-(
-  set +x
-  if [ -n "${DEPLOY_GPG_PASS}" ]; then
-    install -m 600 /dev/null "${DEPLOY_KEY}"
-    echo "${DEPLOY_GPG_PASS}" | gpg \
-      --batch --yes --no-tty --quiet \
-      --pinentry-mode loopback --passphrase-fd 0 \
-      --decrypt "${DEPLOY_KEY}.asc" 2>/dev/null >> "${DEPLOY_KEY}"
-  fi
-)
-fi
-
-# add deploy target to known hosts
-if [ -f "${DEPLOY_KEY}" ]; then
-  # ssh-keyscan silly.haxx.se
-  readonly host_key='silly.haxx.se ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFVVUP9dpjNl2qbHkDYMDS+cTOfxFytjkC04Oh9RNJBg'
-  if [ ! -f "${HOME}/.ssh/known_hosts" ]; then
-    mkdir -m 700 "${HOME}/.ssh"
-    install -m 600 /dev/null "${HOME}/.ssh/known_hosts"
-  fi
-  if ! grep -q -a -F "${host_key}" -- "${HOME}/.ssh/known_hosts"; then
-    echo "${host_key}" >> "${HOME}/.ssh/known_hosts"
-  fi
-fi
-
 case "${_OS}" in
   mac) alias sed=gsed;;
 esac
