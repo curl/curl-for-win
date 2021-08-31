@@ -13,8 +13,7 @@ if gpg --list-public-keys "${SIGN_PKG_KEY_ID}" >/dev/null 2>&1; then
   set +x
   file="$1"
   echo "Package signing: '${file}'"
-  echo "${SIGN_PKG_KEY_PASS}" | \
-  gpg \
+  echo "${SIGN_PKG_KEY_PASS}" | gpg \
     --batch --yes --no-tty \
     --pinentry-mode loopback --passphrase-fd 0 \
     --keyid-format 0xlong \
