@@ -3,8 +3,6 @@
 # Copyright 2020-present Viktor Szakats <https://vsz.me/>
 # See LICENSE.md
 
-# TODO: Implement or switch to minisign/signify
-
 cd "$(dirname "$0")" || exit
 
 # Create signature for package
