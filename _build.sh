@@ -282,5 +282,7 @@ build_single_target() {
   build_single_target x64
   build_single_target x86
 
+rm -f "${SIGN_CODE_KEY}"
+
 # Upload/deploy binaries
 . ./_ul.sh || exit 1

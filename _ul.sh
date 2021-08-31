@@ -64,3 +64,4 @@ if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ]; then
   )
   fi
 fi
+rm -f "${DEPLOY_KEY}"
