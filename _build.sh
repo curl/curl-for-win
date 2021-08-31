@@ -107,7 +107,10 @@ SIGN_PKG_KEY='sign-pkg.gpg.asc'
 if [ -f "${SIGN_PKG_KEY}" ] && [ "${SIGN_PKG_KEY_ID}" ]; then
 (
   set +x
-  gpg --batch --quiet --passphrase "${SIGN_PKG_GPG_PASS}" --decrypt "${SIGN_PKG_KEY}" | \
+  echo "${SIGN_PKG_GPG_PASS}" | gpg \
+    --batch --yes --no-tty --quiet \
+    --pinentry-mode loopback --passphrase-fd 0 \
+    --decrypt "${SIGN_PKG_KEY}" 2>/dev/null | \
   gpg --batch --quiet --import
 )
 fi
@@ -120,7 +123,10 @@ if [ -f "${SIGN_CODE_KEY}.asc" ]; then
   set +x
   if [ -n "${SIGN_CODE_GPG_PASS}" ]; then
     install -m 600 /dev/null "${SIGN_CODE_KEY}"
-    gpg --batch --passphrase "${SIGN_CODE_GPG_PASS}" --decrypt "${SIGN_CODE_KEY}.asc" >> "${SIGN_CODE_KEY}"
+    echo "${SIGN_CODE_GPG_PASS}" | gpg \
+      --batch --yes --no-tty --quiet \
+      --pinentry-mode loopback --passphrase-fd 0 \
+      --decrypt "${SIGN_CODE_KEY}.asc" 2>/dev/null >> "${SIGN_CODE_KEY}"
   fi
 )
 fi
@@ -140,7 +146,10 @@ if [ -f "${DEPLOY_KEY}.asc" ]; then
   set +x
   if [ -n "${DEPLOY_GPG_PASS}" ]; then
     install -m 600 /dev/null "${DEPLOY_KEY}"
-    gpg --batch --passphrase "${DEPLOY_GPG_PASS}" --decrypt "${DEPLOY_KEY}.asc" >> "${DEPLOY_KEY}"
+    echo "${DEPLOY_GPG_PASS}" | gpg \
+      --batch --yes --no-tty --quiet \
+      --pinentry-mode loopback --passphrase-fd 0 \
+      --decrypt "${DEPLOY_KEY}.asc" 2>/dev/null >> "${DEPLOY_KEY}"
   fi
 )
 fi
