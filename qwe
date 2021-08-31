@@ -1,0 +1,8 @@
+curl --location --request POST 'https://new.dogovor24.kz/api/explorer/uuid-file/9420d798-a8a7-4ee4-b663-c0492ae250a9/file-signature' \
+--header 'Accept: application/json' \
+--header 'workspace-id: 52185' \
+--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0MkZmMU9mTUgwM1habU1VU1BMbzNMSmUyaHF2M3pMWXNtWnBoeU15TFV4V21aQzBWeVBMTkZWUk9mQmNEWENpIiwiaXNzIjoibmV3LmRvZ292b3IyNC5reiIsImF1ZCI6Im5ldy5kb2dvdm9yMjQua3oiLCJzdWIiOiI1NDU4MSIsInVzZXIiOnsiaWQiOjU0NTgxLCJ3b3Jrc3BhY2VfaWQiOiI1MjE4NSJ9LCJzY29wZXMiOlsiMWMiXX0.hBaZ9OPbUSutilZ2j_DxhwKBZYnf4IyOAJcKP5VGhRQ' \
+--data-raw '{
+	"type": "visa",
+	"email": "dogovor24@kazmi.kz"
+}'
