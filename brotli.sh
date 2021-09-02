@@ -81,7 +81,7 @@ _VER="$1"
   _pkg='pkg/usr/local'
 
   # Remove '-static' suffixes from static lib names to make these behave
-  # like other most other projects do.
+  # like most other projects do.
 
 # for fn in ${_pkg}/lib/*-static.a; do mv "${fn}" "$(echo "${fn}" | sed 's|-static||')"; done
 
