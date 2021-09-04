@@ -74,7 +74,7 @@ if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ] && \
     fi
 
     if [ -n "${DEPLOY_KEY_PASS}" ]; then
-      # Requires: OpenSSH 8.4 (2020-09-27)
+      # Requires: OpenSSH 8.4+ (2020-09-27)
       unset DISPLAY
       export SSH_ASKPASS_REQUIRE='force'
       export SSH_ASKPASS="$(dirname \
