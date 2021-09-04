@@ -19,6 +19,7 @@ if [ -f "${SIGN_CODE_KEY}" ] && \
   (
     echo "Code signing: '${file}'"
     set +x
+    # Requires: osslsigncode 2.1+
     # -ts 'https://freetsa.org/tsr'
     echo "${SIGN_CODE_KEY_PASS}" | "$(dirname "$0")/osslsigncode-local" sign \
       -h sha512 \
