@@ -25,6 +25,10 @@ if [ -f "${SIGN_CODE_KEY}" ] && \
       -in "${file}" -out "${file}-signed" \
       -st "${unixts}" \
       -pkcs12 "${SIGN_CODE_KEY}" -readpass /dev/stdin
+  # # Create a detached code signature:
+  # "$(dirname "$0")/osslsigncode-local" extract-signature \
+  #   -in  "${file}-signed" \
+  #   -out "${file}.p7"
     cp -f "${file}-signed" "${file}"
     rm -f "${file}-signed"
   )
