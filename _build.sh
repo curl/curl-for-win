@@ -9,6 +9,7 @@
 #   - Switch to libssh from libssh2?
 #   - LLVM -mretpoline
 #   - GCC -mindirect-branch -mfunction-return -mindirect-branch-register
+#   - Use Universal CRT?
 
 # Tools:
 #                compiler        build
