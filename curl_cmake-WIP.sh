@@ -143,9 +143,6 @@ _VER="$1"
     make install "DESTDIR=$(pwd)/pkg"  # VERBOSE=1
   done
 
-  # DESTDIR= + CMAKE_INSTALL_PREFIX
-  _pkg='pkg/usr/local'
-
   if false; then
   options='mingw32-ipv6-sspi-ldaps-srp'
 

@@ -77,7 +77,7 @@ if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ] && \
       # Requires: OpenSSH 8.4+ (2020-09-27)
       unset DISPLAY
       export SSH_ASKPASS_REQUIRE='force'
-      export SSH_ASKPASS="$(dirname \
+      export SSH_ASKPASS; SSH_ASKPASS="$(dirname \
         "$(realpath "$0")")/_ul-askpass.sh"
       batch='no'
     else
