@@ -73,13 +73,24 @@ if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ] && \
       echo "${host_key}" >> "${HOME}/.ssh/known_hosts"
     fi
 
+    if [ -n "${DEPLOY_KEY_PASS}" ]; then
+      # Requires: OpenSSH 8.4 (2020-09-27)
+      unset DISPLAY
+      export SSH_ASKPASS_REQUIRE='force'
+      export SSH_ASKPASS="$(dirname \
+        "$(realpath "$0")")/_ul-askpass.sh"
+      batch='no'
+    else
+      batch='yes'
+    fi
+
     echo "Uploading: '${_ALL}'"
     rsync \
       --checksum \
       --archive \
       --rsh "ssh \
         -i '${DEPLOY_KEY}' \
-        -o BatchMode=yes \
+        -o BatchMode=${batch} \
         -o StrictHostKeyChecking=yes \
         -o ConnectTimeout=20 \
         -o ConnectionAttempts=5" \
