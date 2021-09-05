@@ -127,7 +127,7 @@ fi
 [ -f "${SIGN_CODE_KEY}" ] || unset SIGN_CODE_KEY
 
 if [ -f "${SIGN_CODE_KEY}" ]; then
-  # build a patched binary of osslsigncode
+  # build osslsigncode
   ./osslsigncode.sh
 fi
 
