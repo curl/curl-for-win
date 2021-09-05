@@ -29,8 +29,8 @@ environment:
     secure: 9FJBUF1mskStuU+7o9r6hsQub+XWNiXWtznlEYbFzv2Gl7bneSt44KBrstMLTDUj
   DEPLOY_GPG_PASS:
     secure: WHnaUtu4NM46WEgLhxUyPBShvzLNwRoR5v0Z3+/UqM0nMzrUGieb+tJKX/AZLFkx
-  # DEPLOY_KEY_PASS:
-  #   secure:
+  DEPLOY_KEY_PASS:
+    secure: MJDWMTtg/2jrt/PM0hCVPhOnLo5lshDy7Oq8+Mu26XhITpILCg/6X1j0B1eg1ySv
   CC: mingw-clang
   DO_NOT_TRACK: 1
 build_script:
