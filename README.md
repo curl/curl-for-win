@@ -60,8 +60,7 @@
   - curl/libcurl are built in MultiSSL mode, with both OpenSSL and
     [Schannel](https://docs.microsoft.com/windows/win32/com/schannel)
     available as SSL backends.
-  - Optional support for
-    [c-ares](https://c-ares.haxx.se/).
+  - Optional support for [c-ares](https://c-ares.org/).
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
   - To verify the correct checksum for the latest build, you can look up the
     correct ones in the build log as they are generated. Watch for `main`
