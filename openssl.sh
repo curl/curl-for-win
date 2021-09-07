@@ -172,9 +172,8 @@ _VER="$1"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(mktemp -d)/${_BAS}"
 
-  mkdir -p "${_DST}"
-
-  cp -f -p -r "${_pkg}"/include/openssl "${_DST}/"
+  mkdir -p "${_DST}/include/"
+  cp -f -p -r "${_pkg}"/include/openssl "${_DST}/include/"
 
   mkdir -p "${_DST}/bin"
   cp -f -p "${_pkg}"/bin/openssl.exe "${_DST}/bin/"
