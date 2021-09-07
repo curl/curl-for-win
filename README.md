@@ -28,19 +28,9 @@
     either via [Homebrew](https://brew.sh/) (on macOS),
     [APT](https://en.wikipedia.org/wiki/APT_(Debian)) (on Debian via Docker)
     or [MSYS2](https://www.msys2.org/).
-    C compiler is [GCC](https://gcc.gnu.org/) or
-    [LLVM/Clang](https://clang.llvm.org/) for projects supporting it.
+    C compiler is [LLVM/Clang](https://clang.llvm.org/).
   - Binaries are cross-built and published from Linux
-    (via [AppVeyor CI](https://www.appveyor.com/)), using LLVM/Clang for
-    curl, libssh2,
-    [c-ares](https://c-ares.haxx.se/),
-    [nghttp2](https://nghttp2.org/),
-    [libidn2](https://www.gnu.org/software/libidn/#libidn2),
-    [libgsasl](https://www.gnu.org/software/gsasl/),
-    [brotli](https://github.com/google/brotli),
-    [zstd](https://github.com/facebook/zstd),
-    [zlib-ng](https://github.com/zlib-ng/zlib-ng)/[zlib](https://github.com/madler/zlib),
-    and GCC for OpenSSL.
+    (via [AppVeyor CI](https://www.appveyor.com/)).
     <br>Exact OS image used for the builds is
     [`debian:testing`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing)
     (a [reproducible](https://github.com/debuerreotype/debuerreotype) image)

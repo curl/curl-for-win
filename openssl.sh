@@ -21,12 +21,7 @@ _VER="$1"
     export PATH="${PATH}:/usr/bin/core_perl"
   fi
 
-  if [ -f 'CHANGES.md' ]; then
-    # OpenSSL 3.x
-    readonly _ref='CHANGES.md'
-  else
-    readonly _ref='CHANGES'
-  fi
+  readonly _ref='CHANGES.md'
 
   case "${_OS}" in
     bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${_ref}")";;
@@ -58,8 +53,7 @@ _VER="$1"
   [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128 -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
   [ "${_CPU}" = 'x86' ] && options="${options} -fno-asynchronous-unwind-tables"
 
-  if [ -f 'CHANGES.md' ] && [ "${CC}" = 'mingw-clang' ]; then
-    # OpenSSL 3.x
+  if [ "${CC}" = 'mingw-clang' ]; then
     # To avoid warnings when passing C compiler options to the linker
     options="${options} -Wno-unused-command-line-argument"
     export CC=clang
@@ -99,16 +93,10 @@ _VER="$1"
   # The secure solution would be to disable loading anything from hard-coded
   # disk locations, something that is not supported by OpenSSL at present.
   _prefix='C:/Windows/System32/OpenSSL'
-  if [ -f 'CHANGES.md' ]; then
-    # OpenSSL 3.x
-    _ssldir="ssl"
-    _lib='/lib'
-    [ "${_CPU}" = 'x64' ] && _lib='/lib64'
-    options="${options} no-legacy"
-  else
-    _ssldir="${_prefix}/ssl"
-    _lib='/lib'
-  fi
+  _ssldir="ssl"
+  _lib='/lib'
+  [ "${_CPU}" = 'x64' ] && _lib='/lib64'
+  options="${options} no-legacy"
   _pkr='pkg'
 
   # shellcheck disable=SC2086
@@ -128,15 +116,10 @@ _VER="$1"
   make --jobs 2 install "DESTDIR=$(pwd)/${_pkr}/" >/dev/null # 2>&1
 
   # DESTDIR= + --prefix=
-  # OpenSSL 1.1.1d and newer strips the drive letter.
-  # OpenSSL 3.x does not. (openssl/pkg/C:/Windows/System32/OpenSSL)
-  if [ -f 'CHANGES.md' ]; then
-    _pkg="${_pkr}/${_prefix}"
-    _pks="${_pkr}/${_prefix}/${_ssldir}"
-  else
-    _pkg="${_pkr}/$(echo "${_prefix}" | sed 's|[a-zA-Z]:/||')"
-    _pks="${_pkr}/$(echo "${_ssldir}" | sed 's|[a-zA-Z]:/||')"
-  fi
+  # OpenSSL 3.x does not strip the drive letter anymore
+  # (openssl/pkg/C:/Windows/System32/OpenSSL)
+  _pkg="${_pkr}/${_prefix}"
+  _pks="${_pkr}/${_prefix}/${_ssldir}"
 
   # Make steps for determinism
 
@@ -193,43 +176,20 @@ _VER="$1"
 
   cp -f -p -r "${_pkg}"/include/openssl "${_DST}/"
 
-  if [ -f 'CHANGES.md' ]; then
-    # OpenSSL 3.x
+  mkdir -p "${_DST}/bin"
+  cp -f -p "${_pkg}"/bin/openssl.exe "${_DST}/bin/"
+  cp -f -p "${_pkg}"/bin/*.dll       "${_DST}/bin/"
 
-    mkdir -p "${_DST}/bin"
-    cp -f -p "${_pkg}"/bin/openssl.exe "${_DST}/bin/"
-    cp -f -p "${_pkg}"/bin/*.dll       "${_DST}/bin/"
+  cp -f -p -r "${_pkg}${_lib}" "${_DST}/"
 
-    cp -f -p -r "${_pkg}${_lib}" "${_DST}/"
+  mkdir -p "${_DST}/ssl"
+  cp -f -p "${_pks}"/*.cnf* "${_DST}/ssl/"
 
-    mkdir -p "${_DST}/ssl"
-    cp -f -p "${_pks}"/*.cnf* "${_DST}/ssl/"
-
-    cp -f -p CHANGES.md  "${_DST}/"
-    cp -f -p LICENSE.txt "${_DST}/"
-    cp -f -p README.md   "${_DST}/"
-    cp -f -p FAQ.md      "${_DST}/"
-    cp -f -p NEWS.md     "${_DST}/"
-  else
-    if ls "${_pkg}${_lib}"/engines*/*.dll >/dev/null 2>&1; then
-      cp -f -p -r "${_pkg}${_lib}"/engines* "${_DST}/"
-    fi
-
-    mkdir -p "${_DST}/lib/pkgconfig"
-
-    cp -f -p "${_pkg}${_lib}"/*.a            "${_DST}/lib/"
-    cp -f -p "${_pkg}${_lib}"/pkgconfig/*.pc "${_DST}/lib/pkgconfig/"
-
-    cp -f -p "${_pks}"/*.cnf*                "${_DST}/"
-    cp -f -p "${_pkg}"/bin/openssl.exe       "${_DST}/"
-    cp -f -p "${_pkg}"/bin/*.dll             "${_DST}/"
-
-    cp -f -p CHANGES     "${_DST}/CHANGES.txt"
-    cp -f -p LICENSE     "${_DST}/LICENSE.txt"
-    cp -f -p README      "${_DST}/README.txt"
-    cp -f -p FAQ         "${_DST}/FAQ.txt"
-    cp -f -p NEWS        "${_DST}/NEWS.txt"
-  fi
+  cp -f -p CHANGES.md  "${_DST}/"
+  cp -f -p LICENSE.txt "${_DST}/"
+  cp -f -p README.md   "${_DST}/"
+  cp -f -p FAQ.md      "${_DST}/"
+  cp -f -p NEWS.md     "${_DST}/"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )
