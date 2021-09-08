@@ -38,7 +38,7 @@ _VER="$1"
   find . -name '*.a'  -delete
   find . -name '*.pc' -delete
 
-  for pass in 'static'; do
+  for pass in 'static' 'shared'; do
 
     rm -r -f CMakeFiles CMakeCache.txt cmake_install.cmake
 
