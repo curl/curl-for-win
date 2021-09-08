@@ -10,6 +10,7 @@
 #   - LLVM -mretpoline
 #   - GCC -mindirect-branch -mfunction-return -mindirect-branch-register
 #   - Use Universal CRT?
+#   - Switch to LibreSSL or rustls?
 
 # Tools:
 #                compiler build
