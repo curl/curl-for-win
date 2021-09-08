@@ -152,9 +152,9 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
   else
     curl --location --proto-redir =https \
       --output pkg.bin \
-      "https://github.com/c-ares/c-ares/releases/download/cares-$(echo "${CARES_VER_}" | tr '.' '_')/c-ares-${CARES_VER_}.tar.gz" \
+      "https://c-ares.org/download/c-ares-${CARES_VER_}.tar.gz" \
       --output pkg.sig \
-      "https://github.com/c-ares/c-ares/releases/download/cares-$(echo "${CARES_VER_}" | tr '.' '_')/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
+      "https://c-ares.org/download/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
     gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
     gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
     my_unpack cares "${CARES_HASH}"
@@ -190,9 +190,9 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
 else
   curl --location --proto-redir =https \
     --output pkg.bin \
-    "https://github.com/libssh2/libssh2/releases/download/libssh2-${LIBSSH2_VER_}/libssh2-${LIBSSH2_VER_}.tar.gz" \
+    "https://www.libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz" \
     --output pkg.sig \
-    "https://github.com/libssh2/libssh2/releases/download/libssh2-${LIBSSH2_VER_}/libssh2-${LIBSSH2_VER_}.tar.gz.asc" || exit 1
+    "https://www.libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz.asc" || exit 1
   gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
   my_unpack libssh2 "${LIBSSH2_HASH}"
