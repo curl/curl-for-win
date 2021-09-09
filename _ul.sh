@@ -84,10 +84,13 @@ if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ] && \
       batch='yes'
     fi
 
+    # Sent command: rsync --server -tce.LsfxCIvu . .
     echo "Uploading: '${_ALL}'"
     rsync \
       --checksum \
-      --archive \
+      --times \
+      --no-compress \
+      --info=NAME2 --itemize-changes \
       --rsh "ssh \
         -i '${DEPLOY_KEY}' \
         -o BatchMode=${batch} \
