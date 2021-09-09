@@ -190,5 +190,10 @@ _VER="$1"
   cp -f -p FAQ.md      "${_DST}/"
   cp -f -p NEWS.md     "${_DST}/"
 
+  if [ "${_CPU}" = 'x86' ] && [ -r ms/applink.c ]; then
+    touch -c -r "${_ref}" ms/applink.c
+    cp -f -p ms/applink.c "${_DST}/include/openssl/"
+  fi
+
   ../_pkg.sh "$(pwd)/${_ref}"
 )
