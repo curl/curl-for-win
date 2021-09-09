@@ -10,12 +10,12 @@ mv -f "${_BLD}.sorted" "${_BLD}"
 # shellcheck disable=SC2012
 touch -r "$(ls -1 -t ./*-*-mingw*.* | head -1)" hashes.txt "${_BLD}" "${_LOG}"
 
-ls -l ./*-*-mingw*.*
+find . -maxdepth 1 -type f -name '*-*-mingw*.*' | sort
 cat hashes.txt
 cat "${_BLD}"
 
 # Strip '-built-on-*' suffix for the single-file artifact.
-for f in ./*-*-mingw*.*; do
+find . -maxdepth 1 -type f -name '*-*-mingw*.*' | sort | while read -r f; do
   new="$(echo "${f}" | sed 's|-built-on-[^.]*||g')"
   [ "${f}" = "${new}" ] || mv -f "${f}" "${new}"
 done
@@ -27,7 +27,7 @@ mv -f hashes.txt.all hashes.txt
 # Create an artifact that includes all packages
 _ALL="all-mingw-${CURL_VER_}${_REV}.zip"
 {
-  ls -1 ./*-*-mingw*.*
+  find . -maxdepth 1 -type f -name '*-*-mingw*.*' | sort
   echo 'hashes.txt'
   echo "${_BLD}"
   echo "${_LOG}"
