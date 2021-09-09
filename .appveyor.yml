@@ -28,9 +28,9 @@ environment:
   SIGN_PKG_KEY_PASS:
     secure: 9FJBUF1mskStuU+7o9r6hsQub+XWNiXWtznlEYbFzv2Gl7bneSt44KBrstMLTDUj
   DEPLOY_GPG_PASS:
-    secure: WHnaUtu4NM46WEgLhxUyPBShvzLNwRoR5v0Z3+/UqM0nMzrUGieb+tJKX/AZLFkx
+    secure: kk7XdgGJ+GGuB2gvuD3bp5rX/4bHoG8SAV8U5x7LEhKQSPeDa1h2ThzqgKzCkoC0
   DEPLOY_KEY_PASS:
-    secure: MJDWMTtg/2jrt/PM0hCVPhOnLo5lshDy7Oq8+Mu26XhITpILCg/6X1j0B1eg1ySv
+    secure: xa1MSB2OafRDTyiJa/063us+TWPZVoD17AhDd5bzGx32ep1vXaoSEJN9ibTfxnqO
   CC: mingw-clang
   DO_NOT_TRACK: 1
 build_script:
