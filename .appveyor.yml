@@ -49,4 +49,4 @@ artifacts:
   - path: 'all-mingw*.*'
     name: all
 # init:
-#   - sh: curl --disable --user-agent curl --fail --silent --location --proto-redir =https 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
+#   - sh: curl --disable --user-agent '' --fail --silent --location --proto-redir =https 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
