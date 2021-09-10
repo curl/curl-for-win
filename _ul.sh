@@ -84,8 +84,8 @@ if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ] && \
       batch='yes'
     fi
 
-    # Sent command: rsync --server -tce.LsfxCIvu . .
     echo "Uploading: '${_ALL}'"
+    # Sent command: rsync --server -tce.LsfxCIvu . .
     rsync \
       --checksum \
       --times \
