@@ -34,7 +34,7 @@ export ZSTD_HASH=9aa8dfc1ca17f358b28988ca1f6e00ffe1c6f3198853f8d2022799e6f066918
 export ZLIBNG_VER_='2.0.5'
 export ZLIBNG_HASH=eca3fe72aea7036c31d00ca120493923c4d5b99fe02e6d3322f7c88dbdcd0085
 export ZLIB_VER_='1.2.11'
-export ZLIB_HASH=629380c90a77b964d896ed37163f5c3a34f6e6d897311f1df2a7016355c45eff
+export ZLIB_HASH=4ff941449631ace0d4d203e3483be9dbc9da454084111f97ea0a2114e19bf066
 
 export OSSLSIGNCODE_VER_='2.2.0'
 export OSSLSIGNCODE_HASH=51694331952b3e8b3b20d5de155c6bedb286583c6863ab4bd679c3f288c9b8d1
@@ -95,7 +95,7 @@ else
   # zlib
   curl --location --proto-redir =https \
     --output pkg.bin \
-    "https://github.com/madler/zlib/archive/v${ZLIB_VER_}.tar.gz" || exit 1
+    "https://zlib.net/zlib-${ZLIB_VER_}.tar.xz" || exit 1
   my_unpack zlib "${ZLIB_HASH}"
 fi
 
