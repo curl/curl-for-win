@@ -28,7 +28,7 @@ _VER="$1"
   #   configure.ac:39: aclocal.m4 with aclocal and run automake again.
   #   [...]
   # Requires: autopoint (sometimes offered by the gettext package)
-  [ -f 'Makefile' ] || autoreconf -fi
+  [ -f 'Makefile' ] || autoreconf --force --install
 
   export LDFLAGS="${_OPTM}"
   unset ldonly

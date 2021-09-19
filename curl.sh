@@ -21,7 +21,7 @@ _VER="$1"
   find . -name '*.def' -delete
 
   if [ ! -f 'Makefile' ]; then
-    autoreconf -fi
+    autoreconf --force --install
     cp -f -p Makefile.dist Makefile
   fi
 

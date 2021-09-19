@@ -34,7 +34,7 @@ _VER="$1"
   # May be needed in the future if an "Automake version mismatch" occurs:
 # if [ ! -f 'Makefile' ]; then
 #   autopoint --force
-#   autoreconf -i
+#   autoreconf --install
 # fi
 
   export LDFLAGS="${_OPTM}"
