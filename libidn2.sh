@@ -1,7 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2014-present Viktor Szakats <https://vsz.me/>
-# See LICENSE.md
+# Copyright 2014-present Viktor Szakats. See LICENSE.md
 
 export _NAM
 export _VER

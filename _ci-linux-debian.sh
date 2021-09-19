@@ -1,7 +1,6 @@
 #!/bin/sh
 
-# Copyright 2017-present Viktor Szakats <https://vsz.me/>
-# See LICENSE.md
+# Copyright 2017-present Viktor Szakats. See LICENSE.md
 
 cat /etc/*-release
 

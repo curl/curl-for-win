@@ -1,7 +1,6 @@
 #!/bin/sh
 
-# Copyright 2016-present Viktor Szakats <https://vsz.me/>
-# See LICENSE.md
+# Copyright 2016-present Viktor Szakats. See LICENSE.md
 
 if [ -f "${SIGN_CODE_KEY}" ] && \
    ls "$(dirname "$0")/osslsigncode-local"* >/dev/null 2>&1; then

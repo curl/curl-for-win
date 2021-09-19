@@ -1,7 +1,6 @@
 #!/bin/sh -ex
 
-# Copyright 2015-present Viktor Szakats <https://vsz.me/>
-# See LICENSE.md
+# Copyright 2015-present Viktor Szakats. See LICENSE.md
 
 # TODO:
 #   - Enable Control Flow Guard (once FLOSS toolchains support it)

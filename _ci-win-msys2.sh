@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2016-present Viktor Szakats <https://vsz.me/>
-# See LICENSE.md
+# Copyright 2016-present Viktor Szakats. See LICENSE.md
 
 pacman --noconfirm --ask 20 --noprogressbar --sync --refresh --sysupgrade --sysupgrade
 pacman --noconfirm --ask 20 --noprogressbar --sync --refresh --sysupgrade --sysupgrade

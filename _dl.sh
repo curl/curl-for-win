@@ -1,7 +1,6 @@
 #!/bin/sh -x
 
-# Copyright 2015-present Viktor Szakats <https://vsz.me/>
-# See LICENSE.md
+# Copyright 2015-present Viktor Szakats. See LICENSE.md
 
 # Create revision string
 # NOTE: Set _REV to empty after bumping CURL_VER_, and

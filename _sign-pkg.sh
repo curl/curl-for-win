@@ -1,7 +1,6 @@
 #!/bin/sh
 
-# Copyright 2020-present Viktor Szakats <https://vsz.me/>
-# See LICENSE.md
+# Copyright 2020-present Viktor Szakats. See LICENSE.md
 
 cd "$(dirname "$0")" || exit
 
