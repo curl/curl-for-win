@@ -126,13 +126,6 @@ if [ -f "${SIGN_CODE_KEY}.asc" ]; then
 fi
 [ -f "${SIGN_CODE_KEY}" ] || unset SIGN_CODE_KEY
 
-if [ -f "${SIGN_CODE_KEY}" ]; then
-  # build osslsigncode
-  ./osslsigncode.sh
-fi
-
-ls -l "$(dirname "$0")/osslsigncode-local"*
-
 case "${_OS}" in
   mac) alias sed=gsed;;
 esac
@@ -225,7 +218,13 @@ build_single_target() {
   echo ".gcc-mingw-w64-${_machine} $("${_CCPREFIX}gcc" -dumpversion)" >> "${_BLD}"
   echo ".binutils-mingw-w64-${_machine} $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')" >> "${_BLD}"
 
-  command -v "$(dirname "$0")/osslsigncode-local" >/dev/null 2>&1 || unset SIGN_CODE_KEY
+  osslsigncode --version
+  ver="$(osslsigncode --version | grep -a -o -m 1 -E '[0-9]+\.[0-9]+\.[0-9]+')"
+  maj="$(printf '%s' "${ver}" | grep -a -o -E '[0-9]+' | head -1)"
+  min="$(printf '%s' "${ver}" | grep -a -o -E '[0-9]+' | head -2 | tail -1)"
+  rel="$(printf '%s' "${ver}" | grep -a -o -E '[0-9]+' | tail -1)"
+  ver="$(printf '%02d%02d%02d' "${maj}" "${min}" "${rel}")"
+  [ "${ver}" -lt 020100 ] || unset SIGN_CODE_KEY
 
   time ./zlib.sh         "${ZLIB_VER_}"
   time ./zlibng.sh     "${ZLIBNG_VER_}"

@@ -223,14 +223,4 @@ else
   my_unpack curl "${CURL_HASH}"
 fi
 
-# osslsigncode
-curl --location --proto-redir =https \
-  --output pkg.bin \
-  "https://github.com/mtrojnar/osslsigncode/releases/download/$(echo "${OSSLSIGNCODE_VER_}" | cut -d . -f -2)/osslsigncode-${OSSLSIGNCODE_VER_}.tar.gz" \
-  --output pkg.sig \
-  "https://github.com/mtrojnar/osslsigncode/releases/download/$(echo "${OSSLSIGNCODE_VER_}" | cut -d . -f -2)/osslsigncode-${OSSLSIGNCODE_VER_}.tar.gz.asc" || exit 1
-gpg_recv_key 2BC7E4E67E3CC0C1BEA72F8C2EFC7FF0D416E014
-gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-my_unpack osslsigncode "${OSSLSIGNCODE_HASH}"
-
 set +e
