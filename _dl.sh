@@ -94,14 +94,22 @@ else
   # zlib
   curl --location --proto-redir =https \
     --output pkg.bin \
-    "https://zlib.net/zlib-${ZLIB_VER_}.tar.xz" || exit 1
+    "https://zlib.net/zlib-${ZLIB_VER_}.tar.xz" \
+    --output pkg.sig \
+    "https://zlib.net/zlib-${ZLIB_VER_}.tar.xz.asc" || exit 1
+  gpg_recv_key 5ED46A6721D365587791E2AA783FCD8E58BCAFBA
+  gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
   my_unpack zlib "${ZLIB_HASH}"
 fi
 
 # zstd
 curl --location --proto-redir =https \
   --output pkg.bin \
-  "https://github.com/facebook/zstd/releases/download/v${ZSTD_VER_}/zstd-${ZSTD_VER_}.tar.zst" || exit 1
+  "https://github.com/facebook/zstd/releases/download/v${ZSTD_VER_}/zstd-${ZSTD_VER_}.tar.zst" \
+  --output pkg.sig \
+  "https://github.com/facebook/zstd/releases/download/v${ZSTD_VER_}/zstd-${ZSTD_VER_}.tar.zst.sig" || exit 1
+gpg_recv_key 4EF4AC63455FC9F4545D9B7DEF8FE99528B52FFD
+gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
 my_unpack zstd "${ZSTD_HASH}"
 
 # brotli
@@ -218,7 +226,11 @@ fi
 # osslsigncode
 curl --location --proto-redir =https \
   --output pkg.bin \
-  "https://github.com/mtrojnar/osslsigncode/releases/download/$(echo "${OSSLSIGNCODE_VER_}" | cut -d . -f -2)/osslsigncode-${OSSLSIGNCODE_VER_}.tar.gz" || exit 1
+  "https://github.com/mtrojnar/osslsigncode/releases/download/$(echo "${OSSLSIGNCODE_VER_}" | cut -d . -f -2)/osslsigncode-${OSSLSIGNCODE_VER_}.tar.gz" \
+  --output pkg.sig \
+  "https://github.com/mtrojnar/osslsigncode/releases/download/$(echo "${OSSLSIGNCODE_VER_}" | cut -d . -f -2)/osslsigncode-${OSSLSIGNCODE_VER_}.tar.gz.asc" || exit 1
+gpg_recv_key 2BC7E4E67E3CC0C1BEA72F8C2EFC7FF0D416E014
+gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
 my_unpack osslsigncode "${OSSLSIGNCODE_HASH}"
 
 set +e
