@@ -89,7 +89,7 @@ if [ "${_BRANCH#*zlibng*}" != "${_BRANCH}" ]; then
   my_unpack zlib-ng "${ZLIBNG_HASH}"
 else
   # zlib
-  curl --location --proto-redir =https \
+  curl \
     --output pkg.bin \
     "https://zlib.net/zlib-${ZLIB_VER_}.tar.xz" \
     --output pkg.sig \
@@ -154,7 +154,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
       'https://github.com/c-ares/c-ares/archive/6ce842ff936116b8c1026ecaafdc06468af47e6c.tar.gz' || exit 1
     my_unpack cares
   else
-    curl --location --proto-redir =https \
+    curl \
       --output pkg.bin \
       "https://c-ares.org/download/c-ares-${CARES_VER_}.tar.gz" \
       --output pkg.sig \
@@ -192,7 +192,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
     'https://github.com/libssh2/libssh2/archive/a88a727c2a1840f979b34f12bcce3d55dcd7ea6e.tar.gz' || exit 1
   my_unpack libssh2
 else
-  curl --location --proto-redir =https \
+  curl \
     --output pkg.bin \
     "https://www.libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz" \
     --output pkg.sig \
@@ -210,7 +210,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
     'https://github.com/curl/curl/archive/5dc594e44f73b1726cabca6a4395323f972e416d.tar.gz' || exit 1
   my_unpack curl
 else
-  curl --location --proto-redir =https \
+  curl \
     --output pkg.bin \
     "https://curl.se/download/curl-${CURL_VER_}.tar.xz" \
     --output pkg.sig \
