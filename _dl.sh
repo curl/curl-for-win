@@ -55,7 +55,7 @@ if [ "${_BRANCH#*zlibng*}" != "${_BRANCH}" ]; then
   curl --location --proto-redir =https \
     --output pkg.bin \
     "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/${ZLIBNG_VER_}.tar.gz" || exit 1
-  my_unpack zlib-ng "${ZLIBNG_HASH}"
+  my_unpack zlibng "${ZLIBNG_HASH}"
 else
   # zlib
   curl \

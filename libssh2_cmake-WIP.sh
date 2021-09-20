@@ -62,9 +62,9 @@ _VER="$1"
     options="${options} -DBUILD_EXAMPLES=0"
     options="${options} -DBUILD_TESTING=0"
     options="${options} -DENABLE_ZLIB_COMPRESSION=1"
-    if [ -d ../zlib-ng ]; then
-      options="${options} -DZLIB_INCLUDE_DIR:PATH=$(pwd)/../zlib-ng/pkg/usr/local/include"
-      options="${options} -DZLIB_LIBRARY:FILEPATH=$(pwd)/../zlib-ng/pkg/usr/local/lib/libz.a"
+    if [ -d ../zlibng ]; then
+      options="${options} -DZLIB_INCLUDE_DIR:PATH=$(pwd)/../zlibng/pkg/usr/local/include"
+      options="${options} -DZLIB_LIBRARY:FILEPATH=$(pwd)/../zlibng/pkg/usr/local/lib/libz.a"
     else
       options="${options} -DZLIB_INCLUDE_DIR:PATH=$(pwd)/../zlib/pkg/usr/local/include"
       options="${options} -DZLIB_LIBRARY:FILEPATH=$(pwd)/../zlib/pkg/usr/local/lib/libz.a"
