@@ -6,7 +6,7 @@
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='1'
+export _REV='2'
 
 export CURL_VER_='7.79.0'
 export CURL_HASH=2a1420076f9ffc35c982c78e85b7a69e2ef5d532267895fdb2eac16ad9b680c9
@@ -16,12 +16,12 @@ export NGTCP2_VER_='0.1.90'
 export NGTCP2_HASH=
 export OPENSSL_VER_='3.0.0'
 export OPENSSL_HASH=59eedfcb46c25214c9bd37ed6078297b4df01d012267fe9e9eee31f61bc70536
-export CARES_VER_='1.17.1'
-export CARES_HASH=d73dd0f6de824afd407ce10750ea081af47eba52b8a6cb307d220131ad93fc40
+export CARES_VER_='1.17.2'
+export CARES_HASH=4803c844ce20ce510ef0eb83f8ea41fa24ecaae9d280c468c582d2bb25b3913d
 export NGHTTP3_VER_='0.1.90'
 export NGHTTP3_HASH=
-export NGHTTP2_VER_='1.44.0'
-export NGHTTP2_HASH=5699473b29941e8dafed10de5c8cb37a3581edf62ba7d04b911ca247d4de3c5d
+export NGHTTP2_VER_='1.45.0'
+export NGHTTP2_HASH=77d7523963a438c2f29cf742b7bc7c9f53c229c17a8e5b209415d165cb6f246d
 export LIBIDN2_VER_='2.3.2'
 export LIBIDN2_HASH=76940cd4e778e8093579a9d195b25fff5e936e9dc6242068528b437a76764f91
 export LIBGSASL_VER_='1.10.0'
