@@ -121,7 +121,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
     curl --location --proto-redir =https \
       --output pkg.bin \
       'https://github.com/c-ares/c-ares/archive/6ce842ff936116b8c1026ecaafdc06468af47e6c.tar.gz' || exit 1
-    my_unpack c-ares
+    my_unpack cares
   else
     curl \
       --output pkg.bin \
@@ -130,7 +130,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
       "https://c-ares.org/download/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
     gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
     gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-    my_unpack c-ares "${CARES_HASH}"
+    my_unpack cares "${CARES_HASH}"
   fi
 fi
 

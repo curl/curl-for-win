@@ -94,7 +94,7 @@ _VER="$1"
       options="${options} -DBROTLICOMMON_LIBRARY:FILEPATH=$(pwd)/../brotli/pkg/usr/local/lib/libbrotlicommon-static.a"
       options="${options} -DBROTLIDEV_LIBRARY:FILEPATH=$(pwd)/../brotli/pkg/usr/local/lib/libbrotlidec-static.a"
     fi
-    if [ -d ../c-ares ]; then
+    if [ -d ../cares ]; then
       options="${options} -DENABLE_ARES=1"
     fi
     if [ -d ../libssh2 ]; then
@@ -209,9 +209,9 @@ _VER="$1"
     export NGTCP2_PATH=../../ngtcp2/pkg/usr/local
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGTCP2_STATICLIB"
   fi
-  if [ -d ../c-ares ]; then
+  if [ -d ../cares ]; then
     options="${options}-ares"
-    export LIBCARES_PATH=../../c-ares/pkg/usr/local
+    export LIBCARES_PATH=../../cares/pkg/usr/local
   fi
   if [ -d ../libgsasl ]; then
     options="${options}-gsasl"
@@ -333,7 +333,7 @@ _VER="$1"
   [ -d ../nghttp3 ] && cp -f -p ../nghttp3/COPYING   "${_DST}/COPYING-nghttp3.txt"
   [ -d ../ngtcp2 ]  && cp -f -p ../ngtcp2/COPYING    "${_DST}/COPYING-ngtcp2.txt"
   [ -d ../libidn2 ] && cp -f -p ../libidn2/COPYING   "${_DST}/COPYING-libidn2.txt"
-  [ -d ../cares ]   && cp -f -p ../c-ares/LICENSE.md "${_DST}/COPYING-c-ares.md"
+  [ -d ../cares ]   && cp -f -p ../cares/LICENSE.md  "${_DST}/COPYING-c-ares.md"
   # OpenSSL 3.x
   [ -d ../openssl ] && [ -f ../openssl/LICENSE.txt ] && cp -f -p ../openssl/LICENSE.txt "${_DST}/COPYING-openssl.txt"
   # OpenSSL 1.x
