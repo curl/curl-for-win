@@ -129,7 +129,6 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
     my_curl --location --proto-redir =https \
       --output pkg.bin \
       'https://github.com/c-ares/c-ares/archive/6ce842ff936116b8c1026ecaafdc06468af47e6c.tar.gz' || exit 1
-    live_unpack cares
   else
     my_curl \
       --output pkg.bin \
@@ -138,8 +137,8 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
       "https://c-ares.org/download/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
     gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
     my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-    live_unpack cares "${CARES_HASH}"
   fi
+  live_unpack cares "${CARES_HASH}"
 fi
 
 # openssl
@@ -168,7 +167,6 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   my_curl --location --proto-redir =https \
     --output pkg.bin \
     'https://github.com/libssh2/libssh2/archive/a88a727c2a1840f979b34f12bcce3d55dcd7ea6e.tar.gz' || exit 1
-  live_unpack libssh2
 else
   my_curl \
     --output pkg.bin \
@@ -177,8 +175,8 @@ else
     "https://www.libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz.asc" || exit 1
   gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-  live_unpack libssh2 "${LIBSSH2_HASH}"
 fi
+live_unpack libssh2 "${LIBSSH2_HASH}"
 
 # curl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
@@ -187,7 +185,6 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   my_curl --location --proto-redir =https \
     --output pkg.bin \
     'https://github.com/curl/curl/archive/5dc594e44f73b1726cabca6a4395323f972e416d.tar.gz' || exit 1
-  live_unpack curl
 else
   my_curl \
     --output pkg.bin \
@@ -196,7 +193,7 @@ else
     "https://curl.se/download/curl-${CURL_VER_}.tar.xz.asc" || exit 1
   gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-  live_unpack curl "${CURL_HASH}"
 fi
+live_unpack curl "${CURL_HASH}"
 
 set +e
