@@ -46,7 +46,7 @@ else
   _patsuf=''
 fi
 
-my_unpack() {
+live_unpack() {
   pkg="$1"
   hash="$(openssl dgst -sha256 pkg.bin)"
   echo "${hash}"
@@ -62,7 +62,7 @@ if [ "${_BRANCH#*zlibng*}" != "${_BRANCH}" ]; then
   my_curl --location --proto-redir =https \
     --output pkg.bin \
     "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/${ZLIBNG_VER_}.tar.gz" || exit 1
-  my_unpack zlibng "${ZLIBNG_HASH}"
+  live_unpack zlibng "${ZLIBNG_HASH}"
 else
   # zlib
   my_curl \
@@ -72,7 +72,7 @@ else
     "https://zlib.net/zlib-${ZLIB_VER_}.tar.xz.asc" || exit 1
   gpg_recv_key 5ED46A6721D365587791E2AA783FCD8E58BCAFBA
   my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-  my_unpack zlib "${ZLIB_HASH}"
+  live_unpack zlib "${ZLIB_HASH}"
 fi
 
 # zstd
@@ -83,7 +83,7 @@ my_curl --location --proto-redir =https \
   "https://github.com/facebook/zstd/releases/download/v${ZSTD_VER_}/zstd-${ZSTD_VER_}.tar.zst.sig" || exit 1
 gpg_recv_key 4EF4AC63455FC9F4545D9B7DEF8FE99528B52FFD
 my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-my_unpack zstd "${ZSTD_HASH}"
+live_unpack zstd "${ZSTD_HASH}"
 
 # brotli
 # Relatively high curl binary size + extra dependency overhead aiming mostly
@@ -91,13 +91,13 @@ my_unpack zstd "${ZSTD_HASH}"
 my_curl --location --proto-redir =https \
   --output pkg.bin \
   "https://github.com/google/brotli/archive/v${BROTLI_VER_}.tar.gz" || exit 1
-my_unpack brotli "${BROTLI_HASH}"
+live_unpack brotli "${BROTLI_HASH}"
 
 # nghttp2
 my_curl --location --proto-redir =https \
   --output pkg.bin \
   "https://github.com/nghttp2/nghttp2/releases/download/v${NGHTTP2_VER_}/nghttp2-${NGHTTP2_VER_}.tar.xz" || exit 1
-my_unpack nghttp2 "${NGHTTP2_HASH}"
+live_unpack nghttp2 "${NGHTTP2_HASH}"
 
 # libgsasl
 my_curl \
@@ -108,7 +108,7 @@ my_curl \
 my_curl 'https://ftp.gnu.org/gnu/gnu-keyring.gpg' \
 | my_gpg --quiet --import 2>/dev/null
 my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-my_unpack libgsasl "${LIBGSASL_HASH}"
+live_unpack libgsasl "${LIBGSASL_HASH}"
 
 if [ "${_BRANCH#*winidn*}" = "${_BRANCH}" ]; then
   # libidn2
@@ -118,17 +118,18 @@ if [ "${_BRANCH#*winidn*}" = "${_BRANCH}" ]; then
     --output pkg.sig \
     "https://ftp.gnu.org/gnu/libidn/libidn2-${LIBIDN2_VER_}.tar.gz.sig" || exit 1
   my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-  my_unpack libidn2 "${LIBIDN2_HASH}"
+  live_unpack libidn2 "${LIBIDN2_HASH}"
 fi
 
 if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
   # c-ares
   if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
     CARES_VER_='1.17.2-dev'
+    CARES_HASH=
     my_curl --location --proto-redir =https \
       --output pkg.bin \
       'https://github.com/c-ares/c-ares/archive/6ce842ff936116b8c1026ecaafdc06468af47e6c.tar.gz' || exit 1
-    my_unpack cares
+    live_unpack cares
   else
     my_curl \
       --output pkg.bin \
@@ -137,7 +138,7 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
       "https://c-ares.org/download/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
     gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
     my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-    my_unpack cares "${CARES_HASH}"
+    live_unpack cares "${CARES_HASH}"
   fi
 fi
 
@@ -158,15 +159,16 @@ my_curl \
 gpg_recv_key 8657ABB260F056B1E5190839D9C4D26D0E604491
 gpg_recv_key 7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C
 my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-my_unpack openssl "${OPENSSL_HASH}"
+live_unpack openssl "${OPENSSL_HASH}"
 
 # libssh2
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   LIBSSH2_VER_='1.9.1-dev'
+  LIBSSH2_HASH=
   my_curl --location --proto-redir =https \
     --output pkg.bin \
     'https://github.com/libssh2/libssh2/archive/a88a727c2a1840f979b34f12bcce3d55dcd7ea6e.tar.gz' || exit 1
-  my_unpack libssh2
+  live_unpack libssh2
 else
   my_curl \
     --output pkg.bin \
@@ -175,16 +177,17 @@ else
     "https://www.libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz.asc" || exit 1
   gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-  my_unpack libssh2 "${LIBSSH2_HASH}"
+  live_unpack libssh2 "${LIBSSH2_HASH}"
 fi
 
 # curl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   CURL_VER_='7.79.0-dev'
+  CURL_HASH=
   my_curl --location --proto-redir =https \
     --output pkg.bin \
     'https://github.com/curl/curl/archive/5dc594e44f73b1726cabca6a4395323f972e416d.tar.gz' || exit 1
-  my_unpack curl
+  live_unpack curl
 else
   my_curl \
     --output pkg.bin \
@@ -193,7 +196,7 @@ else
     "https://curl.se/download/curl-${CURL_VER_}.tar.xz.asc" || exit 1
   gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
   my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-  my_unpack curl "${CURL_HASH}"
+  live_unpack curl "${CURL_HASH}"
 fi
 
 set +e
