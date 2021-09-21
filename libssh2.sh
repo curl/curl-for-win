@@ -124,8 +124,6 @@ _VER="$1"
   cp -f -p README        "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES "${_DST}/RELEASE-NOTES.txt"
 
-  [ -d ../openssl ] && [ -f ../openssl/LICENSE.txt ] && cp -f -p ../openssl/LICENSE.txt "${_DST}/COPYING-openssl.txt"
-
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     cp -f -p win32/*.map   "${_DST}/bin/"
   fi
