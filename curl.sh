@@ -264,10 +264,7 @@ _VER="$1"
   [ -d ../ngtcp2 ]  && cp -f -p ../ngtcp2/COPYING    "${_DST}/COPYING-ngtcp2.txt"
   [ -d ../libidn2 ] && cp -f -p ../libidn2/COPYING   "${_DST}/COPYING-libidn2.txt"
   [ -d ../cares ]   && cp -f -p ../cares/LICENSE.md  "${_DST}/COPYING-c-ares.md"
-  # OpenSSL 3.x
   [ -d ../openssl ] && [ -f ../openssl/LICENSE.txt ] && cp -f -p ../openssl/LICENSE.txt "${_DST}/COPYING-openssl.txt"
-  # OpenSSL 1.x
-  [ -d ../openssl ] && [ -f ../openssl/LICENSE     ] && cp -f -p ../openssl/LICENSE     "${_DST}/COPYING-openssl.txt"
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     cp -f -p src/*.map                "${_DST}/bin/"
