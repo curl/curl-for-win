@@ -9,7 +9,6 @@ export _CCSUFFIX=''
 
 dpkg --add-architecture i386
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 update
-# shellcheck disable=SC2086
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
   curl git gpg rsync python3-pip make cmake \
   libssl-dev \
