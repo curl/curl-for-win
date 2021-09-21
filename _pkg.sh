@@ -4,8 +4,8 @@
 
 cd "$(dirname "$0")" || exit
 
-# Map tar to GNU tar, if it exists (e.g. on macOS)
-command -v gtar >/dev/null 2>&1 && alias tar=gtar
+# Map tar to GNU tar on macOS
+[ "${_OS}" = 'mac' ] && alias tar='gtar'
 
 _cdo="$(pwd)"
 
