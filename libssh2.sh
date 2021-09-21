@@ -45,7 +45,6 @@ _VER="$1"
 
   [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
   if [ -n "${OPENSSL_PATH}" ]; then
-#   export LINK_OPENSSL_STATIC=yes; export OPENSSL_LIBS_STAT='crypto ssl'
     export OPENSSL_LIBPATH="${OPENSSL_PATH}"
     export OPENSSL_LIBS_DYN='crypto.dll ssl.dll'
   else
@@ -123,6 +122,9 @@ _VER="$1"
   cp -f -p COPYING       "${_DST}/COPYING.txt"
   cp -f -p README        "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES "${_DST}/RELEASE-NOTES.txt"
+
+  [ -d ../zlibng ]  && cp -f -p ../zlibng/LICENSE.md "${_DST}/COPYING-zlib-ng.md"
+  [ -d ../zlib ]    && cp -f -p ../zlib/README       "${_DST}/COPYING-zlib.txt"
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     cp -f -p win32/*.map   "${_DST}/bin/"
