@@ -126,10 +126,6 @@ if [ -f "${SIGN_CODE_KEY}.asc" ]; then
 fi
 [ -f "${SIGN_CODE_KEY}" ] || unset SIGN_CODE_KEY
 
-case "${_OS}" in
-  mac) alias sed=gsed;;
-esac
-
 if [ "${CC}" = 'mingw-clang' ]; then
   echo ".clang$("clang${_CCSUFFIX}" --version | grep -o -a -E ' [0-9]*\.[0-9]*[\.][0-9]*')" >> "${_BLD}"
 fi
@@ -212,7 +208,8 @@ build_single_target() {
     # We don't use old mingw toolchain versions when building with clang, so this is safe:
     _CCVER='99'
   else
-    _CCVER="$("${_CCPREFIX}gcc" -dumpversion | sed -e 's/\<[0-9]\>/0&/g' -e 's/\.//g' | cut -c -2)"
+    _CCVER="$(printf '%02d' \
+      "$("${_CCPREFIX}gcc" -dumpversion | grep -a -o -E '^[0-9]+')")"
   fi
 
   echo ".gcc-mingw-w64-${_machine} $("${_CCPREFIX}gcc" -dumpversion)" >> "${_BLD}"
