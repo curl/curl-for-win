@@ -46,7 +46,7 @@ _VER="$1"
   [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
   if [ -n "${OPENSSL_PATH}" ]; then
     export OPENSSL_LIBPATH="${OPENSSL_PATH}"
-    export OPENSSL_LIBS_DYN='crypto.dll ssl.dll'
+    export OPENSSL_LIBS_DYN='crypto.dll'
   else
     export WITH_WINCNG=1
   fi
