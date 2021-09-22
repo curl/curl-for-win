@@ -1,8 +1,283 @@
-#!/bin/sh -x
+#!/usr/bin/env bash
 
 # Copyright 2015-present Viktor Szakats. See LICENSE.md
 
+set -x
+
 . ./_versions.sh
+
+meta() {
+cat <<EOF
+[
+  {
+    "name": "brotli",
+    "url": "https://github.com/google/brotli/archive/v{ver}.tar.gz",
+    "redir": "redir"
+  },
+  {
+    "name": "cares",
+    "descending": true,
+    "url": "https://c-ares.org/download/c-ares-{ver}.tar.gz",
+    "sig": ".asc",
+    "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
+  },
+  {
+    "name": "curl",
+    "descending": true,
+    "url": "https://curl.se/download/curl-{ver}.tar.xz",
+    "sig": ".asc",
+    "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
+  },
+  {
+    "name": "libgsasl",
+    "url": "https://ftp.gnu.org/gnu/gsasl/libgsasl-{ver}.tar.gz",
+    "sig": ".sig",
+    "keys": "https://ftp.gnu.org/gnu/gnu-keyring.gpg"
+  },
+  {
+    "name": "libidn2",
+    "url": "https://ftp.gnu.org/gnu/libidn/libidn2-{ver}.tar.gz",
+    "sig": ".sig",
+    "keys": "https://ftp.gnu.org/gnu/gnu-keyring.gpg"
+  },
+  {
+    "name": "libssh2",
+    "url": "https://www.libssh2.org/download/libssh2-{ver}.tar.gz",
+    "sig": ".asc",
+    "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
+  },
+  {
+    "name": "nghttp2",
+    "url": "https://github.com/nghttp2/nghttp2/releases/download/v{ver}/nghttp2-{ver}.tar.xz",
+    "redir": "redir"
+  },
+  {
+    "name": "openssl",
+    "url": "https://www.openssl.org/source/openssl-{ver}.tar.gz",
+    "sig": ".asc",
+    "sha": ".sha256",
+    "keys_comment": "Via: https://www.openssl.org/community/omc.html",
+    "keys": "8657ABB260F056B1E5190839D9C4D26D0E604491 7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C"
+  },
+  {
+    "name": "zlib",
+    "url": "https://zlib.net/zlib-{ver}.tar.xz",
+    "sig": ".asc",
+    "keys": "5ED46A6721D365587791E2AA783FCD8E58BCAFBA"
+  },
+  {
+    "name": "zlibng",
+    "url": "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/{ver}.tar.gz",
+    "redir": "redir"
+  },
+  {
+    "name": "zstd",
+    "url": "https://github.com/facebook/zstd/releases/download/v{ver}/zstd-{ver}.tar.zst",
+    "sig": ".sig",
+    "sha": ".sha256",
+    "redir": "redir",
+    "keys": "4EF4AC63455FC9F4545D9B7DEF8FE99528B52FFD"
+  }
+]
+EOF
+}
+
+my_curl() {
+  curl --disable --user-agent '' --fail --silent --show-error \
+    --connect-timeout 15 --max-time 20 --retry 3 --max-redirs 10 "$@"
+}
+
+my_gpg() {
+  gpg --batch --keyserver-options timeout=15 --keyid-format 0xlong "$@"
+}
+
+gpg_recv_key() {
+  local req
+  req="pks/lookup?op=get&options=mr&exact=on&search=0x$1"
+  my_curl "https://pgpkeys.eu/${req}"           | my_gpg --import --status-fd 1 || \
+  my_curl "https://keyserver.ubuntu.com/${req}" | my_gpg --import --status-fd 1
+}
+
+# convert 'x.y.z' to zero-padded "0x0y0z" numeric format
+to6digit() {
+  local ver maj min rel
+  ver="$(grep -a -o -E '[0-9]+\.[0-9]+\.[0-9]+')"
+  maj="$(printf '%s' "${ver}" | grep -a -o -E '[0-9]+' | head -1)"
+  min="$(printf '%s' "${ver}" | grep -a -o -E '[0-9]+' | head -2 | tail -1)"
+  rel="$(printf '%s' "${ver}" | grep -a -o -E '[0-9]+' | tail -1)"
+  printf '%02d%02d%02d' "${maj}" "${min}" "${rel}"
+}
+
+check_update() {
+  local pkg url ourvern newver newvern slug mask urldir res
+  pkg="$1"
+  ourvern="${2:-000000}"
+  url="$3"
+  unset newver
+  if [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
+    slug="${BASH_REMATCH[1]}"
+    # heavily rate-limited
+    newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases/latest" | \
+      jq -r '.tag_name' | sed -E 's|^v||')"
+  else
+    mask="${pkg}[._-]v?([0-9]+(\.[0-9]+)+)\.t"
+    if [ "$4" = 'true' ]; then
+      latest='head'
+    else
+      latest='tail'
+    fi
+    urldir="$(dirname "${url}")/"
+    res="$(my_curl "${urldir}" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' | \
+      grep -a -o -E "${mask}" | "${latest}" -1)"
+    if [[ "${res}" =~ ${mask} ]]; then
+      newver="${BASH_REMATCH[1]}"
+    fi
+  fi
+  if [ -n "${newver}" ]; then
+    newvern="$(printf '%s' "${newver}" | to6digit)"
+    [ "${newvern}" -gt "${ourvern}" ] && printf '%s' "${newver}"
+  fi
+}
+
+check_dl() {
+  local gpgdir name url keys sig sha options key ok hash_calc hash_got
+  gpgdir="$(mktemp -d)"; export GNUPGHOME="${gpgdir}"
+  name="$1"
+  url="$2"
+  sig="$3"
+  sha="$4"
+  keys="$6"
+  options=()
+  [ "$5" = 'redir' ] && options+=(--location --proto-redir '=https')
+  options+=(--output pkg.bin "${url}")
+  [ -n "${sig}" ] && options+=(--output pkg.sig "${url}${sig}")
+  [ -n "${sha}" ] && options+=(--output pkg.sha "${url}${sha}")
+  my_curl "${options[@]}"
+
+  ok='0'
+  hash_calc="$(openssl dgst -sha256 pkg.bin | grep -a -i -o -E '[0-9a-f]{64}$')"
+  if [ -n "${sig}" ]; then
+
+    for key in ${keys}; do
+      if [[ "${key}" = 'https://'* ]]; then
+        my_curl "${key}" | my_gpg --quiet --import >/dev/null 2>&1
+      else
+        gpg_recv_key "${key}" >/dev/null 2>&1
+      fi
+    done
+
+    if my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin >/dev/null 2>&1; then
+      >&2 echo "! ${name}: Verify: OK (Valid PGP signature)"
+      if [ -n "${sha}" ]; then
+        hash_got="$(grep -a -i -o -E '[0-9A-Fa-f]{64,}' pkg.sha | tr '[:upper:]' '[:lower:]')"
+        if [ "${hash_calc}" = "${hash_got}" ]; then
+          >&2 echo "! ${name}: Verify: OK (Matching hash)"
+          ok='1'
+        fi
+      else
+        ok='1'
+      fi
+    else
+      >&2 echo "! ${name}: Verify: Failed (PGP signature)"
+    fi
+  else
+    >&2 echo "! ${name}: Verify: No PGP signature. Continuing without verification."
+    ok='1'
+  fi
+
+  if [ "${ok}" = '1' ]; then
+    >&2 echo "! ${name}: New hash: |${hash_calc}|"
+    printf '%s' "${hash_calc}"
+  fi
+
+  rm -f pkg.bin pkg.sig pkg.sha
+  rm -r -f "${gpgdir}"
+}
+
+bump() {
+  local keypkg newcurl newdep pkg name ourver ourvern hashenv hash jp url desc pin
+  local newver newhash sig sha redir keys urlver
+
+  set +x
+
+  keypkg='curl'
+
+  newcurl=0
+  newdep=0
+
+  while read -r pkg; do
+    if [[ "${pkg}" =~ ^([A-Z0-9]+)_VER_=(.+)$ ]]; then
+      name="${BASH_REMATCH[1],,}"
+      ourver="${BASH_REMATCH[2]}"
+      ourvern="$(printf '%s' "${ourver}" | to6digit)"
+
+      hashenv="${name^^}_HASH"
+      eval hash="\$${hashenv}"
+
+      jp="$(meta | jq \
+        ".[] | select(.name == \"${name}\")")"
+
+      unset newhash
+
+      if [ -n "${jp}" ]; then
+        url="$( printf '%s' "${jp}" | jq -r '.url')"
+        desc="$(printf '%s' "${jp}" | jq -r '.descending')"
+        pin="$( printf '%s' "${jp}" | jq -r '.pinned')"
+
+        if [ "${pin}" = 'true' ]; then
+          >&2 echo "! ${name}: Version pinned. Skipping."
+        else
+          newver="$(check_update "${name}" "${ourvern}" "${url}" "${desc}")"
+          if [ -n "${newver}" ]; then
+            >&2 echo "! ${name}: New version found: |${newver}|"
+
+            sig="$(  printf '%s' "${jp}" | jq -r '.sig' | sed -E 's|^null$||g')"
+            sha="$(  printf '%s' "${jp}" | jq -r '.sha' | sed -E 's|^null$||g')"
+            redir="$(printf '%s' "${jp}" | jq -r '.redir')"
+            keys="$( printf '%s' "${jp}" | jq -r '.keys' | sed -E 's|^null$||g')"
+
+            urlver="$(printf '%s' "${url}" | sed "s|{ver}|${newver}|g")"
+            newhash="$(check_dl "${name}" "${urlver}" "${sig}" "${sha}" "${redir}" "${keys}")"
+            if [ -z "${newhash}" ]; then
+              >&2 echo "! ${name}: New version failed to validate."
+            elif [ "${name}" == "${keypkg}" ]; then
+              newcurl=1
+            else
+              newdep=1
+            fi
+          fi
+        fi
+      else
+        >&2 echo "! ${name}: Metadata not found. Skipping."
+      fi
+
+      if [ -z "${newhash}" ]; then
+        # Keep old values
+        newver="${ourver}"
+        # shellcheck disable=SC2154
+        newhash="${hash}"
+      fi
+
+      echo "export ${name^^}_VER_='${newver}'"
+      echo "export ${hashenv}=${newhash}"
+    fi
+  done <<< "$(env | grep -a -E '^[A-Z0-9]+_VER_' | \
+    sed -E "s|^${keypkg}|0X0X|g" | sort | \
+    sed -E "s|^0X0X|${keypkg}|g")"
+
+  if [ "${newcurl}" = '1' ]; then
+    _REV=''  # Reset revision on each curl version bump
+  elif [ "${newdep}" = '1' ]; then
+    ((_REV+=1))  # Bump revision with each dependency version bump
+  fi
+
+  echo "_REV=${_REV}"
+}
+
+if [ "$1" = 'bump' ]; then
+  bump
+  exit
+fi
 
 [ -z "${_REV}" ] || _REV="_${_REV}"
 
@@ -17,21 +292,6 @@ if [ "${_OS}" != 'win' ]; then
   pip3 --disable-pip-version-check --no-cache-dir install --user pefile
 fi
 
-my_curl() {
-  curl --disable --user-agent '' --fail --silent --show-error \
-    --connect-timeout 15 --max-time 20 --retry 3 --max-redirs 10 "$@"
-}
-
-my_gpg() {
-  gpg --batch --keyserver-options timeout=15 --keyid-format 0xlong "$@"
-}
-
-gpg_recv_key() {
-  req="pks/lookup?op=get&options=mr&exact=on&search=0x$1"
-  my_curl "https://pgpkeys.eu/${req}"           | my_gpg --import --status-fd 1 || \
-  my_curl "https://keyserver.ubuntu.com/${req}" | my_gpg --import --status-fd 1
-}
-
 [ "${_OS}" = 'mac' ] && alias tar='gtar'
 
 my_gpg --version | grep -a -F gpg
@@ -45,6 +305,7 @@ else
 fi
 
 live_unpack() {
+  local pkg hash
   pkg="$1"
   hash="$(openssl dgst -sha256 pkg.bin)"
   echo "${hash}"
@@ -55,72 +316,75 @@ live_unpack() {
   return 0
 }
 
+live_dl() {
+  local name ver hash jp url sig redir key keys options gpgdir
+
+  name="$1"
+  ver="$2"
+  hash="$3"
+
+  set +x
+  jp="$(meta | jq \
+    ".[] | select(.name == \"${name}\")")"
+
+  url="$(  printf '%s' "${jp}" | jq -r '.url' | sed "s|{ver}|${ver}|g")"
+  sig="$(  printf '%s' "${jp}" | jq -r '.sig' | sed -E 's|^null$||g')"
+  redir="$(printf '%s' "${jp}" | jq -r '.redir')"
+  keys="$( printf '%s' "${jp}" | jq -r '.keys' | sed -E 's|^null$||g')"
+
+  options=()
+  [ "${redir}" = 'redir' ] && options+=(--location --proto-redir '=https')
+  options+=(--output pkg.bin "${url}")
+  [ -n "${sig}" ] && options+=(--output pkg.sig "${url}${sig}")
+  set -x
+  my_curl "${options[@]}" || exit 1
+
+  if [ -n "${sig}" ]; then
+    gpgdir="$(mktemp -d)"; export GNUPGHOME="${gpgdir}"
+    for key in ${keys}; do
+      if printf '%s' "${key}" | grep -q -a '^https://'; then
+        my_curl "${key}" | my_gpg --quiet --import 2>/dev/null
+      else
+        gpg_recv_key "${key}"
+      fi
+    done
+    my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
+    rm -r -f "${gpgdir}"
+  fi
+
+  if [ -n "${hash}" ]; then
+    live_unpack "${name}" "${hash}"
+  else
+    true
+  fi
+}
+
 if [ "${_BRANCH#*zlibng*}" != "${_BRANCH}" ]; then
-  # zlib-ng
-  my_curl --location --proto-redir =https \
-    --output pkg.bin \
-    "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/${ZLIBNG_VER_}.tar.gz" || exit 1
+  live_dl     zlibng "${ZLIBNG_VER_}"
   live_unpack zlibng "${ZLIBNG_HASH}"
 else
-  # zlib
-  my_curl \
-    --output pkg.bin \
-    "https://zlib.net/zlib-${ZLIB_VER_}.tar.xz" \
-    --output pkg.sig \
-    "https://zlib.net/zlib-${ZLIB_VER_}.tar.xz.asc" || exit 1
-  gpg_recv_key 5ED46A6721D365587791E2AA783FCD8E58BCAFBA
-  my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
+  live_dl     zlib "${ZLIB_VER_}"
   live_unpack zlib "${ZLIB_HASH}"
 fi
 
-# zstd
-my_curl --location --proto-redir =https \
-  --output pkg.bin \
-  "https://github.com/facebook/zstd/releases/download/v${ZSTD_VER_}/zstd-${ZSTD_VER_}.tar.zst" \
-  --output pkg.sig \
-  "https://github.com/facebook/zstd/releases/download/v${ZSTD_VER_}/zstd-${ZSTD_VER_}.tar.zst.sig" || exit 1
-gpg_recv_key 4EF4AC63455FC9F4545D9B7DEF8FE99528B52FFD
-my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
+live_dl     zstd "${ZSTD_VER_}"
 live_unpack zstd "${ZSTD_HASH}"
 
-# brotli
-# Relatively high curl binary size + extra dependency overhead aiming mostly
-# to optimize webpage download sizes.
-my_curl --location --proto-redir =https \
-  --output pkg.bin \
-  "https://github.com/google/brotli/archive/v${BROTLI_VER_}.tar.gz" || exit 1
+live_dl     brotli "${BROTLI_VER_}"
 live_unpack brotli "${BROTLI_HASH}"
 
-# nghttp2
-my_curl --location --proto-redir =https \
-  --output pkg.bin \
-  "https://github.com/nghttp2/nghttp2/releases/download/v${NGHTTP2_VER_}/nghttp2-${NGHTTP2_VER_}.tar.xz" || exit 1
+live_dl     nghttp2 "${NGHTTP2_VER_}"
 live_unpack nghttp2 "${NGHTTP2_HASH}"
 
-# libgsasl
-my_curl \
-  --output pkg.bin \
-  "https://ftp.gnu.org/gnu/gsasl/libgsasl-${LIBGSASL_VER_}.tar.gz" \
-  --output pkg.sig \
-  "https://ftp.gnu.org/gnu/gsasl/libgsasl-${LIBGSASL_VER_}.tar.gz.sig" || exit 1
-my_curl 'https://ftp.gnu.org/gnu/gnu-keyring.gpg' \
-| my_gpg --quiet --import 2>/dev/null
-my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
+live_dl     libgsasl "${LIBGSASL_VER_}"
 live_unpack libgsasl "${LIBGSASL_HASH}"
 
 if [ "${_BRANCH#*winidn*}" = "${_BRANCH}" ]; then
-  # libidn2
-  my_curl \
-    --output pkg.bin \
-    "https://ftp.gnu.org/gnu/libidn/libidn2-${LIBIDN2_VER_}.tar.gz" \
-    --output pkg.sig \
-    "https://ftp.gnu.org/gnu/libidn/libidn2-${LIBIDN2_VER_}.tar.gz.sig" || exit 1
-  my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
+  live_dl     libidn2 "${LIBIDN2_VER_}"
   live_unpack libidn2 "${LIBIDN2_HASH}"
 fi
 
 if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
-  # c-ares
   if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
     CARES_VER_='1.17.2-dev'
     CARES_HASH=
@@ -128,37 +392,19 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
       --output pkg.bin \
       'https://github.com/c-ares/c-ares/archive/6ce842ff936116b8c1026ecaafdc06468af47e6c.tar.gz' || exit 1
   else
-    my_curl \
-      --output pkg.bin \
-      "https://c-ares.org/download/c-ares-${CARES_VER_}.tar.gz" \
-      --output pkg.sig \
-      "https://c-ares.org/download/c-ares-${CARES_VER_}.tar.gz.asc" || exit 1
-    gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
-    my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
+    live_dl cares "${CARES_VER_}"
   fi
   live_unpack cares "${CARES_HASH}"
 fi
 
-# openssl
+# QUIC fork: https://github.com/quictls/openssl.git
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   OPENSSL_VER_='3.0.0-beta2'
   OPENSSL_HASH=e76ab22879201b12f014393ee4becec7f264d8f6955b1036839128002868df71
 fi
-# QUIC fork:
-#   https://github.com/quictls/openssl.git
-my_curl \
-  --output pkg.bin \
-  "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz" \
-  --output pkg.sig \
-  "https://www.openssl.org/source/openssl-${OPENSSL_VER_}.tar.gz.asc" || exit 1
-# Via:
-#   https://www.openssl.org/community/omc.html
-gpg_recv_key 8657ABB260F056B1E5190839D9C4D26D0E604491
-gpg_recv_key 7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C
-my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
+live_dl     openssl "${OPENSSL_VER_}"
 live_unpack openssl "${OPENSSL_HASH}"
 
-# libssh2
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   LIBSSH2_VER_='1.9.1-dev'
   LIBSSH2_HASH=
@@ -166,17 +412,10 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
     --output pkg.bin \
     'https://github.com/libssh2/libssh2/archive/a88a727c2a1840f979b34f12bcce3d55dcd7ea6e.tar.gz' || exit 1
 else
-  my_curl \
-    --output pkg.bin \
-    "https://www.libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz" \
-    --output pkg.sig \
-    "https://www.libssh2.org/download/libssh2-${LIBSSH2_VER_}.tar.gz.asc" || exit 1
-  gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
-  my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
+  live_dl libssh2 "${LIBSSH2_VER_}"
 fi
 live_unpack libssh2 "${LIBSSH2_HASH}"
 
-# curl
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   CURL_VER_='7.79.0-dev'
   CURL_HASH=
@@ -184,13 +423,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
     --output pkg.bin \
     'https://github.com/curl/curl/archive/5dc594e44f73b1726cabca6a4395323f972e416d.tar.gz' || exit 1
 else
-  my_curl \
-    --output pkg.bin \
-    "https://curl.se/download/curl-${CURL_VER_}.tar.xz" \
-    --output pkg.sig \
-    "https://curl.se/download/curl-${CURL_VER_}.tar.xz.asc" || exit 1
-  gpg_recv_key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
-  my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
+  live_dl curl "${CURL_VER_}"
 fi
 live_unpack curl "${CURL_HASH}"
 
