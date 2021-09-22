@@ -27,9 +27,7 @@ my_gpg() {
 }
 
 gpg_recv_key() {
-  # https://keys.openpgp.org/about/api
   req="pks/lookup?op=get&options=mr&exact=on&search=0x$1"
-  my_curl "https://keys.openpgp.org/${req}"     | my_gpg --import --status-fd 1 || \
   my_curl "https://pgpkeys.eu/${req}"           | my_gpg --import --status-fd 1 || \
   my_curl "https://keyserver.ubuntu.com/${req}" | my_gpg --import --status-fd 1
 }
