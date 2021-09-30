@@ -22,7 +22,6 @@
 #   libidn2.sh   clang    autotools
 #   nghttp2.sh   clang    cmake
 #   nghttp3.sh   clang    cmake
-#   c-ares.sh    clang    cmake
 #   openssl.sh   clang    proprietary
 #   ngtcp2.sh    gcc      autotools    TODO: move to cmake and clang (couldn't detect openssl, and even configure needs a manual patch)
 #   libssh2.sh   clang    make         TODO: move to cmake
@@ -231,7 +230,6 @@ build_single_target() {
   time ./libidn2.sh   "${LIBIDN2_VER_}"
   time ./nghttp2.sh   "${NGHTTP2_VER_}"
   time ./nghttp3.sh   "${NGHTTP3_VER_}"
-  time ./c-ares.sh      "${CARES_VER_}"
   time ./openssl.sh   "${OPENSSL_VER_}"
   time ./ngtcp2.sh     "${NGTCP2_VER_}"
   time ./libssh2.sh   "${LIBSSH2_VER_}"

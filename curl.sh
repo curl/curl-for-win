@@ -124,10 +124,6 @@ _VER="$1"
     export NGTCP2_PATH=../../ngtcp2/pkg/usr/local
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGTCP2_STATICLIB"
   fi
-  if [ -d ../cares ]; then
-    options="${options}-ares"
-    export LIBCARES_PATH=../../cares/pkg/usr/local
-  fi
   if [ -d ../libgsasl ]; then
     options="${options}-gsasl"
     export LIBGSASL_PATH=../../libgsasl/pkg/usr/local
@@ -263,7 +259,6 @@ _VER="$1"
   [ -d ../nghttp3 ] && cp -f -p ../nghttp3/COPYING   "${_DST}/COPYING-nghttp3.txt"
   [ -d ../ngtcp2 ]  && cp -f -p ../ngtcp2/COPYING    "${_DST}/COPYING-ngtcp2.txt"
   [ -d ../libidn2 ] && cp -f -p ../libidn2/COPYING   "${_DST}/COPYING-libidn2.txt"
-  [ -d ../cares ]   && cp -f -p ../cares/LICENSE.md  "${_DST}/COPYING-c-ares.md"
   [ -d ../openssl ] && [ -f ../openssl/LICENSE.txt ] && cp -f -p ../openssl/LICENSE.txt "${_DST}/COPYING-openssl.txt"
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then

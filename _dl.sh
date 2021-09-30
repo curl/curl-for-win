@@ -15,13 +15,6 @@ cat <<EOF
     "redir": "redir"
   },
   {
-    "name": "cares",
-    "descending": true,
-    "url": "https://c-ares.org/download/c-ares-{ver}.tar.gz",
-    "sig": ".asc",
-    "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
-  },
-  {
     "name": "curl",
     "descending": true,
     "url": "https://curl.se/download/curl-{ver}.tar.xz",
@@ -382,19 +375,6 @@ live_unpack libgsasl "${LIBGSASL_HASH}"
 if [ "${_BRANCH#*winidn*}" = "${_BRANCH}" ]; then
   live_dl     libidn2 "${LIBIDN2_VER_}"
   live_unpack libidn2 "${LIBIDN2_HASH}"
-fi
-
-if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
-  if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-    CARES_VER_='1.17.2-dev'
-    CARES_HASH=
-    my_curl --location --proto-redir =https \
-      --output pkg.bin \
-      'https://github.com/c-ares/c-ares/archive/6ce842ff936116b8c1026ecaafdc06468af47e6c.tar.gz' || exit 1
-  else
-    live_dl cares "${CARES_VER_}"
-  fi
-  live_unpack cares "${CARES_HASH}"
 fi
 
 # QUIC fork: https://github.com/quictls/openssl.git
