@@ -87,10 +87,9 @@ _VER="$1"
     fi
     if [ -d ../openssl ]; then
       options="${options} -DCMAKE_USE_OPENSSL=1"
-      options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/"
+      options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../openssl"
       options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/include"
-      options="${options} -DOPENSSL_LIBRARIES=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/lib"
-      options="${options} -DOPENSSL_CRYPTO_LIBRARY=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/lib"
+      options="${options} -DOPENSSL_USE_STATIC_LIBS=1"
     fi
     options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
     options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"

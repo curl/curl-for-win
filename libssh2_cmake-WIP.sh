@@ -71,10 +71,8 @@ _VER="$1"
     fi
     if [ -d ../openssl ]; then
       options="${options} -DCRYPTO_BACKEND=OpenSSL"
-      options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/"
+      options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../openssl"
       options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/include"
-      options="${options} -DOPENSSL_LIBRARIES=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/lib"
-      options="${options} -DOPENSSL_CRYPTO_LIBRARY=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/lib"
     else
       options="${options} -DCRYPTO_BACKEND=WinCNG"
     fi
