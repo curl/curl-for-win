@@ -69,11 +69,15 @@ _VER="$1"
       options="${options} -DZLIB_INCLUDE_DIR:PATH=$(pwd)/../zlib/pkg/usr/local/include"
       options="${options} -DZLIB_LIBRARY:FILEPATH=$(pwd)/../zlib/pkg/usr/local/lib/libz.a"
     fi
-    options="${options} -DCRYPTO_BACKEND=OpenSSL"
-    options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/"
-    options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/include"
-    options="${options} -DOPENSSL_LIBRARIES=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/lib"
-    options="${options} -DOPENSSL_CRYPTO_LIBRARY=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/lib"
+    if [ -d ../openssl ]; then
+      options="${options} -DCRYPTO_BACKEND=OpenSSL"
+      options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/"
+      options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/include"
+      options="${options} -DOPENSSL_LIBRARIES=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/lib"
+      options="${options} -DOPENSSL_CRYPTO_LIBRARY=$(pwd)/../openssl/pkg/C:/Windows/System32/OpenSSL/lib"
+    else
+      options="${options} -DCRYPTO_BACKEND=WinCNG"
+    fi
     options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
     options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
     options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
