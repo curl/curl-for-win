@@ -20,6 +20,8 @@
   - curl/libcurl features enabled by default (`{upcoming}`):
     <br>`dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
     <br>`alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI TLS-SRP UnixSockets zstd`
+  - To link libcurl statically, link against this list of libraries:
+    `-lcurl -lssh2 -lnghttp2 -lssl -lcrypto -lgsasl -lidn2 -lbrotlidec-static -lbrotlicommon-static -lzstd -lcrypt32 -lwldap32`
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the build
     [in public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
