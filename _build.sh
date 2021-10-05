@@ -4,6 +4,7 @@
 
 # TODO:
 #   - Enable Control Flow Guard (once FLOSS toolchains support it)
+#      LLVM/CLANG: -ehcontguard (requires LLVM 13.0.0)
 #   - ARM64 builds (once FLOSS toolchains support it)
 #   - Switch to libssh from libssh2?
 #   - LLVM -mretpoline
