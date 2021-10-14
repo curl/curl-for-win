@@ -59,6 +59,7 @@ create_pkg() {
     rm -f "${_cdo}/${_pkg}"
     case "${arch_ext}" in
       .tar.xz) tar --create \
+        --format=ustar \
         --owner 0 --group 0 --numeric-owner --mode go=rX,u+rw,a-s \
         --files-from "${_FLS}" | xz > "${_cdo}/${_pkg}";;
       .zip) zip --quiet -9 --strip-extra \
