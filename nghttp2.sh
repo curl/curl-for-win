@@ -13,7 +13,7 @@ _NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
 _VER="$1"
 
 (
-  cd "${_NAM}" || exit
+  cd "${_NAM}" || exit 0
 
   # Cross-tasks
 

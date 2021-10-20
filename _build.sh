@@ -135,9 +135,9 @@ case "${_OS}" in
   mac)
     ver="$(brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
   linux)
-    [ -n "${ver}" ] || ver="$(dpkg   --status       mingw-w64)"
-    [ -n "${ver}" ] || ver="$(rpm    --query        mingw-w64)"
-    [ -n "${ver}" ] || ver="$(pacman --query --info mingw-w64)"
+    [ -n "${ver}" ] || ver="$(dpkg   --status       mingw-w64-common)"
+    [ -n "${ver}" ] || ver="$(rpm    --query        mingw-w64-common)"
+    [ -n "${ver}" ] || ver="$(pacman --query --info mingw-w64-common)"
     ver="$(printf '%s' "${ver}" | sed -E 's|^(Version ?:) *(.+)$|\2|g')"
     ;;
 esac
@@ -215,7 +215,7 @@ build_single_target() {
   echo ".gcc-mingw-w64-${_machine} $("${_CCPREFIX}gcc" -dumpversion)" >> "${_BLD}"
   echo ".binutils-mingw-w64-${_machine} $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')" >> "${_BLD}"
 
-  osslsigncode --version
+  osslsigncode --version || true  # 2.1.0 and older returns an error code here
   ver="$(osslsigncode --version | grep -a -o -m 1 -E '[0-9]+\.[0-9]+\.[0-9]+')"
   maj="$(printf '%s' "${ver}" | grep -a -o -E '[0-9]+' | head -1)"
   min="$(printf '%s' "${ver}" | grep -a -o -E '[0-9]+' | head -2 | tail -1)"
