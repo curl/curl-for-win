@@ -285,7 +285,9 @@ if [ "${_OS}" != 'win' ]; then
   pip3 --disable-pip-version-check --no-cache-dir install --user pefile
 fi
 
-[ "${_OS}" = 'mac' ] && alias tar='gtar'
+if [ "${_OS}" = 'mac' ]; then
+  tar() { gtar "$@"; }
+fi
 
 my_gpg --version | grep -a -F gpg
 
