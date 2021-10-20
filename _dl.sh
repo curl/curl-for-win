@@ -258,20 +258,18 @@ bump() {
     sed -E "s|^0X0X|${keypkg}|g")"
 
   if [ "${newcurl}" = '1' ]; then
-    _REV=''  # Reset revision on each curl version bump
+    _REVN=''  # Reset revision on each curl version bump
   elif [ "${newdep}" = '1' ]; then
-    ((_REV+=1))  # Bump revision with each dependency version bump
+    ((_REVN+=1))  # Bump revision with each dependency version bump
   fi
 
-  echo "_REV=${_REV}"
+  echo "export _REVN=${_REVN}"
 }
 
 if [ "$1" = 'bump' ]; then
   bump
   exit
 fi
-
-[ -z "${_REV}" ] || _REV="_${_REV}"
 
 echo "Build: REV(${_REV})"
 
