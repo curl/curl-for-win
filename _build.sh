@@ -141,9 +141,9 @@ case "${_OS}" in
     ver="$(brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
   linux)
     [ -n "${ver}" ] || ver="$(dpkg   --status       mingw-w64-common)"
-    [ -n "${ver}" ] || ver="$(rpm    --query        mingw-w64-common)"
-    [ -n "${ver}" ] || ver="$(pacman --query --info mingw-w64-common)"
-    ver="$(printf '%s' "${ver}" | sed -E 's|^(Version ?:) *(.+)$|\2|g')"
+    [ -n "${ver}" ] || ver="$(rpm    --query        mingw64-crt)"
+    [ -n "${ver}" ] || ver="$(pacman --query --info mingw-w64-crt)"
+    ver="$(printf '%s' "${ver}" | grep -a '^Version' | grep -a -m 1 -o -E '[0-9.-]+')"
     ;;
 esac
 [ -n "${ver}" ] && echo ".mingw-w64 ${ver}" >> "${_BLD}"
