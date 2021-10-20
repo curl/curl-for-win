@@ -107,7 +107,7 @@ check_update() {
   ourvern="${2:-000000}"
   url="$3"
   unset newver
-  if [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
+  if [[ "${url}" =~ ^https:\/\/github.com\/([a-zA-Z0-9-]+\/[a-zA-Z0-9-]+)\/ ]]; then
     slug="${BASH_REMATCH[1]}"
     # heavily rate-limited
     newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases/latest" | \
