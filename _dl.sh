@@ -183,6 +183,7 @@ check_dl() {
 
   rm -f pkg.bin pkg.sig pkg.sha
   rm -r -f "${gpgdir}"
+  unset GNUPGHOME
 }
 
 bump() {
@@ -343,6 +344,7 @@ live_dl() {
     done
     my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
     rm -r -f "${gpgdir}"
+    unset GNUPGHOME
   fi
 
   if [ -n "${hash}" ]; then
