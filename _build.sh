@@ -94,7 +94,7 @@ rm -f hashes.txt
 rm -f "${_BLD}"
 
 # Download sources
-. ./_dl.sh || exit 1
+./_dl.sh || exit 1
 
 # Decrypt package signing key
 SIGN_PKG_KEY='sign-pkg.gpg.asc'
