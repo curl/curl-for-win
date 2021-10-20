@@ -93,6 +93,8 @@ rm -f ./*-*-mingw*.*
 rm -f hashes.txt
 rm -f "${_BLD}"
 
+. ./_versions.sh
+
 # Download sources
 ./_dl.sh || exit 1
 

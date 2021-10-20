@@ -9,4 +9,6 @@ case "$(uname)" in
       curl git gpg zip zstd jq html-xml-utils;;
 esac
 
+. ./_versions.sh
+
 ./_dl.sh bump

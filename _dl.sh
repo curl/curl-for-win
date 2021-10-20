@@ -4,8 +4,6 @@
 
 set -x
 
-. ./_versions.sh
-
 meta() {
 cat <<EOF
 [
