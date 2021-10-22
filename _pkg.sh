@@ -10,7 +10,7 @@ cd "$(dirname "$0")" || exit
 _cdo="$(pwd)"
 
 _fn="${_DST}/BUILD-README.txt"
-cat << EOF > "${_fn}"
+cat <<EOF > "${_fn}"
 Visit the project page for details about these builds and the list of changes:
 
    ${_URL}
@@ -18,7 +18,7 @@ EOF
 touch -c -r "$1" "${_fn}"
 
 _fn="${_DST}/BUILD-HOMEPAGE.url"
-cat << EOF > "${_fn}"
+cat <<EOF > "${_fn}"
 [InternetShortcut]
 URL=${_URL}
 EOF

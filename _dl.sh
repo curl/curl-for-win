@@ -182,8 +182,7 @@ check_dl() {
   fi
 
   rm -f pkg.bin pkg.sig pkg.sha
-  rm -r -f "${gpgdir}"
-  unset GNUPGHOME
+  rm -r -f "${gpgdir}"; unset GNUPGHOME
 }
 
 bump() {
@@ -296,7 +295,7 @@ else
   _patsuf=''
 fi
 
-live_unpack() {
+live_xt() {
   local pkg hash
   pkg="$1"
   hash="$(openssl dgst -sha256 pkg.bin)"
@@ -341,40 +340,39 @@ live_dl() {
       fi
     done
     my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-    rm -r -f "${gpgdir}"
-    unset GNUPGHOME
+    rm -r -f "${gpgdir}"; unset GNUPGHOME
   fi
 
   if [ -n "${hash}" ]; then
-    live_unpack "${name}" "${hash}"
+    live_xt "${name}" "${hash}"
   else
     true
   fi
 }
 
 if [ "${_BRANCH#*zlibng*}" != "${_BRANCH}" ]; then
-  live_dl     zlibng "${ZLIBNG_VER_}"
-  live_unpack zlibng "${ZLIBNG_HASH}"
+  live_dl zlibng "${ZLIBNG_VER_}"
+  live_xt zlibng "${ZLIBNG_HASH}"
 else
-  live_dl     zlib "${ZLIB_VER_}"
-  live_unpack zlib "${ZLIB_HASH}"
+  live_dl zlib "${ZLIB_VER_}"
+  live_xt zlib "${ZLIB_HASH}"
 fi
 
-live_dl     zstd "${ZSTD_VER_}"
-live_unpack zstd "${ZSTD_HASH}"
+live_dl zstd "${ZSTD_VER_}"
+live_xt zstd "${ZSTD_HASH}"
 
-live_dl     brotli "${BROTLI_VER_}"
-live_unpack brotli "${BROTLI_HASH}"
+live_dl brotli "${BROTLI_VER_}"
+live_xt brotli "${BROTLI_HASH}"
 
-live_dl     nghttp2 "${NGHTTP2_VER_}"
-live_unpack nghttp2 "${NGHTTP2_HASH}"
+live_dl nghttp2 "${NGHTTP2_VER_}"
+live_xt nghttp2 "${NGHTTP2_HASH}"
 
-live_dl     libgsasl "${LIBGSASL_VER_}"
-live_unpack libgsasl "${LIBGSASL_HASH}"
+live_dl libgsasl "${LIBGSASL_VER_}"
+live_xt libgsasl "${LIBGSASL_HASH}"
 
 if [ "${_BRANCH#*winidn*}" = "${_BRANCH}" ]; then
-  live_dl     libidn2 "${LIBIDN2_VER_}"
-  live_unpack libidn2 "${LIBIDN2_HASH}"
+  live_dl libidn2 "${LIBIDN2_VER_}"
+  live_xt libidn2 "${LIBIDN2_HASH}"
 fi
 
 # QUIC fork: https://github.com/quictls/openssl.git
@@ -382,8 +380,8 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   OPENSSL_VER_='3.0.0-beta2'
   OPENSSL_HASH=e76ab22879201b12f014393ee4becec7f264d8f6955b1036839128002868df71
 fi
-live_dl     openssl "${OPENSSL_VER_}"
-live_unpack openssl "${OPENSSL_HASH}"
+live_dl openssl "${OPENSSL_VER_}"
+live_xt openssl "${OPENSSL_HASH}"
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   LIBSSH2_VER_='1.9.1-dev'
@@ -394,7 +392,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
 else
   live_dl libssh2 "${LIBSSH2_VER_}"
 fi
-live_unpack libssh2 "${LIBSSH2_HASH}"
+live_xt libssh2 "${LIBSSH2_HASH}"
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   CURL_VER_='7.79.0-dev'
@@ -405,6 +403,6 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
 else
   live_dl curl "${CURL_VER_}"
 fi
-live_unpack curl "${CURL_HASH}"
+live_xt curl "${CURL_HASH}"
 
 set +e
