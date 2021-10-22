@@ -151,7 +151,7 @@ check_dl() {
 
     for key in ${keys}; do
       if [[ "${key}" = 'https://'* ]]; then
-        my_curl "${key}" | my_gpg --quiet --import >/dev/null 2>&1
+        my_curl --max-time 60 "${key}" | my_gpg --quiet --import >/dev/null 2>&1
       else
         gpg_recv_key "${key}" >/dev/null 2>&1
       fi
@@ -334,7 +334,9 @@ live_dl() {
     gpgdir="$(mktemp -d)"; export GNUPGHOME="${gpgdir}"
     for key in ${keys}; do
       if printf '%s' "${key}" | grep -q -a '^https://'; then
-        my_curl "${key}" | my_gpg --quiet --import 2>/dev/null
+        # gnu-keyring.gpg can take a long time to import, so allow curl to
+        # run longer.
+        my_curl --max-time 60 "${key}" | my_gpg --quiet --import 2>/dev/null
       else
         gpg_recv_key "${key}"
       fi
