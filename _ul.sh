@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 
 # Copyright 2018-present Viktor Szakats. See LICENSE.md
 
@@ -46,21 +46,16 @@ if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ] && \
   # decrypt deploy key
   DEPLOY_KEY="$(realpath '.')/deploy.key"
   if [ -f "${DEPLOY_KEY}.asc" ]; then
-  (
-    set +x
-    if [ -n "${DEPLOY_GPG_PASS}" ]; then
-      install -m 600 /dev/null "${DEPLOY_KEY}"
-      echo "${DEPLOY_GPG_PASS}" | gpg \
-        --batch --yes --no-tty --quiet \
-        --pinentry-mode loopback --passphrase-fd 0 \
-        --decrypt "${DEPLOY_KEY}.asc" 2>/dev/null >> "${DEPLOY_KEY}"
-    fi
-  )
+    install -m 600 /dev/null "${DEPLOY_KEY}"
+    gpg --batch --yes --no-tty --quiet \
+      --pinentry-mode loopback --passphrase-fd 0 \
+      --decrypt "${DEPLOY_KEY}.asc" 2>/dev/null >> "${DEPLOY_KEY}" <<EOF
+${DEPLOY_GPG_PASS}
+EOF
   fi
 
   if [ -s "${DEPLOY_KEY}" ]; then
-  (
-    set +x
+
     # add deploy target to known hosts
     # ssh-keyscan silly.haxx.se
     readonly host_key='silly.haxx.se ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFVVUP9dpjNl2qbHkDYMDS+cTOfxFytjkC04Oh9RNJBg'
@@ -72,16 +67,11 @@ if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ] && \
       echo "${host_key}" >> "${HOME}/.ssh/known_hosts"
     fi
 
-    if [ -n "${DEPLOY_KEY_PASS}" ]; then
-      # Requires: OpenSSH 8.4+ (2020-09-27)
-      unset DISPLAY
-      export SSH_ASKPASS_REQUIRE='force'
-      export SSH_ASKPASS; SSH_ASKPASS="$(dirname \
-        "$(realpath "$0")")/_ul-askpass.sh"
-      batch='no'
-    else
-      batch='yes'
-    fi
+    # Requires: OpenSSH 8.4+ (2020-09-27)
+    unset DISPLAY
+    export SSH_ASKPASS_REQUIRE='force'
+    export SSH_ASKPASS; SSH_ASKPASS="$(dirname \
+      "$(realpath "$0")")/_ul-askpass.sh"
 
     echo "Uploading: '${_ALL}'"
     # Sent command: rsync --server -tce.LsfxCIvu . .
@@ -92,7 +82,7 @@ if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ] && \
       --info=NAME2 --itemize-changes \
       --rsh "ssh \
         -i '${DEPLOY_KEY}' \
-        -o BatchMode=${batch} \
+        -o BatchMode=no \
         -o StrictHostKeyChecking=yes \
         -o ConnectTimeout=20 \
         -o ConnectionAttempts=5" \
@@ -100,7 +90,6 @@ if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ] && \
       "${_ALL}.asc" \
       "${_ALL}.txt" \
       'curl-for-win@silly.haxx.se:.'
-  )
   fi
 
   case "${_OS}" in

@@ -86,26 +86,30 @@ create_pkg() {
 
   # Upload builds to VirusTotal
   if [ "${_BRANCH#*main*}" != "${_BRANCH}" ]; then
-  (
-    set +x
 
     hshl="$(openssl dgst -sha256 "${_pkg}" \
       | sed -n -E 's,.+= ([0-9a-fA-F]{64}),\1,p')"
     # https://developers.virustotal.com/v3.0/reference
-    out="$(echo "x-apikey: ${VIRUSTOTAL_APIKEY}" | curl \
+    out="$(curl \
       --disable --user-agent '' --fail --silent --show-error \
       --connect-timeout 15 --max-time 60 --retry 3 \
       --request POST 'https://www.virustotal.com/api/v3/files' \
       --header @/dev/stdin \
-      --form "file=@${_pkg}")"
+      --form "file=@${_pkg}" <<EOF
+x-apikey: ${VIRUSTOTAL_APIKEY}
+EOF
+)"
     # shellcheck disable=SC2181
     if [ "$?" = 0 ]; then
       id="$(echo "${out}" | jq --raw-output '.data.id')"
-      out="$(echo "x-apikey: ${VIRUSTOTAL_APIKEY}" | curl \
+      out="$(curl \
         --disable --user-agent '' --fail --silent --show-error \
         --connect-timeout 15 --max-time 20 --retry 3 \
         "https://www.virustotal.com/api/v3/analyses/${id}" \
-        --header @/dev/stdin)"
+        --header @/dev/stdin <<EOF
+x-apikey: ${VIRUSTOTAL_APIKEY}
+EOF
+)"
       # shellcheck disable=SC2181
       if [ "$?" = 0 ]; then
         hshr="$(echo "${out}" | jq --raw-output '.meta.file_info.sha256')"
@@ -123,7 +127,6 @@ create_pkg() {
     else
       echo "Error uploading to VirusTotal: $?"
     fi
-  )
   fi
 }
 

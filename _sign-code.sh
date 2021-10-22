@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 
 # Copyright 2016-present Viktor Szakats. See LICENSE.md
 
@@ -14,22 +14,21 @@ if [ -f "${SIGN_CODE_KEY}" ]; then
 
   # Add code signature
   for file in "$@"; do
-  (
     echo "Code signing: '${file}'"
-    set +x
     # Requires: osslsigncode 2.1+
     # -ts 'https://freetsa.org/tsr'
-    echo "${SIGN_CODE_KEY_PASS}" | osslsigncode sign \
+    osslsigncode sign \
       -h sha512 \
       -in "${file}" -out "${file}-signed" \
       -st "${unixts}" \
-      -pkcs12 "${SIGN_CODE_KEY}" -readpass /dev/stdin
+      -pkcs12 "${SIGN_CODE_KEY}" -readpass /dev/stdin <<EOF
+${SIGN_CODE_KEY_PASS}
+EOF
   # # Create a detached code signature:
   # osslsigncode extract-signature \
   #   -in  "${file}-signed" \
   #   -out "${file}.p7"
     cp -f "${file}-signed" "${file}"
     rm -f "${file}-signed"
-  )
   done
 fi
