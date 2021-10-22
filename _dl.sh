@@ -53,6 +53,13 @@ cat <<EOF
     "keys": "8657ABB260F056B1E5190839D9C4D26D0E604491 7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C"
   },
   {
+    "name": "osslsigncode",
+    "url": "https://github.com/mtrojnar/osslsigncode/releases/download/{vermm}/osslsigncode-{ver}.tar.gz",
+    "sig": ".asc",
+    "redir": "redir",
+    "keys": "2BC7E4E67E3CC0C1BEA72F8C2EFC7FF0D416E014"
+  },
+  {
     "name": "zlib",
     "url": "https://zlib.net/zlib-{ver}.tar.xz",
     "sig": ".asc",
@@ -227,7 +234,10 @@ bump() {
             redir="$(printf '%s' "${jp}" | jq -r '.redir')"
             keys="$( printf '%s' "${jp}" | jq -r '.keys' | sed -E 's|^null$||g')"
 
-            urlver="$(printf '%s' "${url}" | sed "s|{ver}|${newver}|g")"
+            urlver="$(printf '%s' "${url}" | sed \
+                -e "s|{ver}|${newver}|g" \
+                -e "s|{vermm}|$(echo "${newver}" | cut -d . -f -2)|g" \
+              )"
             newhash="$(check_dl "${name}" "${urlver}" "${sig}" "${sha}" "${redir}" "${keys}")"
             if [ -z "${newhash}" ]; then
               >&2 echo "! ${name}: New version failed to validate."
@@ -320,7 +330,10 @@ live_dl() {
   jp="$(meta | jq \
     ".[] | select(.name == \"${name}\")")"
 
-  url="$(  printf '%s' "${jp}" | jq -r '.url' | sed "s|{ver}|${ver}|g")"
+  url="$(  printf '%s' "${jp}" | jq -r '.url' | sed \
+      -e "s|{ver}|${ver}|g" \
+      -e "s|{vermm}|$(echo "${ver}" | cut -d . -f -2)|g" \
+    )"
   sig="$(  printf '%s' "${jp}" | jq -r '.sig' | sed -E 's|^null$||g')"
   redir="$(printf '%s' "${jp}" | jq -r '.redir')"
   keys="$( printf '%s' "${jp}" | jq -r '.keys' | sed -E 's|^null$||g')"
@@ -406,6 +419,9 @@ else
   live_dl curl "${CURL_VER_}"
 fi
 live_xt curl "${CURL_HASH}"
+
+live_dl osslsigncode "${OSSLSIGNCODE_VER_}"
+live_xt osslsigncode "${OSSLSIGNCODE_HASH}"
 
 rm -r -f "${gpgdir}"
 

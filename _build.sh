@@ -126,6 +126,13 @@ EOF
 fi
 [ -f "${SIGN_CODE_KEY}" ] || unset SIGN_CODE_KEY
 
+if [ -f "${SIGN_CODE_KEY}" ]; then
+  # build osslsigncode
+  ./osslsigncode.sh
+fi
+
+ls -l "$(dirname "$0")/osslsigncode-local"*
+
 if [ "${CC}" = 'mingw-clang' ]; then
   echo ".clang$("clang${_CCSUFFIX}" --version | grep -o -a -E ' [0-9]*\.[0-9]*[\.][0-9]*')" >> "${_BLD}"
 fi
@@ -215,13 +222,11 @@ build_single_target() {
   echo ".gcc-mingw-w64-${_machine} $("${_CCPREFIX}gcc" -dumpversion)" >> "${_BLD}"
   echo ".binutils-mingw-w64-${_machine} $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')" >> "${_BLD}"
 
-  osslsigncode --version || true  # 2.1.0 and older returns an error code here
-  ver="$(osslsigncode --version | grep -a -o -m 1 -E '[0-9]+\.[0-9]+\.[0-9]+')"
-  maj="$(printf '%s' "${ver}" | grep -a -o -E '[0-9]+' | head -1)"
-  min="$(printf '%s' "${ver}" | grep -a -o -E '[0-9]+' | head -2 | tail -1)"
-  rel="$(printf '%s' "${ver}" | grep -a -o -E '[0-9]+' | tail -1)"
-  ver="$(printf '%02d%02d%02d' "${maj}" "${min}" "${rel}")"
-  [ "${ver}" -lt 020100 ] && unset SIGN_CODE_KEY
+  if command -v "$(dirname "$0")/osslsigncode-local" >/dev/null 2>&1; then
+    "$(dirname "$0")/osslsigncode-local" --version
+  else
+    unset SIGN_CODE_KEY
+  fi
 
   time ./zlib.sh         "${ZLIB_VER_}"
   time ./zlibng.sh     "${ZLIBNG_VER_}"

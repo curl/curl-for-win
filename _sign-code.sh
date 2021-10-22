@@ -2,7 +2,8 @@
 
 # Copyright 2016-present Viktor Szakats. See LICENSE.md
 
-if [ -f "${SIGN_CODE_KEY}" ]; then
+if [ -f "${SIGN_CODE_KEY}" ] && \
+   ls "$(dirname "$0")/osslsigncode-local"* >/dev/null 2>&1; then
 
   _ref="$1"
   shift
@@ -15,9 +16,9 @@ if [ -f "${SIGN_CODE_KEY}" ]; then
   # Add code signature
   for file in "$@"; do
     echo "Code signing: '${file}'"
-    # Requires: osslsigncode 2.1+
+    # Requires: osslsigncode 2.2+
     # -ts 'https://freetsa.org/tsr'
-    osslsigncode sign \
+    "$(dirname "$0")/osslsigncode-local" sign \
       -h sha512 \
       -in "${file}" -out "${file}-signed" \
       -st "${unixts}" \
@@ -25,7 +26,7 @@ if [ -f "${SIGN_CODE_KEY}" ]; then
 ${SIGN_CODE_KEY_PASS}
 EOF
   # # Create a detached code signature:
-  # osslsigncode extract-signature \
+  # "$(dirname "$0")/osslsigncode-local" extract-signature \
   #   -in  "${file}-signed" \
   #   -out "${file}.p7"
     cp -f "${file}-signed" "${file}"
