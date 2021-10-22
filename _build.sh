@@ -226,7 +226,7 @@ build_single_target() {
   min="$(printf '%s' "${ver}" | grep -a -o -E '[0-9]+' | head -2 | tail -1)"
   rel="$(printf '%s' "${ver}" | grep -a -o -E '[0-9]+' | tail -1)"
   ver="$(printf '%02d%02d%02d' "${maj}" "${min}" "${rel}")"
-  [ "${ver}" -lt 020100 ] || unset SIGN_CODE_KEY
+  [ "${ver}" -lt 020100 ] && unset SIGN_CODE_KEY
 
   time ./zlib.sh         "${ZLIB_VER_}"
   time ./zlibng.sh     "${ZLIBNG_VER_}"
