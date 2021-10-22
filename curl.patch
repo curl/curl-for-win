@@ -1,0 +1,83 @@
+commit 21e76f114647c4c17e8bf811ce0feb7d1030957a
+Author: Viktor Szakats <commit@vsz.me>
+Date:   2021-10-22 13:34:26 +0000
+
+    Makefile.m32: fix libssh2 + Schannel build combination
+    
+    Previously the -libssh2 option assumed that OpenSSL is also enabled
+    (and failed with an error when not finding expected OpenSSL headers),
+    but this isn't necessarly true when building both libssh2 and curl
+    against Schannel. This patch makes sure not to enable the OpenSSL
+    backend when -libssh2 option is used with -winssl and without -ssl.
+    
+    Also fix an indentation while there.
+
+diff --git a/docs/examples/Makefile.m32 b/docs/examples/Makefile.m32
+index 45ec8679c..43a73e20e 100644
+--- a/docs/examples/Makefile.m32
++++ b/docs/examples/Makefile.m32
+@@ -183,7 +183,9 @@ ZLIB = 1
+ endif
+ ifeq ($(findstring -ssh2,$(CFG)),-ssh2)
+ SSH2 = 1
++ifneq ($(findstring -winssl,$(CFG))$(findstring -ssl,$(CFG)),-winssl)
+ SSL = 1
++endif
+ ZLIB = 1
+ endif
+ ifeq ($(findstring -ssl,$(CFG)),-ssl)
+@@ -284,7 +286,7 @@ ifdef SSL
+     endif
+   endif
+   ifneq "$(wildcard $(OPENSSL_INCLUDE)/openssl/opensslv.h)" "$(OPENSSL_INCLUDE)/openssl/opensslv.h"
+-  $(error Invalid path to OpenSSL package: $(OPENSSL_PATH))
++    $(error Invalid path to OpenSSL package: $(OPENSSL_PATH))
+   endif
+   ifndef OPENSSL_LIBPATH
+     OPENSSL_LIBS = -lssl -lcrypto
+diff --git a/lib/Makefile.m32 b/lib/Makefile.m32
+index 9f1f5963d..74c7726fa 100644
+--- a/lib/Makefile.m32
++++ b/lib/Makefile.m32
+@@ -184,7 +184,9 @@ ZLIB = 1
+ endif
+ ifeq ($(findstring -ssh2,$(CFG)),-ssh2)
+ SSH2 = 1
++ifneq ($(findstring -winssl,$(CFG))$(findstring -ssl,$(CFG)),-winssl)
+ SSL = 1
++endif
+ ZLIB = 1
+ endif
+ ifeq ($(findstring -ssl,$(CFG)),-ssl)
+@@ -299,7 +301,7 @@ ifdef SSL
+     endif
+   endif
+   ifneq "$(wildcard $(OPENSSL_INCLUDE)/openssl/opensslv.h)" "$(OPENSSL_INCLUDE)/openssl/opensslv.h"
+-  $(error Invalid path to OpenSSL package: $(OPENSSL_PATH))
++    $(error Invalid path to OpenSSL package: $(OPENSSL_PATH))
+   endif
+   ifndef OPENSSL_LIBPATH
+     ifeq "$(wildcard $(OPENSSL_PATH)/out)" "$(OPENSSL_PATH)/out"
+diff --git a/src/Makefile.m32 b/src/Makefile.m32
+index 380d264e7..aa99c9aa0 100644
+--- a/src/Makefile.m32
++++ b/src/Makefile.m32
+@@ -192,7 +192,9 @@ ZLIB = 1
+ endif
+ ifeq ($(findstring -ssh2,$(CFG)),-ssh2)
+ SSH2 = 1
++ifneq ($(findstring -winssl,$(CFG))$(findstring -ssl,$(CFG)),-winssl)
+ SSL = 1
++endif
+ ZLIB = 1
+ endif
+ ifeq ($(findstring -ssl,$(CFG)),-ssl)
+@@ -309,7 +311,7 @@ ifdef SSL
+     endif
+   endif
+   ifneq "$(wildcard $(OPENSSL_INCLUDE)/openssl/opensslv.h)" "$(OPENSSL_INCLUDE)/openssl/opensslv.h"
+-  $(error Invalid path to OpenSSL package: $(OPENSSL_PATH))
++    $(error Invalid path to OpenSSL package: $(OPENSSL_PATH))
+   endif
+   ifndef OPENSSL_LIBPATH
+     OPENSSL_LIBS = -lssl -lcrypto
