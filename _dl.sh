@@ -270,6 +270,7 @@ if [ "$1" = 'bump' ]; then
   exit
 fi
 
+# shellcheck disable=SC2153
 echo "Build: REV(${_REV})"
 
 # Quit if any of the lines fail
