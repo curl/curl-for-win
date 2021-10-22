@@ -4,6 +4,8 @@
 
 set -x
 
+gpgdir="$(mktemp -d)"
+
 meta() {
 cat <<EOF
 [
@@ -79,7 +81,7 @@ my_curl() {
 }
 
 my_gpg() {
-  gpg --batch --keyserver-options timeout=15 --keyid-format 0xlong "$@"
+  gpg --homedir "${gpgdir}" --batch --keyserver-options timeout=15 --keyid-format 0xlong "$@"
 }
 
 gpg_recv_key() {
@@ -131,8 +133,7 @@ check_update() {
 }
 
 check_dl() {
-  local gpgdir name url keys sig sha options key ok hash_calc hash_got
-  gpgdir="$(mktemp -d)"; export GNUPGHOME="${gpgdir}"
+  local name url keys sig sha options key ok hash_calc hash_got
   name="$1"
   url="$2"
   sig="$3"
@@ -182,7 +183,6 @@ check_dl() {
   fi
 
   rm -f pkg.bin pkg.sig pkg.sha
-  rm -r -f "${gpgdir}"; unset GNUPGHOME
 }
 
 bump() {
@@ -267,6 +267,7 @@ bump() {
 
 if [ "$1" = 'bump' ]; then
   bump
+  rm -r -f "${gpgdir}"
   exit
 fi
 
@@ -309,7 +310,7 @@ live_xt() {
 }
 
 live_dl() {
-  local name ver hash jp url sig redir key keys options gpgdir
+  local name ver hash jp url sig redir key keys options
 
   name="$1"
   ver="$2"
@@ -332,7 +333,6 @@ live_dl() {
   my_curl "${options[@]}" || exit 1
 
   if [ -n "${sig}" ]; then
-    gpgdir="$(mktemp -d)"; export GNUPGHOME="${gpgdir}"
     for key in ${keys}; do
       if printf '%s' "${key}" | grep -q -a '^https://'; then
         # gnu-keyring.gpg can take a long time to import, so allow curl to
@@ -343,7 +343,6 @@ live_dl() {
       fi
     done
     my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-    rm -r -f "${gpgdir}"; unset GNUPGHOME
   fi
 
   if [ -n "${hash}" ]; then
@@ -407,5 +406,7 @@ else
   live_dl curl "${CURL_VER_}"
 fi
 live_xt curl "${CURL_HASH}"
+
+rm -r -f "${gpgdir}"
 
 set +e
