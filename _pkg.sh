@@ -94,6 +94,7 @@ create_pkg() {
     # https://developers.virustotal.com/v3.0/reference
     out="$(echo "x-apikey: ${VIRUSTOTAL_APIKEY}" | curl \
       --disable --user-agent '' --fail --silent --show-error \
+      --connect-timeout 15 --max-time 60 --retry 3 \
       --request POST 'https://www.virustotal.com/api/v3/files' \
       --header @/dev/stdin \
       --form "file=@${_pkg}")"
@@ -102,6 +103,7 @@ create_pkg() {
       id="$(echo "${out}" | jq --raw-output '.data.id')"
       out="$(echo "x-apikey: ${VIRUSTOTAL_APIKEY}" | curl \
         --disable --user-agent '' --fail --silent --show-error \
+        --connect-timeout 15 --max-time 20 --retry 3 \
         "https://www.virustotal.com/api/v3/analyses/${id}" \
         --header @/dev/stdin)"
       # shellcheck disable=SC2181
