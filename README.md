@@ -59,6 +59,14 @@
     applied locally if already merged upstream or &mdash; in case it is
     necessary for a successful build &mdash; had them submitted upstream with
     fair confidence of getting accepted.
+    NOTE: As of 2021, there is a small local patch applied to the OpenSSL
+    configure script, which fixes a bug which in turns is necessary to better
+    mitigate a high-severity vulnerability
+    ([CVE-2019-5443](https://curl.se/docs/CVE-2019-5443.html)), which still
+    has only an incomplete fix in the default OpenSSL builds for Windows.
+    Patches for both were refused by the OpenSSL team. Even though the patch
+    is minor, there is no promise that this patch will be maintained here for
+    an indefinite time.
   - curl/libcurl are built in MultiSSL mode, with both OpenSSL and
     [Schannel](https://docs.microsoft.com/windows/win32/com/schannel)
     available as SSL backends.
