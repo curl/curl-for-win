@@ -59,7 +59,7 @@
     applied locally if already merged upstream or &mdash; in case it is
     necessary for a successful build &mdash; had them submitted upstream with
     fair confidence of getting accepted.
-    NOTE: As of 2021, there is a small local patch applied to the OpenSSL
+    <br>NOTE: As of 2021, there is a small local patch applied to the OpenSSL
     configure script, which fixes a bug which in turns is necessary to better
     mitigate a high-severity vulnerability
     ([CVE-2019-5443](https://curl.se/docs/CVE-2019-5443.html)), which still
