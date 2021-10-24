@@ -122,9 +122,8 @@ if [ -f "${SIGN_CODE_KEY}.asc" ]; then
     --decrypt "${SIGN_CODE_KEY}.asc" 2>/dev/null >> "${SIGN_CODE_KEY}" <<EOF
 ${SIGN_CODE_GPG_PASS}
 EOF
-  [ -s "${SIGN_CODE_KEY}" ] || rm -f "${SIGN_CODE_KEY}"
 fi
-[ -f "${SIGN_CODE_KEY}" ] || unset SIGN_CODE_KEY
+[ -s "${SIGN_CODE_KEY}" ] || unset SIGN_CODE_KEY
 
 if [ -f "${SIGN_CODE_KEY}" ]; then
   # build osslsigncode
