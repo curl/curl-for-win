@@ -90,8 +90,7 @@ create_pkg() {
     hshl="$(openssl dgst -sha256 "${_pkg}" \
       | sed -n -E 's,.+= ([0-9a-fA-F]{64}),\1,p')"
     # https://developers.virustotal.com/v3.0/reference
-    out="$(curl \
-      --disable --user-agent '' --fail --silent --show-error \
+    out="$(curl --disable --user-agent '' --fail --silent --show-error \
       --connect-timeout 15 --max-time 60 --retry 3 \
       --request POST 'https://www.virustotal.com/api/v3/files' \
       --header @/dev/stdin \
@@ -102,8 +101,7 @@ EOF
     # shellcheck disable=SC2181
     if [ "$?" = 0 ]; then
       id="$(echo "${out}" | jq --raw-output '.data.id')"
-      out="$(curl \
-        --disable --user-agent '' --fail --silent --show-error \
+      out="$(curl --disable --user-agent '' --fail --silent --show-error \
         --connect-timeout 15 --max-time 20 --retry 3 \
         "https://www.virustotal.com/api/v3/analyses/${id}" \
         --header @/dev/stdin <<EOF
