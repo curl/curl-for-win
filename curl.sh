@@ -47,6 +47,7 @@ _VER="$1"
   export CURL_LDFLAG_EXTRAS_DLL
   if [ "${_CPU}" = 'x86' ]; then
     CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
+    CURL_LDFLAG_EXTRAS_DLL=''
   else
     CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
     CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
@@ -138,9 +139,7 @@ _VER="$1"
     options="${options}-winidn"
   fi
 
-  if [ "${_CPU}" = 'x64' ]; then
-    export CURL_DLL_SUFFIX=-x64
-  fi
+  [ "${_CPU}" = 'x64' ] && export CURL_DLL_SUFFIX=-x64
   export CURL_DLL_A_SUFFIX=.dll
 
   # Make sure to link zlib (and only zlib) in static mode when building
