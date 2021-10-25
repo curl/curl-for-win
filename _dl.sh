@@ -2,7 +2,7 @@
 
 # Copyright 2015-present Viktor Szakats. See LICENSE.md
 
-set -euxo pipefail
+set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 gpgdir="$(mktemp -d)"
 

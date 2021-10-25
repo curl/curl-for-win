@@ -2,7 +2,8 @@
 
 # Copyright 2017-present Viktor Szakats. See LICENSE.md
 
-set -euxo pipefail
+# shellcheck disable=SC3040
+set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 [ "${CC}" = 'mingw-clang' ] && _optpkg='llvm'
 

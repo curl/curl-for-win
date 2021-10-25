@@ -2,7 +2,8 @@
 
 # Copyright 2015-present Viktor Szakats. See LICENSE.md
 
-set -euxo pipefail
+# shellcheck disable=SC3040
+set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 # TODO:
 #   - Enable Control Flow Guard (once FLOSS toolchains support it)

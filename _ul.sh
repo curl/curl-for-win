@@ -2,7 +2,8 @@
 
 # Copyright 2018-present Viktor Szakats. See LICENSE.md
 
-set -euo pipefail
+# shellcheck disable=SC3040
+set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 sort "${_BLD}" > "${_BLD}.sorted"
 mv -f "${_BLD}.sorted" "${_BLD}"

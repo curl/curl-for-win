@@ -2,7 +2,8 @@
 
 # Copyright 2016-present Viktor Szakats. See LICENSE.md
 
-set -euxo pipefail
+# shellcheck disable=SC3040
+set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 if [ -s "${SIGN_CODE_KEY}" ] && \
    ls "$(dirname "$0")/osslsigncode-local"* >/dev/null 2>&1; then
