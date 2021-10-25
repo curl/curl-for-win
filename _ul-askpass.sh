@@ -1,3 +1,3 @@
 #!/bin/sh
 
-echo "${DEPLOY_KEY_PASS}"
+echo "${DEPLOY_KEY_PASS:-}"

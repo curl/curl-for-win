@@ -1,6 +1,8 @@
-#!/bin/sh -ex
+#!/bin/sh
 
 # Copyright 2015-present Viktor Szakats. See LICENSE.md
+
+set -euxo pipefail
 
 # TODO:
 #   - Enable Control Flow Guard (once FLOSS toolchains support it)
@@ -36,25 +38,27 @@ LANG=C
 export GREP_OPTIONS=
 
 readonly _LOG='logurl.txt'
-if [ -n "${APPVEYOR_ACCOUNT_NAME}" ]; then
+if [ -n "${APPVEYOR_ACCOUNT_NAME:-}" ]; then
   # https://www.appveyor.com/docs/environment-variables/
   _LOGURL="${APPVEYOR_URL}/project/${APPVEYOR_ACCOUNT_NAME}/${APPVEYOR_PROJECT_SLUG}/build/${APPVEYOR_BUILD_VERSION}/job/${APPVEYOR_JOB_ID}"
 # _LOGURL="${APPVEYOR_URL}/api/buildjobs/${APPVEYOR_JOB_ID}/log"
-elif [ -n "${GITHUB_RUN_ID}" ]; then
+elif [ -n "${GITHUB_RUN_ID:-}" ]; then
   # https://docs.github.com/actions/reference/environment-variables
   _LOGURL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-else
+elif [ -n "${CI_JOB_ID:-}" ]; then
   # https://docs.gitlab.com/ce/ci/variables/index.html
   _LOGURL="${CI_SERVER_URL}/${CI_PROJECT_PATH}/-/jobs/${CI_JOB_ID}/raw"
+else
+  _LOGURL=''
 fi
 echo "${_LOGURL}" | tee "${_LOG}"
 
-export _BRANCH="${APPVEYOR_REPO_BRANCH}${CI_COMMIT_REF_NAME}${GITHUB_REF}${GIT_BRANCH}"
+export _BRANCH="${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF:-}${GIT_BRANCH:-}"
 [ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD)"
 [ -n "${_BRANCH}" ] || _BRANCH='main'
 export _URL=''
 command -v git >/dev/null 2>&1 && _URL="$(git ls-remote --get-url | sed 's|.git$||')"
-[ -n "${_URL}" ] || _URL="https://github.com/${APPVEYOR_REPO_NAME}${GITHUB_REPOSITORY}"
+[ -n "${_URL}" ] || _URL="https://github.com/${APPVEYOR_REPO_NAME:-}${GITHUB_REPOSITORY:-}"
 
 # Detect host OS
 export _OS
@@ -82,9 +86,11 @@ if [ "${_OS}" != 'win' ]; then
 fi
 
 export PUBLISH_PROD_FROM
-if [ "${APPVEYOR_REPO_PROVIDER}" = 'gitHub' ] || \
-   [ -n "${GITHUB_RUN_ID}" ]; then
+if [ "${APPVEYOR_REPO_PROVIDER:-}" = 'gitHub' ] || \
+   [ -n "${GITHUB_RUN_ID:-}" ]; then
   PUBLISH_PROD_FROM='linux'
+else
+  PUBLISH_PROD_FROM=''
 fi
 
 export _BLD='build.txt'
@@ -103,12 +109,12 @@ export _REV="${_REVN}"; [ -z "${_REV}" ] || _REV="_${_REV}"
 
 # Decrypt package signing key
 SIGN_PKG_KEY='sign-pkg.gpg.asc'
-if [ -f "${SIGN_PKG_KEY}" ] && [ "${SIGN_PKG_KEY_ID}" ]; then
+if [ -f "${SIGN_PKG_KEY}" ] && [ -n "${SIGN_PKG_KEY_ID:-}" ]; then
   gpg --batch --yes --no-tty --quiet \
     --pinentry-mode loopback --passphrase-fd 0 \
     --decrypt "${SIGN_PKG_KEY}" 2>/dev/null <<EOF | \
   gpg --batch --quiet --import
-${SIGN_PKG_GPG_PASS}
+${SIGN_PKG_GPG_PASS:-}
 EOF
 fi
 
@@ -119,24 +125,23 @@ if [ -f "${SIGN_CODE_KEY}.asc" ]; then
   install -m 600 /dev/null "${SIGN_CODE_KEY}"
   gpg --batch --yes --no-tty --quiet \
     --pinentry-mode loopback --passphrase-fd 0 \
-    --decrypt "${SIGN_CODE_KEY}.asc" 2>/dev/null >> "${SIGN_CODE_KEY}" <<EOF
-${SIGN_CODE_GPG_PASS}
+    --decrypt "${SIGN_CODE_KEY}.asc" 2>/dev/null >> "${SIGN_CODE_KEY}" <<EOF || true
+${SIGN_CODE_GPG_PASS:-}
 EOF
 fi
-[ -s "${SIGN_CODE_KEY}" ] || unset SIGN_CODE_KEY
 
-if [ -f "${SIGN_CODE_KEY}" ]; then
+if [ -s "${SIGN_CODE_KEY}" ]; then
   # build osslsigncode
-  ./osslsigncode.sh
+  ./osslsigncode.sh "${OSSLSIGNCODE_VER_}"
+  ls -l "$(dirname "$0")/osslsigncode-local"*
+  "$(dirname "$0")/osslsigncode-local" --version
 fi
-
-ls -l "$(dirname "$0")/osslsigncode-local"*
 
 if [ "${CC}" = 'mingw-clang' ]; then
   echo ".clang$("clang${_CCSUFFIX}" --version | grep -o -a -E ' [0-9]*\.[0-9]*[\.][0-9]*')" >> "${_BLD}"
 fi
 
-unset ver
+ver=''
 case "${_OS}" in
   mac)
     ver="$(brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
@@ -144,7 +149,7 @@ case "${_OS}" in
     [ -n "${ver}" ] || ver="$(dpkg   --status       mingw-w64-common)"
     [ -n "${ver}" ] || ver="$(rpm    --query        mingw64-crt)"
     [ -n "${ver}" ] || ver="$(pacman --query --info mingw-w64-crt)"
-    ver="$(printf '%s' "${ver}" | grep -a '^Version' | grep -a -m 1 -o -E '[0-9.-]+')"
+    [ -n "${ver}" ] && ver="$(printf '%s' "${ver}" | grep -a '^Version' | grep -a -m 1 -o -E '[0-9.-]+')"
     ;;
 esac
 [ -n "${ver}" ] && echo ".mingw-w64 ${ver}" >> "${_BLD}"
@@ -220,12 +225,6 @@ build_single_target() {
 
   echo ".gcc-mingw-w64-${_machine} $("${_CCPREFIX}gcc" -dumpversion)" >> "${_BLD}"
   echo ".binutils-mingw-w64-${_machine} $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')" >> "${_BLD}"
-
-  if command -v "$(dirname "$0")/osslsigncode-local" >/dev/null 2>&1; then
-    "$(dirname "$0")/osslsigncode-local" --version
-  else
-    unset SIGN_CODE_KEY
-  fi
 
   time ./zlib.sh         "${ZLIB_VER_}"
   time ./zlibng.sh     "${ZLIBNG_VER_}"

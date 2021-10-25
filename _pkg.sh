@@ -1,6 +1,8 @@
-#!/bin/sh -x
+#!/bin/sh
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
+
+set -euxo pipefail
 
 cd "$(dirname "$0")" || exit
 
@@ -94,8 +96,8 @@ create_pkg() {
       --connect-timeout 15 --max-time 60 --retry 3 \
       --request POST 'https://www.virustotal.com/api/v3/files' \
       --header @/dev/stdin \
-      --form "file=@${_pkg}" <<EOF
-x-apikey: ${VIRUSTOTAL_APIKEY}
+      --form "file=@${_pkg}" <<EOF || true
+x-apikey: ${VIRUSTOTAL_APIKEY:-}
 EOF
 )"
     # shellcheck disable=SC2181
@@ -104,8 +106,8 @@ EOF
       out="$(curl --disable --user-agent '' --fail --silent --show-error \
         --connect-timeout 15 --max-time 20 --retry 3 \
         "https://www.virustotal.com/api/v3/analyses/${id}" \
-        --header @/dev/stdin <<EOF
-x-apikey: ${VIRUSTOTAL_APIKEY}
+        --header @/dev/stdin <<EOF || true
+x-apikey: ${VIRUSTOTAL_APIKEY:-}
 EOF
 )"
       # shellcheck disable=SC2181

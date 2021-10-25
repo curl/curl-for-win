@@ -1,6 +1,8 @@
-#!/bin/sh -ex
+#!/bin/sh
 
 # Copyright 2017-present Viktor Szakats. See LICENSE.md
+
+set -euxo pipefail
 
 export _NAM
 export _VER
@@ -21,6 +23,8 @@ _VER="$1"
     opt_gmsys='-GMSYS Makefiles'
     # Without this option, the value '/usr/local' becomes 'msys64/usr/local'
     export MSYS2_ARG_CONV_EXCL='-DCMAKE_INSTALL_PREFIX='
+  else
+    opt_gmsys=''
   fi
 
   # Build

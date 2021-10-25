@@ -1,6 +1,8 @@
-#!/bin/sh -ex
+#!/bin/sh
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
+
+set -euxo pipefail
 
 export _NAM
 export _VER
@@ -44,7 +46,7 @@ _VER="$1"
   export LINK_ZLIB_STATIC=1
 
   [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
-  if [ -n "${OPENSSL_PATH}" ]; then
+  if [ -n "${OPENSSL_PATH:-}" ]; then
     export OPENSSL_LIBPATH="${OPENSSL_PATH}"
     export OPENSSL_LIBS_DYN='crypto.dll'
   else

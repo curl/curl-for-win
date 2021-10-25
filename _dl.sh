@@ -2,7 +2,7 @@
 
 # Copyright 2015-present Viktor Szakats. See LICENSE.md
 
-set -x
+set -euxo pipefail
 
 gpgdir="$(mktemp -d)"
 
@@ -113,7 +113,7 @@ check_update() {
   pkg="$1"
   ourvern="${2:-000000}"
   url="$3"
-  unset newver
+  newver=''
   if [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
     slug="${BASH_REMATCH[1]}"
     # heavily rate-limited
@@ -135,7 +135,9 @@ check_update() {
   fi
   if [ -n "${newver}" ]; then
     newvern="$(printf '%s' "${newver}" | to6digit)"
-    [ "${newvern}" -gt "${ourvern}" ] && printf '%s' "${newver}"
+    if [ "${newvern}" -gt "${ourvern}" ]; then
+      printf '%s' "${newver}"
+    fi
   fi
 }
 
@@ -215,7 +217,7 @@ bump() {
       jp="$(meta | jq \
         ".[] | select(.name == \"${name}\")")"
 
-      unset newhash
+      newhash=''
 
       if [ -n "${jp}" ]; then
         url="$( printf '%s' "${jp}" | jq -r '.url')"
@@ -275,7 +277,7 @@ bump() {
   echo "export _REVN=${_REVN}"
 }
 
-if [ "$1" = 'bump' ]; then
+if [ "${1:-}" = 'bump' ]; then
   bump
   rm -r -f "${gpgdir}"
   exit
@@ -324,7 +326,7 @@ live_dl() {
 
   name="$1"
   ver="$2"
-  hash="$3"
+  hash="${3:-}"
 
   set +x
   jp="$(meta | jq \

@@ -2,6 +2,8 @@
 
 # Copyright 2017-present Viktor Szakats. See LICENSE.md
 
+set -euxo pipefail
+
 cat /etc/*-release
 
 export _CCSUFFIX=''

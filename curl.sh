@@ -1,6 +1,8 @@
-#!/bin/sh -ex
+#!/bin/sh
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
+
+set -euxo pipefail
 
 export _NAM
 export _VER
@@ -96,7 +98,7 @@ _VER="$1"
   fi
 
   [ -d ../openssl ] && export OPENSSL_PATH=../../openssl
-  if [ -n "${OPENSSL_PATH}" ]; then
+  if [ -n "${OPENSSL_PATH:-}" ]; then
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
     # Apply a workaround for deprecation warnings from the curl autoconf logic
     if [ "$(echo "${OPENSSL_VER_}" | cut -c -2)" = '3.' ]; then

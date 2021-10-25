@@ -1,8 +1,10 @@
-#!/bin/sh -x
+#!/bin/sh
 
 # Copyright 2016-present Viktor Szakats. See LICENSE.md
 
-if [ -f "${SIGN_CODE_KEY}" ] && \
+set -euxo pipefail
+
+if [ -s "${SIGN_CODE_KEY}" ] && \
    ls "$(dirname "$0")/osslsigncode-local"* >/dev/null 2>&1; then
 
   _ref="$1"
@@ -23,7 +25,7 @@ if [ -f "${SIGN_CODE_KEY}" ] && \
       -in "${file}" -out "${file}-signed" \
       -st "${unixts}" \
       -pkcs12 "${SIGN_CODE_KEY}" -readpass /dev/stdin <<EOF
-${SIGN_CODE_KEY_PASS}
+${SIGN_CODE_KEY_PASS:-}
 EOF
   # # Create a detached code signature:
   # "$(dirname "$0")/osslsigncode-local" extract-signature \

@@ -2,6 +2,8 @@
 
 # Copyright 2018-present Viktor Szakats. See LICENSE.md
 
+set -euo pipefail
+
 sort "${_BLD}" > "${_BLD}.sorted"
 mv -f "${_BLD}.sorted" "${_BLD}"
 
@@ -49,8 +51,8 @@ if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ] && \
     install -m 600 /dev/null "${DEPLOY_KEY}"
     gpg --batch --yes --no-tty --quiet \
       --pinentry-mode loopback --passphrase-fd 0 \
-      --decrypt "${DEPLOY_KEY}.asc" 2>/dev/null >> "${DEPLOY_KEY}" <<EOF
-${DEPLOY_GPG_PASS}
+      --decrypt "${DEPLOY_KEY}.asc" 2>/dev/null >> "${DEPLOY_KEY}" <<EOF || true
+${DEPLOY_GPG_PASS:-}
 EOF
   fi
 

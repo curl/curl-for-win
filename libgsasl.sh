@@ -1,6 +1,8 @@
-#!/bin/sh -ex
+#!/bin/sh
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
+
+set -euxo pipefail
 
 export _NAM
 export _VER
@@ -31,7 +33,7 @@ _VER="$1"
   [ -f 'Makefile' ] || autoreconf --force --install
 
   export LDFLAGS="${_OPTM}"
-  unset ldonly
+  ldonly=''
 
   # No success in convincing the build system to work correctly with clang:
   if [ "${CC}" = 'mingw-clang' ]; then

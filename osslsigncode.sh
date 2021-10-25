@@ -1,6 +1,8 @@
-#!/bin/sh -x
+#!/bin/sh
 
 # Copyright 2016-present Viktor Szakats. See LICENSE.md
+
+set -euxo pipefail
 
 export _NAM
 export _VER

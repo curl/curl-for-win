@@ -2,8 +2,11 @@
 
 # Copyright 2017-present Viktor Szakats. See LICENSE.md
 
+set -euxo pipefail
+
 [ "${CC}" = 'mingw-clang' ] && _optpkg='llvm'
 
+export _CCSUFFIX=''
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ANALYTICS=1
 time brew update >/dev/null

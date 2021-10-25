@@ -2,6 +2,10 @@
 
 # Copyright 2016-present Viktor Szakats. See LICENSE.md
 
+set -euxo pipefail
+
+export _CCSUFFIX=''
+
 pacman --noconfirm --ask 20 --noprogressbar --sync --refresh --sysupgrade --sysupgrade
 pacman --noconfirm --ask 20 --noprogressbar --sync --refresh --sysupgrade --sysupgrade
 pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
