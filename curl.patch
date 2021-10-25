@@ -1,32 +1,54 @@
-commit 21e76f114647c4c17e8bf811ce0feb7d1030957a
+commit 748fb01d821b4fab8226361d97659510468fa52b
 Author: Viktor Szakats <commit@vsz.me>
 Date:   2021-10-22 13:34:26 +0000
 
-    Makefile.m32: fix libssh2 + Schannel build combination
+    Makefile.m32: fix to not require OpenSSL with options -libssh2 and -rtmp
     
-    Previously the -libssh2 option assumed that OpenSSL is also enabled
-    (and failed with an error when not finding expected OpenSSL headers),
-    but this isn't necessarly true when building both libssh2 and curl
-    against Schannel. This patch makes sure not to enable the OpenSSL
-    backend when -libssh2 option is used with -winssl and without -ssl.
+    Previously, -libssh2/-rtmp options assumed that OpenSSL is also enabled
+    (and then failed with an error when not finding expected OpenSSL headers),
+    but this isn't necessarly true, e.g. when building both libssh2 and curl
+    against Schannel. This patch makes sure to only enable the OpenSSL backend
+    with -libssh2/-rtmp, when there was no SSL option explicitly selected.
     
-    Also fix an indentation while there.
+    - Re-implement the logic as a single block of script.
+    - Also fix an indentation while there.
+    
+    Assisted-by: Jay Satiro
+    
+    Closes: #
 
 diff --git a/docs/examples/Makefile.m32 b/docs/examples/Makefile.m32
-index 45ec8679c..43a73e20e 100644
+index 45ec8679c..c27b35f83 100644
 --- a/docs/examples/Makefile.m32
 +++ b/docs/examples/Makefile.m32
-@@ -183,7 +183,9 @@ ZLIB = 1
+@@ -178,12 +178,10 @@ ARES = 1
+ endif
+ ifeq ($(findstring -rtmp,$(CFG)),-rtmp)
+ RTMP = 1
+-SSL = 1
+ ZLIB = 1
  endif
  ifeq ($(findstring -ssh2,$(CFG)),-ssh2)
  SSH2 = 1
-+ifneq ($(findstring -winssl,$(CFG))$(findstring -ssl,$(CFG)),-winssl)
- SSL = 1
-+endif
+-SSL = 1
  ZLIB = 1
  endif
  ifeq ($(findstring -ssl,$(CFG)),-ssl)
-@@ -284,7 +286,7 @@ ifdef SSL
+@@ -230,6 +228,13 @@ ifeq ($(findstring -ngtcp2,$(CFG)),-ngtcp2)
+ NGTCP2 = 1
+ endif
+ 
++# SSH2 and RTMP require an SSL library; assume OpenSSL if none specified
++ifneq ($(SSH2)$(RTMP),)
++  ifeq ($(SSL)$(WINSSL),)
++    SSL = 1
++  endif
++endif
++
+ INCLUDES = -I. -I$(PROOT) -I$(PROOT)/include -I$(PROOT)/lib
+ 
+ ifdef DYN
+@@ -284,7 +289,7 @@ ifdef SSL
      endif
    endif
    ifneq "$(wildcard $(OPENSSL_INCLUDE)/openssl/opensslv.h)" "$(OPENSSL_INCLUDE)/openssl/opensslv.h"
@@ -36,20 +58,37 @@ index 45ec8679c..43a73e20e 100644
    ifndef OPENSSL_LIBPATH
      OPENSSL_LIBS = -lssl -lcrypto
 diff --git a/lib/Makefile.m32 b/lib/Makefile.m32
-index 9f1f5963d..74c7726fa 100644
+index 9f1f5963d..d78614da3 100644
 --- a/lib/Makefile.m32
 +++ b/lib/Makefile.m32
-@@ -184,7 +184,9 @@ ZLIB = 1
+@@ -179,12 +179,10 @@ SYNC = 1
+ endif
+ ifeq ($(findstring -rtmp,$(CFG)),-rtmp)
+ RTMP = 1
+-SSL = 1
+ ZLIB = 1
  endif
  ifeq ($(findstring -ssh2,$(CFG)),-ssh2)
  SSH2 = 1
-+ifneq ($(findstring -winssl,$(CFG))$(findstring -ssl,$(CFG)),-winssl)
- SSL = 1
-+endif
+-SSL = 1
  ZLIB = 1
  endif
  ifeq ($(findstring -ssl,$(CFG)),-ssl)
-@@ -299,7 +301,7 @@ ifdef SSL
+@@ -237,6 +235,13 @@ ifeq ($(findstring -unicode,$(CFG)),-unicode)
+ UNICODE = 1
+ endif
+ 
++# SSH2 and RTMP require an SSL library; assume OpenSSL if none specified
++ifneq ($(SSH2)$(RTMP),)
++  ifeq ($(SSL)$(WINSSL),)
++    SSL = 1
++  endif
++endif
++
+ INCLUDES = -I. -I../include
+ CFLAGS += -DBUILDING_LIBCURL
+ ifdef SSL
+@@ -299,7 +304,7 @@ ifdef SSL
      endif
    endif
    ifneq "$(wildcard $(OPENSSL_INCLUDE)/openssl/opensslv.h)" "$(OPENSSL_INCLUDE)/openssl/opensslv.h"
@@ -59,20 +98,37 @@ index 9f1f5963d..74c7726fa 100644
    ifndef OPENSSL_LIBPATH
      ifeq "$(wildcard $(OPENSSL_PATH)/out)" "$(OPENSSL_PATH)/out"
 diff --git a/src/Makefile.m32 b/src/Makefile.m32
-index 380d264e7..aa99c9aa0 100644
+index 380d264e7..d769bad75 100644
 --- a/src/Makefile.m32
 +++ b/src/Makefile.m32
-@@ -192,7 +192,9 @@ ZLIB = 1
+@@ -187,12 +187,10 @@ SYNC = 1
+ endif
+ ifeq ($(findstring -rtmp,$(CFG)),-rtmp)
+ RTMP = 1
+-SSL = 1
+ ZLIB = 1
  endif
  ifeq ($(findstring -ssh2,$(CFG)),-ssh2)
  SSH2 = 1
-+ifneq ($(findstring -winssl,$(CFG))$(findstring -ssl,$(CFG)),-winssl)
- SSL = 1
-+endif
+-SSL = 1
  ZLIB = 1
  endif
  ifeq ($(findstring -ssl,$(CFG)),-ssl)
-@@ -309,7 +311,7 @@ ifdef SSL
+@@ -242,6 +240,13 @@ ifeq ($(findstring -unicode,$(CFG)),-unicode)
+ UNICODE = 1
+ endif
+ 
++# SSH2 and RTMP require an SSL library; assume OpenSSL if none specified
++ifneq ($(SSH2)$(RTMP),)
++  ifeq ($(SSL)$(WINSSL),)
++    SSL = 1
++  endif
++endif
++
+ INCLUDES = -I. -I../include -I../lib
+ ifdef SSL
+   ifdef WINSSL
+@@ -309,7 +314,7 @@ ifdef SSL
      endif
    endif
    ifneq "$(wildcard $(OPENSSL_INCLUDE)/openssl/opensslv.h)" "$(OPENSSL_INCLUDE)/openssl/opensslv.h"
