@@ -101,8 +101,7 @@ create_pkg() {
 x-apikey: ${VIRUSTOTAL_APIKEY:-}
 EOF
 )"
-    # shellcheck disable=SC2181
-    if [ "$?" = 0 ]; then
+    if [ -n "${out}" ]; then
       id="$(echo "${out}" | jq --raw-output '.data.id')"
       out="$(curl --disable --user-agent '' --fail --silent --show-error \
         --connect-timeout 15 --max-time 20 --retry 3 \
@@ -111,8 +110,7 @@ EOF
 x-apikey: ${VIRUSTOTAL_APIKEY:-}
 EOF
 )"
-      # shellcheck disable=SC2181
-      if [ "$?" = 0 ]; then
+      if [ -n "${out}" ]; then
         hshr="$(echo "${out}" | jq --raw-output '.meta.file_info.sha256')"
         if [ "${hshr}" = "${hshl}" ]; then
           echo "VirusTotal URL for '${_pkg}':"
