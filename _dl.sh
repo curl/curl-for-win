@@ -128,7 +128,7 @@ check_update() {
     fi
     urldir="$(dirname "${url}")/"
     res="$(my_curl "${urldir}" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' | \
-      grep -a -o -E "${mask}" | "${latest}" -1)"
+      grep -a -o -E -- "${mask}" | "${latest}" -1)"
     if [[ "${res}" =~ ${mask} ]]; then
       newver="${BASH_REMATCH[1]}"
     fi
@@ -314,7 +314,7 @@ live_xt() {
   pkg="$1"
   hash="$(openssl dgst -sha256 pkg.bin)"
   echo "${hash}"
-  echo "${hash}" | grep -q -a -F "${2:-}" || exit 1
+  echo "${hash}" | grep -q -a -F -- "${2:-}" || exit 1
   rm -f -r "${pkg}" && mkdir "${pkg}" && tar --strip-components 1 -xf pkg.bin -C "${pkg}" || exit 1
   rm -f pkg.bin pkg.sig
   [ -f "${pkg}${_patsuf}.patch" ] && dos2unix < "${pkg}${_patsuf}.patch" | patch -N -p1 -d "${pkg}"
