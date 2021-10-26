@@ -13,7 +13,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - LLVM -mretpoline
 #   - GCC -mindirect-branch -mfunction-return -mindirect-branch-register
 #   - Use Universal CRT?
-#   - Switch to LibreSSL or rustls?
+#   - Switch to LibreSSL or rustls or Schannel?
 
 # Tools:
 #                compiler build
