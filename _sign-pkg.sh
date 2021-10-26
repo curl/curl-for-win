@@ -5,7 +5,7 @@
 # shellcheck disable=SC3040
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
-cd "$(dirname "$0")" || exit
+cd "$(dirname "$0")" || exit 1
 
 # Create signature for package
 if gpg --list-public-keys "${SIGN_PKG_KEY_ID:-}" >/dev/null 2>&1; then

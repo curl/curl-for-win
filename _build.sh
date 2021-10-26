@@ -31,7 +31,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   libssh2.sh   clang    make         TODO: move to cmake
 #   curl.sh      clang    make         TODO: move to cmake
 
-cd "$(dirname "$0")" || exit
+cd "$(dirname "$0")" || exit 1
 
 LC_ALL=C
 LC_MESSAGES=C
