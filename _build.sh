@@ -110,7 +110,7 @@ export _REV="${_REVN}"; [ -z "${_REV}" ] || _REV="_${_REV}"
 
 # Decrypt package signing key
 SIGN_PKG_KEY='sign-pkg.gpg.asc'
-if [ -f "${SIGN_PKG_KEY}" ] && [ -n "${SIGN_PKG_KEY_ID:-}" ]; then
+if [ -s "${SIGN_PKG_KEY}" ] && [ -n "${SIGN_PKG_KEY_ID:-}" ]; then
   gpg --batch --yes --no-tty --quiet \
     --pinentry-mode loopback --passphrase-fd 0 \
     --decrypt "${SIGN_PKG_KEY}" 2>/dev/null <<EOF | \
@@ -122,7 +122,7 @@ fi
 # decrypt code signing key
 export SIGN_CODE_KEY=
 SIGN_CODE_KEY="$(realpath '.')/sign-code.p12"
-if [ -f "${SIGN_CODE_KEY}.asc" ]; then
+if [ -s "${SIGN_CODE_KEY}.asc" ]; then
   install -m 600 /dev/null "${SIGN_CODE_KEY}"
   gpg --batch --yes --no-tty --quiet \
     --pinentry-mode loopback --passphrase-fd 0 \

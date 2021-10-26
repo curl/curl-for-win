@@ -48,7 +48,7 @@ if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ] && \
 
   # decrypt deploy key
   DEPLOY_KEY="$(realpath '.')/deploy.key"
-  if [ -f "${DEPLOY_KEY}.asc" ]; then
+  if [ -s "${DEPLOY_KEY}.asc" ]; then
     install -m 600 /dev/null "${DEPLOY_KEY}"
     gpg --batch --yes --no-tty --quiet \
       --pinentry-mode loopback --passphrase-fd 0 \
