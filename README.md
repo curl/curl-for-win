@@ -65,8 +65,9 @@
     ([CVE-2019-5443](https://curl.se/docs/CVE-2019-5443.html)), which still
     has only an incomplete fix in the default OpenSSL builds for Windows.
     Patches for both were refused by the OpenSSL team. Even though the patch
-    is minor, there is no promise that this patch will be maintained here for
-    an indefinite time.
+    is minor, there is no promise that it will be maintained here for an
+    indefinite time. Another option under consideration is to migrate to an
+    OpenSSL alternative (e.g. LibreSSL, rustls or Schannel).
   - curl/libcurl are built in MultiSSL mode, with both OpenSSL and
     [Schannel](https://docs.microsoft.com/windows/win32/com/schannel)
     available as SSL backends.
