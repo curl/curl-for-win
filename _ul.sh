@@ -43,19 +43,19 @@ openssl dgst -sha512 "${_ALL}" | tee -a "${_ALL}.txt"
 ./_sign-pkg.sh "${_ALL}"
 
 # Official deploy
+DEPLOY_KEY="$(realpath '.')/deploy.key"
 if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ] && \
-   [ "${_BRANCH#*main*}" != "${_BRANCH}" ]; then
+   [ "${_BRANCH#*main*}" != "${_BRANCH}" ] && \
+   [ -s "${DEPLOY_KEY}.asc" ] && \
+   [ -n "${DEPLOY_GPG_PASS:+1}" ]; then
 
   # decrypt deploy key
-  DEPLOY_KEY="$(realpath '.')/deploy.key"
-  if [ -s "${DEPLOY_KEY}.asc" ]; then
-    install -m 600 /dev/null "${DEPLOY_KEY}"
-    gpg --batch --yes --no-tty --quiet \
-      --pinentry-mode loopback --passphrase-fd 0 \
-      --decrypt "${DEPLOY_KEY}.asc" 2>/dev/null >> "${DEPLOY_KEY}" <<EOF || true
-${DEPLOY_GPG_PASS:-}
+  install -m 600 /dev/null "${DEPLOY_KEY}"
+  gpg --batch --yes --no-tty --quiet \
+    --pinentry-mode loopback --passphrase-fd 0 \
+    --decrypt "${DEPLOY_KEY}.asc" 2>/dev/null >> "${DEPLOY_KEY}" <<EOF || true
+${DEPLOY_GPG_PASS}
 EOF
-  fi
 
   if [ -s "${DEPLOY_KEY}" ]; then
 

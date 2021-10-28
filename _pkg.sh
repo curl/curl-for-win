@@ -88,7 +88,8 @@ create_pkg() {
   fi
 
   # Upload builds to VirusTotal
-  if [ "${_BRANCH#*main*}" != "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*main*}" != "${_BRANCH}" ] && \
+     [ -n "${VIRUSTOTAL_APIKEY:+1}" ]; then
 
     hshl="$(openssl dgst -sha256 "${_pkg}" \
       | sed -n -E 's,.+= ([0-9a-fA-F]{64}),\1,p')"
@@ -98,7 +99,7 @@ create_pkg() {
       --request POST 'https://www.virustotal.com/api/v3/files' \
       --header @/dev/stdin \
       --form "file=@${_pkg}" <<EOF || true
-x-apikey: ${VIRUSTOTAL_APIKEY:-}
+x-apikey: ${VIRUSTOTAL_APIKEY}
 EOF
 )"
     if [ -n "${out}" ]; then
@@ -107,7 +108,7 @@ EOF
         --connect-timeout 15 --max-time 20 --retry 3 \
         "https://www.virustotal.com/api/v3/analyses/${id}" \
         --header @/dev/stdin <<EOF || true
-x-apikey: ${VIRUSTOTAL_APIKEY:-}
+x-apikey: ${VIRUSTOTAL_APIKEY}
 EOF
 )"
       if [ -n "${out}" ]; then

@@ -111,23 +111,25 @@ export _REV="${_REVN}"; [ -z "${_REV}" ] || _REV="_${_REV}"
 # Decrypt package signing key
 SIGN_PKG_KEY='sign-pkg.gpg.asc'
 if [ -s "${SIGN_PKG_KEY}" ] && \
-   [ -n "${SIGN_PKG_KEY_ID:-}" ]; then
+   [ -n "${SIGN_PKG_KEY_ID:-}" ] && \
+   [ -n "${SIGN_PKG_GPG_PASS:+1}" ]; then
   gpg --batch --yes --no-tty --quiet \
     --pinentry-mode loopback --passphrase-fd 0 \
     --decrypt "${SIGN_PKG_KEY}" 2>/dev/null <<EOF | \
   gpg --batch --quiet --import
-${SIGN_PKG_GPG_PASS:-}
+${SIGN_PKG_GPG_PASS}
 EOF
 fi
 
 # decrypt code signing key
 export SIGN_CODE_KEY; SIGN_CODE_KEY="$(realpath '.')/sign-code.p12"
-if [ -s "${SIGN_CODE_KEY}.asc" ]; then
+if [ -s "${SIGN_CODE_KEY}.asc" ] && \
+   [ -n "${SIGN_CODE_GPG_PASS:+1}" ]; then
   install -m 600 /dev/null "${SIGN_CODE_KEY}"
   gpg --batch --yes --no-tty --quiet \
     --pinentry-mode loopback --passphrase-fd 0 \
     --decrypt "${SIGN_CODE_KEY}.asc" 2>/dev/null >> "${SIGN_CODE_KEY}" <<EOF || true
-${SIGN_CODE_GPG_PASS:-}
+${SIGN_CODE_GPG_PASS}
 EOF
 fi
 
