@@ -71,7 +71,7 @@ _VER="$1"
   fi
 
   (
-    cd win32 || exit 1
+    cd win32
     ${_MAKE} -j 2 clean
     ${_MAKE} -j 2
   )

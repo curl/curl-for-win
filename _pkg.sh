@@ -5,7 +5,7 @@
 # shellcheck disable=SC3040
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
-cd "$(dirname "$0")" || exit 1
+cd "$(dirname "$0")"
 
 # Map tar to GNU tar on macOS
 [ "${_OS}" = 'mac' ] && alias tar='gtar'
@@ -52,7 +52,7 @@ create_pkg() {
   _FLS="$(dirname "$0")/_files"
 
   (
-    cd "${_DST}/.." || exit 1
+    cd "${_DST}/.."
     case "${_OS}" in
       win) find "${_BAS}" -exec attrib +A -R '{}' \;
     esac

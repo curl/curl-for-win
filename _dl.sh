@@ -315,7 +315,7 @@ live_xt() {
   hash="$(openssl dgst -sha256 pkg.bin)"
   echo "${hash}"
   echo "${hash}" | grep -q -a -F -- "${2:-}" || exit 1
-  rm -f -r "${pkg}" && mkdir "${pkg}" && tar --strip-components 1 -xf pkg.bin -C "${pkg}" || exit 1
+  rm -f -r "${pkg}"; mkdir "${pkg}"; tar --strip-components 1 -xf pkg.bin -C "${pkg}"
   rm -f pkg.bin pkg.sig
   [ -f "${pkg}${_patsuf}.patch" ] && dos2unix < "${pkg}${_patsuf}.patch" | patch -N -p1 -d "${pkg}"
   return 0
@@ -345,7 +345,7 @@ live_dl() {
   options+=(--output pkg.bin "${url}")
   [ -n "${sig}" ] && options+=(--output pkg.sig "${url}${sig}")
   set -x
-  my_curl "${options[@]}" || exit 1
+  my_curl "${options[@]}"
 
   if [ -n "${sig}" ]; then
     for key in ${keys}; do
@@ -405,7 +405,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   LIBSSH2_HASH=
   my_curl --location --proto-redir =https \
     --output pkg.bin \
-    'https://github.com/libssh2/libssh2/archive/a88a727c2a1840f979b34f12bcce3d55dcd7ea6e.tar.gz' || exit 1
+    'https://github.com/libssh2/libssh2/archive/a88a727c2a1840f979b34f12bcce3d55dcd7ea6e.tar.gz'
 else
   live_dl libssh2 "${LIBSSH2_VER_}"
 fi
@@ -416,7 +416,7 @@ if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   CURL_HASH=
   my_curl --location --proto-redir =https \
     --output pkg.bin \
-    'https://github.com/curl/curl/archive/5dc594e44f73b1726cabca6a4395323f972e416d.tar.gz' || exit 1
+    'https://github.com/curl/curl/archive/5dc594e44f73b1726cabca6a4395323f972e416d.tar.gz'
 else
   live_dl curl "${CURL_VER_}"
 fi
@@ -426,5 +426,3 @@ live_dl osslsigncode "${OSSLSIGNCODE_VER_}"
 live_xt osslsigncode "${OSSLSIGNCODE_HASH}"
 
 rm -r -f "${gpgdir}"
-
-set +e

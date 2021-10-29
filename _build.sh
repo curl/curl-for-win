@@ -31,7 +31,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   libssh2.sh   clang    make         TODO: move to cmake
 #   curl.sh      clang    make         TODO: move to cmake
 
-cd "$(dirname "$0")" || exit 1
+cd "$(dirname "$0")"
 
 LC_ALL=C
 LC_MESSAGES=C
@@ -106,7 +106,7 @@ rm -f "${_BLD}"
 export _REV="${_REVN}"; [ -z "${_REV}" ] || _REV="_${_REV}"
 
 # Download sources
-./_dl.sh || exit 1
+./_dl.sh
 
 # Decrypt package signing key
 SIGN_PKG_KEY='sign-pkg.gpg.asc'
@@ -255,4 +255,4 @@ esac
 rm -f "${SIGN_CODE_KEY}"
 
 # Upload/deploy binaries
-. ./_ul.sh || exit 1
+. ./_ul.sh
