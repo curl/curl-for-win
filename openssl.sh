@@ -64,10 +64,10 @@ _VER="$1"
       [ "${_OS}" = 'linux' ] && options="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${options}"
     # export LDFLAGS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${LDFLAGS}"
     fi
-    export AR=${_CCPREFIX}ar
-    export NM=${_CCPREFIX}nm
-    export RANLIB=${_CCPREFIX}ranlib
-    export RC=${_CCPREFIX}windres
+    export AR="${_CCPREFIX}ar"
+    export NM="${_CCPREFIX}nm"
+    export RANLIB="${_CCPREFIX}ranlib"
+    export RC="${_CCPREFIX}windres"
     _CONF_CCPREFIX=
   else
     unset CC

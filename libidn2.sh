@@ -50,9 +50,9 @@ _VER="$1"
       LDFLAGS="${LDFLAGS} -target ${_TRIPLET} --sysroot ${_SYSROOT}"
       [ "${_OS}" = 'linux' ] && ldonly="${ldonly} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
     fi
-    export AR=${_CCPREFIX}ar
-    export NM=${_CCPREFIX}nm
-    export RANLIB=${_CCPREFIX}ranlib
+    export AR="${_CCPREFIX}ar"
+    export NM="${_CCPREFIX}nm"
+    export RANLIB="${_CCPREFIX}ranlib"
   else
     export CC="${_CCPREFIX}gcc -static-libgcc"
   fi
