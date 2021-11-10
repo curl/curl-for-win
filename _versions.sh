@@ -1,7 +1,7 @@
 #!/bin/sh
 
-export CURL_VER_='7.79.1'
-export CURL_HASH=0606f74b1182ab732a17c11613cbbaf7084f2e6cca432642d0e3ad7c224c3689
+export CURL_VER_='7.80.0'
+export CURL_HASH=a132bd93188b938771135ac7c1f3ac1d3ce507c1fcbef8c471397639214ae2ab
 export BROTLI_VER_='1.0.9'
 export BROTLI_HASH=f9e8d81d0405ba66d181529af42a3354f838c939095ff99930da6aa9cdf6fe46
 export LIBGSASL_VER_='1.10.0'
@@ -31,4 +31,4 @@ export ZSTD_HASH=9aa8dfc1ca17f358b28988ca1f6e00ffe1c6f3198853f8d2022799e6f066918
 # NOTE: Set _REVN to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REVN=4
+export _REVN=''
