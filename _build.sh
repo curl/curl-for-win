@@ -27,7 +27,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   nghttp2.sh   clang    cmake
 #   nghttp3.sh   clang    cmake
 #   openssl.sh   clang    proprietary
-#   ngtcp2.sh    gcc      autotools    TODO: move to cmake and clang (couldn't detect openssl, and even configure needs a manual patch)
+#   ngtcp2.sh    gcc      autotools    TODO: move to cmake and clang (could not detect openssl, and even configure needs a manual patch)
 #   libssh2.sh   clang    make         TODO: move to cmake
 #   curl.sh      clang    make         TODO: move to cmake
 
@@ -194,7 +194,7 @@ build_single_target() {
       export PATH="/usr/local/opt/llvm/bin:${_ori_path}"
     fi
     _TRIPLET="${_machine}-w64-mingw32"
-    # Prefixes don't work with MSYS2/mingw-w64, because `ar`, `nm` and
+    # Prefixes do not work with MSYS2/mingw-w64, because `ar`, `nm` and
     # `runlib` are missing from them. They are accessible either _without_
     # one, or as prefix + `gcc-ar`, `gcc-nm`, `gcc-runlib`.
     _CCPREFIX="${_TRIPLET}-"
@@ -219,7 +219,8 @@ build_single_target() {
 
   export _CCVER
   if [ "${CC}" = 'mingw-clang' ]; then
-    # We don't use old mingw toolchain versions when building with clang, so this is safe:
+    # We do not use old mingw toolchain versions when building with clang,
+    # so this is safe:
     _CCVER='99'
   else
     _CCVER="$(printf '%02d' \

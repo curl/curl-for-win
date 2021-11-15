@@ -29,7 +29,7 @@ if [ -s "${SIGN_CODE_KEY}" ] && \
       -pkcs12 "${SIGN_CODE_KEY}" -readpass /dev/stdin <<EOF
 ${SIGN_CODE_KEY_PASS}
 EOF
-  # # Create a detached code signature:
+  # # Create detached code signature:
   # "$(dirname "$0")/osslsigncode-local" extract-signature \
   #   -in  "${file}-signed" \
   #   -out "${file}.p7"

@@ -63,7 +63,7 @@ _VER="$1"
   options="${options} -DZSTD_BUILD_CONTRIB:BOOL=OFF"
   options="${options} -DZSTD_BUILD_TESTS:BOOL=OFF"
   options="${options} -DZSTD_LEGACY_SUPPORT:BOOL=OFF"
-  # Not required for curl itself, but doesn't take much extra time, so let's build it
+  # Not required for curl itself, but does not take much extra time, so let us build it
   options="${options} -DZSTD_BUILD_PROGRAMS:BOOL=ON"
   options="${options} -DZSTD_PROGRAMS_LINK_SHARED:BOOL=ON"
   options="${options} -DZSTD_BUILD_SHARED:BOOL=ON"

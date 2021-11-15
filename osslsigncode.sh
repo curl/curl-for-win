@@ -17,7 +17,7 @@ _VER="$1"
 
   options=''
 
-  # curl only required to talk to the timestamp server which we don't
+  # curl only required to talk to the timestamp server which we do not
   # use at the moment to remain deterministic.
   # options="${options} -DENABLE_CURL -lcurl"
 

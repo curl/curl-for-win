@@ -102,7 +102,7 @@ _VER="$1"
   [ -d ../openssl ] && export OPENSSL_PATH=../../openssl
   if [ -n "${OPENSSL_PATH:-}" ]; then
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
-    # Apply a workaround for deprecation warnings from the curl autoconf logic
+    # Workaround for deprecation warnings from the curl autoconf logic
     if [ "$(echo "${OPENSSL_VER_}" | cut -c -2)" = '3.' ]; then
       CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DOPENSSL_SUPPRESS_DEPRECATED"
     fi
@@ -143,7 +143,7 @@ _VER="$1"
   export CURL_DLL_A_SUFFIX=.dll
 
   # Make sure to link zlib (and only zlib) in static mode when building
-  # `libcurl.dll`, so that it wouldn't depend on a `zlib1.dll`.
+  # `libcurl.dll`, so that it would not depend on a `zlib1.dll`.
   # In some build environments (such as MSYS2), `libz.dll.a` is also offered
   # along with `libz.a` causing the linker to pick up the shared library.
   export DLL_LIBS='-Wl,-Bstatic -lz -Wl,-Bdynamic'
@@ -166,7 +166,7 @@ _VER="$1"
       [ "${_OS}" = 'linux' ] && CURL_LDFLAG_EXTRAS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${CURL_LDFLAG_EXTRAS}"
       CURL_LDFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${CURL_LDFLAG_EXTRAS}"
     fi
-    # This doesn't work yet, due to:
+    # This does not work yet, due to:
     #   /usr/local/bin/x86_64-w64-mingw32-ld: asyn-thread.o:asyn-thread.c:(.rdata$.refptr.__guard_dispatch_icall_fptr[.refptr.__guard_dispatch_icall_fptr]+0x0): undefined reference to `__guard_dispatch_icall_fptr'
   # CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -Xclang -cfguard"
   # CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Xlinker -guard:cf"
