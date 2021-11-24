@@ -60,7 +60,7 @@
     necessary for a successful build &mdash; had them submitted upstream with
     fair confidence of getting accepted.
     <br>NOTE: As of 2021, there is a small local patch applied to the OpenSSL
-    configure script, which fixes a bug which in turns is necessary to better
+    configure script, which fixes a bug which in turn is necessary to better
     mitigate a high-severity vulnerability
     ([CVE-2019-5443](https://curl.se/docs/CVE-2019-5443.html)), which still
     has only an incomplete fix in the default OpenSSL builds for Windows.
