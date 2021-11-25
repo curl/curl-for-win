@@ -111,7 +111,7 @@ _VER="$1"
     export OPENSSL_LIBPATH="${OPENSSL_PATH}"
     export OPENSSL_LIBS='-lssl -lcrypto'
   fi
-  options="${options}-winssl"
+  options="${options}-schannel-winssl"
   if [ -d ../libssh2 ]; then
     options="${options}-ssh2"
     export LIBSSH2_PATH=../../libssh2
