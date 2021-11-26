@@ -52,7 +52,7 @@
     builds _may_ use different versions/builds of the compiler toolchain.
     This may result in different generated binaries given otherwise unchanged
     source code and configuration, sometimes thus breaking reproducibility.
-    This trade-off was decided to be tolerable for more ideal binaries and
+    This trade-off was decided to be tolerable for more optimal binaries and
     allowing this project to automatically benefit from continuous C compiler
     updates.
   - Patching policy: No locally maintained patches. Patches are only
