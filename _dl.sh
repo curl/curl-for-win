@@ -375,11 +375,13 @@ else
   live_xt zlib "${ZLIB_HASH}"
 fi
 
-live_dl zstd "${ZSTD_VER_}"
-live_xt zstd "${ZSTD_HASH}"
+if [ "${_BRANCH#*mini*}" = "${_BRANCH}" ]; then
+  live_dl zstd "${ZSTD_VER_}"
+  live_xt zstd "${ZSTD_HASH}"
 
-live_dl brotli "${BROTLI_VER_}"
-live_xt brotli "${BROTLI_HASH}"
+  live_dl brotli "${BROTLI_VER_}"
+  live_xt brotli "${BROTLI_HASH}"
+fi
 
 live_dl nghttp2 "${NGHTTP2_VER_}"
 live_xt nghttp2 "${NGHTTP2_HASH}"
@@ -387,12 +389,14 @@ live_xt nghttp2 "${NGHTTP2_HASH}"
 live_dl libgsasl "${LIBGSASL_VER_}"
 live_xt libgsasl "${LIBGSASL_HASH}"
 
-if [ "${_BRANCH#*winidn*}" = "${_BRANCH}" ]; then
+if [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*winidn*}" = "${_BRANCH}" ]; then
   live_dl libidn2 "${LIBIDN2_VER_}"
   live_xt libidn2 "${LIBIDN2_HASH}"
 fi
 
-if [ "${_BRANCH#*schannel*}" = "${_BRANCH}" ]; then
+if [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*schannel*}" = "${_BRANCH}" ]; then
   # QUIC fork: https://github.com/quictls/openssl.git
   if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
     OPENSSL_VER_='3.0.0-beta2'

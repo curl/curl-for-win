@@ -4,12 +4,12 @@ version: 1.0.{build}
 branches:
   only:
     - main
-    - main-schannel
+    - main-mini
     - dev
-    - dev-schannel
-    - test
-    - test-schannel
+    - dev-mini
     - dev-appveyor
+    - test
+    - test-mini
     - test-appveyor
 # https://www.appveyor.com/docs/build-environment/#build-worker-images
 image: Ubuntu2004

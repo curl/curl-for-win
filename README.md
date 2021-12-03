@@ -17,11 +17,19 @@
     [required](https://devblogs.microsoft.com/oldnewthing/?p=1273)).
   - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2)
     support enabled.
-  - curl/libcurl features enabled by default (`{upcoming}`):
-    <br>`dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
-    <br>`alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI TLS-SRP UnixSockets zstd`
-  - To link libcurl statically, link against this list of libraries:
-    `-lcurl -lssh2 -lnghttp2 -lssl -lcrypto -lgsasl -lidn2 -lbrotlidec-static -lbrotlicommon-static -lzstd -lcrypt32 -lwldap32`
+  - default builds, with the default TLS backend OpenSSL and
+    [Schannel](https://docs.microsoft.com/windows/win32/com/schannel)
+    as runtime selectable option:
+    - Features:
+      <br>`dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
+      <br>`alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI TLS-SRP UnixSockets zstd`
+    - List of libraries to link libcurl statically:
+      <br>`-lcurl -lssh2 -lnghttp2 -lssl -lcrypto -lgsasl -lidn2 -lbrotlidec-static -lbrotlicommon-static -lzstd -lcrypt32 -lwldap32`
+  - "mini" builds, with the single TLS backend Schannel:
+    - Features:
+      <br>`alt-svc AsynchDNS gsasl HSTS HTTP2 IDN IPv6 Kerberos Largefile libz NTLM SPNEGO SSL SSPI UnixSockets`
+    - List of libraries to link libcurl statically:
+      <br>`-lcurl -lssh2 -lnghttp2 -lgsasl -lbcrypt -lcrypt32 -lwldap32`
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the build
     [in public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
@@ -68,9 +76,6 @@
     is minor, there is no promise that it will be maintained here for an
     indefinite time. Another option under consideration is to migrate to an
     OpenSSL alternative (e.g. LibreSSL, rustls or Schannel).
-  - curl/libcurl are built in MultiSSL mode, with both OpenSSL and
-    [Schannel](https://docs.microsoft.com/windows/win32/com/schannel)
-    available as SSL backends.
   - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
   - To verify the correct checksum for the latest build, you can look up the
     correct ones in the build log as they are generated. Watch for `main`
