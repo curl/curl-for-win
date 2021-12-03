@@ -4,8 +4,11 @@ version: 1.0.{build}
 branches:
   only:
     - main
+    - main-schannel
     - dev
+    - dev-schannel
     - test
+    - test-schannel
     - dev-appveyor
     - test-appveyor
 # https://www.appveyor.com/docs/build-environment/#build-worker-images

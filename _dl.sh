@@ -392,13 +392,15 @@ if [ "${_BRANCH#*winidn*}" = "${_BRANCH}" ]; then
   live_xt libidn2 "${LIBIDN2_HASH}"
 fi
 
-# QUIC fork: https://github.com/quictls/openssl.git
-if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-  OPENSSL_VER_='3.0.0-beta2'
-  OPENSSL_HASH=e76ab22879201b12f014393ee4becec7f264d8f6955b1036839128002868df71
+if [ "${_BRANCH#*schannel*}" = "${_BRANCH}" ]; then
+  # QUIC fork: https://github.com/quictls/openssl.git
+  if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
+    OPENSSL_VER_='3.0.0-beta2'
+    OPENSSL_HASH=e76ab22879201b12f014393ee4becec7f264d8f6955b1036839128002868df71
+  fi
+  live_dl openssl "${OPENSSL_VER_}"
+  live_xt openssl "${OPENSSL_HASH}"
 fi
-live_dl openssl "${OPENSSL_VER_}"
-live_xt openssl "${OPENSSL_HASH}"
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   LIBSSH2_VER_='1.9.1-dev'
