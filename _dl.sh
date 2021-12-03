@@ -428,7 +428,9 @@ else
 fi
 live_xt curl "${CURL_HASH}"
 
-live_dl osslsigncode "${OSSLSIGNCODE_VER_}"
-live_xt osslsigncode "${OSSLSIGNCODE_HASH}"
+if [ -n "${SIGN_CODE_GPG_PASS:+1}" ]; then
+  live_dl osslsigncode "${OSSLSIGNCODE_VER_}"
+  live_xt osslsigncode "${OSSLSIGNCODE_HASH}"
+fi
 
 rm -r -f "${gpgdir}"
