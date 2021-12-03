@@ -17,11 +17,12 @@
     [required](https://devblogs.microsoft.com/oldnewthing/?p=1273)).
   - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2)
     support enabled.
+  - Supported protocols:
+    <br>`dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
   - default builds, with the default TLS backend OpenSSL and
     [Schannel](https://docs.microsoft.com/windows/win32/com/schannel)
     as runtime selectable option:
     - Features:
-      <br>`dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
       <br>`alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI TLS-SRP UnixSockets zstd`
     - List of libraries to link libcurl statically:
       <br>`-lcurl -lssh2 -lnghttp2 -lssl -lcrypto -lgsasl -lidn2 -lbrotlidec-static -lbrotlicommon-static -lzstd -lcrypt32 -lwldap32`
