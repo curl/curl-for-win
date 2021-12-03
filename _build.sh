@@ -245,9 +245,11 @@ build_single_target() {
 }
 
 # Build binaries
+build_single_target x64
+if [ "${_BRANCH#*x64only*}" = "${_BRANCH}" ]; then
 # build_single_target arm64
-  build_single_target x64
   build_single_target x86
+fi
 
 case "${_OS}" in
   mac)   rm -f -P "${SIGN_CODE_KEY}";;
