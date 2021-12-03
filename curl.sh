@@ -176,14 +176,16 @@ _VER="$1"
   ${_MAKE} -j 2 "${options}"
 
   # Download CA bundle
-  [ -f '../ca-bundle.crt' ] || \
-    curl --disable --user-agent '' --fail --silent --show-error \
-      --remote-time --xattr \
-      --output '../ca-bundle.crt' \
-      'https://curl.se/ca/cacert.pem'
+  if [ -d ../openssl ]; then
+    [ -f '../ca-bundle.crt' ] || \
+      curl --disable --user-agent '' --fail --silent --show-error \
+        --remote-time --xattr \
+        --output '../ca-bundle.crt' \
+        'https://curl.se/ca/cacert.pem'
 
-  openssl dgst -sha256 '../ca-bundle.crt'
-  openssl dgst -sha512 '../ca-bundle.crt'
+    openssl dgst -sha256 '../ca-bundle.crt'
+    openssl dgst -sha512 '../ca-bundle.crt'
+  fi
 
   # Make steps for determinism
 
@@ -245,12 +247,16 @@ _VER="$1"
   cp -f -p lib/*.dll                "${_DST}/bin/"
   cp -f -p lib/*.def                "${_DST}/bin/"
   cp -f -p lib/*.a                  "${_DST}/lib/"
-  cp -f -p lib/mk-ca-bundle.pl      "${_DST}/"
   cp -f -p CHANGES                  "${_DST}/CHANGES.txt"
   cp -f -p COPYING                  "${_DST}/COPYING.txt"
   cp -f -p README                   "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES            "${_DST}/RELEASE-NOTES.txt"
-  cp -f -p ../ca-bundle.crt         "${_DST}/bin/curl-ca-bundle.crt"
+
+  if [ -d ../openssl ]; then
+    cp -f -p lib/mk-ca-bundle.pl  "${_DST}/"
+    cp -f -p ../ca-bundle.crt     "${_DST}/bin/curl-ca-bundle.crt"
+    [ -f ../openssl/LICENSE.txt ] && cp -f -p ../openssl/LICENSE.txt "${_DST}/COPYING-openssl.txt"
+  fi
 
   [ -d ../zlibng ]  && cp -f -p ../zlibng/LICENSE.md "${_DST}/COPYING-zlib-ng.md"
   [ -d ../zlib ]    && cp -f -p ../zlib/README       "${_DST}/COPYING-zlib.txt"
@@ -261,7 +267,6 @@ _VER="$1"
   [ -d ../nghttp3 ] && cp -f -p ../nghttp3/COPYING   "${_DST}/COPYING-nghttp3.txt"
   [ -d ../ngtcp2 ]  && cp -f -p ../ngtcp2/COPYING    "${_DST}/COPYING-ngtcp2.txt"
   [ -d ../libidn2 ] && cp -f -p ../libidn2/COPYING   "${_DST}/COPYING-libidn2.txt"
-  [ -d ../openssl ] && [ -f ../openssl/LICENSE.txt ] && cp -f -p ../openssl/LICENSE.txt "${_DST}/COPYING-openssl.txt"
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     cp -f -p src/*.map                "${_DST}/bin/"
