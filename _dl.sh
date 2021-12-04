@@ -375,7 +375,9 @@ else
   live_xt zlib "${ZLIB_HASH}"
 fi
 
-if [ "${_BRANCH#*mini*}" = "${_BRANCH}" ]; then
+if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*mini*}" = "${_BRANCH}" ]; then
   live_dl zstd "${ZSTD_VER_}"
   live_xt zstd "${ZSTD_HASH}"
 
@@ -383,19 +385,28 @@ if [ "${_BRANCH#*mini*}" = "${_BRANCH}" ]; then
   live_xt brotli "${BROTLI_HASH}"
 fi
 
-live_dl nghttp2 "${NGHTTP2_VER_}"
-live_xt nghttp2 "${NGHTTP2_HASH}"
+if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
+  live_dl nghttp2 "${NGHTTP2_VER_}"
+  live_xt nghttp2 "${NGHTTP2_HASH}"
+fi
 
-live_dl libgsasl "${LIBGSASL_VER_}"
-live_xt libgsasl "${LIBGSASL_HASH}"
+if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*micro*}" = "${_BRANCH}" ]; then
+  live_dl libgsasl "${LIBGSASL_VER_}"
+  live_xt libgsasl "${LIBGSASL_HASH}"
+fi
 
-if [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
+if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*winidn*}" = "${_BRANCH}" ]; then
   live_dl libidn2 "${LIBIDN2_VER_}"
   live_xt libidn2 "${LIBIDN2_HASH}"
 fi
 
-if [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
+if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*schannel*}" = "${_BRANCH}" ]; then
   # QUIC fork: https://github.com/quictls/openssl.git
   if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
@@ -406,16 +417,19 @@ if [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
   live_xt openssl "${OPENSSL_HASH}"
 fi
 
-if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-  LIBSSH2_VER_='1.9.1-dev'
-  LIBSSH2_HASH=
-  my_curl --location --proto-redir =https \
-    --output pkg.bin \
-    'https://github.com/libssh2/libssh2/archive/a88a727c2a1840f979b34f12bcce3d55dcd7ea6e.tar.gz'
-else
-  live_dl libssh2 "${LIBSSH2_VER_}"
+if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*micro*}" = "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
+    LIBSSH2_VER_='1.9.1-dev'
+    LIBSSH2_HASH=
+    my_curl --location --proto-redir =https \
+      --output pkg.bin \
+      'https://github.com/libssh2/libssh2/archive/a88a727c2a1840f979b34f12bcce3d55dcd7ea6e.tar.gz'
+  else
+    live_dl libssh2 "${LIBSSH2_VER_}"
+  fi
+  live_xt libssh2 "${LIBSSH2_HASH}"
 fi
-live_xt libssh2 "${LIBSSH2_HASH}"
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   CURL_VER_='7.79.0-dev'

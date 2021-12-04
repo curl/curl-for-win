@@ -38,7 +38,11 @@ create_pkg() {
 
   _suf=''
   # Alter filename for non-default builds
-  if [ "${_BRANCH#*mini*}" != "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*nano*}" != "${_BRANCH}" ]; then
+    _suf="${_suf}-nano"
+  elif [ "${_BRANCH#*micro*}" != "${_BRANCH}" ]; then
+    _suf="${_suf}-micro"
+  elif [ "${_BRANCH#*mini*}" != "${_BRANCH}" ]; then
     _suf="${_suf}-mini"
   fi
   # Alter filename for non-release packages
