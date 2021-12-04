@@ -36,15 +36,18 @@ find "${_DST}" \( -name '*.exe' -o -name '*.dll' \) -exec chmod a+x '{}' +
 create_pkg() {
   arch_ext="$2"
 
+  _suf=''
+  # Alter filename for non-default builds
+  if [ "${_BRANCH#*mini*}" != "${_BRANCH}" ]; then
+    _suf="${_suf}-mini"
+  fi
   # Alter filename for non-release packages
   if [ "${_BRANCH#*main*}" != "${_BRANCH}" ]; then
-    if [ "${PUBLISH_PROD_FROM}" = "${_OS}" ]; then
-      _suf=''
-    else
-      _suf="-built-on-${_OS}"
+    if [ "${PUBLISH_PROD_FROM}" != "${_OS}" ]; then
+      _suf="${_suf}-built-on-${_OS}"
     fi
   else
-    _suf="-test-built-on-${_OS}"
+    _suf="${_suf}-test-built-on-${_OS}"
   fi
 
   _pkg="${_OUT}${_suf}${arch_ext}"
