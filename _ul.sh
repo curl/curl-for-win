@@ -27,7 +27,7 @@ touch -r hashes.txt hashes.txt.all
 mv -f hashes.txt.all hashes.txt
 
 # Create an artifact that includes all packages
-_ALL="all-mingw-${CURL_VER_}${_REV}.zip"
+_ALL="all-mingw-${CURL_VER_}${_REV}${_FLAV}.zip"
 {
   find . -maxdepth 1 -type f -name '*-*-mingw*.*' | sort
   echo 'hashes.txt'

@@ -36,15 +36,7 @@ find "${_DST}" \( -name '*.exe' -o -name '*.dll' \) -exec chmod a+x '{}' +
 create_pkg() {
   arch_ext="$2"
 
-  _suf=''
-  # Alter filename for non-default builds
-  if [ "${_BRANCH#*nano*}" != "${_BRANCH}" ]; then
-    _suf="${_suf}-nano"
-  elif [ "${_BRANCH#*micro*}" != "${_BRANCH}" ]; then
-    _suf="${_suf}-micro"
-  elif [ "${_BRANCH#*mini*}" != "${_BRANCH}" ]; then
-    _suf="${_suf}-mini"
-  fi
+  _suf="${_FLAV}"
   # Alter filename for non-release packages
   if [ "${_BRANCH#*main*}" != "${_BRANCH}" ]; then
     if [ "${PUBLISH_PROD_FROM}" != "${_OS}" ]; then

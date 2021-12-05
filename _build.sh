@@ -72,6 +72,16 @@ case "$(uname)" in
   *)       _OS='unrecognized';;
 esac
 
+# Form suffix for alternate builds
+export _FLAV=''
+if [ "${_BRANCH#*nano*}" != "${_BRANCH}" ]; then
+  _FLAV='-nano'
+elif [ "${_BRANCH#*micro*}" != "${_BRANCH}" ]; then
+  _FLAV='-micro'
+elif [ "${_BRANCH#*mini*}" != "${_BRANCH}" ]; then
+  _FLAV='-mini'
+fi
+
 # For 'configure'-based builds.
 # This is more or less guesswork and this warning remains:
 #    `configure: WARNING: using cross tools not prefixed with host triplet`
