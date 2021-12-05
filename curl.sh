@@ -160,6 +160,8 @@ _VER="$1"
   export CROSSPREFIX="${_CCPREFIX}"
 
   if [ "${CC}" = 'mingw-clang' ]; then
+  # CURL_CFLAG_EXTRAS="-mretpoline ${CURL_CFLAG_EXTRAS}"
+  # CURL_CFLAG_EXTRAS="-mspeculative-load-hardening ${CURL_CFLAG_EXTRAS}"
     export CURL_CC="clang${_CCSUFFIX}"
     if [ "${_OS}" != 'win' ]; then
       CURL_CFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${CURL_CFLAG_EXTRAS}"

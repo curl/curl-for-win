@@ -8,10 +8,11 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # TODO:
 #   - Enable Control Flow Guard (once FLOSS toolchains support it)
 #      LLVM/CLANG: -ehcontguard (requires LLVM 13.0.0)
-#   - ARM64 builds (once FLOSS toolchains support it)
-#   - Switch to libssh from libssh2?
-#   - LLVM -mretpoline
+#   - LLVM
+#      -mretpoline
+#      -mspeculative-load-hardening / -mllvm -x86-speculative-load-hardening (high overhead)
 #   - GCC -mindirect-branch -mfunction-return -mindirect-branch-register
+#   - ARM64 builds? (once FLOSS toolchains support it)
 #   - Use Universal CRT?
 #   - Switch to LibreSSL or rustls or Schannel?
 
