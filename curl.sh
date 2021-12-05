@@ -214,7 +214,7 @@ _VER="$1"
   "${_CCPREFIX}objdump" --all-headers src/*.exe | grep -a -E -i "(file format|dll name)"
   "${_CCPREFIX}objdump" --all-headers lib/*.dll | grep -a -E -i "(file format|dll name)"
 
-  ${_WINE} src/curl.exe --version
+  ${_WINE} src/curl.exe --version | tee "curl-${_CPU}.txt"
   ${_WINE} src/curl.exe --dump-module-paths
 
   # Create package
