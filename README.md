@@ -17,20 +17,24 @@
     [required](https://devblogs.microsoft.com/oldnewthing/?p=1273)).
   - curl/libcurl are built with [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2)
     support enabled.
-  - Supported protocols:
-    <br>`dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
   - default builds, with the default TLS backend OpenSSL and
     [Schannel](https://docs.microsoft.com/windows/win32/com/schannel)
     as runtime selectable option:
-    - Features:
-      <br>`alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI TLS-SRP UnixSockets zstd`
-    - List of libraries to link libcurl statically:
-      <br>`-lcurl -lssh2 -lnghttp2 -lssl -lcrypto -lgsasl -lidn2 -lbrotlidec-static -lbrotlicommon-static -lzstd -lcrypt32 -lwldap32`
+    - `Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
+    - `Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI TLS-SRP UnixSockets zstd`
+    - Static libraries: `-lcurl -lwldap32 -lcrypt32 -lz -lnghttp2 -lssh2 -lgsasl -lbcrypt -lssl -lcrypto -lidn2 -lbrotlidec-static -lbrotlicommon-static -lzstd`
   - "mini" builds, with the single TLS backend Schannel:
-    - Features:
-      <br>`alt-svc AsynchDNS gsasl HSTS HTTP2 IDN IPv6 Kerberos Largefile libz NTLM SPNEGO SSL SSPI UnixSockets`
-    - List of libraries to link libcurl statically:
-      <br>`-lcurl -lssh2 -lnghttp2 -lgsasl -lbcrypt -lcrypt32 -lwldap32`
+    - `Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
+    - `Features: alt-svc AsynchDNS gsasl HSTS HTTP2 IDN IPv6 Kerberos Largefile libz NTLM SPNEGO SSL SSPI UnixSockets`
+    - Static libraries: `-lcurl -lwldap32 -lcrypt32 -lz -lnghttp2 -lssh2 -lgsasl -lbcrypt`
+  - "micro" builds:
+    - `Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp smb smbs smtp smtps telnet tftp`
+    - `Features: alt-svc AsynchDNS HSTS HTTP2 IDN IPv6 Kerberos Largefile libz NTLM SPNEGO SSL SSPI UnixSockets`
+    - Static libraries: `-lcurl -lwldap32 -lcrypt32 -lz -lnghttp2`
+  - "nano" builds:
+    - `Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp smb smbs smtp smtps telnet tftp`
+    - `Features: alt-svc AsynchDNS HSTS IDN IPv6 Kerberos Largefile libz NTLM SPNEGO SSL SSPI UnixSockets`
+    - Static libraries: `-lcurl -lwldap32 -lcrypt32 -lz`
   - The build process is fully transparent by using publicly available
     open source code, C compiler, build scripts and running the build
     [in public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
