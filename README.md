@@ -27,11 +27,11 @@
     - `Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
     - `Features: alt-svc AsynchDNS gsasl HSTS HTTP2 IDN IPv6 Kerberos Largefile libz NTLM SPNEGO SSL SSPI UnixSockets`
     - Static libraries: `-lcurl -lwldap32 -lcrypt32 -lz -lnghttp2 -lssh2 -lgsasl -lbcrypt`
-  - "micro" builds:
+  - "micro" builds, without `libssh2` and `libgsasl`:
     - `Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp smb smbs smtp smtps telnet tftp`
     - `Features: alt-svc AsynchDNS HSTS HTTP2 IDN IPv6 Kerberos Largefile libz NTLM SPNEGO SSL SSPI UnixSockets`
     - Static libraries: `-lcurl -lwldap32 -lcrypt32 -lz -lnghttp2`
-  - "nano" builds:
+  - "nano" builds, HTTP/1.1-only:
     - `Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp smb smbs smtp smtps telnet tftp`
     - `Features: alt-svc AsynchDNS HSTS IDN IPv6 Kerberos Largefile libz NTLM SPNEGO SSL SSPI UnixSockets`
     - Static libraries: `-lcurl -lwldap32 -lcrypt32 -lz`
