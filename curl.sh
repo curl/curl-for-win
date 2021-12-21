@@ -93,11 +93,6 @@ _VER="$1"
     export BROTLI_PATH=../../brotli/pkg/usr/local
     export BROTLI_LIBS='-Wl,-Bstatic -lbrotlidec-static -lbrotlicommon-static -Wl,-Bdynamic'
   fi
-  if [ -d ../zstd ]; then
-    options="${options}-zstd"
-    export ZSTD_PATH=../../zstd/build/cmake/pkg/usr/local
-    export ZSTD_LIBS='-Wl,-Bstatic -lzstd_static -Wl,-Bdynamic'
-  fi
 
   [ -d ../openssl ] && export OPENSSL_PATH=../../openssl
   if [ -n "${OPENSSL_PATH:-}" ]; then
@@ -262,7 +257,6 @@ _VER="$1"
 
   [ -d ../zlibng ]  && cp -f -p ../zlibng/LICENSE.md "${_DST}/COPYING-zlib-ng.md"
   [ -d ../zlib ]    && cp -f -p ../zlib/README       "${_DST}/COPYING-zlib.txt"
-  [ -d ../zstd ]    && cp -f -p ../zstd/LICENSE      "${_DST}/COPYING-zstd.txt"
   [ -d ../brotli ]  && cp -f -p ../brotli/LICENSE    "${_DST}/COPYING-brotli.txt"
   [ -d ../libssh2 ] && cp -f -p ../libssh2/COPYING   "${_DST}/COPYING-libssh2.txt"
   [ -d ../nghttp2 ] && cp -f -p ../nghttp2/COPYING   "${_DST}/COPYING-nghttp2.txt"

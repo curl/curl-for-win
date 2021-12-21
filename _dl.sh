@@ -69,14 +69,6 @@ cat <<EOF
     "name": "zlibng",
     "url": "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/{ver}.tar.gz",
     "redir": "redir"
-  },
-  {
-    "name": "zstd",
-    "url": "https://github.com/facebook/zstd/releases/download/v{ver}/zstd-{ver}.tar.zst",
-    "sig": ".sig",
-    "sha": ".sha256",
-    "redir": "redir",
-    "keys": "4EF4AC63455FC9F4545D9B7DEF8FE99528B52FFD"
   }
 ]
 EOF
@@ -378,9 +370,6 @@ fi
 if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*mini*}" = "${_BRANCH}" ]; then
-  live_dl zstd "${ZSTD_VER_}"
-  live_xt zstd "${ZSTD_HASH}"
-
   live_dl brotli "${BROTLI_VER_}"
   live_xt brotli "${BROTLI_HASH}"
 fi

@@ -21,7 +21,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #                -------- -----------
 #   zlib.sh      clang    cmake
 #   zlibng.sh    clang    cmake
-#   zstd.sh      clang    cmake
 #   brotli.sh    clang    cmake
 #   libgsasl.sh  clang    autotools
 #   libidn2.sh   clang    autotools
@@ -243,7 +242,6 @@ build_single_target() {
 
   time ./zlib.sh         "${ZLIB_VER_}"
   time ./zlibng.sh     "${ZLIBNG_VER_}"
-  time ./zstd.sh         "${ZSTD_VER_}"
   time ./brotli.sh     "${BROTLI_VER_}"
   time ./libgsasl.sh "${LIBGSASL_VER_}"
   time ./libidn2.sh   "${LIBIDN2_VER_}"
