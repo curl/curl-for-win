@@ -96,7 +96,7 @@ _VER="$1"
   if [ -d ../zstd ]; then
     options="${options}-zstd"
     export ZSTD_PATH=../../zstd/build/cmake/pkg/usr/local
-    export ZSTD_LIBS='-Wl,-Bstatic -lzstd -Wl,-Bdynamic'
+    export ZSTD_LIBS='-Wl,-Bstatic -lzstd_static -Wl,-Bdynamic'
   fi
 
   [ -d ../openssl ] && export OPENSSL_PATH=../../openssl
