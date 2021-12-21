@@ -24,11 +24,11 @@ export ZLIBNG_VER_='2.0.5'
 export ZLIBNG_HASH=eca3fe72aea7036c31d00ca120493923c4d5b99fe02e6d3322f7c88dbdcd0085
 export ZLIB_VER_='1.2.11'
 export ZLIB_HASH=4ff941449631ace0d4d203e3483be9dbc9da454084111f97ea0a2114e19bf066
-export ZSTD_VER_='1.5.0'
-export ZSTD_HASH=9aa8dfc1ca17f358b28988ca1f6e00ffe1c6f3198853f8d2022799e6f0669180
+export ZSTD_VER_='1.5.1'
+export ZSTD_HASH=444f68cf74d2ee6e1d3e53aa99463570bcabf37734f26f86b8aa3fec99446f96
 
 # Create revision string
 # NOTE: Set _REVN to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REVN='2'
+export _REVN='3'
