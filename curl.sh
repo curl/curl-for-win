@@ -99,7 +99,7 @@ _VER="$1"
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
     # Workaround for deprecation warnings from the curl autoconf logic
     if [ "$(echo "${OPENSSL_VER_}" | cut -c -2)" = '3.' ]; then
-      CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DOPENSSL_SUPPRESS_DEPRECATED -DHAVE_OPENSSL_VERSION"
+      CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DOPENSSL_SUPPRESS_DEPRECATED"
     fi
     options="${options}-ssl"
     export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"

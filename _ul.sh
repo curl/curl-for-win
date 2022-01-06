@@ -84,7 +84,7 @@ EOF
       --times \
       --no-compress \
       --info=NAME2 --itemize-changes \
-      --rsh "ssh \
+      --rsh "ssh -a -k \
         -i '${DEPLOY_KEY}' \
         -o BatchMode=no \
         -o StrictHostKeyChecking=yes \
