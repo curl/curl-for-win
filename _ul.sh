@@ -39,6 +39,7 @@ zip --latest-time "${_ALL}"
 
 openssl dgst -sha256 "${_ALL}" | tee    "${_ALL}.txt"
 openssl dgst -sha512 "${_ALL}" | tee -a "${_ALL}.txt"
+touch -c -r "${_ALL}" "${_ALL}.txt"
 
 ./_sign-pkg.sh "${_ALL}"
 
