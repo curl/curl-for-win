@@ -6,7 +6,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 gpgdir="$(mktemp -d)"
 
-meta() {
+dependencies_json() {
 cat <<EOF
 [
   {
@@ -206,7 +206,7 @@ bump() {
       hashenv="${name^^}_HASH"
       eval hash="\$${hashenv}"
 
-      jp="$(meta | jq \
+      jp="$(dependencies_json | jq \
         ".[] | select(.name == \"${name}\")")"
 
       newhash=''
@@ -243,7 +243,7 @@ bump() {
           fi
         fi
       else
-        >&2 echo "! ${name}: Metadata not found. Skipping."
+        >&2 echo "! ${name}: Dependency metadata not found. Skipping."
       fi
 
       if [ -z "${newhash}" ]; then
@@ -321,7 +321,7 @@ live_dl() {
   hash="${3:-}"
 
   set +x
-  jp="$(meta | jq \
+  jp="$(dependencies_json | jq \
     ".[] | select(.name == \"${name}\")")"
 
   url="$(  printf '%s' "${jp}" | jq -r '.url' | sed \
