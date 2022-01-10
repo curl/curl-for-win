@@ -93,7 +93,9 @@ _VER="$1"
   # own build system when used in cross-build scenarios. The working patch
   # was submitted, but closed subsequently due to mixed/no response.
   # The secure solution would be to disable loading anything from hard-coded
-  # disk locations, something that is not supported by OpenSSL at present.
+  # disk locations or preferably to detect OS location at runtime and
+  # adjust config paths accordingly; none that is currently supported by
+  # OpenSSL.
   _prefix='C:/Windows/System32/OpenSSL'
   _ssldir="ssl"
   _lib='/lib'
