@@ -33,8 +33,8 @@ _VER="$1"
   options='mingw32-ipv6-sspi-ldaps-srp'
 
   export ARCH
-  [ "${_CPU}" = 'x86' ] && ARCH="w32"
-  [ "${_CPU}" = 'x64' ] && ARCH="w64"
+  [ "${_CPU}" = 'x86' ] && ARCH='w32'
+  [ "${_CPU}" = 'x64' ] && ARCH='w64'
 
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
   # public libcurl functions being marked as 'exported'. It is useful to
