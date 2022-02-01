@@ -96,11 +96,14 @@
   The signature intentionally omits a trusted timestamp to retain
   reproducibility.
 
-# Binary package download
+# Official binary package download
 
-* Official page, latest version:<br>
-  <https://curl.se/windows/>
-* Official page, specific versions (back to 7.66.0):<br>
+* Latest version:
+  <br><https://curl.se/windows/>
+* Latest version direct links:
+  <br><https://curl.se/windows/curl-win32-latest.zip>
+  <br><https://curl.se/windows/curl-win64-latest.zip>
+* Specific versions (back to 7.66.0):<br>
   `https://curl.se/windows/dl-<curl-version>[_<build-number>]/`
   <br>Examples:
   <br><https://curl.se/windows/dl-7.77.0/>
