@@ -103,11 +103,11 @@
 * Latest version direct links:
   <br><https://curl.se/windows/curl-win32-latest.zip>
   <br><https://curl.se/windows/curl-win64-latest.zip>
-* Specific versions (back to 7.66.0):<br>
+* Specific versions (back to 7.80.0):<br>
   `https://curl.se/windows/dl-<curl-version>[_<build-number>]/`
   <br>Examples:
-  <br><https://curl.se/windows/dl-7.77.0/>
-  <br><https://curl.se/windows/dl-7.77.0_1/>
+  <br><https://curl.se/windows/dl-7.80.0/>
+  <br><https://curl.se/windows/dl-7.80.0_1/>
 
 # Build logs
 
