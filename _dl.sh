@@ -64,11 +64,6 @@ cat <<EOF
     "url": "https://zlib.net/zlib-{ver}.tar.xz",
     "sig": ".asc",
     "keys": "5ED46A6721D365587791E2AA783FCD8E58BCAFBA"
-  },
-  {
-    "name": "zlibng",
-    "url": "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/{ver}.tar.gz",
-    "redir": "redir"
   }
 ]
 EOF
@@ -359,13 +354,8 @@ live_dl() {
   fi
 }
 
-if [ "${_BRANCH#*zlibng*}" != "${_BRANCH}" ]; then
-  live_dl zlibng "${ZLIBNG_VER_}"
-  live_xt zlibng "${ZLIBNG_HASH}"
-else
-  live_dl zlib "${ZLIB_VER_}"
-  live_xt zlib "${ZLIB_HASH}"
-fi
+live_dl zlib "${ZLIB_VER_}"
+live_xt zlib "${ZLIB_HASH}"
 
 if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \

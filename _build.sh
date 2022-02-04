@@ -20,7 +20,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #                compiler build
 #                -------- -----------
 #   zlib.sh      clang    cmake
-#   zlibng.sh    clang    cmake
 #   brotli.sh    clang    cmake
 #   libgsasl.sh  clang    autotools
 #   libidn2.sh   clang    autotools
@@ -241,7 +240,6 @@ build_single_target() {
   echo ".binutils-mingw-w64-${_machine} $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')" >> "${_BLD}"
 
   time ./zlib.sh         "${ZLIB_VER_}"
-  time ./zlibng.sh     "${ZLIBNG_VER_}"
   time ./brotli.sh     "${BROTLI_VER_}"
   time ./libgsasl.sh "${LIBGSASL_VER_}"
   time ./libidn2.sh   "${LIBIDN2_VER_}"

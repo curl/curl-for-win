@@ -38,11 +38,7 @@ _VER="$1"
     LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,-Map,libssh2.map"
   fi
 
-  if [ -d ../zlibng ]; then
-    export ZLIB_PATH=../../zlibng/pkg/usr/local
-  else
-    export ZLIB_PATH=../../zlib/pkg/usr/local
-  fi
+  export ZLIB_PATH=../../zlib/pkg/usr/local
   export WITH_ZLIB=1
   export LINK_ZLIB_STATIC=1
 
@@ -126,8 +122,7 @@ _VER="$1"
   cp -f -p README        "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES "${_DST}/RELEASE-NOTES.txt"
 
-  [ -d ../zlibng ]  && cp -f -p ../zlibng/LICENSE.md "${_DST}/COPYING-zlib-ng.md"
-  [ -d ../zlib ]    && cp -f -p ../zlib/README       "${_DST}/COPYING-zlib.txt"
+  [ -d ../zlib ] && cp -f -p ../zlib/README "${_DST}/COPYING-zlib.txt"
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     cp -f -p win32/*.map   "${_DST}/bin/"
