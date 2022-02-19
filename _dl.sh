@@ -105,7 +105,7 @@ check_update() {
     slug="${BASH_REMATCH[1]}"
     # heavily rate-limited
     newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases/latest" | \
-      jq -r '.tag_name' | sed -E 's|^v||')"
+      jq --raw-output '.tag_name' | sed -E 's|^v||')"
   else
     mask="${pkg}[._-]v?([0-9]+(\.[0-9]+)+)\.t"
     if [ "$4" = 'true' ]; then
@@ -207,9 +207,9 @@ bump() {
       newhash=''
 
       if [ -n "${jp}" ]; then
-        url="$( printf '%s' "${jp}" | jq -r '.url')"
-        desc="$(printf '%s' "${jp}" | jq -r '.descending')"
-        pin="$( printf '%s' "${jp}" | jq -r '.pinned')"
+        url="$( printf '%s' "${jp}" | jq --raw-output '.url')"
+        desc="$(printf '%s' "${jp}" | jq --raw-output '.descending')"
+        pin="$( printf '%s' "${jp}" | jq --raw-output '.pinned')"
 
         if [ "${pin}" = 'true' ]; then
           >&2 echo "! ${name}: Version pinned. Skipping."
@@ -218,10 +218,10 @@ bump() {
           if [ -n "${newver}" ]; then
             >&2 echo "! ${name}: New version found: |${newver}|"
 
-            sig="$(  printf '%s' "${jp}" | jq -r '.sig' | sed -E 's|^null$||g')"
-            sha="$(  printf '%s' "${jp}" | jq -r '.sha' | sed -E 's|^null$||g')"
-            redir="$(printf '%s' "${jp}" | jq -r '.redir')"
-            keys="$( printf '%s' "${jp}" | jq -r '.keys' | sed -E 's|^null$||g')"
+            sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed -E 's|^null$||g')"
+            sha="$(  printf '%s' "${jp}" | jq --raw-output '.sha' | sed -E 's|^null$||g')"
+            redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"
+            keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed -E 's|^null$||g')"
 
             urlver="$(printf '%s' "${url}" | sed \
                 -e "s|{ver}|${newver}|g" \
@@ -319,13 +319,13 @@ live_dl() {
   jp="$(dependencies_json | jq \
     ".[] | select(.name == \"${name}\")")"
 
-  url="$(  printf '%s' "${jp}" | jq -r '.url' | sed \
+  url="$(  printf '%s' "${jp}" | jq --raw-output '.url' | sed \
       -e "s|{ver}|${ver}|g" \
       -e "s|{vermm}|$(echo "${ver}" | cut -d . -f -2)|g" \
     )"
-  sig="$(  printf '%s' "${jp}" | jq -r '.sig' | sed -E 's|^null$||g')"
-  redir="$(printf '%s' "${jp}" | jq -r '.redir')"
-  keys="$( printf '%s' "${jp}" | jq -r '.keys' | sed -E 's|^null$||g')"
+  sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed -E 's|^null$||g')"
+  redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"
+  keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed -E 's|^null$||g')"
 
   options=()
   [ "${redir}" = 'redir' ] && options+=(--location --proto-redir '=https')
