@@ -7,8 +7,14 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 cd "$(dirname "$0")"
 
-# Map tar to GNU tar on macOS
-[ "${_OS}" = 'mac' ] && alias tar='gtar'
+my_tar() {
+  # Use GNU tar on macOS
+  if [ "${_OS}" = 'mac' ]; then
+    gtar "$@"
+  else
+    tar "$@"
+  fi
+}
 
 _cdo="$(pwd)"
 
@@ -60,7 +66,7 @@ create_pkg() {
 
     rm -f "${_cdo}/${_pkg}"
     case "${arch_ext}" in
-      .tar.xz) tar --create \
+      .tar.xz) my_tar --create \
         --format=ustar \
         --owner 0 --group 0 --numeric-owner --mode go=rX,u+rw,a-s \
         --files-from "${_FLS}" | xz > "${_cdo}/${_pkg}";;
