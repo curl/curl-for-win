@@ -36,6 +36,8 @@ LC_ALL=C
 LC_MESSAGES=C
 LANG=C
 export GREP_OPTIONS=
+export ZIPOPT=
+export ZIP=
 
 readonly _LOG='logurl.txt'
 if [ -n "${APPVEYOR_ACCOUNT_NAME:-}" ]; then
