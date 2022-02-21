@@ -12,7 +12,10 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      -mretpoline
 #      -mspeculative-load-hardening / -mllvm -x86-speculative-load-hardening (high overhead)
 #   - GCC -mindirect-branch -mfunction-return -mindirect-branch-register
-#   - ARM64 builds? (once FLOSS toolchains support it)
+#   - Add ARM64 builds? (once FLOSS toolchains support it)
+#   - Drop x86 (Intel 32-bit) builds?
+#   - Drop FTP support?
+#   - Drop brotli support?
 #   - Use Universal CRT?
 #   - Switch to LibreSSL or rustls or Schannel?
 
