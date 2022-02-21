@@ -22,8 +22,8 @@ _VER="$1"
   # options="${options} -DENABLE_CURL -lcurl"
 
   if [ "${_OS}" = 'mac' ]; then
-    # options="-I/usr/local/opt/curl/include -L/usr/local/opt/curl/lib"
-    options="${options} -I/usr/local/opt/openssl@1.1/include -L/usr/local/opt/openssl@1.1/lib"
+    # options="${options} -I/usr/local/opt/curl/include -L/usr/local/opt/curl/lib"
+    options="${options} -I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib"
   fi
 
   # shellcheck disable=SC2086
