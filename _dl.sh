@@ -112,7 +112,7 @@ check_update() {
     slug="${BASH_REMATCH[1]}"
     # heavily rate-limited
     newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases/latest" | \
-      jq --raw-output '.tag_name' | sed -E 's|^v||')"
+      jq --raw-output '.tag_name' | sed 's|^v||')"
   else
     mask="${pkg}[._-]v?([0-9]+(\.[0-9]+)+)\.t"
     if [ "$4" = 'true' ]; then
@@ -225,10 +225,10 @@ bump() {
           if [ -n "${newver}" ]; then
             >&2 echo "! ${name}: New version found: |${newver}|"
 
-            sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed -E 's|^null$||g')"
-            sha="$(  printf '%s' "${jp}" | jq --raw-output '.sha' | sed -E 's|^null$||g')"
+            sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's|^null$||g')"
+            sha="$(  printf '%s' "${jp}" | jq --raw-output '.sha' | sed 's|^null$||g')"
             redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"
-            keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed -E 's|^null$||g')"
+            keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's|^null$||g')"
 
             urlver="$(printf '%s' "${url}" | sed \
                 -e "s|{ver}|${newver}|g" \
@@ -259,8 +259,8 @@ bump() {
       echo "export ${hashenv}=${newhash}"
     fi
   done <<< "$(env | grep -a -E '^[A-Z0-9]+_VER_' | \
-    sed -E "s|^${keypkg}|0X0X|g" | sort | \
-    sed -E "s|^0X0X|${keypkg}|g")"
+    sed "s|^${keypkg}|0X0X|g" | sort | \
+    sed "s|^0X0X|${keypkg}|g")"
 
   if [ "${newcurl}" = '1' ]; then
     _REVN=''  # Reset revision on each curl version bump
@@ -330,9 +330,9 @@ live_dl() {
       -e "s|{ver}|${ver}|g" \
       -e "s|{vermm}|$(echo "${ver}" | cut -d . -f -2)|g" \
     )"
-  sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed -E 's|^null$||g')"
+  sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's|^null$||g')"
   redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"
-  keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed -E 's|^null$||g')"
+  keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's|^null$||g')"
 
   options=()
   [ "${redir}" = 'redir' ] && options+=(--location --proto-redir '=https')

@@ -84,7 +84,7 @@ _VER="$1"
   # 'configure' misdetects CC=clang as MSVC and then uses '.lib'
   # extension. So rename these to '.a':
   if [ -f "${_pkg}/lib/libgsasl.lib" ]; then
-    sed -i.bak -E "s|\.lib'$|.a'|g" "${_pkg}/lib/libgsasl.la"
+    sed -i.bak "s|\.lib'$|.a'|g" "${_pkg}/lib/libgsasl.la"
     mv "${_pkg}/lib/libgsasl.lib" "${_pkg}/lib/libgsasl.a"
   fi
 
