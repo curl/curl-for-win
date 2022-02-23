@@ -75,7 +75,14 @@ my_curl() {
 }
 
 my_gpg() {
-  gpg --homedir "${gpgdir}" --batch --keyserver-options timeout=15 --keyid-format 0xlong "$@"
+  local opts
+  opts=()
+  if [ -z "${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF:-}" ]; then
+    # Do not populate local GPG configuration with build-related keys, unless
+    # this is an automated CI session, where this is not an issue.
+    opts+=(--homedir "${gpgdir}")
+  fi
+  gpg "${opts[@]}" --batch --keyserver-options timeout=15 --keyid-format 0xlong "$@"
 }
 
 gpg_recv_key() {
