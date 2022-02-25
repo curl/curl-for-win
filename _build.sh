@@ -116,7 +116,7 @@ rm -f "${_BLD}"
 
 . ./_versions.sh
 
-# Revision suffix to be used in package filenames
+# Revision suffix used in package filenames
 export _REV="${_REVN}"; [ -z "${_REV}" ] || _REV="_${_REV}"
 
 # Download sources

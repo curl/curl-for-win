@@ -61,26 +61,25 @@
 - Generated binaries are [reproducible](https://reproducible-builds.org/),
   meaning they will have the same hash given the same input sources and C
   compiler.
-- Because the build environment is updated before each build, subsequent
-  builds _may_ use different versions/builds of the compiler toolchain.
-  This may result in different generated binaries given otherwise unchanged
-  source code and configuration, sometimes thus breaking reproducibility.
-  This trade-off was decided to be tolerable for more optimal binaries and
-  allowing this project to automatically benefit from continuous C compiler
-  updates.
-- Patching policy: No locally maintained patches. Patches are only
-  applied locally if already merged upstream or &mdash; in case it is
-  necessary for a successful build &mdash; had them submitted upstream with
-  fair confidence of getting accepted.
+- Because the build environment is updated before each build, builds _may_
+  use different versions/builds of the compiler toolchain. This may result
+  in different generated binaries given otherwise unchanged source code and
+  configuration, sometimes thus breaking reproducibility. This is
+  a trade-off for more optimal binaries and to automatically make use of
+  continuous C compiler updates.
+- Patching policy: No locally maintained patches. Patches are applied
+  locally if already merged upstream or &mdash; if necessary for
+  a successful build &mdash; had them submitted upstream with fair
+  confidence of getting accepted.
   <br>NOTE: As of 2021, there is a small local patch applied to the OpenSSL
   configure script, which fixes a bug which in turn is necessary to better
   mitigate a high-severity vulnerability
   ([CVE-2019-5443](https://curl.se/docs/CVE-2019-5443.html)), which still
-  has only an incomplete fix in the default OpenSSL builds for Windows.
-  Patches for both were refused by the OpenSSL team. Even though the patch
-  is minor, there is no promise that it will be maintained here for an
-  indefinite time. Another option under consideration is to migrate to an
-  OpenSSL alternative (e.g. LibreSSL, rustls or Schannel).
+  has an incomplete fix in the default OpenSSL builds for Windows. The
+  OpenSSL team rejected both patches. Even though the patch is minor, there
+  is no promise that it will be maintained here for an indefinite time.
+  Another option under consideration is to migrate to an OpenSSL
+  alternative (e.g. LibreSSL, rustls or Schannel).
 - Generated binaries are uploaded to [VirusTotal](https://www.virustotal.com/).
 - To verify the correct checksum for the latest build, you can look up the
   correct ones in the build log as they are generated. Watch for `main`
@@ -89,11 +88,11 @@
     <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main>
 - The build process is multi-platform and able to cross-build Windows
   executables from \*nix hosts (Linux and macOS tested.)
-- Packages created across different host platforms will not currently have
-  identical hashes. The reason for this is the slightly different build
-  options and versions of the `mingw-w64` and `binutils` tools.
+- Packages created across different host platforms will not have identical
+  hashes. The reason for this is the slightly different build options and
+  versions of the `mingw-w64` and `binutils` tools.
 - Code signing is implemented and enabled with a self-signed certificate.
-  The signature intentionally omits a trusted timestamp to retain
+  The signature intentionally omits a trusted timestamp for
   reproducibility.
 
 # Official binary package download
