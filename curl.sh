@@ -37,7 +37,7 @@ _VER="$1"
   [ "${_CPU}" = 'x64' ] && ARCH='w64'
 
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
-  # public libcurl functions being marked as 'exported'. It is useful to
+  # public libcurl functions being marked as 'exported'. Useful to
   # avoid the chance of libcurl functions getting exported from final
   # binaries when linked against static libcurl lib.
   export CURL_CFLAG_EXTRAS='-DCURL_STATICLIB -DCURL_ENABLE_MQTT -fno-ident -DHAVE_ATOMIC'

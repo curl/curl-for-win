@@ -94,8 +94,7 @@ _VER="$1"
   # was submitted, but closed subsequently due to mixed/no response.
   # The secure solution would be to disable loading anything from hard-coded
   # disk locations or preferably to detect OS location at runtime and
-  # adjust config paths accordingly; none that is currently supported by
-  # OpenSSL.
+  # adjust config paths accordingly; none that is supported by OpenSSL.
   _prefix='C:/Windows/System32/OpenSSL'
   _ssldir="ssl"
   _lib='/lib'

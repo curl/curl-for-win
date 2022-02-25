@@ -36,7 +36,6 @@ _VER="$1"
   export LDFLAGS="${_OPTM}"
   ldonly=''
 
-  # No success in convincing the build system to work correctly with clang:
   if [ "${CC}" = 'mingw-clang' ]; then
 
     # Skip 'gltests' build due to errors like this:
@@ -82,7 +81,7 @@ _VER="$1"
   # Build fixups for clang
 
   # 'configure' misdetects CC=clang as MSVC and then uses '.lib'
-  # extension. So rename these to '.a':
+  # extension. Rename these to '.a':
   if [ -f "${_pkg}/lib/libgsasl.lib" ]; then
     sed -i.bak "s|\.lib'$|.a'|g" "${_pkg}/lib/libgsasl.la"
     mv "${_pkg}/lib/libgsasl.lib" "${_pkg}/lib/libgsasl.a"
