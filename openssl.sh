@@ -158,8 +158,8 @@ _VER="$1"
   touch -c -r "${_ref}" "${_pkg}"/bin/*.dll
   touch -c -r "${_ref}" "${_pkg}${_lib}"/*.a
   touch -c -r "${_ref}" "${_pkg}${_lib}"/pkgconfig/*.pc
-  find "${_pkg}"/include/openssl -exec touch -c -r "${_ref}" '{}' \;
-  find "${_pkg}${_lib}" -exec touch -c -r "${_ref}" '{}' \;
+  find "${_pkg}"/include/openssl -exec touch -c -r "${_ref}" '{}' +
+  find "${_pkg}${_lib}" -exec touch -c -r "${_ref}" '{}' +
 
   # Tests
 
