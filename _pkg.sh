@@ -30,7 +30,7 @@ unix2dos --quiet --keepdate "${_fn}"
 touch -c -r "$1" "${_fn}"
 
 find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' \;
-# NOTE: This is not effective on MSYS2:
+# NOTE: Not effective on MSYS2:
 find "${_DST}" -name '*.a' -exec chmod a-x '{}' +
 find "${_DST}" \( -name '*.exe' -o -name '*.dll' \) -exec chmod a+x '{}' +
 

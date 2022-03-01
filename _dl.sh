@@ -78,11 +78,11 @@ my_gpg() {
   local opts
   opts=()
   if [ -z "${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF:-}" ]; then
-    # Do not populate local GPG configuration with build-related keys, unless
-    # this is an automated CI session, where this is not an issue. In CI
-    # environments, as of gnupg 2.2.27, using --homedir or GNUPGHOME causes
-    # frequent intermittent fatal errors on subsequent symmetric-key gpg
-    # calls that do not use a homedir override.
+    # Do not populate user GPG configuration with build-related keys, unless
+    # this is an automated CI session, where this is fine. In CI environments,
+    # as of gnupg 2.2.27, using --homedir or GNUPGHOME causes frequent
+    # intermittent fatal errors on subsequent symmetric-key gpg calls that
+    # do not use a homedir override.
     opts+=(--homedir "${gpgdir}")
   fi
   gpg "${opts[@]}" --batch --keyserver-options timeout=15 --keyid-format 0xlong "$@"
