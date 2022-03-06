@@ -98,10 +98,17 @@ gpg_recv_key() {
 # convert 'x.y.z' to zero-padded "0x0y0z" numeric format
 to6digit() {
   local ver maj min rel
-  ver="$(grep -a -o -E '[0-9]+\.[0-9]+\.[0-9]+')"
-  maj="$(printf '%s' "${ver}" | grep -a -o -E '[0-9]+' | head -1)"
-  min="$(printf '%s' "${ver}" | grep -a -o -E '[0-9]+' | head -2 | tail -1)"
-  rel="$(printf '%s' "${ver}" | grep -a -o -E '[0-9]+' | tail -1)"
+  ver="$(cat)"
+  if [[ "${ver}" =~ ([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
+    maj="${BASH_REMATCH[1]}"
+    min="${BASH_REMATCH[2]}"
+    rel="${BASH_REMATCH[3]}"
+  else
+    >&2 echo "! Internal error: Failed to parse version string: '${ver}'"
+    maj=0
+    min=0
+    rel=0
+  fi
   printf '%02d%02d%02d' "${maj}" "${min}" "${rel}"
 }
 
@@ -116,7 +123,7 @@ check_update() {
     # heavily rate-limited
     newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases/latest" | \
       jq --raw-output '.tag_name' | sed 's|^v||')"
-    if [ -n "$(echo "${newver}" | grep -a -o -E '^[0-9]+\.[0-9]+$')" ]; then
+    if [[ "${newver}" =~ ^[0-9]+\.[0-9]+$ ]]; then
       newver="${newver}.0"
     fi
   else
