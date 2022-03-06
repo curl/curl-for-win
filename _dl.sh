@@ -116,6 +116,9 @@ check_update() {
     # heavily rate-limited
     newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases/latest" | \
       jq --raw-output '.tag_name' | sed 's|^v||')"
+    if [ -n "$(echo "${newver}" | grep -a -o -E '^[0-9]+\.[0-9]+$')" ]; then
+      newver="${newver}.0"
+    fi
   else
     mask="${pkg}[._-]v?([0-9]+(\.[0-9]+)+)\.t"
     if [ "$4" = 'true' ]; then
