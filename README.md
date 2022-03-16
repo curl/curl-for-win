@@ -95,7 +95,7 @@
   The signature intentionally omits a trusted timestamp for
   reproducibility.
 
-# Official binary package download
+# Official binary downloads
 
 * Latest version:
   <br><https://curl.se/windows/>
