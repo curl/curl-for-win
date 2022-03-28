@@ -20,11 +20,11 @@ export OPENSSL_VER_='3.0.2'
 export OPENSSL_HASH=98e91ccead4d4756ae3c9cde5e09191a8e586d9f4d50838e7ec09d6411dfdb63
 export OSSLSIGNCODE_VER_='2.3.0'
 export OSSLSIGNCODE_HASH=b73a7f5a68473ca467f98f93ad098142ac6ca66a32436a7d89bb833628bd2b4e
-export ZLIB_VER_='1.2.11'
-export ZLIB_HASH=4ff941449631ace0d4d203e3483be9dbc9da454084111f97ea0a2114e19bf066
+export ZLIB_VER_='1.2.12'
+export ZLIB_HASH=7db46b8d7726232a621befaab4a1c870f00a90805511c0e0090441dac57def18
 
 # Create revision string
 # NOTE: Set _REVN to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REVN='1'
+export _REVN='2'
