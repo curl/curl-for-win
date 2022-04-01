@@ -7,10 +7,10 @@ if ! command -v hxclean >/dev/null 2>&1; then
     Linux*)
       apt-get --quiet 2 --option Dpkg::Use-Pty=0 update
       apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
-        curl git gpg zip zstd jq html-xml-utils;;
+        curl git gpg zip jq html-xml-utils;;
     Darwin*)
       brew install \
-        curl git gpg zip zstd jq html-xml-utils;;
+        curl git gpg zip jq html-xml-utils;;
   esac
 fi
 
