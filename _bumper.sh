@@ -17,3 +17,22 @@ fi
 . ./_versions.sh
 
 ./_dl.sh bump
+
+# Find out the latest docker image release:
+
+name='debian'
+
+# https://docs.docker.com/registry/spec/api/
+token="$(curl --user-agent '' --silent --fail --show-error \
+    "https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/${name}:pull" \
+  | jq --raw-output '.token')"
+
+# TODO: Switch: testing -> testing-slim
+tag="$(curl --user-agent '' --silent --fail --show-error \
+  --header 'Accept: application/json' \
+  --header "Authorization: Bearer ${token}" \
+  "https://registry-1.docker.io/v2/library/${name}/tags/list" \
+| jq --raw-output '.tags[]' | grep -E '^testing-[0-9]{8}-slim$' | sort | tail -1)"
+
+echo
+echo "  DOCKER_IMAGE: ${name}:${tag}"

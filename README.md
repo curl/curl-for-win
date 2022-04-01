@@ -46,8 +46,8 @@
   C compiler is [LLVM/Clang](https://clang.llvm.org/).
 - Binaries are cross-built and published from Linux
   (via [AppVeyor CI](https://www.appveyor.com/)).
-  <br>Exact OS image used for the builds is
-  [`debian:testing`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing)
+  <br>OS image used for the builds is
+  [`debian:testing-slim`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing/slim)
   (a [reproducible](https://github.com/debuerreotype/debuerreotype) image)
   via [Docker](https://hub.docker.com/_/debian/).
 - Binaries are built with supported

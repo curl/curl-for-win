@@ -64,6 +64,11 @@ cat <<EOF
     "url": "https://zlib.net/zlib-{ver}.tar.xz",
     "sig": ".asc",
     "keys": "5ED46A6721D365587791E2AA783FCD8E58BCAFBA"
+  },
+  {
+    "name": "pefile",
+    "url": "https://github.com/erocarrera/pefile/releases/download/v{ver}/pefile-{ver}.tar.gz",
+    "redir": "redir"
   }
 ]
 EOF
@@ -95,8 +100,8 @@ gpg_recv_key() {
   my_curl "https://keyserver.ubuntu.com/${req}" | my_gpg --import --status-fd 1
 }
 
-# convert 'x.y.z' to zero-padded "0x0y0z" numeric format
-to6digit() {
+# convert 'x.y.z' to zero-padded "000x0y0z" numeric format
+to8digit() {
   local ver maj min rel
   ver="$(cat)"
   if [[ "${ver}" =~ ([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
@@ -109,7 +114,7 @@ to6digit() {
     min=0
     rel=0
   fi
-  printf '%02d%02d%02d' "${maj}" "${min}" "${rel}"
+  printf '%04d%02d%02d' "${maj}" "${min}" "${rel}"
 }
 
 check_update() {
@@ -141,7 +146,7 @@ check_update() {
     fi
   fi
   if [ -n "${newver}" ]; then
-    newvern="$(printf '%s' "${newver}" | to6digit)"
+    newvern="$(printf '%s' "${newver}" | to8digit)"
     if [ "${newvern}" -gt "${ourvern}" ]; then
       printf '%s' "${newver}"
     fi
@@ -216,10 +221,10 @@ bump() {
     if [[ "${pkg}" =~ ^([A-Z0-9]+)_VER_=(.+)$ ]]; then
       name="${BASH_REMATCH[1],,}"
       ourver="${BASH_REMATCH[2]}"
-      ourvern="$(printf '%s' "${ourver}" | to6digit)"
+      ourvern="$(printf '%s' "${ourver}" | to8digit)"
 
       hashenv="${name^^}_HASH"
-      eval hash="\$${hashenv}"
+      eval hash="\${${hashenv}:-}"
 
       jp="$(dependencies_json | jq \
         ".[] | select(.name == \"${name}\")")"
@@ -238,16 +243,21 @@ bump() {
           if [ -n "${newver}" ]; then
             >&2 echo "! ${name}: New version found: |${newver}|"
 
-            sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's|^null$||g')"
-            sha="$(  printf '%s' "${jp}" | jq --raw-output '.sha' | sed 's|^null$||g')"
-            redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"
-            keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's|^null$||g')"
+            if [ -n "${hash}" ]; then
+              sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's|^null$||g')"
+              sha="$(  printf '%s' "${jp}" | jq --raw-output '.sha' | sed 's|^null$||g')"
+              redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"
+              keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's|^null$||g')"
 
-            urlver="$(printf '%s' "${url}" | sed \
-                -e "s|{ver}|${newver}|g" \
-                -e "s|{vermm}|$(echo "${newver}" | cut -d . -f -2)|g" \
-              )"
-            newhash="$(check_dl "${name}" "${urlver}" "${sig}" "${sha}" "${redir}" "${keys}")"
+              urlver="$(printf '%s' "${url}" | sed \
+                  -e "s|{ver}|${newver}|g" \
+                  -e "s|{vermm}|$(echo "${newver}" | cut -d . -f -2)|g" \
+                )"
+              newhash="$(check_dl "${name}" "${urlver}" "${sig}" "${sha}" "${redir}" "${keys}")"
+            else
+              newhash='-'
+            fi
+
             if [ -z "${newhash}" ]; then
               >&2 echo "! ${name}: New version failed to validate."
             elif [ "${name}" == "${keypkg}" ]; then
@@ -269,7 +279,7 @@ bump() {
       fi
 
       echo "export ${name^^}_VER_='${newver}'"
-      echo "export ${hashenv}=${newhash}"
+      [ -n "${hash}" ] && echo "export ${hashenv}=${newhash}"
     fi
   done <<< "$(env | grep -a -E '^[A-Z0-9]+_VER_' | \
     sed "s|^${keypkg}|0X0X|g" | sort | \

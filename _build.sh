@@ -202,7 +202,7 @@ build_single_target() {
 
     # Install required component
     pip3 --version
-    pip3 --disable-pip-version-check --no-cache-dir install --user pefile
+    pip3 --disable-pip-version-check --no-cache-dir install --user "pefile==${PEFILE_VER_}"
   else
     if [ "${CC}" = 'mingw-clang' ] && [ "${_OS}" = 'mac' ]; then
       export PATH="/usr/local/opt/llvm/bin:${_ori_path}"

@@ -101,10 +101,6 @@ _VER="$1"
   touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
   touch -c -r "${_ref}" ${_pkg}/include/*.h
 
-  # Tests
-
-  ${_WINE} ${_pkg}/bin/idn2.exe --version
-
   # Create package
 
   _OUT="${_NAM}-${_VER}${_REV}${_PKGSUFFIX}"

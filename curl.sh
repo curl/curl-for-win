@@ -169,6 +169,7 @@ _VER="$1"
   ${_MAKE} -j 2 "${options}"
 
   # Download CA bundle
+  # CAVEAT: Build-time download. It can break reproducibility.
   if [ -d ../openssl ]; then
     [ -f '../ca-bundle.crt' ] || \
       curl --disable --user-agent '' --fail --silent --show-error \
@@ -207,6 +208,7 @@ _VER="$1"
   "${_CCPREFIX}objdump" --all-headers src/*.exe | grep -a -E -i "(file format|dll name)"
   "${_CCPREFIX}objdump" --all-headers lib/*.dll | grep -a -E -i "(file format|dll name)"
 
+  # FIXME: Avoid executing build results?
   ${_WINE} src/curl.exe --version | tee "curl-${_CPU}.txt"
   ${_WINE} src/curl.exe --dump-module-paths
 
