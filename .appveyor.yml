@@ -43,7 +43,7 @@ build_script:
       docker images --digests
       time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
         --env-file <(env | grep -a -E \
-          '^(CC|DO_NOT_TRACK|VIRUSTOTAL_|SIGN_|DEPLOY_|APPVEYOR_|GITLAB_|CI_)') \
+          '^(CC|DO_NOT_TRACK|VIRUSTOTAL_|SIGN_|DEPLOY_|APPVEYOR_|CI_)') \
         "${DOCKER_IMAGE}" \
         sh -c ./_ci-linux-debian.sh
 artifacts:
