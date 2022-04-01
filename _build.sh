@@ -218,7 +218,16 @@ build_single_target() {
     else
       _SYSROOT="/usr/${_TRIPLET}"
     fi
-    if [ "${_OS}" = 'mac' ]; then
+
+    if [ "${_OS}" = 'linux' ]; then
+      # Execute x64 targets only, to avoid having to install wine32 and
+      # i386 architecture.
+      if [ "${_CPU}" = 'x64' ]; then
+        _WINE='wine64'
+      else
+        _WINE='echo'
+      fi
+    elif [ "${_OS}" = 'mac' ]; then
       if [ "${_CPU}" = 'x64' ] && \
          [ "$(uname -m)" = 'x86_64' ] && \
          [ "$(sysctl -i -n sysctl.proc_translated)" != '1' ]; then
