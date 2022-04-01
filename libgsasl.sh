@@ -99,7 +99,7 @@ _VER="$1"
 
   # Create package
 
-  _OUT="${_NAM}-${_VER}${_REV}${_PKGSUFFIX}"
+  _OUT="${_NAM}-${_VER}${_REVSUFFIX}${_PKGSUFFIX}"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(mktemp -d)/${_BAS}"
 

@@ -25,7 +25,7 @@ export ZLIB_HASH=7db46b8d7726232a621befaab4a1c870f00a90805511c0e0090441dac57def1
 export PEFILE_VER_='2021.9.3'
 
 # Create revision string
-# NOTE: Set _REVN to empty after bumping CURL_VER_, and
+# NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REVN='2'
+export _REV='2'

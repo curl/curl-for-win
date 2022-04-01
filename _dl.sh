@@ -286,12 +286,12 @@ bump() {
     sed "s|^0X0X|${keypkg}|g")"
 
   if [ "${newcurl}" = '1' ]; then
-    _REVN=''  # Reset revision on each curl version bump
+    _REV=''  # Reset revision on each curl version bump
   elif [ "${newdep}" = '1' ]; then
-    ((_REVN+=1))  # Bump revision with each dependency version bump
+    ((_REV+=1))  # Bump revision with each dependency version bump
   fi
 
-  echo "export _REVN=${_REVN}"
+  echo "export _REV=${_REV}"
 }
 
 if [ "${1:-}" = 'bump' ]; then
@@ -300,8 +300,7 @@ if [ "${1:-}" = 'bump' ]; then
   exit
 fi
 
-# shellcheck disable=SC2153
-echo "Build: REV(${_REV})"
+echo "Build: REV(${_REVSUFFIX})"
 
 # Quit if any of the lines fail
 set -e
