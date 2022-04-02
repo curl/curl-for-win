@@ -166,9 +166,14 @@ _VER="$1"
   "${_CCPREFIX}objdump" --all-headers "${_pkg}"/bin/openssl.exe | grep -a -E -i "(file format|dll name)"
   "${_CCPREFIX}objdump" --all-headers "${_pkg}"/bin/*.dll       | grep -a -E -i "(file format|dll name)"
 
-  # FIXME: Avoid executing build results?
-  ${_WINE} "${_pkg}"/bin/openssl.exe version -a
-  ${_WINE} "${_pkg}"/bin/openssl.exe ciphers -s -V -stdname
+  for bin in \
+    "${_pkg}"/bin/openssl.exe \
+    "${_pkg}"/bin/*.dll \
+  ; do
+    file "${bin}"
+    # Produce 'openssl version -a'-like output without executing the build:
+    strings "${bin}" | grep -a -E '^(OpenSSL [0-9]|built on: |compiler: |platform: |[A-Z]+DIR: )' || true
+  done
 
   # Create package
 
