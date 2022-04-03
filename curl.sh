@@ -208,9 +208,8 @@ _VER="$1"
   "${_CCPREFIX}objdump" --all-headers src/*.exe | grep -a -E -i "(file format|dll name)"
   "${_CCPREFIX}objdump" --all-headers lib/*.dll | grep -a -E -i "(file format|dll name)"
 
-  # FIXME: Avoid executing build results?
-  ${_WINE} src/curl.exe --version | tee "curl-${_CPU}.txt"
-  ${_WINE} src/curl.exe --dump-module-paths
+  # FIXME: Avoid executing build result?
+  CURL_SSL_BACKEND=schannel ${_WINE} src/curl.exe --version | tee "curl-${_CPU}.txt"
 
   # Create package
 
