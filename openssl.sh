@@ -53,7 +53,7 @@ _VER="$1"
   fi
   options="${options} no-filenames"
   [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128 -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
-  [ "${_CPU}" = 'x86' ] && options="${options} -fno-asynchronous-unwind-tables"
+  [ "${_CPU}" = 'x86' ] && options="${options} -fno-asynchronous-unwind-tables -D_WIN32_WINNT=0x0501"
 
   if [ "${CC}" = 'mingw-clang' ]; then
     # To avoid warnings when passing C compiler options to the linker
