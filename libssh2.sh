@@ -66,11 +66,8 @@ _VER="$1"
   # LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Xlinker -guard:cf"
   fi
 
-  (
-    cd win32
-    ${_MAKE} --jobs 2 clean
-    ${_MAKE} --jobs 2
-  )
+  ${_MAKE} --jobs 2 --directory win32 clean
+  ${_MAKE} --jobs 2 --directory win32
 
   # Make steps for determinism
 
