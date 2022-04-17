@@ -165,8 +165,8 @@ _VER="$1"
   # CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Xlinker -guard:cf"
   fi
 
-  ${_MAKE} -j 2 mingw32-clean
-  ${_MAKE} -j 2 "${options}"
+  ${_MAKE} --jobs 2 mingw32-clean
+  ${_MAKE} --jobs 2 "${options}"
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.

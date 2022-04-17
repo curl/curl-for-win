@@ -68,8 +68,8 @@ _VER="$1"
 
   (
     cd win32
-    ${_MAKE} -j 2 clean
-    ${_MAKE} -j 2
+    ${_MAKE} --jobs 2 clean
+    ${_MAKE} --jobs 2
   )
 
   # Make steps for determinism
