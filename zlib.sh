@@ -66,7 +66,7 @@ _VER="$1"
   # _LDFLAGS="${_LDFLAGS} -Xlinker -guard:cf"
 
     # shellcheck disable=SC2086
-    cmake . ${options} "${opt_gmsys}" \
+    cmake . ${options} ${opt_gmsys} \
       "-DCMAKE_SYSROOT=${_SYSROOT}" \
       "-DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}" \
       "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
@@ -78,7 +78,7 @@ _VER="$1"
     unset CC
 
     # shellcheck disable=SC2086
-    cmake . ${options} "${opt_gmsys}" \
+    cmake . ${options} ${opt_gmsys} \
       "-DCMAKE_C_COMPILER=${_CCPREFIX}gcc" \
       "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}" \
       "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS}"
