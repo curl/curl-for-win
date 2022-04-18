@@ -89,7 +89,6 @@ _VER="$1"
   # DESTDIR= + CMAKE_INSTALL_PREFIX
   _pkg='pkg/usr/local'
 
-  ls -l ${_pkg}/bin/*.dll
   ls -l ${_pkg}/lib/*.a
 
   # Delete the implib, we need the static lib only
@@ -107,20 +106,10 @@ _VER="$1"
   readonly _ref='ChangeLog'
 
   "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
-  "${_CCPREFIX}strip" --preserve-dates --strip-all ${_pkg}/bin/*.dll
-
-  ../_peclean.py "${_ref}" ${_pkg}/bin/*.dll
-
-  ../_sign-code.sh "${_ref}" ${_pkg}/bin/*.dll
 
   touch -c -r "${_ref}" ${_pkg}/include/*.h
-  touch -c -r "${_ref}" ${_pkg}/bin/*.dll
 # touch -c -r "${_ref}" ${_pkg}/share/pkgconfig/*.pc
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
-
-  # Tests
-
-  "${_CCPREFIX}objdump" --all-headers ${_pkg}/bin/*.dll | grep -a -E -i "(file format|dll name)"
 
   # Create package
 
