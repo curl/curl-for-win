@@ -31,12 +31,6 @@ _VER="$1"
 
   export LIBSSH2_CFLAG_EXTRAS='-fno-ident -DHAVE_STRTOI64 -DLIBSSH2_DH_GEX_NEW=1 -DHAVE_DECL_SECUREZEROMEMORY=1'
   [ "${_CPU}" = 'x86' ] && LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
-  export LIBSSH2_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
-  [ "${_CPU}" = 'x64' ] && LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,--high-entropy-va -Wl,--image-base,0x152000000"
-
-  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-    LIBSSH2_LDFLAG_EXTRAS="${LIBSSH2_LDFLAG_EXTRAS} -Wl,-Map,libssh2.map"
-  fi
 
   export ZLIB_PATH=../../zlib/pkg/usr/local
   export WITH_ZLIB=1
@@ -50,13 +44,13 @@ _VER="$1"
     export WITH_WINCNG=1
   fi
 
-  [ "${_CPU}" = 'x64' ] && export LIBSSH2_DLL_SUFFIX=-x64
   export LIBSSH2_DLL_A_SUFFIX=.dll
 
   export CROSSPREFIX="${_CCPREFIX}"
 
   if [ "${CC}" = 'mingw-clang' ]; then
     export LIBSSH2_CC="clang${_CCSUFFIX}"
+    export LIBSSH2_LDFLAG_EXTRAS=''
     if [ "${_OS}" != 'win' ]; then
       LIBSSH2_CFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${LIBSSH2_CFLAG_EXTRAS}"
       [ "${_OS}" = 'linux' ] && LIBSSH2_LDFLAG_EXTRAS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${LIBSSH2_LDFLAG_EXTRAS}"
@@ -69,27 +63,15 @@ _VER="$1"
   ${_MAKE} --jobs 2 --directory win32 clean
   ${_MAKE} --jobs 2 --directory win32
 
+  rm -f win32/libssh2.dll.a
+
   # Make steps for determinism
 
   readonly _ref='NEWS'
 
   "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives win32/*.a
 
-  ../_peclean.py "${_ref}" win32/*.dll
-
-  ../_sign-code.sh "${_ref}" win32/*.dll
-
-  touch -c -r "${_ref}" win32/*.dll
-  touch -c -r "${_ref}" win32/*.def
   touch -c -r "${_ref}" win32/*.a
-
-  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-    touch -c -r "${_ref}" win32/*.map
-  fi
-
-  # Tests
-
-  "${_CCPREFIX}objdump" --all-headers win32/*.dll | grep -a -E -i "(file format|dll name)"
 
   # Create package
 
@@ -100,7 +82,6 @@ _VER="$1"
   mkdir -p "${_DST}/docs"
   mkdir -p "${_DST}/include"
   mkdir -p "${_DST}/lib"
-  mkdir -p "${_DST}/bin"
 
   (
     set +x
@@ -111,8 +92,6 @@ _VER="$1"
     done
   )
   cp -f -p include/*.h   "${_DST}/include/"
-  cp -f -p win32/*.dll   "${_DST}/bin/"
-  cp -f -p win32/*.def   "${_DST}/bin/"
   cp -f -p win32/*.a     "${_DST}/lib/"
   cp -f -p NEWS          "${_DST}/NEWS.txt"
   cp -f -p COPYING       "${_DST}/COPYING.txt"
@@ -120,10 +99,6 @@ _VER="$1"
   cp -f -p RELEASE-NOTES "${_DST}/RELEASE-NOTES.txt"
 
   [ -d ../zlib ] && cp -f -p ../zlib/README "${_DST}/COPYING-zlib.txt"
-
-  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-    cp -f -p win32/*.map   "${_DST}/bin/"
-  fi
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )
