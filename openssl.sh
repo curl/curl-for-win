@@ -60,7 +60,7 @@ _VER="$1"
     options="${options} -Wno-unused-command-line-argument"
     export CC=clang
     if [ "${_OS}" != 'win' ]; then
-      export options="${options} --target=${_TRIPLET} --sysroot=${_SYSROOT}"
+      options="${options} --target=${_TRIPLET} --sysroot=${_SYSROOT}"
       [ "${_OS}" = 'linux' ] && options="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${options}"
     # export LDFLAGS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${LDFLAGS}"
     fi

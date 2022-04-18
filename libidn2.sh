@@ -46,7 +46,7 @@ _VER="$1"
   if [ "${CC}" = 'mingw-clang' ]; then
     export CC='clang'
     if [ "${_OS}" != 'win' ]; then
-      export options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
+      options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
       LDFLAGS="${LDFLAGS} -target ${_TRIPLET} --sysroot ${_SYSROOT}"
       [ "${_OS}" = 'linux' ] && ldonly="${ldonly} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
     fi
