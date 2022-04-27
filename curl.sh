@@ -246,8 +246,8 @@ _VER="$1"
   cp -f -p RELEASE-NOTES            "${_DST}/RELEASE-NOTES.txt"
 
   if [ -d ../openssl ]; then
-    cp -f -p lib/mk-ca-bundle.pl  "${_DST}/"
-    cp -f -p ../ca-bundle.crt     "${_DST}/bin/curl-ca-bundle.crt"
+    cp -f -p scripts/mk-ca-bundle.pl "${_DST}/"
+    cp -f -p ../ca-bundle.crt        "${_DST}/bin/curl-ca-bundle.crt"
     [ -f ../openssl/LICENSE.txt ] && cp -f -p ../openssl/LICENSE.txt "${_DST}/COPYING-openssl.txt"
   fi
 
