@@ -16,8 +16,8 @@ export NGHTTP3_VER_='0.1.90'
 export NGHTTP3_HASH=
 export NGTCP2_VER_='0.1.90'
 export NGTCP2_HASH=
-export OPENSSL_VER_='3.0.2'
-export OPENSSL_HASH=98e91ccead4d4756ae3c9cde5e09191a8e586d9f4d50838e7ec09d6411dfdb63
+export OPENSSL_VER_='3.0.3'
+export OPENSSL_HASH=ee0078adcef1de5f003c62c80cc96527721609c6f3bb42b7795df31f8b558c0b
 export OSSLSIGNCODE_VER_='2.3.0'
 export OSSLSIGNCODE_HASH=b73a7f5a68473ca467f98f93ad098142ac6ca66a32436a7d89bb833628bd2b4e
 export ZLIB_VER_='1.2.12'
@@ -28,4 +28,4 @@ export PEFILE_VER_='2021.9.3'
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV=''
+export _REV='1'
