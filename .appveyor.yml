@@ -19,7 +19,7 @@ clone_depth: 8
 build:
   verbosity: detailed
 environment:
-  DOCKER_IMAGE: debian:testing-20220418-slim
+  DOCKER_IMAGE: debian:testing-20220509-slim
   VIRUSTOTAL_APIKEY:
     secure: 9SXnYhOkq6CP97zQ+dUc+NzKpKVIoVACMi0wwtLkaUv9y8BimLo5B7XSWBQ9lYwKbQY8JSJ10JFtyxrKRN6O0PK5U7i6bhg4/B6c40ieHHw=
   SIGN_CODE_GPG_PASS:
