@@ -428,11 +428,11 @@ fi
 if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ]; then
   if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-    LIBSSH2_VER_='1.9.1-dev'
+    LIBSSH2_VER_='1.10.0-dev'
     LIBSSH2_HASH=
     my_curl --location --proto-redir =https \
       --output pkg.bin \
-      'https://github.com/libssh2/libssh2/archive/a88a727c2a1840f979b34f12bcce3d55dcd7ea6e.tar.gz'
+      'https://github.com/libssh2/libssh2/archive/635caa90787220ac3773c1d5ba11f1236c22eae8.tar.gz'
   else
     live_dl libssh2 "${LIBSSH2_VER_}"
   fi
@@ -440,11 +440,11 @@ if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
 fi
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-  CURL_VER_='7.79.0-dev'
+  CURL_VER_='7.83.1-dev'
   CURL_HASH=
   my_curl --location --proto-redir =https \
     --output pkg.bin \
-    'https://github.com/curl/curl/archive/5dc594e44f73b1726cabca6a4395323f972e416d.tar.gz'
+    'https://github.com/curl/curl/archive/462196e6b4a47f924293a0e26b8e9c23d37ac26f.tar.gz'
 else
   live_dl curl "${CURL_VER_}"
 fi
