@@ -18,6 +18,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - Drop brotli support?
 #   - Use Universal CRT?
 #   - Switch to LibreSSL or rustls or Schannel?
+#   - openssl: enable no-engine, no-module, no-dso, no-dynamic-engine options
+#     (whichever minimum set is necessary) to improve security.
 
 # Tools:
 #                compiler build
