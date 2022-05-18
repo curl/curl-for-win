@@ -56,7 +56,6 @@ _VER="$1"
 
   CFLAGS="${CFLAGS} -fno-ident"
   LDFLAGS="${LDFLAGS}${ldonly}"
-# [ "${_CPU}" = 'x64' ] && LDFLAGS="${LDFLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
   [ "${_CPU}" = 'x86' ] && CPPFLAGS="${CPPFLAGS} -D__MINGW_USE_VC2005_COMPAT"
 
@@ -99,19 +98,7 @@ _VER="$1"
   readonly _ref='ChangeLog'
 
   "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
-  "${_CCPREFIX}strip" --preserve-dates --strip-all ${_pkg}/bin/*.exe
-  "${_CCPREFIX}strip" --preserve-dates --strip-all ${_pkg}/bin/*.dll
 
-  ../_peclean.py "${_ref}" "${_pkg}"/bin/*.exe
-  ../_peclean.py "${_ref}" "${_pkg}"/bin/*.dll
-
-  ../_sign-code.sh "${_ref}" "${_pkg}"/bin/*.exe
-  ../_sign-code.sh "${_ref}" "${_pkg}"/bin/*.dll
-
-  touch -c -r "${_ref}" "${_pkg}"/ssl/cert.pem
-  touch -c -r "${_ref}" "${_pkg}"/ssl/*.cnf
-  touch -c -r "${_ref}" "${_pkg}"/bin/*.exe
-  touch -c -r "${_ref}" "${_pkg}"/bin/*.dll
   touch -c -r "${_ref}" "${_pkg}"/lib/*.a
   touch -c -r "${_ref}" "${_pkg}"/lib/pkgconfig/*.pc
   touch -c -r "${_ref}" "${_pkg}"/include/openssl/*.h
@@ -119,12 +106,8 @@ _VER="$1"
 
   # Tests
 
-  "${_CCPREFIX}objdump" --all-headers "${_pkg}"/bin/openssl.exe | grep -a -E -i "(file format|dll name)"
-  "${_CCPREFIX}objdump" --all-headers "${_pkg}"/bin/*.dll       | grep -a -E -i "(file format|dll name)"
-
   for bin in \
     "${_pkg}"/bin/openssl.exe \
-    "${_pkg}"/bin/*.dll \
   ; do
     file "${bin}"
     # Produce 'openssl version -a'-like output without executing the build:
@@ -140,10 +123,6 @@ _VER="$1"
   mkdir -p "${_DST}/include/openssl"
   mkdir -p "${_DST}/lib/pkgconfig"
 
-  cp -f -p "${_pkg}"/ssl/cert.pem        "${_DST}/cert.pem"
-  cp -f -p "${_pkg}"/ssl/*.cnf           "${_DST}/"
-  cp -f -p "${_pkg}"/bin/*.exe           "${_DST}/"
-  cp -f -p "${_pkg}"/bin/*.dll           "${_DST}/"
   cp -f -p "${_pkg}"/lib/*.a             "${_DST}/lib"
   cp -f -p "${_pkg}"/lib/pkgconfig/*.pc  "${_DST}/lib/pkgconfig/"
   cp -f -p "${_pkg}"/include/openssl/*.h "${_DST}/include/openssl/"
