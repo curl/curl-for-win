@@ -34,6 +34,7 @@ _VER="$1"
   find . -name '*.dll' -delete
   find . -name '*.exe' -delete
 
+  [ -d ../libressl ] && export OPENSSL_PATH='../../../libressl'
   [ -d ../openssl ]  && export OPENSSL_PATH='../../../openssl'
   if [ -n "${OPENSSL_PATH}" ]; then
     export OPENSSL_CFLAGS="-L${OPENSSL_PATH}/lib -I${OPENSSL_PATH}/include"

@@ -4,11 +4,14 @@ version: 1.0.{build}
 branches:
   only:
     - main
+    - main-libressl
     - main-mini
     - dev
+    - dev-libressl
     - dev-mini
     - dev-appveyor
     - test
+    - test-libressl
     - test-mini
     - test-appveyor
 # https://www.appveyor.com/docs/build-environment/#build-worker-images

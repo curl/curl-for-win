@@ -45,6 +45,12 @@ cat <<EOF
     "redir": "redir"
   },
   {
+    "name": "libressl",
+    "url": "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-{ver}.tar.gz",
+    "sig": ".asc",
+    "keys": "A1EB079B8D3EB92B4EBD3139663AF51BD5E4D8D5"
+  },
+  {
     "name": "openssl",
     "url": "https://www.openssl.org/source/openssl-{ver}.tar.gz",
     "sig": ".asc",
@@ -416,13 +422,18 @@ if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*schannel*}" = "${_BRANCH}" ]; then
-  # QUIC fork: https://github.com/quictls/openssl.git
-  if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-    OPENSSL_VER_='3.0.0-beta2'
-    OPENSSL_HASH=e76ab22879201b12f014393ee4becec7f264d8f6955b1036839128002868df71
+  if [ "${_BRANCH#*libressl*}" = "${_BRANCH}" ]; then
+    # QUIC fork: https://github.com/quictls/openssl.git
+    if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
+      OPENSSL_VER_='3.0.0-beta2'
+      OPENSSL_HASH=e76ab22879201b12f014393ee4becec7f264d8f6955b1036839128002868df71
+    fi
+    live_dl openssl "${OPENSSL_VER_}"
+    live_xt openssl "${OPENSSL_HASH}"
+  else
+    live_dl libressl "${LIBRESSL_VER_}"
+    live_xt libressl "${LIBRESSL_HASH}"
   fi
-  live_dl openssl "${OPENSSL_VER_}"
-  live_xt openssl "${OPENSSL_HASH}"
 fi
 
 if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \

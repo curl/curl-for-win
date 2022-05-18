@@ -90,7 +90,8 @@ _VER="$1"
     export BROTLI_LIBS='-Wl,-Bstatic -lbrotlidec-static -lbrotlicommon-static -Wl,-Bdynamic'
   fi
 
-  [ -d ../openssl ] && export OPENSSL_PATH=../../openssl
+  [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
+  [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
   if [ -n "${OPENSSL_PATH:-}" ]; then
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
     # Workaround for deprecation warnings from the curl autoconf logic
@@ -169,7 +170,7 @@ _VER="$1"
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.
-  if [ -d ../openssl ]; then
+  if [ -d ../libressl ] || [ -d ../openssl ]; then
     [ -f '../ca-bundle.crt' ] || \
       curl --disable --user-agent '' --fail --silent --show-error \
         --remote-time --xattr \
@@ -245,9 +246,10 @@ _VER="$1"
   cp -f -p README                   "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES            "${_DST}/RELEASE-NOTES.txt"
 
-  if [ -d ../openssl ]; then
+  if [ -d ../libressl ] || [ -d ../openssl ]; then
     cp -f -p scripts/mk-ca-bundle.pl "${_DST}/"
     cp -f -p ../ca-bundle.crt        "${_DST}/bin/curl-ca-bundle.crt"
+    [ -f ../libressl/COPYING ]    && cp -f -p ../libressl/COPYING    "${_DST}/COPYING-libressl.txt"
     [ -f ../openssl/LICENSE.txt ] && cp -f -p ../openssl/LICENSE.txt "${_DST}/COPYING-openssl.txt"
   fi
 

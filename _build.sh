@@ -26,6 +26,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   brotli.sh    clang    cmake
 #   libgsasl.sh  clang    autotools
 #   libidn2.sh   clang    autotools
+#   libressl.sh  clang    autotools
 #   nghttp2.sh   clang    cmake
 #   nghttp3.sh   clang    cmake
 #   openssl.sh   clang    proprietary
@@ -259,6 +260,7 @@ build_single_target() {
   time ./libidn2.sh   "${LIBIDN2_VER_}"
   time ./nghttp2.sh   "${NGHTTP2_VER_}"
   time ./nghttp3.sh   "${NGHTTP3_VER_}"
+  time ./libressl.sh "${LIBRESSL_VER_}"
   time ./openssl.sh   "${OPENSSL_VER_}"
   time ./ngtcp2.sh     "${NGTCP2_VER_}"
   time ./libssh2.sh   "${LIBSSH2_VER_}"

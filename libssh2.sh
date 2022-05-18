@@ -36,6 +36,7 @@ _VER="$1"
   export WITH_ZLIB=1
   export LINK_ZLIB_STATIC=1
 
+  [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
   [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
   if [ -n "${OPENSSL_PATH:-}" ]; then
     export OPENSSL_LIBPATH="${OPENSSL_PATH}"
