@@ -82,6 +82,10 @@ _VER="$1"
   _pkg="${_pkr}/${_prefix}"
   _pks="${_pkr}/${_prefix}/${_ssldir}"
 
+  # List files created
+
+  find "${_pkg}" | grep -a -v -F '/share/' | sort
+
   # Build fixups for clang
 
   # 'configure' misdetects CC=clang as MSVC and then uses '.lib'
