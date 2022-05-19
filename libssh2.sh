@@ -29,12 +29,14 @@ _VER="$1"
   [ "${_CPU}" = 'x86' ] && ARCH='w32'
   [ "${_CPU}" = 'x64' ] && ARCH='w64'
 
-  export LIBSSH2_CFLAG_EXTRAS='-fno-ident -DHAVE_STRTOI64 -DLIBSSH2_DH_GEX_NEW=1 -DHAVE_DECL_SECUREZEROMEMORY=1'
+  export LIBSSH2_CFLAG_EXTRAS='-fno-ident -DHAVE_STRTOI64 -DLIBSSH2_DH_GEX_NEW=1 -DHAVE_DECL_SECUREZEROMEMORY=1 -DHAVE_EVP_AES_128_CTR=1'
   [ "${_CPU}" = 'x86' ] && LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
 
   export ZLIB_PATH=../../zlib/pkg/usr/local
   export WITH_ZLIB=1
   export LINK_ZLIB_STATIC=1
+
+  [ -d ../libressl ] && LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -DNOCRYPT"
 
   [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
   [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
@@ -62,9 +64,7 @@ _VER="$1"
   fi
 
   ${_MAKE} --jobs 2 --directory win32 clean
-  ${_MAKE} --jobs 2 --directory win32
-
-  rm -f win32/libssh2.dll.a
+  ${_MAKE} --jobs 2 --directory win32 lib
 
   # Make steps for determinism
 
