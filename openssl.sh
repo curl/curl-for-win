@@ -104,7 +104,7 @@ _VER="$1"
 
   # 'no-dso' will imply 'no-dynamic-engine' which will in turn force these
   # engines to be included non-dynamically. To avoid them, along with their
-  # system DLL dependencies and DLL imports, we explicitly disable then
+  # system DLL dependencies and DLL imports, we explicitly disable them
   # one by one in the 'no-capieng ...' line.
 
   # shellcheck disable=SC2086
