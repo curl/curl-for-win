@@ -80,7 +80,6 @@ _VER="$1"
 
   CFLAGS="${CFLAGS} -fno-ident"
   LDFLAGS="${LDFLAGS}${ldonly}"
-  [ "${_CPU}" = 'x64' ] && LDFLAGS="${LDFLAGS} -Wl,--image-base,0x151000000"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
   [ "${_CPU}" = 'x86' ] && CPPFLAGS="${CPPFLAGS} -D__MINGW_USE_VC2005_COMPAT"
 

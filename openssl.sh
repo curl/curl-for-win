@@ -52,7 +52,7 @@ _VER="$1"
     [ "${_CPU}" = 'x64' ] && options="${options} no-asm"
   fi
   options="${options} no-filenames"
-  [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128 -Wl,--high-entropy-va -Wl,--image-base,0x151000000"
+  [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128"
   [ "${_CPU}" = 'x86' ] && options="${options} -fno-asynchronous-unwind-tables -D_WIN32_WINNT=0x0501"
 
   if [ "${CC}" = 'mingw-clang' ]; then
@@ -74,11 +74,17 @@ _VER="$1"
     _CONF_CCPREFIX="${_CCPREFIX}"
   fi
 
-  # Patch OpenSSL ./Configure to make it accept Windows-style absolute
-  # paths as --prefix. Without the patch it misidentifies all such
-  # absolute paths as relative ones and aborts.
-  # Reported: https://github.com/openssl/openssl/issues/9520
-  sed 's|die "Directory given with --prefix|print "Directory given with --prefix|g' \
+  # Patch OpenSSL ./Configure to:
+  # - make it accept Windows-style absolute paths as --prefix. Without the
+  #   patch it misidentifies all such absolute paths as relative ones and
+  #   aborts.
+  #   Reported: https://github.com/openssl/openssl/issues/9520
+  # - allow no-apps option to omit building openssl.exe. This helps when
+  #   linking is broken (like on macOS hosts has been for a while) or when
+  #   need only the libs.
+  sed \
+    -e 's|die "Directory given with --prefix|print "Directory given with --prefix|g' \
+    -e 's|"aria",$|"apps", "aria",|g' \
     < ./Configure > ./Configure-patched
   chmod a+x ./Configure-patched
 
@@ -99,22 +105,24 @@ _VER="$1"
   _ssldir="ssl"
   _lib='/lib'
   [ "${_CPU}" = 'x64' ] && _lib='/lib64'
-  options="${options} no-legacy"
   _pkr='pkg'
 
-  # 'no-dso' will imply 'no-dynamic-engine' which will in turn force these
-  # engines to be included non-dynamically. To avoid them, along with their
-  # system DLL dependencies and DLL imports, we explicitly disable them
-  # one by one in the 'no-capieng ...' line.
+  # 'no-dso' implies 'no-dynamic-engine' which in turn forces these engines
+  # to be included non-dynamically. To avoid them, along with their system
+  # DLL dependencies and DLL imports, we explicitly disable them one by one
+  # in the 'no-capieng ...' line.
 
   # shellcheck disable=SC2086
-  ./Configure-patched ${options} shared \
+  ./Configure-patched ${options} \
     "--cross-compile-prefix=${_CONF_CCPREFIX}" \
     -fno-ident \
     -Wl,--nxcompat -Wl,--dynamicbase \
+    no-legacy \
+    no-apps \
     no-capieng no-loadereng no-padlockeng \
     no-module \
     no-dso \
+    no-shared \
     no-idea \
     no-unit-test \
     no-tests \
@@ -139,53 +147,11 @@ _VER="$1"
   # Make steps for determinism
 
   "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives "${_pkg}${_lib}"/*.a
-  "${_CCPREFIX}strip" --preserve-dates --strip-all "${_pkg}"/bin/openssl.exe
-  "${_CCPREFIX}strip" --preserve-dates --strip-all "${_pkg}"/bin/*.dll
-  if ls "${_pkg}${_lib}"/ossl-modules/*.dll >/dev/null 2>&1; then
-    "${_CCPREFIX}strip" --preserve-dates --strip-all "${_pkg}${_lib}"/ossl-modules/*.dll
-  fi
-  if ls "${_pkg}${_lib}"/engines*/*.dll >/dev/null 2>&1; then
-    "${_CCPREFIX}strip" --preserve-dates --strip-all "${_pkg}${_lib}"/engines*/*.dll
-  fi
 
-  ../_peclean.py "${_ref}" "${_pkg}"/bin/openssl.exe
-  ../_peclean.py "${_ref}" "${_pkg}"/bin/*.dll
-
-  ../_sign-code.sh "${_ref}" "${_pkg}"/bin/openssl.exe
-  ../_sign-code.sh "${_ref}" "${_pkg}"/bin/*.dll
-
-  if ls "${_pkg}${_lib}"/ossl-modules/*.dll >/dev/null 2>&1; then
-    ../_peclean.py "${_ref}" "${_pkg}${_lib}"/ossl-modules/*.dll
-
-    ../_sign-code.sh "${_ref}" "${_pkg}${_lib}"/ossl-modules/*.dll
-  fi
-  if ls "${_pkg}${_lib}"/engines*/*.dll >/dev/null 2>&1; then
-    ../_peclean.py "${_ref}" "${_pkg}${_lib}"/engines*/*.dll
-
-    ../_sign-code.sh "${_ref}" "${_pkg}${_lib}"/engines*/*.dll
-  fi
-
-  touch -c -r "${_ref}" "${_pks}"/*.cnf*
-  touch -c -r "${_ref}" "${_pkg}"/bin/openssl.exe
-  touch -c -r "${_ref}" "${_pkg}"/bin/*.dll
   touch -c -r "${_ref}" "${_pkg}${_lib}"/*.a
   touch -c -r "${_ref}" "${_pkg}${_lib}"/pkgconfig/*.pc
   find "${_pkg}"/include/openssl -exec touch -c -r "${_ref}" '{}' +
   find "${_pkg}${_lib}" -exec touch -c -r "${_ref}" '{}' +
-
-  # Tests
-
-  "${_CCPREFIX}objdump" --all-headers "${_pkg}"/bin/openssl.exe | grep -a -E -i "(file format|dll name)"
-  "${_CCPREFIX}objdump" --all-headers "${_pkg}"/bin/*.dll       | grep -a -E -i "(file format|dll name)"
-
-  for bin in \
-    "${_pkg}"/bin/openssl.exe \
-    "${_pkg}"/bin/*.dll \
-  ; do
-    file "${bin}"
-    # Produce 'openssl version -a'-like output without executing the build:
-    strings "${bin}" | grep -a -E '^(OpenSSL [0-9]|built on: |compiler: |platform: |[A-Z]+DIR: )' || true
-  done
 
   # Create package
 
@@ -196,14 +162,7 @@ _VER="$1"
   mkdir -p "${_DST}/include/"
   cp -f -p -r "${_pkg}"/include/openssl "${_DST}/include/"
 
-  mkdir -p "${_DST}/bin"
-  cp -f -p "${_pkg}"/bin/openssl.exe "${_DST}/bin/"
-  cp -f -p "${_pkg}"/bin/*.dll       "${_DST}/bin/"
-
   cp -f -p -r "${_pkg}${_lib}" "${_DST}/"
-
-  mkdir -p "${_DST}/ssl"
-  cp -f -p "${_pks}"/*.cnf* "${_DST}/ssl/"
 
   cp -f -p CHANGES.md  "${_DST}/"
   cp -f -p LICENSE.txt "${_DST}/"

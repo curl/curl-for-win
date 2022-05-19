@@ -93,23 +93,17 @@ _VER="$1"
 
 # for fn in ${_pkg}/lib/*-static.a; do mv "${fn}" "$(echo "${fn}" | sed 's|-static||')"; done
 
+  # Delete implibs
+
+  rm -f ${_pkg}/lib/*.dll.a
+
   # Make steps for determinism
 
   readonly _ref='docs/brotli.1'
 
   "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
-  "${_CCPREFIX}strip" --preserve-dates --strip-all ${_pkg}/bin/*.exe
-  "${_CCPREFIX}strip" --preserve-dates --strip-all ${_pkg}/bin/*.dll
-
-  ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
-  ../_peclean.py "${_ref}" ${_pkg}/bin/*.dll
-
-  ../_sign-code.sh "${_ref}" ${_pkg}/bin/*.exe
-  ../_sign-code.sh "${_ref}" ${_pkg}/bin/*.dll
 
   touch -c -r "${_ref}" ${_pkg}/include/brotli/*.h
-  touch -c -r "${_ref}" ${_pkg}/bin/*.exe
-  touch -c -r "${_ref}" ${_pkg}/bin/*.dll
   touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
 
@@ -125,13 +119,10 @@ _VER="$1"
   _DST="$(mktemp -d)/${_BAS}"
 
   mkdir -p "${_DST}"
-  mkdir -p "${_DST}/bin"
   mkdir -p "${_DST}/lib/pkgconfig"
   mkdir -p "${_DST}/include/brotli"
 
   cp -f -p ${_pkg}/include/brotli/*.h "${_DST}/include/brotli/"
-  cp -f -p ${_pkg}/bin/*.exe          "${_DST}/bin/"
-  cp -f -p ${_pkg}/bin/*.dll          "${_DST}/bin/"
   cp -f -p ${_pkg}/lib/pkgconfig/*.pc "${_DST}/lib/pkgconfig/"
   cp -f -p ${_pkg}/lib/*.a            "${_DST}/lib/"
   cp -f -p README.md                  "${_DST}/"
