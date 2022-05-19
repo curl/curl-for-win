@@ -51,6 +51,7 @@ _VER="$1"
   [ "${_OS}" = 'mac' ] && options="${options} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
   options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
   options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
+  options="${options} -DBROTLI_DISABLE_TESTS=ON"
 
   if [ "${CC}" = 'mingw-clang' ]; then
     unset CC
