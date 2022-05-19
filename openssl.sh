@@ -45,12 +45,6 @@ _VER="$1"
 
   [ "${_CPU}" = 'x86' ] && options='mingw'
   [ "${_CPU}" = 'x64' ] && options='mingw64'
-  if [ "${_BRANCH#*lto*}" != "${_BRANCH}" ]; then
-    # Create a fixed seed based on the timestamp of the OpenSSL source package.
-    options="${options} -flto -ffat-lto-objects -frandom-seed=${unixts}"
-    # mingw64 build (as of mingw 5.2.0) will fail without the `no-asm` option.
-    [ "${_CPU}" = 'x64' ] && options="${options} no-asm"
-  fi
   options="${options} no-filenames"
   [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128"
   [ "${_CPU}" = 'x86' ] && options="${options} -fno-asynchronous-unwind-tables -D_WIN32_WINNT=0x0501"
