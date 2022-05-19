@@ -1,14 +1,14 @@
-diff --git a/src/openssl.h b/src/openssl.h
-index 5704e1eb4..60c0c2c34 100644
---- a/src/openssl.h
-+++ b/src/openssl.h
-@@ -95,7 +95,8 @@
+--- a/src/openssl.h	2021-05-14 21:36:06.000000000 +0000
++++ b/src/openssl.h	2022-05-19 19:02:58.903387065 +0000
+@@ -57,8 +57,9 @@
+ #include <openssl/pem.h>
  #include <openssl/rand.h>
  
- #if (OPENSSL_VERSION_NUMBER >= 0x10100000L && \
--    !defined(LIBRESSL_VERSION_NUMBER)) || defined(LIBSSH2_WOLFSSL)
-+    !defined(LIBRESSL_VERSION_NUMBER)) || defined(LIBSSH2_WOLFSSL) || \
+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L && \
+-    !defined(LIBRESSL_VERSION_NUMBER)
++#if (OPENSSL_VERSION_NUMBER >= 0x10100000L && \
++    !defined(LIBRESSL_VERSION_NUMBER)) || \
 +    LIBRESSL_VERSION_NUMBER >= 0x3050000fL
- /* For wolfSSL, whether the structs are truly opaque or not, it's best to not
-  * rely on their internal data members being exposed publicly. */
  # define HAVE_OPAQUE_STRUCTS 1
+ #endif
+ 
