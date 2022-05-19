@@ -58,9 +58,7 @@ _VER="$1"
 
     [ "${_OS}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
 
-    _LDFLAGS=''
   # _CFLAGS="${_CFLAGS} -Xclang -cfguard"
-  # _LDFLAGS="${_LDFLAGS} -Xlinker -guard:cf"
 
     # shellcheck disable=SC2086
     cmake . ${options} ${opt_gmsys} \
@@ -70,9 +68,7 @@ _VER="$1"
       "-DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}" \
       "-DCMAKE_C_COMPILER=clang${_CCSUFFIX}" \
       "-DCMAKE_CXX_COMPILER=clang++${_CCSUFFIX}" \
-      "-DCMAKE_C_FLAGS=${_CFLAGS}" \
-      "-DCMAKE_EXE_LINKER_FLAGS=-static-libgcc ${_LDFLAGS}" \
-      "-DCMAKE_SHARED_LINKER_FLAGS=-static-libgcc ${_LDFLAGS}"
+      "-DCMAKE_C_FLAGS=${_CFLAGS}"
   else
     unset CC
 
