@@ -102,6 +102,7 @@ _VER="$1"
     export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
     export OPENSSL_LIBPATH="${OPENSSL_PATH}"
     export OPENSSL_LIBS='-lssl -lcrypto'
+    [ -d ../libressl ] && OPENSSL_LIBS="${OPENSSL_LIBS} -lbcrypt"
   fi
   options="${options}-schannel-winssl"
   if [ -d ../libssh2 ]; then
