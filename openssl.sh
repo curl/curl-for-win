@@ -102,11 +102,19 @@ _VER="$1"
   options="${options} no-legacy"
   _pkr='pkg'
 
+  # 'no-dso' will imply 'no-dynamic-engine' which will in turn force these
+  # engines to be included non-dynamically. To avoid them, along with their
+  # system DLL dependencies and DLL imports, we explicitly disable then
+  # one by one in the 'no-capieng ...' line.
+
   # shellcheck disable=SC2086
   ./Configure-patched ${options} shared \
     "--cross-compile-prefix=${_CONF_CCPREFIX}" \
     -fno-ident \
     -Wl,--nxcompat -Wl,--dynamicbase \
+    no-capieng no-loadereng no-padlockeng \
+    no-module \
+    no-dso \
     no-idea \
     no-unit-test \
     no-tests \
@@ -123,6 +131,10 @@ _VER="$1"
   # (openssl/pkg/C:/Windows/System32/OpenSSL)
   _pkg="${_pkr}/${_prefix}"
   _pks="${_pkr}/${_prefix}/${_ssldir}"
+
+  # List files created
+
+  find "${_pkg}" | grep -a -v -F '/share/' | sort
 
   # Make steps for determinism
 
