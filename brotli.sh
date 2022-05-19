@@ -46,6 +46,9 @@ _VER="$1"
   options=''
   options="${options} -DCMAKE_SYSTEM_NAME=Windows"
   options="${options} -DCMAKE_BUILD_TYPE=Release"
+  # A bizarre fix that became required around year 2021 to not fail instantly
+  # on macOS when using clang. Likely not the correct/complete fix.
+  [ "${_OS}" = 'mac' ] && options="${options} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
   options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
   options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
 
