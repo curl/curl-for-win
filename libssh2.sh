@@ -39,7 +39,10 @@ _VER="$1"
   [ -d ../libressl ] && LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -DNOCRYPT"
 
   [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
-  [ -d ../openssl ]  && export OPENSSL_PATH=../../openssl
+  if [ -d ../openssl ]; then
+    export OPENSSL_PATH=../../openssl
+    LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -DOPENSSL_SUPPRESS_DEPRECATED"
+  fi
   if [ -n "${OPENSSL_PATH:-}" ]; then
     export OPENSSL_LIBPATH="${OPENSSL_PATH}"
     export OPENSSL_LIBS_DYN='crypto.dll'
