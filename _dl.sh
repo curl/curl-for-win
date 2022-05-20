@@ -45,6 +45,16 @@ cat <<EOF
     "redir": "redir"
   },
   {
+    "name": "nghttp3",
+    "url": "https://github.com/ngtcp2/nghttp3/releases/download/v{ver}/nghttp3-{ver}.tar.xz",
+    "redir": "redir"
+  },
+  {
+    "name": "ngtcp2",
+    "url": "https://github.com/ngtcp2/ngtcp2/releases/download/v{ver}/ngtcp2-{ver}.tar.xz",
+    "redir": "redir"
+  },
+  {
     "name": "libressl",
     "url": "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-{ver}.tar.gz",
     "sig": ".asc",
@@ -402,6 +412,14 @@ fi
 if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
   live_dl nghttp2 "${NGHTTP2_VER_}"
   live_xt nghttp2 "${NGHTTP2_HASH}"
+
+  if [ "${_BRANCH#*http3*}" != "${_BRANCH}" ]; then
+    live_dl nghttp3 "${NGHTTP3_VER_}"
+    live_xt nghttp3 "${NGHTTP3_HASH}"
+
+    live_dl ngtcp2 "${NGTCP2_VER_}"
+    live_xt ngtcp2 "${NGTCP2_HASH}"
+  fi
 fi
 
 if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
