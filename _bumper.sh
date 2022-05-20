@@ -18,6 +18,17 @@ fi
 
 ./_dl.sh bump
 
+# Find out the latest tag for OpenSSL QUIC:
+# (standard bumper logic fails because these are branches, not releases)
+
+latest_tag="$(curl --disable --user-agent ' ' --silent --fail --show-error \
+    'https://api.github.com/repos/quictls/openssl/git/refs/heads' \
+  | jq '.[].ref' \
+  | grep -E '/openssl-\d+\.\d+\.\d+\+quic\"' \
+  | grep -E -o '\d+\.\d+\.\d' | sort | tail -1)"
+
+echo "\n  OpenSSL QUIC: ${latest_tag}"
+
 # Find out the latest docker image release:
 
 name='debian'

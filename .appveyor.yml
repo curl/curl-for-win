@@ -4,13 +4,16 @@ version: 1.0.{build}
 branches:
   only:
     - main
+    - main-quic
     - main-libressl
     - main-mini
     - dev
+    - dev-quic
     - dev-libressl
     - dev-mini
     - dev-appveyor
     - test
+    - test-quic
     - test-libressl
     - test-mini
     - test-appveyor

@@ -55,10 +55,9 @@ cat <<EOF
     "redir": "redir"
   },
   {
-    "name": "libressl",
-    "url": "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-{ver}.tar.gz",
-    "sig": ".asc",
-    "keys": "A1EB079B8D3EB92B4EBD3139663AF51BD5E4D8D5"
+    "name": "openssl_quic",
+    "url": "https://github.com/quictls/openssl/archive/refs/heads/openssl-{ver}+quic.tar.gz",
+    "redir": "redir"
   },
   {
     "name": "openssl",
@@ -67,6 +66,12 @@ cat <<EOF
     "sha": ".sha256",
     "keys_comment": "Via: https://www.openssl.org/community/omc.html",
     "keys": "8657ABB260F056B1E5190839D9C4D26D0E604491 7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C"
+  },
+  {
+    "name": "libressl",
+    "url": "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-{ver}.tar.gz",
+    "sig": ".asc",
+    "keys": "A1EB079B8D3EB92B4EBD3139663AF51BD5E4D8D5"
   },
   {
     "name": "osslsigncode",
@@ -91,6 +96,7 @@ EOF
 }
 
 my_curl() {
+  # >&2 echo "|$@|"
   curl --disable --user-agent '' --fail --silent --show-error \
     --connect-timeout 15 --max-time 20 --retry 3 --max-redirs 10 "$@"
 }
@@ -234,7 +240,7 @@ bump() {
   newdep=0
 
   while read -r pkg; do
-    if [[ "${pkg}" =~ ^([A-Z0-9]+)_VER_=(.+)$ ]]; then
+    if [[ "${pkg}" =~ ^([A-Z0-9_]+)_VER_=(.+)$ ]]; then
       name="${BASH_REMATCH[1],,}"
       ourver="${BASH_REMATCH[2]}"
       ourvern="$(printf '%s' "${ourver}" | to8digit)"
@@ -297,7 +303,7 @@ bump() {
       echo "export ${name^^}_VER_='${newver}'"
       [ -n "${hash}" ] && echo "export ${hashenv}=${newhash}"
     fi
-  done <<< "$(env | grep -a -E '^[A-Z0-9]+_VER_' | \
+  done <<< "$(env | grep -a -E '^[A-Z0-9_]+_VER_' | \
     sed "s|^${keypkg}|0X0X|g" | sort | \
     sed "s|^0X0X|${keypkg}|g")"
 
@@ -413,7 +419,7 @@ if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
   live_dl nghttp2 "${NGHTTP2_VER_}"
   live_xt nghttp2 "${NGHTTP2_HASH}"
 
-  if [ "${_BRANCH#*http3*}" != "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*quic*}" != "${_BRANCH}" ]; then
     live_dl nghttp3 "${NGHTTP3_VER_}"
     live_xt nghttp3 "${NGHTTP3_HASH}"
 
@@ -440,10 +446,12 @@ if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*schannel*}" = "${_BRANCH}" ]; then
-  if [ "${_BRANCH#*libressl*}" = "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*quic*}" != "${_BRANCH}" ]; then
+    live_dl openssl-quic "${OPENSSL_QUIC_VER_}"
+    live_xt openssl-quic "${OPENSSL_QUIC_HASH}"
+  elif [ "${_BRANCH#*libressl*}" = "${_BRANCH}" ]; then
     # QUIC fork:
     #   https://github.com/quictls/openssl.git
-    #   https://github.com/quictls/openssl/archive/refs/tags/openssl-{ver}.tar.gz
     if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
       OPENSSL_VER_='3.0.0-beta2'
       OPENSSL_HASH=e76ab22879201b12f014393ee4becec7f264d8f6955b1036839128002868df71
