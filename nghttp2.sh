@@ -53,7 +53,6 @@ _VER="$1"
   options="${options} -DENABLE_LIB_ONLY=1"
   options="${options} -DENABLE_STATIC_LIB=1"
   options="${options} -DENABLE_SHARED_LIB=0"
-  options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
   options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
   options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
   # We do not need C++ with ENABLE_LIB_ONLY, so make sure to skip the

@@ -60,7 +60,6 @@ _VER="$1"
     export AR="${_CCPREFIX}ar"
     export NM="${_CCPREFIX}nm"
     export RANLIB="${_CCPREFIX}ranlib"
-    export RC="${_CCPREFIX}windres"
     _CONF_CCPREFIX=
   else
     unset CC
