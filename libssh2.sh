@@ -30,9 +30,10 @@ _VER="$1"
   export ZLIB_PATH=../../zlib/pkg/usr/local
   export WITH_ZLIB=1
 
-  [ -d ../libressl ] && LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -DNOCRYPT"
-
-  [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
+  if [ -d ../libressl ]; then
+    export OPENSSL_PATH=../../libressl
+    LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -DNOCRYPT"
+  fi
   if [ -d ../openssl ]; then
     export OPENSSL_PATH=../../openssl
     LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -DOPENSSL_SUPPRESS_DEPRECATED"
