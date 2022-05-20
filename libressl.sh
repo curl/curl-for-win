@@ -81,7 +81,6 @@ _VER="$1"
   CFLAGS="${CFLAGS} -fno-ident -O3 -Wa,--noexecstack"
   LDFLAGS="${LDFLAGS}${ldonly}"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
-  [ "${_CPU}" = 'x86' ] && CPPFLAGS="${CPPFLAGS} -D__MINGW_USE_VC2005_COMPAT"
 
   _prefix='C:/Windows/libressl'
   _ssldir="ssl"
