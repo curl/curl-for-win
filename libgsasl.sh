@@ -24,6 +24,9 @@ _VER="$1"
 
   rm -r -f pkg
 
+  # Skip building tests
+  sed -i.bak 's| gltests||g' ./Makefile.am
+
   # To fix this bizarre error when executing 'make':
   #   configure.ac:39: error: version mismatch.  This is Automake 1.16.4,
   #   configure.ac:39: but the definition used by this AM_INIT_AUTOMAKE
@@ -36,11 +39,6 @@ _VER="$1"
   export CFLAGS="${_OPTM} -fno-ident"
 
   if [ "${CC}" = 'mingw-clang' ]; then
-
-    # Skip 'gltests' build due to errors like this:
-    #   ./signal.h:922:3: error: unknown type name 'uid_t'; did you mean 'pid_t'?
-    sed -i.bak 's| gltests||g' ./Makefile.am
-
     export CC='clang'
     if [ "${_OS}" != 'win' ]; then
       options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
