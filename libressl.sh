@@ -101,8 +101,8 @@ _VER="$1"
   make --jobs 2 install "DESTDIR=$(pwd)/${_pkr}/" >/dev/null # 2>&1
 
   # DESTDIR= + --prefix=
-  # LibreSSL and OpenSSL 3.x does not strip the drive letter
-  # (openssl/pkg/C:/Windows/libressl)
+  # LibreSSL does not strip the drive letter
+  # (libressl/pkg/C:/Windows/libressl)
   _pkg="${_pkr}/${_prefix}"
   _pks="${_pkr}/${_prefix}/${_ssldir}"
 
