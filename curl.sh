@@ -40,7 +40,7 @@ _VER="$1"
   # public libcurl functions being marked as 'exported'. Useful to
   # avoid the chance of libcurl functions getting exported from final
   # binaries when linked against static libcurl lib.
-  export CURL_CFLAG_EXTRAS='-fno-ident -O3 -Wa,--noexecstack -DCURL_STATICLIB -DCURL_ENABLE_MQTT -DHAVE_ATOMIC'
+  export CURL_CFLAG_EXTRAS='-fno-ident -O3 -DCURL_STATICLIB -DCURL_ENABLE_MQTT -DHAVE_ATOMIC'
   [ "${_CPU}" = 'x86' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
   export CURL_LDFLAG_EXTRAS_EXE
@@ -148,6 +148,7 @@ _VER="$1"
   # CURL_CFLAG_EXTRAS="-mretpoline ${CURL_CFLAG_EXTRAS}"
   # CURL_CFLAG_EXTRAS="-mspeculative-load-hardening ${CURL_CFLAG_EXTRAS}"
     export CURL_CC="clang${_CCSUFFIX}"
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -Wa,--noexecstack"
     if [ "${_OS}" != 'win' ]; then
       CURL_CFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${CURL_CFLAG_EXTRAS}"
       [ "${_OS}" = 'linux' ] && CURL_LDFLAG_EXTRAS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${CURL_LDFLAG_EXTRAS}"

@@ -40,7 +40,7 @@ _VER="$1"
   find . -name '*.Plo' -delete
   find . -name '*.pc'  -delete
 
-  _CFLAGS="${_OPTM} -fno-ident -Wa,--noexecstack -DMINGW_HAS_SECURE_API"
+  _CFLAGS="${_OPTM} -fno-ident -DMINGW_HAS_SECURE_API"
   [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
   options=''
@@ -58,6 +58,7 @@ _VER="$1"
 
     [ "${_OS}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
 
+    _CFLAGS="${_CFLAGS} -Wa,--noexecstack"
   # _CFLAGS="${_CFLAGS} -Xclang -cfguard"
 
     # shellcheck disable=SC2086

@@ -39,7 +39,7 @@ _VER="$1"
   fi
 
   export CC="${_CCPREFIX}gcc -static-libgcc"
-  export CFLAGS="${_OPTM} -fno-ident -O3 -Wa,--noexecstack"
+  export CFLAGS="${_OPTM} -fno-ident -O3"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
 
   # shellcheck disable=SC2086

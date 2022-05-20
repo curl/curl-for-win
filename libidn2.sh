@@ -40,6 +40,7 @@ _VER="$1"
 # fi
 
   export LDFLAGS="${_OPTM}"
+  export CFLAGS='-fno-ident -O3'
   ldonly=''
 
   if [ "${CC}" = 'mingw-clang' ]; then
@@ -52,11 +53,12 @@ _VER="$1"
     export AR="${_CCPREFIX}ar"
     export NM="${_CCPREFIX}nm"
     export RANLIB="${_CCPREFIX}ranlib"
+    CFLAGS="${CFLAGS} -Wa,--noexecstack"
   else
     export CC="${_CCPREFIX}gcc -static-libgcc"
   fi
 
-  export CFLAGS="${LDFLAGS} -fno-ident -O3 -Wa,--noexecstack"
+  CFLAGS="${LDFLAGS} ${CFLAGS}"
   LDFLAGS="${LDFLAGS}${ldonly}"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
   # shellcheck disable=SC2086
