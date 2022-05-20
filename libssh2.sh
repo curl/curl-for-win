@@ -88,7 +88,5 @@ _VER="$1"
   cp -f -p README        "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES "${_DST}/RELEASE-NOTES.txt"
 
-  [ -d ../zlib ] && cp -f -p ../zlib/README "${_DST}/COPYING-zlib.txt"
-
   ../_pkg.sh "$(pwd)/${_ref}"
 )
