@@ -27,11 +27,11 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   brotli.sh    clang    cmake
 #   libgsasl.sh  clang    autotools
 #   libidn2.sh   clang    autotools
-#   libressl.sh  clang    autotools
 #   nghttp2.sh   clang    cmake
 #   nghttp3.sh   clang    cmake
+#   ngtcp2.sh    clang    cmake
 #   openssl.sh   clang    proprietary
-#   ngtcp2.sh    gcc      autotools    TODO: move to cmake and clang (could not detect openssl, and even configure needs a manual patch)
+#   libressl.sh  clang    autotools
 #   libssh2.sh   clang    autotools
 #   curl.sh      clang    make         TODO: move to autotools/cmake
 
