@@ -58,9 +58,11 @@ _VER="$1"
   LDFLAGS="${LDFLAGS}${ldonly}"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
 
-  # FIXME: for cwd with spaces
-  options="${options} --with-libz --with-libz-prefix=$(realpath ../zlib/pkg/usr/local)"
-  # autotools seems to also need these to detect zlib:
+  # NOTE: root path with spaces will break all value with 'realpath'. But,
+  #       autotools breaks on spaces anyway, so let us leave it like that.
+
+  options="${options} --with-libz"
+  # These seem to work better than --with-libz-prefix=:
   CFLAGS="${CFLAGS} -I$(realpath ../zlib/pkg/usr/local/include)"
   LDFLAGS="${LDFLAGS} -L$(realpath ../zlib/pkg/usr/local/lib)"
 
