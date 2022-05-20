@@ -18,6 +18,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - Drop brotli support?
 #   - Use Universal CRT?
 #   - Switch to LibreSSL or rustls or Schannel?
+#   - Move all lib and header dependencies into the curl distro package?
 
 # Tools:
 #                compiler build

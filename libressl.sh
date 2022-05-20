@@ -22,7 +22,7 @@ _VER="$1"
 
   # Build
 
-  # As of 2022-05 (libressl 3.5.2), autotools does not fully support
+  # As of 2022-05 (LibreSSL 3.5.2), autotools does not fully support
   # cross-building using clang. It confuses the compiler with MSVC due to
   # matching its name with 'cl*'. This triggers using .lib extension instead of
   # .a for static and import libs.
@@ -31,7 +31,7 @@ _VER="$1"
   # Then a check fails in 'libtool' before trying to build any DLL. These are
   # bogus warnings [1][2], which are in fact errors, so DLLs are not being built.
   # The bogus checks can be neutralized via 's/droppeddeps=yes/#droppeddeps=yes/g'
-  # in ./ltmain.sh. But, DLL builds will still fail due thinking using MSVC and
+  # in ./ltmain.sh. But, DLL builds will still fail due to thinking using MSVC and
   # the '-link -EXPORT:<symbol>' option, which fails with clang. Manually setting
   # LD to the mingw-w64 ld tool (= "${_CCPREFIX}ld"), will also result in a wrong
   # command-line, with the '--whole-archive' option in it, and fail.
