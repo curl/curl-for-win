@@ -141,14 +141,6 @@ _VER="$1"
   # along with `libz.a` causing the linker to pick up the shared library.
   export DLL_LIBS='-Wl,-Bstatic -lz -Wl,-Bdynamic'
 
-  # Link further libs to libcurl DLL in static mode by
-  # deleting their implibs:
-  rm -f \
-    '../libidn2/pkg/usr/local/lib/libidn2.dll.a' \
-    '../libgsasl/pkg/usr/local/lib/libgsasl.dll.a' \
-    '../openssl/libcrypto.dll.a' \
-    '../openssl/libssl.dll.a'
-
   export CROSSPREFIX="${_CCPREFIX}"
 
   if [ "${CC}" = 'mingw-clang' ]; then

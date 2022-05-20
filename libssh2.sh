@@ -47,8 +47,6 @@ _VER="$1"
     export WITH_WINCNG=1
   fi
 
-  export LIBSSH2_DLL_A_SUFFIX=.dll
-
   export CROSSPREFIX="${_CCPREFIX}"
 
   if [ "${CC}" = 'mingw-clang' ]; then
