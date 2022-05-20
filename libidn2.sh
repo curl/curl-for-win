@@ -53,7 +53,6 @@ _VER="$1"
     export AR="${_CCPREFIX}ar"
     export NM="${_CCPREFIX}nm"
     export RANLIB="${_CCPREFIX}ranlib"
-    CFLAGS="${CFLAGS} -Wa,--noexecstack"
   else
     export CC="${_CCPREFIX}gcc -static-libgcc"
   fi

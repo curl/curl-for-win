@@ -148,7 +148,6 @@ _VER="$1"
   # CURL_CFLAG_EXTRAS="-mretpoline ${CURL_CFLAG_EXTRAS}"
   # CURL_CFLAG_EXTRAS="-mspeculative-load-hardening ${CURL_CFLAG_EXTRAS}"
     export CURL_CC="clang${_CCSUFFIX}"
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -Wa,--noexecstack"
     if [ "${_OS}" != 'win' ]; then
       CURL_CFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${CURL_CFLAG_EXTRAS}"
       [ "${_OS}" = 'linux' ] && CURL_LDFLAG_EXTRAS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${CURL_LDFLAG_EXTRAS}"

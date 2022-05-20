@@ -58,7 +58,6 @@ _VER="$1"
 
     [ "${_OS}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
 
-    _CFLAGS="${_CFLAGS} -Wa,--noexecstack"
   # _CFLAGS="${_CFLAGS} -Xclang -cfguard"
 
     # shellcheck disable=SC2086
