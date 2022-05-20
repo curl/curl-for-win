@@ -31,7 +31,6 @@ _VER="$1"
   find . -name '*.lai' -delete
   find . -name '*.Plo' -delete
   find . -name '*.pc'  -delete
-  find . -name '*.dll' -delete
   find . -name '*.exe' -delete
 
   # May be needed in the future if an "Automake version mismatch" occurs:

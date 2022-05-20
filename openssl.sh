@@ -56,7 +56,6 @@ _VER="$1"
     if [ "${_OS}" != 'win' ]; then
       options="${options} --target=${_TRIPLET} --sysroot=${_SYSROOT}"
       [ "${_OS}" = 'linux' ] && options="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${options}"
-    # export LDFLAGS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${LDFLAGS}"
     fi
     export AR="${_CCPREFIX}ar"
     export NM="${_CCPREFIX}nm"

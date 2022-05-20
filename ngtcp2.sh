@@ -31,19 +31,15 @@ _VER="$1"
   find . -name '*.lai' -delete
   find . -name '*.Plo' -delete
   find . -name '*.pc'  -delete
-  find . -name '*.dll' -delete
-  find . -name '*.exe' -delete
 
   [ -d ../libressl ] && export OPENSSL_PATH='../../../libressl'
   [ -d ../openssl ]  && export OPENSSL_PATH='../../../openssl'
   if [ -n "${OPENSSL_PATH}" ]; then
-    export OPENSSL_CFLAGS="-L${OPENSSL_PATH}/lib -I${OPENSSL_PATH}/include"
-    export OPENSSL_LIBS='-lssl -lcrypto'
+    export OPENSSL_CFLAGS="-I${OPENSSL_PATH}/include"
   fi
 
   export CC="${_CCPREFIX}gcc -static-libgcc"
-  export LDFLAGS="${_OPTM}"
-  export CFLAGS="${LDFLAGS} -fno-ident"
+  export CFLAGS="${_OPTM} -fno-ident"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
 
   # shellcheck disable=SC2086

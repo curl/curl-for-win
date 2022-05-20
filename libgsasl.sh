@@ -33,8 +33,7 @@ _VER="$1"
   # Requires: autopoint (sometimes offered by the gettext package)
   [ -f 'Makefile' ] || autoreconf --force --install
 
-  export LDFLAGS="${_OPTM}"
-  ldonly=''
+  export CFLAGS="${_OPTM} -fno-ident"
 
   if [ "${CC}" = 'mingw-clang' ]; then
 
@@ -45,8 +44,7 @@ _VER="$1"
     export CC='clang'
     if [ "${_OS}" != 'win' ]; then
       options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
-      LDFLAGS="${LDFLAGS} -target ${_TRIPLET} --sysroot ${_SYSROOT}"
-      [ "${_OS}" = 'linux' ] && ldonly="${ldonly} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
+      CFLAGS="${CFLAGS} -target ${_TRIPLET} --sysroot ${_SYSROOT}"
     fi
     export AR="${_CCPREFIX}ar"
     export NM="${_CCPREFIX}nm"
@@ -56,8 +54,6 @@ _VER="$1"
     export CC="${_CCPREFIX}gcc -static-libgcc"
   fi
 
-  export CFLAGS="${LDFLAGS} -fno-ident"
-  LDFLAGS="${LDFLAGS}${ldonly}"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
   # shellcheck disable=SC2086
   ./configure ${options} \

@@ -18,11 +18,6 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  # Prepare build
-
-  find . -name '*.dll' -delete
-  find . -name '*.def' -delete
-
   # Build
 
   export ARCH
@@ -34,7 +29,6 @@ _VER="$1"
 
   export ZLIB_PATH=../../zlib/pkg/usr/local
   export WITH_ZLIB=1
-  export LINK_ZLIB_STATIC=1
 
   [ -d ../libressl ] && LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -DNOCRYPT"
 
@@ -43,10 +37,7 @@ _VER="$1"
     export OPENSSL_PATH=../../openssl
     LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -DOPENSSL_SUPPRESS_DEPRECATED"
   fi
-  if [ -n "${OPENSSL_PATH:-}" ]; then
-    export OPENSSL_LIBPATH="${OPENSSL_PATH}"
-    export OPENSSL_LIBS_DYN='crypto.dll'
-  else
+  if [ -z "${OPENSSL_PATH:-}" ]; then
     export WITH_WINCNG=1
   fi
 
@@ -54,11 +45,8 @@ _VER="$1"
 
   if [ "${CC}" = 'mingw-clang' ]; then
     export LIBSSH2_CC="clang${_CCSUFFIX}"
-    export LIBSSH2_LDFLAG_EXTRAS=''
     if [ "${_OS}" != 'win' ]; then
       LIBSSH2_CFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${LIBSSH2_CFLAG_EXTRAS}"
-      [ "${_OS}" = 'linux' ] && LIBSSH2_LDFLAG_EXTRAS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${LIBSSH2_LDFLAG_EXTRAS}"
-      LIBSSH2_LDFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${LIBSSH2_LDFLAG_EXTRAS}"
     fi
   # LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -Xclang -cfguard"
   fi
