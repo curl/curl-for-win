@@ -54,7 +54,20 @@ _VER="$1"
     options="${options} -Wno-unused-command-line-argument"
     export CC=clang
     if [ "${_OS}" != 'win' ]; then
-      options="${options} --target=${_TRIPLET} --sysroot=${_SYSROOT}"
+      # Include the target specifier in the CC variable. This hack is necessary
+      # because OpenSSL 3.x detects the symbol prefix for dynamically generated
+      # assembly source code by running ${CC} and extracting the value of the
+      # macro __USER_LABEL_PREFIX__ [1]. On macOS, with pure 'clang', this
+      # returns '_' (as of Homebrew LLVM 13.0.1). This causes all exported
+      # assembly function names getting an underscore prefix. Then, when linking
+      # OpenSSL libraries into executables, these symbols will not be found,
+      # breaking the builds, including openssl.exe and OpenSSL DLLs.
+      # [1]: https://github.com/openssl/openssl/blob/openssl-3.0.2/crypto/perlasm/x86_64-xlate.pl#L91
+      # On Linux, this was not an issue, and it seems to affect x64 targets
+      # only. But enable the workaround in all cross-builds anyway.
+      CC="${CC} --target=${_TRIPLET}"
+
+      options="${options} --sysroot=${_SYSROOT}"
       [ "${_OS}" = 'linux' ] && options="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${options}"
     fi
     export AR="${_CCPREFIX}ar"
