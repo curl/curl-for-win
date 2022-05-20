@@ -36,7 +36,7 @@ _VER="$1"
   # Requires: autopoint (sometimes offered by the gettext package)
   [ -f 'Makefile' ] || autoreconf --force --install
 
-  export CFLAGS="${_OPTM} -fno-ident"
+  export CFLAGS="${_OPTM} -fno-ident -O3 -Wa,--noexecstack"
 
   if [ "${CC}" = 'mingw-clang' ]; then
     export CC='clang'

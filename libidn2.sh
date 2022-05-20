@@ -56,7 +56,7 @@ _VER="$1"
     export CC="${_CCPREFIX}gcc -static-libgcc"
   fi
 
-  export CFLAGS="${LDFLAGS} -fno-ident"
+  export CFLAGS="${LDFLAGS} -fno-ident -O3 -Wa,--noexecstack"
   LDFLAGS="${LDFLAGS}${ldonly}"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
   # shellcheck disable=SC2086
