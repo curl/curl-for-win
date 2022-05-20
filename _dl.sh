@@ -423,7 +423,9 @@ if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*schannel*}" = "${_BRANCH}" ]; then
   if [ "${_BRANCH#*libressl*}" = "${_BRANCH}" ]; then
-    # QUIC fork: https://github.com/quictls/openssl.git
+    # QUIC fork:
+    #   https://github.com/quictls/openssl.git
+    #   https://github.com/quictls/openssl/archive/refs/tags/openssl-{ver}.tar.gz
     if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
       OPENSSL_VER_='3.0.0-beta2'
       OPENSSL_HASH=e76ab22879201b12f014393ee4becec7f264d8f6955b1036839128002868df71
