@@ -32,7 +32,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   nghttp3.sh   clang    cmake
 #   openssl.sh   clang    proprietary
 #   ngtcp2.sh    gcc      autotools    TODO: move to cmake and clang (could not detect openssl, and even configure needs a manual patch)
-#   libssh2.sh   clang    make         TODO: move to autotools/cmake
+#   libssh2.sh   clang    autotools
 #   curl.sh      clang    make         TODO: move to autotools/cmake
 
 cd "$(dirname "$0")"

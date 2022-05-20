@@ -107,7 +107,8 @@ _VER="$1"
   options="${options}-schannel-winssl"
   if [ -d ../libssh2 ]; then
     options="${options}-ssh2"
-    export LIBSSH2_PATH=../../libssh2
+    export LIBSSH2_PATH=../../libssh2/pkg/usr/local
+    CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L${LIBSSH2_PATH}/lib"
   fi
   if [ -d ../nghttp2 ]; then
     options="${options}-nghttp2"

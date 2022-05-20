@@ -18,50 +18,99 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
+  [ "${_OS}" != 'win' ] && options="--build=${_CROSS_HOST} --host=${_TRIPLET}"
+
   # Build
 
-  export ARCH
-  [ "${_CPU}" = 'x86' ] && ARCH='w32'
-  [ "${_CPU}" = 'x64' ] && ARCH='w64'
+  rm -r -f pkg
 
-  export LIBSSH2_CFLAG_EXTRAS='-fno-ident -O3 -Wa,--noexecstack -DHAVE_STRTOI64 -DLIBSSH2_DH_GEX_NEW=1 -DHAVE_DECL_SECUREZEROMEMORY=1 -DHAVE_EVP_AES_128_CTR=1'
-  [ "${_CPU}" = 'x86' ] && LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
+  # Skip building tests
+  sed -i.bak 's| tests||g' ./Makefile.am
 
-  export ZLIB_PATH=../../zlib/pkg/usr/local
-  export WITH_ZLIB=1
+  # To fix this bizarre error when executing 'make':
+  #   configure.ac:39: error: version mismatch.  This is Automake 1.16.4,
+  #   configure.ac:39: but the definition used by this AM_INIT_AUTOMAKE
+  #   configure.ac:39: comes from Automake 1.16.3.  You should recreate
+  #   configure.ac:39: aclocal.m4 with aclocal and run automake again.
+  #   [...]
+  # Requires: autopoint (sometimes offered by the gettext package)
+  [ -f 'Makefile' ] || autoreconf --force --install
 
-  if [ -d ../libressl ]; then
-    export OPENSSL_PATH=../../libressl
-    LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -DNOCRYPT"
-  fi
-  if [ -d ../openssl ]; then
-    export OPENSSL_PATH=../../openssl
-    LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -DOPENSSL_SUPPRESS_DEPRECATED"
-  fi
-  if [ -z "${OPENSSL_PATH:-}" ]; then
-    export WITH_WINCNG=1
-  fi
-
-  export CROSSPREFIX="${_CCPREFIX}"
+  export LDFLAGS="${_OPTM}"
+  ldonly=''
 
   if [ "${CC}" = 'mingw-clang' ]; then
-    export LIBSSH2_CC="clang${_CCSUFFIX}"
+    export CC='clang'
     if [ "${_OS}" != 'win' ]; then
-      LIBSSH2_CFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${LIBSSH2_CFLAG_EXTRAS}"
+      options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
+      LDFLAGS="${LDFLAGS} -target ${_TRIPLET} --sysroot ${_SYSROOT}"
+      [ "${_OS}" = 'linux' ] && ldonly="${ldonly} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
     fi
-  # LIBSSH2_CFLAG_EXTRAS="${LIBSSH2_CFLAG_EXTRAS} -Xclang -cfguard"
+    export AR="${_CCPREFIX}ar"
+    export NM="${_CCPREFIX}nm"
+    export RANLIB="${_CCPREFIX}ranlib"
+  else
+    export CC="${_CCPREFIX}gcc -static-libgcc"
   fi
 
-  ${_MAKE} --jobs 2 --directory win32 clean
-  ${_MAKE} --jobs 2 --directory win32 lib
+  export CFLAGS="${LDFLAGS} -fno-ident -O3 -Wa,--noexecstack -fno-builtin -fno-strict-aliasing -Wall -DHAVE_DECL_SECUREZEROMEMORY=1"
+  LDFLAGS="${LDFLAGS}${ldonly}"
+  [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
+
+  # FIXME: for cwd with spaces
+  options="${options} --with-libz --with-libz-prefix=$(realpath ../zlib/pkg/usr/local)"
+  # autotools seems to also need these to detect zlib:
+  CFLAGS="${CFLAGS} -I$(realpath ../zlib/pkg/usr/local/include)"
+  LDFLAGS="${LDFLAGS} -L$(realpath ../zlib/pkg/usr/local/lib)"
+
+  if [ -d ../libressl ]; then
+    options="${options} --with-crypto=openssl --with-libssl-prefix=$(realpath ../libressl/pkg/C:/Windows/libressl)"
+    CFLAGS="${CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DNOCRYPT"
+  elif [ -d ../openssl ]; then
+    options="${options} --with-crypto=openssl --with-libssl-prefix=$(realpath ../openssl/pkg/C:/Windows/System32/OpenSSL)"
+    CFLAGS="${CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
+    # Workaround for renamed directory in OpenSSL 3.x:
+    [ "${_CPU}" = 'x64' ] && LDFLAGS="${LDFLAGS} -L$(realpath ../openssl/pkg/C:/Windows/System32/OpenSSL)/lib64"
+  else
+    options="${options} --with-crypto=wincng"
+  fi
+
+  # shellcheck disable=SC2086
+  ./configure ${options} \
+    --disable-dependency-tracking \
+    --disable-silent-rules \
+    --disable-rpath \
+    --disable-debug \
+    --enable-hidden-symbols \
+    --enable-static \
+    --disable-shared \
+    --disable-examples-build \
+    --prefix=/usr/local \
+    --silent
+  make --jobs 2 clean >/dev/null
+  make --jobs 2 install "DESTDIR=$(pwd)/pkg" # >/dev/null # V=1
+
+  # DESTDIR= + --prefix=
+  _pkg='pkg/usr/local'
+
+  # Build fixups for clang
+
+  # 'configure' misdetects CC=clang as MSVC and then uses '.lib'
+  # extension. Rename these to '.a':
+  if [ -f "${_pkg}/lib/libssh2.lib" ]; then
+    sed -i.bak "s|\.lib'$|.a'|g" "${_pkg}/lib/libssh2.la"
+    mv "${_pkg}/lib/libssh2.lib" "${_pkg}/lib/libssh2.a"
+  fi
 
   # Make steps for determinism
 
   readonly _ref='NEWS'
 
-  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives win32/*.a
+  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
 
-  touch -c -r "${_ref}" win32/*.a
+  touch -c -r "${_ref}" ${_pkg}/lib/*.a
+  touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
+  touch -c -r "${_ref}" ${_pkg}/include/*.h
 
   # Create package
 
@@ -71,7 +120,7 @@ _VER="$1"
 
   mkdir -p "${_DST}/docs"
   mkdir -p "${_DST}/include"
-  mkdir -p "${_DST}/lib"
+  mkdir -p "${_DST}/lib/pkgconfig"
 
   (
     set +x
@@ -81,12 +130,13 @@ _VER="$1"
       fi
     done
   )
-  cp -f -p include/*.h   "${_DST}/include/"
-  cp -f -p win32/*.a     "${_DST}/lib/"
-  cp -f -p NEWS          "${_DST}/NEWS.txt"
-  cp -f -p COPYING       "${_DST}/COPYING.txt"
-  cp -f -p README        "${_DST}/README.txt"
-  cp -f -p RELEASE-NOTES "${_DST}/RELEASE-NOTES.txt"
+  cp -f -p ${_pkg}/lib/*.a            "${_DST}/lib/"
+  cp -f -p ${_pkg}/lib/pkgconfig/*.pc "${_DST}/lib/pkgconfig/"
+  cp -f -p ${_pkg}/include/*.h        "${_DST}/include/"
+  cp -f -p NEWS                       "${_DST}/NEWS.txt"
+  cp -f -p COPYING                    "${_DST}/COPYING.txt"
+  cp -f -p README                     "${_DST}/README.txt"
+  cp -f -p RELEASE-NOTES              "${_DST}/RELEASE-NOTES.txt"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

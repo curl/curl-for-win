@@ -87,10 +87,10 @@ _VER="$1"
 
   # Delete the implib, we need the static lib only
   rm -f ${_pkg}/lib/*.dll.a
-  # Stick to the name used by win32/Makefile.gcc
+  # Stick to the name expected by everyone
   mv -f ${_pkg}/lib/libzlibstatic.a ${_pkg}/lib/libz.a
 
-  # libssh2 and curl makefile.m32 assume the headers and lib to be in the
+  # curl Makefile.m32 assume the headers and lib to be in the
   # same directory. Make sure to copy the static library only:
   cp -f -p ${_pkg}/include/*.h "${_pkg}/"
   cp -f -p ${_pkg}/lib/libz.a  "${_pkg}/"
