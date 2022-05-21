@@ -86,9 +86,6 @@ _VER="$1"
   # DESTDIR= + CMAKE_INSTALL_PREFIX
   _pkg='pkg/usr/local'
 
-  # Delete the implib, we need the static lib only
-  rm -f ${_pkg}/lib/*.dll.a
-
   # Make steps for determinism
 
   readonly _ref='ChangeLog'
