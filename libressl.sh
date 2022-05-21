@@ -159,7 +159,14 @@ _VER="$1"
   cp -f -p README.md                     "${_DST}/"
 
   # Copy libs to an OpenSSL-compatible location so that libssh2 and curl find them.
+  # FIXME: delete this
   cp -f -p "${_pkg}"/lib/*.a ./
+
+  # Symlink installed tree to a folder with no special characters.
+  # Some tools (e.g CMake) will become weird when colons appear in a filename.
+
+  mkdir -p "${_pkr}/usr"
+  ln -sf "../../${_pkg}" "${_pkr}/usr/local"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

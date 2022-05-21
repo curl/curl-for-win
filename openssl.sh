@@ -181,5 +181,16 @@ _VER="$1"
     cp -f -p ms/applink.c "${_DST}/include/openssl/"
   fi
 
+  # Symlink the lib location that everyone expects to find.
+  # Vs. the native lib64 which is seldom auto-detected.
+
+  [ "${_CPU}" = 'x64' ] && ln -sf "${_pkg}${_lib}" "${_pkg}"/lib
+
+  # Symlink installed tree to a folder with no special characters.
+  # Some tools (e.g CMake) will become weird when colons appear in a filename.
+
+  mkdir -p "${_pkr}/usr"
+  ln -sf "../../${_pkg}" "${_pkr}/usr/local"
+
   ../_pkg.sh "$(pwd)/${_ref}"
 )
