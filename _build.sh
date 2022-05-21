@@ -255,7 +255,7 @@ build_single_target() {
       "$("${_CCPREFIX}gcc" -dumpversion | grep -a -o -E '^[0-9]+')")"
   fi
 
-  echo ".gcc-mingw-w64-${_machine} $("${_CCPREFIX}gcc" -dumpversion)" >> "${_BLD}"
+  [ "${CC}" = 'mingw-clang' ] || echo ".gcc-mingw-w64-${_machine} $("${_CCPREFIX}gcc" -dumpversion)" >> "${_BLD}"
   echo ".binutils-mingw-w64-${_machine} $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')" >> "${_BLD}"
 
   # Unified, per-target package: Initialize
