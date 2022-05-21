@@ -13,6 +13,8 @@ fi
 
 _cdo="$(pwd)"
 
+_NAMX="$(printf '%s' "${_NAM}" | tr '_' '-')"
+
 if [ "${_NAM}" != "${_UNIPKG}" ]; then
   # First, merge this package into the unified package
   unipkg="${_UNIPKG}"
@@ -31,7 +33,7 @@ if [ "${_NAM}" != "${_UNIPKG}" ]; then
       done
       rsync --archive --update "${_DST}/docs" "${unipkg}"
     else
-      _NAM_DEP="${unipkg}/dep/$(printf '%s' "${_NAM}" | tr '_' '-')"
+      _NAM_DEP="${unipkg}/dep/${_NAMX}"
       mkdir -p "${_NAM_DEP}"
       cp -f -p "${_DST}"/*.* "${_NAM_DEP}"
     fi
@@ -163,7 +165,7 @@ create_pkg "$1" '.tar.xz'
 create_pkg "$1" '.zip'
 
 if [ "${_NAM}" != "${_UNIPKG}" ]; then
-  ver="${_NAM} ${_VER}"
+  ver="${_NAMX} ${_VER}"
   echo "${ver}" >> "${_UNIMFT}"
   if ! grep -q -a -F "${ver}" -- "${_BLD}"; then
     echo "${ver}" >> "${_BLD}"
