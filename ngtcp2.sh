@@ -52,6 +52,17 @@ _VER="$1"
   [ "${_OS}" = 'mac' ] && options="${options} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
   options="${options} -DENABLE_STATIC_LIB=1"
   options="${options} -DENABLE_SHARED_LIB=0"
+  if [ -d ../openssl_quic ]; then
+    options="${options} -DENABLE_OPENSSL=1"
+    options="${options} -DHAVE_SSL_IS_QUIC=1"  # Detection fails with a long list of unfixable errors, so force it.
+    options="${options} -DOPENSSL_ROOT_DIR=../openssl_quic/pkg/usr/local"
+    options="${options} -DOPENSSL_INCLUDE_DIR=../openssl_quic/pkg/usr/local/include"
+  fi
+  if [ -d ../nghttp3 ]; then
+    options="${options} -DLIBNGHTTP3_LIBRARY=../nghttp3/pkg/usr/local/lib"
+    options="${options} -DLIBNGHTTP3_INCLUDE_DIR=../nghttp3/pkg/usr/local/include"
+  fi
+  options="${options} -DLIBEV_LIBRARY="  # To avoid finding any non-cross copies
   options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
   options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
 
@@ -85,6 +96,13 @@ _VER="$1"
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
   _pkg='pkg/usr/local'
+
+  # Rename static libs so they get found by dependents
+
+  if [ -d ../openssl_quic ]; then
+    mv -f ${_pkg}/lib/libngtcp2_crypto_openssl_static.a ${_pkg}/lib/libngtcp2_crypto_openssl.a
+  fi
+  mv -f ${_pkg}/lib/libngtcp2_static.a ${_pkg}/lib/libngtcp2.a
 
   # Make steps for determinism
 
