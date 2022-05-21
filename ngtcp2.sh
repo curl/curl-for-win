@@ -65,6 +65,9 @@ _VER="$1"
   options="${options} -DLIBEV_LIBRARY="  # To avoid finding any non-cross copies
   options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
   options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
+  # We do not need C++ with ENABLE_LIB_ONLY, so make sure to skip the
+  # detection logic and all the potential detection issues with it.
+  options="${options} -DCMAKE_CXX_COMPILER_WORKS=1"
 
   if [ "${CC}" = 'mingw-clang' ]; then
     unset CC
@@ -78,9 +81,7 @@ _VER="$1"
       "-DCMAKE_SYSROOT=${_SYSROOT}" \
       "-DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}" \
       "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
-      "-DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}" \
       "-DCMAKE_C_COMPILER=clang${_CCSUFFIX}" \
-      "-DCMAKE_CXX_COMPILER=clang++${_CCSUFFIX}" \
       "-DCMAKE_C_FLAGS=${_CFLAGS}"
   else
     unset CC
@@ -88,7 +89,6 @@ _VER="$1"
     # shellcheck disable=SC2086
     cmake . ${options} ${opt_gmsys} \
       "-DCMAKE_C_COMPILER=${_CCPREFIX}gcc" \
-      "-DCMAKE_CXX_COMPILER=${_CCPREFIX}g++" \
       "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}"
   fi
 
