@@ -159,22 +159,26 @@ if [ -s "${SIGN_CODE_KEY}" ]; then
   "$(dirname "$0")/osslsigncode-local" --version
 fi
 
+clangver=''
 if [ "${CC}" = 'mingw-clang' ]; then
-  echo ".clang$("clang${_CCSUFFIX}" --version | grep -o -a -E ' [0-9]*\.[0-9]*[\.][0-9]*')" >> "${_BLD}"
+  clangver="clang$("clang${_CCSUFFIX}" --version | grep -o -a -E ' [0-9]*\.[0-9]*[\.][0-9]*')"
 fi
 
-ver=''
+mingwver=''
 case "${_OS}" in
   mac)
-    ver="$(brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
+    mingwver="$(brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
   linux)
-    [ -n "${ver}" ] || ver="$(dpkg   --status       mingw-w64-common)"
-    [ -n "${ver}" ] || ver="$(rpm    --query        mingw64-crt)"
-    [ -n "${ver}" ] || ver="$(pacman --query --info mingw-w64-crt)"
-    [ -n "${ver}" ] && ver="$(printf '%s' "${ver}" | grep -a '^Version' | grep -a -m 1 -o -E '[0-9.-]+')"
+    [ -n "${mingwver}" ] || mingwver="$(dpkg   --status       mingw-w64-common)"
+    [ -n "${mingwver}" ] || mingwver="$(rpm    --query        mingw64-crt)"
+    [ -n "${mingwver}" ] || mingwver="$(pacman --query --info mingw-w64-crt)"
+    [ -n "${mingwver}" ] && mingwver="$(printf '%s' "${mingwver}" | grep -a '^Version' | grep -a -m 1 -o -E '[0-9.-]+')"
     ;;
 esac
-[ -n "${ver}" ] && echo ".mingw-w64 ${ver}" >> "${_BLD}"
+[ -n "${mingwver}" ] && mingwver="mingw-w64 ${mingwver}"
+
+[ -n "${clangver}" ] && echo ".${clangver}" >> "${_BLD}"
+[ -n "${mingwver}" ] && echo ".${mingwver}" >> "${_BLD}"
 
 _ori_path="${PATH}"
 
@@ -255,12 +259,30 @@ build_single_target() {
       "$("${_CCPREFIX}gcc" -dumpversion | grep -a -o -E '^[0-9]+')")"
   fi
 
-  [ "${CC}" = 'mingw-clang' ] || echo ".gcc-mingw-w64-${_machine} $("${_CCPREFIX}gcc" -dumpversion)" >> "${_BLD}"
-  echo ".binutils-mingw-w64-${_machine} $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')" >> "${_BLD}"
-
   # Unified, per-target package: Initialize
   export _UNIPKG="curl-uni-${CURL_VER_}${_REVSUFFIX}${_PKGSUFFIX}${_FLAV}"
   rm -r -f "${_UNIPKG:?}"
+  mkdir -p "${_UNIPKG}"
+  export _UNIMFT="${_UNIPKG}/BUILD-MANIFEST.txt"
+  rm -f "${_UNIMFT}"
+
+  gccver=''
+  [ "${CC}" = 'mingw-clang' ] || gccver="gcc-mingw-w64-${_machine} $("${_CCPREFIX}gcc" -dumpversion)"
+  binver="binutils-mingw-w64-${_machine} $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
+
+  {
+    [ -n "${clangver}" ] && echo ".${clangver}"
+    [ -n "${gccver}" ]   && echo ".${gccver}"
+    [ -n "${mingwver}" ] && echo ".${mingwver}"
+    echo ".${binver}"
+  } >> "${_BLD}"
+
+  {
+    [ -n "${clangver}" ] && echo ".${clangver}"
+    [ -n "${gccver}" ]   && echo ".${gccver}"
+    [ -n "${mingwver}" ] && echo ".${mingwver}"
+    echo ".${binver}"
+  } >> "${_UNIMFT}"
 
   time ./zlib.sh                 "${ZLIB_VER_}"
   time ./brotli.sh             "${BROTLI_VER_}"
@@ -282,7 +304,22 @@ build_single_target() {
   export _BAS="${_UNIPKG}"
   export _DST="${_UNIPKG}"
 
-  ./_pkg.sh "${_DST}/CHANGES.txt"
+  readonly _ref="${_DST}/CHANGES.txt"
+
+  touch -c -r "${_ref}" "${_UNIMFT}"
+
+  # Link to the build log
+  if [ -n "${_LOGURL}" ]; then
+    _fn="${_DST}/BUILD-LOG.url"
+    cat <<EOF > "${_fn}"
+[InternetShortcut]
+URL=${_LOGURL}
+EOF
+    unix2dos --quiet --keepdate "${_fn}"
+    touch -c -r "${_ref}" "${_fn}"
+  fi
+
+  ./_pkg.sh "${_ref}"
 }
 
 # Build binaries

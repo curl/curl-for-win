@@ -164,6 +164,7 @@ create_pkg "$1" '.zip'
 
 if [ "${_NAM}" != "${_UNIPKG}" ]; then
   ver="${_NAM} ${_VER}"
+  echo "${ver}" >> "${_UNIMFT}"
   if ! grep -q -a -F "${ver}" -- "${_BLD}"; then
     echo "${ver}" >> "${_BLD}"
   fi
