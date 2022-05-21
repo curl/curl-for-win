@@ -19,7 +19,7 @@ if [ "${_NAM}" != "${_UNIPKG}" ]; then
   {
     [ -d "${_DST}/bin" ]      && rsync --archive --update "${_DST}/bin"     "${unipkg}"
     [ -d "${_DST}/include" ]  && rsync --archive --update "${_DST}/include" "${unipkg}"
-    [ "${_NAM}" = 'libssh2' ] && rsync --archive --update "${_DST}/docs"    "${unipkg}/more/${_NAM}"
+    [ "${_NAM}" = 'libssh2' ] && rsync --archive --update "${_DST}/docs"    "${unipkg}/dep/${_NAM}"
     if [ -d "${_DST}/lib64" ]; then  # openssl
       rsync --archive --update "${_DST}/lib64/" "${unipkg}/lib/"
     else
@@ -31,9 +31,9 @@ if [ "${_NAM}" != "${_UNIPKG}" ]; then
       done
       rsync --archive --update "${_DST}/docs" "${unipkg}"
     else
-      _NAM_MORE="${unipkg}/more/$(printf '%s' "${_NAM}" | tr '_' '-')"
-      mkdir -p "${_NAM_MORE}"
-      cp -f -p "${_DST}"/*.* "${_NAM_MORE}"
+      _NAM_DEP="${unipkg}/dep/$(printf '%s' "${_NAM}" | tr '_' '-')"
+      mkdir -p "${_NAM_DEP}"
+      cp -f -p "${_DST}"/*.* "${_NAM_DEP}"
     fi
   }
 
