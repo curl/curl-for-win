@@ -22,19 +22,20 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - delete gcc logic
 
 # Tools:
-#                compiler build
-#                -------- -----------
-#   zlib.sh      clang    cmake
-#   brotli.sh    clang    cmake
-#   libgsasl.sh  clang    autotools
-#   libidn2.sh   clang    autotools
-#   nghttp2.sh   clang    cmake
-#   nghttp3.sh   clang    cmake
-#   ngtcp2.sh    clang    cmake
-#   openssl.sh   clang    proprietary
-#   libressl.sh  clang    autotools
-#   libssh2.sh   clang    autotools
-#   curl.sh      clang    make         TODO: move to autotools/cmake
+#                    compiler build
+#                    -------- -----------
+#   zlib.sh          clang    cmake
+#   brotli.sh        clang    cmake
+#   libgsasl.sh      clang    autotools
+#   libidn2.sh       clang    autotools
+#   nghttp2.sh       clang    cmake
+#   nghttp3.sh       clang    cmake
+#   ngtcp2.sh        clang    cmake
+#   openssl.sh       clang    proprietary
+#   openssl_quic.sh  clang    proprietary
+#   libressl.sh      clang    autotools    TODO: -> cmake?
+#   libssh2.sh       clang    autotools    TODO: -> cmake?
+#   curl.sh          clang    make         TODO: -> autotools/cmake
 
 cd "$(dirname "$0")"
 
