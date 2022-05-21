@@ -264,7 +264,6 @@ build_single_target() {
   rm -r -f "${_UNIPKG:?}"
   mkdir -p "${_UNIPKG}"
   export _UNIMFT="${_UNIPKG}/BUILD-MANIFEST.txt"
-  rm -f "${_UNIMFT}"
 
   gccver=''
   [ "${CC}" = 'mingw-clang' ] || gccver="gcc-mingw-w64-${_machine} $("${_CCPREFIX}gcc" -dumpversion)"
