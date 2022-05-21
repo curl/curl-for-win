@@ -30,7 +30,7 @@ _VER="$1"
 
   # Build
 
-  rm -r -f pkg CMakeFiles CMakeCache.txt cmake_install.cmake
+  rm -r -f pkg CMakeFiles CMakeCache.txt ./*.cmake
 
   find . -name '*.o'   -delete
   find . -name '*.obj' -delete
