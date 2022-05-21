@@ -447,8 +447,8 @@ if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*schannel*}" = "${_BRANCH}" ]; then
   if [ "${_BRANCH#*quic*}" != "${_BRANCH}" ]; then
-    live_dl openssl-quic "${OPENSSL_QUIC_VER_}"
-    live_xt openssl-quic "${OPENSSL_QUIC_HASH}"
+    live_dl openssl_quic "${OPENSSL_QUIC_VER_}"
+    live_xt openssl_quic "${OPENSSL_QUIC_HASH}"
   elif [ "${_BRANCH#*libressl*}" = "${_BRANCH}" ]; then
     # QUIC fork:
     #   https://github.com/quictls/openssl.git
