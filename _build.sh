@@ -18,7 +18,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - Drop brotli support?
 #   - Use Universal CRT?
 #   - Switch to LibreSSL or rustls or Schannel?
-#   - Move all lib and header dependencies into the curl distro package?
 #   - delete gcc logic
 
 # Tools:
@@ -87,6 +86,8 @@ elif [ "${_BRANCH#*micro*}" != "${_BRANCH}" ]; then
   _FLAV='-micro'
 elif [ "${_BRANCH#*mini*}" != "${_BRANCH}" ]; then
   _FLAV='-mini'
+elif [ "${_BRANCH#*quic*}" != "${_BRANCH}" ]; then
+  _FLAV='-quic'
 fi
 
 # For 'configure'-based builds.
@@ -257,6 +258,10 @@ build_single_target() {
   echo ".gcc-mingw-w64-${_machine} $("${_CCPREFIX}gcc" -dumpversion)" >> "${_BLD}"
   echo ".binutils-mingw-w64-${_machine} $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')" >> "${_BLD}"
 
+  # Unified, per-target package: Initialize
+  export _UNIPKG="curl-uni-${CURL_VER_}${_REVSUFFIX}${_PKGSUFFIX}${_FLAV}"
+  rm -r -f "${_UNIPKG:?}"
+
   time ./zlib.sh                 "${ZLIB_VER_}"
   time ./brotli.sh             "${BROTLI_VER_}"
   time ./libgsasl.sh         "${LIBGSASL_VER_}"
@@ -269,6 +274,15 @@ build_single_target() {
   time ./ngtcp2.sh             "${NGTCP2_VER_}"
   time ./libssh2.sh           "${LIBSSH2_VER_}"
   time ./curl.sh                 "${CURL_VER_}"
+
+  # Unified, per-target package: Build
+  export _NAM="${_UNIPKG}"
+  export _VER="${CURL_VER_}"
+  export _OUT="${_UNIPKG}"
+  export _BAS="${_UNIPKG}"
+  export _DST="${_UNIPKG}"
+
+  ./_pkg.sh "${_DST}/CHANGES.txt"
 }
 
 # Build binaries

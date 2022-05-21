@@ -13,31 +13,62 @@ fi
 
 _cdo="$(pwd)"
 
-_fn="${_DST}/BUILD-README.txt"
-cat <<EOF > "${_fn}"
+if [ "${_NAM}" != "${_UNIPKG}" ]; then
+  # First, merge this package into the unified package
+  unipkg="${_UNIPKG}"
+  {
+    [ -d "${_DST}/bin" ]      && rsync --archive --update "${_DST}/bin"     "${unipkg}"
+    [ -d "${_DST}/include" ]  && rsync --archive --update "${_DST}/include" "${unipkg}"
+    [ "${_NAM}" = 'libssh2' ] && rsync --archive --update "${_DST}/docs"    "${unipkg}/more/${_NAM}"
+    if [ -d "${_DST}/lib64" ]; then  # openssl
+      rsync --archive --update "${_DST}/lib64/" "${unipkg}/lib/"
+    else
+      rsync --archive --update "${_DST}/lib"    "${unipkg}"
+    fi
+    if [ "${_NAM}" = 'curl' ]; then
+      find "${_DST}" -maxdepth 1 -type f -name '*.*' -a -not -name 'COPYING-*.*' | while read -r f; do
+        cp -f -p "${f}" "${unipkg}"
+      done
+      rsync --archive --update "${_DST}/docs" "${unipkg}"
+    else
+      _NAM_MORE="${unipkg}/more/$(printf '%s' "${_NAM}" | tr '_' '-')"
+      mkdir -p "${_NAM_MORE}"
+      cp -f -p "${_DST}"/*.* "${_NAM_MORE}"
+    fi
+  }
+
+  _fn="${_DST}/BUILD-README.txt"
+  cat <<EOF > "${_fn}"
 Visit the project page for details about these builds and the list of changes:
 
-   ${_URL}
+  ${_URL}
 EOF
-touch -c -r "$1" "${_fn}"
+  touch -c -r "$1" "${_fn}"
+  [ "${_NAM}" = 'curl' ] && cp -f -p "${_fn}" "${unipkg}"
 
-_fn="${_DST}/BUILD-HOMEPAGE.url"
-cat <<EOF > "${_fn}"
+  _fn="${_DST}/BUILD-HOMEPAGE.url"
+  cat <<EOF > "${_fn}"
 [InternetShortcut]
 URL=${_URL}
 EOF
-unix2dos --quiet --keepdate "${_fn}"
-touch -c -r "$1" "${_fn}"
+  unix2dos --quiet --keepdate "${_fn}"
+  touch -c -r "$1" "${_fn}"
+  [ "${_NAM}" = 'curl' ] && cp -f -p "${_fn}" "${unipkg}"
 
-find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' +
-# NOTE: Not effective on MSYS2:
-find "${_DST}" -name '*.a' -exec chmod a-x '{}' +
-find "${_DST}" \( -name '*.exe' -o -name '*.dll' \) -exec chmod a+x '{}' +
+  find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' +
+  # NOTE: Not effective on MSYS2:
+  find "${_DST}" -name '*.a' -exec chmod a-x '{}' +
+  find "${_DST}" \( -name '*.exe' -o -name '*.dll' \) -exec chmod a+x '{}' +
+fi
 
 create_pkg() {
   arch_ext="$2"
 
-  _suf="${_FLAV}"
+  if [ "${_NAM}" != "${_UNIPKG}" ]; then
+    _suf="${_FLAV}"
+  else
+    _suf=''  # _FLAV already added, do not add it a second time
+  fi
   # Alter filename for non-release packages
   if [ "${_BRANCH#*main*}" != "${_BRANCH}" ]; then
     if [ "${PUBLISH_PROD_FROM}" != "${_OS}" ]; then
@@ -131,9 +162,11 @@ EOF
 create_pkg "$1" '.tar.xz'
 create_pkg "$1" '.zip'
 
-ver="${_NAM} ${_VER}"
-if ! grep -q -a -F "${ver}" -- "${_BLD}"; then
-  echo "${ver}" >> "${_BLD}"
+if [ "${_NAM}" != "${_UNIPKG}" ]; then
+  ver="${_NAM} ${_VER}"
+  if ! grep -q -a -F "${ver}" -- "${_BLD}"; then
+    echo "${ver}" >> "${_BLD}"
+  fi
 fi
 
 rm -r -f "${_DST:?}"
