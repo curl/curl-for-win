@@ -69,6 +69,11 @@ _VER="$1"
   if [ -d ../libressl ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=$(realpath ../libressl/pkg/C:/Windows/libressl)"
     CFLAGS="${CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DNOCRYPT"
+  elif [ -d ../openssl_quic ]; then
+    options="${options} --with-crypto=openssl --with-libssl-prefix=$(realpath ../openssl_quic/pkg/C:/Windows/System32/OpenSSL)"
+    CFLAGS="${CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
+    # Workaround for renamed directory in OpenSSL 3.x:
+    [ "${_CPU}" = 'x64' ] && LDFLAGS="${LDFLAGS} -L$(realpath ../openssl_quic/pkg/C:/Windows/System32/OpenSSL)/lib64"
   elif [ -d ../openssl ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=$(realpath ../openssl/pkg/C:/Windows/System32/OpenSSL)"
     CFLAGS="${CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"

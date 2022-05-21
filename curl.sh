@@ -90,8 +90,13 @@ _VER="$1"
     export BROTLI_LIBS='-Wl,-Bstatic -lbrotlidec-static -lbrotlicommon-static -Wl,-Bdynamic'
   fi
 
-  [ -d ../libressl ] && export OPENSSL_PATH=../../libressl
-  if [ -d ../openssl ]; then
+  if [ -d ../libressl ]; then
+    export OPENSSL_PATH=../../libressl
+  elif [ -d ../openssl_quic ]; then
+    export OPENSSL_PATH=../../openssl_quic
+    # Workaround for 3.x deprecation warnings
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DOPENSSL_SUPPRESS_DEPRECATED"
+  elif [ -d ../openssl ]; then
     export OPENSSL_PATH=../../openssl
     # Workaround for 3.x deprecation warnings
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DOPENSSL_SUPPRESS_DEPRECATED"
@@ -164,7 +169,7 @@ _VER="$1"
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.
-  if [ -d ../libressl ] || [ -d ../openssl ]; then
+  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl_quic ]; then
     [ -f '../ca-bundle.crt' ] || \
       curl --disable --user-agent '' --fail --silent --show-error \
         --remote-time --xattr \
@@ -240,11 +245,12 @@ _VER="$1"
   cp -f -p README                   "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES            "${_DST}/RELEASE-NOTES.txt"
 
-  if [ -d ../libressl ] || [ -d ../openssl ]; then
+  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl_quic ]; then
     cp -f -p scripts/mk-ca-bundle.pl "${_DST}/"
     cp -f -p ../ca-bundle.crt        "${_DST}/bin/curl-ca-bundle.crt"
-    [ -f ../libressl/COPYING ]    && cp -f -p ../libressl/COPYING    "${_DST}/COPYING-libressl.txt"
-    [ -f ../openssl/LICENSE.txt ] && cp -f -p ../openssl/LICENSE.txt "${_DST}/COPYING-openssl.txt"
+    [ -f ../libressl/COPYING ]         && cp -f -p ../libressl/COPYING         "${_DST}/COPYING-libressl.txt"
+    [ -f ../openssl/LICENSE.txt ]      && cp -f -p ../openssl/LICENSE.txt      "${_DST}/COPYING-openssl.txt"
+    [ -f ../openssl_quic/LICENSE.txt ] && cp -f -p ../openssl_quic/LICENSE.txt "${_DST}/COPYING-openssl.txt"
   fi
 
   [ -d ../zlib ]    && cp -f -p ../zlib/README     "${_DST}/COPYING-zlib.txt"
