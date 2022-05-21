@@ -109,8 +109,6 @@ _VER="$1"
   # adjust config paths accordingly; none that is supported by OpenSSL.
   _prefix='C:/Windows/System32/OpenSSL'
   _ssldir="ssl"
-  _lib='/lib'
-  [ "${_CPU}" = 'x64' ] && _lib='/lib64'
   _pkr='pkg'
 
   # 'no-dso' implies 'no-dynamic-engine' which in turn forces these engines
@@ -144,7 +142,16 @@ _VER="$1"
   # OpenSSL 3.x does not strip the drive letter anymore
   # (openssl/pkg/C:/Windows/System32/OpenSSL)
   _pkg="${_pkr}/${_prefix}"
-  _pks="${_pkr}/${_prefix}/${_ssldir}"
+
+  _lib='lib'
+  [ "${_CPU}" = 'x64' ] && _lib='lib64'
+
+  # Move results to a sane, standard path.
+  # Some tools (e.g CMake) will become weird when colons appear in a filename.
+
+  mkdir -p "${_pkr}/usr"
+  mv "${_pkg}" "${_pkr}/usr/local"
+  _pkg="${_pkr}/usr/local"
 
   # List files created
 
@@ -152,12 +159,12 @@ _VER="$1"
 
   # Make steps for determinism
 
-  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives "${_pkg}${_lib}"/*.a
+  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives "${_pkg}/${_lib}"/*.a
 
-  touch -c -r "${_ref}" "${_pkg}${_lib}"/*.a
-  touch -c -r "${_ref}" "${_pkg}${_lib}"/pkgconfig/*.pc
+  touch -c -r "${_ref}" "${_pkg}/${_lib}"/*.a
+  touch -c -r "${_ref}" "${_pkg}/${_lib}"/pkgconfig/*.pc
   find "${_pkg}"/include/openssl -exec touch -c -r "${_ref}" '{}' +
-  find "${_pkg}${_lib}" -exec touch -c -r "${_ref}" '{}' +
+  find "${_pkg}/${_lib}" -exec touch -c -r "${_ref}" '{}' +
 
   # Create package
 
@@ -168,7 +175,7 @@ _VER="$1"
   mkdir -p "${_DST}/include/"
   cp -f -p -r "${_pkg}"/include/openssl "${_DST}/include/"
 
-  cp -f -p -r "${_pkg}${_lib}" "${_DST}/"
+  cp -f -p -r "${_pkg}/${_lib}" "${_DST}/"
 
   cp -f -p CHANGES.md  "${_DST}/"
   cp -f -p LICENSE.txt "${_DST}/"
@@ -184,13 +191,7 @@ _VER="$1"
   # Symlink the lib location that everyone expects to find.
   # Vs. the native lib64 which is seldom auto-detected.
 
-  [ "${_CPU}" = 'x64' ] && ln -sf "${_pkg}${_lib}" "${_pkg}"/lib
-
-  # Symlink installed tree to a folder with no special characters.
-  # Some tools (e.g CMake) will become weird when colons appear in a filename.
-
-  mkdir -p "${_pkr}/usr"
-  ln -sf "../../${_pkg}" "${_pkr}/usr/local"
+  [ "${_CPU}" = 'x64' ] && ln -sf "${_lib}" "${_pkg}"/lib
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

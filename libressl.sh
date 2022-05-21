@@ -105,6 +105,13 @@ _VER="$1"
   _pkg="${_pkr}/${_prefix}"
   _pks="${_pkr}/${_prefix}/${_ssldir}"
 
+  # Move results to a sane, standard path.
+  # Some tools (e.g CMake) will become weird when colons appear in a filename.
+
+  mkdir -p "${_pkr}/usr"
+  mv "${_pkg}" "${_pkr}/usr/local"
+  pkg="${_pkr}/usr/local"
+
   # List files created
 
   find "${_pkg}" | grep -a -v -F '/share/' | sort
@@ -157,12 +164,6 @@ _VER="$1"
   cp -f -p ChangeLog                     "${_DST}/ChangeLog.txt"
   cp -f -p COPYING                       "${_DST}/COPYING.txt"
   cp -f -p README.md                     "${_DST}/"
-
-  # Symlink installed tree to a folder with no special characters.
-  # Some tools (e.g CMake) will become weird when colons appear in a filename.
-
-  mkdir -p "${_pkr}/usr"
-  ln -sf "../../${_pkg}" "${_pkr}/usr/local"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )
