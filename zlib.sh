@@ -102,7 +102,6 @@ _VER="$1"
   "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
 
   touch -c -r "${_ref}" ${_pkg}/include/*.h
-# touch -c -r "${_ref}" ${_pkg}/share/pkgconfig/*.pc
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
 
   # Create package
@@ -111,13 +110,13 @@ _VER="$1"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(mktemp -d)/${_BAS}"
 
-  mkdir -p "${_DST}"
+  mkdir -p "${_DST}/include"
+  mkdir -p "${_DST}/lib"
 
-  cp -f -p ${_pkg}/include/*.h          "${_DST}/"
-# cp -f -p ${_pkg}/share/pkgconfig/*.pc "${_DST}/"
-  cp -f -p ${_pkg}/lib/*.a              "${_DST}/"
-  cp -f -p ChangeLog                    "${_DST}/ChangeLog.txt"
-  cp -f -p README                       "${_DST}/README.txt"
+  cp -f -p ${_pkg}/include/*.h "${_DST}/include"
+  cp -f -p ${_pkg}/lib/*.a     "${_DST}/lib/"
+  cp -f -p ChangeLog           "${_DST}/ChangeLog.txt"
+  cp -f -p README              "${_DST}/README.txt"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )
