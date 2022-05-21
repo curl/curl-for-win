@@ -91,13 +91,13 @@ _VER="$1"
   fi
 
   if [ -d ../libressl ]; then
-    export OPENSSL_PATH=../../libressl
+    export OPENSSL_PATH=../../libressl/pkg/usr/local
   elif [ -d ../openssl_quic ]; then
-    export OPENSSL_PATH=../../openssl_quic
+    export OPENSSL_PATH=../../openssl_quic/pkg/usr/local
     # Workaround for 3.x deprecation warnings
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DOPENSSL_SUPPRESS_DEPRECATED"
   elif [ -d ../openssl ]; then
-    export OPENSSL_PATH=../../openssl
+    export OPENSSL_PATH=../../openssl/pkg/usr/local
     # Workaround for 3.x deprecation warnings
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DOPENSSL_SUPPRESS_DEPRECATED"
   fi
@@ -105,7 +105,7 @@ _VER="$1"
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
     options="${options}-ssl"
     export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
-    export OPENSSL_LIBPATH="${OPENSSL_PATH}"
+    export OPENSSL_LIBPATH="${OPENSSL_PATH}/lib"
     export OPENSSL_LIBS='-lssl -lcrypto'
     [ -d ../libressl ] && OPENSSL_LIBS="${OPENSSL_LIBS} -lbcrypt"
   fi

@@ -58,27 +58,23 @@ _VER="$1"
   LDFLAGS="${LDFLAGS}${ldonly}"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
 
-  # NOTE: root path with spaces will break all value with 'realpath'. But,
+  # NOTE: root path with spaces will break all value with '$(pwd)'. But,
   #       autotools breaks on spaces anyway, so let us leave it like that.
 
   options="${options} --with-libz"
   # These seem to work better than --with-libz-prefix=:
-  CFLAGS="${CFLAGS} -I$(realpath ../zlib/pkg/usr/local/include)"
-  LDFLAGS="${LDFLAGS} -L$(realpath ../zlib/pkg/usr/local/lib)"
+  CFLAGS="${CFLAGS} -I$(pwd)/../zlib/pkg/usr/local/include"
+  LDFLAGS="${LDFLAGS} -L$(pwd)/../zlib/pkg/usr/local/lib"
 
   if [ -d ../libressl ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=$(realpath ../libressl/pkg/C:/Windows/libressl)"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=$(pwd)/../libressl/pkg/usr/local"
     CFLAGS="${CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DNOCRYPT"
   elif [ -d ../openssl_quic ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=$(realpath ../openssl_quic/pkg/C:/Windows/System32/OpenSSL)"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=$(pwd)/../openssl_quic/pkg/usr/local"
     CFLAGS="${CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
-    # Workaround for renamed directory in OpenSSL 3.x:
-    [ "${_CPU}" = 'x64' ] && LDFLAGS="${LDFLAGS} -L$(realpath ../openssl_quic/pkg/C:/Windows/System32/OpenSSL)/lib64"
   elif [ -d ../openssl ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=$(realpath ../openssl/pkg/C:/Windows/System32/OpenSSL)"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=$(pwd)/../openssl/pkg/usr/local"
     CFLAGS="${CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
-    # Workaround for renamed directory in OpenSSL 3.x:
-    [ "${_CPU}" = 'x64' ] && LDFLAGS="${LDFLAGS} -L$(realpath ../openssl/pkg/C:/Windows/System32/OpenSSL)/lib64"
   else
     options="${options} --with-crypto=wincng"
   fi
