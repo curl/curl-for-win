@@ -16,6 +16,12 @@ _cdo="$(pwd)"
 _NAMX="$(printf '%s' "${_NAM}" | tr '_' '-')"
 
 if [ "${_NAM}" != "${_UNIPKG}" ]; then
+
+  find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' +
+  # NOTE: Not effective on MSYS2:
+  find "${_DST}" -name '*.a' -exec chmod a-x '{}' +
+  find "${_DST}" \( -name '*.exe' -o -name '*.dll' \) -exec chmod a+x '{}' +
+
   # First, merge this package into the unified package
   unipkg="${_UNIPKG}"
   {
@@ -56,11 +62,6 @@ EOF
   unix2dos --quiet --keepdate "${_fn}"
   touch -c -r "$1" "${_fn}"
   [ "${_NAM}" = 'curl' ] && cp -f -p "${_fn}" "${unipkg}"
-
-  find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' +
-  # NOTE: Not effective on MSYS2:
-  find "${_DST}" -name '*.a' -exec chmod a-x '{}' +
-  find "${_DST}" \( -name '*.exe' -o -name '*.dll' \) -exec chmod a+x '{}' +
 fi
 
 create_pkg() {
