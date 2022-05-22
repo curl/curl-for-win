@@ -248,18 +248,7 @@ _VER="$1"
   if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl_quic ]; then
     cp -f -p scripts/mk-ca-bundle.pl "${_DST}/"
     cp -f -p ../ca-bundle.crt        "${_DST}/bin/curl-ca-bundle.crt"
-    [ -f ../libressl/COPYING ]         && cp -f -p ../libressl/COPYING         "${_DST}/COPYING-libressl.txt"
-    [ -f ../openssl/LICENSE.txt ]      && cp -f -p ../openssl/LICENSE.txt      "${_DST}/COPYING-openssl.txt"
-    [ -f ../openssl_quic/LICENSE.txt ] && cp -f -p ../openssl_quic/LICENSE.txt "${_DST}/COPYING-openssl.txt"
   fi
-
-  [ -d ../zlib ]    && cp -f -p ../zlib/README     "${_DST}/COPYING-zlib.txt"
-  [ -d ../brotli ]  && cp -f -p ../brotli/LICENSE  "${_DST}/COPYING-brotli.txt"
-  [ -d ../libssh2 ] && cp -f -p ../libssh2/COPYING "${_DST}/COPYING-libssh2.txt"
-  [ -d ../nghttp2 ] && cp -f -p ../nghttp2/COPYING "${_DST}/COPYING-nghttp2.txt"
-  [ -d ../nghttp3 ] && cp -f -p ../nghttp3/COPYING "${_DST}/COPYING-nghttp3.txt"
-  [ -d ../ngtcp2 ]  && cp -f -p ../ngtcp2/COPYING  "${_DST}/COPYING-ngtcp2.txt"
-  [ -d ../libidn2 ] && cp -f -p ../libidn2/COPYING "${_DST}/COPYING-libidn2.txt"
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     cp -f -p src/*.map                "${_DST}/bin/"

@@ -143,9 +143,6 @@ _VER="$1"
   # (openssl/pkg/C:/Windows/System32/OpenSSL)
   _pkg="${_pkr}/${_prefix}"
 
-  _lib='lib'
-  [ "${_CPU}" = 'x64' ] && _lib='lib64'
-
   # Move results to a sane, standard path.
   # Some tools (e.g CMake) will become weird when colons appear in a filename.
 
@@ -153,18 +150,22 @@ _VER="$1"
   mv "${_pkg}" "${_pkr}/usr/local"
   _pkg="${_pkr}/usr/local"
 
+  # Rename lib64 to lib to move closer to what packages expect
+
+  [ "${_CPU}" = 'x64' ] && mv "${_pkg}/lib64" "${_pkg}/lib"
+
   # List files created
 
   find "${_pkg}" | grep -a -v -F '/share/' | sort
 
   # Make steps for determinism
 
-  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives "${_pkg}/${_lib}"/*.a
+  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
 
-  touch -c -r "${_ref}" "${_pkg}/${_lib}"/*.a
-  touch -c -r "${_ref}" "${_pkg}/${_lib}"/pkgconfig/*.pc
-  find "${_pkg}"/include/openssl -exec touch -c -r "${_ref}" '{}' +
-  find "${_pkg}/${_lib}" -exec touch -c -r "${_ref}" '{}' +
+  touch -c -r "${_ref}" ${_pkg}/lib/*.a
+  touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
+  find ${_pkg}/include/openssl -exec touch -c -r "${_ref}" '{}' +
+  find ${_pkg}/lib -exec touch -c -r "${_ref}" '{}' +
 
   # Create package
 
@@ -173,9 +174,9 @@ _VER="$1"
   _DST="$(mktemp -d)/${_BAS}"
 
   mkdir -p "${_DST}/include/"
-  cp -f -p -r "${_pkg}"/include/openssl "${_DST}/include/"
+  cp -f -p -r ${_pkg}/include/openssl "${_DST}/include/"
 
-  cp -f -p -r "${_pkg}/${_lib}" "${_DST}/"
+  cp -f -p -r ${_pkg}/lib "${_DST}/"
 
   cp -f -p CHANGES.md  "${_DST}/"
   cp -f -p LICENSE.txt "${_DST}/"
@@ -187,11 +188,6 @@ _VER="$1"
     touch -c -r "${_ref}" ms/applink.c
     cp -f -p ms/applink.c "${_DST}/include/openssl/"
   fi
-
-  # Symlink the lib location that everyone expects to find.
-  # Vs. the native lib64 which is seldom auto-detected.
-
-  [ "${_CPU}" = 'x64' ] && ln -sf "${_lib}" "${_pkg}"/lib
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

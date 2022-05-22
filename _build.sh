@@ -260,7 +260,7 @@ build_single_target() {
   fi
 
   # Unified, per-target package: Initialize
-  export _UNIPKG="curl-uni-${CURL_VER_}${_REVSUFFIX}${_PKGSUFFIX}${_FLAV}"
+  export _UNIPKG="curl-${CURL_VER_}${_REVSUFFIX}${_PKGSUFFIX}${_FLAV}"
   rm -r -f "${_UNIPKG:?}"
   mkdir -p "${_UNIPKG}"
   export _UNIMFT="${_UNIPKG}/BUILD-MANIFEST.txt"
@@ -303,12 +303,27 @@ build_single_target() {
   export _BAS="${_UNIPKG}"
   export _DST="${_UNIPKG}"
 
-  readonly _ref='curl/CHANGES'
+  _ref='curl/CHANGES'
 
   touch -c -r "${_ref}" "${_UNIMFT}"
 
-  # Link to the build log
-  if [ -n "${_LOGURL}" ]; then
+  _fn="${_DST}/BUILD-README.txt"
+  cat <<EOF > "${_fn}"
+Visit the project page for details about these builds and the list of changes:
+
+  ${_URL}
+EOF
+  touch -c -r "${_ref}" "${_fn}"
+
+  _fn="${_DST}/BUILD-HOMEPAGE.url"
+  cat <<EOF > "${_fn}"
+[InternetShortcut]
+URL=${_URL}
+EOF
+  unix2dos --quiet --keepdate "${_fn}"
+  touch -c -r "${_ref}" "${_fn}"
+
+  if [ -n "${_LOGURL}" ]; then  # Link to the build log
     _fn="${_DST}/BUILD-LOG.url"
     cat <<EOF > "${_fn}"
 [InternetShortcut]

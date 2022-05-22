@@ -34,9 +34,7 @@ if [ "${_NAM}" != "${_UNIPKG}" ]; then
       rsync --archive --update "${_DST}/lib"    "${unipkg}"
     fi
     if [ "${_NAM}" = 'curl' ]; then
-      find "${_DST}" -maxdepth 1 -type f -name '*.*' -a -not -name 'COPYING-*.*' | while read -r f; do
-        cp -f -p "${f}" "${unipkg}"
-      done
+      cp -f -p "${_DST}"/*.* "${unipkg}"
       rsync --archive --update "${_DST}/docs" "${unipkg}"
     else
       _NAM_DEP="${unipkg}/dep/${_NAMX}"
@@ -44,24 +42,6 @@ if [ "${_NAM}" != "${_UNIPKG}" ]; then
       cp -f -p "${_DST}"/*.* "${_NAM_DEP}"
     fi
   }
-
-  _fn="${_DST}/BUILD-README.txt"
-  cat <<EOF > "${_fn}"
-Visit the project page for details about these builds and the list of changes:
-
-  ${_URL}
-EOF
-  touch -c -r "$1" "${_fn}"
-  [ "${_NAM}" = 'curl' ] && cp -f -p "${_fn}" "${unipkg}"
-
-  _fn="${_DST}/BUILD-HOMEPAGE.url"
-  cat <<EOF > "${_fn}"
-[InternetShortcut]
-URL=${_URL}
-EOF
-  unix2dos --quiet --keepdate "${_fn}"
-  touch -c -r "$1" "${_fn}"
-  [ "${_NAM}" = 'curl' ] && cp -f -p "${_fn}" "${unipkg}"
 fi
 
 create_pkg() {
@@ -162,15 +142,15 @@ EOF
   fi
 }
 
-create_pkg "$1" '.tar.xz'
-create_pkg "$1" '.zip'
-
 if [ "${_NAM}" != "${_UNIPKG}" ]; then
   ver="${_NAMX} ${_VER}"
   echo "${ver}" >> "${_UNIMFT}"
   if ! grep -q -a -F "${ver}" -- "${_BLD}"; then
     echo "${ver}" >> "${_BLD}"
   fi
+else
+  create_pkg "$1" '.tar.xz'
+  create_pkg "$1" '.zip'
 fi
 
 rm -r -f "${_DST:?}"
