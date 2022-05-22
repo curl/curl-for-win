@@ -47,17 +47,20 @@ cat <<EOF
   {
     "name": "nghttp3",
     "url": "https://github.com/ngtcp2/nghttp3/releases/download/v{ver}/nghttp3-{ver}.tar.xz",
-    "redir": "redir"
+    "redir": "redir",
+    "tag": ".+"
   },
   {
     "name": "ngtcp2",
     "url": "https://github.com/ngtcp2/ngtcp2/releases/download/v{ver}/ngtcp2-{ver}.tar.xz",
-    "redir": "redir"
+    "redir": "redir",
+    "tag": ".+"
   },
   {
-    "name": "openssl_quic",
+    "name": "openssl-quic",
     "url": "https://github.com/quictls/openssl/archive/refs/heads/openssl-{ver}+quic.tar.gz",
-    "redir": "redir"
+    "redir": "redir",
+    "tag": "openssl-\\\\d+\\\\.\\\\d+\\\\.\\\\d+\\\\+quic$"
   },
   {
     "name": "openssl",
@@ -147,11 +150,19 @@ check_update() {
   newver=''
   if [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
     slug="${BASH_REMATCH[1]}"
-    # heavily rate-limited
-    newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases/latest" | \
-      jq --raw-output '.tag_name' | sed 's|^v||')"
-    if [[ "${newver}" =~ ^[0-9]+\.[0-9]+$ ]]; then
-      newver="${newver}.0"
+    if [ -n "$5" ]; then
+      newver="$(curl --disable --user-agent ' ' --silent --fail --show-error \
+          "https://api.github.com/repos/${slug}/git/refs/heads" \
+        | jq --raw-output '.[].ref' \
+        | grep -a -E "$5" \
+        | grep -a -E -o '\d+\.\d+\.\d' | sort | tail -1)"
+    else
+      # heavily rate-limited
+      newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases/latest" | \
+        jq --raw-output '.tag_name' | sed 's|^v||')"
+      if [[ "${newver}" =~ ^[0-9]+\.[0-9]+$ ]]; then
+        newver="${newver}.0"
+      fi
     fi
   else
     mask="${pkg}[._-]v?([0-9]+(\.[0-9]+)+)\.t"
@@ -241,11 +252,13 @@ bump() {
 
   while read -r pkg; do
     if [[ "${pkg}" =~ ^([A-Z0-9_]+)_VER_=(.+)$ ]]; then
-      name="${BASH_REMATCH[1],,}"
+      nameenv="${BASH_REMATCH[1]}"
+      name="${nameenv,,}"
+      name="${name//_/-}"
       ourver="${BASH_REMATCH[2]}"
       ourvern="$(printf '%s' "${ourver}" | to8digit)"
 
-      hashenv="${name^^}_HASH"
+      hashenv="${nameenv}_HASH"
       eval hash="\${${hashenv}:-}"
 
       jp="$(dependencies_json | jq \
@@ -257,11 +270,12 @@ bump() {
         url="$( printf '%s' "${jp}" | jq --raw-output '.url')"
         desc="$(printf '%s' "${jp}" | jq --raw-output '.descending')"
         pin="$( printf '%s' "${jp}" | jq --raw-output '.pinned')"
+        tag="$( printf '%s' "${jp}" | jq --raw-output '.tag' | sed 's|null||')"
 
         if [ "${pin}" = 'true' ]; then
           >&2 echo "! ${name}: Version pinned. Skipping."
         else
-          newver="$(check_update "${name}" "${ourvern}" "${url}" "${desc}")"
+          newver="$(check_update "${name}" "${ourvern}" "${url}" "${desc}" "${tag}")"
           if [ -n "${newver}" ]; then
             >&2 echo "! ${name}: New version found: |${newver}|"
 
@@ -300,7 +314,7 @@ bump() {
         newhash="${hash}"
       fi
 
-      echo "export ${name^^}_VER_='${newver}'"
+      echo "export ${nameenv^^}_VER_='${newver}'"
       [ -n "${hash}" ] && echo "export ${hashenv}=${newhash}"
     fi
   done <<< "$(env | grep -a -E '^[A-Z0-9_]+_VER_' | \
@@ -447,8 +461,8 @@ if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*schannel*}" = "${_BRANCH}" ]; then
   if [ "${_BRANCH#*quic*}" != "${_BRANCH}" ]; then
-    live_dl openssl_quic "${OPENSSL_QUIC_VER_}"
-    live_xt openssl_quic "${OPENSSL_QUIC_HASH}"
+    live_dl openssl-quic "${OPENSSL_QUIC_VER_}"
+    live_xt openssl-quic "${OPENSSL_QUIC_HASH}"
   elif [ "${_BRANCH#*libressl*}" = "${_BRANCH}" ]; then
     if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
       OPENSSL_VER_='3.0.0-beta2'

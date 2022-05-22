@@ -92,8 +92,8 @@ _VER="$1"
 
   if [ -d ../libressl ]; then
     export OPENSSL_PATH=../../libressl/pkg/usr/local
-  elif [ -d ../openssl_quic ]; then
-    export OPENSSL_PATH=../../openssl_quic/pkg/usr/local
+  elif [ -d ../openssl-quic ]; then
+    export OPENSSL_PATH=../../openssl-quic/pkg/usr/local
     # Workaround for 3.x deprecation warnings
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DOPENSSL_SUPPRESS_DEPRECATED"
   elif [ -d ../openssl ]; then
@@ -169,7 +169,7 @@ _VER="$1"
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.
-  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl_quic ]; then
+  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ]; then
     [ -f '../ca-bundle.crt' ] || \
       curl --disable --user-agent '' --fail --silent --show-error \
         --remote-time --xattr \
@@ -245,7 +245,7 @@ _VER="$1"
   cp -f -p README                   "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES            "${_DST}/RELEASE-NOTES.txt"
 
-  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl_quic ]; then
+  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ]; then
     cp -f -p scripts/mk-ca-bundle.pl "${_DST}/"
     cp -f -p ../ca-bundle.crt        "${_DST}/bin/curl-ca-bundle.crt"
   fi

@@ -13,8 +13,6 @@ fi
 
 _cdo="$(pwd)"
 
-_NAMX="$(printf '%s' "${_NAM}" | tr '_' '-')"
-
 if [ "${_NAM}" != "${_UNIPKG}" ]; then
 
   find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' +
@@ -37,7 +35,7 @@ if [ "${_NAM}" != "${_UNIPKG}" ]; then
       cp -f -p "${_DST}"/*.* "${unipkg}"
       rsync --archive --update "${_DST}/docs" "${unipkg}"
     else
-      _NAM_DEP="${unipkg}/dep/${_NAMX}"
+      _NAM_DEP="${unipkg}/dep/${_NAM}"
       mkdir -p "${_NAM_DEP}"
       cp -f -p "${_DST}"/*.* "${_NAM_DEP}"
     fi
@@ -143,7 +141,7 @@ EOF
 }
 
 if [ "${_NAM}" != "${_UNIPKG}" ]; then
-  ver="${_NAMX} ${_VER}"
+  ver="${_NAM} ${_VER}"
   echo "${ver}" >> "${_UNIMFT}"
   if ! grep -q -a -F "${ver}" -- "${_BLD}"; then
     echo "${ver}" >> "${_BLD}"

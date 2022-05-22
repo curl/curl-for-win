@@ -52,11 +52,11 @@ _VER="$1"
   [ "${_OS}" = 'mac' ] && options="${options} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
   options="${options} -DENABLE_STATIC_LIB=1"
   options="${options} -DENABLE_SHARED_LIB=0"
-  if [ -d ../openssl_quic ]; then
+  if [ -d ../openssl-quic ]; then
     options="${options} -DENABLE_OPENSSL=1"
     options="${options} -DHAVE_SSL_IS_QUIC=1"  # Detection fails with a long list of unfixable errors, so force it.
-    options="${options} -DOPENSSL_ROOT_DIR=../openssl_quic/pkg/usr/local"
-    options="${options} -DOPENSSL_INCLUDE_DIR=../openssl_quic/pkg/usr/local/include"
+    options="${options} -DOPENSSL_ROOT_DIR=../openssl-quic/pkg/usr/local"
+    options="${options} -DOPENSSL_INCLUDE_DIR=../openssl-quic/pkg/usr/local/include"
   fi
   if [ -d ../nghttp3 ]; then
     options="${options} -DLIBNGHTTP3_LIBRARY=../nghttp3/pkg/usr/local/lib"
@@ -99,7 +99,7 @@ _VER="$1"
 
   # Rename static libs so they get found by dependents
 
-  if [ -d ../openssl_quic ]; then
+  if [ -d ../openssl-quic ]; then
     mv -f ${_pkg}/lib/libngtcp2_crypto_openssl_static.a ${_pkg}/lib/libngtcp2_crypto_openssl.a
   fi
   mv -f ${_pkg}/lib/libngtcp2_static.a ${_pkg}/lib/libngtcp2.a

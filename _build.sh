@@ -290,7 +290,7 @@ build_single_target() {
   time ./nghttp3.sh       "${NGHTTP3_VER_}"
   time ./libressl.sh     "${LIBRESSL_VER_}"
   time ./openssl.sh       "${OPENSSL_VER_}"
-  time ./openssl.sh  "${OPENSSL_QUIC_VER_}" openssl_quic
+  time ./openssl.sh  "${OPENSSL_QUIC_VER_}" openssl-quic
   time ./ngtcp2.sh         "${NGTCP2_VER_}"
   time ./libssh2.sh       "${LIBSSH2_VER_}"
   time ./curl.sh             "${CURL_VER_}"
@@ -308,6 +308,7 @@ build_single_target() {
 
   (
     cd "${_DST}"
+    set +x
     _fn='BUILD-HASHES.txt'
     {
       find . -type f | grep -a -E '/(bin|include|lib)/' | sort | while read -r f; do
