@@ -266,8 +266,8 @@ build_single_target() {
   export _UNIMFT="${_UNIPKG}/BUILD-MANIFEST.txt"
 
   gccver=''
-  [ "${CC}" = 'mingw-clang' ] || gccver="gcc-mingw-w64-${_machine} $("${_CCPREFIX}gcc" -dumpversion)"
-  binver="binutils-mingw-w64-${_machine} $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
+  [ "${CC}" = 'mingw-clang' ] || gccver="gcc $("${_CCPREFIX}gcc" -dumpversion)"
+  binver="binutils $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
 
   {
     [ -n "${clangver}" ] && echo ".${clangver}"
