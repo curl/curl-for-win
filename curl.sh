@@ -37,9 +37,9 @@ _VER="$1"
   [ "${_CPU}" = 'x64' ] && ARCH='w64'
 
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
-  # public libcurl functions being marked as 'exported'. Useful to
-  # avoid the chance of libcurl functions getting exported from final
-  # binaries when linked against static libcurl lib.
+  # marking public libcurl functions as 'exported'. Useful to avoid the
+  # chance of libcurl functions getting exported from final binaries when
+  # linked against static libcurl lib.
   export CURL_CFLAG_EXTRAS='-fno-ident -O3 -DCURL_STATICLIB -DCURL_ENABLE_MQTT -DHAVE_ATOMIC'
   [ "${_CPU}" = 'x86' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
@@ -54,8 +54,8 @@ _VER="$1"
     CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
   fi
 
-  # Disabled till UNICODE is fleshed out and documented enough to be safe
-  # to use.
+  # Disabled till we flesh out UNICODE support and document it enough to be
+  # safe to use.
 # CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUNICODE -D_UNICODE"
 # CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -municode"
 
@@ -64,13 +64,13 @@ _VER="$1"
     CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,-Map,libcurl.map"
   fi
 
-  # Generate .def file for libcurl by parsing curl headers.
-  # Useful to limit .dll exports to libcurl functions meant to be exported.
-  # Without this, the default linker logic kicks in, whereas every public
-  # function is exported if none is marked for export explicitly. This
-  # leads to exporting every libcurl public function, as well as any other
-  # ones from statically linked dependencies, resulting in a larger .dll,
-  # an inflated implib and a non-standard list of exported functions.
+  # Generate .def file for libcurl by parsing curl headers. Useful to export
+  # the libcurl function meant to be exported.
+  # Without this, the default linker logic kicks in, whereas it exports every
+  # public function, if none is marked for export explicitly. This leads to
+  # exporting every libcurl public function, as well as any other ones from
+  # statically linked dependencies, resulting in a larger .dll, an inflated
+  # implib and a non-standard list of exported functions.
   echo 'EXPORTS' > libcurl.def
   {
     # CURL_EXTERN CURLcode curl_easy_send(CURL *curl, const void *buffer,

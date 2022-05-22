@@ -26,18 +26,18 @@ _VER="$1"
   # cross-building using clang. It confuses the compiler with MSVC due to
   # matching its name with 'cl*'. This triggers using .lib extension instead of
   # .a for static and import libs.
-  # This can be worked around by aliasing clang to e.g. 'mingw-clang', which
-  # fixes the lib extension, but without further benefit.
+  # We can work around by aliasing clang to e.g. 'mingw-clang', which fixes the
+  # lib extension, but without further benefit.
   # Then a check fails in 'libtool' before trying to build any DLL. These are
-  # bogus warnings [1][2], which are in fact errors, so DLLs are not being built.
-  # The bogus checks can be neutralized via 's/droppeddeps=yes/#droppeddeps=yes/g'
+  # bogus warnings [1][2], which are in fact errors, so DLLs are not built.
+  # We can neutralize the bogus checks via 's/droppeddeps=yes/#droppeddeps=yes/g'
   # in ./ltmain.sh. But, DLL builds will still fail due to thinking using MSVC and
   # the '-link -EXPORT:<symbol>' option, which fails with clang. Manually setting
   # LD to the mingw-w64 ld tool (= "${_CCPREFIX}ld"), will also result in a wrong
   # command-line, with the '--whole-archive' option in it, and fail.
   #
   # So the options are either to stick with gcc with libressl, or to use clang
-  # without publishing DLLs. (Or use CMake, but that has various other issues.)
+  # without publishing DLLs. (Or use CMake, but that has other issues.)
   #
   # This is true for other autotools-built curl dependencies, but in those cases
   # there was no focus or need to build DLLs. The wrong .lib extension can be
@@ -95,8 +95,7 @@ _VER="$1"
     "--prefix=${_prefix}" \
     "--with-openssldir=${_prefix}/${_ssldir}"
 # make clean > /dev/null
-  # Install it so that it can be detected by CMake
-  # (ending slash required)
+  # Ending slash required.
   make --jobs 2 install "DESTDIR=$(pwd)/${_pkr}/" >/dev/null # 2>&1
 
   # DESTDIR= + --prefix=

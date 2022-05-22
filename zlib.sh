@@ -85,13 +85,13 @@ _VER="$1"
 
   ls -l ${_pkg}/lib/*.a
 
-  # Delete the implib, we need the static lib only
+  # We need the static lib, so delete the implib
   rm -f ${_pkg}/lib/*.dll.a
   # Stick to the name expected by everyone
   mv -f ${_pkg}/lib/libzlibstatic.a ${_pkg}/lib/libz.a
 
   # curl Makefile.m32 assume the headers and lib to be in the
-  # same directory. Make sure to copy the static library only:
+  # same directory.
   cp -f -p ${_pkg}/include/*.h "${_pkg}/"
   cp -f -p ${_pkg}/lib/libz.a  "${_pkg}/"
 

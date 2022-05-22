@@ -34,7 +34,7 @@ _VER="$1"
 
   rm -r -f pkg
 
-  find . -name '*.s'   -delete  # filenames are different for each CPU platform, but cleanup just in case
+  find . -name '*.s'   -delete  # filenames are different for each CPU platform, but cleanup anyway
   find . -name '*.o'   -delete
   find . -name '*.obj' -delete
   find . -name '*.a'   -delete
@@ -60,12 +60,13 @@ _VER="$1"
       # assembly source code by running ${CC} and extracting the value of the
       # macro __USER_LABEL_PREFIX__ [1]. On macOS, with pure 'clang', this
       # returns '_' (as of Homebrew LLVM 13.0.1). This causes all exported
-      # assembly function names getting an underscore prefix. Then, when linking
-      # OpenSSL libraries into executables, these symbols will not be found,
-      # breaking the builds, including openssl.exe and OpenSSL DLLs.
+      # assembly function names getting an underscore prefix. Then, when
+      # building OpenSSL libraries into executables, the linker will not find
+      # these symbols, breaking the builds, including openssl.exe and OpenSSL
+      # DLLs.
       # [1]: https://github.com/openssl/openssl/blob/openssl-3.0.2/crypto/perlasm/x86_64-xlate.pl#L91
-      # On Linux, this was not an issue, and it seems to affect x64 targets
-      # only. But enable the workaround in all cross-builds anyway.
+      # On Linux, this was not an issue, and it seems to affect x64 targets.
+      # But enable the workaround in all cross-builds anyway.
       CC="${CC} --target=${_TRIPLET}"
 
       options="${options} --sysroot=${_SYSROOT}"
@@ -85,9 +86,7 @@ _VER="$1"
   #   patch it misidentifies all such absolute paths as relative ones and
   #   aborts.
   #   Reported: https://github.com/openssl/openssl/issues/9520
-  # - allow no-apps option to omit building openssl.exe. This helps when
-  #   linking is broken (like on macOS hosts has been for a while) or when
-  #   need only the libs.
+  # - allow no-apps option to omit building openssl.exe.
   sed \
     -e 's|die "Directory given with --prefix|print "Directory given with --prefix|g' \
     -e 's|"aria",$|"apps", "aria",|g' \
@@ -95,26 +94,25 @@ _VER="$1"
   chmod a+x ./Configure-patched
 
   # Space or backslash not allowed. Needs to be a folder restricted
-  # to Administrators across majority of Windows installations, versions
-  # and configurations. We do avoid using the new default prefix set since
+  # to Administrators across Windows installations, versions and
+  # configurations. We do avoid using the new default prefix set since
   # OpenSSL 1.1.1d, because by using the C:\Program Files*\ value, the
-  # prefix remains vulnerable on localized Windows versions and for 32-bit
-  # OpenSSL builds executed on 64-bit Windows systems. I believe that the
-  # default below will give a "more secure" configuration for most Windows
+  # prefix remains vulnerable on localized Windows versions. The default
+  # below will give a "more secure" configuration for most Windows
   # installations. Also notice that said OpenSSL default breaks OpenSSL's
-  # own build system when used in cross-build scenarios. The working patch
-  # was submitted, but closed subsequently due to mixed/no response.
+  # own build system when used in cross-build scenarios. I submitted the
+  # working patch, but closed subsequently due to mixed/no response.
   # The secure solution would be to disable loading anything from hard-coded
-  # disk locations or preferably to detect OS location at runtime and
-  # adjust config paths accordingly; none that is supported by OpenSSL.
+  # paths and preferably to detect OS location at runtime and adjust config
+  # paths accordingly; none supported by OpenSSL.
   _prefix='C:/Windows/System32/OpenSSL'
   _ssldir="ssl"
   _pkr='pkg'
 
-  # 'no-dso' implies 'no-dynamic-engine' which in turn forces these engines
-  # to be included non-dynamically. To avoid them, along with their system
-  # DLL dependencies and DLL imports, we explicitly disable them one by one
-  # in the 'no-capieng ...' line.
+  # 'no-dso' implies 'no-dynamic-engine' which in turn compiles in these
+  # engines non-dynamically. To avoid them, along with their system DLL
+  # dependencies and DLL imports, we explicitly disable them one by one in
+  # the 'no-capieng ...' line.
 
   # shellcheck disable=SC2086
   ./Configure-patched ${options} \
@@ -134,8 +132,7 @@ _VER="$1"
     "--prefix=${_prefix}" \
     "--openssldir=${_ssldir}"
   SOURCE_DATE_EPOCH=${unixts} TZ=UTC make --jobs 2
-  # Install it so that it can be detected by CMake
-  # (ending slash required)
+  # Ending slash required.
   make --jobs 2 install "DESTDIR=$(pwd)/${_pkr}/" >/dev/null # 2>&1
 
   # DESTDIR= + --prefix=

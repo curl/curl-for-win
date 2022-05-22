@@ -33,7 +33,7 @@ _VER="$1"
   find . -name '*.pc'  -delete
   find . -name '*.exe' -delete
 
-  # May be needed in the future if an "Automake version mismatch" occurs:
+  # We may need this in the future if an "Automake version mismatch" occurs:
 # if [ ! -f 'Makefile' ]; then
 #   autopoint --force
 #   autoreconf --install
