@@ -283,18 +283,18 @@ build_single_target() {
     echo ".${binver}"
   } >> "${_UNIMFT}"
 
-  time ./zlib.sh                 "${ZLIB_VER_}"
-  time ./brotli.sh             "${BROTLI_VER_}"
-  time ./libgsasl.sh         "${LIBGSASL_VER_}"
-  time ./libidn2.sh           "${LIBIDN2_VER_}"
-  time ./nghttp2.sh           "${NGHTTP2_VER_}"
-  time ./nghttp3.sh           "${NGHTTP3_VER_}"
-  time ./libressl.sh         "${LIBRESSL_VER_}"
-  time ./openssl.sh           "${OPENSSL_VER_}"
-  time ./openssl_quic.sh "${OPENSSL_QUIC_VER_}"
-  time ./ngtcp2.sh             "${NGTCP2_VER_}"
-  time ./libssh2.sh           "${LIBSSH2_VER_}"
-  time ./curl.sh                 "${CURL_VER_}"
+  time ./zlib.sh             "${ZLIB_VER_}"
+  time ./brotli.sh         "${BROTLI_VER_}"
+  time ./libgsasl.sh     "${LIBGSASL_VER_}"
+  time ./libidn2.sh       "${LIBIDN2_VER_}"
+  time ./nghttp2.sh       "${NGHTTP2_VER_}"
+  time ./nghttp3.sh       "${NGHTTP3_VER_}"
+  time ./libressl.sh     "${LIBRESSL_VER_}"
+  time ./openssl.sh       "${OPENSSL_VER_}"
+  time ./openssl.sh  "${OPENSSL_QUIC_VER_}" openssl_quic
+  time ./ngtcp2.sh         "${NGTCP2_VER_}"
+  time ./libssh2.sh       "${LIBSSH2_VER_}"
+  time ./curl.sh             "${CURL_VER_}"
 
   # Unified, per-target package: Build
   export _NAM="${_UNIPKG}"
@@ -303,7 +303,7 @@ build_single_target() {
   export _BAS="${_UNIPKG}"
   export _DST="${_UNIPKG}"
 
-  readonly _ref="${_DST}/CHANGES.txt"
+  readonly _ref='curl/CHANGES'
 
   touch -c -r "${_ref}" "${_UNIMFT}"
 
