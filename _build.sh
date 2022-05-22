@@ -307,6 +307,15 @@ build_single_target() {
 
   touch -c -r "${_ref}" "${_UNIMFT}"
 
+  _fn="${_DST}/BUILD-HASHES.txt"
+  {
+    find "${_DST}" -type f | grep -a -E '/(bin|include|lib)/' | sort | while read -r f; do
+      openssl dgst -sha256 "${f}"
+      openssl dgst -sha512 "${f}"
+    done
+  } > "${_fn}"
+  touch -c -r "${_ref}" "${_fn}"
+
   _fn="${_DST}/BUILD-README.txt"
   cat <<EOF > "${_fn}"
 Visit the project page for details about these builds and the list of changes:
