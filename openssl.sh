@@ -136,22 +136,21 @@ _VER="$1"
   make --jobs 2 install "DESTDIR=$(pwd)/${_pkr}/" >/dev/null # 2>&1
 
   # DESTDIR= + --prefix=
-  # OpenSSL 3.x does not strip the drive letter anymore
-  # (openssl/pkg/C:/Windows/System32/OpenSSL)
-  _pkg="${_pkr}/${_prefix}"
+  # OpenSSL 3.x does not strip the drive letter anymore:
+  #   ./openssl/pkg/C:/Windows/System32/OpenSSL
+  # Some tools (e.g CMake) will become weird when colons appear in
+  # a filename, so move results to a sane, standard path:
 
-  # Move results to a sane, standard path.
-  # Some tools (e.g CMake) will become weird when colons appear in a filename.
-
-  mkdir -p "${_pkr}/usr"
-  mv "${_pkg}" "${_pkr}/usr/local"
   _pkg="${_pkr}/usr/local"
+  mkdir -p "${_pkr}/usr"
+  mv "${_pkr}/${_prefix}" "${_pkg}"
 
-  # Rename lib64 to lib to move closer to what packages expect
+  # Rename 'lib64' to 'lib'. This is what most packages expect.
 
   if [ "${_CPU}" = 'x64' ]; then
     mv "${_pkg}/lib64" "${_pkg}/lib"
     sed -i.bak 's|/lib64|/lib|g' ${_pkg}/lib/pkgconfig/*.pc
+    rm -f ${_pkg}/lib/pkgconfig/*.pc.bak
   fi
 
   # List files created
