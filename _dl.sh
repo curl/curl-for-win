@@ -151,15 +151,14 @@ check_update() {
   if [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
     slug="${BASH_REMATCH[1]}"
     if [ -n "$5" ]; then
-      newver="$(curl --disable --user-agent ' ' --silent --fail --show-error \
-          "https://api.github.com/repos/${slug}/git/refs/heads" \
+      newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/git/refs/heads" \
         | jq --raw-output '.[].ref' \
         | grep -a -E "$5" \
         | grep -a -E -o '\d+\.\d+\.\d' | sort | tail -1)"
     else
       # heavily rate-limited
-      newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases/latest" | \
-        jq --raw-output '.tag_name' | sed 's|^v||')"
+      newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases/latest" \
+        | jq --raw-output '.tag_name' | sed 's|^v||')"
       if [[ "${newver}" =~ ^[0-9]+\.[0-9]+$ ]]; then
         newver="${newver}.0"
       fi
@@ -172,8 +171,8 @@ check_update() {
       latest='tail'
     fi
     urldir="$(dirname "${url}")/"
-    res="$(my_curl "${urldir}" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' | \
-      grep -a -o -E -- "${mask}" | "${latest}" -1)"
+    res="$(my_curl "${urldir}" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
+      | grep -a -o -E -- "${mask}" | "${latest}" -1)"
     if [[ "${res}" =~ ${mask} ]]; then
       newver="${BASH_REMATCH[1]}"
     fi
