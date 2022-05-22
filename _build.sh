@@ -181,6 +181,14 @@ esac
 
 _ori_path="${PATH}"
 
+bld() {
+  pkg="$1"
+  if [ -z "${C4W_BLD}" ] || echo "${C4W_BLD}" | grep -q -F "${pkg}"; then
+    shift
+    time "./${pkg}.sh" "$@"
+  fi
+}
+
 build_single_target() {
   export _CPU="$1"
 
@@ -282,18 +290,18 @@ build_single_target() {
     echo ".${binver}"
   } >> "${_UNIMFT}"
 
-  time ./zlib.sh             "${ZLIB_VER_}"
-  time ./brotli.sh         "${BROTLI_VER_}"
-  time ./libgsasl.sh     "${LIBGSASL_VER_}"
-  time ./libidn2.sh       "${LIBIDN2_VER_}"
-  time ./nghttp2.sh       "${NGHTTP2_VER_}"
-  time ./nghttp3.sh       "${NGHTTP3_VER_}"
-  time ./libressl.sh     "${LIBRESSL_VER_}"
-  time ./openssl.sh       "${OPENSSL_VER_}"
-  time ./openssl.sh  "${OPENSSL_QUIC_VER_}" openssl-quic
-  time ./ngtcp2.sh         "${NGTCP2_VER_}"
-  time ./libssh2.sh       "${LIBSSH2_VER_}"
-  time ./curl.sh             "${CURL_VER_}"
+  bld zlib             "${ZLIB_VER_}"
+  bld brotli         "${BROTLI_VER_}"
+  bld libgsasl     "${LIBGSASL_VER_}"
+  bld libidn2       "${LIBIDN2_VER_}"
+  bld nghttp2       "${NGHTTP2_VER_}"
+  bld nghttp3       "${NGHTTP3_VER_}"
+  bld libressl     "${LIBRESSL_VER_}"
+  bld openssl       "${OPENSSL_VER_}"
+  bld openssl  "${OPENSSL_QUIC_VER_}" openssl-quic
+  bld ngtcp2         "${NGTCP2_VER_}"
+  bld libssh2       "${LIBSSH2_VER_}"
+  bld curl             "${CURL_VER_}"
 
   # Unified, per-target package: Build
   export _NAM="${_UNIPKG}"

@@ -363,12 +363,14 @@ fi
 live_xt() {
   local pkg hash
   pkg="$1"
-  hash="$(openssl dgst -sha256 pkg.bin)"
-  echo "${hash}"
-  echo "${hash}" | grep -q -a -F -- "${2:-}" || exit 1
-  rm -f -r "${pkg}"; mkdir "${pkg}"; tar --strip-components 1 -xf pkg.bin -C "${pkg}"
-  rm -f pkg.bin pkg.sig
-  [ -f "${pkg}${_patsuf}.patch" ] && dos2unix < "${pkg}${_patsuf}.patch" | patch -N -p1 -d "${pkg}"
+  if [ -z "${C4W_GET}" ] || echo "${C4W_GET}" | grep -q -F "${pkg}"; then
+    hash="$(openssl dgst -sha256 pkg.bin)"
+    echo "${hash}"
+    echo "${hash}" | grep -q -a -F -- "${2:-}" || exit 1
+    rm -f -r "${pkg}"; mkdir "${pkg}"; tar --strip-components 1 -xf pkg.bin -C "${pkg}"
+    rm -f pkg.bin pkg.sig
+    [ -f "${pkg}${_patsuf}.patch" ] && dos2unix < "${pkg}${_patsuf}.patch" | patch -N -p1 -d "${pkg}"
+  fi
   return 0
 }
 
@@ -376,45 +378,49 @@ live_dl() {
   local name ver hash jp url sig redir key keys options
 
   name="$1"
-  ver="$2"
-  hash="${3:-}"
 
-  set +x
-  jp="$(dependencies_json | jq \
-    ".[] | select(.name == \"${name}\")")"
+  if [ -z "${C4W_GET}" ] || echo "${C4W_GET}" | grep -q -F "${name}"; then
 
-  url="$(  printf '%s' "${jp}" | jq --raw-output '.url' | sed \
-      -e "s|{ver}|${ver}|g" \
-      -e "s|{vermm}|$(echo "${ver}" | cut -d . -f -2)|g" \
-    )"
-  sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's|^null$||g')"
-  redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"
-  keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's|^null$||g')"
+    ver="$2"
+    hash="${3:-}"
 
-  options=()
-  [ "${redir}" = 'redir' ] && options+=(--location --proto-redir '=https')
-  options+=(--output pkg.bin "${url}")
-  [ -n "${sig}" ] && options+=(--output pkg.sig "${url}${sig}")
-  set -x
-  my_curl "${options[@]}"
+    set +x
+    jp="$(dependencies_json | jq \
+      ".[] | select(.name == \"${name}\")")"
 
-  if [ -n "${sig}" ]; then
-    for key in ${keys}; do
-      if printf '%s' "${key}" | grep -q -a '^https://'; then
-        # gnu-keyring.gpg can take a long time to import, so allow curl to
-        # run longer.
-        my_curl --max-time 60 "${key}" | my_gpg --quiet --import 2>/dev/null
-      else
-        gpg_recv_key "${key}"
-      fi
-    done
-    my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-  fi
+    url="$(  printf '%s' "${jp}" | jq --raw-output '.url' | sed \
+        -e "s|{ver}|${ver}|g" \
+        -e "s|{vermm}|$(echo "${ver}" | cut -d . -f -2)|g" \
+      )"
+    sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's|^null$||g')"
+    redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"
+    keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's|^null$||g')"
 
-  if [ -n "${hash}" ]; then
-    live_xt "${name}" "${hash}"
-  else
-    true
+    options=()
+    [ "${redir}" = 'redir' ] && options+=(--location --proto-redir '=https')
+    options+=(--output pkg.bin "${url}")
+    [ -n "${sig}" ] && options+=(--output pkg.sig "${url}${sig}")
+    set -x
+    my_curl "${options[@]}"
+
+    if [ -n "${sig}" ]; then
+      for key in ${keys}; do
+        if printf '%s' "${key}" | grep -q -a '^https://'; then
+          # gnu-keyring.gpg can take a long time to import, so allow curl to
+          # run longer.
+          my_curl --max-time 60 "${key}" | my_gpg --quiet --import 2>/dev/null
+        else
+          gpg_recv_key "${key}"
+        fi
+      done
+      my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
+    fi
+
+    if [ -n "${hash}" ]; then
+      live_xt "${name}" "${hash}"
+    else
+      true
+    fi
   fi
 }
 
