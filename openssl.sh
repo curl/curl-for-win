@@ -152,7 +152,10 @@ _VER="$1"
 
   # Rename lib64 to lib to move closer to what packages expect
 
-  [ "${_CPU}" = 'x64' ] && mv "${_pkg}/lib64" "${_pkg}/lib"
+  if [ "${_CPU}" = 'x64' ]; then
+    mv "${_pkg}/lib64" "${_pkg}/lib"
+    sed -i.bak 's|/lib64|/lib|g' ${_pkg}/lib/pkgconfig/*.pc
+  fi
 
   # List files created
 
