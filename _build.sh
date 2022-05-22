@@ -31,7 +31,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   nghttp3.sh   clang    cmake
 #   ngtcp2.sh    clang    cmake
 #   openssl.sh   clang    proprietary
-#   libressl.sh  clang    autotools    TODO: -> cmake?
+#   libressl.sh  clang    autotools/cmake
 #   libssh2.sh   clang    autotools    TODO: -> cmake?
 #   curl.sh      clang    make         TODO: -> autotools/cmake
 
