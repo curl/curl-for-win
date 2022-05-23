@@ -438,7 +438,7 @@ if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
   live_dl nghttp2 "${NGHTTP2_VER_}"
   live_xt nghttp2 "${NGHTTP2_HASH}"
 
-  if [ "${_BRANCH#*quic*}" != "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*nonquic*}" = "${_BRANCH}" ]; then
     live_dl nghttp3 "${NGHTTP3_VER_}"
     live_xt nghttp3 "${NGHTTP3_HASH}"
 
