@@ -150,7 +150,6 @@ _VER="$1"
   if [ "${_CPU}" = 'x64' ]; then
     mv "${_pkg}/lib64" "${_pkg}/lib"
     sed -i.bak 's|/lib64|/lib|g' ${_pkg}/lib/pkgconfig/*.pc
-    rm -f ${_pkg}/lib/pkgconfig/*.pc.bak
   fi
 
   # List files created
@@ -163,8 +162,7 @@ _VER="$1"
 
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
   touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
-  find ${_pkg}/include/openssl -exec touch -c -r "${_ref}" '{}' +
-  find ${_pkg}/lib -exec touch -c -r "${_ref}" '{}' +
+  touch -c -r "${_ref}" ${_pkg}/include/openssl/*.h
 
   # Create package
 
@@ -172,16 +170,17 @@ _VER="$1"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(mktemp -d)/${_BAS}"
 
-  mkdir -p "${_DST}/include/"
-  cp -f -p -r ${_pkg}/include/openssl "${_DST}/include/"
+  mkdir -p "${_DST}/include/openssl"
+  mkdir -p "${_DST}/lib/pkgconfig"
 
-  cp -f -p -r ${_pkg}/lib "${_DST}/"
-
-  cp -f -p CHANGES.md  "${_DST}/"
-  cp -f -p LICENSE.txt "${_DST}/"
-  cp -f -p README.md   "${_DST}/"
-  cp -f -p FAQ.md      "${_DST}/"
-  cp -f -p NEWS.md     "${_DST}/"
+  cp -f -p ${_pkg}/lib/*.a             "${_DST}/lib"
+  cp -f -p ${_pkg}/lib/pkgconfig/*.pc  "${_DST}/lib/pkgconfig/"
+  cp -f -p ${_pkg}/include/openssl/*.h "${_DST}/include/openssl/"
+  cp -f -p CHANGES.md                  "${_DST}/"
+  cp -f -p LICENSE.txt                 "${_DST}/"
+  cp -f -p README.md                   "${_DST}/"
+  cp -f -p FAQ.md                      "${_DST}/"
+  cp -f -p NEWS.md                     "${_DST}/"
 
   if [ "${_CPU}" = 'x86' ] && [ -r ms/applink.c ]; then
     touch -c -r "${_ref}" ms/applink.c

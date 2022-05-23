@@ -18,6 +18,8 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
+  # Cross-tasks
+
   [ "${_OS}" != 'win' ] && options="--build=${_CROSS_HOST} --host=${_TRIPLET}"
 
   # Build
@@ -100,20 +102,13 @@ _VER="$1"
 
   # DESTDIR= + --prefix=
   # LibreSSL does not strip the drive letter
-  # (libressl/pkg/C:/Windows/libressl)
-  _pkg="${_pkr}/${_prefix}"
-  _pks="${_pkr}/${_prefix}/${_ssldir}"
+  #   ./libressl/pkg/C:/Windows/libressl
+  # Some tools (e.g CMake) will become weird when colons appear in
+  # a filename, so move results to a sane, standard path:
 
-  # Move results to a sane, standard path.
-  # Some tools (e.g CMake) will become weird when colons appear in a filename.
-
+  _pkg="${_pkr}/usr/local"
   mkdir -p "${_pkr}/usr"
-  mv "${_pkg}" "${_pkr}/usr/local"
-  pkg="${_pkr}/usr/local"
-
-  # List files created
-
-  find "${_pkg}" | grep -a -v -F '/share/' | sort
+  mv "${_pkr}/${_prefix}" "${_pkg}"
 
   # Build fixups for clang
 
@@ -126,21 +121,25 @@ _VER="$1"
     fi
   done
 
+  # List files created
+
+  find "${_pkg}" | grep -a -v -F '/share/' | sort
+
   # Make steps for determinism
 
   readonly _ref='ChangeLog'
 
   "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
 
-  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
-  touch -c -r "${_ref}" "${_pkg}"/lib/pkgconfig/*.pc
-  touch -c -r "${_ref}" "${_pkg}"/include/openssl/*.h
-  touch -c -r "${_ref}" "${_pkg}"/include/*.h
+  touch -c -r "${_ref}" ${_pkg}/lib/*.a
+  touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
+  touch -c -r "${_ref}" ${_pkg}/include/openssl/*.h
+  touch -c -r "${_ref}" ${_pkg}/include/*.h
 
   # Tests
 
   for bin in \
-    "${_pkg}"/bin/openssl.exe \
+    ${_pkg}/bin/openssl.exe \
   ; do
     file "${bin}"
     # Produce 'openssl version -a'-like output without executing the build:
@@ -156,13 +155,13 @@ _VER="$1"
   mkdir -p "${_DST}/include/openssl"
   mkdir -p "${_DST}/lib/pkgconfig"
 
-  cp -f -p "${_pkg}"/lib/*.a             "${_DST}/lib"
-  cp -f -p "${_pkg}"/lib/pkgconfig/*.pc  "${_DST}/lib/pkgconfig/"
-  cp -f -p "${_pkg}"/include/openssl/*.h "${_DST}/include/openssl/"
-  cp -f -p "${_pkg}"/include/*.h         "${_DST}/include/"
-  cp -f -p ChangeLog                     "${_DST}/ChangeLog.txt"
-  cp -f -p COPYING                       "${_DST}/COPYING.txt"
-  cp -f -p README.md                     "${_DST}/"
+  cp -f -p ${_pkg}/lib/*.a             "${_DST}/lib"
+  cp -f -p ${_pkg}/lib/pkgconfig/*.pc  "${_DST}/lib/pkgconfig/"
+  cp -f -p ${_pkg}/include/openssl/*.h "${_DST}/include/openssl/"
+  cp -f -p ${_pkg}/include/*.h         "${_DST}/include/"
+  cp -f -p ChangeLog                   "${_DST}/ChangeLog.txt"
+  cp -f -p COPYING                     "${_DST}/COPYING.txt"
+  cp -f -p README.md                   "${_DST}/"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )
