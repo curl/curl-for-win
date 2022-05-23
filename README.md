@@ -3,8 +3,7 @@
 
 # Automated, reproducible, transparent, Windows builds for curl
 
-- Packaging aims to follow popular binary releases found on the internet.
-- Both x64 and x86 packages use the same build process.
+- x64 and x86 packages use the same build process.
 - Binary packages are downloadable in `.zip` and `.tar.xz` formats.<br>
   You can extract `.xz` files and the resulting `.tar` archive using
   [7-Zip](https://www.7-zip.org/).
@@ -25,7 +24,7 @@
   - `Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
   - `Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI TLS-SRP UnixSockets`
   - Libraries: `-lcurl -lwldap32 -lcrypt32 -lz -lnghttp2 -lssh2 -lgsasl -lbcrypt -lssl -lcrypto -lidn2 -lbrotlidec-static -lbrotlicommon-static -lnghttp3 -lngtcp2`
-- "noh3" builds:
+- "noh3" builds, like the default, without HTTP/3:
   - `Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp`
   - `Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI TLS-SRP UnixSockets`
   - Libraries: `-lcurl -lwldap32 -lcrypt32 -lz -lnghttp2 -lssh2 -lgsasl -lbcrypt -lssl -lcrypto -lidn2 -lbrotlidec-static -lbrotlicommon-static`

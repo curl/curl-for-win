@@ -33,7 +33,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   openssl.sh   clang    proprietary
 #   libressl.sh  clang    autotools/cmake
 #   libssh2.sh   clang    autotools/cmake
-#   curl.sh      clang    make             TODO: -> autotools/cmake
+#   curl.sh      clang    make             TODO: -> autotools. CMake failed linking with all 4 dependencies I tried adding first: brotli, openssl, libssh2, zlib
 
 cd "$(dirname "$0")"
 
