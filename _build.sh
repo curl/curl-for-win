@@ -17,8 +17,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - Drop FTP support?
 #   - Drop brotli support?
 #   - Use Universal CRT?
+#   - Switch default to openssl-quic
 #   - Switch to LibreSSL or rustls or Schannel?
-#   - delete gcc logic
+#   - Delete gcc logic
 
 # Tools:
 #                compiler build
