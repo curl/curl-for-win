@@ -12,7 +12,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #       to create reproducible binaries. In practice this is a problem when
 #       using CMake, because it will convert source filenames into absolute
 #       ones before passing them to the compiler. autotools builds pass the
-#       path relative to the source root, so it is fine.
+#       path relative to the source root, so no issue there.
 
 export _NAM
 export _VER
