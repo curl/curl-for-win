@@ -86,7 +86,6 @@ _VER="$1"
 
   _prefix='C:/Windows/libressl'
   _ssldir="ssl"
-  _pkr='pkg'
 
   # shellcheck disable=SC2086
   ./configure ${options} \
@@ -98,7 +97,7 @@ _VER="$1"
     "--with-openssldir=${_prefix}/${_ssldir}"
 # make clean > /dev/null
   # Ending slash required.
-  make --jobs 2 install "DESTDIR=$(pwd)/${_pkr}/" >/dev/null # 2>&1
+  make --jobs 2 install "DESTDIR=$(pwd)/pkg/" >/dev/null # 2>&1
 
   # DESTDIR= + --prefix=
   # LibreSSL does not strip the drive letter
@@ -106,9 +105,9 @@ _VER="$1"
   # Some tools (e.g CMake) will become weird when colons appear in
   # a filename, so move results to a sane, standard path:
 
-  _pkg="${_pkr}/usr/local"
-  mkdir -p "${_pkr}/usr"
-  mv "${_pkr}/${_prefix}" "${_pkg}"
+  _pkg='pkg/usr/local'
+  mkdir -p 'pkg/usr'
+  mv "pkg/${_prefix}" "${_pkg}"
 
   # Build fixups for clang
 

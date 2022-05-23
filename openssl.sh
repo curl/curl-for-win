@@ -107,7 +107,6 @@ _VER="$1"
   # paths accordingly; none supported by OpenSSL.
   _prefix='C:/Windows/System32/OpenSSL'
   _ssldir="ssl"
-  _pkr='pkg'
 
   # 'no-dso' implies 'no-dynamic-engine' which in turn compiles in these
   # engines non-dynamically. To avoid them, along with their system DLL
@@ -133,7 +132,7 @@ _VER="$1"
     "--openssldir=${_ssldir}"
   SOURCE_DATE_EPOCH=${unixts} TZ=UTC make --jobs 2
   # Ending slash required.
-  make --jobs 2 install "DESTDIR=$(pwd)/${_pkr}/" >/dev/null # 2>&1
+  make --jobs 2 install "DESTDIR=$(pwd)/pkg/" >/dev/null # 2>&1
 
   # DESTDIR= + --prefix=
   # OpenSSL 3.x does not strip the drive letter anymore:
@@ -141,9 +140,9 @@ _VER="$1"
   # Some tools (e.g CMake) will become weird when colons appear in
   # a filename, so move results to a sane, standard path:
 
-  _pkg="${_pkr}/usr/local"
-  mkdir -p "${_pkr}/usr"
-  mv "${_pkr}/${_prefix}" "${_pkg}"
+  _pkg='pkg/usr/local'
+  mkdir -p 'pkg/usr'
+  mv "pkg/${_prefix}" "${_pkg}"
 
   # Rename 'lib64' to 'lib'. This is what most packages expect.
 
