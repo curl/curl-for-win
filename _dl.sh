@@ -465,10 +465,10 @@ if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*schannel*}" = "${_BRANCH}" ]; then
-  if [ "${_BRANCH#*quic*}" != "${_BRANCH}" ]; then
-    live_dl openssl-quic "${OPENSSL_QUIC_VER_}"
-    live_xt openssl-quic "${OPENSSL_QUIC_HASH}"
-  elif [ "${_BRANCH#*libressl*}" = "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ]; then
+    live_dl libressl "${LIBRESSL_VER_}"
+    live_xt libressl "${LIBRESSL_HASH}"
+  elif [ "${_BRANCH#*nonquic*}" != "${_BRANCH}" ]; then
     if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
       OPENSSL_VER_='3.0.0-beta2'
       OPENSSL_HASH=e76ab22879201b12f014393ee4becec7f264d8f6955b1036839128002868df71
@@ -476,8 +476,8 @@ if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
     live_dl openssl "${OPENSSL_VER_}"
     live_xt openssl "${OPENSSL_HASH}"
   else
-    live_dl libressl "${LIBRESSL_VER_}"
-    live_xt libressl "${LIBRESSL_HASH}"
+    live_dl openssl-quic "${OPENSSL_QUIC_VER_}"
+    live_xt openssl-quic "${OPENSSL_QUIC_HASH}"
   fi
 fi
 
