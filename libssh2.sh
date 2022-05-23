@@ -56,10 +56,12 @@ _VER="$1"
   # NOTE: root path with spaces will break all value with '$(pwd)'. But,
   #       autotools breaks on spaces anyway, so let us leave it like that.
 
-  options="${options} --with-libz"
-  # These seem to work better than --with-libz-prefix=:
-  CFLAGS="${CFLAGS} -I$(pwd)/../zlib/pkg/usr/local/include"
-  LDFLAGS="${LDFLAGS} -L$(pwd)/../zlib/pkg/usr/local/lib"
+  if [ -d ../zlib ]; then
+    options="${options} --with-libz"
+    # These seem to work better than --with-libz-prefix=:
+    CFLAGS="${CFLAGS} -I$(pwd)/../zlib/pkg/usr/local/include"
+    LDFLAGS="${LDFLAGS} -L$(pwd)/../zlib/pkg/usr/local/lib"
+  fi
 
   if [ -d ../libressl ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=$(pwd)/../libressl/pkg/usr/local"

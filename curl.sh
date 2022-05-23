@@ -82,8 +82,10 @@ _VER="$1"
   } | grep -a -v '^$' | sort | tee -a libcurl.def
   CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} ../libcurl.def"
 
-  export ZLIB_PATH=../../zlib/pkg/usr/local
-  options="${options}-zlib"
+  if [ -d ../zlib ]; then
+    export ZLIB_PATH=../../zlib/pkg/usr/local
+    options="${options}-zlib"
+  fi
   if [ -d ../brotli ]; then
     options="${options}-brotli"
     export BROTLI_PATH=../../brotli/pkg/usr/local
