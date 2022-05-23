@@ -87,7 +87,7 @@ _VER="$1"
   if [ -d ../brotli ]; then
     options="${options}-brotli"
     export BROTLI_PATH=../../brotli/pkg/usr/local
-    export BROTLI_LIBS='-Wl,-Bstatic -lbrotlidec-static -lbrotlicommon-static -Wl,-Bdynamic'
+    export BROTLI_LIBS='-Wl,-Bstatic -lbrotlidec -lbrotlicommon -Wl,-Bdynamic'
   fi
 
   if [ -d ../libressl ]; then

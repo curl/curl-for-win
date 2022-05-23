@@ -83,9 +83,12 @@ _VER="$1"
   _pkg='pkg/usr/local'
 
   # Remove '-static' suffixes from static lib names to make these behave
-  # like most other projects do.
+  # like most other projects do. And, also to be in sync with the .pc
+  # files that are correctly generated in the same CMake build process.
 
-# for fn in ${_pkg}/lib/*-static.a; do mv "${fn}" "$(echo "${fn}" | sed 's|-static||')"; done
+  for fn in "${_pkg}"/lib/*-static.a; do
+    mv "${fn}" "$(echo "${fn}" | sed 's|-static||')"
+  done
 
   # Delete implibs
 
