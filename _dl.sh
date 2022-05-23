@@ -150,13 +150,13 @@ check_update() {
   newver=''
   if [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
     slug="${BASH_REMATCH[1]}"
+    # heavily rate-limited
     if [ -n "$5" ]; then
       newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/git/refs/heads" \
         | jq --raw-output '.[].ref' \
         | grep -a -E "$5" \
         | grep -a -E -o '\d+\.\d+\.\d' | sort | tail -1)"
     else
-      # heavily rate-limited
       newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases/latest" \
         | jq --raw-output '.tag_name' | sed 's|^v||')"
       if [[ "${newver}" =~ ^[0-9]+\.[0-9]+$ ]]; then
