@@ -41,7 +41,7 @@ _VER="$1"
   find . -name '*.Plo' -delete
   find . -name '*.pc'  -delete
 
-  _CFLAGS="${_OPTM} -fno-ident -DNDEBUG"
+  _CFLAGS="${_OPTM} -fno-ident"
   [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
   options=''
