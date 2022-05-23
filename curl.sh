@@ -167,6 +167,8 @@ _VER="$1"
   ${_MAKE} --jobs 2 mingw32-clean
   ${_MAKE} --jobs 2 "${options}"
 
+  _pkg='.'
+
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.
   if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ]; then
@@ -184,31 +186,31 @@ _VER="$1"
 
   readonly _ref='CHANGES'
 
-  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
 
-  ../_peclean.py "${_ref}" src/*.exe
-  ../_peclean.py "${_ref}" lib/*.dll
+  ../_peclean.py "${_ref}" ${_pkg}/src/*.exe
+  ../_peclean.py "${_ref}" ${_pkg}/lib/*.dll
 
-  ../_sign-code.sh "${_ref}" src/*.exe
-  ../_sign-code.sh "${_ref}" lib/*.dll
+  ../_sign-code.sh "${_ref}" ${_pkg}/src/*.exe
+  ../_sign-code.sh "${_ref}" ${_pkg}/lib/*.dll
 
-  touch -c -r "${_ref}" src/*.exe
-  touch -c -r "${_ref}" lib/*.dll
-  touch -c -r "${_ref}" lib/*.def
-  touch -c -r "${_ref}" lib/*.a
+  touch -c -r "${_ref}" ${_pkg}/src/*.exe
+  touch -c -r "${_ref}" ${_pkg}/lib/*.dll
+  touch -c -r "${_ref}" ${_pkg}/lib/*.def
+  touch -c -r "${_ref}" ${_pkg}/lib/*.a
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-    touch -c -r "${_ref}" src/*.map
-    touch -c -r "${_ref}" lib/*.map
+    touch -c -r "${_ref}" ${_pkg}/src/*.map
+    touch -c -r "${_ref}" ${_pkg}/lib/*.map
   fi
 
   # Tests
 
-  "${_CCPREFIX}objdump" --all-headers src/*.exe | grep -a -E -i "(file format|dll name)"
-  "${_CCPREFIX}objdump" --all-headers lib/*.dll | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" --all-headers ${_pkg}/src/*.exe | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" --all-headers ${_pkg}/lib/*.dll | grep -a -E -i "(file format|dll name)"
 
   # FIXME: Avoid executing build result?
-  CURL_SSL_BACKEND=schannel ${_WINE} src/curl.exe --version | tee "curl-${_CPU}.txt"
+  CURL_SSL_BACKEND=schannel ${_WINE} ${_pkg}/src/curl.exe --version | tee "curl-${_CPU}.txt"
 
   # Create package
 
@@ -234,12 +236,12 @@ _VER="$1"
       fi
     done
   )
+  cp -f -p ${_pkg}/include/curl/*.h "${_DST}/include/curl/"
+  cp -f -p ${_pkg}/src/*.exe        "${_DST}/bin/"
+  cp -f -p ${_pkg}/lib/*.dll        "${_DST}/bin/"
+  cp -f -p ${_pkg}/lib/*.def        "${_DST}/bin/"
+  cp -f -p ${_pkg}/lib/*.a          "${_DST}/lib/"
   cp -f -p docs/*.md                "${_DST}/docs/"
-  cp -f -p include/curl/*.h         "${_DST}/include/curl/"
-  cp -f -p src/*.exe                "${_DST}/bin/"
-  cp -f -p lib/*.dll                "${_DST}/bin/"
-  cp -f -p lib/*.def                "${_DST}/bin/"
-  cp -f -p lib/*.a                  "${_DST}/lib/"
   cp -f -p CHANGES                  "${_DST}/CHANGES.txt"
   cp -f -p COPYING                  "${_DST}/COPYING.txt"
   cp -f -p README                   "${_DST}/README.txt"
@@ -251,8 +253,8 @@ _VER="$1"
   fi
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-    cp -f -p src/*.map                "${_DST}/bin/"
-    cp -f -p lib/*.map                "${_DST}/bin/"
+    cp -f -p ${_pkg}/src/*.map        "${_DST}/bin/"
+    cp -f -p ${_pkg}/lib/*.map        "${_DST}/bin/"
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"
