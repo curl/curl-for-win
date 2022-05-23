@@ -183,7 +183,7 @@ _ori_path="${PATH}"
 
 bld() {
   pkg="$1"
-  if [ -z "${C4W_BLD}" ] || echo "${C4W_BLD}" | grep -q -F "${pkg}"; then
+  if [ -z "${C4W_BLD:-}" ] || echo "${C4W_BLD}" | grep -q -F "${pkg}"; then
     shift
     time "./${pkg}.sh" "$@"
   fi
