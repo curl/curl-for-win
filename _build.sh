@@ -85,8 +85,8 @@ elif [ "${_BRANCH#*micro*}" != "${_BRANCH}" ]; then
   _FLAV='-micro'
 elif [ "${_BRANCH#*mini*}" != "${_BRANCH}" ]; then
   _FLAV='-mini'
-elif [ "${_BRANCH#*nonquic*}" != "${_BRANCH}" ]; then
-  _FLAV='-nonquic'
+elif [ "${_BRANCH#*noh3*}" != "${_BRANCH}" ]; then
+  _FLAV='-noh3'
 fi
 
 # For 'configure'-based builds.
