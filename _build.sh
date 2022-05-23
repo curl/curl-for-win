@@ -17,8 +17,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - Drop FTP support?
 #   - Drop brotli support?
 #   - Use Universal CRT?
-#   - Switch to LibreSSL or rustls or Schannel?
-#   - Delete gcc logic
+#   - Switch to rustls?
+#   - Make Schannel (no TLSv1.3/QUIC) or LibreSSL (no QUIC, no ed25519 in libssh2) the default?
 
 # Tools:
 #                compiler build
@@ -33,7 +33,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   openssl.sh   clang    proprietary
 #   libressl.sh  clang    autotools/cmake
 #   libssh2.sh   clang    autotools/cmake
-#   curl.sh      clang    make             TODO: -> autotools. CMake failed linking with all 4 dependencies I tried adding first: brotli, openssl, libssh2, zlib
+#   curl.sh      clang    Makefile.m32
 
 cd "$(dirname "$0")"
 
