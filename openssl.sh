@@ -181,6 +181,8 @@ _VER="$1"
   cp -f -p FAQ.md                      "${_DST}/"
   cp -f -p NEWS.md                     "${_DST}/"
 
+  [ "${_NAM}" = 'openssl-quic' ] && cp -f -p README-OpenSSL.md "${_DST}/"
+
   if [ "${_CPU}" = 'x86' ] && [ -r ms/applink.c ]; then
     touch -c -r "${_ref}" ms/applink.c
     cp -f -p ms/applink.c "${_DST}/include/openssl/"
