@@ -18,6 +18,8 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
+  # Cross-tasks
+
   [ "${_OS}" != 'win' ] && options="--build=${_CROSS_HOST} --host=${_TRIPLET}"
 
   # Build
@@ -30,7 +32,7 @@ _VER="$1"
   [ -f 'Makefile' ] || autoreconf --force --install
 
   export LDFLAGS="${_OPTM}"
-  export CFLAGS='-fno-ident -O3 -fno-builtin -fno-strict-aliasing -Wall -DHAVE_DECL_SECUREZEROMEMORY=1'
+  export CFLAGS='-fno-ident -O3 -DHAVE_DECL_SECUREZEROMEMORY=1'
   ldonly=''
 
   if [ "${CC}" = 'mingw-clang' ]; then
