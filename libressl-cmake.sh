@@ -118,16 +118,6 @@ _VER="$1"
   touch -c -r "${_ref}" ${_pkg}/include/openssl/*.h
   touch -c -r "${_ref}" ${_pkg}/include/*.h
 
-  # Tests
-
-  for bin in \
-    ${_pkg}/bin/openssl.exe \
-  ; do
-    file "${bin}"
-    # Produce 'openssl version -a'-like output without executing the build:
-    strings "${bin}" | grep -a -E '^(LibreSSL [0-9]|built on: |compiler: |platform: |[A-Z]+DIR: )' || true
-  done
-
   # Create package
 
   _OUT="${_NAM}-${_VER}${_REVSUFFIX}${_PKGSUFFIX}"
