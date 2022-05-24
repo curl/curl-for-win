@@ -14,6 +14,7 @@
   ([`msvcrt.dll`](https://en.wikipedia.org/wiki/Microsoft_Windows_library_files#MSVCRT.DLL,_MSVCP*.DLL_and_CRTDLL.DLL)
   is
   [required](https://devblogs.microsoft.com/oldnewthing/?p=1273)).
+- The binary package also contains the static library for curl its dependencies.
 - curl/libcurl have
   [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3) (experimental)
   and
