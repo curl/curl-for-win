@@ -211,8 +211,15 @@ _VER="$1"
   "${_CCPREFIX}objdump" --all-headers ${_pkg}/src/*.exe | grep -a -E -i "(file format|dll name)"
   "${_CCPREFIX}objdump" --all-headers ${_pkg}/lib/*.dll | grep -a -E -i "(file format|dll name)"
 
-  # FIXME: Avoid executing build result?
-  CURL_SSL_BACKEND=schannel ${_WINE} ${_pkg}/src/curl.exe --version | tee "curl-${_CPU}.txt"
+  # Execute curl and compiled-in dependency code. This is not secure, but
+  # the build process already requires executing external code
+  # (e.g. configure scripts) on the build machine, so this will not make
+  # it worse, except that it requires installing WINE on a compatible CPU
+  # (and a QEMU setup on non-compatible ones). It would be best to extract
+  # `--version` output directly from the binary as strings, but curl creates
+  # most of these strings dynamically at runtime, so this is not possible
+  # (as of curl 7.83.1).
+  ${_WINE} ${_pkg}/src/curl.exe --version | tee "curl-${_CPU}.txt"
 
   # Create package
 
