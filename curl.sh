@@ -23,11 +23,6 @@ _VER="$1"
   find . -name '*.dll' -delete
   find . -name '*.def' -delete
 
-  if [ ! -f 'Makefile' ]; then
-    autoreconf --force --install
-    cp -f -p Makefile.dist Makefile
-  fi
-
   # Build
 
   options='mingw32-ipv6-sspi-ldaps-srp'
@@ -166,8 +161,11 @@ _VER="$1"
   # CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Xlinker -guard:cf"
   fi
 
-  ${_MAKE} --jobs 2 mingw32-clean
-  ${_MAKE} --jobs 2 "${options}"
+  "${_MAKE}" --jobs 2 --directory lib --makefile Makefile.m32 clean
+  "${_MAKE}" --jobs 2 --directory src --makefile Makefile.m32 clean
+
+  "${_MAKE}" --jobs 2 --directory lib --makefile Makefile.m32 CFG="${options}"
+  "${_MAKE}" --jobs 2 --directory src --makefile Makefile.m32 CFG="${options}"
 
   _pkg='.'
 
