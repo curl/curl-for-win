@@ -1,0 +1,105 @@
+diff --git a/docs/examples/Makefile.m32 b/docs/examples/Makefile.m32
+index ed1d17cd2f839..adff334c4faca 100644
+--- a/docs/examples/Makefile.m32
++++ b/docs/examples/Makefile.m32
+@@ -5,7 +5,7 @@
+ #                            | (__| |_| |  _ <| |___
+ #                             \___|\___/|_| \_\_____|
+ #
+-# Copyright (C) 1998 - 2021, Daniel Stenberg, <daniel@haxx.se>, et al.
++# Copyright (C) 1998 - 2022, Daniel Stenberg, <daniel@haxx.se>, et al.
+ #
+ # This software is licensed as described in the file COPYING, which
+ # you should have received as part of this distribution. The terms
+@@ -113,10 +113,8 @@ CURL_AR := $(CROSSPREFIX)ar
+ endif
+ 
+ CC = $(CURL_CC)
+-CFLAGS = $(CURL_CFLAG_EXTRAS) -g -O2 -Wall -W
+-CFLAGS += -fno-strict-aliasing
+-# comment LDFLAGS below to keep debug info
+-LDFLAGS = $(CURL_LDFLAG_EXTRAS) $(CURL_LDFLAG_EXTRAS_EXE) -s
++CFLAGS = -O3 $(CURL_CFLAG_EXTRAS) -W -Wall
++LDFLAGS = $(CURL_LDFLAG_EXTRAS) $(CURL_LDFLAG_EXTRAS_EXE)
+ RC = $(CROSSPREFIX)windres
+ RCFLAGS = --include-dir=$(PROOT)/include -O coff
+ 
+@@ -130,7 +128,7 @@ endif
+ endif
+ 
+ ifeq ($(ARCH),w64)
+-CFLAGS  += -m64 -D_AMD64_
++CFLAGS  += -m64
+ LDFLAGS += -m64
+ RCFLAGS += -F pe-x86-64
+ else
+diff --git a/lib/Makefile.m32 b/lib/Makefile.m32
+index 699e1a9e5ad76..6b884a29e87b1 100644
+--- a/lib/Makefile.m32
++++ b/lib/Makefile.m32
+@@ -5,7 +5,7 @@
+ #                            | (__| |_| |  _ <| |___
+ #                             \___|\___/|_| \_\_____|
+ #
+-# Copyright (C) 1999 - 2021, Daniel Stenberg, <daniel@haxx.se>, et al.
++# Copyright (C) 1999 - 2022, Daniel Stenberg, <daniel@haxx.se>, et al.
+ #
+ # This software is licensed as described in the file COPYING, which
+ # you should have received as part of this distribution. The terms
+@@ -108,10 +108,8 @@ CURL_RANLIB := $(CROSSPREFIX)ranlib
+ endif
+ 
+ CC = $(CURL_CC)
+-CFLAGS = $(CURL_CFLAG_EXTRAS) -g -O2 -Wall -W
+-CFLAGS += -fno-strict-aliasing
+-# comment LDFLAGS below to keep debug info
+-LDFLAGS = $(CURL_LDFLAG_EXTRAS) $(CURL_LDFLAG_EXTRAS_DLL) -s
++CFLAGS = -O3 $(CURL_CFLAG_EXTRAS) -W -Wall
++LDFLAGS = $(CURL_LDFLAG_EXTRAS) $(CURL_LDFLAG_EXTRAS_DLL)
+ AR = $(CURL_AR)
+ RANLIB = $(CURL_RANLIB)
+ RC = $(CROSSPREFIX)windres
+@@ -128,7 +126,7 @@ endif
+ endif
+ 
+ ifeq ($(ARCH),w64)
+-CFLAGS  += -m64 -D_AMD64_
++CFLAGS  += -m64
+ LDFLAGS += -m64
+ RCFLAGS += -F pe-x86-64
+ else
+diff --git a/src/Makefile.m32 b/src/Makefile.m32
+index 2412b40bf5ff8..d9e58d346c99c 100644
+--- a/src/Makefile.m32
++++ b/src/Makefile.m32
+@@ -5,7 +5,7 @@
+ #                            | (__| |_| |  _ <| |___
+ #                             \___|\___/|_| \_\_____|
+ #
+-# Copyright (C) 1999 - 2021, Daniel Stenberg, <daniel@haxx.se>, et al.
++# Copyright (C) 1999 - 2022, Daniel Stenberg, <daniel@haxx.se>, et al.
+ #
+ # This software is licensed as described in the file COPYING, which
+ # you should have received as part of this distribution. The terms
+@@ -113,10 +113,8 @@ CURL_AR := $(CROSSPREFIX)ar
+ endif
+ 
+ CC = $(CURL_CC)
+-CFLAGS = $(CURL_CFLAG_EXTRAS) -g -O2 -Wall -W
+-CFLAGS += -fno-strict-aliasing
+-# comment LDFLAGS below to keep debug info
+-LDFLAGS = $(CURL_LDFLAG_EXTRAS) $(CURL_LDFLAG_EXTRAS_EXE) -s
++CFLAGS = -O3 $(CURL_CFLAG_EXTRAS) -W -Wall
++LDFLAGS = $(CURL_LDFLAG_EXTRAS) $(CURL_LDFLAG_EXTRAS_EXE)
+ AR = $(CURL_AR)
+ RC = $(CROSSPREFIX)windres
+ RCFLAGS = --include-dir=$(PROOT)/include -O coff -DCURL_EMBED_MANIFEST
+@@ -136,7 +134,7 @@ endif
+ endif
+ 
+ ifeq ($(ARCH),w64)
+-CFLAGS  += -m64 -D_AMD64_
++CFLAGS  += -m64
+ LDFLAGS += -m64
+ RCFLAGS += -F pe-x86-64
+ else
