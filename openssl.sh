@@ -34,7 +34,6 @@ _VER="$1"
 
   rm -r -f pkg
 
-  find . -name '*.s'   -delete  # filenames are different for each CPU platform, but cleanup anyway
   find . -name '*.o'   -delete
   find . -name '*.obj' -delete
   find . -name '*.a'   -delete
