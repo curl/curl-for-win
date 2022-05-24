@@ -54,9 +54,13 @@ _VER="$1"
 # CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUNICODE -D_UNICODE"
 # CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -municode"
 
+  export CURL_DLL_SUFFIX=''
+  [ "${_CPU}" = 'x64' ] && CURL_DLL_SUFFIX='-x64'
+  export CURL_DLL_A_SUFFIX=.dll
+
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,-Map,curl.map"
-    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,-Map,libcurl.map"
+    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,-Map,libcurl${CURL_DLL_SUFFIX}.map"
   fi
 
   # Generate .def file for libcurl by parsing curl headers. Useful to export
@@ -134,9 +138,6 @@ _VER="$1"
   else
     options="${options}-winidn"
   fi
-
-  [ "${_CPU}" = 'x64' ] && export CURL_DLL_SUFFIX=-x64
-  export CURL_DLL_A_SUFFIX=.dll
 
   # Make sure to link zlib (and only zlib) in static mode when building
   # `libcurl.dll`, so that it would not depend on a `zlib1.dll`.
