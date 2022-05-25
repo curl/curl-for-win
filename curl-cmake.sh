@@ -3,11 +3,9 @@
 # [CMAKE EXPERIMENTAL]
 
 # FIXME:
-# - libidn2 not found
 # - ngtcp2 fails with "Could NOT find NGTCP2 (missing: OpenSSL)".
 #   OpenSSL QUIC capability also not detected.
 # - HAVE_STRCASECMP, possibly others, undetected
-# - both .exe and .dll miss linking the .rc/manifest
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
 
@@ -219,9 +217,10 @@ _VER="$1"
       _CFLAGS="${_CFLAGS} -DUSE_GSASL -I$(pwd)/../libgsasl/pkg/usr/local/include"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L$(pwd)/../libgsasl/pkg/usr/local/lib -lgsasl"
     fi
-    if [ -d ../libidn2 ] && false; then  # FIXME: libidn2 not detected. Unclear how to configure this.
+    if [ -d ../libidn2 ]; then
       options="${options} -DUSE_LIBIDN2=ON"
-      options="${options} -DCMAKE_LIBRARY_PATH=$(pwd)/../libidn2/pkg/usr/local/lib"
+      _CFLAGS="${_CFLAGS} -I$(pwd)/../libidn2/pkg/usr/local/include"
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L$(pwd)/../libidn2/pkg/usr/local/lib -lidn2"
     else
       options="${options} -DUSE_LIBIDN2=OFF"
       options="${options} -DUSE_WIN32_IDN=ON"
@@ -254,7 +253,7 @@ _VER="$1"
         "-DCMAKE_C_COMPILER=clang${_CCSUFFIX}" \
         "-DCMAKE_C_FLAGS=${_CFLAGS}" \
         "-DCMAKE_EXE_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_EXE}" \
-        "-DCMAKE_SHARED_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_DLL}"
+        "-DCMAKE_SHARED_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_DLL}"  # --debug-find
     else
       unset CC
 
