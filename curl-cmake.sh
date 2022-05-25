@@ -9,6 +9,7 @@
 # - HAVE_STRCASECMP, maybe others, undetected
 # - ngtcp2 fails with "Could NOT find NGTCP2 (missing: OpenSSL)".
 #   OpenSSL QUIC capability also not detected.
+# - both .exe and .dll miss linking the .rc/manifest
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
 
@@ -129,6 +130,7 @@ _VER="$1"
       | sed -E 's|^ *\*? *([a-z_]+) *\(.+$|\1|g'
   } | grep -a -v '^$' | sort | tee -a libcurl.def
   options="${options} -DCMAKE_LINK_DEF_FILE_FLAG=$(pwd)/libcurl.def"  # FIXME: .def input ignored.
+  CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} $(pwd)/libcurl.def"  # FIXME: .def input ignored.
 
   _CFLAGS="${_CFLAGS} -DHAVE_LDAP_SSL"
   CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lwldap32"
@@ -268,6 +270,8 @@ _VER="$1"
 
   readonly _ref='CHANGES'
 
+  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/bin/*.exe
+  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/bin/*.dll
   "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
 
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
