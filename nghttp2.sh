@@ -89,7 +89,7 @@ _VER="$1"
 
   readonly _ref='ChangeLog'
 
-  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/*.a
 
   touch -c -r "${_ref}" ${_pkg}/include/nghttp2/*.h
   touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc

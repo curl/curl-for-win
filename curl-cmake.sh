@@ -271,9 +271,9 @@ _VER="$1"
 
   readonly _ref='CHANGES'
 
-  "${_CCPREFIX}strip" --preserve-dates --strip-all   --enable-deterministic-archives ${_pkg}/bin/*.exe
-  "${_CCPREFIX}strip" --preserve-dates --strip-all   --enable-deterministic-archives ${_pkg}/bin/*.dll
-  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/bin/*.exe
+  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/bin/*.dll
+  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/*.a
 
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.dll
