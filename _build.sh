@@ -37,9 +37,10 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 cd "$(dirname "$0")"
 
-LC_ALL=C
-LC_MESSAGES=C
-LANG=C
+export LC_ALL=C
+export LC_MESSAGES=C
+export LANG=C
+
 export GREP_OPTIONS=
 export ZIPOPT=
 export ZIP=
