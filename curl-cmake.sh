@@ -3,13 +3,10 @@
 # [CMAKE EXPERIMENTAL]
 
 # FIXME:
-# - .def input ignored
-# - .exe not standalone (depends on libcurl.dll)
-# - static lib not built when a .dll is built
 # - libidn2 not found
-# - HAVE_STRCASECMP, maybe others, undetected
 # - ngtcp2 fails with "Could NOT find NGTCP2 (missing: OpenSSL)".
 #   OpenSSL QUIC capability also not detected.
+# - HAVE_STRCASECMP, possibly others, undetected
 # - both .exe and .dll miss linking the .rc/manifest
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
@@ -61,58 +58,8 @@ _VER="$1"
 
   # Build
 
-  options=''
-  options="${options} -DCMAKE_SYSTEM_NAME=Windows"
-  options="${options} -DCMAKE_BUILD_TYPE=Release"
-  options="${options} -DCMAKE_DISABLE_PRECOMPILE_HEADERS=OFF"
-  [ "${_OS}" = 'mac' ] && options="${options} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
-  options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
-  options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
-  options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
-
-  _CFLAGS="${_OPTM} -fno-ident"
-  [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
-
-  # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
-  # marking public libcurl functions as 'exported'. Useful to avoid the
-  # chance of libcurl functions getting exported from final binaries when
-  # linked against the static libcurl lib.
-  export _CFLAGS='-fno-ident -DCURL_STATICLIB -DHAVE_STRCASECMP -DHAVE_ATOMIC'
-  [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
-  [ "${_CPU}" = 'x86' ] && options="${options} -DENABLE_INET_PTON=OFF"  # For Windows XP/etc compatibility
-  export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
-  export CURL_LDFLAG_EXTRAS_EXE
-  export CURL_LDFLAG_EXTRAS_DLL
-  if [ "${_CPU}" = 'x86' ]; then
-    CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
-    CURL_LDFLAG_EXTRAS_DLL=''
-  else
-    CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
-    CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
-    CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
-  fi
-
-  # Disabled till we flesh out UNICODE support and document it enough to be
-  # safe to use.
-# options="${options} -DENABLE_UNICODE=ON"
-
-  CURL_DLL_SUFFIX=''
-  [ "${_CPU}" = 'x64' ] && CURL_DLL_SUFFIX='-x64'
-
-  options="${options} -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${CURL_DLL_SUFFIX}.dll"  # CMAKE_SHARED_LIBRARY_SUFFIX is ignored.
-
-  CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,--output-def,libcurl${CURL_DLL_SUFFIX}.def"
-
-  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-    CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,-Map,curl.map"
-    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,-Map,libcurl${CURL_DLL_SUFFIX}.map"
-  fi
-
-  # Ugly hack. Everything breaks without this due to the accidental ordering of
-  # libs and objects, and offering no universal way to (re)insert libs at
-  # specific positions. Linker will complain about a missing --end-group, which
-  # it will add automatically anyway. With -fuse-ld=lld, it is the same case.
-  CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--start-group"
+  # DESTDIR= + CMAKE_INSTALL_PREFIX
+  _pkg='pkg/usr/local'
 
   # Generate .def file for libcurl by parsing curl headers. Useful to export
   # the libcurl function meant to be exported.
@@ -130,129 +77,197 @@ _VER="$1"
     grep -a -h -E '^ *\*? *[a-z_]+ *\(.+\);$' include/curl/*.h \
       | sed -E 's|^ *\*? *([a-z_]+) *\(.+$|\1|g'
   } | grep -a -v '^$' | sort | tee -a libcurl.def
-  options="${options} -DCMAKE_LINK_DEF_FILE_FLAG=$(pwd)/libcurl.def"  # FIXME: .def input ignored.
-  CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} $(pwd)/libcurl.def"  # FIXME: .def input ignored.
 
-  _CFLAGS="${_CFLAGS} -DHAVE_LDAP_SSL"
-  CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lwldap32"
+  CC_INPUT="${CC}"
 
-  if [ -d ../zlib ]; then
-    options="${options} -DUSE_ZLIB=ON"
-    options="${options} -DZLIB_LIBRARY=$(pwd)/../zlib/pkg/usr/local/lib/libz.a"
-    options="${options} -DZLIB_INCLUDE_DIR=$(pwd)/../zlib/pkg/usr/local/include"
-  else
-    options="${options} -DUSE_ZLIB=OFF"
-  fi
-  if [ -d ../brotli ]; then
-    options="${options} -DCURL_BROTLI=ON"
-    options="${options} -DBROTLIDEC_LIBRARY=$(pwd)/../brotli/pkg/usr/local/lib/libbrotlidec.a"
-    options="${options} -DBROTLICOMMON_LIBRARY=$(pwd)/../brotli/pkg/usr/local/lib/libbrotlicommon.a"
-  else
-    options="${options} -DCURL_BROTLI=OFF"
-  fi
+  # CMake cannot build everything in one pass. With BUILD_SHARED_LIBS enabled,
+  # it will not build a static lib, and links curl.exe against libcurl DLL
+  # with no option to change this. We need to split it into two passes. This
+  # will be slower than when using a single pass (like in Makefile.m32), but
+  # there is no other way. The two passes are:
+  #   1. build the shared libcurl DLL + implib + .def
+  #   2. build the static libcurl lib + statically linked curl EXE
+  for pass in shared static; do
 
-  if [ -d ../libressl ]; then
-    options="${options} -DCURL_USE_OPENSSL=ON"
-    options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../libressl/pkg/usr/local"
-    options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../libressl/pkg/usr/local/include"
-  elif [ -d ../openssl-quic ]; then
-    options="${options} -DCURL_USE_OPENSSL=ON"
-    options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../openssl-quic/pkg/usr/local"
-    options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../openssl-quic/pkg/usr/local/include"
-  elif [ -d ../openssl ]; then
-    options="${options} -DCURL_USE_OPENSSL=ON"
-    options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../openssl/pkg/usr/local"
-    options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../openssl/pkg/usr/local/include"
-  else
-    options="${options} -DCURL_USE_OPENSSL=OFF"
-  fi
-  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ]; then
-    options="${options} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON"
-    _CFLAGS="${_CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
-  fi
-  options="${options} -DCURL_USE_SCHANNEL=ON"
+    options=''
+    options="${options} -DCMAKE_SYSTEM_NAME=Windows"
+    options="${options} -DCMAKE_BUILD_TYPE=Release"
+    options="${options} -DCMAKE_DISABLE_PRECOMPILE_HEADERS=OFF"
+    [ "${_OS}" = 'mac' ] && options="${options} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
+    options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
+    options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
+    options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
 
-  if [ -d ../libssh2 ]; then
-    options="${options} -DCURL_USE_LIBSSH2=ON"
-    options="${options} -DLIBSSH2_LIBRARY=$(pwd)/../libssh2/pkg/usr/local/lib/libssh2.a"
-    options="${options} -DLIBSSH2_INCLUDE_DIR=$(pwd)/../libssh2/pkg/usr/local/include"
-    CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lbcrypt"
-    options="${options} -DCMAKE_LINK_LIBRARY_FLAG=bcrypt"
-  else
-    options="${options} -DCURL_USE_LIBSSH2=OFF"  # Avoid detecting a copy on the host OS
-  fi
+    _CFLAGS="${_OPTM} -fno-ident"
+    [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
-  if [ -d ../nghttp2 ]; then
-    options="${options} -DUSE_NGHTTP2=ON"
-    options="${options} -DNGHTTP2_LIBRARY=$(pwd)/../nghttp2/pkg/usr/local/lib/libnghttp2.a"
-    options="${options} -DNGHTTP2_INCLUDE_DIR=$(pwd)/../nghttp2/pkg/usr/local/include"
-    _CFLAGS="${_CFLAGS} -DNGHTTP2_STATICLIB"
-  else
-    options="${options} -DUSE_NGHTTP2=OFF"
-  fi
-  if [ -d ../nghttp3 ] && false; then
-    options="${options} -DUSE_NGHTTP3=ON"
-    options="${options} -DNGHTTP3_LIBRARY=$(pwd)/../nghttp3/pkg/usr/local/lib/libnghttp3.a"
-    options="${options} -DNGHTTP3_INCLUDE_DIR=$(pwd)/../nghttp3/pkg/usr/local/include"
-    _CFLAGS="${_CFLAGS} -DNGHTTP3_STATICLIB"
+    # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
+    # marking public libcurl functions as 'exported'. Useful to avoid the
+    # chance of libcurl functions getting exported from final binaries when
+    # linked against the static libcurl lib.
+    export _CFLAGS='-fno-ident -DCURL_STATICLIB -DHAVE_STRCASECMP -DHAVE_ATOMIC'
+    [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
+    [ "${_CPU}" = 'x86' ] && options="${options} -DENABLE_INET_PTON=OFF"  # For Windows XP/etc compatibility
+    export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
+    export CURL_LDFLAG_EXTRAS_EXE
+    export CURL_LDFLAG_EXTRAS_DLL
+    if [ "${_CPU}" = 'x86' ]; then
+      CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
+      CURL_LDFLAG_EXTRAS_DLL=''
+    else
+      CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
+      CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
+    fi
 
-    options="${options} -DUSE_NGTCP2=ON"  # FIXME: failing with "Could NOT find NGTCP2 (missing: OpenSSL)"
-  # options="${options} -DNGTCP2_LIBRARY=$(pwd)/../ngtcp2/pkg/usr/local/lib/libngtcp2.a"
-    options="${options} -DNGTCP2_INCLUDE_DIR=$(pwd)/../ngtcp2/pkg/usr/local/include"
-    _CFLAGS="${_CFLAGS} -DNGTCP2_STATICLIB"
-  else
-    options="${options} -DUSE_NGHTTP3=OFF"
-    options="${options} -DUSE_NGTCP2=OFF"
-  fi
-  if [ -d ../libgsasl ]; then
-    _CFLAGS="${_CFLAGS} -DUSE_GSASL -I$(pwd)/../libgsasl/pkg/usr/local/include"
-    CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L$(pwd)/../libgsasl/pkg/usr/local/lib -lgsasl"
-  fi
-  if [ -d ../libidn2 ] && false; then  # FIXME: libidn2 not detected. Unclear how it is supposed to be configured.
-    options="${options} -DUSE_LIBIDN2=ON"
-    options="${options} -DCMAKE_LIBRARY_PATH=$(pwd)/../libidn2/pkg/usr/local/lib"
-  else
-    options="${options} -DUSE_LIBIDN2=OFF"
-    options="${options} -DUSE_WIN32_IDN=ON"
-  fi
+    # Disabled till we flesh out UNICODE support and document it enough to be
+    # safe to use.
+  # options="${options} -DENABLE_UNICODE=ON"
 
-  options="${options} -DCURL_CA_PATH=none"
-  options="${options} -DCURL_CA_BUNDLE=none"
-  options="${options} -DBUILD_SHARED_LIBS=ON"  # FIXME: This also means the .exe will depend on the DLL.
-  options="${options} -DENABLE_THREADED_RESOLVER=ON"
-  options="${options} -DBUILD_TESTING=OFF"
+    CURL_DLL_SUFFIX=''
+    [ "${_CPU}" = 'x64' ] && CURL_DLL_SUFFIX='-x64'
 
-  if [ "${CC}" = 'mingw-clang' ]; then
-    unset CC
+    options="${options} -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${CURL_DLL_SUFFIX}.dll"  # CMAKE_SHARED_LIBRARY_SUFFIX ignored.
 
-    [ "${_OS}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
+    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,--output-def,libcurl${CURL_DLL_SUFFIX}.def"
 
-  # _CFLAGS="${_CFLAGS} -Xclang -cfguard"
+    if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+      CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,-Map,curl.map"
+      CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,-Map,libcurl${CURL_DLL_SUFFIX}.map"
+    fi
 
-    # shellcheck disable=SC2086
-    cmake . ${options} ${opt_gmsys} \
-      "-DCMAKE_SYSROOT=${_SYSROOT}" \
-      "-DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}" \
-      "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
-      "-DCMAKE_C_COMPILER=clang${_CCSUFFIX}" \
-      "-DCMAKE_C_FLAGS=${_CFLAGS}" \
-      "-DCMAKE_EXE_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_EXE}" \
-      "-DCMAKE_SHARED_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_DLL}"
-  else
-    unset CC
+    # Ugly hack. Everything breaks without this due to the accidental ordering of
+    # libs and objects, and offering no universal way to (re)insert libs at
+    # specific positions. Linker will complain about a missing --end-group, which
+    # it will add automatically anyway. Same with '-fuse-ld=lld'.
+    CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--start-group"
 
-    # shellcheck disable=SC2086
-    cmake . ${options} ${opt_gmsys} \
-      "-DCMAKE_C_COMPILER=${_CCPREFIX}gcc" \
-      "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}" \
-      "-DCMAKE_EXE_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_EXE}" \
-      "-DCMAKE_SHARED_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_DLL}"
-  fi
+    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} $(pwd)/libcurl.def"
 
-  make --jobs 2 install "DESTDIR=$(pwd)/pkg" VERBOSE=1
+    _CFLAGS="${_CFLAGS} -DHAVE_LDAP_SSL"
+    CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lwldap32"
 
-  # DESTDIR= + CMAKE_INSTALL_PREFIX
-  _pkg='pkg/usr/local'
+    if [ -d ../zlib ]; then
+      options="${options} -DUSE_ZLIB=ON"
+      options="${options} -DZLIB_LIBRARY=$(pwd)/../zlib/pkg/usr/local/lib/libz.a"
+      options="${options} -DZLIB_INCLUDE_DIR=$(pwd)/../zlib/pkg/usr/local/include"
+    else
+      options="${options} -DUSE_ZLIB=OFF"
+    fi
+    if [ -d ../brotli ]; then
+      options="${options} -DCURL_BROTLI=ON"
+      options="${options} -DBROTLIDEC_LIBRARY=$(pwd)/../brotli/pkg/usr/local/lib/libbrotlidec.a"
+      options="${options} -DBROTLICOMMON_LIBRARY=$(pwd)/../brotli/pkg/usr/local/lib/libbrotlicommon.a"
+    else
+      options="${options} -DCURL_BROTLI=OFF"
+    fi
+
+    if [ -d ../libressl ]; then
+      options="${options} -DCURL_USE_OPENSSL=ON"
+      options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../libressl/pkg/usr/local"
+      options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../libressl/pkg/usr/local/include"
+    elif [ -d ../openssl-quic ]; then
+      options="${options} -DCURL_USE_OPENSSL=ON"
+      options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../openssl-quic/pkg/usr/local"
+      options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../openssl-quic/pkg/usr/local/include"
+    elif [ -d ../openssl ]; then
+      options="${options} -DCURL_USE_OPENSSL=ON"
+      options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../openssl/pkg/usr/local"
+      options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../openssl/pkg/usr/local/include"
+    else
+      options="${options} -DCURL_USE_OPENSSL=OFF"
+    fi
+    if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ]; then
+      options="${options} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON"
+      _CFLAGS="${_CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
+    fi
+    options="${options} -DCURL_USE_SCHANNEL=ON"
+
+    if [ -d ../libssh2 ]; then
+      options="${options} -DCURL_USE_LIBSSH2=ON"
+      options="${options} -DLIBSSH2_LIBRARY=$(pwd)/../libssh2/pkg/usr/local/lib/libssh2.a"
+      options="${options} -DLIBSSH2_INCLUDE_DIR=$(pwd)/../libssh2/pkg/usr/local/include"
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lbcrypt"
+      options="${options} -DCMAKE_LINK_LIBRARY_FLAG=bcrypt"
+    else
+      options="${options} -DCURL_USE_LIBSSH2=OFF"  # Avoid detecting a copy on the host OS
+    fi
+
+    if [ -d ../nghttp2 ]; then
+      options="${options} -DUSE_NGHTTP2=ON"
+      options="${options} -DNGHTTP2_LIBRARY=$(pwd)/../nghttp2/pkg/usr/local/lib/libnghttp2.a"
+      options="${options} -DNGHTTP2_INCLUDE_DIR=$(pwd)/../nghttp2/pkg/usr/local/include"
+      _CFLAGS="${_CFLAGS} -DNGHTTP2_STATICLIB"
+    else
+      options="${options} -DUSE_NGHTTP2=OFF"
+    fi
+    if [ -d ../nghttp3 ] && false; then
+      options="${options} -DUSE_NGHTTP3=ON"
+      options="${options} -DNGHTTP3_LIBRARY=$(pwd)/../nghttp3/pkg/usr/local/lib/libnghttp3.a"
+      options="${options} -DNGHTTP3_INCLUDE_DIR=$(pwd)/../nghttp3/pkg/usr/local/include"
+      _CFLAGS="${_CFLAGS} -DNGHTTP3_STATICLIB"
+
+      options="${options} -DUSE_NGTCP2=ON"  # FIXME: failing with "Could NOT find NGTCP2 (missing: OpenSSL)"
+    # options="${options} -DNGTCP2_LIBRARY=$(pwd)/../ngtcp2/pkg/usr/local/lib/libngtcp2.a"
+      options="${options} -DNGTCP2_INCLUDE_DIR=$(pwd)/../ngtcp2/pkg/usr/local/include"
+      _CFLAGS="${_CFLAGS} -DNGTCP2_STATICLIB"
+    else
+      options="${options} -DUSE_NGHTTP3=OFF"
+      options="${options} -DUSE_NGTCP2=OFF"
+    fi
+    if [ -d ../libgsasl ]; then
+      _CFLAGS="${_CFLAGS} -DUSE_GSASL -I$(pwd)/../libgsasl/pkg/usr/local/include"
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L$(pwd)/../libgsasl/pkg/usr/local/lib -lgsasl"
+    fi
+    if [ -d ../libidn2 ] && false; then  # FIXME: libidn2 not detected. Unclear how to configure this.
+      options="${options} -DUSE_LIBIDN2=ON"
+      options="${options} -DCMAKE_LIBRARY_PATH=$(pwd)/../libidn2/pkg/usr/local/lib"
+    else
+      options="${options} -DUSE_LIBIDN2=OFF"
+      options="${options} -DUSE_WIN32_IDN=ON"
+    fi
+
+    options="${options} -DCURL_CA_PATH=none"
+    options="${options} -DCURL_CA_BUNDLE=none"
+    if [ "${pass}" = 'static' ]; then
+      options="${options} -DBUILD_SHARED_LIBS=OFF"
+      options="${options} -DBUILD_CURL_EXE=ON"
+    else
+      options="${options} -DBUILD_SHARED_LIBS=ON"
+      options="${options} -DBUILD_CURL_EXE=OFF"
+    fi
+    options="${options} -DENABLE_THREADED_RESOLVER=ON"
+    options="${options} -DBUILD_TESTING=OFF"
+
+    if [ "${CC_INPUT}" = 'mingw-clang' ]; then
+      unset CC
+
+      [ "${_OS}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
+
+    # _CFLAGS="${_CFLAGS} -Xclang -cfguard"
+
+      # shellcheck disable=SC2086
+      cmake . ${options} ${opt_gmsys} \
+        "-DCMAKE_SYSROOT=${_SYSROOT}" \
+        "-DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}" \
+        "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
+        "-DCMAKE_C_COMPILER=clang${_CCSUFFIX}" \
+        "-DCMAKE_C_FLAGS=${_CFLAGS}" \
+        "-DCMAKE_EXE_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_EXE}" \
+        "-DCMAKE_SHARED_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_DLL}"
+    else
+      unset CC
+
+      # shellcheck disable=SC2086
+      cmake . ${options} ${opt_gmsys} \
+        "-DCMAKE_C_COMPILER=${_CCPREFIX}gcc" \
+        "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}" \
+        "-DCMAKE_EXE_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_EXE}" \
+        "-DCMAKE_SHARED_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_DLL}"
+    fi
+
+    make --jobs 2 install "DESTDIR=$(pwd)/pkg" VERBOSE=1
+  done
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.
