@@ -6,7 +6,7 @@
 # - .def input ignored
 # - .exe not standalone (depends on libcurl.dll)
 # - libidn2 not found
-# - HAVE_STRCASECMP/friends undetected
+# - HAVE_STRCASECMP, maybe others, undetected
 # - ngtcp2 fails with "Could NOT find NGTCP2 (missing: OpenSSL)".
 #   OpenSSL QUIC capability also not detected.
 
@@ -74,9 +74,9 @@ _VER="$1"
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
   # marking public libcurl functions as 'exported'. Useful to avoid the
   # chance of libcurl functions getting exported from final binaries when
-  # linked against static libcurl lib.
-  export CURL_CFLAG_EXTRAS='-fno-ident -O3 -DCURL_STATICLIB -DHAVE_STRCASECMP -DHAVE_ATOMIC'  # FIXME: HAVE_STRCASECMP not working
-  [ "${_CPU}" = 'x86' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
+  # linked against the static libcurl lib.
+  export _CFLAGS='-fno-ident -DCURL_STATICLIB -DHAVE_STRCASECMP -DHAVE_ATOMIC'
+  [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
   [ "${_CPU}" = 'x86' ] && options="${options} -DENABLE_INET_PTON=OFF"  # For Windows XP/etc compatibility
   export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
   export CURL_LDFLAG_EXTRAS_EXE

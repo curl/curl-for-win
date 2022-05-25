@@ -34,7 +34,7 @@ _VER="$1"
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
   # marking public libcurl functions as 'exported'. Useful to avoid the
   # chance of libcurl functions getting exported from final binaries when
-  # linked against static libcurl lib.
+  # linked against the static libcurl lib.
   export CURL_CFLAG_EXTRAS='-fno-ident -DCURL_STATICLIB -DCURL_ENABLE_MQTT -DHAVE_ATOMIC'
   [ "${_CPU}" = 'x86' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
