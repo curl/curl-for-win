@@ -3,9 +3,8 @@
 # [CMAKE EXPERIMENTAL]
 
 # FIXME:
-# - ngtcp2 fails with "Could NOT find NGTCP2 (missing: OpenSSL)".
-#   OpenSSL QUIC capability also not detected.
 # - HAVE_STRCASECMP, possibly others, undetected
+# - CPU platform not visible in --version output, only "Windows"
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
 
@@ -96,9 +95,6 @@ _VER="$1"
     options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
     options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
 
-    _CFLAGS="${_OPTM} -fno-ident"
-    [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
-
     # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
     # marking public libcurl functions as 'exported'. Useful to avoid the
     # chance of libcurl functions getting exported from final binaries when
@@ -118,6 +114,12 @@ _VER="$1"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
     fi
 
+    # FIXME: Improve this ugly solution to include the CPU in the OS string
+  # [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -DOS=Windows-x86 -Wno-macro-redefined"
+  # [ "${_CPU}" = 'x64' ] && _CFLAGS="${_CFLAGS} -DOS=Windows-x64 -Wno-macro-redefined"
+    [ "${_CPU}" = 'x86' ] && options="${options} -DCURL_OS=Windows-x86"
+    [ "${_CPU}" = 'x64' ] && options="${options} -DCURL_OS=Windows-x64"
+
     # Disabled till we flesh out UNICODE support and document it enough to be
     # safe to use.
   # options="${options} -DENABLE_UNICODE=ON"
@@ -125,7 +127,7 @@ _VER="$1"
     CURL_DLL_SUFFIX=''
     [ "${_CPU}" = 'x64' ] && CURL_DLL_SUFFIX='-x64'
 
-    options="${options} -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${CURL_DLL_SUFFIX}.dll"  # CMAKE_SHARED_LIBRARY_SUFFIX ignored.
+    [ "${pass}" = 'shared' ] && options="${options} -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${CURL_DLL_SUFFIX}.dll"  # CMAKE_SHARED_LIBRARY_SUFFIX ignored.
 
     CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,--output-def,libcurl${CURL_DLL_SUFFIX}.def"
 
@@ -186,7 +188,6 @@ _VER="$1"
       options="${options} -DLIBSSH2_LIBRARY=$(pwd)/../libssh2/pkg/usr/local/lib/libssh2.a"
       options="${options} -DLIBSSH2_INCLUDE_DIR=$(pwd)/../libssh2/pkg/usr/local/include"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lbcrypt"
-      options="${options} -DCMAKE_LINK_LIBRARY_FLAG=bcrypt"
     else
       options="${options} -DCURL_USE_LIBSSH2=OFF"  # Avoid detecting a copy on the host OS
     fi
@@ -199,16 +200,18 @@ _VER="$1"
     else
       options="${options} -DUSE_NGHTTP2=OFF"
     fi
-    if [ -d ../nghttp3 ] && false; then
+    if [ -d ../nghttp3 ]; then
       options="${options} -DUSE_NGHTTP3=ON"
       options="${options} -DNGHTTP3_LIBRARY=$(pwd)/../nghttp3/pkg/usr/local/lib/libnghttp3.a"
       options="${options} -DNGHTTP3_INCLUDE_DIR=$(pwd)/../nghttp3/pkg/usr/local/include"
       _CFLAGS="${_CFLAGS} -DNGHTTP3_STATICLIB"
 
-      options="${options} -DUSE_NGTCP2=ON"  # FIXME: failing with "Could NOT find NGTCP2 (missing: OpenSSL)"
-    # options="${options} -DNGTCP2_LIBRARY=$(pwd)/../ngtcp2/pkg/usr/local/lib/libngtcp2.a"
+      options="${options} -DUSE_NGTCP2=ON"
+      options="${options} -DNGTCP2_LIBRARY=$(pwd)/../ngtcp2/pkg/usr/local/lib/libngtcp2.a"
       options="${options} -DNGTCP2_INCLUDE_DIR=$(pwd)/../ngtcp2/pkg/usr/local/include"
+      options="${options} -DCMAKE_LIBRARY_PATH=$(pwd)/../ngtcp2/pkg/usr/local/lib"
       _CFLAGS="${_CFLAGS} -DNGTCP2_STATICLIB"
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lws2_32"  # Necessary for 'CheckQuicSupportInOpenSSL'
     else
       options="${options} -DUSE_NGHTTP3=OFF"
       options="${options} -DUSE_NGTCP2=OFF"
