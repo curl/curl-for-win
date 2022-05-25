@@ -100,6 +100,7 @@ if [ "${_OS}" != 'win' ]; then
   case "${_OS}" in
     win)   _CROSS_HOST='x86_64-pc-mingw32';;
     linux) _CROSS_HOST='x86_64-pc-linux';;  # x86_64-pc-linux-gnu
+    bsd)   _CROSS_HOST='x86_64-pc-bsd';;
     mac)
       if [ "$(uname -m)" = 'arm64' ]; then
         _CROSS_HOST='arm-apple-darwin'
@@ -107,7 +108,6 @@ if [ "${_OS}" != 'win' ]; then
         _CROSS_HOST='x86_64-apple-darwin'
       fi
       ;;
-    bsd)   _CROSS_HOST='x86_64-pc-bsd';;
   esac
 fi
 
