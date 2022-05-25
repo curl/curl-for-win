@@ -5,6 +5,7 @@
 # FIXME:
 # - .def input ignored
 # - .exe not standalone (depends on libcurl.dll)
+# - static lib not built when a .dll is built
 # - libidn2 not found
 # - HAVE_STRCASECMP, maybe others, undetected
 # - ngtcp2 fails with "Could NOT find NGTCP2 (missing: OpenSSL)".
@@ -270,8 +271,8 @@ _VER="$1"
 
   readonly _ref='CHANGES'
 
-  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/bin/*.exe
-  "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/bin/*.dll
+  "${_CCPREFIX}strip" --preserve-dates --strip-all   --enable-deterministic-archives ${_pkg}/bin/*.exe
+  "${_CCPREFIX}strip" --preserve-dates --strip-all   --enable-deterministic-archives ${_pkg}/bin/*.dll
   "${_CCPREFIX}strip" --preserve-dates --strip-debug --enable-deterministic-archives ${_pkg}/lib/*.a
 
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
