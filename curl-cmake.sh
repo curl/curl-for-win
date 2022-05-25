@@ -114,11 +114,7 @@ _VER="$1"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
     fi
 
-    # FIXME: Improve this ugly solution to include the CPU in the OS string
-  # [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -DOS=Windows-x86 -Wno-macro-redefined"
-  # [ "${_CPU}" = 'x64' ] && _CFLAGS="${_CFLAGS} -DOS=Windows-x64 -Wno-macro-redefined"
-    [ "${_CPU}" = 'x86' ] && options="${options} -DCURL_OS=Windows-x86"
-    [ "${_CPU}" = 'x64' ] && options="${options} -DCURL_OS=Windows-x64"
+    options="${options} -DCURL_OS_SUFFIX=${_CPU}"
 
     # Disabled till we flesh out UNICODE support and document it enough to be
     # safe to use.
