@@ -114,7 +114,7 @@ _VER="$1"
   cp -f -p ${_pkg}/include/*.h "${_DST}/include"
   cp -f -p ${_pkg}/lib/*.a     "${_DST}/lib/"
   cp -f -p ChangeLog           "${_DST}/ChangeLog.txt"
-  cp -f -p README              "${_DST}/README.txt"
+  cp -f -p README              "${_DST}/COPYING.txt"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )
