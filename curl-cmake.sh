@@ -4,7 +4,6 @@
 
 # FIXME:
 # - HAVE_STRCASECMP, possibly others, undetected
-# - libcurl.rc also added to static libcurl
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
 
