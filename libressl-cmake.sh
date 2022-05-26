@@ -20,7 +20,7 @@ export _OUT
 export _BAS
 export _DST
 
-_NAM="$(basename "$0" | cut -f 1 -d '.')"
+_NAM="$(basename "$0" | cut -f 1 -d '.' | sed 's/-cmake//')"
 _VER="$1"
 
 (
