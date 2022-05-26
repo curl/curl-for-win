@@ -19,8 +19,7 @@ export _OUT
 export _BAS
 export _DST
 
-_NAM="$(basename "$0")"
-_NAM="$(echo "${_NAM}" | cut -f 1 -d '.')"
+_NAM="$(basename "$0" | cut -f 1 -d '.')"
 _VER="$1"
 
 (
