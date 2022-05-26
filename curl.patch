@@ -148,3 +148,16 @@ index 621ae19d82571..fdc67888571f6 100644
  
  include_directories(${CURL_SOURCE_DIR}/include)
  
+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+index 46973bf2b875..8eb5d0caf27c 100644
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -40,7 +40,7 @@ list(APPEND HHEADERS
+   ${CMAKE_CURRENT_BINARY_DIR}/curl_config.h
+   )
+ 
+-if(WIN32)
++if(WIN32 AND NOT CURL_STATICLIB)
+   list(APPEND CSOURCES libcurl.rc)
+ endif()
+ 
