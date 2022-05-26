@@ -192,6 +192,14 @@ bld() {
   pkg="$1"
   if [ -z "${C4W_BLD:-}" ] || echo "${C4W_BLD}" | grep -q -F "${pkg}"; then
     shift
+
+    # allow selecting an alternate build tool
+    withbuildtool="$(echo "${C4W_BLD}" | \
+      grep -a -E "${pkg}-(cmake|autotools|make)" || true)"
+    if [ -n "${withbuildtool}" ] && [ -f "${withbuildtool}.sh" ]; then
+      pkg="${withbuildtool}"
+    fi
+
     time "./${pkg}.sh" "$@"
   fi
 }
