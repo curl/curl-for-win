@@ -4,7 +4,6 @@
 
 # FIXME:
 # - HAVE_STRCASECMP, possibly others, undetected
-# - CPU platform not visible in --version output, only "Windows"
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
 
