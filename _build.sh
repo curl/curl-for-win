@@ -5,24 +5,65 @@
 # shellcheck disable=SC3040
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
+# Build configuration environment variables:
+#
+# C4W_BLD
+#      List of components to build. E.g. 'curl' or 'zlib libssh2 curl' or 'zlib curl-cmake' or 'none'.
+#      Optional. Default: (all)
+#
+# C4W_GET
+#      List of components to (re-)download. E.g. 'zlib curl' or 'none'.
+#      Optional. Default: (all)
+#
+# CC
+#      C compiler to use. E.g. 'mingw-clang' or any other value implies gcc.
+#      Optional. Default: gcc
+#
+# _CCSUFFIX
+#      clang suffix. E.g. '-8' for clang-8.
+#      Optional.
+#
+# GIT_BRANCH
+#      Emulate a Git branch name. Certain keywords select certain configurations. E.g.: 'main-micro'.
+#      Optional. Default: main
+#
+#      Supported keywords:
+#        main       production build
+#        test       test build (VirusTotal upload and publishing disabled, .map files enabled)
+#        dev        development build (use source snapshots instead of stable releases)
+#        noh3       build without HTTP/3 (QUIC) support (select stock OpenSSL instead of OpenSSL-QUIC fork)
+#        libressl   build with LibreSSL instead of OpenSSL
+#        schannel   build with Schannel
+#        mini       build with less features, see README.md
+#        micro      build with less features, see README.md
+#        nano       build with less features, see README.md
+#        x64only    build x64 target only
+#
+# SIGN_CODE_GPG_PASS, SIGN_CODE_KEY_PASS: for code signing
+# SIGN_PKG_KEY_ID, SIGN_PKG_GPG_PASS, SIGN_PKG_KEY_PASS: for package signing
+# VIRUSTOTAL_APIKEY: to upload to VirusTotal
+# DEPLOY_GPG_PASS, DEPLOY_KEY_PASS: to publish results
+#      Secrets used for the above operations.
+#      Optional. Skip operations that miss a secret.
+
 # TODO:
+#   - Add ARM64 builds? (once FLOSS toolchains support it)
+#   - Drop x86 (Intel 32-bit) builds?
+#   - Drop FTP support?
+#   - Drop brotli support?
+#   - Use Universal CRT?
 #   - Enable Control Flow Guard (once FLOSS toolchains support it)
 #      LLVM/CLANG: -ehcontguard (requires LLVM 13.0.0)
 #   - LLVM
 #      -mretpoline
 #      -mspeculative-load-hardening / -mllvm -x86-speculative-load-hardening (high overhead)
 #   - GCC -mindirect-branch -mfunction-return -mindirect-branch-register
-#   - Add ARM64 builds? (once FLOSS toolchains support it)
-#   - Drop x86 (Intel 32-bit) builds?
-#   - Drop FTP support?
-#   - Drop brotli support?
-#   - Use Universal CRT?
 #   - Switch to rustls?
 #   - Make Schannel (no TLSv1.3/QUIC) or LibreSSL (no QUIC, no ed25519 in libssh2) the default?
 
 # Tools:
 #                compiler build
-#                -------- ----------------
+#                -------- -------------------
 #   zlib.sh      clang    cmake
 #   brotli.sh    clang    cmake
 #   libgsasl.sh  clang    autotools
@@ -33,7 +74,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   openssl.sh   clang    proprietary
 #   libressl.sh  clang    autotools/cmake
 #   libssh2.sh   clang    autotools/cmake
-#   curl.sh      clang    Makefile.m32
+#   curl.sh      clang    Makefile.m32/cmake
 
 cd "$(dirname "$0")"
 
