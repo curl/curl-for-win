@@ -3,11 +3,10 @@
 
 # Automated, reproducible, transparent, Windows builds for curl
 
-- x64 and x86 packages use the same build process.
 - Binary packages are downloadable in `.zip` and `.tar.xz` formats.<br>
   You can extract `.xz` files and the resulting `.tar` archive using
   [7-Zip](https://www.7-zip.org/).
-- We sign binary packages with the PGP key [EXPERIMENTAL]:
+- We sign binary packages with the PGP key:
   <br><https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc>
   <br>`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`
 - Standalone `curl.exe` and `libcurl.dll`
@@ -17,7 +16,7 @@
 - The binary package also contains the static library for curl and its
   dependencies.
 - curl/libcurl have
-  [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3) (experimental)
+  [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3) [EXPERIMENTAL]
   and
   [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
 - default builds, with the default TLS backend OpenSSL (QUIC fork) and

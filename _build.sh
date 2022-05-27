@@ -16,8 +16,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Default: (all)
 #
 # CC
-#      C compiler to use. E.g. 'mingw-clang' or any other value implies gcc.
-#      Optional. Default: gcc
+#      C compiler to use. E.g. 'mingw-clang' or any other value implies mingw-gcc.
+#      Optional. Default: mingw-gcc
 #
 # _CCSUFFIX
 #      clang suffix. E.g. '-8' for clang-8.
@@ -28,16 +28,16 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Default: main
 #
 #      Supported keywords:
-#        main       production build
-#        test       test build (VirusTotal upload and publishing disabled, .map files enabled)
-#        dev        development build (use source snapshots instead of stable releases)
-#        noh3       build without HTTP/3 (QUIC) support (select stock OpenSSL instead of OpenSSL-QUIC fork)
-#        libressl   build with LibreSSL instead of OpenSSL
-#        schannel   build with Schannel
-#        mini       build with less features, see README.md
-#        micro      build with less features, see README.md
-#        nano       build with less features, see README.md
-#        x64only    build x64 target only
+#        main      production build
+#        test      test build (VirusTotal upload and publishing disabled, .map files enabled)
+#        dev       development build (use source snapshots instead of stable releases)
+#        noh3      build without HTTP/3 (QUIC) support (select stock OpenSSL instead of its QUIC fork)
+#        libressl  build with LibreSSL instead of OpenSSL
+#        schannel  build with Schannel
+#        mini      build with less features, see README.md
+#        micro     build with less features, see README.md
+#        nano      build with less features, see README.md
+#        x64only   build x64 target only
 #
 # SIGN_CODE_GPG_PASS, SIGN_CODE_KEY_PASS: for code signing
 # SIGN_PKG_KEY_ID, SIGN_PKG_GPG_PASS, SIGN_PKG_KEY_PASS: for package signing
