@@ -84,7 +84,7 @@ _VER="$1"
     export ZLIB_PATH=../../zlib/pkg/usr/local
     options="${options}-zlib"
   fi
-  if [ -d ../brotli ]; then
+  if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
     options="${options}-brotli"
     export BROTLI_PATH=../../brotli/pkg/usr/local
     export BROTLI_LIBS='-Wl,-Bstatic -lbrotlidec -lbrotlicommon -Wl,-Bdynamic'
@@ -137,6 +137,8 @@ _VER="$1"
   else
     options="${options}-winidn"
   fi
+
+  [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_FTP=1"
 
   # Make sure to link zlib (and only zlib) in static mode when building
   # `libcurl.dll`, so that it would not depend on a `zlib1.dll`.

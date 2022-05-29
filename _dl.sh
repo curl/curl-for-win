@@ -429,7 +429,8 @@ live_xt zlib "${ZLIB_HASH}"
 
 if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*mini*}" = "${_BRANCH}" ]; then
+   [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
   live_dl brotli "${BROTLI_VER_}"
   live_xt brotli "${BROTLI_HASH}"
 fi

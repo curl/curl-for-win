@@ -124,7 +124,7 @@ _VER="$1"
     options="${options} --without-zlib"
   fi
 
-  if [ -d ../brotli ]; then
+  if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
     options="${options} --with-brotli=$(pwd)/../brotli/pkg/usr/local"
   else
     options="${options} --without-brotli"
@@ -198,6 +198,8 @@ _VER="$1"
 
   options="${options} --with-ldap-lib=wldap32"
 
+  [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && options="${options} --disable-ftp"
+
 #    --enable-unix-sockets \
 #    --enable-socketpair \
 
@@ -212,7 +214,6 @@ _VER="$1"
     --enable-shared \
     --disable-ares \
     --enable-http \
-    --enable-ftp \
     --enable-file \
     --enable-ldap \
     --enable-ldaps \

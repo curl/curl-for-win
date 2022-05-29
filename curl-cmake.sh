@@ -148,7 +148,7 @@ _VER="$1"
     else
       options="${options} -DUSE_ZLIB=OFF"
     fi
-    if [ -d ../brotli ]; then
+    if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
       options="${options} -DCURL_BROTLI=ON"
       options="${options} -DBROTLIDEC_LIBRARY=$(pwd)/../brotli/pkg/usr/local/lib/libbrotlidec.a"
       options="${options} -DBROTLICOMMON_LIBRARY=$(pwd)/../brotli/pkg/usr/local/lib/libbrotlicommon.a"
@@ -222,6 +222,8 @@ _VER="$1"
       options="${options} -DUSE_LIBIDN2=OFF"
       options="${options} -DUSE_WIN32_IDN=ON"
     fi
+
+    [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && _CFLAGS="${_CFLAGS} -DCURL_DISABLE_FTP=1"
 
     options="${options} -DCURL_CA_PATH=none"
     options="${options} -DCURL_CA_BUNDLE=none"

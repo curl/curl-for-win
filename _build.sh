@@ -21,17 +21,19 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #
 # _CCSUFFIX
 #      clang suffix. E.g. '-8' for clang-8.
-#      Optional.
+#      Optional. Default: (empty)
 #
 # GIT_BRANCH
 #      Emulate a Git branch name. Certain keywords select certain configurations. E.g.: 'main-micro'.
-#      Optional. Default: main
+#      Optional. Default: 'main'
 #
 #      Supported keywords:
 #        main      production build
 #        test      test build (VirusTotal upload and publishing disabled, .map files enabled)
 #        dev       development build (use source snapshots instead of stable releases)
 #        noh3      build without HTTP/3 (QUIC) support (select stock OpenSSL instead of its QUIC fork)
+#        nobrotli  build without brotli
+#        noftp     build without FTP/FTPS support
 #        libressl  build with LibreSSL instead of OpenSSL
 #        schannel  build with Schannel
 #        mini      build with less features, see README.md
@@ -47,16 +49,15 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skip operations that miss a secret.
 
 # TODO:
-#   - Add ARM64 builds? (once FLOSS toolchains support it)
-#   - Drop x86 (Intel 32-bit) builds?
-#   - Drop FTP support?
-#   - Drop brotli support?
+#   - Add arm64 builds (once FLOSS toolchains support it)
+#   - Drop x86 builds?
 #   - Use Universal CRT?
+#   - Make -noftp the default?
+#   - Make -nobrotli the default?
 #   - Enable Control Flow Guard (once FLOSS toolchains support it)
 #      LLVM/CLANG: -ehcontguard (requires LLVM 13.0.0)
 #   - LLVM
 #      -mretpoline
-#      -mspeculative-load-hardening / -mllvm -x86-speculative-load-hardening (high overhead)
 #   - GCC -mindirect-branch -mfunction-return -mindirect-branch-register
 #   - Switch to rustls?
 #   - Make Schannel (no TLSv1.3/QUIC) or LibreSSL (no QUIC, no ed25519 in libssh2) the default?
