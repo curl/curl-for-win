@@ -26,7 +26,7 @@ export OSSLSIGNCODE_VER_='2.3.0'
 export OSSLSIGNCODE_HASH=b73a7f5a68473ca467f98f93ad098142ac6ca66a32436a7d89bb833628bd2b4e
 export ZLIB_VER_='1.2.12'
 export ZLIB_HASH=7db46b8d7726232a621befaab4a1c870f00a90805511c0e0090441dac57def18
-export PEFILE_VER_='2021.9.3'
+export PEFILE_VER_='2022.5.30'
 
 # Create revision string
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
