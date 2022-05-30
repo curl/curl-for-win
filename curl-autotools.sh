@@ -247,7 +247,6 @@ _VER="$1"
     --enable-dnsshuffle \
     --enable-get-easy-options \
     --enable-alt-svc \
-    --enable-headers-api \
     --enable-hsts \
     --without-ca-path \
     --without-ca-bundle \
