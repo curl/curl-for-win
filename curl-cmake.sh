@@ -194,7 +194,7 @@ _VER="$1"
     else
       options="${options} -DUSE_NGHTTP2=OFF"
     fi
-    if [ -d ../nghttp3 ]; then
+    if [ -d ../nghttp3 ] && [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ]; then
       options="${options} -DUSE_NGHTTP3=ON"
       options="${options} -DNGHTTP3_LIBRARY=$(pwd)/../nghttp3/pkg/usr/local/lib/libnghttp3.a"
       options="${options} -DNGHTTP3_INCLUDE_DIR=$(pwd)/../nghttp3/pkg/usr/local/include"

@@ -120,7 +120,7 @@ _VER="$1"
     export NGHTTP2_PATH=../../nghttp2/pkg/usr/local
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGHTTP2_STATICLIB"
   fi
-  if [ -d ../nghttp3 ]; then
+  if [ -d ../nghttp3 ] && [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ]; then
     options="${options}-nghttp3-ngtcp2"
     export NGHTTP3_PATH=../../nghttp3/pkg/usr/local
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGHTTP3_STATICLIB"

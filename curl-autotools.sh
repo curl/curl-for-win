@@ -179,19 +179,19 @@ _VER="$1"
   else
     options="${options} --without-nghttp2"
   fi
-  if false; then  # FIXME: autotools fails to find an "ngtcp2 pkg-config file"
-  if [ -d ../nghttp3 ]; then
-    options="${options} --with-nghttp3=$(pwd)/../libnghttp3/pkg/usr/local"
-    CFLAGS="${CFLAGS} -DNGHTTP3_STATICLIB"
-  else
-    options="${options} --without-nghttp3"
-  fi
-  if [ -d ../ngtcp2 ]; then
-    options="${options} --with-ngtcp2=$(pwd)/../libngtcp2/pkg/usr/local"
-    CFLAGS="${CFLAGS} -DNGTCP2_STATICLIB"
-  else
-    options="${options} --without-ngtcp2"
-  fi
+  if false && [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ]; then  # FIXME: autotools fails to find an "ngtcp2 pkg-config file"
+    if [ -d ../nghttp3 ]; then
+      options="${options} --with-nghttp3=$(pwd)/../libnghttp3/pkg/usr/local"
+      CFLAGS="${CFLAGS} -DNGHTTP3_STATICLIB"
+    else
+      options="${options} --without-nghttp3"
+    fi
+    if [ -d ../ngtcp2 ]; then
+      options="${options} --with-ngtcp2=$(pwd)/../libngtcp2/pkg/usr/local"
+      CFLAGS="${CFLAGS} -DNGTCP2_STATICLIB"
+    else
+      options="${options} --without-ngtcp2"
+    fi
   fi
 
   options="${options} --without-quiche --without-msh3"
