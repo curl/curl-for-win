@@ -40,6 +40,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        micro     build with less features, see README.md
 #        nano      build with less features, see README.md
 #        x64only   build x64 target only
+#        ucrt      build against UCRT instead of msvcrt [TODO]
 #
 # SIGN_CODE_GPG_PASS, SIGN_CODE_KEY_PASS: for code signing
 # SIGN_PKG_KEY_ID, SIGN_PKG_GPG_PASS, SIGN_PKG_KEY_PASS: for package signing
@@ -49,9 +50,10 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skip operations that miss a secret.
 
 # TODO:
-#   - Add arm64 builds (once FLOSS toolchains support it)
-#   - Drop x86 builds?
-#   - Use Universal CRT?
+#   - Add support for UCRT
+#     https://sourceforge.net/p/mingw-w64/mailman/message/36621319/
+#   - Add support for arm64 builds (using UCRT)
+#   - Drop x86 builds
 #   - Make -noftp the default?
 #   - Make -nobrotli the default?
 #   - Enable Control Flow Guard (once FLOSS toolchains support it)

@@ -48,6 +48,15 @@ _VER="$1"
     CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
   fi
 
+  if [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ]; then
+    # TODO: Add these to all dependencies
+    [ "${CC}" = 'mingw-clang' ] || CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} --with-default-msvcrt=ucrt"
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -D_UCRT -D__MSVCRT_VERSION__=0x1400"
+    # FIXME: also add these to the end of the lib list
+    #        (need to patch curl's {lib,src}/Makefile.m32 files)
+    CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lucrt -lucrtbase"
+  fi
+
   # Disabled till we flesh out UNICODE support and document it enough to be
   # safe to use.
 # CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUNICODE -D_UNICODE"
