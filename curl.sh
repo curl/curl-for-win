@@ -83,6 +83,12 @@ _VER="$1"
   if [ -d ../zlib ]; then
     export ZLIB_PATH=../../zlib/pkg/usr/local
     options="${options}-zlib"
+
+    # Make sure to link zlib (and only zlib) in static mode when building
+    # `libcurl.dll`, so that it would not depend on a `zlib1.dll`.
+    # In some build environments (such as MSYS2), `libz.dll.a` is also offered
+    # along with `libz.a` causing the linker to pick up the shared library.
+    export DLL_LIBS='-Wl,-Bstatic -lz -Wl,-Bdynamic'
   fi
   if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
     options="${options}-brotli"
@@ -139,12 +145,6 @@ _VER="$1"
   fi
 
   [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_FTP=1"
-
-  # Make sure to link zlib (and only zlib) in static mode when building
-  # `libcurl.dll`, so that it would not depend on a `zlib1.dll`.
-  # In some build environments (such as MSYS2), `libz.dll.a` is also offered
-  # along with `libz.a` causing the linker to pick up the shared library.
-  export DLL_LIBS='-Wl,-Bstatic -lz -Wl,-Bdynamic'
 
   export CROSSPREFIX="${_CCPREFIX}"
 
