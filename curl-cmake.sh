@@ -120,7 +120,7 @@ _VER="$1"
 
     if [ "${_CRT}" = 'ucrt' ]; then
       if [ "${CC}" = 'mingw-clang' ]; then
-        CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -fuse-ld=lld"
+        CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -fuse-ld=lld -s"
       else
         CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -specs=${_GCCSPECS}"
       fi
@@ -300,17 +300,17 @@ _VER="$1"
 
   readonly _ref='CHANGES'
 
-  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/bin/*.exe
-  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/bin/*.dll
+  # binutils 2.38 has issues handling lld output:
+  # - failing on implibs or creating corrupted output (depending on options).
+  # - not stripping the .buildid section, which contains a timestamp.
+  # LLVM's own llvm-objcopy does not seems to work with Windows binaries,
+  # so .exe and .dll stripping is done via the -s linker option.
+  if [ "${uselld}" = '0' ]; then
+    "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/src/*.exe
+    "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/lib/*.dll
+    "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.dll.a
+  fi
   "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.a
-  # When using LLVM's ldd, the implib by default does not have a timestamp
-  # embedded, so already deterministic. Running strip --strip-debug on it also
-  # results in this error (as of binutils 2.38):
-  #   x86_64-w64-mingw32-strip: strZ3GKQ/stiRDNOp/libcurl-x64.dll: warning: line number table read failed
-  #   x86_64-w64-mingw32-strip: stfxKR38: file truncated
-  # Other strip options will run, but output a corrupt implib. So skip
-  # running strip on an implib created by lld.
-  [ "${uselld}" = '1' ] || "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.dll.a
 
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.dll
