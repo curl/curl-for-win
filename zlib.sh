@@ -41,6 +41,7 @@ _VER="$1"
   find . -name '*.pc'  -delete
 
   _CFLAGS="${_OPTM} -fno-ident -D_LARGEFILE64_SOURCE=1 -D_LFS64_LARGEFILE=1"
+  [ "${_BRANCH#*ucrt*}" = "${_BRANCH}" ] || _CFLAGS="${_CFLAGS} -D_UCRT"
   [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
   options=''

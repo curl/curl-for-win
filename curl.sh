@@ -50,7 +50,6 @@ _VER="$1"
 
   uselld=0
   if [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ]; then
-    # TODO: Add these to all dependencies
     if [ "${CC}" = 'mingw-clang' ]; then
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -fuse-ld=lld"
       uselld=1

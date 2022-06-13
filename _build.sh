@@ -50,9 +50,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skip operations that miss a secret.
 
 # TODO:
-#   - Add support for UCRT
-#     https://sourceforge.net/p/mingw-w64/mailman/message/36621319/
-#   - Add support for arm64 builds (using UCRT)
+#   - Make -ucrt the default?
+#   - Add support for arm64 builds (requires UCRT)
 #   - Drop x86 builds
 #   - Make -noftp the default?
 #   - Make -nobrotli the default?
