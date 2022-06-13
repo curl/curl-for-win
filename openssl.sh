@@ -79,7 +79,7 @@ _VER="$1"
     _CONF_CCPREFIX="${_CCPREFIX}"
   fi
 
-  [ "${_BRANCH#*ucrt*}" = "${_BRANCH}" ] || options="${options} -D_UCRT"
+  [ "${_CRT}" = 'ucrt' ] && options="${options} -D_UCRT"
 
   # Patch OpenSSL ./Configure to:
   # - make it accept Windows-style absolute paths as --prefix. Without the

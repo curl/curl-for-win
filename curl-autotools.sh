@@ -82,7 +82,7 @@ _VER="$1"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
 
   uselld=0
-  if [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ]; then
+  if [ "${_CRT}" = 'ucrt' ]; then
     if [ "${CC}" = 'mingw-clang' ]; then
       LDFLAGS="${LDFLAGS} -fuse-ld=lld"
       uselld=1

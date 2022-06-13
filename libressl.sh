@@ -81,7 +81,7 @@ _VER="$1"
 
   CFLAGS="${CFLAGS} -fno-ident -O3 -Wa,--noexecstack"
   LDFLAGS="${LDFLAGS}${ldonly}"
-  [ "${_BRANCH#*ucrt*}" = "${_BRANCH}" ] || CFLAGS="${CFLAGS} -D_UCRT"
+  [ "${_CRT}" = 'ucrt' ] && CFLAGS="${CFLAGS} -D_UCRT"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
 
   _prefix='C:/Windows/libressl'

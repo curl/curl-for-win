@@ -75,7 +75,7 @@ _VER="$1"
 
   CC_INPUT="${CC}"
 
-  if [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ] && [ "${CC}" = 'mingw-clang' ]; then
+  if [ "${_CRT}" = 'ucrt' ] && [ "${CC}" = 'mingw-clang' ]; then
     uselld=1
   else
     uselld=0
@@ -118,7 +118,7 @@ _VER="$1"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
     fi
 
-    if [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ]; then
+    if [ "${_CRT}" = 'ucrt' ]; then
       if [ "${CC}" = 'mingw-clang' ]; then
         CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -fuse-ld=lld"
       else

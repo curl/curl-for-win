@@ -49,7 +49,7 @@ _VER="$1"
   fi
 
   uselld=0
-  if [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ]; then
+  if [ "${_CRT}" = 'ucrt' ]; then
     if [ "${CC}" = 'mingw-clang' ]; then
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -fuse-ld=lld"
       uselld=1

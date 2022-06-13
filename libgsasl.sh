@@ -37,7 +37,7 @@ _VER="$1"
 
   export LDFLAGS="${_OPTM}"
   export CFLAGS='-fno-ident -O3'
-  [ "${_BRANCH#*ucrt*}" = "${_BRANCH}" ] || CFLAGS="${CFLAGS} -D_UCRT"
+  [ "${_CRT}" = 'ucrt' ] && CFLAGS="${CFLAGS} -D_UCRT"
   ldonly=''
 
   if [ "${CC}" = 'mingw-clang' ]; then

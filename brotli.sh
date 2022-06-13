@@ -40,7 +40,7 @@ _VER="$1"
   find . -name '*.pc'  -delete
 
   _CFLAGS="${_OPTM} -fno-ident -DMINGW_HAS_SECURE_API"
-  [ "${_BRANCH#*ucrt*}" = "${_BRANCH}" ] || _CFLAGS="${_CFLAGS} -D_UCRT"
+  [ "${_CRT}" = 'ucrt' ] && _CFLAGS="${_CFLAGS} -D_UCRT"
   [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
   options=''

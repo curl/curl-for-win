@@ -314,6 +314,9 @@ build_single_target() {
     fi
   fi
 
+  export _CRT
+  [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ] && _CRT='ucrt'
+
   export _CCVER
   if [ "${CC}" = 'mingw-clang' ]; then
     # We do not use old mingw toolchain versions when building with clang,
@@ -325,7 +328,7 @@ build_single_target() {
 
     # Create specs files that overrides msvcrt with ucrt. We need this
     # for gcc when building against UCRT.
-    if [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ]; then
+    if [ "${_CRT}" = 'ucrt' ]; then
       # https://stackoverflow.com/questions/57528555/how-do-i-build-against-the-ucrt-with-mingw-w64
       export _GCCSPECS
       _GCCSPECS="$(realpath gcc-specs-ucrt)"
