@@ -323,6 +323,15 @@ build_single_target() {
   else
     _CCVER="$(printf '%02d' \
       "$("${_CCPREFIX}gcc" -dumpversion | grep -a -o -E '^[0-9]+')")"
+
+    # Create specs files that overrides msvcrt with ucrt. We need this
+    # for gcc when building against UCRT.
+    if [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ]; then
+      # https://stackoverflow.com/questions/57528555/how-do-i-build-against-the-ucrt-with-mingw-w64
+      export _GCCSPECS
+      _GCCSPECS="$(realpath gcc-specs-ucrt)"
+      "${_CCPREFIX}gcc" -dumpspecs | sed 's|-lmsvcrt|-lucrt|g' > "${_GCCSPECS}"
+    fi
   fi
 
   # Unified, per-target package: Initialize

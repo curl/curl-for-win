@@ -75,6 +75,12 @@ _VER="$1"
 
   CC_INPUT="${CC}"
 
+  if [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ] && [ "${CC}" = 'mingw-clang' ]; then
+    uselld=1
+  else
+    uselld=0
+  fi
+
   # CMake cannot build everything in one pass. With BUILD_SHARED_LIBS enabled,
   # it will not build a static lib, and links curl.exe against libcurl DLL
   # with no option to change this. We need to split it into two passes. This
@@ -110,6 +116,16 @@ _VER="$1"
       CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
       CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
+    fi
+
+    if [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ]; then
+      if [ "${CC}" = 'mingw-clang' ]; then
+        CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -fuse-ld=lld"
+      else
+        CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -specs=${_GCCSPECS}"
+      fi
+      _CFLAGS="${_CFLAGS} -D_UCRT"
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lucrt"
     fi
 
     options="${options} -DCURL_OS_SUFFIX=${_CPU}"
@@ -286,7 +302,15 @@ _VER="$1"
 
   "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/bin/*.exe
   "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/bin/*.dll
-  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.a
+  # When using LLVM's ldd, the implib by default does not have a timestamp
+  # embedded, so already deterministic. Running strip --strip-debug on it also
+  # results in this error (as of binutils 2.38):
+  #   x86_64-w64-mingw32-strip: strZ3GKQ/stiRDNOp/libcurl-x64.dll: warning: line number table read failed
+  #   x86_64-w64-mingw32-strip: stfxKR38: file truncated
+  # Other strip options will run, but output a corrupt implib. So skip
+  # running strip on an implib created by lld.
+  [ "${uselld}" = '1' ] || "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.dll.a
 
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.dll

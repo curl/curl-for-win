@@ -81,6 +81,18 @@ _VER="$1"
   LDFLAGS="${LDFLAGS}${ldonly}"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
 
+  uselld=0
+  if [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ]; then
+    if [ "${CC}" = 'mingw-clang' ]; then
+      LDFLAGS="${LDFLAGS} -fuse-ld=lld"
+      uselld=1
+    else
+      LDFLAGS="${LDFLAGS} -specs=${_GCCSPECS}"
+    fi
+    CFLAGS="${CFLAGS} -D_UCRT"
+    LDFLAGS="${LDFLAGS} -lucrt"
+  fi
+
   if false; then
     # TODO: Logic below is yet to be migrated to autotools
 
@@ -278,7 +290,15 @@ _VER="$1"
 
   "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/src/*.exe
   "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/lib/*.dll
-  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.a
+  # When using LLVM's ldd, the implib by default does not have a timestamp
+  # embedded, so already deterministic. Running strip --strip-debug on it also
+  # results in this error (as of binutils 2.38):
+  #   x86_64-w64-mingw32-strip: strZ3GKQ/stiRDNOp/libcurl-x64.dll: warning: line number table read failed
+  #   x86_64-w64-mingw32-strip: stfxKR38: file truncated
+  # Other strip options will run, but output a corrupt implib. So skip
+  # running strip on an implib created by lld.
+  [ "${uselld}" = '1' ] || "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.dll.a
 
   ../_peclean.py "${_ref}" ${_pkg}/src/*.exe
   ../_peclean.py "${_ref}" ${_pkg}/lib/*.dll

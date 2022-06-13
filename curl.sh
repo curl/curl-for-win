@@ -48,13 +48,17 @@ _VER="$1"
     CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
   fi
 
+  uselld=0
   if [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ]; then
     # TODO: Add these to all dependencies
-    [ "${CC}" = 'mingw-clang' ] || CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} --with-default-msvcrt=ucrt"
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -D_UCRT -D__MSVCRT_VERSION__=0x1400"
-    # FIXME: also add these to the end of the lib list
-    #        (need to patch curl's {lib,src}/Makefile.m32 files)
-    CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lucrt -lucrtbase"
+    if [ "${CC}" = 'mingw-clang' ]; then
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -fuse-ld=lld"
+      uselld=1
+    else
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -specs=${_GCCSPECS}"
+    fi
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -D_UCRT"
+    CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lucrt"
   fi
 
   # Disabled till we flesh out UNICODE support and document it enough to be
@@ -199,7 +203,15 @@ _VER="$1"
 
   "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/src/*.exe
   "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/lib/*.dll
-  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.a
+  # When using LLVM's ldd, the implib by default does not have a timestamp
+  # embedded, so already deterministic. Running strip --strip-debug on it also
+  # results in this error (as of binutils 2.38):
+  #   x86_64-w64-mingw32-strip: strZ3GKQ/stiRDNOp/libcurl-x64.dll: warning: line number table read failed
+  #   x86_64-w64-mingw32-strip: stfxKR38: file truncated
+  # Other strip options will run, but output a corrupt implib. So skip
+  # running strip on an implib created by lld.
+  [ "${uselld}" = '1' ] || "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.dll.a
 
   ../_peclean.py "${_ref}" ${_pkg}/src/*.exe
   ../_peclean.py "${_ref}" ${_pkg}/lib/*.dll
