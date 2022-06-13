@@ -13,6 +13,16 @@
   ([`msvcrt.dll`](https://en.wikipedia.org/wiki/Microsoft_Windows_library_files#MSVCRT.DLL,_MSVCP*.DLL_and_CRTDLL.DLL)
   is
   [required](https://devblogs.microsoft.com/oldnewthing/?p=1273)).
+- Support for
+  [Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/).
+  We plan to make this the default soon, replacing `msvcrt.dll`. The runtime
+  comes with Windows 10 and later (including the Server equivalents). For
+  earlier versions it came via Windows Update, or
+  [manual](https://support.microsoft.com/topic/update-for-universal-c-runtime-in-windows-c0514201-7fe6-95a3-b0a5-287930f3560c)
+  install. More information here:
+  [1](https://stackoverflow.com/questions/67848972/differences-between-msvcrt-ucrt-and-vcruntime-libraries/68609918#68609918)
+  [2](https://docs.microsoft.com/cpp/porting/upgrade-your-code-to-the-universal-crt)
+  [3](https://docs.microsoft.com/cpp/windows/universal-crt-deployment)
 - The binary package also contains the static library for curl and its
   dependencies.
 - curl/libcurl have
