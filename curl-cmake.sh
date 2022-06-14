@@ -119,7 +119,7 @@ _VER="$1"
     fi
 
     if [ "${_CRT}" = 'ucrt' ]; then
-      if [ "${CC}" = 'mingw-clang' ]; then
+      if [ "${CC_INPUT}" = 'mingw-clang' ]; then
         CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -fuse-ld=lld -s"
       else
         CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -specs=${_GCCSPECS}"
