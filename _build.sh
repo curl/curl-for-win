@@ -40,7 +40,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        micro     build with less features, see README.md
 #        nano      build with less features, see README.md
 #        x64only   build x64 target only
-#        ucrt      build against UCRT instead of msvcrt [TODO]
+#        ucrt      build against UCRT instead of msvcrt
 #
 # SIGN_CODE_GPG_PASS, SIGN_CODE_KEY_PASS: for code signing
 # SIGN_PKG_KEY_ID, SIGN_PKG_GPG_PASS, SIGN_PKG_KEY_PASS: for package signing
@@ -50,7 +50,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skip operations that miss a secret.
 
 # TODO:
-#   - Make -ucrt the default?
+#   - Make -ucrt the default, replace with -noucrt
 #   - Add support for arm64 builds (requires UCRT)
 #   - Drop x86 builds
 #   - Make -noftp the default?
