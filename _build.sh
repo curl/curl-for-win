@@ -50,6 +50,11 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skip operations that miss a secret.
 
 # TODO:
+#   - Update nameing-scheme to make room for arm64 builds:
+#       win64 -> win-x64
+#       win32 -> win-x86
+#             -> win-arm
+#     Needs updating curl-www also.
 #   - Make -ucrt the default, replace with -noucrt
 #   - Add support for arm64 builds (requires UCRT)
 #   - Drop x86 builds
