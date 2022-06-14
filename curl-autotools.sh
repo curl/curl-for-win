@@ -63,6 +63,18 @@ _VER="$1"
   export CFLAGS='-fno-ident -O3 -DCURL_STATICLIB -DHAVE_ATOMIC -DHAVE_IOCTLSOCKET_FIONBIO -DHAVE_SOCKET -DUSE_UNIX_SOCKETS'
   ldonly=''
 
+  uselld=0
+  if [ "${_CRT}" = 'ucrt' ]; then
+    if [ "${CC}" = 'mingw-clang' ]; then
+      LDFLAGS="${LDFLAGS} -fuse-ld=lld -s"
+      uselld=1
+    else
+      LDFLAGS="${LDFLAGS} -specs=${_GCCSPECS}"
+    fi
+    CFLAGS="${CFLAGS} -D_UCRT"
+    LDFLAGS="${LDFLAGS} -lucrt"
+  fi
+
   if [ "${CC}" = 'mingw-clang' ]; then
     export CC='clang'
     if [ "${_OS}" != 'win' ]; then
@@ -80,18 +92,6 @@ _VER="$1"
   CFLAGS="${LDFLAGS} ${CFLAGS}"
   LDFLAGS="${LDFLAGS}${ldonly}"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
-
-  uselld=0
-  if [ "${_CRT}" = 'ucrt' ]; then
-    if [ "${CC}" = 'mingw-clang' ]; then
-      LDFLAGS="${LDFLAGS} -fuse-ld=lld -s"
-      uselld=1
-    else
-      LDFLAGS="${LDFLAGS} -specs=${_GCCSPECS}"
-    fi
-    CFLAGS="${CFLAGS} -D_UCRT"
-    LDFLAGS="${LDFLAGS} -lucrt"
-  fi
 
   if false; then
     # TODO: Logic below is yet to be migrated to autotools
