@@ -27,13 +27,9 @@ if [ "${_NAM}" != "${_UNIPKG}" ]; then
     [ -d "${_DST}/include" ]  && rsync --archive --update "${_DST}/include" "${unipkg}"
     if [ "${_NAM}" = 'libssh2' ]; then
       mkdir -p "${unipkg}/dep/${_NAM}"
-      rsync --archive --update "${_DST}/docs"    "${unipkg}/dep/${_NAM}"
+      rsync --archive --update "${_DST}/docs" "${unipkg}/dep/${_NAM}"
     fi
-    if [ -d "${_DST}/lib64" ]; then  # openssl
-      rsync --archive --update "${_DST}/lib64/" "${unipkg}/lib/"
-    else
-      rsync --archive --update "${_DST}/lib"    "${unipkg}"
-    fi
+    rsync --archive --update "${_DST}/lib" "${unipkg}"
     if [ "${_NAM}" = 'curl' ]; then
       cp -f -p "${_DST}"/*.* "${unipkg}"
       rsync --archive --update "${_DST}/docs" "${unipkg}"
