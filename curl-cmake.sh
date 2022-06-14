@@ -128,7 +128,7 @@ _VER="$1"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lucrt"
     fi
 
-    options="${options} -DCURL_OS_SUFFIX=${_CPU}"
+    options="${options} -DCURL_OS_SUFFIX=-${_CPU}"
 
     # Disabled till we flesh out UNICODE support and document it enough to be
     # safe to use.
