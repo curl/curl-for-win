@@ -323,7 +323,7 @@ build_single_target() {
     fi
   fi
 
-  export _CRT
+  export _CRT=''
   [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ] && _CRT='ucrt'
 
   export _CCVER
