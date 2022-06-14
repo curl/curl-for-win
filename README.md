@@ -20,7 +20,7 @@
   versions it came via Windows Update, or
   [manual](https://support.microsoft.com/topic/update-for-universal-c-runtime-in-windows-c0514201-7fe6-95a3-b0a5-287930f3560c)
   install.
-  [More](https://stackoverflow.com/questions/67848972/differences-between-msvcrt-ucrt-and-vcruntime-libraries/68609918#68609918),
+  [More](https://www.msys2.org/docs/environments/#msvcrt-vs-ucrt),
   [information](https://docs.microsoft.com/cpp/porting/upgrade-your-code-to-the-universal-crt),
   [here](https://docs.microsoft.com/cpp/windows/universal-crt-deployment).
 - The binary package also contains the static library for curl and its
