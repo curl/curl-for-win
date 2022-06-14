@@ -120,7 +120,8 @@ _VER="$1"
 
     CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} libcurl.def"
 
-    [ "${_CPU}" = 'x64' ] && export CURL_DLL_SUFFIX=-x64
+    [ "${_CPU}" = 'x64' ] && export CURL_DLL_SUFFIX="-${_CPU}"
+    [ "${_CPU}" = 'a64' ] && export CURL_DLL_SUFFIX="-${_CPU}"
     export CURL_DLL_A_SUFFIX=.dll
   fi
 

@@ -29,6 +29,7 @@ _VER="$1"
   export ARCH
   [ "${_CPU}" = 'x86' ] && ARCH='w32'
   [ "${_CPU}" = 'x64' ] && ARCH='w64'
+  [ "${_CPU}" = 'a64' ] && ARCH='a64'  # TODO: add upstream support (or switch to curl-cmake)
 
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
   # marking public libcurl functions as 'exported'. Useful to avoid the
@@ -66,7 +67,8 @@ _VER="$1"
 # CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -municode"
 
   export CURL_DLL_SUFFIX=''
-  [ "${_CPU}" = 'x64' ] && CURL_DLL_SUFFIX='-x64'
+  [ "${_CPU}" = 'x64' ] && CURL_DLL_SUFFIX="-${_CPU}"
+  [ "${_CPU}" = 'a64' ] && CURL_DLL_SUFFIX="-${_CPU}"
   export CURL_DLL_A_SUFFIX=.dll
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then

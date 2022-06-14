@@ -50,23 +50,26 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skip operations that miss a secret.
 
 # TODO:
+#   - switch curl to cmake builds.
 #   - Update nameing-scheme to make room for arm64 builds:
 #       win64 -> win-x64
 #       win32 -> win-x86
-#             -> win-arm
+#             -> win-a64
 #     Needs updating curl-www also.
 #   - Make -ucrt the default, replace with -noucrt
 #   - Add support for arm64 builds (requires UCRT)
 #   - Drop x86 builds
+#   - Drop gcc support?
 #   - Make -noftp the default?
 #   - Make -nobrotli the default?
-#   - Enable Control Flow Guard (once FLOSS toolchains support it)
-#      LLVM/CLANG: -ehcontguard (requires LLVM 13.0.0)
-#   - LLVM
-#      -mretpoline
-#   - GCC -mindirect-branch -mfunction-return -mindirect-branch-register
+#   - Enable Control Flow Guard (once FLOSS toolchains support it): -ehcontguard (requires LLVM 13.0.0)
+#   - LLVM -mretpoline
 #   - Switch to rustls?
 #   - Make Schannel (no TLSv1.3/QUIC) or LibreSSL (no QUIC, no ed25519 in libssh2) the default?
+
+# Resources:
+#   - https://github.com/mstorsjo/llvm-mingw
+#   - https://blog.llvm.org/2019/11/deterministic-builds-with-clang-and-lld.html
 
 # Tools:
 #                compiler build
@@ -264,19 +267,22 @@ build_single_target() {
   export _OPTM=
   [ "${_CPU}" = 'x86' ] && _OPTM='-m32'
   [ "${_CPU}" = 'x64' ] && _OPTM='-m64'
+  [ "${_CPU}" = 'a64' ] && _OPTM='-arch arm64'  # clang-only. FIXME: verify.
 
-  [ "${_CPU}" = 'x86' ]   && _machine='i686'
-  [ "${_CPU}" = 'x64' ]   && _machine='x86_64'
-  [ "${_CPU}" = 'arm64' ] && _machine="${_CPU}"
+  [ "${_CPU}" = 'x86' ] && _machine='i686'
+  [ "${_CPU}" = 'x64' ] && _machine='x86_64'
+  [ "${_CPU}" = 'a64' ] && _machine='aarch64'
 
   export _PKGSUFFIX
-  [ "${_CPU}" = 'x86' ] && _PKGSUFFIX="-win32-mingw"
-  [ "${_CPU}" = 'x64' ] && _PKGSUFFIX="-win64-mingw"
+  [ "${_CPU}" = 'x86' ] && _PKGSUFFIX='-win32-mingw'  # TODO: -> '-win-x86-mingw'
+  [ "${_CPU}" = 'x64' ] && _PKGSUFFIX='-win64-mingw'  # TODO: -> '-win-x64-mingw'
+  [ "${_CPU}" = 'a64' ] && _PKGSUFFIX='-win-a64-mingw'
 
   if [ "${_OS}" = 'win' ]; then
     export PATH
     [ "${_CPU}" = 'x86' ] && PATH="/mingw32/bin:${_ori_path}"
     [ "${_CPU}" = 'x64' ] && PATH="/mingw64/bin:${_ori_path}"
+    [ "${_CPU}" = 'a64' ] && PATH="/clangarm64/bin:${_ori_path}"
     export _MAKE='mingw32-make'
 
     # Install required component
@@ -298,24 +304,22 @@ build_single_target() {
       _SYSROOT="/usr/${_TRIPLET}"
     fi
 
+    # FIXME: Run arm64 targets on arm64 linux/mac hosts?
+    _WINE='wine'
     if [ "${_OS}" = 'linux' ]; then
-      # Execute x64 targets only, to avoid having to install wine32 and
-      # i386 architecture.
-      if [ "${_CPU}" = 'x64' ]; then
+      # Execute CPU-native targets only
+      if [ "${_CPU}" = 'x64' ] && \
+         [ "$(uname -m)" = 'x86_64' ]; then
         _WINE='wine64'
-      else
-        _WINE='echo'
       fi
     elif [ "${_OS}" = 'mac' ]; then
       if [ "${_CPU}" = 'x64' ] && \
          [ "$(uname -m)" = 'x86_64' ] && \
          [ "$(sysctl -i -n sysctl.proc_translated)" != '1' ]; then
         _WINE='wine64'
-      else
-        _WINE='echo'
       fi
-    else
-      _WINE='wine'
+    elif [ "${_OS}" = 'win' ]; then
+      _WINE='wine'  # FIXME: what targets can an arm64 host run? Can an x64 host run arm64 targets?
     fi
   fi
 
@@ -434,7 +438,7 @@ EOF
 # Build binaries
 build_single_target x64
 if [ "${_BRANCH#*x64only*}" = "${_BRANCH}" ]; then
-# build_single_target arm64
+# build_single_target a64
   build_single_target x86
 fi
 

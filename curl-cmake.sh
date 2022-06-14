@@ -135,7 +135,8 @@ _VER="$1"
   # options="${options} -DENABLE_UNICODE=ON"
 
     CURL_DLL_SUFFIX=''
-    [ "${_CPU}" = 'x64' ] && CURL_DLL_SUFFIX='-x64'
+    [ "${_CPU}" = 'x64' ] && CURL_DLL_SUFFIX="-${_CPU}"
+    [ "${_CPU}" = 'a64' ] && CURL_DLL_SUFFIX="-${_CPU}"
 
     [ "${pass}" = 'shared' ] && options="${options} -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${CURL_DLL_SUFFIX}.dll"  # CMAKE_SHARED_LIBRARY_SUFFIX ignored.
 

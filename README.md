@@ -71,7 +71,7 @@
   options enabled.
 - Binaries are using [DWARF](https://en.wikipedia.org/wiki/DWARF) in x86 and
   [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH)
-  in x64 builds.
+  in x64 builds. [FIXME: UCRT/lld builds are using PDB?]
 - Components are verified using SHA-256 hashes and also GPG signatures where
   available.
 - Generated binaries are [reproducible](https://reproducible-builds.org/),
