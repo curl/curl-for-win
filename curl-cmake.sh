@@ -1,14 +1,14 @@
 #!/bin/sh
 
-# [CMAKE EXPERIMENTAL]
-
-# FIXME:
-# - HAVE_STRCASECMP, possibly others, undetected
-
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
 
 # https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html
 # https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html
+
+# This build bumps up Windows compatibility for x64 to the toolchain default,
+# which is Vista now. x86 is manually forced, to stay XP compatible, in sync
+# with openssl builds. Makefile.m32 builds forced XP compatibliity for both
+# x64 and x86.
 
 # shellcheck disable=SC3040
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
