@@ -281,7 +281,7 @@ _VER="$1"
         "-DCMAKE_SHARED_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_DLL}"
     fi
 
-    make --jobs 2 install "DESTDIR=$(pwd)/pkg" VERBOSE=1
+    make --jobs 2 install "DESTDIR=$(pwd)/pkg"
   done
 
   # Download CA bundle
