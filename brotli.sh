@@ -94,6 +94,11 @@ _VER="$1"
 
   rm -f ${_pkg}/lib/*.dll.a
 
+  # libcurl only uses the decoding functionality
+
+  rm -f ${_pkg}/lib/libbrotlienc.a
+  rm -f ${_pkg}/lib/pkgconfig/libbrotlienc.pc
+
   # Make steps for determinism
 
   readonly _ref='docs/brotli.1'
