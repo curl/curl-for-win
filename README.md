@@ -96,7 +96,7 @@
   [VirusTotal](https://www.virustotal.com/).
 - To verify the correct checksum for the latest build, you can look up the
   correct ones in the build log. Watch for `main` branch job `Image: Ubuntu`,
-  log lines starting with `SHA256(` or `SHA512(`:
+  log lines starting with `SHA2-256(` or `SHA2-512(`:
     <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main>
 - The build process is multi-platform and able to cross-build Windows
   executables from \*nix hosts (Linux and macOS tested.)
