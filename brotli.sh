@@ -96,6 +96,7 @@ _VER="$1"
 
   # libcurl only uses the decoding functionality
 
+  rm -f ${_pkg}/include/encode.h
   rm -f ${_pkg}/lib/libbrotlienc.a
   rm -f ${_pkg}/lib/pkgconfig/libbrotlienc.pc
 
