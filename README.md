@@ -51,7 +51,7 @@
     Features: alt-svc AsynchDNS        gsasl HSTS HTTP2                   IDN IPv6 Kerberos Largefile libz          NTLM SPNEGO SSL SSPI (threadsafe)         UnixSockets
     Libs: -lcurl -lwldap32 -lcrypt32 -lz -lnghttp2 -lssh2 -lgsasl -lbcrypt
 
-    "micro" (without `libssh2` and `libgsasl`):
+    "micro" (without libssh2 and libgsasl):
     Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp
     Features: alt-svc AsynchDNS              HSTS HTTP2                   IDN IPv6 Kerberos Largefile libz          NTLM SPNEGO SSL SSPI (threadsafe)         UnixSockets
     Libs: -lcurl -lwldap32 -lcrypt32 -lz -lnghttp2
@@ -79,9 +79,6 @@
 - Binaries have supported
   [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29)
   options enabled.
-- Binaries are using [DWARF](https://en.wikipedia.org/wiki/DWARF) in x86 and
-  [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH)
-  in x64 builds. [FIXME: UCRT/lld builds are using PDB?]
 - Components are verified using SHA-256 hashes and also GPG signatures where
   available.
 - Generated binaries are [reproducible](https://reproducible-builds.org/),
@@ -102,9 +99,9 @@
   rustls or Schannel).
 - Generated binaries are automatically uploaded to
   [VirusTotal](https://www.virustotal.com/).
-- To verify the correct checksum for the latest build, you can look up the
-  correct ones in the build log. Watch for `main` branch job `Image: Ubuntu`,
-  log lines starting with `SHA2-256(` or `SHA2-512(`:
+- To verify the hashes of the latest build, you can look up the correct
+  values in the build log. Watch for `main` branch builds, log lines starting
+  with `SHA2-256(` or `SHA2-512(`:
     <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main>
 - The build process is multi-platform and able to cross-build Windows
   executables from \*nix hosts (Linux and macOS tested.)
