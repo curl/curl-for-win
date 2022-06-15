@@ -51,10 +51,10 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # TODO:
 #   - switch curl to cmake builds.
-#   - Update nameing-scheme to make room for arm64 builds:
+#   - Update naming-scheme to make room for arm64 builds:
 #       win64 -> win-x64
 #       win32 -> win-x86
-#             -> win-a64
+#             -> win-a64 / win-arm64
 #     Needs updating curl-www also.
 #   - Make -ucrt the default, replace with -noucrt
 #   - Add support for arm64 builds (requires UCRT)
@@ -70,6 +70,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # Resources:
 #   - https://github.com/mstorsjo/llvm-mingw
 #   - https://blog.llvm.org/2019/11/deterministic-builds-with-clang-and-lld.html
+#   - https://my.visualstudio.com/Downloads?q=Redistributable%20for%20Visual%20Studio%202019%20Version%2016.7 (UCRT for Windows XP)
 
 # Tools:
 #                compiler build

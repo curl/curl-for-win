@@ -6,7 +6,7 @@
 # https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html
 
 # This build bumps up Windows compatibility for x64 to the toolchain default,
-# which is Vista now. x86 is manually forced, to stay XP compatible, in sync
+# which is Vista now. x86 is manually forced to stay XP compatible, in sync
 # with openssl builds. Makefile.m32 builds forced XP compatibliity for both
 # x64 and x86.
 
