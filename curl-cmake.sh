@@ -82,9 +82,9 @@ _VER="$1"
   fi
 
   # CMake cannot build everything in one pass. With BUILD_SHARED_LIBS enabled,
-  # it will not build a static lib, and links curl.exe against libcurl DLL
+  # it does not build a static lib, and links curl.exe against libcurl DLL
   # with no option to change this. We need to split it into two passes. This
-  # will be slower than when using a single pass (like in Makefile.m32), but
+  # is be slower than when using a single pass (like in Makefile.m32), but
   # there is no other way. The two passes are:
   #   1. build the shared libcurl DLL + implib + .def
   #   2. build the static libcurl lib + statically linked curl EXE
@@ -149,8 +149,8 @@ _VER="$1"
 
     # Ugly hack. Everything breaks without this due to the accidental ordering of
     # libs and objects, and offering no universal way to (re)insert libs at
-    # specific positions. Linker will complain about a missing --end-group, which
-    # it will add automatically anyway. Same with '-fuse-ld=lld'.
+    # specific positions. Linker complains about a missing --end-group, then adds
+    # it automatically anyway. Same with '-fuse-ld=lld'.
     CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--start-group"
 
     CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} $(pwd)/libcurl.def"
@@ -336,7 +336,7 @@ _VER="$1"
 
   # Execute curl and compiled-in dependency code. This is not secure, but
   # the build process already requires executing external code
-  # (e.g. configure scripts) on the build machine, so this will not make
+  # (e.g. configure scripts) on the build machine, so this does not make
   # it worse, except that it requires installing WINE on a compatible CPU
   # (and a QEMU setup on non-compatible ones). It would be best to extract
   # `--version` output directly from the binary as strings, but curl creates

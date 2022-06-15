@@ -10,9 +10,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #       information leaks into the built objects at compile time, making this
 #       information visible in object files. It also makes it problematic
 #       to create reproducible binaries. In practice this is a problem when
-#       using CMake, because it will convert source filenames into absolute
-#       ones before passing them to the compiler. autotools builds pass the
-#       path relative to the source root, so no issue there.
+#       using CMake, because it converts source filenames into absolute ones
+#       before passing them to the compiler. autotools builds pass the path
+#       relative to the source root, so no issue there.
 
 export _NAM
 export _VER

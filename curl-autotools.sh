@@ -125,7 +125,7 @@ _VER="$1"
     export CURL_DLL_A_SUFFIX=.dll
   fi
 
-  # NOTE: root path with spaces will break all value with '$(pwd)'. But,
+  # NOTE: root path with spaces breaks all values with '$(pwd)'. But,
   #       autotools breaks on spaces anyway, so let us leave it like that.
 
   if [ -d ../zlib ]; then
@@ -324,7 +324,7 @@ _VER="$1"
 
   # Execute curl and compiled-in dependency code. This is not secure, but
   # the build process already requires executing external code
-  # (e.g. configure scripts) on the build machine, so this will not make
+  # (e.g. configure scripts) on the build machine, so this does not make
   # it worse, except that it requires installing WINE on a compatible CPU
   # (and a QEMU setup on non-compatible ones). It would be best to extract
   # `--version` output directly from the binary as strings, but curl creates

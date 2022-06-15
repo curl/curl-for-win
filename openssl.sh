@@ -59,7 +59,7 @@ _VER="$1"
       # macro __USER_LABEL_PREFIX__ [1]. On macOS, with pure 'clang', this
       # returns '_' (as of Homebrew LLVM 13.0.1). This causes all exported
       # assembly function names getting an underscore prefix. Then, when
-      # building OpenSSL libraries into executables, the linker will not find
+      # building OpenSSL libraries into executables, the linker does not find
       # these symbols, breaking the builds, including openssl.exe and OpenSSL
       # DLLs.
       # [1]: https://github.com/openssl/openssl/blob/openssl-3.0.2/crypto/perlasm/x86_64-xlate.pl#L91
@@ -98,13 +98,13 @@ _VER="$1"
   # configurations. We do avoid using the new default prefix set since
   # OpenSSL 1.1.1d, because by using the C:\Program Files*\ value, the
   # prefix remains vulnerable on localized Windows versions. The default
-  # below will give a "more secure" configuration for most Windows
-  # installations. Also notice that said OpenSSL default breaks OpenSSL's
-  # own build system when used in cross-build scenarios. I submitted the
-  # working patch, but closed subsequently due to mixed/no response.
-  # The secure solution would be to disable loading anything from hard-coded
-  # paths and preferably to detect OS location at runtime and adjust config
-  # paths accordingly; none supported by OpenSSL.
+  # below gives a "more secure" configuration for most Windows installations.
+  # Also notice that said OpenSSL default breaks OpenSSL's own build system
+  # when used in cross-build scenarios. I submitted the working patch, but
+  # closed subsequently due to mixed/no response. The secure solution would
+  # be to disable loading anything from hard-coded paths and preferably to
+  # detect OS location at runtime and adjust config paths accordingly; none
+  # supported by OpenSSL.
   _prefix='C:/Windows/System32/OpenSSL'
   _ssldir="ssl"
 
@@ -137,7 +137,7 @@ _VER="$1"
   # DESTDIR= + --prefix=
   # OpenSSL 3.x does not strip the drive letter anymore:
   #   ./openssl/pkg/C:/Windows/System32/OpenSSL
-  # Some tools (e.g CMake) will become weird when colons appear in
+  # Some tools (e.g CMake) become weird when colons appear in
   # a filename, so move results to a sane, standard path:
 
   _pkg='pkg/usr/local'

@@ -53,7 +53,7 @@ _VER="$1"
   LDFLAGS="${LDFLAGS}${ldonly}"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
 
-  # NOTE: root path with spaces will break all value with '$(pwd)'. But,
+  # NOTE: root path with spaces breaks all values with '$(pwd)'. But,
   #       autotools breaks on spaces anyway, so let us leave it like that.
 
   if [ -d ../zlib ]; then

@@ -32,9 +32,9 @@ _VER="$1"
   # Then a check fails in 'libtool' before trying to build any DLL. These are
   # bogus warnings [1][2], which are in fact errors, so DLLs are not built.
   # We can neutralize the bogus checks via 's/droppeddeps=yes/#droppeddeps=yes/g'
-  # in ./ltmain.sh. But, DLL builds will still fail due to thinking using MSVC and
+  # in ./ltmain.sh. But, DLL builds still fail due to thinking using MSVC and
   # the '-link -EXPORT:<symbol>' option, which fails with clang. Manually setting
-  # LD to the mingw-w64 ld tool (= "${_CCPREFIX}ld"), will also result in a wrong
+  # LD to the mingw-w64 ld tool (= "${_CCPREFIX}ld"), also results in a wrong
   # command-line, with the '--whole-archive' option in it, and fail.
   #
   # So the options are either to stick with gcc with libressl, or to use clang
@@ -102,7 +102,7 @@ _VER="$1"
   # DESTDIR= + --prefix=
   # LibreSSL does not strip the drive letter
   #   ./libressl/pkg/C:/Windows/libressl
-  # Some tools (e.g CMake) will become weird when colons appear in
+  # Some tools (e.g CMake) become weird when colons appear in
   # a filename, so move results to a sane, standard path:
 
   _pkg='pkg/usr/local'

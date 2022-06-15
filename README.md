@@ -75,7 +75,7 @@
 - Components are verified using SHA-256 hashes and also GPG signatures where
   available.
 - Generated binaries are [reproducible](https://reproducible-builds.org/),
-  meaning they will have the same hash given the same input sources and C
+  meaning they produce the same hash given the same input sources and C
   compiler.
 - Patching policy: No locally maintained patches. We apply patches
   locally if already merged upstream or &mdash; if necessary for
@@ -86,10 +86,10 @@
   mitigate a high-severity vulnerability
   ([CVE-2019-5443](https://curl.se/docs/CVE-2019-5443.html)), which still
   has an incomplete fix in the default OpenSSL builds for Windows. The
-  OpenSSL team rejected both patches. Even though the patch is minor, we
-  do not promise we will maintain them here for an indefinite time.
-  Another option under consideration is to migrate to an OpenSSL
-  alternative (e.g. LibreSSL, rustls or Schannel).
+  OpenSSL team rejected both patches. Even though the patches are minor, we
+  do not promise to maintain them for an indefinite time. Another option
+  under consideration is to migrate to an OpenSSL alternative (e.g. LibreSSL,
+  rustls or Schannel).
 - Generated binaries are automatically uploaded to
   [VirusTotal](https://www.virustotal.com/).
 - To verify the correct checksum for the latest build, you can look up the
@@ -98,7 +98,7 @@
     <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main>
 - The build process is multi-platform and able to cross-build Windows
   executables from \*nix hosts (Linux and macOS tested.)
-- Packages created across different host platforms will not have identical
+- Packages created across different host platforms do not have identical
   hashes. The reason for this is the slightly different build options and
   versions of the `mingw-w64` and `binutils` tools.
 - Code signing uses a self-signed certificate. The signature intentionally
