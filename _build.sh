@@ -50,7 +50,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skip operations that miss a secret.
 
 # TODO:
-#   - switch curl to cmake builds.
+#   - Switch curl to CMake builds.
 #   - Update naming-scheme to make room for arm64 builds:
 #       win64 -> win-x64
 #       win32 -> win-x86
@@ -64,27 +64,28 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - Make -nobrotli the default?
 #   - Enable Control Flow Guard (once FLOSS toolchains support it): -ehcontguard (requires LLVM 13.0.0)
 #   - LLVM -mretpoline
-#   - Switch to rustls?
-#   - Make Schannel (no TLSv1.3/QUIC) or LibreSSL (no QUIC, no ed25519 in libssh2) the default?
+#   - Change default TLS to
+#     - Schannel (no QUIC, no TLSv1.3)
+#     - LibreSSL (no QUIC, no ed25519 in libssh2)
+#     - rustls (experimental, no rand)
 
 # Resources:
 #   - https://github.com/mstorsjo/llvm-mingw
 #   - https://blog.llvm.org/2019/11/deterministic-builds-with-clang-and-lld.html
 
-# Tools:
-#                compiler build
-#                -------- -------------------
-#   zlib.sh      clang    cmake
-#   brotli.sh    clang    cmake
-#   libgsasl.sh  clang    autotools
-#   libidn2.sh   clang    autotools
-#   nghttp2.sh   clang    cmake
-#   nghttp3.sh   clang    cmake
-#   ngtcp2.sh    clang    cmake
-#   openssl.sh   clang    proprietary
-#   libressl.sh  clang    autotools/cmake
-#   libssh2.sh   clang    autotools/cmake
-#   curl.sh      clang    Makefile.m32/cmake
+# Supported build tools:
+#
+#   zlib      cmake
+#   brotli    cmake
+#   libgsasl  autotools
+#   libidn2   autotools
+#   nghttp2   cmake
+#   nghttp3   cmake
+#   ngtcp2    cmake
+#   openssl   proprietary
+#   libressl  autotools, cmake
+#   libssh2   autotools, cmake
+#   curl      Makefile.m32, cmake, autotools (broken)
 
 cd "$(dirname "$0")"
 

@@ -3,9 +3,7 @@
 
 # Automated, reproducible, transparent, Windows builds for curl
 
-- Binary packages are downloadable in `.zip` and `.tar.xz` formats.<br>
-  You can extract `.xz` files and the resulting `.tar` archive using
-  [7-Zip](https://www.7-zip.org/).
+- Binary packages are downloadable in `.zip` and `.tar.xz` formats.
 - We sign binary packages with the PGP key:
   <br><https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc>
   <br>`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`
