@@ -65,7 +65,7 @@ _VER="$1"
 
   uselld=0
   if [ "${_CRT}" = 'ucrt' ]; then
-    if [ "${CW_CC}" = 'mingw-clang' ]; then
+    if [ "${_CC}" = 'clang' ]; then
       LDFLAGS="${LDFLAGS} -fuse-ld=lld -s"
       uselld=1
     else
@@ -75,7 +75,7 @@ _VER="$1"
     LDFLAGS="${LDFLAGS} -lucrt"
   fi
 
-  if [ "${CW_CC}" = 'mingw-clang' ]; then
+  if [ "${_CC}" = 'clang' ]; then
     export CC='clang'
     if [ "${_OS}" != 'win' ]; then
       options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"

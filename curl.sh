@@ -52,7 +52,7 @@ _VER="$1"
 
   uselld=0
   if [ "${_CRT}" = 'ucrt' ]; then
-    if [ "${CW_CC}" = 'mingw-clang' ]; then
+    if [ "${_CC}" = 'clang' ]; then
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -fuse-ld=lld -s"
       uselld=1
     else
@@ -163,7 +163,7 @@ _VER="$1"
 
   export CROSSPREFIX="${_CCPREFIX}"
 
-  if [ "${CW_CC}" = 'mingw-clang' ]; then
+  if [ "${_CC}" = 'clang' ]; then
   # CURL_CFLAG_EXTRAS="-mretpoline ${CURL_CFLAG_EXTRAS}"
   # CURL_CFLAG_EXTRAS="-mspeculative-load-hardening ${CURL_CFLAG_EXTRAS}"
     export CURL_CC="clang${CW_CCSUFFIX}"

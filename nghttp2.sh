@@ -57,7 +57,7 @@ _VER="$1"
   # detection logic and all the potential detection issues with it.
   options="${options} -DCMAKE_CXX_COMPILER_WORKS=1"
 
-  if [ "${CW_CC}" = 'mingw-clang' ]; then
+  if [ "${_CC}" = 'clang' ]; then
     unset CC
 
     [ "${_OS}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"

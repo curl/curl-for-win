@@ -40,7 +40,7 @@ _VER="$1"
   [ "${_CRT}" = 'ucrt' ] && CFLAGS="${CFLAGS} -D_UCRT"
   ldonly=''
 
-  if [ "${CW_CC}" = 'mingw-clang' ]; then
+  if [ "${_CC}" = 'clang' ]; then
     export CC='clang'
     if [ "${_OS}" != 'win' ]; then
       options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"

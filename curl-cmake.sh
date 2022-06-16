@@ -73,7 +73,7 @@ _VER="$1"
       | sed -E 's|^ *\*? *([a-z_]+) *\(.+$|\1|g'
   } | grep -a -v '^$' | sort | tee -a libcurl.def
 
-  if [ "${_CRT}" = 'ucrt' ] && [ "${CW_CC}" = 'mingw-clang' ]; then
+  if [ "${_CRT}" = 'ucrt' ] && [ "${_CC}" = 'clang' ]; then
     uselld=1
   else
     uselld=0
@@ -117,7 +117,7 @@ _VER="$1"
     fi
 
     if [ "${_CRT}" = 'ucrt' ]; then
-      if [ "${CW_CC}" = 'mingw-clang' ]; then
+      if [ "${_CC}" = 'clang' ]; then
         CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -fuse-ld=lld -s"
       else
         CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -specs=${_GCCSPECS}"
@@ -252,7 +252,7 @@ _VER="$1"
     options="${options} -DENABLE_THREADED_RESOLVER=ON"
     options="${options} -DBUILD_TESTING=OFF"
 
-    if [ "${CW_CC}" = 'mingw-clang' ]; then
+    if [ "${_CC}" = 'clang' ]; then
       unset CC
 
       [ "${_OS}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"

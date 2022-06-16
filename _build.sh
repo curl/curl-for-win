@@ -15,17 +15,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      List of components to (re-)download. E.g. 'zlib curl' or 'none'.
 #      Optional. Default: (all)
 #
-# CW_CC
-#      C compiler to use. E.g. 'mingw-clang'. Any other value implies mingw-gcc.
-#      Optional. Default: mingw-gcc
-#
-# CW_CCSUFFIX
-#      clang suffix. E.g. '-8' for clang-8.
-#      Optional. Default: (empty)
-#
 # CW_CONFIG
 #      Build configuration. Certain keywords select certain configurations. E.g.: 'main-micro'.
-#      Optional. Default: 'main' (inherited from the active Git branch name)
+#      Optional. Default: 'main' (inherited from the active repo branch name)
 #
 #      Supported keywords:
 #        main      production build
@@ -41,6 +33,11 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        nano      build with less features, see README.md
 #        x64only   build x64 target only
 #        ucrt      build against UCRT instead of msvcrt
+#        gcc       build with GCC (use clang if not specified)
+#
+# CW_CCSUFFIX
+#      clang suffix. E.g. '-8' for clang-8.
+#      Optional. Default: (empty)
 #
 # SIGN_CODE_GPG_PASS, SIGN_CODE_KEY_PASS: for code signing
 # SIGN_PKG_KEY_ID, SIGN_PKG_GPG_PASS, SIGN_PKG_KEY_PASS: for package signing
@@ -119,6 +116,12 @@ export _BRANCH="${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF:-}$
 export _URL=''
 command -v git >/dev/null 2>&1 && _URL="$(git ls-remote --get-url | sed 's|.git$||')"
 [ -n "${_URL}" ] || _URL="https://github.com/${APPVEYOR_REPO_NAME:-}${GITHUB_REPOSITORY:-}"
+
+export CW_CCSUFFIX
+[ -n "${CW_CCSUFFIX:-}" ] || CW_CCSUFFIX=''
+
+export _CC='clang'
+[ ! "${_BRANCH#*gcc*}" = "${_BRANCH}" ] && _CC='gcc'
 
 # Detect host OS
 export _OS
@@ -218,9 +221,7 @@ if [ -s "${SIGN_CODE_KEY}" ]; then
 fi
 
 clangver=''
-if [ "${CW_CC}" = 'mingw-clang' ]; then
-  clangver="clang$("clang${CW_CCSUFFIX}" --version | grep -o -a -E ' [0-9]*\.[0-9]*[\.][0-9]*')"
-fi
+[ "${_CC}" = 'clang' ] && clangver="clang$("clang${CW_CCSUFFIX}" --version | grep -o -a -E ' [0-9]*\.[0-9]*[\.][0-9]*')"
 
 mingwver=''
 case "${_OS}" in
@@ -290,7 +291,7 @@ build_single_target() {
     pip3 --version
     pip3 --disable-pip-version-check --no-cache-dir install --user "pefile==${PEFILE_VER_}"
   else
-    if [ "${CW_CC}" = 'mingw-clang' ] && [ "${_OS}" = 'mac' ]; then
+    if [ "${_CC}" = 'clang' ] && [ "${_OS}" = 'mac' ]; then
       export PATH="/usr/local/opt/llvm/bin:${_ori_path}"
     fi
     _TRIPLET="${_machine}-w64-mingw32"
@@ -328,7 +329,7 @@ build_single_target() {
   [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ] && _CRT='ucrt'
 
   export _CCVER
-  if [ "${CW_CC}" = 'mingw-clang' ]; then
+  if [ "${_CC}" = 'clang' ]; then
     # We do not use old mingw toolchain versions when building with clang,
     # so this is safe:
     _CCVER='99'
@@ -353,7 +354,7 @@ build_single_target() {
   export _UNIMFT="${_UNIPKG}/BUILD-MANIFEST.txt"
 
   gccver=''
-  [ "${CW_CC}" = 'mingw-clang' ] || gccver="gcc $("${_CCPREFIX}gcc" -dumpversion)"
+  [ "${_CC}" = 'clang' ] || gccver="gcc $("${_CCPREFIX}gcc" -dumpversion)"
   binver="binutils $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
 
   {
