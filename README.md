@@ -111,9 +111,6 @@
 
 * Latest version:
   <br><https://curl.se/windows/>
-* Latest version direct links:
-  <br><https://curl.se/windows/curl-win32-latest.zip>
-  <br><https://curl.se/windows/curl-win64-latest.zip>
 * Specific versions (back to 7.80.0):<br>
   `https://curl.se/windows/dl-<curl-version>[_<build-number>]/`
   <br>Examples:
