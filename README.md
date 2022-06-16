@@ -115,7 +115,7 @@
   `https://curl.se/windows/dl-<curl-version>[_<build-number>]/`
   <br>Examples:
   <br><https://curl.se/windows/dl-7.80.0/>
-  <br><https://curl.se/windows/dl-7.80.0_1/>
+  <br><https://curl.se/windows/dl-7.83.1_2/>
 
 # Build logs
 
