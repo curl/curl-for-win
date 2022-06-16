@@ -63,7 +63,7 @@ _VER="$1"
   options="${options} -DCMAKE_RC_FLAGS=-DGCC_WINDRES"
   options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
 
-  if [ "${CC}" = 'mingw-clang' ]; then
+  if [ "${CW_CC}" = 'mingw-clang' ]; then
     unset CC
 
     [ "${_OS}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
@@ -75,7 +75,7 @@ _VER="$1"
       "-DCMAKE_SYSROOT=${_SYSROOT}" \
       "-DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}" \
       "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
-      "-DCMAKE_C_COMPILER=clang${_CCSUFFIX}" \
+      "-DCMAKE_C_COMPILER=clang${CW_CCSUFFIX}" \
       "-DCMAKE_C_FLAGS=${_CFLAGS}"
   else
     unset CC

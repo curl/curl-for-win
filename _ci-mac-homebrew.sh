@@ -5,9 +5,9 @@
 # shellcheck disable=SC3040
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
-[ "${CC}" = 'mingw-clang' ] && _optpkg='llvm'
+[ "${CW_CC}" = 'mingw-clang' ] && _optpkg='llvm'
 
-export _CCSUFFIX=''
+export CW_CCSUFFIX=''
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ANALYTICS=1
 time brew update >/dev/null

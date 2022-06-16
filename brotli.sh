@@ -51,7 +51,7 @@ _VER="$1"
   options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
   options="${options} -DBROTLI_DISABLE_TESTS=ON"
 
-  if [ "${CC}" = 'mingw-clang' ]; then
+  if [ "${CW_CC}" = 'mingw-clang' ]; then
     unset CC
 
     [ "${_OS}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
@@ -64,8 +64,8 @@ _VER="$1"
       "-DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}" \
       "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
       "-DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}" \
-      "-DCMAKE_C_COMPILER=clang${_CCSUFFIX}" \
-      "-DCMAKE_CXX_COMPILER=clang++${_CCSUFFIX}" \
+      "-DCMAKE_C_COMPILER=clang${CW_CCSUFFIX}" \
+      "-DCMAKE_CXX_COMPILER=clang++${CW_CCSUFFIX}" \
       "-DCMAKE_C_FLAGS=${_CFLAGS}"
   else
     unset CC

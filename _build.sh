@@ -15,17 +15,17 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      List of components to (re-)download. E.g. 'zlib curl' or 'none'.
 #      Optional. Default: (all)
 #
-# CC
-#      C compiler to use. E.g. 'mingw-clang' or any other value implies mingw-gcc.
+# CW_CC
+#      C compiler to use. E.g. 'mingw-clang'. Any other value implies mingw-gcc.
 #      Optional. Default: mingw-gcc
 #
-# _CCSUFFIX
+# CW_CCSUFFIX
 #      clang suffix. E.g. '-8' for clang-8.
 #      Optional. Default: (empty)
 #
-# GIT_BRANCH
-#      Emulate a Git branch name. Certain keywords select certain configurations. E.g.: 'main-micro'.
-#      Optional. Default: 'main'
+# CW_CONFIG
+#      Build configuration. Certain keywords select certain configurations. E.g.: 'main-micro'.
+#      Optional. Default: 'main' (inherited from the active Git branch name)
 #
 #      Supported keywords:
 #        main      production build
@@ -44,10 +44,10 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #
 # SIGN_CODE_GPG_PASS, SIGN_CODE_KEY_PASS: for code signing
 # SIGN_PKG_KEY_ID, SIGN_PKG_GPG_PASS, SIGN_PKG_KEY_PASS: for package signing
-# VIRUSTOTAL_APIKEY: to upload to VirusTotal
-# DEPLOY_GPG_PASS, DEPLOY_KEY_PASS: to publish results
+# VIRUSTOTAL_APIKEY: for VirusTotal uploads
+# DEPLOY_GPG_PASS, DEPLOY_KEY_PASS: for publishing results
 #      Secrets used for the above operations.
-#      Optional. Skip operations that miss a secret.
+#      Optional. Operations missing a secret are skipped.
 
 # TODO:
 #   - Switch curl to CMake builds.
@@ -218,8 +218,8 @@ if [ -s "${SIGN_CODE_KEY}" ]; then
 fi
 
 clangver=''
-if [ "${CC}" = 'mingw-clang' ]; then
-  clangver="clang$("clang${_CCSUFFIX}" --version | grep -o -a -E ' [0-9]*\.[0-9]*[\.][0-9]*')"
+if [ "${CW_CC}" = 'mingw-clang' ]; then
+  clangver="clang$("clang${CW_CCSUFFIX}" --version | grep -o -a -E ' [0-9]*\.[0-9]*[\.][0-9]*')"
 fi
 
 mingwver=''
@@ -290,7 +290,7 @@ build_single_target() {
     pip3 --version
     pip3 --disable-pip-version-check --no-cache-dir install --user "pefile==${PEFILE_VER_}"
   else
-    if [ "${CC}" = 'mingw-clang' ] && [ "${_OS}" = 'mac' ]; then
+    if [ "${CW_CC}" = 'mingw-clang' ] && [ "${_OS}" = 'mac' ]; then
       export PATH="/usr/local/opt/llvm/bin:${_ori_path}"
     fi
     _TRIPLET="${_machine}-w64-mingw32"
@@ -328,7 +328,7 @@ build_single_target() {
   [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ] && _CRT='ucrt'
 
   export _CCVER
-  if [ "${CC}" = 'mingw-clang' ]; then
+  if [ "${CW_CC}" = 'mingw-clang' ]; then
     # We do not use old mingw toolchain versions when building with clang,
     # so this is safe:
     _CCVER='99'
@@ -353,7 +353,7 @@ build_single_target() {
   export _UNIMFT="${_UNIPKG}/BUILD-MANIFEST.txt"
 
   gccver=''
-  [ "${CC}" = 'mingw-clang' ] || gccver="gcc $("${_CCPREFIX}gcc" -dumpversion)"
+  [ "${CW_CC}" = 'mingw-clang' ] || gccver="gcc $("${_CCPREFIX}gcc" -dumpversion)"
   binver="binutils $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
 
   {

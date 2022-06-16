@@ -48,7 +48,7 @@ _VER="$1"
   [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128"
   [ "${_CPU}" = 'x86' ] && options="${options} -fno-asynchronous-unwind-tables -D_WIN32_WINNT=0x0501"
 
-  if [ "${CC}" = 'mingw-clang' ]; then
+  if [ "${CW_CC}" = 'mingw-clang' ]; then
     # To avoid warnings when passing C compiler options to the linker
     options="${options} -Wno-unused-command-line-argument"
     export CC=clang

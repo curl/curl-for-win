@@ -7,8 +7,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 cat /etc/*-release
 
-export _CCSUFFIX=''
-[ "${CC}" = 'mingw-clang' ] && _optpkg="clang${_CCSUFFIX}"
+export CW_CCSUFFIX=''
+[ "${CW_CC}" = 'mingw-clang' ] && _optpkg="clang${CW_CCSUFFIX}"
 
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 update
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \

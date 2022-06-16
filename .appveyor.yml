@@ -41,7 +41,7 @@ environment:
     secure: bnL3+KC1CKO+vEE2MzgeoNX6rGuwB6L/ItM55z6Dd39R3JYVBGig16FQWNMzSRQK
   DEPLOY_KEY_PASS:
     secure: yqzKOttlHYVNIqJWC/tnmB8Qu+87mOVxJa7h6uD7WLU32XjUhTEDp9ZwpgmQD1RH
-  CC: mingw-clang
+  CW_CC: mingw-clang
   DO_NOT_TRACK: 1
 build_script:
   - sh: |
@@ -49,7 +49,7 @@ build_script:
       docker images --digests
       time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
         --env-file <(env | grep -a -E \
-          '^(CC|DO_NOT_TRACK|VIRUSTOTAL_|SIGN_|DEPLOY_|APPVEYOR_|CI_)') \
+          '^(CW_|VIRUSTOTAL_|SIGN_|DEPLOY_|APPVEYOR_|CI_|DO_NOT_TRACK)') \
         "${DOCKER_IMAGE}" \
         sh -c ./_ci-linux-debian.sh
 artifacts:

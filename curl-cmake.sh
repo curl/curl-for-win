@@ -73,9 +73,7 @@ _VER="$1"
       | sed -E 's|^ *\*? *([a-z_]+) *\(.+$|\1|g'
   } | grep -a -v '^$' | sort | tee -a libcurl.def
 
-  CC_INPUT="${CC}"
-
-  if [ "${_CRT}" = 'ucrt' ] && [ "${CC}" = 'mingw-clang' ]; then
+  if [ "${_CRT}" = 'ucrt' ] && [ "${CW_CC}" = 'mingw-clang' ]; then
     uselld=1
   else
     uselld=0
@@ -119,7 +117,7 @@ _VER="$1"
     fi
 
     if [ "${_CRT}" = 'ucrt' ]; then
-      if [ "${CC_INPUT}" = 'mingw-clang' ]; then
+      if [ "${CW_CC}" = 'mingw-clang' ]; then
         CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -fuse-ld=lld -s"
       else
         CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -specs=${_GCCSPECS}"
@@ -254,7 +252,7 @@ _VER="$1"
     options="${options} -DENABLE_THREADED_RESOLVER=ON"
     options="${options} -DBUILD_TESTING=OFF"
 
-    if [ "${CC_INPUT}" = 'mingw-clang' ]; then
+    if [ "${CW_CC}" = 'mingw-clang' ]; then
       unset CC
 
       [ "${_OS}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
@@ -266,7 +264,7 @@ _VER="$1"
         "-DCMAKE_SYSROOT=${_SYSROOT}" \
         "-DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}" \
         "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
-        "-DCMAKE_C_COMPILER=clang${_CCSUFFIX}" \
+        "-DCMAKE_C_COMPILER=clang${CW_CCSUFFIX}" \
         "-DCMAKE_C_FLAGS=${_CFLAGS}" \
         "-DCMAKE_EXE_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_EXE}" \
         "-DCMAKE_SHARED_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_DLL}"  # --debug-find

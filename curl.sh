@@ -52,7 +52,7 @@ _VER="$1"
 
   uselld=0
   if [ "${_CRT}" = 'ucrt' ]; then
-    if [ "${CC}" = 'mingw-clang' ]; then
+    if [ "${CW_CC}" = 'mingw-clang' ]; then
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -fuse-ld=lld -s"
       uselld=1
     else
@@ -163,10 +163,10 @@ _VER="$1"
 
   export CROSSPREFIX="${_CCPREFIX}"
 
-  if [ "${CC}" = 'mingw-clang' ]; then
+  if [ "${CW_CC}" = 'mingw-clang' ]; then
   # CURL_CFLAG_EXTRAS="-mretpoline ${CURL_CFLAG_EXTRAS}"
   # CURL_CFLAG_EXTRAS="-mspeculative-load-hardening ${CURL_CFLAG_EXTRAS}"
-    export CURL_CC="clang${_CCSUFFIX}"
+    export CURL_CC="clang${CW_CCSUFFIX}"
     if [ "${_OS}" != 'win' ]; then
       CURL_CFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${CURL_CFLAG_EXTRAS}"
       [ "${_OS}" = 'linux' ] && CURL_LDFLAG_EXTRAS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${CURL_LDFLAG_EXTRAS}"

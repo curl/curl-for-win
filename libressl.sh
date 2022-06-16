@@ -63,7 +63,7 @@ _VER="$1"
   export CPPFLAGS=''
   ldonly=''
 
-  if [ "${CC}" = 'mingw-clang' ]; then
+  if [ "${CW_CC}" = 'mingw-clang' ]; then
     export CC='clang'
     if [ "${_OS}" != 'win' ]; then
       options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
