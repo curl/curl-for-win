@@ -99,7 +99,7 @@
   [VirusTotal](https://www.virustotal.com/).
 - To verify the hashes of the latest build, you can look up the correct
   values in the build log. Watch for `main` branch builds, log lines starting
-  with `SHA2-256(` or `SHA2-512(`:
+  with `SHA`:
     <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main>
 - The build process is multi-platform and able to cross-build Windows
   executables from \*nix hosts (Linux and macOS tested.)
