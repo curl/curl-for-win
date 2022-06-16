@@ -44,7 +44,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # VIRUSTOTAL_APIKEY: for VirusTotal uploads
 # DEPLOY_GPG_PASS, DEPLOY_KEY_PASS: for publishing results
 #      Secrets used for the above operations.
-#      Optional. Operations missing a secret are skipped.
+#      Optional. Skipping any operation missing a secret.
 
 # TODO:
 #   - Switch curl to CMake builds.

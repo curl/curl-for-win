@@ -14,13 +14,11 @@
 - Support for
   [Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/).
   We plan to make this the default soon, replacing `msvcrt.dll`. The runtime
-  comes with Windows 10 and later (including Server equivalents). Earlier
-  versions got it via Windows Update, or
-  [manual](https://support.microsoft.com/topic/update-for-universal-c-runtime-in-windows-c0514201-7fe6-95a3-b0a5-287930f3560c)
-  install. Windows XP needs v14.27.29114.0, available here:
+  comes with Windows 10 and later. Back to Vista it came via Windows Update.
+  XP needs v14.27.29114.0, installed manually:
   [x86](https://download.visualstudio.microsoft.com/download/pr/56f631e5-4252-4f28-8ecc-257c7bf412b8/D305BAA965C9CD1B44EBCD53635EE9ECC6D85B54210E2764C8836F4E9DEFA345/VC_redist.x86.exe),
   [x64](https://download.visualstudio.microsoft.com/download/pr/722d59e4-0671-477e-b9b1-b8da7d4bd60b/591CBE3A269AFBCC025681B968A29CD191DF3C6204712CBDC9BA1CB632BA6068/VC_redist.x64.exe).
-  [More](https://www.msys2.org/docs/environments/#msvcrt-vs-ucrt),
+  <br>[More](https://www.msys2.org/docs/environments/#msvcrt-vs-ucrt),
   [information](https://docs.microsoft.com/cpp/porting/upgrade-your-code-to-the-universal-crt),
   [here](https://docs.microsoft.com/cpp/windows/universal-crt-deployment).
 - The binary package also contains the static library for curl and its
