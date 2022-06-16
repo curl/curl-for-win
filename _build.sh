@@ -7,11 +7,11 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # Build configuration environment variables:
 #
-# C4W_BLD
+# CW_BLD
 #      List of components to build. E.g. 'curl' or 'zlib libssh2 curl' or 'zlib curl-cmake' or 'none'.
 #      Optional. Default: (all)
 #
-# C4W_GET
+# CW_GET
 #      List of components to (re-)download. E.g. 'zlib curl' or 'none'.
 #      Optional. Default: (all)
 #
@@ -242,11 +242,11 @@ _ori_path="${PATH}"
 
 bld() {
   pkg="$1"
-  if [ -z "${C4W_BLD:-}" ] || echo "${C4W_BLD}" | grep -q -F "${pkg}"; then
+  if [ -z "${CW_BLD:-}" ] || echo "${CW_BLD}" | grep -q -F "${pkg}"; then
     shift
 
     # allow selecting an alternate build tool
-    withbuildtool="$(echo "${C4W_BLD}" | \
+    withbuildtool="$(echo "${CW_BLD}" | \
       grep -a -E "${pkg}-(cmake|autotools|make)" || true)"
     if [ -n "${withbuildtool}" ] && [ -f "${withbuildtool}.sh" ]; then
       pkg="${withbuildtool}"

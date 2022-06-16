@@ -363,7 +363,7 @@ fi
 live_xt() {
   local pkg hash
   pkg="$1"
-  if [ -z "${C4W_GET:-}" ] || echo "${C4W_GET}" | grep -q -F "${pkg}"; then
+  if [ -z "${CW_GET:-}" ] || echo "${CW_GET}" | grep -q -F "${pkg}"; then
     hash="$(openssl dgst -sha256 pkg.bin)"
     echo "${hash}"
     echo "${hash}" | grep -q -a -F -- "${2:-}" || exit 1
@@ -379,7 +379,7 @@ live_dl() {
 
   name="$1"
 
-  if [ -z "${C4W_GET:-}" ] || echo "${C4W_GET}" | grep -q -F "${name}"; then
+  if [ -z "${CW_GET:-}" ] || echo "${CW_GET}" | grep -q -F "${name}"; then
 
     ver="$2"
     hash="${3:-}"
