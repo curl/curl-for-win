@@ -240,6 +240,9 @@ _VER="$1"
 
     [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && _CFLAGS="${_CFLAGS} -DCURL_DISABLE_FTP=1"
 
+    options="${options} -DENABLE_MANUAL=ON"  # Does not seem to work.
+    _CFLAGS="${_CFLAGS} -DUSE_MANUAL=1"
+
     options="${options} -DCURL_CA_PATH=none"
     options="${options} -DCURL_CA_BUNDLE=none"
     if [ "${pass}" = 'static' ]; then
