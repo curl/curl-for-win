@@ -62,7 +62,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - Enable Control Flow Guard (once FLOSS toolchains support it): -ehcontguard (requires LLVM 13.0.0)
 #   - LLVM -mretpoline
 #   - Change default TLS to
-#     - Schannel (no QUIC, no TLSv1.3)
+#     - Schannel (no QUIC, no TLSv1.3, no TLS-SRP)
 #     - LibreSSL (no QUIC, no ed25519 in libssh2)
 #     - rustls (experimental, no rand)
 
