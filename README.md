@@ -56,6 +56,11 @@
     Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp
     Features: alt-svc AsynchDNS              HSTS                         IDN IPv6 Kerberos Largefile libz          NTLM SPNEGO SSL SSPI (threadsafe)         UnixSockets
     Libs: -lcurl -lz -lcrypt32 -lwldap32
+
+    "pico" (HTTP/1.1-only):
+    Protocols: http https
+    Features: AsynchDNS                      HSTS                             IPv6          Largefile libz                      SSL SSPI (threadsafe)         UnixSockets
+    Libs: -lcurl -lz -lcrypt32
     ```
 - The build process is fully transparent by using publicly available
   open source code, C compiler, build scripts and running the build

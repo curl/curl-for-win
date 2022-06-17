@@ -24,7 +24,7 @@ _VER="$1"
 
   # Build
 
-  options='mingw32-ipv6-sspi-ldaps-srp'
+  options='mingw32-ipv6-sspi-srp'
 
   export ARCH
   [ "${_CPU}" = 'x86' ] && ARCH='w32'
@@ -48,6 +48,21 @@ _VER="$1"
     CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
     CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
     CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
+  fi
+
+  if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
+     [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_ALTSVC=1"
+  fi
+
+  if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_CRYPTO_AUTH=1"
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_DICT=1 -DCURL_DISABLE_FILE=1 -DCURL_DISABLE_GOPHER=1 -DCURL_DISABLE_MQTT=1 -DCURL_DISABLE_RTSP=1 -DCURL_DISABLE_SMB=1 -DCURL_DISABLE_TELNET=1 -DCURL_DISABLE_TFTP=1"
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_FTP=1"
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_IMAP=1 -DCURL_DISABLE_POP3=1 -DCURL_DISABLE_SMTP=1"
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_LDAP=1 -DCURL_DISABLE_LDAPS=1"
+  else
+    options="${options}-ldaps"
   fi
 
   uselld=0
@@ -155,7 +170,7 @@ _VER="$1"
   if [ -d ../libidn2 ]; then
     options="${options}-idn2"
     export LIBIDN2_PATH=../../libidn2/pkg/usr/local
-  else
+  elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
     options="${options}-winidn"
   fi
 

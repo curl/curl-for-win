@@ -427,7 +427,8 @@ live_dl() {
 live_dl zlib "${ZLIB_VER_}"
 live_xt zlib "${ZLIB_HASH}"
 
-if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
+if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
@@ -435,7 +436,8 @@ if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
   live_xt brotli "${BROTLI_HASH}"
 fi
 
-if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
+if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
   live_dl nghttp2 "${NGHTTP2_VER_}"
   live_xt nghttp2 "${NGHTTP2_HASH}"
 
@@ -448,13 +450,15 @@ if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
   fi
 fi
 
-if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
+if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ]; then
   live_dl libgsasl "${LIBGSASL_VER_}"
   live_xt libgsasl "${LIBGSASL_HASH}"
 fi
 
-if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
+if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*winidn*}" = "${_BRANCH}" ]; then
@@ -462,7 +466,8 @@ if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
   live_xt libidn2 "${LIBIDN2_HASH}"
 fi
 
-if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
+if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*schannel*}" = "${_BRANCH}" ]; then
@@ -482,7 +487,8 @@ if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
   fi
 fi
 
-if [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
+if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ]; then
   if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
     LIBSSH2_VER_='1.10.0-dev'

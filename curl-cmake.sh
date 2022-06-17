@@ -153,8 +153,23 @@ _VER="$1"
 
     CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} $(pwd)/libcurl.def"
 
-    _CFLAGS="${_CFLAGS} -DHAVE_LDAP_SSL"
-    CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lwldap32"
+    if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
+       [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
+      options="${options} -DCURL_DISABLE_ALTSVC=ON"
+    fi
+
+    if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
+      options="${options} -DCURL_DISABLE_CRYPTO_AUTH=1"
+      options="${options} -DCURL_DISABLE_DICT=1 -DCURL_DISABLE_FILE=1 -DCURL_DISABLE_GOPHER=1 -DCURL_DISABLE_MQTT=1 -DCURL_DISABLE_RTSP=1 -DCURL_DISABLE_SMB=1 -DCURL_DISABLE_TELNET=1 -DCURL_DISABLE_TFTP=1"
+      options="${options} -DCURL_DISABLE_FTP=1"
+      options="${options} -DCURL_DISABLE_IMAP=1 -DCURL_DISABLE_POP3=1 -DCURL_DISABLE_SMTP=1"
+      options="${options} -DCURL_DISABLE_LDAP=1 -DCURL_DISABLE_LDAPS=1"
+    else
+      [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && _CFLAGS="${_CFLAGS} -DCURL_DISABLE_FTP=1"
+
+      _CFLAGS="${_CFLAGS} -DHAVE_LDAP_SSL"
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lwldap32"
+    fi
 
     if [ -d ../zlib ]; then
       options="${options} -DUSE_ZLIB=ON"
@@ -233,12 +248,10 @@ _VER="$1"
       options="${options} -DUSE_LIBIDN2=ON"
       _CFLAGS="${_CFLAGS} -I$(pwd)/../libidn2/pkg/usr/local/include"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L$(pwd)/../libidn2/pkg/usr/local/lib -lidn2"
-    else
+    elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
       options="${options} -DUSE_LIBIDN2=OFF"
       options="${options} -DUSE_WIN32_IDN=ON"
     fi
-
-    [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && _CFLAGS="${_CFLAGS} -DCURL_DISABLE_FTP=1"
 
     options="${options} -DENABLE_MANUAL=ON"  # Does not seem to work.
     _CFLAGS="${_CFLAGS} -DUSE_MANUAL=1"

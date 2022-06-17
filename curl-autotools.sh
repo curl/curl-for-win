@@ -125,6 +125,31 @@ _VER="$1"
     export CURL_DLL_A_SUFFIX=.dll
   fi
 
+  if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
+     [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
+    options="${options} --disable-alt-svc"
+  else
+    options="${options} --enable-alt-svc"
+  fi
+
+  if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
+    options="${options} --disable-crypto-auth"
+    options="${options} --disable-dict --disable-file --disable-gopher --disable-mqtt --disable-rtsp --disable-smb --disable-telnet --disable-tftp"
+    options="${options} --disable-ftp"
+    options="${options} --disable-imap --disable-pop3 --disable-smtp"
+    options="${options} --disable-ldap --disable-ldaps --with-ldap-lib=wldap32"
+  else
+    options="${options} --enable-crypto-auth"
+    options="${options} --enable-dict --enable-file --enable-gopher --enable-mqtt --enable-rtsp --enable-smb --enable-telnet --enable-tftp"
+    if [ "${_BRANCH#*noftp*}" = "${_BRANCH}" ]; then
+      options="${options} --enable-ftp"
+    else
+      options="${options} --disable-ftp"
+    fi
+    options="${options} --enable-imap --enable-pop3 --enable-smtp"
+    options="${options} --enable-ldap --enable-ldaps --with-ldap-lib=wldap32"
+  fi
+
   # NOTE: root path with spaces breaks all values with '$(pwd)'. But,
   #       autotools breaks on spaces anyway, so let us leave it like that.
 
@@ -148,17 +173,21 @@ _VER="$1"
   options="${options} --with-schannel"
   if [ -d ../libressl ]; then
     options="${options} --with-default-ssl-backend=openssl --with-openssl=$(pwd)/../libressl/pkg/usr/local"
+    options="${options} --enable-tls-srp"
   elif [ -d ../openssl-quic ]; then
     options="${options} --with-default-ssl-backend=openssl --with-openssl=$(pwd)/../openssl-quic/pkg/usr/local"
+    options="${options} --enable-tls-srp"
     # Workaround for 3.x deprecation warnings
     CFLAGS="${CFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LDFLAGS="${LDFLAGS} -bcrypt"
   elif [ -d ../openssl ]; then
     options="${options} --with-default-ssl-backend=openssl --with-openssl=$(pwd)/../openssl/pkg/usr/local"
+    options="${options} --enable-tls-srp"
     # Workaround for 3.x deprecation warnings
     CFLAGS="${CFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
   else
     options="${options} --with-default-ssl-backend=schannel"
+    options="${options} --disable-tls-srp"
   fi
 
   options="${options} --without-gnutls --without-mbedtls --without-wolfssl --without-bearssl --without-rustls --without-nss --without-hyper"
@@ -174,7 +203,7 @@ _VER="$1"
 
   if [ -d ../libidn2 ]; then
     options="${options} --with-libidn2=$(pwd)/../libidn2/pkg/usr/local"
-  else
+  elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
     options="${options} --with-winidn"  # FIXME: path?
   fi
 
@@ -209,10 +238,6 @@ _VER="$1"
 
   options="${options} --without-quiche --without-msh3"
 
-  options="${options} --with-ldap-lib=wldap32"
-
-  [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && options="${options} --disable-ftp"
-
 #    --enable-unix-sockets \
 #    --enable-socketpair \
 
@@ -227,29 +252,14 @@ _VER="$1"
     --enable-shared \
     --disable-ares \
     --enable-http \
-    --enable-file \
-    --enable-ldap \
-    --enable-ldaps \
-    --disable-rtsp \
     --enable-proxy \
-    --enable-dict \
-    --enable-telnet \
-    --enable-tftp \
-    --enable-pop3 \
-    --enable-imap \
-    --enable-smb \
-    --enable-smtp \
-    --enable-gopher \
-    --enable-mqtt \
     --enable-manual \
     --enable-libcurl-option \
     --enable-ipv6 \
     --disable-openssl-auto-load-config \
     --enable-verbose \
     --enable-sspi \
-    --enable-crypto-auth \
     --enable-ntlm \
-    --enable-tls-srp \
     --enable-cookies \
     --enable-http-auth \
     --enable-doh \
@@ -259,7 +269,6 @@ _VER="$1"
     --enable-progress-meter \
     --enable-dnsshuffle \
     --enable-get-easy-options \
-    --enable-alt-svc \
     --enable-hsts \
     --without-ca-path \
     --without-ca-bundle \

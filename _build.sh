@@ -31,6 +31,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        mini      build with less features, see README.md
 #        micro     build with less features, see README.md
 #        nano      build with less features, see README.md
+#        pico      build with less features, see README.md
 #        x64only   build x64 target only
 #        ucrt      build against UCRT instead of msvcrt
 #        gcc       build with GCC (use clang if not specified)
