@@ -60,8 +60,12 @@ _VER="$1"
   # marking public libcurl functions as 'exported'. Useful to avoid the
   # chance of libcurl functions getting exported from final binaries when
   # linked against static libcurl lib.
-  export CFLAGS='-fno-ident -O3 -DCURL_STATICLIB -DHAVE_ATOMIC -DHAVE_IOCTLSOCKET_FIONBIO -DHAVE_SOCKET -DUSE_UNIX_SOCKETS'
+  export CFLAGS='-fno-ident -O3 -DCURL_STATICLIB -DHAVE_ATOMIC -DHAVE_IOCTLSOCKET_FIONBIO -DHAVE_SOCKET'
   ldonly=''
+
+  # configure: error: --enable-unix-sockets is not available on this platform!
+  # due to non-portable verification method.
+  CFLAGS="${CFLAGS} -DUSE_UNIX_SOCKETS"
 
   uselld=0
   if [ "${_CRT}" = 'ucrt' ]; then
@@ -179,7 +183,7 @@ _VER="$1"
     options="${options} --enable-tls-srp"
     # Workaround for 3.x deprecation warnings
     CFLAGS="${CFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
-    LDFLAGS="${LDFLAGS} -bcrypt"
+    LDFLAGS="${LDFLAGS} -lbcrypt"
   elif [ -d ../openssl ]; then
     options="${options} --with-default-ssl-backend=openssl --with-openssl=$(pwd)/../openssl/pkg/usr/local"
     options="${options} --enable-tls-srp"
@@ -216,20 +220,20 @@ _VER="$1"
   options="${options} --without-libpsl"
 
   if [ -d ../nghttp2 ]; then
-    options="${options} --with-nghttp2=$(pwd)/../libnghttp2/pkg/usr/local"
+    options="${options} --with-nghttp2=$(pwd)/../nghttp2/pkg/usr/local"
     CFLAGS="${CFLAGS} -DNGHTTP2_STATICLIB"
   else
     options="${options} --without-nghttp2"
   fi
   if false && [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ]; then  # FIXME: autotools fails to find an "ngtcp2 pkg-config file"
     if [ -d ../nghttp3 ]; then
-      options="${options} --with-nghttp3=$(pwd)/../libnghttp3/pkg/usr/local"
+      options="${options} --with-nghttp3=$(pwd)/../nghttp3/pkg/usr/local"
       CFLAGS="${CFLAGS} -DNGHTTP3_STATICLIB"
     else
       options="${options} --without-nghttp3"
     fi
     if [ -d ../ngtcp2 ]; then
-      options="${options} --with-ngtcp2=$(pwd)/../libngtcp2/pkg/usr/local"
+      options="${options} --with-ngtcp2=$(pwd)/../ngtcp2/pkg/usr/local"
       CFLAGS="${CFLAGS} -DNGTCP2_STATICLIB"
     else
       options="${options} --without-ngtcp2"
@@ -238,18 +242,17 @@ _VER="$1"
 
   options="${options} --without-quiche --without-msh3"
 
-#    --enable-unix-sockets \
-#    --enable-socketpair \
-
   # shellcheck disable=SC2086
   ./configure ${options} \
     --disable-dependency-tracking \
     --disable-silent-rules \
     --disable-debug \
+    --disable-pthreads \
     --enable-optimize \
     --enable-symbol-hiding \
     --enable-static \
     --enable-shared \
+    --enable-headers-api \
     --disable-ares \
     --enable-http \
     --enable-proxy \
@@ -279,7 +282,16 @@ _VER="$1"
   make --jobs 2 install "DESTDIR=$(pwd)/pkg" # >/dev/null # V=1
 
   # DESTDIR= + --prefix=
-  _pkg='.'
+  _pkg='pkg/usr/local'
+
+  # Build fixups for clang
+
+  # 'configure' misdetects CC=clang as MSVC and then uses '.lib'
+  # extension. Rename these to '.a':
+  if [ -f "${_pkg}/lib/libcurl.lib" ]; then
+    sed -i.bak "s|\.lib'$|.a'|g" "${_pkg}/lib/libcurl.la"
+    mv "${_pkg}/lib/libcurl.lib" "${_pkg}/lib/libcurl.a"
+  fi
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.
