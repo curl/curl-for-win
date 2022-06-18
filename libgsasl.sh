@@ -64,6 +64,7 @@ _VER="$1"
     --disable-rpath \
     --enable-static \
     --disable-shared \
+    --disable-server \
     --enable-scram-sha1 \
     --enable-scram-sha256 \
     --disable-obsolete \
