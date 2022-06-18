@@ -60,23 +60,25 @@ _VER="$1"
   # marking public libcurl functions as 'exported'. Useful to avoid the
   # chance of libcurl functions getting exported from final binaries when
   # linked against static libcurl lib.
-  export CFLAGS='-fno-ident -O3 -DCURL_STATICLIB -DHAVE_ATOMIC -DHAVE_IOCTLSOCKET_FIONBIO -DHAVE_SOCKET'
+  export CFLAGS='-fno-ident -O3'
+  export CPPFLAGS='-DCURL_STATICLIB -DHAVE_ATOMIC -DHAVE_IOCTLSOCKET_FIONBIO -DHAVE_SOCKET'
+  export LIBS=''
   ldonly=''
 
   # configure: error: --enable-unix-sockets is not available on this platform!
   # due to non-portable verification method.
-  CFLAGS="${CFLAGS} -DUSE_UNIX_SOCKETS"
+  CPPFLAGS="${CPPFLAGS} -DUSE_UNIX_SOCKETS"
 
   uselld=0
   if [ "${_CRT}" = 'ucrt' ]; then
     if [ "${_CC}" = 'clang' ]; then
-      LDFLAGS="${LDFLAGS} -fuse-ld=lld -s"
+      ldonly="${ldonly} -fuse-ld=lld -s"
       uselld=1
     else
-      LDFLAGS="${LDFLAGS} -specs=${_GCCSPECS}"
+      ldonly="${ldonly} -specs=${_GCCSPECS}"
     fi
-    CFLAGS="${CFLAGS} -D_UCRT"
-    LDFLAGS="${LDFLAGS} -lucrt"
+    CPPFLAGS="${CPPFLAGS} -D_UCRT"
+    LIBS="${LIBS} -lucrt"
   fi
 
   if [ "${_CC}" = 'clang' ]; then
@@ -114,7 +116,7 @@ _VER="$1"
 
     # Disabled till we flesh out UNICODE support and document it enough to be
     # safe to use.
-  # CFLAGS="${CFLAGS} -DUNICODE -D_UNICODE"
+  # CPPFLAGS="${CPPFLAGS} -DUNICODE -D_UNICODE"
   # LDFLAGS="${LDFLAGS} -municode"
 
     if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
@@ -182,13 +184,13 @@ _VER="$1"
     options="${options} --with-default-ssl-backend=openssl --with-openssl=$(pwd)/../openssl-quic/pkg/usr/local"
     options="${options} --enable-tls-srp"
     # Workaround for 3.x deprecation warnings
-    CFLAGS="${CFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
-    LDFLAGS="${LDFLAGS} -lbcrypt"
+    CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
+    LIBS="${LIBS} -lbcrypt"
   elif [ -d ../openssl ]; then
     options="${options} --with-default-ssl-backend=openssl --with-openssl=$(pwd)/../openssl/pkg/usr/local"
     options="${options} --enable-tls-srp"
     # Workaround for 3.x deprecation warnings
-    CFLAGS="${CFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
+    CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
   else
     options="${options} --with-default-ssl-backend=schannel"
     options="${options} --disable-tls-srp"
@@ -221,20 +223,20 @@ _VER="$1"
 
   if [ -d ../nghttp2 ]; then
     options="${options} --with-nghttp2=$(pwd)/../nghttp2/pkg/usr/local"
-    CFLAGS="${CFLAGS} -DNGHTTP2_STATICLIB"
+    CPPFLAGS="${CPPFLAGS} -DNGHTTP2_STATICLIB"
   else
     options="${options} --without-nghttp2"
   fi
   if false && [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ]; then  # FIXME: autotools fails to find an "ngtcp2 pkg-config file"
     if [ -d ../nghttp3 ]; then
-      options="${options} --with-nghttp3=$(pwd)/../nghttp3/pkg/usr/local"
-      CFLAGS="${CFLAGS} -DNGHTTP3_STATICLIB"
+      options="${options} --with-nghttp3=$(pwd)/../libnghttp3/pkg/usr/local"
+      CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB"
     else
       options="${options} --without-nghttp3"
     fi
     if [ -d ../ngtcp2 ]; then
-      options="${options} --with-ngtcp2=$(pwd)/../ngtcp2/pkg/usr/local"
-      CFLAGS="${CFLAGS} -DNGTCP2_STATICLIB"
+      options="${options} --with-ngtcp2=$(pwd)/../libngtcp2/pkg/usr/local"
+      CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB"
     else
       options="${options} --without-ngtcp2"
     fi

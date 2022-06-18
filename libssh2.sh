@@ -31,8 +31,9 @@ _VER="$1"
   [ -f 'Makefile' ] || autoreconf --force --install
 
   export LDFLAGS="${_OPTM}"
-  export CFLAGS='-fno-ident -O3 -DHAVE_DECL_SECUREZEROMEMORY=1'
-  [ "${_CRT}" = 'ucrt' ] && CFLAGS="${CFLAGS} -D_UCRT"
+  export CFLAGS='-fno-ident -O3'
+  export CPPFLAGS='-DHAVE_DECL_SECUREZEROMEMORY=1'
+  [ "${_CRT}" = 'ucrt' ] && CPPFLAGS="${CPPFLAGS} -D_UCRT"
   ldonly=''
 
   if [ "${_CC}" = 'clang' ]; then
@@ -65,13 +66,13 @@ _VER="$1"
 
   if [ -d ../libressl ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=$(pwd)/../libressl/pkg/usr/local"
-    CFLAGS="${CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DNOCRYPT"
+    CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DNOCRYPT"
   elif [ -d ../openssl-quic ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=$(pwd)/../openssl-quic/pkg/usr/local"
-    CFLAGS="${CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
+    CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
   elif [ -d ../openssl ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=$(pwd)/../openssl/pkg/usr/local"
-    CFLAGS="${CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
+    CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
   else
     options="${options} --with-crypto=wincng"
   fi

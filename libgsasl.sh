@@ -37,7 +37,8 @@ _VER="$1"
 
   export LDFLAGS="${_OPTM}"
   export CFLAGS='-fno-ident -O3'
-  [ "${_CRT}" = 'ucrt' ] && CFLAGS="${CFLAGS} -D_UCRT"
+  export CPPFLAGS=''
+  [ "${_CRT}" = 'ucrt' ] && CPPFLAGS="${CPPFLAGS} -D_UCRT"
   ldonly=''
 
   if [ "${_CC}" = 'clang' ]; then
