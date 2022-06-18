@@ -101,8 +101,8 @@
 - Generated binaries are automatically uploaded to
   [VirusTotal](https://www.virustotal.com/).
 - To verify the hashes of the latest build, you can look up the correct
-  values in the build log. Watch for `main` branch builds, log lines starting
-  with `SHA`:
+  values in the build log. Watch for `main` branch, log lines starting with
+  `SHA`:
     <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main>
 - The build process is multi-platform and able to cross-build Windows
   executables from \*nix hosts (Linux and macOS tested.)
