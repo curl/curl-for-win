@@ -170,6 +170,8 @@ _VER="$1"
 
   if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
     options="${options} --with-brotli=$(pwd)/../brotli/pkg/usr/local"
+    LDFLAGS="${LDFLAGS} -L$(pwd)/../brotli/pkg/usr/local/lib"
+    LIBS="${LIBS} -lbrotlicommon"
   else
     options="${options} --without-brotli"
   fi
@@ -210,11 +212,14 @@ _VER="$1"
   if [ -d ../libidn2 ]; then
     options="${options} --with-libidn2=$(pwd)/../libidn2/pkg/usr/local"
   elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
-    options="${options} --with-winidn"  # FIXME: path?
+    options="${options} --without-libidn2"  # Prevent autotools picking up a non-cross copy
+    options="${options} --with-winidn"
   fi
 
   if [ -d ../libgsasl ]; then
     options="${options} --with-libgsasl=$(pwd)/../libgsasl/pkg/usr/local"
+    CFLAGS="${CFLAGS} -I$(pwd)/../libgsasl/pkg/usr/local/include"
+    LDFLAGS="${LDFLAGS} -L$(pwd)/../libgsasl/pkg/usr/local/lib"
   else
     options="${options} --without-libgsasl"
   fi
@@ -227,16 +232,26 @@ _VER="$1"
   else
     options="${options} --without-nghttp2"
   fi
-  if false && [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ]; then  # FIXME: autotools fails to find an "ngtcp2 pkg-config file"
+  if [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ]; then
     if [ -d ../nghttp3 ]; then
-      options="${options} --with-nghttp3=$(pwd)/../libnghttp3/pkg/usr/local"
-      CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB"
+      # Detection insists on having a pkg-config, so force feed everything manually.
+      # This lib will not appear enabled in the configure summary.
+      options="${options} --with-nghttp3=yes"
+      CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB -DUSE_NGHTTP3"
+      CFLAGS="${CFLAGS} -I$(pwd)/../nghttp3/pkg/usr/local/include"
+      LDFLAGS="${LDFLAGS} -L$(pwd)/../nghttp3/pkg/usr/local/lib"
+      LIBS="${LIBS} -lnghttp3"
     else
       options="${options} --without-nghttp3"
     fi
     if [ -d ../ngtcp2 ]; then
-      options="${options} --with-ngtcp2=$(pwd)/../libngtcp2/pkg/usr/local"
-      CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB"
+      # Detection insists on having a pkg-config, so force feed everything manually
+      # This lib will not appear enabled in the configure summary.
+      options="${options} --with-ngtcp2=yes"
+      CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB -DUSE_NGTCP2"
+      CFLAGS="${CFLAGS} -I$(pwd)/../ngtcp2/pkg/usr/local/include"
+      LDFLAGS="${LDFLAGS} -L$(pwd)/../ngtcp2/pkg/usr/local/lib"
+      LIBS="${LIBS} -lngtcp2 -lngtcp2_crypto_openssl"
     else
       options="${options} --without-ngtcp2"
     fi
