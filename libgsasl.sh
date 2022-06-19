@@ -87,6 +87,9 @@ _VER="$1"
     mv "${_pkg}/lib/libgsasl.lib" "${_pkg}/lib/libgsasl.a"
   fi
 
+  # Delete .pc files
+  rm -r -f ${_pkg}/lib/pkgconfig
+
   # Make steps for determinism
 
   readonly _ref='NEWS'
@@ -94,7 +97,6 @@ _VER="$1"
   "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/*.a
 
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
-  touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
   touch -c -r "${_ref}" ${_pkg}/include/*.h
 
   # Create package
@@ -104,15 +106,14 @@ _VER="$1"
   _DST="$(mktemp -d)/${_BAS}"
 
   mkdir -p "${_DST}/include"
-  mkdir -p "${_DST}/lib/pkgconfig"
+  mkdir -p "${_DST}/lib"
 
-  cp -f -p ${_pkg}/lib/*.a            "${_DST}/lib/"
-  cp -f -p ${_pkg}/lib/pkgconfig/*.pc "${_DST}/lib/pkgconfig/"
-  cp -f -p ${_pkg}/include/*.h        "${_DST}/include/"
-  cp -f -p NEWS                       "${_DST}/NEWS.txt"
-  cp -f -p AUTHORS                    "${_DST}/AUTHORS.txt"
-  cp -f -p COPYING                    "${_DST}/COPYING.txt"
-  cp -f -p README                     "${_DST}/README.txt"
+  cp -f -p ${_pkg}/lib/*.a     "${_DST}/lib/"
+  cp -f -p ${_pkg}/include/*.h "${_DST}/include/"
+  cp -f -p NEWS                "${_DST}/NEWS.txt"
+  cp -f -p AUTHORS             "${_DST}/AUTHORS.txt"
+  cp -f -p COPYING             "${_DST}/COPYING.txt"
+  cp -f -p README              "${_DST}/README.txt"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

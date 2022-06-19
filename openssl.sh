@@ -148,8 +148,10 @@ _VER="$1"
 
   if [ "${_CPU}" = 'x64' ]; then
     mv "${_pkg}/lib64" "${_pkg}/lib"
-    sed -i.bak 's|/lib64|/lib|g' ${_pkg}/lib/pkgconfig/*.pc
   fi
+
+  # Delete .pc files
+  rm -r -f ${_pkg}/lib/pkgconfig
 
   # List files created
 
@@ -160,7 +162,6 @@ _VER="$1"
   "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/*.a
 
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
-  touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
   touch -c -r "${_ref}" ${_pkg}/include/openssl/*.h
 
   # Create package
@@ -170,10 +171,9 @@ _VER="$1"
   _DST="$(mktemp -d)/${_BAS}"
 
   mkdir -p "${_DST}/include/openssl"
-  mkdir -p "${_DST}/lib/pkgconfig"
+  mkdir -p "${_DST}/lib"
 
   cp -f -p ${_pkg}/lib/*.a             "${_DST}/lib"
-  cp -f -p ${_pkg}/lib/pkgconfig/*.pc  "${_DST}/lib/pkgconfig/"
   cp -f -p ${_pkg}/include/openssl/*.h "${_DST}/include/openssl/"
   cp -f -p CHANGES.md                  "${_DST}/"
   cp -f -p LICENSE.txt                 "${_DST}/"

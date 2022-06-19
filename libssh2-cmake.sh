@@ -107,6 +107,9 @@ _VER="$1"
   # DESTDIR= + CMAKE_INSTALL_PREFIX
   _pkg='pkg/usr/local'
 
+  # Delete .pc files
+  rm -r -f ${_pkg}/lib/pkgconfig
+
   # Make steps for determinism
 
   readonly _ref='NEWS'
@@ -114,7 +117,6 @@ _VER="$1"
   "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/*.a
 
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
-  touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
   touch -c -r "${_ref}" ${_pkg}/include/*.h
 
   # Create package
@@ -125,7 +127,7 @@ _VER="$1"
 
   mkdir -p "${_DST}/docs"
   mkdir -p "${_DST}/include"
-  mkdir -p "${_DST}/lib/pkgconfig"
+  mkdir -p "${_DST}/lib"
 
   (
     set +x
@@ -135,13 +137,12 @@ _VER="$1"
       fi
     done
   )
-  cp -f -p ${_pkg}/lib/*.a            "${_DST}/lib/"
-  cp -f -p ${_pkg}/lib/pkgconfig/*.pc "${_DST}/lib/pkgconfig/"
-  cp -f -p ${_pkg}/include/*.h        "${_DST}/include/"
-  cp -f -p NEWS                       "${_DST}/NEWS.txt"
-  cp -f -p COPYING                    "${_DST}/COPYING.txt"
-  cp -f -p README                     "${_DST}/README.txt"
-  cp -f -p RELEASE-NOTES              "${_DST}/RELEASE-NOTES.txt"
+  cp -f -p ${_pkg}/lib/*.a     "${_DST}/lib/"
+  cp -f -p ${_pkg}/include/*.h "${_DST}/include/"
+  cp -f -p NEWS                "${_DST}/NEWS.txt"
+  cp -f -p COPYING             "${_DST}/COPYING.txt"
+  cp -f -p README              "${_DST}/README.txt"
+  cp -f -p RELEASE-NOTES       "${_DST}/RELEASE-NOTES.txt"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

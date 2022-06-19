@@ -102,6 +102,9 @@ _VER="$1"
   fi
   mv -f ${_pkg}/lib/libngtcp2_static.a ${_pkg}/lib/libngtcp2.a
 
+  # Delete .pc files
+  rm -r -f ${_pkg}/lib/pkgconfig
+
   # Make steps for determinism
 
   readonly _ref='ChangeLog'
@@ -109,7 +112,6 @@ _VER="$1"
   "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/*.a
 
   touch -c -r "${_ref}" ${_pkg}/include/ngtcp2/*.h
-  touch -c -r "${_ref}" ${_pkg}/lib/pkgconfig/*.pc
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
 
   # Create package
@@ -119,11 +121,10 @@ _VER="$1"
   _DST="$(mktemp -d)/${_BAS}"
 
   mkdir -p "${_DST}/include/ngtcp2"
-  mkdir -p "${_DST}/lib/pkgconfig"
+  mkdir -p "${_DST}/lib"
 
   cp -f -p ${_pkg}/include/ngtcp2/*.h "${_DST}/include/ngtcp2/"
   cp -f -p ${_pkg}/lib/*.a            "${_DST}/lib/"
-  cp -f -p ${_pkg}/lib/pkgconfig/*.pc "${_DST}/lib/pkgconfig/"
   cp -f -p ChangeLog                  "${_DST}/ChangeLog.txt"
   cp -f -p AUTHORS                    "${_DST}/AUTHORS.txt"
   cp -f -p COPYING                    "${_DST}/COPYING.txt"
