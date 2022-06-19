@@ -333,31 +333,31 @@ _VER="$1"
   # LLVM's own llvm-objcopy does not seems to work with Windows binaries,
   # so .exe and .dll stripping is done via the -s linker option.
   if [ "${uselld}" = '0' ]; then
-    "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/src/*.exe
+    "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/bin/*.exe
     "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/lib/*.dll
     "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.dll.a
   fi
   "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.a
 
-  ../_peclean.py "${_ref}" ${_pkg}/src/*.exe
+  ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
   ../_peclean.py "${_ref}" ${_pkg}/lib/*.dll
 
-  ../_sign-code.sh "${_ref}" ${_pkg}/src/*.exe
+  ../_sign-code.sh "${_ref}" ${_pkg}/bin/*.exe
   ../_sign-code.sh "${_ref}" ${_pkg}/lib/*.dll
 
-  touch -c -r "${_ref}" ${_pkg}/src/*.exe
+  touch -c -r "${_ref}" ${_pkg}/bin/*.exe
   touch -c -r "${_ref}" ${_pkg}/lib/*.dll
   touch -c -r "${_ref}" ${_pkg}/lib/*.def
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-    touch -c -r "${_ref}" ${_pkg}/src/*.map
+    touch -c -r "${_ref}" ${_pkg}/bin/*.map
     touch -c -r "${_ref}" ${_pkg}/lib/*.map
   fi
 
   # Tests
 
-  "${_CCPREFIX}objdump" --all-headers ${_pkg}/src/*.exe | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" --all-headers ${_pkg}/bin/*.exe | grep -a -E -i "(file format|dll name)"
   "${_CCPREFIX}objdump" --all-headers ${_pkg}/lib/*.dll | grep -a -E -i "(file format|dll name)"
 
   # Execute curl and compiled-in dependency code. This is not secure, but
@@ -368,7 +368,7 @@ _VER="$1"
   # `--version` output directly from the binary as strings, but curl creates
   # most of these strings dynamically at runtime, so this is not possible
   # (as of curl 7.83.1).
-  ${_WINE} ${_pkg}/src/curl.exe --version | tee "curl-${_CPU}.txt"
+  ${_WINE} ${_pkg}/bin/curl.exe --version | tee "curl-${_CPU}.txt"
 
   # Create package
 
@@ -395,7 +395,7 @@ _VER="$1"
     done
   )
   cp -f -p ${_pkg}/include/curl/*.h "${_DST}/include/curl/"
-  cp -f -p ${_pkg}/src/*.exe        "${_DST}/bin/"
+  cp -f -p ${_pkg}/bin/*.exe        "${_DST}/bin/"
   cp -f -p ${_pkg}/lib/*.dll        "${_DST}/bin/"
   cp -f -p ${_pkg}/lib/*.def        "${_DST}/bin/"
   cp -f -p ${_pkg}/lib/*.a          "${_DST}/lib/"
@@ -411,7 +411,7 @@ _VER="$1"
   fi
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-    cp -f -p ${_pkg}/src/*.map        "${_DST}/bin/"
+    cp -f -p ${_pkg}/bin/*.map        "${_DST}/bin/"
     cp -f -p ${_pkg}/lib/*.map        "${_DST}/bin/"
   fi
 
