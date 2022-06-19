@@ -88,13 +88,19 @@ _VER="$1"
   # Stick to the name expected by everyone
   mv -f ${_pkg}/lib/libzlibstatic.a ${_pkg}/lib/libz.a
 
-  # curl Makefile.m32 assume the headers and lib to be in the
+  # curl Makefile.m32 assumes the headers and lib to be in the
   # same directory.
   cp -f -p ${_pkg}/include/*.h "${_pkg}/"
   cp -f -p ${_pkg}/lib/libz.a  "${_pkg}/"
 
   # Delete .pc files
   rm -r -f ${_pkg}/lib/pkgconfig
+
+  # Make symlink with .lib extension to make autotools work
+
+  for fn in "${_pkg}"/lib/*.a; do
+    ln -s "$(basename "${fn}")" "$(echo "${fn}" | sed 's|\.a$|.lib|')"
+  done
 
   # Make steps for determinism
 
