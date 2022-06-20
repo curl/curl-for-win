@@ -86,8 +86,9 @@ _VER="$1"
     mv "${_pkg}/lib/libidn2.lib" "${_pkg}/lib/libidn2.a"
   fi
 
-  # Delete .pc files
+  # Delete .pc and .la files
   rm -r -f ${_pkg}/lib/pkgconfig
+  rm -f    ${_pkg}/lib/*.la
 
   # Make symlink with .lib extension to make autotools work
 

@@ -87,8 +87,9 @@ _VER="$1"
     mv "${_pkg}/lib/libgsasl.lib" "${_pkg}/lib/libgsasl.a"
   fi
 
-  # Delete .pc files
+  # Delete .pc and .la files
   rm -r -f ${_pkg}/lib/pkgconfig
+  rm -f    ${_pkg}/lib/*.la
 
   # Make symlink with .lib extension to make autotools work
 
