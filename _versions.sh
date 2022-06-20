@@ -12,10 +12,10 @@ export LIBSSH2_VER_='1.10.0'
 export LIBSSH2_HASH=2d64e90f3ded394b91d3a2e774ca203a4179f69aebee03003e5a6fa621e41d51
 export NGHTTP2_VER_='1.47.0'
 export NGHTTP2_HASH=68271951324554c34501b85190f22f2221056db69f493afc3bbac8e7be21e7cc
-export NGHTTP3_VER_='0.4.1'
-export NGHTTP3_HASH=b0017e46733873614c8fb808e185204a04a746573e9571f900f20caa62714367
-export NGTCP2_VER_='0.5.0'
-export NGTCP2_HASH=c74659f612ed6e88313c55f2fd830f61009996d2112c2c3a1faf78413710b9d9
+export NGHTTP3_VER_='0.5.0'
+export NGHTTP3_HASH=017c56dea814c973a15962c730840d33c6ecbfa92535236df3d5b66f0cb08de0
+export NGTCP2_VER_='0.6.0'
+export NGTCP2_HASH=7f88db4fb40af9838ed7655899606431d746988a2a19904cab8f95c134fcd78a
 export OPENSSL_QUIC_VER_='3.0.2'
 export OPENSSL_QUIC_HASH=d046c67be6013553166fd1654743fb3b082c6a3903bd1ba64c17d1142995b621
 export OPENSSL_VER_='3.0.2'
@@ -32,4 +32,4 @@ export PEFILE_VER_='2022.5.30'
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='4'
+export _REV='5'
