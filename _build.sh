@@ -308,7 +308,7 @@ build_single_target() {
     fi
 
     # FIXME: Run arm64 targets on arm64 linux/mac hosts?
-    _WINE='wine'
+    _WINE='echo'
     if [ "${_OS}" = 'linux' ]; then
       # Execute CPU-native targets only
       if [ "${_CPU}" = 'x64' ] && \
