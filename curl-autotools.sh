@@ -200,6 +200,7 @@ _VER="$1"
     if [ -d ../libressl ]; then
       options="${options} --with-default-ssl-backend=openssl --with-openssl=$(pwd)/../libressl/pkg/usr/local"
       options="${options} --enable-tls-srp"
+      LIBS="${LIBS} -lbcrypt"
     elif [ -d ../openssl-quic ]; then
       options="${options} --with-default-ssl-backend=openssl --with-openssl=$(pwd)/../openssl-quic/pkg/usr/local"
       options="${options} --enable-tls-srp"
@@ -211,6 +212,7 @@ _VER="$1"
       options="${options} --enable-tls-srp"
       # Workaround for 3.x deprecation warnings
       CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
+      LIBS="${LIBS} -lbcrypt"
     else
       options="${options} --with-default-ssl-backend=schannel"
       options="${options} --disable-tls-srp"
@@ -220,6 +222,7 @@ _VER="$1"
 
     if [ -d ../libssh2 ]; then
       options="${options} --with-libssh2=$(pwd)/../libssh2/pkg/usr/local"
+      LIBS="${LIBS} -lbcrypt"
     else
       options="${options} --without-libssh2"
     fi

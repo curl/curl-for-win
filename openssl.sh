@@ -45,7 +45,7 @@ _VER="$1"
   [ "${_CPU}" = 'x86' ] && options='mingw'
   [ "${_CPU}" = 'x64' ] && options='mingw64'
   options="${options} no-filenames"
-  [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128"
+  [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128 -DUSE_BCRYPTGENRANDOM"
   [ "${_CPU}" = 'x86' ] && options="${options} -fno-asynchronous-unwind-tables -D_WIN32_WINNT=0x0501"
 
   if [ "${_CC}" = 'clang' ]; then

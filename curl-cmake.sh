@@ -204,6 +204,7 @@ _VER="$1"
     if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ]; then
       options="${options} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON"
       _CFLAGS="${_CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lbcrypt"
     fi
     options="${options} -DCURL_USE_SCHANNEL=ON"
 
