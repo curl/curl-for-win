@@ -206,7 +206,9 @@ _VER="$1"
       _CFLAGS="${_CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lbcrypt"
     fi
+
     options="${options} -DCURL_USE_SCHANNEL=ON"
+    _CFLAGS="${_CFLAGS} -DHAS_ALPN"
 
     if [ -d ../libssh2 ]; then
       options="${options} -DCURL_USE_LIBSSH2=ON"

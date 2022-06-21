@@ -110,6 +110,7 @@ _VER="$1"
   } | grep -a -v '^$' | sort | tee -a libcurl.def
   CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} ../libcurl.def"
 
+  # NOTE: Makefile.m32 automatically enables -zlib with -ssh2
   if [ -d ../zlib ]; then
     export ZLIB_PATH=../../zlib/pkg/usr/local
     options="${options}-zlib"
@@ -144,7 +145,10 @@ _VER="$1"
     export OPENSSL_LIBPATH="${OPENSSL_PATH}/lib"
     export OPENSSL_LIBS='-lssl -lcrypto -lbcrypt'
   fi
-  options="${options}-schannel-winssl"
+
+  options="${options}-schannel"
+  CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAS_ALPN"
+
   if [ -d ../libssh2 ]; then
     options="${options}-ssh2"
     export LIBSSH2_PATH=../../libssh2/pkg/usr/local

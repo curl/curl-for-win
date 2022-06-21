@@ -197,6 +197,8 @@ _VER="$1"
     options="${options} --without-zstd"
 
     options="${options} --with-schannel"
+    CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
+
     if [ -d ../libressl ]; then
       options="${options} --with-default-ssl-backend=openssl --with-openssl=$(pwd)/../libressl/pkg/usr/local"
       options="${options} --enable-tls-srp"
