@@ -60,7 +60,8 @@ cat <<EOF
     "name": "openssl-quic",
     "url": "https://github.com/quictls/openssl/archive/refs/heads/openssl-{ver}+quic.tar.gz",
     "redir": "redir",
-    "tag": "openssl-\\\\d+\\\\.\\\\d+\\\\.\\\\d+\\\\+quic$"
+    "tag": "openssl-\\\\d+\\\\.\\\\d+\\\\.\\\\d+\\\\+quic$",
+    "haspath": "README-OpenSSL.md"
   },
   {
     "name": "openssl",
@@ -152,10 +153,15 @@ check_update() {
     slug="${BASH_REMATCH[1]}"
     # heavily rate-limited
     if [ -n "$5" ]; then
-      newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/git/refs/heads" \
+      ref="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/git/refs/heads" \
         | jq --raw-output '.[].ref' \
-        | grep -a -E "$5" \
-        | grep -a -E -o '\d+\.\d+\.\d' | sort | tail -1)"
+        | grep -a -E "$5" | sort | tail -1)"
+      newver="$(printf '%s' "${ref}" | grep -a -E -o '\d+\.\d+\.\d')"
+      # Optionally, check for the presence of a path
+      if [ -n "$6" ] && \
+         ! my_curl --head "https://raw.githubusercontent.com/${slug}/${ref}/$6" >/dev/null 2>&1; then
+        newver=''
+      fi
     else
       newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases/latest" \
         | jq --raw-output '.tag_name' | sed 's|^v||')"
@@ -266,15 +272,16 @@ bump() {
       newhash=''
 
       if [ -n "${jp}" ]; then
-        url="$( printf '%s' "${jp}" | jq --raw-output '.url')"
-        desc="$(printf '%s' "${jp}" | jq --raw-output '.descending')"
-        pin="$( printf '%s' "${jp}" | jq --raw-output '.pinned')"
-        tag="$( printf '%s' "${jp}" | jq --raw-output '.tag' | sed 's|null||')"
+        url="$(     printf '%s' "${jp}" | jq --raw-output '.url')"
+        desc="$(    printf '%s' "${jp}" | jq --raw-output '.descending')"
+        pin="$(     printf '%s' "${jp}" | jq --raw-output '.pinned')"
+        tag="$(     printf '%s' "${jp}" | jq --raw-output '.tag' | sed 's|null||')"
+        haspath="$( printf '%s' "${jp}" | jq --raw-output '.haspath' | sed 's|null||')"
 
         if [ "${pin}" = 'true' ]; then
           >&2 echo "! ${name}: Version pinned. Skipping."
         else
-          newver="$(check_update "${name}" "${ourvern}" "${url}" "${desc}" "${tag}")"
+          newver="$(check_update "${name}" "${ourvern}" "${url}" "${desc}" "${tag}" "${haspath}")"
           if [ -n "${newver}" ]; then
             >&2 echo "! ${name}: New version found: |${newver}|"
 

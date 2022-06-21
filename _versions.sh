@@ -1,9 +1,5 @@
 #!/bin/sh
 
-# NOTE: With openssl+quic, _bumper.sh may detect a new version because the new
-#       branch already exists. But that branch is not necessarily ready for use
-#       yet.
-
 export CURL_VER_='7.83.1'
 export CURL_HASH=2cb9c2356e7263a1272fd1435ef7cdebf2cd21400ec287b068396deb705c22c4
 export BROTLI_VER_='1.0.9'
