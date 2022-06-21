@@ -45,8 +45,12 @@ _VER="$1"
   [ "${_CPU}" = 'x86' ] && options='mingw'
   [ "${_CPU}" = 'x64' ] && options='mingw64'
   options="${options} no-filenames"
-  [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128 -DUSE_BCRYPTGENRANDOM"
-  [ "${_CPU}" = 'x86' ] && options="${options} -fno-asynchronous-unwind-tables -D_WIN32_WINNT=0x0501"
+  [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128"
+  if [ "${_CPU}" = 'x86' ]; then
+    options="${options} -fno-asynchronous-unwind-tables -D_WIN32_WINNT=0x0501"
+  else
+    options="${options} -DUSE_BCRYPTGENRANDOM"
+  fi
 
   if [ "${_CC}" = 'clang' ]; then
     # To avoid warnings when passing C compiler options to the linker
