@@ -61,7 +61,7 @@ cat <<EOF
     "url": "https://github.com/quictls/openssl/archive/refs/heads/openssl-{ver}+quic.tar.gz",
     "redir": "redir",
     "tag": "openssl-\\\\d+\\\\.\\\\d+\\\\.\\\\d+\\\\+quic$",
-    "haspath": "README-OpenSSL.md"
+    "hasfile": "README-OpenSSL.md"
   },
   {
     "name": "openssl",
@@ -276,12 +276,12 @@ bump() {
         desc="$(    printf '%s' "${jp}" | jq --raw-output '.descending')"
         pin="$(     printf '%s' "${jp}" | jq --raw-output '.pinned')"
         tag="$(     printf '%s' "${jp}" | jq --raw-output '.tag' | sed 's|null||')"
-        haspath="$( printf '%s' "${jp}" | jq --raw-output '.haspath' | sed 's|null||')"
+        hasfile="$( printf '%s' "${jp}" | jq --raw-output '.hasfile' | sed 's|null||')"
 
         if [ "${pin}" = 'true' ]; then
           >&2 echo "! ${name}: Version pinned. Skipping."
         else
-          newver="$(check_update "${name}" "${ourvern}" "${url}" "${desc}" "${tag}" "${haspath}")"
+          newver="$(check_update "${name}" "${ourvern}" "${url}" "${desc}" "${tag}" "${hasfile}")"
           if [ -n "${newver}" ]; then
             >&2 echo "! ${name}: New version found: |${newver}|"
 
