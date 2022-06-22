@@ -242,7 +242,7 @@ _VER="$1"
       _CFLAGS="${_CFLAGS} -DUSE_GSASL -I$(pwd)/../libgsasl/pkg/usr/local/include"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L$(pwd)/../libgsasl/pkg/usr/local/lib -lgsasl"
     fi
-    if [ -d ../libidn2 ]; then
+    if [ -d ../libidn2 ]; then  # Also for Windows XP compatibility
       options="${options} -DUSE_LIBIDN2=ON"
       _CFLAGS="${_CFLAGS} -I$(pwd)/../libidn2/pkg/usr/local/include"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L$(pwd)/../libidn2/pkg/usr/local/lib -lidn2"

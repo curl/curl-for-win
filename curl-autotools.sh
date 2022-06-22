@@ -233,7 +233,7 @@ _VER="$1"
     options="${options} --without-libssh --without-wolfssh"
     options="${options} --without-librtmp"
 
-    if [ -d ../libidn2 ]; then
+    if [ -d ../libidn2 ]; then  # Also for Windows XP compatibility
       options="${options} --with-libidn2=$(pwd)/../libidn2/pkg/usr/local"
     elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
       options="${options} --without-libidn2"  # Prevent autotools picking up a non-cross copy

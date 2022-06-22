@@ -47,7 +47,8 @@ _VER="$1"
   options="${options} no-filenames"
   [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128"
   if [ "${_CPU}" = 'x86' ]; then
-    options="${options} -fno-asynchronous-unwind-tables -D_WIN32_WINNT=0x0501"
+    options="${options} -fno-asynchronous-unwind-tables"
+    options="${options} -D_WIN32_WINNT=0x0501"  # For Windows XP compatibility
   else
     options="${options} -DUSE_BCRYPTGENRANDOM"
   fi

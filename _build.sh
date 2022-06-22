@@ -56,6 +56,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     Needs updating curl-www also.
 #   - Make -ucrt the default, replace with -noucrt
 #   - Add support for arm64 builds (requires UCRT)
+#   - Drop XP compatibility for x86 builds also
 #   - Drop x86 builds
 #   - Drop gcc support?
 #   - Make -noftp the default?

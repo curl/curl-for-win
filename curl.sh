@@ -171,7 +171,7 @@ _VER="$1"
     options="${options}-gsasl"
     export LIBGSASL_PATH=../../libgsasl/pkg/usr/local
   fi
-  if [ -d ../libidn2 ]; then
+  if [ -d ../libidn2 ]; then  # Also for Windows XP compatibility
     options="${options}-idn2"
     export LIBIDN2_PATH=../../libidn2/pkg/usr/local
   elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
