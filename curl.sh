@@ -42,6 +42,7 @@ _VER="$1"
   export CURL_LDFLAG_EXTRAS_EXE
   export CURL_LDFLAG_EXTRAS_DLL
   if [ "${_CPU}" = 'x86' ]; then
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -D_WIN32_WINNT=0x0501"  # For Windows XP compatibility
     CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
     CURL_LDFLAG_EXTRAS_DLL=''
   else

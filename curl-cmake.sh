@@ -103,7 +103,7 @@ _VER="$1"
     # linked against the static libcurl lib.
     export _CFLAGS='-fno-ident -DCURL_STATICLIB -DHAVE_STRCASECMP -DHAVE_ATOMIC'
     [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
-    [ "${_CPU}" = 'x86' ] && options="${options} -DENABLE_INET_PTON=OFF"  # For Windows XP/etc compatibility
+    [ "${_CPU}" = 'x86' ] && options="${options} -DENABLE_INET_PTON=OFF"  # For Windows XP compatibility
     export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
     export CURL_LDFLAG_EXTRAS_EXE
     export CURL_LDFLAG_EXTRAS_DLL

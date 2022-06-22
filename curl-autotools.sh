@@ -115,6 +115,7 @@ _VER="$1"
 
     LDFLAGS="${LDFLAGS} -Wl,--nxcompat -Wl,--dynamicbase"
     if [ "${_CPU}" = 'x86' ]; then
+      CPPFLAGS="${CPPFLAGS} -D_WIN32_WINNT=0x0501"  # For Windows XP compatibility
       if [ "${pass}" = 'static' ]; then
         LDFLAGS="${LDFLAGS} -Wl,--pic-executable,-e,_mainCRTStartup"
       fi

@@ -161,3 +161,42 @@ index 46973bf2b875..8eb5d0caf27c 100644
    list(APPEND CSOURCES libcurl.rc)
  endif()
  
+diff --git a/docs/examples/Makefile.m32 b/docs/examples/Makefile.m32
+index 71369487a7924..15eaf82b3a8b7 100644
+--- a/docs/examples/Makefile.m32
++++ b/docs/examples/Makefile.m32
+@@ -356,7 +356,7 @@ ifdef SSPI
+   CFLAGS += -DUSE_WINDOWS_SSPI
+ endif
+ ifdef IPV6
+-  CFLAGS += -DENABLE_IPV6 -D_WIN32_WINNT=0x0501
++  CFLAGS += -DENABLE_IPV6
+ endif
+ ifdef LDAPS
+   CFLAGS += -DHAVE_LDAP_SSL
+diff --git a/lib/Makefile.m32 b/lib/Makefile.m32
+index 227e4e95c9559..1987b237e5d4e 100644
+--- a/lib/Makefile.m32
++++ b/lib/Makefile.m32
+@@ -380,7 +380,7 @@ ifdef SPNEGO
+   CFLAGS += -DHAVE_SPNEGO
+ endif
+ ifdef IPV6
+-  CFLAGS += -DENABLE_IPV6 -D_WIN32_WINNT=0x0501
++  CFLAGS += -DENABLE_IPV6
+ endif
+ ifdef LDAPS
+   CFLAGS += -DHAVE_LDAP_SSL
+diff --git a/src/Makefile.m32 b/src/Makefile.m32
+index a5ae2bec90fa6..b3d3cf9631f08 100644
+--- a/src/Makefile.m32
++++ b/src/Makefile.m32
+@@ -381,7 +381,7 @@ ifdef SSPI
+   CFLAGS += -DUSE_WINDOWS_SSPI
+ endif
+ ifdef IPV6
+-  CFLAGS += -DENABLE_IPV6 -D_WIN32_WINNT=0x0501
++  CFLAGS += -DENABLE_IPV6
+ endif
+ ifdef LDAPS
+   CFLAGS += -DHAVE_LDAP_SSL
