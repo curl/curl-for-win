@@ -188,9 +188,9 @@ _VER="$1"
   # CURL_CFLAG_EXTRAS="-mspeculative-load-hardening ${CURL_CFLAG_EXTRAS}"
     export CURL_CC="clang${CW_CCSUFFIX}"
     if [ "${_OS}" != 'win' ]; then
-      CURL_CFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${CURL_CFLAG_EXTRAS}"
+      CURL_CFLAG_EXTRAS="--target=${_TRIPLET} --sysroot=${_SYSROOT} ${CURL_CFLAG_EXTRAS}"
       [ "${_OS}" = 'linux' ] && CURL_LDFLAG_EXTRAS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${CURL_LDFLAG_EXTRAS}"
-      CURL_LDFLAG_EXTRAS="-target ${_TRIPLET} --sysroot ${_SYSROOT} ${CURL_LDFLAG_EXTRAS}"
+      CURL_LDFLAG_EXTRAS="--target=${_TRIPLET} --sysroot=${_SYSROOT} ${CURL_LDFLAG_EXTRAS}"
     fi
     # This does not work yet, due to:
     #   /usr/local/bin/x86_64-w64-mingw32-ld: asyn-thread.o:asyn-thread.c:(.rdata$.refptr.__guard_dispatch_icall_fptr[.refptr.__guard_dispatch_icall_fptr]+0x0): undefined reference to `__guard_dispatch_icall_fptr'
