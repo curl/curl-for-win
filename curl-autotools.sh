@@ -120,6 +120,7 @@ _VER="$1"
         LDFLAGS="${LDFLAGS} -Wl,--pic-executable,-e,_mainCRTStartup"
       fi
     else
+      CPPFLAGS="${CPPFLAGS} -DHAVE_INET_PTON"
       if [ "${pass}" = 'static' ]; then
         LDFLAGS="${LDFLAGS} -Wl,--pic-executable,-e,mainCRTStartup"
       else
