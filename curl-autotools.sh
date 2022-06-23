@@ -69,12 +69,8 @@ _VER="$1"
   for pass in static; do  # FIXME: 'shared' broken.
 
     export LDFLAGS="${_OPTM}"
-    # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
-    # marking public libcurl functions as 'exported'. Useful to avoid the
-    # chance of libcurl functions getting exported from final binaries when
-    # linked against static libcurl lib.
     export CFLAGS='-fno-ident -O3'
-    export CPPFLAGS='-DCURL_STATICLIB -DHAVE_ATOMIC -DNDEBUG -DHAVE_SOCKET -DHAVE_IOCTLSOCKET_FIONBIO -DHAVE_FREEADDRINFO -DHAVE_GETADDRINFO -DHAVE_GETADDRINFO_THREADSAFE -DHAVE_PROCESS_H -DHAVE_CLOSESOCKET'
+    export CPPFLAGS='-DHAVE_ATOMIC -DNDEBUG -DHAVE_SOCKET -DHAVE_IOCTLSOCKET_FIONBIO -DHAVE_FREEADDRINFO -DHAVE_GETADDRINFO -DHAVE_GETADDRINFO_THREADSAFE -DHAVE_PROCESS_H -DHAVE_CLOSESOCKET'
     export LIBS=''
     ldonly=''
 
@@ -285,6 +281,11 @@ _VER="$1"
     options="${options} --without-quiche --without-msh3"
 
     if [ "${pass}" = 'static' ]; then
+      # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
+      # marking public libcurl functions as 'exported'. Useful to avoid the
+      # chance of libcurl functions getting exported from final binaries when
+      # linked against static libcurl lib.
+      CPPFLAGS="${CPPFLAGS} -DCURL_STATICLIB"
       options="${options} --enable-static"
       options="${options} --disable-shared"
     else

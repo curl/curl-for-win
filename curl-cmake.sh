@@ -92,11 +92,7 @@ _VER="$1"
     options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
     options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
 
-    # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
-    # marking public libcurl functions as 'exported'. Useful to avoid the
-    # chance of libcurl functions getting exported from final binaries when
-    # linked against the static libcurl lib.
-    export _CFLAGS='-fno-ident -DCURL_STATICLIB -DHAVE_STRCASECMP -DHAVE_ATOMIC -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID -DHAVE_STRTOK_R -DUSE_HEADERS_API'
+    export _CFLAGS='-fno-ident -DHAVE_STRCASECMP -DHAVE_ATOMIC -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID -DHAVE_STRTOK_R -DUSE_HEADERS_API'
     [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
     [ "${_CPU}" = 'x86' ] && options="${options} -DENABLE_INET_PTON=OFF"  # For Windows XP compatibility
     export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
@@ -257,6 +253,11 @@ _VER="$1"
     options="${options} -DCURL_CA_PATH=none"
     options="${options} -DCURL_CA_BUNDLE=none"
     if [ "${pass}" = 'static' ]; then
+      # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
+      # marking public libcurl functions as 'exported'. Useful to avoid the
+      # chance of libcurl functions getting exported from final binaries when
+      # linked against the static libcurl lib.
+      _CFLAGS="${_CFLAGS} -DCURL_STATICLIB"
       options="${options} -DBUILD_SHARED_LIBS=OFF"
       options="${options} -DBUILD_CURL_EXE=ON"
     else
