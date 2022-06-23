@@ -74,7 +74,7 @@ _VER="$1"
     # chance of libcurl functions getting exported from final binaries when
     # linked against static libcurl lib.
     export CFLAGS='-fno-ident -O3'
-    export CPPFLAGS='-DCURL_STATICLIB -DHAVE_ATOMIC -DHAVE_IOCTLSOCKET_FIONBIO -DHAVE_SOCKET'
+    export CPPFLAGS='-DCURL_STATICLIB -DHAVE_ATOMIC -DNDEBUG -DHAVE_SOCKET -DHAVE_IOCTLSOCKET_FIONBIO -DHAVE_FREEADDRINFO -DHAVE_GETADDRINFO -DHAVE_GETADDRINFO_THREADSAFE -DHAVE_PROCESS_H -DHAVE_CLOSESOCKET'
     export LIBS=''
     ldonly=''
 
