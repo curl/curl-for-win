@@ -94,14 +94,15 @@ _VER="$1"
 
     export _CFLAGS='-fno-ident -W -Wall -DHAVE_STRCASECMP -DHAVE_ATOMIC -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID -DHAVE_STRTOK_R -DUSE_HEADERS_API -DHAVE_FTRUNCATE -DHAVE_GETADDRINFO_THREADSAFE -DHAVE_UNISTD_H -DHAVE_STRUCT_POLLFD'
     [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
-    [ "${_CPU}" = 'x86' ] && options="${options} -DENABLE_INET_PTON=OFF"  # For Windows XP compatibility
     export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
     export CURL_LDFLAG_EXTRAS_EXE
     export CURL_LDFLAG_EXTRAS_DLL
     if [ "${_CPU}" = 'x86' ]; then
+      options="${options} CURL_TARGET_WINDOWS_VERSION=0x0501"  # For Windows XP compatibility
       CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
       CURL_LDFLAG_EXTRAS_DLL=''
     else
+      options="${options} CURL_TARGET_WINDOWS_VERSION=0x0600"
       CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
       CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
