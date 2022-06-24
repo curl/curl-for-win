@@ -2,6 +2,8 @@
 
 # [SHARED BUILD (DLL) BROKEN]
 
+# FIXME: curl.rc/libcurl.rc is not compiled at all with autotools
+
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
 
 # shellcheck disable=SC3040
@@ -101,6 +103,7 @@ _VER="$1"
       export LD="${_CCPREFIX}ld"
       export NM="${_CCPREFIX}nm"
       export RANLIB="${_CCPREFIX}ranlib"
+      export RC="${_CCPREFIX}windres"
     else
       export CC="${_CCPREFIX}gcc -static-libgcc"
     fi
