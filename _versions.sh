@@ -10,8 +10,8 @@ export LIBIDN2_VER_='2.3.2'
 export LIBIDN2_HASH=76940cd4e778e8093579a9d195b25fff5e936e9dc6242068528b437a76764f91
 export LIBSSH2_VER_='1.10.0'
 export LIBSSH2_HASH=2d64e90f3ded394b91d3a2e774ca203a4179f69aebee03003e5a6fa621e41d51
-export NGHTTP2_VER_='1.47.0'
-export NGHTTP2_HASH=68271951324554c34501b85190f22f2221056db69f493afc3bbac8e7be21e7cc
+export NGHTTP2_VER_='1.48.0'
+export NGHTTP2_HASH=47d8f30ee4f1bc621566d10362ca1b3ac83a335c63da7144947c806772d016e4
 export NGHTTP3_VER_='0.5.0'
 export NGHTTP3_HASH=017c56dea814c973a15962c730840d33c6ecbfa92535236df3d5b66f0cb08de0
 export NGTCP2_VER_='0.6.0'
@@ -32,4 +32,4 @@ export PEFILE_VER_='2022.5.30'
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='6'
+export _REV='7'
