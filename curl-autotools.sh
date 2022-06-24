@@ -211,14 +211,10 @@ _VER="$1"
     elif [ -d ../openssl-quic ]; then
       options="${options} --with-default-ssl-backend=openssl --with-openssl=$(pwd)/../openssl-quic/pkg/usr/local"
       options="${options} --enable-tls-srp"
-      # Workaround for 3.x deprecation warnings
-      CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
       LIBS="${LIBS} -lbcrypt"
     elif [ -d ../openssl ]; then
       options="${options} --with-default-ssl-backend=openssl --with-openssl=$(pwd)/../openssl/pkg/usr/local"
       options="${options} --enable-tls-srp"
-      # Workaround for 3.x deprecation warnings
-      CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
       LIBS="${LIBS} -lbcrypt"
     else
       options="${options} --with-default-ssl-backend=schannel"
@@ -288,11 +284,6 @@ _VER="$1"
     options="${options} --without-quiche --without-msh3"
 
     if [ "${pass}" = 'static' ]; then
-      # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
-      # marking public libcurl functions as 'exported'. Useful to avoid the
-      # chance of libcurl functions getting exported from final binaries when
-      # linked against static libcurl lib.
-      CPPFLAGS="${CPPFLAGS} -DCURL_STATICLIB"
       options="${options} --enable-static"
       options="${options} --disable-shared"
     else

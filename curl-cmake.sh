@@ -253,11 +253,6 @@ _VER="$1"
     options="${options} -DCURL_CA_PATH=none"
     options="${options} -DCURL_CA_BUNDLE=none"
     if [ "${pass}" = 'static' ]; then
-      # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
-      # marking public libcurl functions as 'exported'. Useful to avoid the
-      # chance of libcurl functions getting exported from final binaries when
-      # linked against the static libcurl lib.
-      _CFLAGS="${_CFLAGS} -DCURL_STATICLIB"
       options="${options} -DBUILD_SHARED_LIBS=OFF"
       options="${options} -DBUILD_CURL_EXE=ON"
     else
