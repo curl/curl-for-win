@@ -40,6 +40,10 @@ _VER="$1"
     cp -f -p Makefile.dist Makefile
   fi
 
+  # autotools forces its -On option (gcc = -O2, clang = -Os) and removes custom
+  # ones. We patch ./configure to customize it.
+  sed -i.bak 's|flags_opt_yes="-O[s12]"|flags_opt_yes="-O3"|g' ./configure
+
   # For 'shared' builds, create fake .libs to pass libtool's test for implibs.
   for fn in advapi32 crypt32 wldap32 ws2_32 normaliz ucrt z; do
     if [ "${fn}" = 'ucrt' ] || \
@@ -71,7 +75,7 @@ _VER="$1"
   for pass in static; do  # FIXME: 'shared' broken.
 
     export LDFLAGS="${_OPTM}"
-    export CFLAGS='-fno-ident -O3'
+    export CFLAGS='-fno-ident'
     export CPPFLAGS='-DHAVE_ATOMIC -DNDEBUG -DHAVE_SOCKET -DHAVE_IOCTLSOCKET_FIONBIO -DHAVE_FREEADDRINFO -DHAVE_GETADDRINFO -DHAVE_GETADDRINFO_THREADSAFE -DHAVE_PROCESS_H -DHAVE_CLOSESOCKET'
     export LIBS=''
     ldonly=''
