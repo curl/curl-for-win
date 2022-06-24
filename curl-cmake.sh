@@ -92,7 +92,7 @@ _VER="$1"
     options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
     options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
 
-    export _CFLAGS='-fno-ident -DHAVE_STRCASECMP -DHAVE_ATOMIC -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID -DHAVE_STRTOK_R -DUSE_HEADERS_API'
+    export _CFLAGS='-fno-ident -DHAVE_STRCASECMP -DHAVE_ATOMIC -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID -DHAVE_STRTOK_R -DUSE_HEADERS_API -DHAVE_FTRUNCATE -DHAVE_GETADDRINFO_THREADSAFE -DHAVE_UNISTD_H -DHAVE_STRUCT_POLLFD'
     [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
     [ "${_CPU}" = 'x86' ] && options="${options} -DENABLE_INET_PTON=OFF"  # For Windows XP compatibility
     export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
