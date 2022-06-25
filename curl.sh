@@ -23,7 +23,7 @@ _VER="$1"
   find . -name '*.def' -delete
 
   # Set OS string to the autotools value. To test reproducibility across make systems.
-  if [ -n "${CW_DEV_FIXUP_OS_STRING}" ]; then
+  if [ -n "${CW_DEV_FIXUP_OS_STRING:-}" ]; then
     # x86_64-pc-win32 ->
     {
       echo '#undef OS'

@@ -258,7 +258,7 @@ bld() {
 
     time "./${pkg}.sh" "$@"
 
-    if [ "${CW_DEV_MOVEAWAY}" = '1' ] && [ "${pkg}" != "${pkgori}" ]; then
+    if [ "${CW_DEV_MOVEAWAY:-}" = '1' ] && [ "${pkg}" != "${pkgori}" ]; then
       mv -n "${pkgori}" "${pkg}"
     fi
   fi

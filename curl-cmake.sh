@@ -31,7 +31,7 @@ _VER="$1"
   fi
 
   # Set OS string to the autotools value. To test reproducibility across make systems.
-  if [ -n "${CW_DEV_FIXUP_OS_STRING}" ]; then
+  if [ -n "${CW_DEV_FIXUP_OS_STRING:-}" ]; then
     # Windows-* ->
     sed -i.bak 's|set(OS "\\"${CMAKE_SYSTEM_NAME}${CURL_OS_SUFFIX}\\"")|set(OS \\"x86_64-w64-mingw32\\")|g' ./CMakeLists.txt
   fi
