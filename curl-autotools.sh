@@ -372,31 +372,31 @@ _VER="$1"
   # so .exe and .dll stripping is done via the -s linker option.
   if [ "${uselld}" = '0' ]; then
     "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/bin/*.exe
-    "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/lib/*.dll
-    "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.dll.a
+  # "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/lib/*.dll
+  # "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.dll.a
   fi
   "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.a
 
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
-  ../_peclean.py "${_ref}" ${_pkg}/lib/*.dll
+# ../_peclean.py "${_ref}" ${_pkg}/lib/*.dll
 
   ../_sign-code.sh "${_ref}" ${_pkg}/bin/*.exe
-  ../_sign-code.sh "${_ref}" ${_pkg}/lib/*.dll
+# ../_sign-code.sh "${_ref}" ${_pkg}/lib/*.dll
 
   touch -c -r "${_ref}" ${_pkg}/bin/*.exe
-  touch -c -r "${_ref}" ${_pkg}/lib/*.dll
-  touch -c -r "${_ref}" ${_pkg}/lib/*.def
+# touch -c -r "${_ref}" ${_pkg}/lib/*.dll
+# touch -c -r "${_ref}" ${_pkg}/lib/*.def
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     touch -c -r "${_ref}" ./src/*.map
-    touch -c -r "${_ref}" ./lib/*.map
+  # touch -c -r "${_ref}" ./lib/*.map
   fi
 
   # Tests
 
   "${_CCPREFIX}objdump" --all-headers ${_pkg}/bin/*.exe | grep -a -E -i "(file format|dll name)"
-  "${_CCPREFIX}objdump" --all-headers ${_pkg}/lib/*.dll | grep -a -E -i "(file format|dll name)"
+# "${_CCPREFIX}objdump" --all-headers ${_pkg}/lib/*.dll | grep -a -E -i "(file format|dll name)"
 
   # Execute curl and compiled-in dependency code. This is not secure, but
   # the build process already requires executing external code
@@ -434,8 +434,8 @@ _VER="$1"
   )
   cp -f -p ${_pkg}/include/curl/*.h "${_DST}/include/curl/"
   cp -f -p ${_pkg}/bin/*.exe        "${_DST}/bin/"
-  cp -f -p ${_pkg}/lib/*.dll        "${_DST}/bin/"
-  cp -f -p ${_pkg}/lib/*.def        "${_DST}/bin/"
+# cp -f -p ${_pkg}/lib/*.dll        "${_DST}/bin/"
+# cp -f -p ${_pkg}/lib/*.def        "${_DST}/bin/"
   cp -f -p ${_pkg}/lib/*.a          "${_DST}/lib/"
   cp -f -p docs/*.md                "${_DST}/docs/"
   cp -f -p CHANGES                  "${_DST}/CHANGES.txt"
@@ -450,7 +450,7 @@ _VER="$1"
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     cp -f -p ./src/*.map        "${_DST}/bin/"
-    cp -f -p ./lib/*.map        "${_DST}/bin/"
+#   cp -f -p ./lib/*.map        "${_DST}/bin/"
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"
