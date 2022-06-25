@@ -242,7 +242,7 @@ _VER="$1"
 
     if [ -d ../libgsasl ]; then
       options="${options} --with-libgsasl=$(pwd)/../libgsasl/pkg/usr/local"
-      CFLAGS="${CFLAGS} -I$(pwd)/../libgsasl/pkg/usr/local/include"
+      CPPFLAGS="${CPPFLAGS} -I$(pwd)/../libgsasl/pkg/usr/local/include"
       LDFLAGS="${LDFLAGS} -L$(pwd)/../libgsasl/pkg/usr/local/lib"
     else
       options="${options} --without-libgsasl"
@@ -262,7 +262,7 @@ _VER="$1"
         # This lib will not appear enabled in the configure summary.
         options="${options} --with-nghttp3=yes"
         CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB -DUSE_NGHTTP3"
-        CFLAGS="${CFLAGS} -I$(pwd)/../nghttp3/pkg/usr/local/include"
+        CPPFLAGS="${CPPFLAGS} -I$(pwd)/../nghttp3/pkg/usr/local/include"
         LDFLAGS="${LDFLAGS} -L$(pwd)/../nghttp3/pkg/usr/local/lib"
         LIBS="${LIBS} -lnghttp3"
       else
@@ -273,7 +273,7 @@ _VER="$1"
         # This lib will not appear enabled in the configure summary.
         options="${options} --with-ngtcp2=yes"
         CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB -DUSE_NGTCP2"
-        CFLAGS="${CFLAGS} -I$(pwd)/../ngtcp2/pkg/usr/local/include"
+        CPPFLAGS="${CPPFLAGS} -I$(pwd)/../ngtcp2/pkg/usr/local/include"
         LDFLAGS="${LDFLAGS} -L$(pwd)/../ngtcp2/pkg/usr/local/lib"
         LIBS="${LIBS} -lngtcp2 -lngtcp2_crypto_openssl"
       else
