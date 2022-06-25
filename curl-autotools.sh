@@ -29,8 +29,16 @@ _VER="$1"
 
   rm -r -f pkg
 
+  find . -name '*.o'   -delete
+  find . -name '*.a'   -delete
+  find . -name '*.lo'  -delete
+  find . -name '*.la'  -delete
+  find . -name '*.lai' -delete
+  find . -name '*.pc'  -delete
+  find . -name '*.exe' -delete
   find . -name '*.dll' -delete
   find . -name '*.def' -delete
+  find . -name '*.map' -delete
 
   # Skip building tests in non-cross-build cases
   sed -i.bak 's| tests packages| packages|g' ./Makefile.am
@@ -48,7 +56,7 @@ _VER="$1"
   for fn in advapi32 crypt32 wldap32 ws2_32 normaliz ucrt z; do
     if [ "${fn}" = 'ucrt' ] || \
        [ "${fn}" = 'z' ]; then
-      fnt=advapi32  # Any implib will do here.
+      fnt=advapi32  # Any implib does the job here.
     else
       fnt="${fn}"
     fi
@@ -146,9 +154,9 @@ _VER="$1"
     fi
 
     if [ "${pass}" = 'shared' ]; then
-      # FIXME: This breaks autotools pre-checks. Our exports will always be
-      # missing for test snippets. How to pass this to the actual linking
-      # command? We likely have to solve this differently.
+      # FIXME: This breaks autotools pre-checks. Our exports are always
+      # missing when compiling 'configure' test snippets. How to pass this
+      # to the final linker command? We likely have to solve this differently.
       #LDFLAGS="${LDFLAGS} libcurl.def"
       :
     fi
@@ -205,19 +213,18 @@ _VER="$1"
     CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
     if [ -d ../libressl ]; then
-      options="${options} --with-default-ssl-backend=openssl --with-openssl=$(pwd)/../libressl/pkg/usr/local"
+      options="${options} --with-openssl=$(pwd)/../libressl/pkg/usr/local"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
     elif [ -d ../openssl-quic ]; then
-      options="${options} --with-default-ssl-backend=openssl --with-openssl=$(pwd)/../openssl-quic/pkg/usr/local"
+      options="${options} --with-openssl=$(pwd)/../openssl-quic/pkg/usr/local"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
     elif [ -d ../openssl ]; then
-      options="${options} --with-default-ssl-backend=openssl --with-openssl=$(pwd)/../openssl/pkg/usr/local"
+      options="${options} --with-openssl=$(pwd)/../openssl/pkg/usr/local"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
     else
-      options="${options} --with-default-ssl-backend=schannel"
       options="${options} --disable-tls-srp"
     fi
 
@@ -332,7 +339,14 @@ _VER="$1"
       --without-ca-bundle \
       --without-ca-fallback \
       --prefix=/usr/local --silent
-    make --jobs 2 clean >/dev/null
+
+    # NOTE: 'make clean' deletes src/tool_hugehelp.c and docs/curl.1. Next,
+    #       'make' regenerates them, including the current date in curl.1,
+    #       and breaking reproducibility. tool_hugehelp.c might also be
+    #       reflowed/hyphened differently than the source distro, breaking
+    #       reproducibility again. So let us skip the clean phase. Do any
+    #       cleaning manually as necessary.
+
     make --jobs 2 install "DESTDIR=$(pwd)/pkg" # >/dev/null # V=1
   done
 
