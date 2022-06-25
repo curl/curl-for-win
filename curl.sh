@@ -11,7 +11,7 @@ export _OUT
 export _BAS
 export _DST
 
-_NAM="$(basename "$0" | cut -f 1 -d '.')"
+_NAM="$(basename "$0" | cut -f 1 -d '.' | sed 's/-make//')"
 _VER="$1"
 
 (
@@ -21,6 +21,15 @@ _VER="$1"
 
   find . -name '*.dll' -delete
   find . -name '*.def' -delete
+
+  # Set OS string to the autotools value. To test reproducibility across make systems.
+  if [ -n "${CW_DEV_FIXUP_OS_STRING}" ]; then
+    # x86_64-pc-win32 ->
+    {
+      echo '#undef OS'
+      echo '#define OS "x86_64-w64-mingw32"'
+    } >> ./lib/config-win32.h
+  fi
 
   # Build
 

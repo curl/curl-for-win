@@ -30,6 +30,12 @@ _VER="$1"
     opt_gmsys=''
   fi
 
+  # Set OS string to the autotools value. To test reproducibility across make systems.
+  if [ -n "${CW_DEV_FIXUP_OS_STRING}" ]; then
+    # Windows-* ->
+    sed -i.bak 's|set(OS "\\"${CMAKE_SYSTEM_NAME}${CURL_OS_SUFFIX}\\"")|set(OS \\"x86_64-w64-mingw32\\")|g' ./CMakeLists.txt
+  fi
+
   # Build
 
   rm -r -f pkg CMakeFiles CMakeCache.txt CTestTestfile.cmake cmake_install.cmake
@@ -45,8 +51,6 @@ _VER="$1"
   find . -name '*.dll' -delete
   find . -name '*.def' -delete
   find . -name '*.map' -delete
-
-  # Build
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
   _pkg='pkg/usr/local'

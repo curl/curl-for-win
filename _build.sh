@@ -248,6 +248,7 @@ bld() {
   if [ -z "${CW_BLD:-}" ] || echo "${CW_BLD}" | grep -q -F "${pkg}"; then
     shift
 
+    pkgori="${pkg}"
     # allow selecting an alternate build tool
     withbuildtool="$(echo "${CW_BLD}" | \
       grep -a -o -E "${pkg}-(cmake|autotools|make)" || true)"
@@ -256,6 +257,10 @@ bld() {
     fi
 
     time "./${pkg}.sh" "$@"
+
+    if [ "${CW_DEV_MOVEAWAY}" = '1' ] && [ "${pkg}" != "${pkgori}" ]; then
+      mv -n "${pkgori}" "${pkg}"
+    fi
   fi
 }
 
