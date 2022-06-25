@@ -389,8 +389,8 @@ _VER="$1"
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-    touch -c -r "${_ref}" ${_pkg}/bin/*.map
-    touch -c -r "${_ref}" ${_pkg}/lib/*.map
+    touch -c -r "${_ref}" ./src/*.map
+    touch -c -r "${_ref}" ./lib/*.map
   fi
 
   # Tests
@@ -449,8 +449,8 @@ _VER="$1"
   fi
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-    cp -f -p ${_pkg}/bin/*.map        "${_DST}/bin/"
-    cp -f -p ${_pkg}/lib/*.map        "${_DST}/bin/"
+    cp -f -p ./src/*.map        "${_DST}/bin/"
+    cp -f -p ./lib/*.map        "${_DST}/bin/"
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"
