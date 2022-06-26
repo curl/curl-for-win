@@ -1,7 +1,6 @@
 #!/bin/sh
 
-# [SHARED BUILD (DLL) BROKEN]
-
+# FIXME: DLL exports everything, also from dependencies
 # FIXME: curl.rc/libcurl.rc is not compiled at all with autotools
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
@@ -29,39 +28,22 @@ _VER="$1"
 
   rm -r -f pkg
 
-  find . -name '*.o'   -delete
   find . -name '*.a'   -delete
-  find . -name '*.lo'  -delete
-  find . -name '*.la'  -delete
-  find . -name '*.lai' -delete
-  find . -name '*.pc'  -delete
-  find . -name '*.exe' -delete
   find . -name '*.dll' -delete
   find . -name '*.def' -delete
   find . -name '*.map' -delete
-
-  # Skip building tests in non-cross-build cases
-  sed -i.bak 's| tests packages| packages|g' ./Makefile.am
 
   if [ ! -f 'Makefile' ]; then
     autoreconf --force --install
     cp -f -p Makefile.dist Makefile
   fi
 
+  # patch autotools to not refuse to link a shared library against static libs
+  sed -i.bak -E 's|^deplibs_check_method=.+|deplibs_check_method=pass_all|g' ./configure
+
   # autotools forces its -On option (gcc = -O2, clang = -Os) and removes custom
   # ones. We patch ./configure to customize it.
   sed -i.bak 's|flags_opt_yes="-O[s12]"|flags_opt_yes="-O3"|g' ./configure
-
-  # For 'shared' builds, create fake .libs to pass libtool's test for implibs.
-  for fn in advapi32 crypt32 wldap32 ws2_32 normaliz ucrt z; do
-    if [ "${fn}" = 'ucrt' ] || \
-       [ "${fn}" = 'z' ]; then
-      fnt=advapi32  # Any implib does the job here.
-    else
-      fnt="${fn}"
-    fi
-    ln -s -f "${_SYSROOT}/${_TRIPLET}/lib/lib${fnt}.a" "../lib${fn}.lib"
-  done
 
   # Generate .def file for libcurl by parsing curl headers. Useful to export
   # the libcurl function meant to be exported.
@@ -80,7 +62,11 @@ _VER="$1"
       | sed -E 's|^ *\*? *([a-z_]+) *\(.+$|\1|g'
   } | grep -a -v '^$' | sort | tee -a libcurl.def
 
-  for pass in static; do  # FIXME: 'shared' broken.
+  CURL_DLL_SUFFIX=''
+  [ "${_CPU}" = 'x64' ] && CURL_DLL_SUFFIX="-${_CPU}"
+  [ "${_CPU}" = 'a64' ] && CURL_DLL_SUFFIX="-${_CPU}"
+
+  for pass in shared static; do
 
     export LDFLAGS="${_OPTM}"
     export CFLAGS='-fno-ident -W -Wall'
@@ -105,10 +91,10 @@ _VER="$1"
     fi
 
     if [ "${_CC}" = 'clang' ]; then
-      export CC='clang'
+      export CC="clang --target=${_TRIPLET}"
       if [ "${_OS}" != 'win' ]; then
-        options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
-        LDFLAGS="${LDFLAGS} --target=${_TRIPLET} --sysroot=${_SYSROOT}"
+        options="${options} --with-sysroot=${_SYSROOT}"
+        LDFLAGS="${LDFLAGS} --sysroot=${_SYSROOT}"
         [ "${_OS}" = 'linux' ] && ldonly="${ldonly} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
       fi
       export AR="${_CCPREFIX}ar"
@@ -154,16 +140,17 @@ _VER="$1"
     fi
 
     if [ "${pass}" = 'shared' ]; then
+      LDFLAGS="${LDFLAGS} -Wl,--output-def,libcurl${CURL_DLL_SUFFIX}.def"
+
       # FIXME: This breaks autotools pre-checks. Our exports are always
       # missing when compiling 'configure' test snippets. How to pass this
-      # to the final linker command? We likely have to solve this differently.
+      # to the final linker command? We have to solve this differently.
+      # Without this, ALL symbols are exported, including those from our
+      # dependencies. LLD -exported_symbols_list option could resolve this,
+      # but I could not make it work.
       #LDFLAGS="${LDFLAGS} libcurl.def"
       :
     fi
-
-    # FIXME:
-    [ "${_CPU}" = 'x64' ] && export CURL_DLL_SUFFIX="-${_CPU}"
-    [ "${_CPU}" = 'a64' ] && export CURL_DLL_SUFFIX="-${_CPU}"
 
     if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
        [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
@@ -294,16 +281,9 @@ _VER="$1"
       options="${options} --enable-static"
       options="${options} --disable-shared"
     else
+      CPPFLAGS="${CPPFLAGS} -DCURL_STATICLIB"
       options="${options} --disable-static"
       options="${options} --enable-shared"
-
-      # Ugly hack to make libtool find what is wants when doing checks
-      # before attempting to link a DLL. We put implibs here with all the
-      # names it needs. This complements the .lib names symlinked to .a files.
-      LDFLAGS="${LDFLAGS} -L$(pwd)/.."
-
-      # FIXME: Not sure why this was necessary to find Windows implibs.
-      LDFLAGS="${LDFLAGS} -L${_SYSROOT}/${_TRIPLET}/lib"
     fi
 
     # shellcheck disable=SC2086
@@ -340,18 +320,58 @@ _VER="$1"
       --without-ca-fallback \
       --prefix=/usr/local --silent
 
+    # Skip building tests also in non-cross-build cases
+    sed -i.bak 's| tests packages| packages|g' ./Makefile
+
+    if [ "${pass}" = 'shared' ]; then
+      # Skip building shared version curl.exe. The build itself works, but
+      # then autotools tries to create its "ltwrapper", and fails.
+      # I have found no way to skip building that component, even though
+      # we do not need it. Skip this pass altogether.
+      sed -i.bak -E 's|^SUBDIRS = .+|SUBDIRS = lib|g' ./Makefile
+    else
+      sed -i.bak -E 's|^SUBDIRS = .+|SUBDIRS = lib src|g' ./Makefile
+    fi
+
     # NOTE: 'make clean' deletes src/tool_hugehelp.c and docs/curl.1. Next,
     #       'make' regenerates them, including the current date in curl.1,
     #       and breaking reproducibility. tool_hugehelp.c might also be
     #       reflowed/hyphened differently than the source distro, breaking
-    #       reproducibility again. So let us skip the clean phase. Do any
-    #       cleaning manually as necessary.
+    #       reproducibility again. Skip the clean phase to resolve it. Do
+    #       any cleaning manually as necessary.
+
+    find . -name '*.o'   -delete
+    find . -name '*.lo'  -delete
+    find . -name '*.la'  -delete
+    find . -name '*.lai' -delete
+    find . -name '*.pc'  -delete
+    find . -name '*.exe' -delete
 
     make --jobs 2 install "DESTDIR=$(pwd)/pkg" # >/dev/null # V=1
   done
 
   # DESTDIR= + --prefix=
   _pkg='pkg/usr/local'
+
+  # DLL fixups
+
+  # Rename DLL to out preferred name and re-generate its implib
+  mv "${_pkg}/bin/libcurl-4.dll" "${_pkg}/bin/libcurl${CURL_DLL_SUFFIX}.dll"
+  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+    mv './lib/libcurl.map' "./lib/libcurl${CURL_DLL_SUFFIX}.map"
+  fi
+
+  if [ "${_CC}" = 'clang' ]; then
+    llvm-dlltool \
+      -D "${_pkg}/bin/libcurl${CURL_DLL_SUFFIX}.dll" \
+      -d libcurl.def \
+      -l "${_pkg}/lib/libcurl.dll.a"
+  else
+    "${_CCPREFIX}dlltool" \
+      --dllname    "${_pkg}/bin/libcurl${CURL_DLL_SUFFIX}.dll" \
+      --input-def  libcurl.def \
+      --output-lib "${_pkg}/lib/libcurl.dll.a"
+  fi
 
   # Build fixups for clang
 
@@ -386,31 +406,31 @@ _VER="$1"
   # so .exe and .dll stripping is done via the -s linker option.
   if [ "${uselld}" = '0' ]; then
     "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/bin/*.exe
-  # "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/lib/*.dll
-  # "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.dll.a
+    "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   ${_pkg}/bin/*.dll
+    "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.dll.a
   fi
   "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/libcurl.a
 
   ../_peclean.py "${_ref}" ${_pkg}/bin/*.exe
-# ../_peclean.py "${_ref}" ${_pkg}/lib/*.dll
+  ../_peclean.py "${_ref}" ${_pkg}/bin/*.dll
 
   ../_sign-code.sh "${_ref}" ${_pkg}/bin/*.exe
-# ../_sign-code.sh "${_ref}" ${_pkg}/lib/*.dll
+  ../_sign-code.sh "${_ref}" ${_pkg}/bin/*.dll
 
   touch -c -r "${_ref}" ${_pkg}/bin/*.exe
-# touch -c -r "${_ref}" ${_pkg}/lib/*.dll
-# touch -c -r "${_ref}" ${_pkg}/lib/*.def
+  touch -c -r "${_ref}" ${_pkg}/bin/*.dll
+  touch -c -r "${_ref}" ./lib/*.def
   touch -c -r "${_ref}" ${_pkg}/lib/*.a
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     touch -c -r "${_ref}" ./src/*.map
-  # touch -c -r "${_ref}" ./lib/*.map
+    touch -c -r "${_ref}" ./lib/*.map
   fi
 
   # Tests
 
   "${_CCPREFIX}objdump" --all-headers ${_pkg}/bin/*.exe | grep -a -E -i "(file format|dll name)"
-# "${_CCPREFIX}objdump" --all-headers ${_pkg}/lib/*.dll | grep -a -E -i "(file format|dll name)"
+  "${_CCPREFIX}objdump" --all-headers ${_pkg}/bin/*.dll | grep -a -E -i "(file format|dll name)"
 
   # Execute curl and compiled-in dependency code. This is not secure, but
   # the build process already requires executing external code
@@ -448,8 +468,8 @@ _VER="$1"
   )
   cp -f -p ${_pkg}/include/curl/*.h "${_DST}/include/curl/"
   cp -f -p ${_pkg}/bin/*.exe        "${_DST}/bin/"
-# cp -f -p ${_pkg}/lib/*.dll        "${_DST}/bin/"
-# cp -f -p ${_pkg}/lib/*.def        "${_DST}/bin/"
+  cp -f -p ${_pkg}/bin/*.dll        "${_DST}/bin/"
+  cp -f -p ./lib/*.def              "${_DST}/bin/"
   cp -f -p ${_pkg}/lib/*.a          "${_DST}/lib/"
   cp -f -p docs/*.md                "${_DST}/docs/"
   cp -f -p CHANGES                  "${_DST}/CHANGES.txt"
@@ -464,7 +484,7 @@ _VER="$1"
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     cp -f -p ./src/*.map        "${_DST}/bin/"
-#   cp -f -p ./lib/*.map        "${_DST}/bin/"
+    cp -f -p ./lib/*.map        "${_DST}/bin/"
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"
