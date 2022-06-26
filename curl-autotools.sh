@@ -286,6 +286,13 @@ _VER="$1"
       options="${options} --enable-shared"
     fi
 
+    # autotools forces its unixy DLL naming scheme. We prefer to use the same
+    # as with the other curl build systems. Maybe there is a slightly cleaner
+    # solution to this via libtool's `-version-info`?
+    # We only need to change the one under 'mingw', but change all for
+    # simplicity.
+    sed -i.bak -E "s| soname_spec='\\\$libname.+| soname_spec='\\\$libname${CURL_DLL_SUFFIX}\\\$shared_ext'|g" ./configure
+
     # shellcheck disable=SC2086
     ./configure ${options} \
       --disable-dependency-tracking \
@@ -353,24 +360,10 @@ _VER="$1"
   # DESTDIR= + --prefix=
   _pkg='pkg/usr/local'
 
-  # DLL fixups
+  # Build fixups
 
-  # Rename DLL to out preferred name and re-generate its implib
-  mv "${_pkg}/bin/libcurl-4.dll" "${_pkg}/bin/libcurl${CURL_DLL_SUFFIX}.dll"
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     mv './lib/libcurl.map' "./lib/libcurl${CURL_DLL_SUFFIX}.map"
-  fi
-
-  if [ "${_CC}" = 'clang' ]; then
-    llvm-dlltool \
-      -D "${_pkg}/bin/libcurl${CURL_DLL_SUFFIX}.dll" \
-      -d libcurl.def \
-      -l "${_pkg}/lib/libcurl.dll.a"
-  else
-    "${_CCPREFIX}dlltool" \
-      --dllname    "${_pkg}/bin/libcurl${CURL_DLL_SUFFIX}.dll" \
-      --input-def  libcurl.def \
-      --output-lib "${_pkg}/lib/libcurl.dll.a"
   fi
 
   # Build fixups for clang
