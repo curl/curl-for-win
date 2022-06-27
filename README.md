@@ -9,11 +9,9 @@
   <br>`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`
 - Standalone `curl.exe` and `libcurl.dll`.
   [Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/)
-  is
-  [required](https://devblogs.microsoft.com/oldnewthing/?p=1273).
-  UCRT replaces `msvcrt.dll`, and it comes with Windows 10 and later.
-  Back to Vista it came via Windows Update.
-  XP needs v14.27.29114.0 of it, installed manually:
+  is required. UCRT replaces `msvcrt.dll`, and it comes with Windows 10 and
+  later. Back to Vista it came via Windows Update. XP needs v14.27.29114.0 of
+  it, installed manually:
   [x86](https://download.visualstudio.microsoft.com/download/pr/56f631e5-4252-4f28-8ecc-257c7bf412b8/D305BAA965C9CD1B44EBCD53635EE9ECC6D85B54210E2764C8836F4E9DEFA345/VC_redist.x86.exe),
   [x64](https://download.visualstudio.microsoft.com/download/pr/722d59e4-0671-477e-b9b1-b8da7d4bd60b/591CBE3A269AFBCC025681B968A29CD191DF3C6204712CBDC9BA1CB632BA6068/VC_redist.x64.exe).
   <br>[More](https://www.msys2.org/docs/environments/#msvcrt-vs-ucrt),
