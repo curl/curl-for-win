@@ -66,9 +66,9 @@
   [in public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
   with open, auditable [build logs](#build-logs).
 - Build environment is `mingw-w64`
-  (via [Debian](https://packages.debian.org/testing/mingw-w64),
+  via [Debian](https://packages.debian.org/testing/mingw-w64),
   [Homebrew](https://formulae.brew.sh/formula/mingw-w64),
-  [MSYS2](https://www.msys2.org/)).
+  [MSYS2](https://www.msys2.org/).
   C compiler is [LLVM/Clang](https://clang.llvm.org/).
 - Binaries are cross-built and published from Linux
   via [AppVeyor CI](https://www.appveyor.com/).
@@ -92,8 +92,8 @@
   has an incomplete fix in default OpenSSL Windows builds. The OpenSSL team
   rejected all attempts to fix it. Even though the patches are trivial, we
   do not promise to maintain them for an indefinite time. Another option
-  under consideration is migrating to an alternative backend (LibreSSL,
-  rustls or Schannel).
+  under consideration is migrating to an alternative backend, e.g. LibreSSL,
+  rustls or Schannel.
 - Generated binaries are automatically uploaded to
   [VirusTotal](https://www.virustotal.com/).
 - To verify the hashes of the latest build, you can look up the correct
@@ -110,7 +110,7 @@
 
 * Latest version:
   <br><https://curl.se/windows/>
-* Specific versions (back to 7.80.0):<br>
+* Specific versions, back to 7.80.0:<br>
   `https://curl.se/windows/dl-<curl-version>[_<build-number>]/`
   <br>Examples:
   <br><https://curl.se/windows/dl-7.80.0/>
