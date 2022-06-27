@@ -1,7 +1,9 @@
 #!/bin/sh
 
-export CURL_VER_='7.83.1'
-export CURL_HASH=2cb9c2356e7263a1272fd1435ef7cdebf2cd21400ec287b068396deb705c22c4
+# NOTE: Bump nghttp3 and ngtcp2 only when curl is updated.
+
+export CURL_VER_='7.84.0'
+export CURL_HASH=2d118b43f547bfe5bae806d8d47b4e596ea5b25a6c1f080aef49fbcd817c5db8
 export BROTLI_VER_='1.0.9'
 export BROTLI_HASH=f9e8d81d0405ba66d181529af42a3354f838c939095ff99930da6aa9cdf6fe46
 export LIBGSASL_VER_='1.10.0'
@@ -32,4 +34,4 @@ export PEFILE_VER_='2022.5.30'
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='7'
+export _REV=''
