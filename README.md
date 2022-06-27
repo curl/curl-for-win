@@ -3,7 +3,7 @@
 
 # Automated, reproducible, transparent, Windows builds for curl
 
-- Binary packages are downloadable in `.zip` and `.tar.xz` formats.
+- We provide binary packages in `.zip` and `.tar.xz` formats.
 - We sign binary packages with the PGP key:
   <br><https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc>
   <br>`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`
@@ -19,7 +19,8 @@
   <br>[More](https://www.msys2.org/docs/environments/#msvcrt-vs-ucrt),
   [information](https://docs.microsoft.com/cpp/porting/upgrade-your-code-to-the-universal-crt),
   [here](https://docs.microsoft.com/cpp/windows/universal-crt-deployment).
-- The binary package also contains the static library for curl and its
+- x64 binaries require Vista, x86 require XP. We plan to bump it to Vista soon.
+- Binary packages also contain the static library for curl and its
   dependencies.
 - curl/libcurl have
   [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3) [EXPERIMENTAL]
@@ -35,12 +36,12 @@
     Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI threadsafe TLS-SRP UnixSockets
     Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2 -lssh2 -lgsasl -lbcrypt -lssl -lcrypto -lidn2 -lbrotlidec -lbrotlicommon -lnghttp3 -lngtcp2
 
-    "noh3" (without HTTP/3):
+    "noh3" (HTTP/2):
     Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp
     Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI threadsafe TLS-SRP UnixSockets
     Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2 -lssh2 -lgsasl -lbcrypt -lssl -lcrypto -lidn2 -lbrotlidec -lbrotlicommon
 
-    "mini" (Schannel-only, with OS-provided IDN support):
+    "mini" (Schannel, with OS-provided IDN support):
     Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp
     Features: alt-svc AsynchDNS        gsasl HSTS HTTP2                   IDN IPv6 Kerberos Largefile libz          NTLM SPNEGO SSL SSPI threadsafe         UnixSockets
     Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2 -lssh2 -lgsasl -lbcrypt
@@ -50,7 +51,7 @@
     Features: alt-svc AsynchDNS              HSTS HTTP2                   IDN IPv6 Kerberos Largefile libz          NTLM SPNEGO SSL SSPI threadsafe         UnixSockets
     Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2
 
-    "nano" (with HTTP/1.1):
+    "nano" (HTTP/1.1):
     Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp
     Features:         AsynchDNS              HSTS                         IDN IPv6 Kerberos Largefile libz          NTLM SPNEGO SSL SSPI threadsafe         UnixSockets
     Libs: -lcurl -lz -lcrypt32 -lwldap32
@@ -60,14 +61,14 @@
     Features:         AsynchDNS              HSTS                             IPv6          Largefile libz                      SSL SSPI threadsafe         UnixSockets
     Libs: -lcurl -lz -lcrypt32
     ```
-- The build process is fully transparent by using publicly available
+- Transparent build process by using publicly available
   open source code, C compiler, build scripts and running the build
   [in public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
   with open, auditable [build logs](#build-logs).
-- C compiler toolchain is latest MinGW-w64 (non-multilib, x64 and x86)
-  either via [Homebrew](https://brew.sh/) (on macOS),
-  [APT](https://en.wikipedia.org/wiki/APT_(Debian)) (on Debian via Docker)
-  or [MSYS2](https://www.msys2.org/).
+- Build environment is `mingw-w64`
+  (via [Debian](https://packages.debian.org/testing/mingw-w64),
+  [Homebrew](https://brew.sh/),
+  [MSYS2](https://www.msys2.org/)).
   C compiler is [LLVM/Clang](https://clang.llvm.org/).
 - Binaries are cross-built and published from Linux
   (via [AppVeyor CI](https://www.appveyor.com/)).
