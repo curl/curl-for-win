@@ -7,10 +7,10 @@
 - We sign binary packages with the PGP key:
   <br><https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc>
   <br>`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`
-- Standalone `curl.exe` and `libcurl.dll`
-  ([Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/)
+- Standalone `curl.exe` and `libcurl.dll`.
+  [Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/)
   is
-  [required](https://devblogs.microsoft.com/oldnewthing/?p=1273)).
+  [required](https://devblogs.microsoft.com/oldnewthing/?p=1273).
   UCRT replaces `msvcrt.dll`, and it comes with Windows 10 and later.
   Back to Vista it came via Windows Update.
   XP needs v14.27.29114.0 of it, installed manually:
@@ -26,37 +26,37 @@
   [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3) [EXPERIMENTAL]
   and
   [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
-- Default builds with the default TLS backend OpenSSL (QUIC fork) and
+- Default builds with TLS backend OpenSSL (QUIC fork), and
   [Schannel](https://docs.microsoft.com/windows/win32/com/schannel)
-  as runtime-selectable option. Plus, alternate configuration with
+  as runtime-selectable option. Plus, alternate configurations with
   less features/dependencies and more compactness:
     ```
-    default (with everything):
+    default, with everything:
     Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp
     Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI threadsafe TLS-SRP UnixSockets
     Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2 -lssh2 -lgsasl -lbcrypt -lssl -lcrypto -lidn2 -lbrotlidec -lbrotlicommon -lnghttp3 -lngtcp2
 
-    "noh3" (HTTP/2):
+    "noh3", HTTP/2:
     Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp
     Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI threadsafe TLS-SRP UnixSockets
     Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2 -lssh2 -lgsasl -lbcrypt -lssl -lcrypto -lidn2 -lbrotlidec -lbrotlicommon
 
-    "mini" (Schannel, with OS-provided IDN support):
+    "mini", Schannel, with OS-provided IDN support:
     Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp
     Features: alt-svc AsynchDNS        gsasl HSTS HTTP2                   IDN IPv6 Kerberos Largefile libz          NTLM SPNEGO SSL SSPI threadsafe         UnixSockets
     Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2 -lssh2 -lgsasl -lbcrypt
 
-    "micro" (without libssh2 and libgsasl):
+    "micro", without libssh2 and libgsasl:
     Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp
     Features: alt-svc AsynchDNS              HSTS HTTP2                   IDN IPv6 Kerberos Largefile libz          NTLM SPNEGO SSL SSPI threadsafe         UnixSockets
     Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2
 
-    "nano" (HTTP/1.1):
+    "nano", HTTP/1.1:
     Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp
     Features:         AsynchDNS              HSTS                         IDN IPv6 Kerberos Largefile libz          NTLM SPNEGO SSL SSPI threadsafe         UnixSockets
     Libs: -lcurl -lz -lcrypt32 -lwldap32
 
-    "pico" (HTTP/1.1-only):
+    "pico", HTTP/1.1-only:
     Protocols:                                   http https
     Features:         AsynchDNS              HSTS                             IPv6          Largefile libz                      SSL SSPI threadsafe         UnixSockets
     Libs: -lcurl -lz -lcrypt32
