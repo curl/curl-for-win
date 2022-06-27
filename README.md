@@ -71,16 +71,14 @@
   [MSYS2](https://www.msys2.org/)).
   C compiler is [LLVM/Clang](https://clang.llvm.org/).
 - Binaries are cross-built and published from Linux
-  (via [AppVeyor CI](https://www.appveyor.com/)).
-  <br>OS image used for the builds is
+  via [AppVeyor CI](https://www.appveyor.com/).
+  <br>OS image used for the builds is reproducible
   [`debian:testing-slim`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing/slim)
-  (a [reproducible](https://github.com/debuerreotype/debuerreotype) image)
   via [Docker](https://hub.docker.com/_/debian/).
 - Binaries have supported
   [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29)
   options enabled.
-- Components are verified using SHA-256 hashes and also GPG signatures where
-  available.
+- We verify components using SHA-256 hashes and GPG signatures where provided.
 - Generated binaries are [reproducible](https://reproducible-builds.org/),
   meaning they produce the same hash given the same input sources and C
   compiler.
@@ -88,14 +86,13 @@
   locally if already merged upstream or &mdash; if necessary for
   a successful build &mdash; had them submitted upstream with fair
   confidence of getting accepted.
-  <br>NOTE: As of 2021, there is a small local patch applied to the OpenSSL
-  configure script, which fixes a bug which in turn is necessary to better
-  mitigate a high-severity vulnerability
-  ([CVE-2019-5443](https://curl.se/docs/CVE-2019-5443.html)), which still
-  has an incomplete fix in the default OpenSSL builds for Windows. The
-  OpenSSL team rejected both patches. Even though the patches are minor, we
+  <br>NOTE: Since 2021, we apply a small patch to the OpenSSL `Configure`
+  script, that allows to better mitigate the high-severity vulnerability
+  ([CVE-2019-5443](https://curl.se/docs/CVE-2019-5443.html)). This still
+  has an incomplete fix in default OpenSSL Windows builds. The OpenSSL team
+  rejected all attempts to fix it. Even though the patches are trivial, we
   do not promise to maintain them for an indefinite time. Another option
-  under consideration is to migrate to an OpenSSL alternative (e.g. LibreSSL,
+  under consideration is migrating to an alternative backend (LibreSSL,
   rustls or Schannel).
 - Generated binaries are automatically uploaded to
   [VirusTotal](https://www.virustotal.com/).
@@ -103,11 +100,9 @@
   values in the build log. Watch for `main` branch, log lines starting with
   `SHA`:
     <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main>
-- The build process is multi-platform and able to cross-build Windows
-  executables from \*nix hosts (Linux and macOS tested.)
 - Packages created across different host platforms do not have identical
   hashes. The reason for this is the slightly different build options and
-  versions of the `mingw-w64` and `binutils` tools.
+  toolchain builds/versions.
 - Code signing uses a self-signed certificate. The signature intentionally
   omits a trusted timestamp for reproducibility.
 
