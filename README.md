@@ -24,47 +24,7 @@
   [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3) [EXPERIMENTAL]
   and
   [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
-- Default builds with TLS backend OpenSSL (QUIC fork), and
-  [Schannel](https://docs.microsoft.com/windows/win32/com/schannel)
-  as runtime-selectable option:
-    ```
-    Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp
-    Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI threadsafe TLS-SRP UnixSockets
-    Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2 -lssh2 -lgsasl -lbcrypt -lssl -lcrypto -lidn2 -lbrotlidec -lbrotlicommon -lnghttp3 -lngtcp2
-    ```
-  <details>
-  <summary>Alternate configurations with less features/dependencies and more
-    compactness:</summary>
-  <p>
-
-    ```
-    "noh3", HTTP/2:
-    Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp
-    Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI threadsafe TLS-SRP UnixSockets
-    Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2 -lssh2 -lgsasl -lbcrypt -lssl -lcrypto -lidn2 -lbrotlidec -lbrotlicommon
-
-    "mini", Schannel, with OS-provided IDN support:
-    Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp
-    Features: alt-svc AsynchDNS        gsasl HSTS HTTP2                   IDN IPv6 Kerberos Largefile libz          NTLM SPNEGO SSL SSPI threadsafe         UnixSockets
-    Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2 -lssh2 -lgsasl -lbcrypt
-
-    "micro", without libssh2 and libgsasl:
-    Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp
-    Features: alt-svc AsynchDNS              HSTS HTTP2                   IDN IPv6 Kerberos Largefile libz          NTLM SPNEGO SSL SSPI threadsafe         UnixSockets
-    Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2
-
-    "nano", HTTP/1.1:
-    Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp
-    Features:         AsynchDNS              HSTS                         IDN IPv6 Kerberos Largefile libz          NTLM SPNEGO SSL SSPI threadsafe         UnixSockets
-    Libs: -lcurl -lz -lcrypt32 -lwldap32
-
-    "pico", HTTP/1.1-only:
-    Protocols:                                   http https
-    Features:         AsynchDNS              HSTS                             IPv6          Largefile libz                      SSL SSPI threadsafe         UnixSockets
-    Libs: -lcurl -lz -lcrypt32
-    ```
-  </p>
-  </details>
+- Configuration details [below](#features).
 - Transparent build process by using publicly available
   open source code, C compiler, build scripts and running the build
   [in public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
@@ -109,6 +69,47 @@
   toolchain builds/versions.
 - Code signing uses a self-signed certificate. The signature intentionally
   omits a trusted timestamp for reproducibility.
+
+# Features
+
+Default build with OpenSSL (QUIC [fork](https://github.com/quictls/openssl/)),
+and [Schannel](https://docs.microsoft.com/windows/win32/com/schannel)
+runtime-selectable option:
+```
+Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp
+Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI threadsafe TLS-SRP UnixSockets
+Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2 -lssh2 -lgsasl -lbcrypt -lssl -lcrypto -lidn2 -lbrotlidec -lbrotlicommon -lnghttp3 -lngtcp2
+```
+<details><summary>Alternate configurations with less features/dependencies and
+more compactness:</summary><p>
+
+```
+"noh3", HTTP/2:
+Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp
+Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI threadsafe TLS-SRP UnixSockets
+Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2 -lssh2 -lgsasl -lbcrypt -lssl -lcrypto -lidn2 -lbrotlidec -lbrotlicommon
+
+"mini", Schannel, with OS-provided IDN support:
+Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp
+Features: alt-svc AsynchDNS        gsasl HSTS HTTP2                   IDN IPv6 Kerberos Largefile libz          NTLM SPNEGO SSL SSPI threadsafe         UnixSockets
+Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2 -lssh2 -lgsasl -lbcrypt
+
+"micro", without libssh2 and libgsasl:
+Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp
+Features: alt-svc AsynchDNS              HSTS HTTP2                   IDN IPv6 Kerberos Largefile libz          NTLM SPNEGO SSL SSPI threadsafe         UnixSockets
+Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2
+
+"nano", HTTP/1.1:
+Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp
+Features:         AsynchDNS              HSTS                         IDN IPv6 Kerberos Largefile libz          NTLM SPNEGO SSL SSPI threadsafe         UnixSockets
+Libs: -lcurl -lz -lcrypt32 -lwldap32
+
+"pico", HTTP/1.1-only:
+Protocols:                                   http https
+Features:         AsynchDNS              HSTS                             IPv6          Largefile libz                      SSL SSPI threadsafe         UnixSockets
+Libs: -lcurl -lz -lcrypt32
+```
+</p></details>
 
 # Official binary downloads
 
