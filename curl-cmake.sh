@@ -103,12 +103,10 @@ _VER="$1"
     export CURL_LDFLAG_EXTRAS_EXE
     export CURL_LDFLAG_EXTRAS_DLL
     if [ "${_CPU}" = 'x86' ]; then
-      options="${options} -DCURL_TARGET_WINDOWS_VERSION=0x0501"  # For Windows XP compatibility
-      _CFLAGS="${_CFLAGS} -DHAVE_ATOMIC"
+      _CFLAGS="${_CFLAGS} -D_WIN32_WINNT=0x0501 -DHAVE_ATOMIC"  # For Windows XP compatibility
       CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
       CURL_LDFLAG_EXTRAS_DLL=''
     else
-      options="${options} -DCURL_TARGET_WINDOWS_VERSION=0x0600"
       CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
       CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
