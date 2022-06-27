@@ -88,7 +88,7 @@
   confidence of getting accepted.
   <br>NOTE: Since 2021, we apply a small patch to the OpenSSL `Configure`
   script, that allows to better mitigate the high-severity vulnerability
-  ([CVE-2019-5443](https://curl.se/docs/CVE-2019-5443.html)). This still
+  [CVE-2019-5443](https://curl.se/docs/CVE-2019-5443.html). This still
   has an incomplete fix in default OpenSSL Windows builds. The OpenSSL team
   rejected all attempts to fix it. Even though the patches are trivial, we
   do not promise to maintain them for an indefinite time. Another option
