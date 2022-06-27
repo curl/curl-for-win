@@ -26,14 +26,19 @@
   [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
 - Default builds with TLS backend OpenSSL (QUIC fork), and
   [Schannel](https://docs.microsoft.com/windows/win32/com/schannel)
-  as runtime-selectable option. Plus, alternate configurations with
-  less features/dependencies and more compactness:
+  as runtime-selectable option:
     ```
     default, with everything:
     Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp
     Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI threadsafe TLS-SRP UnixSockets
     Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2 -lssh2 -lgsasl -lbcrypt -lssl -lcrypto -lidn2 -lbrotlidec -lbrotlicommon -lnghttp3 -lngtcp2
+    ```
+  <details>
+  <summary>Alternate configurations with less features/dependencies and more
+    compactness:</summary>
+  <p>
 
+    ```
     "noh3", HTTP/2:
     Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp
     Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM SPNEGO SSL SSPI threadsafe TLS-SRP UnixSockets
@@ -59,6 +64,8 @@
     Features:         AsynchDNS              HSTS                             IPv6          Largefile libz                      SSL SSPI threadsafe         UnixSockets
     Libs: -lcurl -lz -lcrypt32
     ```
+  </p>
+  </details>
 - Transparent build process by using publicly available
   open source code, C compiler, build scripts and running the build
   [in public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
