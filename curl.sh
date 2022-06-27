@@ -44,14 +44,14 @@ _VER="$1"
   # marking public libcurl functions as 'exported'. Useful to avoid the
   # chance of libcurl functions getting exported from final binaries when
   # linked against the static libcurl lib.
-  export CURL_CFLAG_EXTRAS='-fno-ident -DCURL_STATICLIB -DHAVE_ATOMIC -DHAVE_SIGNAL -DNDEBUG -DHAVE_STRTOK_R -DUSE_HEADERS_API -DHAVE_BOOL_T -DHAVE_STDBOOL_H -DHAVE_STRING_H -DHAVE_SETJMP_H -DHAVE_FTRUNCATE -D_FILE_OFFSET_BITS=64 -DSIZEOF_OFF_T=8'
+  export CURL_CFLAG_EXTRAS='-fno-ident -DCURL_STATICLIB -DHAVE_SIGNAL -DNDEBUG -DHAVE_STRTOK_R -DUSE_HEADERS_API -DHAVE_BOOL_T -DHAVE_STDBOOL_H -DHAVE_STRING_H -DHAVE_SETJMP_H -DHAVE_FTRUNCATE -D_FILE_OFFSET_BITS=64 -DSIZEOF_OFF_T=8'
   CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_LIBGEN_H -DHAVE_BASENAME"
   [ "${_CPU}" = 'x86' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
   export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
   export CURL_LDFLAG_EXTRAS_EXE
   export CURL_LDFLAG_EXTRAS_DLL
   if [ "${_CPU}" = 'x86' ]; then
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -D_WIN32_WINNT=0x0501"  # For Windows XP compatibility
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -D_WIN32_WINNT=0x0501 -DHAVE_ATOMIC"  # For Windows XP compatibility
     CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
     CURL_LDFLAG_EXTRAS_DLL=''
   else
