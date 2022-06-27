@@ -33,7 +33,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        nano      build with less features, see README.md
 #        pico      build with less features, see README.md
 #        x64only   build x64 target only
-#        ucrt      build against UCRT instead of msvcrt
+#        noucrt    build against msvcrt instead of UCRT
 #        gcc       build with GCC (use clang if not specified)
 #
 # CW_CCSUFFIX
@@ -56,7 +56,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     Needs updating curl-www also.
 #   - Move --target options into CC variable for all components
 #   - Delete hacks added for curl's autotools build (deleting .la files, deleting pkg-config dirs, creating .lib symlinks)
-#   - Make -ucrt the default, replace with -noucrt
 #   - Add support for arm64 builds (requires UCRT)
 #   - Drop XP compatibility for x86 builds also
 #   - Drop x86 builds
@@ -335,7 +334,7 @@ build_single_target() {
   fi
 
   export _CRT=''
-  [ ! "${_BRANCH#*ucrt*}" = "${_BRANCH}" ] && _CRT='ucrt'
+  [ "${_BRANCH#*noucrt*}" = "${_BRANCH}" ] && _CRT='ucrt'
 
   export _CCVER
   if [ "${_CC}" = 'clang' ]; then
