@@ -67,7 +67,7 @@
   with open, auditable [build logs](#build-logs).
 - Build environment is `mingw-w64`
   (via [Debian](https://packages.debian.org/testing/mingw-w64),
-  [Homebrew](https://brew.sh/),
+  [Homebrew](https://formulae.brew.sh/formula/mingw-w64),
   [MSYS2](https://www.msys2.org/)).
   C compiler is [LLVM/Clang](https://clang.llvm.org/).
 - Binaries are cross-built and published from Linux
