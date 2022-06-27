@@ -1,6 +1,5 @@
 #!/bin/sh
 
-# FIXME: DLL exports everything, also from dependencies
 # FIXME: curl.rc/libcurl.rc is not compiled at all with autotools
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
@@ -16,6 +15,10 @@ export _DST
 
 _NAM="$(basename "$0" | cut -f 1 -d '.' | sed 's/-autotools//')"
 _VER="$1"
+
+if [ "${_OS}" = 'mac' ]; then
+  sed() { gsed "$@"; }
+fi
 
 (
   cd "${_NAM}"  # mandatory component
@@ -81,7 +84,7 @@ _VER="$1"
     uselld=0
     if [ "${_CRT}" = 'ucrt' ]; then
       if [ "${_CC}" = 'clang' ]; then
-        ldonly="${ldonly} -fuse-ld=lld -s"
+        ldonly="${ldonly} -fuse-ld=lld -Wl,-s"
         uselld=1
       else
         ldonly="${ldonly} -specs=${_GCCSPECS}"
@@ -137,19 +140,6 @@ _VER="$1"
       else
         LDFLAGS="${LDFLAGS} -Wl,-Map,libcurl.map"
       fi
-    fi
-
-    if [ "${pass}" = 'shared' ]; then
-      LDFLAGS="${LDFLAGS} -Wl,--output-def,libcurl${CURL_DLL_SUFFIX}.def"
-
-      # FIXME: This breaks autotools pre-checks. Our exports are always
-      # missing when compiling 'configure' test snippets. How to pass this
-      # to the final linker command? We have to solve this differently.
-      # Without this, ALL symbols are exported, including those from our
-      # dependencies. LLD -exported_symbols_list option could resolve this,
-      # but I could not make it work.
-      #LDFLAGS="${LDFLAGS} libcurl.def"
-      :
     fi
 
     if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
@@ -277,20 +267,20 @@ _VER="$1"
 
     options="${options} --without-quiche --without-msh3"
 
-    if [ "${pass}" = 'static' ]; then
-      options="${options} --enable-static"
-      options="${options} --disable-shared"
-    else
+    if [ "${pass}" = 'shared' ]; then
+      LDFLAGS="${LDFLAGS} -Wl,--output-def,libcurl${CURL_DLL_SUFFIX}.def"
       CPPFLAGS="${CPPFLAGS} -DCURL_STATICLIB"
+
       options="${options} --disable-static"
       options="${options} --enable-shared"
+    else
+      options="${options} --enable-static"
+      options="${options} --disable-shared"
     fi
 
     # autotools forces its unixy DLL naming scheme. We prefer to use the same
-    # as with the other curl build systems. Maybe there is a slightly cleaner
-    # solution to this via libtool's `-version-info`?
-    # We only need to change the one under 'mingw', but change all for
-    # simplicity.
+    # as with the other curl build systems. The default value is derived from
+    # `VERSIONINFO=` in lib/Makefile.am.
     sed -i.bak -E "s| soname_spec='\\\$libname.+| soname_spec='\\\$libname${CURL_DLL_SUFFIX}\\\$shared_ext'|g" ./configure
 
     # shellcheck disable=SC2086
@@ -330,6 +320,11 @@ _VER="$1"
     # Skip building tests also in non-cross-build cases
     sed -i.bak 's| tests packages| packages|g' ./Makefile
 
+    # Cannot add this linker option to LDFLAGS as-is, because it gets used
+    # by ./configure tests and fails right away. This needs GNU sed.
+    # shellcheck disable=SC2016
+    sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,../libcurl.def' lib/Makefile
+
     if [ "${pass}" = 'shared' ]; then
       # Skip building shared version curl.exe. The build itself works, but
       # then autotools tries to create its "ltwrapper", and fails.
@@ -362,17 +357,10 @@ _VER="$1"
 
   # Build fixups
 
+  chmod -x ${_pkg}/lib/*.a
+
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     mv './lib/libcurl.map' "./lib/libcurl${CURL_DLL_SUFFIX}.map"
-  fi
-
-  # Build fixups for clang
-
-  # 'configure' misdetects CC=clang as MSVC and then uses '.lib'
-  # extension. Rename these to '.a':
-  if [ -f "${_pkg}/lib/libcurl.lib" ]; then
-    sed -i.bak "s|\.lib'$|.a'|g" "${_pkg}/lib/libcurl.la"
-    mv "${_pkg}/lib/libcurl.lib" "${_pkg}/lib/libcurl.a"
   fi
 
   # Download CA bundle

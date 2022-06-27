@@ -9,7 +9,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ANALYTICS=1
 time brew update >/dev/null
 time brew upgrade python
-time brew install xz gnu-tar mingw-w64 llvm gettext \
+time brew install xz gnu-tar mingw-w64 llvm gettext gnu-sed \
                   jq dos2unix openssl osslsigncode openssh
 time brew install --cask wine-stable
 time wineboot --init
