@@ -328,7 +328,8 @@ fi
       sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,../libcurl.def' lib/Makefile
 
       # Skip building shared version curl.exe. The build itself works, but
-      # then autotools tries to create its "ltwrapper", and fails.
+      # then autotools tries to create its "ltwrapper", and fails. This only
+      # seems to happen when building curl against more than one dependency.
       # I have found no way to skip building that component, even though
       # we do not need it. Skip this pass altogether.
       sed -i.bak -E 's|^SUBDIRS = .+|SUBDIRS = lib|g' ./Makefile
