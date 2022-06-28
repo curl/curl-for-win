@@ -459,18 +459,18 @@ fi
 
 if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*micro*}" = "${_BRANCH}" ]; then
-  live_dl libgsasl "${LIBGSASL_VER_}"
-  live_xt libgsasl "${LIBGSASL_HASH}"
-fi
-
-if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*winidn*}" = "${_BRANCH}" ]; then
   live_dl libidn2 "${LIBIDN2_VER_}"
   live_xt libidn2 "${LIBIDN2_HASH}"
+fi
+
+if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*micro*}" = "${_BRANCH}" ]; then
+  live_dl libgsasl "${LIBGSASL_VER_}"
+  live_xt libgsasl "${LIBGSASL_HASH}"
 fi
 
 if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \

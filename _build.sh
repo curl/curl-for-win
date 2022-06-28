@@ -381,8 +381,8 @@ build_single_target() {
 
   bld zlib             "${ZLIB_VER_}"
   bld brotli         "${BROTLI_VER_}"
-  bld libgsasl     "${LIBGSASL_VER_}"
   bld libidn2       "${LIBIDN2_VER_}"
+  bld libgsasl     "${LIBGSASL_VER_}"
   bld nghttp2       "${NGHTTP2_VER_}"
   bld nghttp3       "${NGHTTP3_VER_}"
   bld libressl     "${LIBRESSL_VER_}"
