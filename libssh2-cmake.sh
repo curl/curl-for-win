@@ -110,12 +110,6 @@ _VER="$1"
   # Delete .pc files
   rm -r -f ${_pkg}/lib/pkgconfig
 
-  # Make symlink with .lib extension to make autotools work
-
-  for fn in "${_pkg}"/lib/*.a; do
-    ln -s "$(basename "${fn}")" "$(echo "${fn}" | sed 's|\.a$|.lib|')"
-  done
-
   # Make steps for determinism
 
   readonly _ref='NEWS'

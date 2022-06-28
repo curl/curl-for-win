@@ -81,12 +81,6 @@ _VER="$1"
   rm -r -f ${_pkg}/lib/pkgconfig
   rm -f    ${_pkg}/lib/*.la
 
-  # Make symlink with .lib extension to make autotools work
-
-  for fn in "${_pkg}"/lib/*.a; do
-    ln -s "$(basename "${fn}")" "$(echo "${fn}" | sed 's|\.a$|.lib|')"
-  done
-
   # Make steps for determinism
 
   readonly _ref='NEWS'
