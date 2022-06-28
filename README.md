@@ -24,7 +24,7 @@
   [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3) [EXPERIMENTAL]
   and
   [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
-- Configuration details [below](#features).
+  Detailed feature list [below](#features).
 - Transparent build process by using publicly available
   open source code, C compiler, build scripts and running the build
   [in public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
