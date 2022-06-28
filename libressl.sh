@@ -23,30 +23,6 @@ _VER="$1"
 
   # Build
 
-  # As of 2022-05 (LibreSSL 3.5.2), autotools does not fully support
-  # cross-building using clang. It confuses the compiler with MSVC due to
-  # matching its name with 'cl*'. This triggers using .lib extension instead of
-  # .a for static and import libs.
-  # We can work around by aliasing clang to e.g. 'mingw-clang', which fixes the
-  # lib extension, but without further benefit.
-  # Then a check fails in 'libtool' before trying to build any DLL. These are
-  # bogus warnings [1][2], which are in fact errors, so DLLs are not built.
-  # We can neutralize the bogus checks via 's/droppeddeps=yes/#droppeddeps=yes/g'
-  # in ./ltmain.sh. But, DLL builds still fail due to thinking using MSVC and
-  # the '-link -EXPORT:<symbol>' option, which fails with clang. Manually setting
-  # LD to the mingw-w64 ld tool (= "${_CCPREFIX}ld"), also results in a wrong
-  # command-line, with the '--whole-archive' option in it, and fail.
-  #
-  # So the options are either to stick with gcc with libressl, or to use clang
-  # without publishing DLLs. (Or use CMake, but that has other issues.)
-  #
-  # This is true for other autotools-built curl dependencies, but in those cases
-  # there was no focus or need to build DLLs. The wrong .lib extension can be
-  # fixed post-build.
-  #
-  # [1] "Warning: This system can not link to static lib archive [...]" (when using .lib extension)
-  # [2] "Warning: linker path does not have real file for library [...]"
-
   rm -r -f pkg
 
   find . -name '*.o'   -delete
@@ -64,7 +40,7 @@ _VER="$1"
   ldonly=''
 
   if [ "${_CC}" = 'clang' ]; then
-    export CC='clang'
+    export CC="clang --target=${_TRIPLET}"
     if [ "${_OS}" != 'win' ]; then
       options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
       LDFLAGS="${LDFLAGS} --target=${_TRIPLET} --sysroot=${_SYSROOT}"
@@ -108,17 +84,6 @@ _VER="$1"
   _pkg='pkg/usr/local'
   mkdir -p 'pkg/usr'
   mv "pkg/${_prefix}" "${_pkg}"
-
-  # Build fixups for clang
-
-  # 'configure' misdetects CC=clang as MSVC and then uses '.lib'
-  # extension. Rename these to '.a':
-  for l in libcrypto libssl libtls; do
-    if [ -f "${_pkg}/lib/${l}.lib" ]; then
-      sed -i.bak "s|\.lib'$|.a'|g" "${_pkg}/lib/${l}.la"
-      mv "${_pkg}/lib/${l}.lib" "${_pkg}/lib/${l}.a"
-    fi
-  done
 
   # Delete .pc and .la files
   rm -r -f ${_pkg}/lib/pkgconfig

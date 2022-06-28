@@ -45,7 +45,7 @@ _VER="$1"
   ldonly=''
 
   if [ "${_CC}" = 'clang' ]; then
-    export CC='clang'
+    export CC="clang --target=${_TRIPLET}"
     if [ "${_OS}" != 'win' ]; then
       options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
       LDFLAGS="${LDFLAGS} --target=${_TRIPLET} --sysroot=${_SYSROOT}"
@@ -76,15 +76,6 @@ _VER="$1"
 
   # DESTDIR= + --prefix=
   _pkg='pkg/usr/local'
-
-  # Build fixups for clang
-
-  # 'configure' misdetects CC=clang as MSVC and then uses '.lib'
-  # extension. Rename these to '.a':
-  if [ -f "${_pkg}/lib/libidn2.lib" ]; then
-    sed -i.bak "s|\.lib'$|.a'|g" "${_pkg}/lib/libidn2.la"
-    mv "${_pkg}/lib/libidn2.lib" "${_pkg}/lib/libidn2.a"
-  fi
 
   # Delete .pc and .la files
   rm -r -f ${_pkg}/lib/pkgconfig
