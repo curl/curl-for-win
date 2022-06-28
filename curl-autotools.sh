@@ -317,6 +317,19 @@ fi
       --without-ca-fallback \
       --prefix=/usr/local --silent
 
+    # NOTE: 'make clean' deletes src/tool_hugehelp.c and docs/curl.1. Next,
+    #       'make' regenerates them, including the current date in curl.1,
+    #       and breaking reproducibility. tool_hugehelp.c might also be
+    #       reflowed/hyphened differently than the source distro, breaking
+    #       reproducibility again. Skip the clean phase to resolve it. Do
+    #       any cleaning manually as necessary.
+    find . -name '*.o'   -delete
+    find . -name '*.lo'  -delete
+    find . -name '*.la'  -delete
+    find . -name '*.lai' -delete
+    find . -name '*.pc'  -delete
+    find . -name '*.exe' -delete
+
     # Skip building tests also in non-cross-build cases
     sed -i.bak 's| tests packages| packages|g' ./Makefile
 
@@ -336,20 +349,6 @@ fi
     else
       sed -i.bak -E 's|^SUBDIRS = .+|SUBDIRS = lib src|g' ./Makefile
     fi
-
-    # NOTE: 'make clean' deletes src/tool_hugehelp.c and docs/curl.1. Next,
-    #       'make' regenerates them, including the current date in curl.1,
-    #       and breaking reproducibility. tool_hugehelp.c might also be
-    #       reflowed/hyphened differently than the source distro, breaking
-    #       reproducibility again. Skip the clean phase to resolve it. Do
-    #       any cleaning manually as necessary.
-
-    find . -name '*.o'   -delete
-    find . -name '*.lo'  -delete
-    find . -name '*.la'  -delete
-    find . -name '*.lai' -delete
-    find . -name '*.pc'  -delete
-    find . -name '*.exe' -delete
 
     make --jobs 2 install "DESTDIR=$(pwd)/pkg" # >/dev/null # V=1
   done
