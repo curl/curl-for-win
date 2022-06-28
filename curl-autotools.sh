@@ -320,12 +320,13 @@ fi
     # Skip building tests also in non-cross-build cases
     sed -i.bak 's| tests packages| packages|g' ./Makefile
 
-    # Cannot add this linker option to LDFLAGS as-is, because it gets used
-    # by ./configure tests and fails right away. This needs GNU sed.
-    # shellcheck disable=SC2016
-    sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,../libcurl.def' lib/Makefile
-
     if [ "${pass}" = 'shared' ]; then
+
+      # Cannot add this linker option to LDFLAGS as-is, because it gets used
+      # by ./configure tests and fails right away. This needs GNU sed.
+      # shellcheck disable=SC2016
+      sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,../libcurl.def' lib/Makefile
+
       # Skip building shared version curl.exe. The build itself works, but
       # then autotools tries to create its "ltwrapper", and fails.
       # I have found no way to skip building that component, even though
