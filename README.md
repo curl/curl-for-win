@@ -21,8 +21,7 @@
 - Binary packages also contain the static library for curl and its
   dependencies.
 - curl/libcurl have
-  [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3) [EXPERIMENTAL]
-  and
+  [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3) [EXPERIMENTAL] and
   [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
   Detailed feature list [below](#features).
 - Transparent build process by using publicly available
@@ -46,23 +45,20 @@
 - Generated binaries are [reproducible](https://reproducible-builds.org/),
   meaning they produce the same hash given the same input sources and C
   compiler.
-- Patching policy: No locally maintained patches. We apply patches
-  locally if already merged upstream or &mdash; if necessary for
-  a successful build &mdash; had them submitted upstream with fair
-  confidence of getting accepted.
+- Patching policy: No locally maintained patches. We apply patches locally if
+  already merged upstream or &mdash; if necessary for a successful build
+  &mdash; had them submitted upstream with fair confidence of getting accepted.
   <br>NOTE: Since 2021, we apply a small patch to the OpenSSL `Configure`
   script, that allows to better mitigate the high-severity vulnerability
-  [CVE-2019-5443](https://curl.se/docs/CVE-2019-5443.html). This still
-  has an incomplete fix in default OpenSSL Windows builds. The OpenSSL team
-  rejected all attempts to fix it. Even though the patches are trivial, we
-  do not promise to maintain them for an indefinite time. Another option
-  under consideration is migrating to an alternative backend, e.g. LibreSSL,
-  rustls or Schannel.
-- Generated binaries are automatically uploaded to
-  [VirusTotal](https://www.virustotal.com/).
-- To verify the hashes of the latest build, you can look up the correct
-  values in the build log. Watch for `main` branch, log lines starting with
-  `SHA`:
+  [CVE-2019-5443](https://curl.se/docs/CVE-2019-5443.html). This still has an
+  incomplete fix in default OpenSSL Windows builds. The OpenSSL team rejected
+  all attempts to fix it. Even though the patch is trivial, we do not promise
+  to maintain it for an indefinite time. Another option under consideration
+  is migrating to an alternative backend, e.g. LibreSSL, rustls or Schannel.
+- Generated binaries are automatically uploaded
+  to [VirusTotal](https://www.virustotal.com/).
+- To verify the hashes of the latest build, you can look up the correct values
+  in the build log. Watch for `main` branch, log lines starting with `SHA`:
     <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main>
 - Packages created across different host platforms do not have identical
   hashes. The reason for this is the slightly different build options and
