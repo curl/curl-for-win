@@ -102,9 +102,6 @@ _VER="$1"
   fi
   mv -f ${_pkg}/lib/libngtcp2_static.a ${_pkg}/lib/libngtcp2.a
 
-  # Delete .pc files
-  rm -r -f ${_pkg}/lib/pkgconfig
-
   # Make steps for determinism
 
   readonly _ref='ChangeLog'

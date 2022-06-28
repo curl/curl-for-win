@@ -78,10 +78,6 @@ _VER="$1"
   # DESTDIR= + --prefix=
   _pkg='pkg/usr/local'
 
-  # Delete .pc and .la files
-  rm -r -f ${_pkg}/lib/pkgconfig
-  rm -f    ${_pkg}/lib/*.la
-
   # Make steps for determinism
 
   readonly _ref='NEWS'

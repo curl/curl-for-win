@@ -55,7 +55,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #             -> win-a64 / win-arm64
 #     Needs updating curl-www also.
 #   - Move --target options into CC variable for all components
-#   - Delete hacks added for curl's autotools build (deleting .la files, deleting pkg-config dirs)
 #   - Add support for arm64 builds (requires UCRT)
 #   - Drop XP compatibility for x86 builds also
 #   - Drop x86 builds

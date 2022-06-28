@@ -85,10 +85,6 @@ _VER="$1"
   mkdir -p 'pkg/usr'
   mv "pkg/${_prefix}" "${_pkg}"
 
-  # Delete .pc and .la files
-  rm -r -f ${_pkg}/lib/pkgconfig
-  rm -f    ${_pkg}/lib/*.la
-
   # List files created
 
   find "${_pkg}" | grep -a -v -F '/share/' | sort

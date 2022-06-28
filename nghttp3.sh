@@ -85,9 +85,6 @@ _VER="$1"
   # DESTDIR= + CMAKE_INSTALL_PREFIX
   _pkg='pkg/usr/local'
 
-  # Delete .pc files
-  rm -r -f ${_pkg}/lib/pkgconfig
-
   # Make steps for determinism
 
   readonly _ref='ChangeLog'

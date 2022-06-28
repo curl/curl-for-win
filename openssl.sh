@@ -155,9 +155,6 @@ _VER="$1"
     mv "${_pkg}/lib64" "${_pkg}/lib"
   fi
 
-  # Delete .pc files
-  rm -r -f ${_pkg}/lib/pkgconfig
-
   # List files created
 
   find "${_pkg}" | grep -a -v -F '/share/' | sort

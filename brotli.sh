@@ -97,9 +97,7 @@ _VER="$1"
 
   rm -f ${_pkg}/include/encode.h
   rm -f ${_pkg}/lib/libbrotlienc.a
-
-  # Delete .pc files
-  rm -r -f ${_pkg}/lib/pkgconfig
+  rm -f ${_pkg}/lib/pkgconfig/libbrotlienc.pc
 
   # Make steps for determinism
 
