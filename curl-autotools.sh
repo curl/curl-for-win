@@ -340,13 +340,13 @@ fi
 
       # Compile resource
       # shellcheck disable=SC2086
-      "${RC}" ${RCFLAGS} -i lib/libcurl.rc -o lib/libcurl.rc.o
+      "${RC}" ${RCFLAGS} -i lib/libcurl.rc -o lib/libcurl.rc.res
 
       # Cannot add this linker option to LDFLAGS as-is, because it gets used
       # by ./configure tests and fails right away. This needs GNU sed.
       # Also add our compiled resource object.
       # shellcheck disable=SC2016
-      sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,libcurl.rc.o -Wl,../libcurl.def' lib/Makefile
+      sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,libcurl.rc.res -Wl,../libcurl.def' lib/Makefile
 
       # Skip building shared version curl.exe. The build itself works, but
       # then autotools tries to create its "ltwrapper", and fails. This only
@@ -357,10 +357,10 @@ fi
     else
       # Compile resource
       # shellcheck disable=SC2086
-      "${RC}" ${RCFLAGS} -i src/curl.rc -o src/curl.rc.o
+      "${RC}" ${RCFLAGS} -i src/curl.rc -o src/curl.rc.res
 
       # Add our compiled resource object.
-      sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,curl.rc.o' src/Makefile
+      sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,curl.rc.res' src/Makefile
 
       sed -i.bak -E 's|^SUBDIRS = .+|SUBDIRS = lib src|g' ./Makefile
     fi
