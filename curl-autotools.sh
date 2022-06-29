@@ -450,12 +450,12 @@ fi
   (
     set +x
     for file in docs/*; do
-      if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -F '.'; then
+      if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -E '(\.|/Makefile$)'; then
         cp -f -p "${file}" "${_DST}/${file}.txt"
       fi
     done
     for file in docs/libcurl/*; do
-      if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -F '.'; then
+      if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -E '(\.|/Makefile$)'; then
         cp -f -p "${file}" "${_DST}/${file}.txt"
       fi
     done
