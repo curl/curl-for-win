@@ -33,8 +33,7 @@
   [MSYS2](https://www.msys2.org/).
   C compiler is [LLVM/Clang](https://clang.llvm.org/).
 - Binaries cross-built and published from Linux
-  via [AppVeyor CI](https://www.appveyor.com/).
-  <br>Using reproducible OS image
+  via [AppVeyor CI](https://www.appveyor.com/). Using reproducible OS image
   [`debian:testing-slim`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing/slim)
   via [Docker](https://hub.docker.com/_/debian/).
 - Binaries have supported
