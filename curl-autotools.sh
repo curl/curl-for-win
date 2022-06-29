@@ -21,10 +21,6 @@ fi
 (
   cd "${_NAM}"  # mandatory component
 
-  # Cross-tasks
-
-  [ "${_OS}" != 'win' ] && options="--build=${_CROSS_HOST} --host=${_TRIPLET}"
-
   # Build
 
   rm -r -f pkg
@@ -68,6 +64,10 @@ fi
   [ "${_CPU}" = 'a64' ] && CURL_DLL_SUFFIX="-${_CPU}"
 
   for pass in shared static; do
+
+    # Cross-tasks
+
+    [ "${_OS}" != 'win' ] && options="--build=${_CROSS_HOST} --host=${_TRIPLET}"
 
     export LDFLAGS="${_OPTM}"
     export CFLAGS='-fno-ident -W -Wall'
