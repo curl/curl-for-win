@@ -75,12 +75,12 @@ fi
     export CPPFLAGS='-DNDEBUG -DHAVE_STRCASECMP -DHAVE_SIGNAL -DHAVE_SOCKET -DHAVE_FTRUNCATE -DHAVE_IOCTLSOCKET_FIONBIO -DHAVE_FREEADDRINFO -DHAVE_GETADDRINFO -DHAVE_GETADDRINFO_THREADSAFE -DHAVE_PROCESS_H -DHAVE_CLOSESOCKET -DHAVE_STRUCT_POLLFD -DHAVE_GETPEERNAME -DHAVE_GETSOCKNAME -DHAVE_BASENAME -DHAVE_GETHOSTNAME -DHAVE_STRDUP -DHAVE_STRTOK_R -DHAVE_STRTOLL'
     export LIBS=''
     export RC="${_CCPREFIX}windres"
-    export RCFLAGS='-Iinclude -DCURL_EMBED_MANIFEST -O coff'
+    export RCFLAGS='--output-format coff -Iinclude'
     ldonly=''
 
-    [ "${_CPU}" = 'x86' ] && RCFLAGS="${RCFLAGS} -F pe-i386"
-    [ "${_CPU}" = 'x64' ] && RCFLAGS="${RCFLAGS} -F pe-x86-64"
-  # [ "${_CPU}" = 'a64' ] && RCFLAGS="${RCFLAGS} -F <FIXME>"
+    [ "${_CPU}" = 'x86' ] && RCFLAGS="${RCFLAGS} --target=pe-i386"
+    [ "${_CPU}" = 'x64' ] && RCFLAGS="${RCFLAGS} --target=pe-x86-64"
+  # [ "${_CPU}" = 'a64' ] && RCFLAGS="${RCFLAGS} --target=..."  # FIXME
 
     # configure: error: --enable-unix-sockets is not available on this platform!
     # due to non-portable verification method.
@@ -355,7 +355,7 @@ fi
     else
       # Compile resource
       # shellcheck disable=SC2086
-      "${RC}" ${RCFLAGS} -i src/curl.rc -o src/curl.rc.res
+      "${RC}" ${RCFLAGS} -i src/curl.rc -o src/curl.rc.res -DCURL_EMBED_MANIFEST
 
       # Add our compiled resource object.
       # shellcheck disable=SC2016
