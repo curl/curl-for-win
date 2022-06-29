@@ -1,0 +1,13 @@
+diff --git a/lib/ngtcp2_net.h b/lib/ngtcp2_net.h
+index f8d8e518..b1f28096 100644
+--- a/lib/ngtcp2_net.h
++++ b/lib/ngtcp2_net.h
+@@ -101,7 +101,7 @@ STIN uint32_t ngtcp2_htonl(uint32_t hostlong) {
+ STIN uint16_t ngtcp2_htons(uint16_t hostshort) {
+   uint16_t res;
+   unsigned char *p = (unsigned char *)&res;
+-  *p++ = (unsigned char)hostshort >> 8;
++  *p++ = (unsigned char)(hostshort >> 8);
+   *p = hostshort & 0xffu;
+   return res;
+ }
