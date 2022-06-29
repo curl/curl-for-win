@@ -24,10 +24,10 @@
   [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3) [EXPERIMENTAL] and
   [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
   Detailed feature list [below](#features).
-- Transparent build process by using publicly available
-  open source code, C compiler, build scripts and running the build
-  [in public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
-  with open, auditable [build logs](#build-logs).
+- Transparent build process by using publicly available open source code,
+  C compiler, build scripts and running the build in
+  [public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
+  with auditable [build logs](#build-logs).
 - Build environment is `mingw-w64`
   via [Debian](https://packages.debian.org/testing/mingw-w64),
   [Homebrew](https://formulae.brew.sh/formula/mingw-w64),
