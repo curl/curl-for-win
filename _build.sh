@@ -84,7 +84,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   openssl   proprietary
 #   libressl  autotools, cmake
 #   libssh2   autotools, cmake
-#   curl      Makefile.m32, cmake, autotools (broken)
+#   curl      autotools, cmake, Makefile.m32
 
 cd "$(dirname "$0")"
 

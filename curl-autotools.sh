@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# FIXME: curl.rc/libcurl.rc is not compiled at all with autotools
-
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
 
 # shellcheck disable=SC3040
@@ -75,7 +73,13 @@ fi
     export CFLAGS='-fno-ident -W -Wall'
     export CPPFLAGS='-DNDEBUG -DHAVE_STRCASECMP -DHAVE_SIGNAL -DHAVE_SOCKET -DHAVE_FTRUNCATE -DHAVE_IOCTLSOCKET_FIONBIO -DHAVE_FREEADDRINFO -DHAVE_GETADDRINFO -DHAVE_GETADDRINFO_THREADSAFE -DHAVE_PROCESS_H -DHAVE_CLOSESOCKET -DHAVE_STRUCT_POLLFD -DHAVE_GETPEERNAME -DHAVE_GETSOCKNAME -DHAVE_BASENAME -DHAVE_GETHOSTNAME -DHAVE_STRDUP -DHAVE_STRTOK_R -DHAVE_STRTOLL'
     export LIBS=''
+    export RC="${_CCPREFIX}windres"
+    export RCFLAGS='-Iinclude -DCURL_EMBED_MANIFEST -O coff'
     ldonly=''
+
+    [ "${_CPU}" = 'x86' ] && RCFLAGS="${RCFLAGS} -F pe-i386"
+    [ "${_CPU}" = 'x64' ] && RCFLAGS="${RCFLAGS} -F pe-x86-64"
+  # [ "${_CPU}" = 'a64' ] && RCFLAGS="${RCFLAGS} -F <FIXME>"
 
     # configure: error: --enable-unix-sockets is not available on this platform!
     # due to non-portable verification method.
@@ -104,7 +108,6 @@ fi
       export LD="${_CCPREFIX}ld"
       export NM="${_CCPREFIX}nm"
       export RANLIB="${_CCPREFIX}ranlib"
-      export RC="${_CCPREFIX}windres"
     else
       export CC="${_CCPREFIX}gcc -static-libgcc"
     fi
@@ -335,10 +338,15 @@ fi
 
     if [ "${pass}" = 'shared' ]; then
 
+      # Compile resource
+      # shellcheck disable=SC2086
+      "${RC}" ${RCFLAGS} -i lib/libcurl.rc -o lib/libcurl.rc.o
+
       # Cannot add this linker option to LDFLAGS as-is, because it gets used
       # by ./configure tests and fails right away. This needs GNU sed.
+      # Also add our compiled resource object.
       # shellcheck disable=SC2016
-      sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,../libcurl.def' lib/Makefile
+      sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,libcurl.rc.o -Wl,../libcurl.def' lib/Makefile
 
       # Skip building shared version curl.exe. The build itself works, but
       # then autotools tries to create its "ltwrapper", and fails. This only
@@ -347,6 +355,13 @@ fi
       # we do not need it. Skip this pass altogether.
       sed -i.bak -E 's|^SUBDIRS = .+|SUBDIRS = lib|g' ./Makefile
     else
+      # Compile resource
+      # shellcheck disable=SC2086
+      "${RC}" ${RCFLAGS} -i src/curl.rc -o src/curl.rc.o
+
+      # Add our compiled resource object.
+      sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,curl.rc.o' src/Makefile
+
       sed -i.bak -E 's|^SUBDIRS = .+|SUBDIRS = lib src|g' ./Makefile
     fi
 
