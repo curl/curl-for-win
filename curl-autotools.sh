@@ -333,9 +333,6 @@ fi
     find . -name '*.pc'  -delete
     find . -name '*.exe' -delete
 
-    # Skip building tests also in non-cross-build cases
-    sed -i.bak 's| tests packages| packages|g' ./Makefile
-
     if [ "${pass}" = 'shared' ]; then
 
       # Compile resource
