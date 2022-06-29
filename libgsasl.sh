@@ -23,9 +23,6 @@ _VER="$1"
 
   rm -r -f pkg
 
-  # Skip building tests
-  sed -i.bak 's| gltests||g' ./Makefile.am
-
   # To fix this bizarre error when executing 'make':
   #   configure.ac:39: error: version mismatch.  This is Automake 1.16.4,
   #   configure.ac:39: but the definition used by this AM_INIT_AUTOMAKE
