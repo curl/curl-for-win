@@ -104,7 +104,7 @@ create_pkg() {
       | sed -n -E 's,.+= ([0-9a-fA-F]{64}),\1,p')"
     # https://developers.virustotal.com/v3.0/reference
     out="$(curl --disable --user-agent '' --fail --silent --show-error \
-      --connect-timeout 15 --max-time 60 --retry 3 \
+      --connect-timeout 10 --max-time 60 --retry 1 \
       --request POST 'https://www.virustotal.com/api/v3/files' \
       --header @/dev/stdin \
       --form "file=@${_pkg}" <<EOF || true
@@ -114,7 +114,7 @@ EOF
     if [ -n "${out}" ]; then
       id="$(echo "${out}" | jq --raw-output '.data.id')"
       out="$(curl --disable --user-agent '' --fail --silent --show-error \
-        --connect-timeout 15 --max-time 20 --retry 3 \
+        --connect-timeout 10 --max-time 20 --retry 1 \
         "https://www.virustotal.com/api/v3/analyses/${id}" \
         --header @/dev/stdin <<EOF || true
 x-apikey: ${VIRUSTOTAL_APIKEY}
