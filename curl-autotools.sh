@@ -65,9 +65,10 @@ fi
 
   for pass in shared static; do
 
-    # Cross-tasks
+    options=''
 
-    [ "${_OS}" != 'win' ] && options="--build=${_CROSS_HOST} --host=${_TRIPLET}"
+    # Cross-tasks
+    [ "${_OS}" != 'win' ] && options="${options} --build=${_CROSS_HOST} --host=${_TRIPLET}"
 
     export LDFLAGS="${_OPTM}"
     export CFLAGS='-fno-ident -W -Wall'
@@ -357,6 +358,7 @@ fi
       "${RC}" ${RCFLAGS} -i src/curl.rc -o src/curl.rc.res
 
       # Add our compiled resource object.
+      # shellcheck disable=SC2016
       sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,curl.rc.res' src/Makefile
 
       sed -i.bak -E 's|^SUBDIRS = .+|SUBDIRS = lib src|g' ./Makefile
