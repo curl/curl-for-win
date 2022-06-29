@@ -25,9 +25,6 @@ _VER="$1"
 
   rm -r -f pkg
 
-  # Skip building tests
-  sed -i.bak 's| tests||g' ./Makefile.am
-
   [ -f 'Makefile' ] || autoreconf --force --install
 
   export LDFLAGS="${_OPTM}"
@@ -67,12 +64,15 @@ _VER="$1"
   if [ -d ../libressl ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=$(pwd)/../libressl/pkg/usr/local"
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DNOCRYPT"
+    LDFLAGS="${LDFLAGS} -lbcrypt"
   elif [ -d ../openssl-quic ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=$(pwd)/../openssl-quic/pkg/usr/local"
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
+    LDFLAGS="${LDFLAGS} -lbcrypt"
   elif [ -d ../openssl ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=$(pwd)/../openssl/pkg/usr/local"
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
+    LDFLAGS="${LDFLAGS} -lbcrypt"
   else
     options="${options} --with-crypto=wincng"
   fi
