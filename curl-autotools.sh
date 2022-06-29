@@ -318,7 +318,7 @@ fi
       --without-ca-path \
       --without-ca-bundle \
       --without-ca-fallback \
-      --prefix=/usr/local --silent
+      --prefix=/usr/local
 
     # NOTE: 'make clean' deletes src/tool_hugehelp.c and docs/curl.1. Next,
     #       'make' regenerates them, including the current date in curl.1,
