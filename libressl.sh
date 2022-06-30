@@ -67,6 +67,7 @@ _VER="$1"
   ./configure ${options} \
     --disable-dependency-tracking \
     --disable-silent-rules \
+    --disable-shared \
     --disable-tests \
     --silent \
     "--prefix=${_prefix}" \
