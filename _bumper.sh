@@ -36,4 +36,4 @@ Authorization: Bearer ${token}
 EOF
 )"
 
-echo "\n  DOCKER_IMAGE: ${name}:${tag}"
+echo; echo "  DOCKER_IMAGE: ${name}:${tag}"
