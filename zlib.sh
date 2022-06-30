@@ -93,6 +93,9 @@ _VER="$1"
   cp -f -p ${_pkg}/include/*.h "${_pkg}/"
   cp -f -p ${_pkg}/lib/libz.a  "${_pkg}/"
 
+  # Delete .pc files
+  rm -r -f ${_pkg}/lib/pkgconfig
+
   # Make steps for determinism
 
   readonly _ref='ChangeLog'

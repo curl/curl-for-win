@@ -99,6 +99,9 @@ _VER="$1"
   rm -f ${_pkg}/lib/libbrotlienc.a
   rm -f ${_pkg}/lib/pkgconfig/libbrotlienc.pc
 
+  # Delete .pc files
+  rm -r -f ${_pkg}/lib/pkgconfig
+
   # Make steps for determinism
 
   readonly _ref='docs/brotli.1'

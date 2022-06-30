@@ -92,6 +92,9 @@ _VER="$1"
     mv "${_pkg}/lib/${l}"*.a "${_pkg}/lib/${l}.a"
   done
 
+  # Delete .pc files
+  rm -r -f ${_pkg}/lib/pkgconfig
+
   # List files created
 
   find "${_pkg}" | grep -a -v -F '/share/' | sort
