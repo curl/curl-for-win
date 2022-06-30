@@ -273,6 +273,11 @@ _VER="$1"
 
       [ "${_OS}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
 
+      if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ]; then
+        CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
+        CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
+      fi
+
     # _CFLAGS="${_CFLAGS} -Xclang -cfguard"
 
       # shellcheck disable=SC2086
