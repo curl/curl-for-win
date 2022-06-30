@@ -86,8 +86,8 @@ _VER="$1"
   mv "pkg/${_prefix}" "${_pkg}"
 
   # Delete .pc and .la files
-  rm -r -f ${_pkg}/lib/pkgconfig
-  rm -f    ${_pkg}/lib/*.la
+  rm -r -f "${_pkg}"/lib/pkgconfig
+  rm -f    "${_pkg}"/lib/*.la
 
   # List files created
 
@@ -97,16 +97,17 @@ _VER="$1"
 
   readonly _ref='ChangeLog'
 
-  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
 
-  touch -c -r "${_ref}" ${_pkg}/lib/*.a
-  touch -c -r "${_ref}" ${_pkg}/include/openssl/*.h
-  touch -c -r "${_ref}" ${_pkg}/include/*.h
+  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
+  touch -c -r "${_ref}" "${_pkg}"/include/openssl/*.h
+  touch -c -r "${_ref}" "${_pkg}"/include/*.h
 
   # Tests
 
+  # shellcheck disable=SC2043
   for bin in \
-    ${_pkg}/bin/openssl.exe \
+    "${_pkg}"/bin/openssl.exe \
   ; do
     file "${bin}"
     # Produce 'openssl version -a'-like output without executing the build:
@@ -122,12 +123,12 @@ _VER="$1"
   mkdir -p "${_DST}/include/openssl"
   mkdir -p "${_DST}/lib"
 
-  cp -f -p ${_pkg}/lib/*.a             "${_DST}/lib"
-  cp -f -p ${_pkg}/include/openssl/*.h "${_DST}/include/openssl/"
-  cp -f -p ${_pkg}/include/*.h         "${_DST}/include/"
-  cp -f -p ChangeLog                   "${_DST}/ChangeLog.txt"
-  cp -f -p COPYING                     "${_DST}/COPYING.txt"
-  cp -f -p README.md                   "${_DST}/"
+  cp -f -p "${_pkg}"/lib/*.a             "${_DST}/lib"
+  cp -f -p "${_pkg}"/include/openssl/*.h "${_DST}/include/openssl/"
+  cp -f -p "${_pkg}"/include/*.h         "${_DST}/include/"
+  cp -f -p ChangeLog                     "${_DST}/ChangeLog.txt"
+  cp -f -p COPYING                       "${_DST}/COPYING.txt"
+  cp -f -p README.md                     "${_DST}/"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

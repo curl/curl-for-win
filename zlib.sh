@@ -83,29 +83,29 @@ _VER="$1"
   # DESTDIR= + CMAKE_INSTALL_PREFIX
   _pkg='pkg/usr/local'
 
-  ls -l ${_pkg}/lib/*.a
+  ls -l "${_pkg}"/lib/*.a
 
   # We need the static lib, so delete the implib
-  rm -f ${_pkg}/lib/*.dll.a
+  rm -f "${_pkg}"/lib/*.dll.a
   # Stick to the name expected by everyone
-  mv -f ${_pkg}/lib/libzlibstatic.a ${_pkg}/lib/libz.a
+  mv -f "${_pkg}"/lib/libzlibstatic.a "${_pkg}"/lib/libz.a
 
   # curl Makefile.m32 assumes the headers and lib to be in the
   # same directory.
-  cp -f -p ${_pkg}/include/*.h "${_pkg}/"
-  cp -f -p ${_pkg}/lib/libz.a  "${_pkg}/"
+  cp -f -p "${_pkg}"/include/*.h "${_pkg}/"
+  cp -f -p "${_pkg}"/lib/libz.a  "${_pkg}/"
 
   # Delete .pc files
-  rm -r -f ${_pkg}/lib/pkgconfig
+  rm -r -f "${_pkg}"/lib/pkgconfig
 
   # Make steps for determinism
 
   readonly _ref='ChangeLog'
 
-  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
 
-  touch -c -r "${_ref}" ${_pkg}/include/*.h
-  touch -c -r "${_ref}" ${_pkg}/lib/*.a
+  touch -c -r "${_ref}" "${_pkg}"/include/*.h
+  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
 
   # Create package
 
@@ -116,10 +116,10 @@ _VER="$1"
   mkdir -p "${_DST}/include"
   mkdir -p "${_DST}/lib"
 
-  cp -f -p ${_pkg}/include/*.h "${_DST}/include"
-  cp -f -p ${_pkg}/lib/*.a     "${_DST}/lib/"
-  cp -f -p ChangeLog           "${_DST}/ChangeLog.txt"
-  cp -f -p README              "${_DST}/COPYING.txt"
+  cp -f -p "${_pkg}"/include/*.h "${_DST}/include"
+  cp -f -p "${_pkg}"/lib/*.a     "${_DST}/lib/"
+  cp -f -p ChangeLog             "${_DST}/ChangeLog.txt"
+  cp -f -p README                "${_DST}/COPYING.txt"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

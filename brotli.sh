@@ -93,25 +93,25 @@ _VER="$1"
 
   # Delete implibs
 
-  rm -f ${_pkg}/lib/*.dll.a
+  rm -f "${_pkg}"/lib/*.dll.a
 
   # libcurl only uses the decoding functionality
 
-  rm -f ${_pkg}/include/encode.h
-  rm -f ${_pkg}/lib/libbrotlienc.a
-  rm -f ${_pkg}/lib/pkgconfig/libbrotlienc.pc
+  rm -f "${_pkg}"/include/encode.h
+  rm -f "${_pkg}"/lib/libbrotlienc.a
+  rm -f "${_pkg}"/lib/pkgconfig/libbrotlienc.pc
 
   # Delete .pc files
-  rm -r -f ${_pkg}/lib/pkgconfig
+  rm -r -f "${_pkg}"/lib/pkgconfig
 
   # Make steps for determinism
 
   readonly _ref='docs/brotli.1'
 
-  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
 
-  touch -c -r "${_ref}" ${_pkg}/include/brotli/*.h
-  touch -c -r "${_ref}" ${_pkg}/lib/*.a
+  touch -c -r "${_ref}" "${_pkg}"/include/brotli/*.h
+  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
 
   # Create package
 
@@ -123,10 +123,10 @@ _VER="$1"
   mkdir -p "${_DST}/lib"
   mkdir -p "${_DST}/include/brotli"
 
-  cp -f -p ${_pkg}/include/brotli/*.h "${_DST}/include/brotli/"
-  cp -f -p ${_pkg}/lib/*.a            "${_DST}/lib/"
-  cp -f -p README.md                  "${_DST}/"
-  cp -f -p LICENSE                    "${_DST}/LICENSE.txt"
+  cp -f -p "${_pkg}"/include/brotli/*.h "${_DST}/include/brotli/"
+  cp -f -p "${_pkg}"/lib/*.a            "${_DST}/lib/"
+  cp -f -p README.md                    "${_DST}/"
+  cp -f -p LICENSE                      "${_DST}/LICENSE.txt"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

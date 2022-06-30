@@ -156,7 +156,7 @@ _VER="$1"
   fi
 
   # Delete .pc files
-  rm -r -f ${_pkg}/lib/pkgconfig
+  rm -r -f "${_pkg}"/lib/pkgconfig
 
   # List files created
 
@@ -164,10 +164,10 @@ _VER="$1"
 
   # Make steps for determinism
 
-  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
 
-  touch -c -r "${_ref}" ${_pkg}/lib/*.a
-  touch -c -r "${_ref}" ${_pkg}/include/openssl/*.h
+  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
+  touch -c -r "${_ref}" "${_pkg}"/include/openssl/*.h
 
   # Create package
 
@@ -178,13 +178,13 @@ _VER="$1"
   mkdir -p "${_DST}/include/openssl"
   mkdir -p "${_DST}/lib"
 
-  cp -f -p ${_pkg}/lib/*.a             "${_DST}/lib"
-  cp -f -p ${_pkg}/include/openssl/*.h "${_DST}/include/openssl/"
-  cp -f -p CHANGES.md                  "${_DST}/"
-  cp -f -p LICENSE.txt                 "${_DST}/"
-  cp -f -p README.md                   "${_DST}/"
-  cp -f -p FAQ.md                      "${_DST}/"
-  cp -f -p NEWS.md                     "${_DST}/"
+  cp -f -p "${_pkg}"/lib/*.a             "${_DST}/lib"
+  cp -f -p "${_pkg}"/include/openssl/*.h "${_DST}/include/openssl/"
+  cp -f -p CHANGES.md                    "${_DST}/"
+  cp -f -p LICENSE.txt                   "${_DST}/"
+  cp -f -p README.md                     "${_DST}/"
+  cp -f -p FAQ.md                        "${_DST}/"
+  cp -f -p NEWS.md                       "${_DST}/"
 
   [ "${_NAM}" = 'openssl-quic' ] && cp -f -p README-OpenSSL.md "${_DST}/"
 

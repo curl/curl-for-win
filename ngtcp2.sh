@@ -100,21 +100,21 @@ _VER="$1"
   # Rename static libs so they get found by dependents
 
   if [ -d ../openssl-quic ]; then
-    mv -f ${_pkg}/lib/libngtcp2_crypto_openssl_static.a ${_pkg}/lib/libngtcp2_crypto_openssl.a
+    mv -f "${_pkg}"/lib/libngtcp2_crypto_openssl_static.a "${_pkg}"/lib/libngtcp2_crypto_openssl.a
   fi
-  mv -f ${_pkg}/lib/libngtcp2_static.a ${_pkg}/lib/libngtcp2.a
+  mv -f "${_pkg}"/lib/libngtcp2_static.a "${_pkg}"/lib/libngtcp2.a
 
   # Delete .pc files
-  rm -r -f ${_pkg}/lib/pkgconfig
+  rm -r -f "${_pkg}"/lib/pkgconfig
 
   # Make steps for determinism
 
   readonly _ref='ChangeLog'
 
-  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug ${_pkg}/lib/*.a
+  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
 
-  touch -c -r "${_ref}" ${_pkg}/include/ngtcp2/*.h
-  touch -c -r "${_ref}" ${_pkg}/lib/*.a
+  touch -c -r "${_ref}" "${_pkg}"/include/ngtcp2/*.h
+  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
 
   # Create package
 
@@ -125,12 +125,12 @@ _VER="$1"
   mkdir -p "${_DST}/include/ngtcp2"
   mkdir -p "${_DST}/lib"
 
-  cp -f -p ${_pkg}/include/ngtcp2/*.h "${_DST}/include/ngtcp2/"
-  cp -f -p ${_pkg}/lib/*.a            "${_DST}/lib/"
-  cp -f -p ChangeLog                  "${_DST}/ChangeLog.txt"
-  cp -f -p AUTHORS                    "${_DST}/AUTHORS.txt"
-  cp -f -p COPYING                    "${_DST}/COPYING.txt"
-  cp -f -p README.rst                 "${_DST}/"
+  cp -f -p "${_pkg}"/include/ngtcp2/*.h "${_DST}/include/ngtcp2/"
+  cp -f -p "${_pkg}"/lib/*.a            "${_DST}/lib/"
+  cp -f -p ChangeLog                    "${_DST}/ChangeLog.txt"
+  cp -f -p AUTHORS                      "${_DST}/AUTHORS.txt"
+  cp -f -p COPYING                      "${_DST}/COPYING.txt"
+  cp -f -p README.rst                   "${_DST}/"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )
