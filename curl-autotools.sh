@@ -70,13 +70,12 @@ fi
     # Cross-tasks
     [ "${_OS}" != 'win' ] && options="${options} --build=${_CROSS_HOST} --host=${_TRIPLET}"
 
-    export LDFLAGS="${_OPTM}"
+    export LDFLAGS=''
     export CFLAGS='-fno-ident -W -Wall'
     export CPPFLAGS='-DNDEBUG -DHAVE_STRCASECMP -DHAVE_SIGNAL -DHAVE_SOCKET -DHAVE_FTRUNCATE -DHAVE_IOCTLSOCKET_FIONBIO -DHAVE_FREEADDRINFO -DHAVE_GETADDRINFO -DHAVE_GETADDRINFO_THREADSAFE -DHAVE_PROCESS_H -DHAVE_CLOSESOCKET -DHAVE_STRUCT_POLLFD -DHAVE_GETPEERNAME -DHAVE_GETSOCKNAME -DHAVE_BASENAME -DHAVE_GETHOSTNAME -DHAVE_STRDUP -DHAVE_STRTOK_R -DHAVE_STRTOLL'
     export LIBS=''
     export RC="${_CCPREFIX}windres"
     export RCFLAGS='--output-format coff -Iinclude'
-    ldonly=''
 
     [ "${_CPU}" = 'x86' ] && RCFLAGS="${RCFLAGS} --target=pe-i386"
     [ "${_CPU}" = 'x64' ] && RCFLAGS="${RCFLAGS} --target=pe-x86-64"
@@ -89,10 +88,10 @@ fi
     uselld=0
     if [ "${_CRT}" = 'ucrt' ]; then
       if [ "${_CC}" = 'clang' ]; then
-        ldonly="${ldonly} -fuse-ld=lld -Wl,-s"
+        LDFLAGS="${LDFLAGS} -fuse-ld=lld -Wl,-s"
         uselld=1
       else
-        ldonly="${ldonly} -specs=${_GCCSPECS}"
+        LDFLAGS="${LDFLAGS} -specs=${_GCCSPECS}"
       fi
       CPPFLAGS="${CPPFLAGS} -D_UCRT"
       LIBS="${LIBS} -lucrt"
@@ -101,9 +100,9 @@ fi
     if [ "${_CC}" = 'clang' ]; then
       export CC="clang --target=${_TRIPLET}"
       if [ "${_OS}" != 'win' ]; then
+        CC="${CC} --sysroot=${_SYSROOT}"
         options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
-        LDFLAGS="${LDFLAGS} --target=${_TRIPLET} --sysroot=${_SYSROOT}"
-        [ "${_OS}" = 'linux' ] && ldonly="${ldonly} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
+        [ "${_OS}" = 'linux' ] && LDFLAGS="${LDFLAGS} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
       fi
       export AR="${_CCPREFIX}ar"
       export LD="${_CCPREFIX}ld"
@@ -111,10 +110,10 @@ fi
       export RANLIB="${_CCPREFIX}ranlib"
     else
       export CC="${_CCPREFIX}gcc -static-libgcc"
+      LDFLAGS="${_OPTM} ${LDFLAGS}"
+      CFLAGS="${_OPTM} ${CFLAGS}"
     fi
 
-    CFLAGS="${LDFLAGS} ${CFLAGS}"
-    LDFLAGS="${LDFLAGS}${ldonly}"
     [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
 
     LDFLAGS="${LDFLAGS} -Wl,--nxcompat -Wl,--dynamicbase"

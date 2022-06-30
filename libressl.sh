@@ -35,29 +35,28 @@ _VER="$1"
   find . -name '*.dll' -delete
   find . -name '*.exe' -delete
 
-  export LDFLAGS="${_OPTM}"
+  export LDFLAGS=''
+  export CFLAGS='-fno-ident -O3 -Wa,--noexecstack'
   export CPPFLAGS=''
-  ldonly=''
+  [ "${_CRT}" = 'ucrt' ] && CPPFLAGS="${CPPFLAGS} -D_UCRT"
 
   if [ "${_CC}" = 'clang' ]; then
     export CC="clang --target=${_TRIPLET}"
     if [ "${_OS}" != 'win' ]; then
+      CC="${CC} --sysroot=${_SYSROOT}"
       options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
-      LDFLAGS="${LDFLAGS} --target=${_TRIPLET} --sysroot=${_SYSROOT}"
-      [ "${_OS}" = 'linux' ] && ldonly="${ldonly} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
+      [ "${_OS}" = 'linux' ] && LDFLAGS="${LDFLAGS} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
     fi
     export AR="${_CCPREFIX}ar"
     export NM="${_CCPREFIX}nm"
     export RANLIB="${_CCPREFIX}ranlib"
-    export CFLAGS="${LDFLAGS} -Wno-inconsistent-dllimport"
+    CFLAGS="${CFLAGS} -Wno-inconsistent-dllimport"
   else
     export CC="${_CCPREFIX}gcc -static-libgcc"
-    export CFLAGS="${LDFLAGS} -Wno-attributes"
+    LDFLAGS="${_OPTM} ${LDFLAGS}"
+    CFLAGS="${_OPTM} ${CFLAGS} -Wno-attributes"
   fi
 
-  CFLAGS="${CFLAGS} -fno-ident -O3 -Wa,--noexecstack"
-  LDFLAGS="${LDFLAGS}${ldonly}"
-  [ "${_CRT}" = 'ucrt' ] && CPPFLAGS="${CPPFLAGS} -D_UCRT"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
 
   _prefix='C:/Windows/libressl'

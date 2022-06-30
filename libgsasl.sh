@@ -32,28 +32,27 @@ _VER="$1"
   # Requires: autopoint (sometimes offered by the gettext package)
   [ -f 'Makefile' ] || autoreconf --force --install
 
-  export LDFLAGS="${_OPTM}"
+  export LDFLAGS=''
   export CFLAGS='-fno-ident -O3'
   export CPPFLAGS=''
   [ "${_CRT}" = 'ucrt' ] && CPPFLAGS="${CPPFLAGS} -D_UCRT"
-  ldonly=''
 
   if [ "${_CC}" = 'clang' ]; then
     export CC="clang --target=${_TRIPLET}"
     if [ "${_OS}" != 'win' ]; then
+      CC="${CC} --sysroot=${_SYSROOT}"
       options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
-      LDFLAGS="${LDFLAGS} --target=${_TRIPLET} --sysroot=${_SYSROOT}"
-      [ "${_OS}" = 'linux' ] && ldonly="${ldonly} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
+      [ "${_OS}" = 'linux' ] && LDFLAGS="${LDFLAGS} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
     fi
     export AR="${_CCPREFIX}ar"
     export NM="${_CCPREFIX}nm"
     export RANLIB="${_CCPREFIX}ranlib"
   else
     export CC="${_CCPREFIX}gcc -static-libgcc"
+    LDFLAGS="${_OPTM} ${LDFLAGS}"
+    CFLAGS="${_OPTM} ${CFLAGS}"
   fi
 
-  CFLAGS="${LDFLAGS} ${CFLAGS}"
-  LDFLAGS="${LDFLAGS}${ldonly}"
   [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
   # shellcheck disable=SC2086
   ./configure ${options} \
