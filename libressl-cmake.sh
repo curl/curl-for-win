@@ -40,7 +40,7 @@ _VER="$1"
   find . -name '*.Plo' -delete
   find . -name '*.pc'  -delete
 
-  _CFLAGS="${_OPTM} -fno-ident -ffile-prefix-map=$(pwd)="
+  _CFLAGS="-fno-ident -ffile-prefix-map=$(pwd)="
   [ "${_CRT}" = 'ucrt' ] && _CFLAGS="${_CFLAGS} -D_UCRT"
   [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
 
@@ -70,6 +70,8 @@ _VER="$1"
       "-DCMAKE_C_FLAGS=${_CFLAGS}"
   else
     unset CC
+
+    _CFLAGS="${_OPTM} ${_CFLAGS}"
 
     # shellcheck disable=SC2086
     cmake . ${options} ${opt_gmsys} \

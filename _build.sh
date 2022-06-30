@@ -273,10 +273,10 @@ build_single_target() {
   export _MAKE='make'
   export _WINE=''
 
-  export _OPTM=
+  export _OPTM=  # GCC-specific machine selection
   [ "${_CPU}" = 'x86' ] && _OPTM='-m32'
   [ "${_CPU}" = 'x64' ] && _OPTM='-m64'
-  [ "${_CPU}" = 'a64' ] && _OPTM='-arch arm64'  # clang-only. FIXME: verify.
+  [ "${_CPU}" = 'a64' ] && _OPTM='-m..'  # FIXME
 
   [ "${_CPU}" = 'x86' ] && _machine='i686'
   [ "${_CPU}" = 'x64' ] && _machine='x86_64'

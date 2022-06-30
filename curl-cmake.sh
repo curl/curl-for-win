@@ -287,6 +287,8 @@ _VER="$1"
     else
       unset CC
 
+      _CFLAGS="${_OPTM} ${_CFLAGS}"
+
       # shellcheck disable=SC2086
       cmake . ${options} ${opt_gmsys} \
         "-DCMAKE_C_COMPILER=${_CCPREFIX}gcc" \
