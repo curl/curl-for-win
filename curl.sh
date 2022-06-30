@@ -55,7 +55,7 @@ _VER="$1"
     CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
     CURL_LDFLAG_EXTRAS_DLL=''
   else
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_INET_PTON"
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_INET_PTON -DHAVE_INET_NTOP"
     CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
     CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
     CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
