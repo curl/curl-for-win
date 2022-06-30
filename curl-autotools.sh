@@ -97,6 +97,14 @@ fi
       LIBS="${LIBS} -lucrt"
     fi
 
+    if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${uselld}" = '1' ]; then
+      if [ "${pass}" = 'shared' ]; then
+        LDFLAGS="${LDFLAGS} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
+      else
+        LDFLAGS="${LDFLAGS} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
+      fi
+    fi
+
     if [ "${_CC}" = 'clang' ]; then
       export CC="clang --target=${_TRIPLET}"
       if [ "${_OS}" != 'win' ]; then
@@ -108,14 +116,6 @@ fi
       export LD="${_CCPREFIX}ld"
       export NM="${_CCPREFIX}nm"
       export RANLIB="${_CCPREFIX}ranlib"
-
-      if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ]; then
-        if [ "${pass}" = 'shared' ]; then
-          LDFLAGS="${LDFLAGS} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
-        else
-          LDFLAGS="${LDFLAGS} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
-        fi
-      fi
     else
       export CC="${_CCPREFIX}gcc -static-libgcc"
       LDFLAGS="${_OPTM} ${LDFLAGS}"
