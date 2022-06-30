@@ -29,7 +29,7 @@ _VER="$1"
 
   export LDFLAGS="${_OPTM}"
   export CFLAGS='-fno-ident -O3'
-  export CPPFLAGS='-DHAVE_DECL_SECUREZEROMEMORY=1'
+  export CPPFLAGS='-DHAVE_DECL_SECUREZEROMEMORY=1 -DLIBSSH2_CLEAR_MEMORY'
   [ "${_CRT}" = 'ucrt' ] && CPPFLAGS="${CPPFLAGS} -D_UCRT"
   ldonly=''
 
