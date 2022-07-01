@@ -53,9 +53,8 @@ _VER="$1"
     --disable-silent-rules \
     --disable-shared \
     --disable-tests \
-    --silent \
     "--prefix=${_win_prefix}" \
-    "--with-openssldir=${_win_prefix}/${_ssldir}"
+    "--with-openssldir=${_win_prefix}/${_ssldir}" --silent
 # make clean > /dev/null
   # Ending slash required.
   make --jobs 2 install "DESTDIR=$(pwd)/pkg/" >/dev/null # 2>&1

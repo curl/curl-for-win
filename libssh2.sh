@@ -68,8 +68,7 @@ _VER="$1"
     --enable-static \
     --disable-shared \
     --disable-examples-build \
-    "--prefix=${_PREFIX}" \
-    --silent
+    "--prefix=${_PREFIX}" --silent
   make --jobs 2 clean >/dev/null
   make --jobs 2 install "DESTDIR=$(pwd)/pkg" # >/dev/null # V=1
 
