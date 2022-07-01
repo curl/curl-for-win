@@ -97,19 +97,18 @@ _VER="$1"
     options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
     options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
 
-    export _CFLAGS='-fno-ident -W -Wall -DHAVE_STRCASECMP -DHAVE_SIGNAL -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID -DHAVE_STRTOK_R -DUSE_HEADERS_API -DHAVE_FTRUNCATE -DHAVE_GETADDRINFO_THREADSAFE -DHAVE_UNISTD_H -DHAVE_STRUCT_POLLFD'
+    _CFLAGS='-fno-ident -W -Wall -DHAVE_STRCASECMP -DHAVE_SIGNAL -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID -DHAVE_STRTOK_R -DUSE_HEADERS_API -DHAVE_FTRUNCATE -DHAVE_GETADDRINFO_THREADSAFE -DHAVE_UNISTD_H -DHAVE_STRUCT_POLLFD'
     [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
-    export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
-    export CURL_LDFLAG_EXTRAS_EXE
-    export CURL_LDFLAG_EXTRAS_DLL
+    CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
+    CURL_LDFLAG_EXTRAS_EXE=''
+    CURL_LDFLAG_EXTRAS_DLL=''
     if [ "${_CPU}" = 'x86' ]; then
       _CFLAGS="${_CFLAGS} -D_WIN32_WINNT=0x0501 -DHAVE_ATOMIC"  # For Windows XP compatibility
-      CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
-      CURL_LDFLAG_EXTRAS_DLL=''
+      CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--pic-executable,-e,_mainCRTStartup"
     else
       _CFLAGS="${_CFLAGS} -DHAVE_INET_NTOP"
-      CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
-      CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
+      CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--pic-executable,-e,mainCRTStartup"
+      CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,--image-base,0x150000000"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
     fi
 
