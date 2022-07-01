@@ -32,7 +32,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        micro     build with less features, see README.md
 #        nano      build with less features, see README.md
 #        pico      build with less features, see README.md
-#        x64only   build x64 target only
+#        x64       build x64 target only
 #        noucrt    build against msvcrt instead of UCRT
 #        gcc       build with GCC (use clang if not specified)
 #
@@ -538,7 +538,7 @@ EOF
 
 # Build binaries
 build_single_target x64
-if [ "${_BRANCH#*x64only*}" = "${_BRANCH}" ]; then
+if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ]; then
 # build_single_target a64
   build_single_target x86
 fi
