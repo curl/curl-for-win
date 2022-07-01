@@ -72,7 +72,7 @@ fi
 
     export LDFLAGS=''
     export CFLAGS='-fno-ident -W -Wall'
-    export CPPFLAGS='-DNDEBUG -DHAVE_PROCESS_H -DHAVE_STRUCT_POLLFD'
+    export CPPFLAGS='-DNDEBUG -DHAVE_PROCESS_H'
     export LIBS=''
     export RC="${_CCPREFIX}windres"
     export RCFLAGS='--output-format coff -Iinclude'
@@ -131,7 +131,7 @@ fi
         LDFLAGS="${LDFLAGS} -Wl,--pic-executable,-e,_mainCRTStartup"
       fi
     else
-      CPPFLAGS="${CPPFLAGS} -DHAVE_INET_PTON"
+      CPPFLAGS="${CPPFLAGS} -DHAVE_INET_PTON -DHAVE_STRUCT_POLLFD"
       if [ "${pass}" = 'static' ]; then
         LDFLAGS="${LDFLAGS} -Wl,--pic-executable,-e,mainCRTStartup"
       else
