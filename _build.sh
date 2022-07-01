@@ -356,7 +356,7 @@ build_single_target() {
   # Setup common toolchain configuration options
 
   export _TOP; _TOP="$(pwd)"
-  export _PKGDIR='pkg'
+  export _PKGDIR="${_TRIPLET}"
   _PREFIX='/usr'
   export _PP="${_PKGDIR}${_PREFIX}"
   export _CC_GLOBAL=''
