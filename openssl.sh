@@ -90,7 +90,7 @@ _VER="$1"
   # be to disable loading anything from hard-coded paths and preferably to
   # detect OS location at runtime and adjust config paths accordingly; none
   # supported by OpenSSL.
-  _prefix='C:/Windows/System32/OpenSSL'
+  _win_prefix='C:/Windows/System32/OpenSSL'
   _ssldir="ssl"
 
   # 'no-dso' implies 'no-dynamic-engine' which in turn compiles in these
@@ -113,7 +113,7 @@ _VER="$1"
     no-unit-test \
     no-tests \
     no-makedepend \
-    "--prefix=${_prefix}" \
+    "--prefix=${_win_prefix}" \
     "--openssldir=${_ssldir}"
   SOURCE_DATE_EPOCH=${unixts} TZ=UTC make --jobs 2
   # Ending slash required.
@@ -127,7 +127,7 @@ _VER="$1"
 
   _pkg="pkg${_PREFIX}"
   mkdir -p 'pkg/usr'  # Needs to be kept in sync with _PREFIX content
-  mv "pkg/${_prefix}" "${_pkg}"
+  mv "pkg/${_win_prefix}" "${_pkg}"
 
   # Rename 'lib64' to 'lib'. This is what most packages expect.
 

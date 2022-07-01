@@ -44,7 +44,7 @@ _VER="$1"
     CFLAGS="${CFLAGS} -Wno-attributes"
   fi
 
-  _prefix='C:/Windows/libressl'
+  _win_prefix='C:/Windows/libressl'
   _ssldir="ssl"
 
   # shellcheck disable=SC2086
@@ -54,8 +54,8 @@ _VER="$1"
     --disable-shared \
     --disable-tests \
     --silent \
-    "--prefix=${_prefix}" \
-    "--with-openssldir=${_prefix}/${_ssldir}"
+    "--prefix=${_win_prefix}" \
+    "--with-openssldir=${_win_prefix}/${_ssldir}"
 # make clean > /dev/null
   # Ending slash required.
   make --jobs 2 install "DESTDIR=$(pwd)/pkg/" >/dev/null # 2>&1
@@ -68,7 +68,7 @@ _VER="$1"
 
   _pkg="pkg${_PREFIX}"
   mkdir -p 'pkg/usr'  # Needs to be kept in sync with _PREFIX content
-  mv "pkg/${_prefix}" "${_pkg}"
+  mv "pkg/${_win_prefix}" "${_pkg}"
 
   # Delete .pc and .la files
   rm -r -f "${_pkg}"/lib/pkgconfig
