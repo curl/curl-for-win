@@ -358,6 +358,7 @@ build_single_target() {
   export _TOP; _TOP="$(pwd)"
   export _PKGDIR='pkg'
   export _PREFIX='/usr'
+  export _PP="${_PKGDIR}${_PREFIX}"
   export _CC_GLOBAL=''
   export _CFLAGS_GLOBAL='-fno-ident'
   export _CPPFLAGS_GLOBAL=''

@@ -149,14 +149,14 @@ fi
     #       autotools breaks on spaces anyway, so let us leave it like that.
 
     if [ -d ../zlib ]; then
-      options="${options} --with-zlib=${_TOP}/zlib/${_PKGDIR}${_PREFIX}"
+      options="${options} --with-zlib=${_TOP}/zlib/${_PP}"
     else
       options="${options} --without-zlib"
     fi
 
     if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
-      options="${options} --with-brotli=${_TOP}/brotli/${_PKGDIR}${_PREFIX}"
-      LDFLAGS="${LDFLAGS} -L${_TOP}/brotli/${_PKGDIR}${_PREFIX}/lib"
+      options="${options} --with-brotli=${_TOP}/brotli/${_PP}"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/brotli/${_PP}/lib"
       LIBS="${LIBS} -lbrotlicommon"
     else
       options="${options} --without-brotli"
@@ -168,15 +168,15 @@ fi
     CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
     if [ -d ../libressl ]; then
-      options="${options} --with-openssl=${_TOP}/libressl/${_PKGDIR}${_PREFIX}"
+      options="${options} --with-openssl=${_TOP}/libressl/${_PP}"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
     elif [ -d ../openssl-quic ]; then
-      options="${options} --with-openssl=${_TOP}/openssl-quic/${_PKGDIR}${_PREFIX}"
+      options="${options} --with-openssl=${_TOP}/openssl-quic/${_PP}"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
     elif [ -d ../openssl ]; then
-      options="${options} --with-openssl=${_TOP}/openssl/${_PKGDIR}${_PREFIX}"
+      options="${options} --with-openssl=${_TOP}/openssl/${_PP}"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
     else
@@ -186,7 +186,7 @@ fi
     options="${options} --without-gnutls --without-mbedtls --without-wolfssl --without-bearssl --without-rustls --without-nss --without-hyper"
 
     if [ -d ../libssh2 ]; then
-      options="${options} --with-libssh2=${_TOP}/libssh2/${_PKGDIR}${_PREFIX}"
+      options="${options} --with-libssh2=${_TOP}/libssh2/${_PP}"
       LIBS="${LIBS} -lbcrypt"
     else
       options="${options} --without-libssh2"
@@ -196,16 +196,16 @@ fi
     options="${options} --without-librtmp"
 
     if [ -d ../libidn2 ]; then  # Also for Windows XP compatibility
-      options="${options} --with-libidn2=${_TOP}/libidn2/${_PKGDIR}${_PREFIX}"
+      options="${options} --with-libidn2=${_TOP}/libidn2/${_PP}"
     elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
       options="${options} --without-libidn2"  # Prevent autotools picking up a non-cross copy
       options="${options} --with-winidn"
     fi
 
     if [ -d ../libgsasl ]; then
-      options="${options} --with-libgsasl=${_TOP}/libgsasl/${_PKGDIR}${_PREFIX}"
-      CPPFLAGS="${CPPFLAGS} -I${_TOP}/libgsasl/${_PKGDIR}${_PREFIX}/include"
-      LDFLAGS="${LDFLAGS} -L${_TOP}/libgsasl/${_PKGDIR}${_PREFIX}/lib"
+      options="${options} --with-libgsasl=${_TOP}/libgsasl/${_PP}"
+      CPPFLAGS="${CPPFLAGS} -I${_TOP}/libgsasl/${_PP}/include"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/libgsasl/${_PP}/lib"
     else
       options="${options} --without-libgsasl"
     fi
@@ -213,7 +213,7 @@ fi
     options="${options} --without-libpsl"
 
     if [ -d ../nghttp2 ]; then
-      options="${options} --with-nghttp2=${_TOP}/nghttp2/${_PKGDIR}${_PREFIX}"
+      options="${options} --with-nghttp2=${_TOP}/nghttp2/${_PP}"
       CPPFLAGS="${CPPFLAGS} -DNGHTTP2_STATICLIB"
     else
       options="${options} --without-nghttp2"
@@ -224,8 +224,8 @@ fi
         # This lib will not appear enabled in the configure summary.
         options="${options} --with-nghttp3=yes"
         CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB -DUSE_NGHTTP3"
-        CPPFLAGS="${CPPFLAGS} -I${_TOP}/nghttp3/${_PKGDIR}${_PREFIX}/include"
-        LDFLAGS="${LDFLAGS} -L${_TOP}/nghttp3/${_PKGDIR}${_PREFIX}/lib"
+        CPPFLAGS="${CPPFLAGS} -I${_TOP}/nghttp3/${_PP}/include"
+        LDFLAGS="${LDFLAGS} -L${_TOP}/nghttp3/${_PP}/lib"
         LIBS="${LIBS} -lnghttp3"
       else
         options="${options} --without-nghttp3"
@@ -235,8 +235,8 @@ fi
         # This lib will not appear enabled in the configure summary.
         options="${options} --with-ngtcp2=yes"
         CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB -DUSE_NGTCP2"
-        CPPFLAGS="${CPPFLAGS} -I${_TOP}/ngtcp2/${_PKGDIR}${_PREFIX}/include"
-        LDFLAGS="${LDFLAGS} -L${_TOP}/ngtcp2/${_PKGDIR}${_PREFIX}/lib"
+        CPPFLAGS="${CPPFLAGS} -I${_TOP}/ngtcp2/${_PP}/include"
+        LDFLAGS="${LDFLAGS} -L${_TOP}/ngtcp2/${_PP}/lib"
         LIBS="${LIBS} -lngtcp2 -lngtcp2_crypto_openssl"
       else
         options="${options} --without-ngtcp2"
@@ -340,7 +340,7 @@ fi
   done
 
   # DESTDIR= + --prefix=
-  _pkg="${_PKGDIR}${_PREFIX}"
+  _pkg="${_PP}"
 
   # Build fixups
 

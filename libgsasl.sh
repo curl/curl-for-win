@@ -52,7 +52,7 @@ _VER="$1"
   make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
   # DESTDIR= + --prefix=
-  _pkg="${_PKGDIR}${_PREFIX}"
+  _pkg="${_PP}"
 
   # Delete .pc and .la files
   rm -r -f "${_pkg}"/lib/pkgconfig

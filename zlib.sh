@@ -42,7 +42,7 @@ _VER="$1"
   make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}"
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
-  _pkg="${_PKGDIR}${_PREFIX}"
+  _pkg="${_PP}"
 
   ls -l "${_pkg}"/lib/*.a
 

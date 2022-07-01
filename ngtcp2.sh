@@ -39,13 +39,13 @@ _VER="$1"
   if [ -d ../openssl-quic ]; then
     options="${options} -DENABLE_OPENSSL=1"
     options="${options} -DHAVE_SSL_IS_QUIC=1"  # Detection fails due to missing -lws2_32 option, so force it.
-    options="${options} -DOPENSSL_ROOT_DIR=../openssl-quic/${_PKGDIR}${_PREFIX}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=../openssl-quic/${_PKGDIR}${_PREFIX}/include"
+    options="${options} -DOPENSSL_ROOT_DIR=../openssl-quic/${_PP}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=../openssl-quic/${_PP}/include"
   fi
 
   if [ -d ../nghttp3 ]; then
-    options="${options} -DLIBNGHTTP3_LIBRARY=../nghttp3/${_PKGDIR}${_PREFIX}/lib"
-    options="${options} -DLIBNGHTTP3_INCLUDE_DIR=../nghttp3/${_PKGDIR}${_PREFIX}/include"
+    options="${options} -DLIBNGHTTP3_LIBRARY=../nghttp3/${_PP}/lib"
+    options="${options} -DLIBNGHTTP3_INCLUDE_DIR=../nghttp3/${_PP}/include"
   fi
 
   options="${options} -DLIBEV_LIBRARY="  # To avoid finding any non-cross copies
@@ -65,7 +65,7 @@ _VER="$1"
   make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}"
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
-  _pkg="${_PKGDIR}${_PREFIX}"
+  _pkg="${_PP}"
 
   # Rename static libs so they get found by dependents
 

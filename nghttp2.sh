@@ -47,7 +47,7 @@ _VER="$1"
   make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}"
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
-  _pkg="${_PKGDIR}${_PREFIX}"
+  _pkg="${_PP}"
 
   # Delete .pc files
   rm -r -f "${_pkg}"/lib/pkgconfig
