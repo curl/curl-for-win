@@ -51,7 +51,10 @@ _VER="$1"
   options="${options} -DLIBEV_LIBRARY="  # To avoid finding any non-cross copies
 
   # We do not need C++ with ENABLE_LIB_ONLY, so make sure to skip the detection
-  # logic and potential detection issues with CMAKE_CXX_COMPILER_WORKS=1
+  # logic and potential detection issues with CMAKE_CXX_COMPILER_WORKS=1. Some
+  # success was achieve by adding these instead to the cmake command-line:
+  #   ${_CMAKE_CXX_GLOBAL}
+  #   "-DCMAKE_CXX_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CXXFLAGS_GLOBAL}"
   # shellcheck disable=SC2086
   cmake . ${_CMAKE_GLOBAL} ${options} \
     "-DENABLE_STATIC_LIB=1" \

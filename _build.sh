@@ -361,6 +361,7 @@ build_single_target() {
   export _CC_GLOBAL=''
   export _CFLAGS_GLOBAL=''
   export _CPPFLAGS_GLOBAL=''
+  export _CXXFLAGS_GLOBAL=''
   export _LDFLAGS_GLOBAL=''
   export _LIBS_GLOBAL=''
   export _CONFIGURE_GLOBAL=''
@@ -404,8 +405,10 @@ build_single_target() {
 
   if [ "${_CC}" = 'clang' ]; then
     _CC_GLOBAL="clang${CW_CCSUFFIX} --target=${_TRIPLET}"
+    _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} --target=${_TRIPLET}"  # Seems necessary for CMake to recognize clang++
     if [ "${_OS}" != 'win' ]; then
       _CC_GLOBAL="${_CC_GLOBAL} --sysroot=${_SYSROOT}"
+      _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} --sysroot=${_SYSROOT}"
       _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
     fi
     if [ "${_OS}" = 'linux' ]; then
