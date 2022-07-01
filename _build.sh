@@ -117,7 +117,6 @@ export _URL=''
 command -v git >/dev/null 2>&1 && _URL="$(git ls-remote --get-url | sed 's|.git$||')"
 [ -n "${_URL}" ] || _URL="https://github.com/${APPVEYOR_REPO_NAME:-}${GITHUB_REPOSITORY:-}"
 
-export CW_CCSUFFIX
 [ -n "${CW_CCSUFFIX:-}" ] || CW_CCSUFFIX=''
 
 export _CC='clang'
@@ -151,7 +150,6 @@ fi
 # Even with `_CCPREFIX` provided.
 if [ "${_OS}" != 'win' ]; then
   # https://clang.llvm.org/docs/CrossCompilation.html
-  export _CROSS_HOST
   case "${_OS}" in
     win)   _CROSS_HOST='x86_64-pc-mingw32';;
     linux) _CROSS_HOST='x86_64-pc-linux';;  # x86_64-pc-linux-gnu
@@ -272,7 +270,7 @@ build_single_target() {
   export _MAKE='make'
   export _WINE=''
 
-  export _OPTM=  # GCC-specific machine selection
+  # GCC-specific machine selection option
   [ "${_CPU}" = 'x86' ] && _OPTM='-m32'
   [ "${_CPU}" = 'x64' ] && _OPTM='-m64'
   [ "${_CPU}" = 'a64' ] && _OPTM='-m..'  # FIXME
@@ -331,10 +329,9 @@ build_single_target() {
     fi
   fi
 
-  export _CRT='ucrt'
+  _CRT='ucrt'
   [ ! "${_BRANCH#*msvcrt*}" = "${_BRANCH}" ] && _CRT='msvcrt'
 
-  export _CCVER
   if [ "${_CC}" = 'clang' ]; then
     # We do not use old mingw toolchain versions when building with clang,
     # so this is safe:
@@ -347,7 +344,6 @@ build_single_target() {
     # for gcc when building against UCRT.
     if [ "${_CRT}" = 'ucrt' ]; then
       # https://stackoverflow.com/questions/57528555/how-do-i-build-against-the-ucrt-with-mingw-w64
-      export _GCCSPECS
       _GCCSPECS="$(realpath gcc-specs-ucrt)"
       "${_CCPREFIX}gcc" -dumpspecs | sed 's|-lmsvcrt|-lucrt|g' > "${_GCCSPECS}"
     fi
