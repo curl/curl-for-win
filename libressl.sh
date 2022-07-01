@@ -65,8 +65,8 @@ _VER="$1"
   # a filename, so move results to a sane, standard path:
 
   _pkg="pkg${_PREFIX}"
-  mkdir -p 'pkg/usr'  # Needs to be kept in sync with _PREFIX content
-  mv "pkg/${_win_prefix}" "${_pkg}"
+  mkdir -p "./${_pkg}"
+  mv "pkg/${_win_prefix}"/* "${_pkg}"
 
   # Delete .pc and .la files
   rm -r -f "${_pkg}"/lib/pkgconfig
