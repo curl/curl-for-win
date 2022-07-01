@@ -384,11 +384,11 @@ fi
   # LLVM's own llvm-objcopy does not seems to work with Windows binaries,
   # so .exe and .dll stripping is done via the -s linker option.
   if [ "${_LD}" = 'ld' ]; then
-    "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.exe
-    "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.dll
-    "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/libcurl.dll.a
+    "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.exe
+    "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.dll
+    "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/libcurl.dll.a
   fi
-  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/libcurl.a
+  "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/libcurl.a
 
   ../_peclean.py "${_ref}" "${_pkg}"/bin/*.exe
   ../_peclean.py "${_ref}" "${_pkg}"/bin/*.dll
@@ -408,8 +408,8 @@ fi
 
   # Tests
 
-  "${_CCPREFIX}objdump" --all-headers "${_pkg}"/bin/*.exe | grep -a -E -i "(file format|dll name)"
-  "${_CCPREFIX}objdump" --all-headers "${_pkg}"/bin/*.dll | grep -a -E -i "(file format|dll name)"
+  "${_OBJDUMP}" --all-headers "${_pkg}"/bin/*.exe | grep -a -E -i "(file format|dll name)"
+  "${_OBJDUMP}" --all-headers "${_pkg}"/bin/*.dll | grep -a -E -i "(file format|dll name)"
 
   # Execute curl and compiled-in dependency code. This is not secure, but
   # the build process already requires executing external code

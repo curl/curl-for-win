@@ -367,6 +367,8 @@ build_single_target() {
   export _CMAKE_GLOBAL='-Wno-dev -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_BUILD_TYPE=Release'
   export _CMAKE_CXX_GLOBAL=''
   export _LD='ld'  # ld or lld
+  export _STRIP="${_CCPREFIX}strip"
+  export _OBJDUMP="${_CCPREFIX}objdump"
 
   if [ "${_OS}" = 'win' ]; then
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -GMSYS Makefiles"

@@ -91,7 +91,7 @@ _VER="$1"
 
   readonly _ref='NEWS'
 
-  "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
+  "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
 
   touch -c -r "${_ref}" "${_pkg}"/lib/*.a
   touch -c -r "${_ref}" "${_pkg}"/include/*.h
