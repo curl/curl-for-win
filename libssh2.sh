@@ -65,8 +65,7 @@ _VER="$1"
     --enable-hidden-symbols \
     --enable-static \
     --disable-shared \
-    --disable-examples-build \
-    "--prefix=${_PREFIX}" --silent
+    --disable-examples-build --silent
   make --jobs 2 clean >/dev/null
   make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 

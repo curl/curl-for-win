@@ -290,8 +290,7 @@ fi
       --enable-hsts \
       --without-ca-path \
       --without-ca-bundle \
-      --without-ca-fallback \
-      "--prefix=${_PREFIX}"
+      --without-ca-fallback
 
     # NOTE: 'make clean' deletes src/tool_hugehelp.c and docs/curl.1. Next,
     #       'make' regenerates them, including the current date in curl.1,

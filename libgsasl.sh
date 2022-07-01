@@ -46,8 +46,7 @@ _VER="$1"
     --enable-scram-sha1 \
     --enable-scram-sha256 \
     --disable-obsolete \
-    --disable-valgrind-tests \
-    "--prefix=${_PREFIX}" --silent
+    --disable-valgrind-tests --silent
   make --jobs 2 clean >/dev/null
   make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 

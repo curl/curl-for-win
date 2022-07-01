@@ -357,7 +357,7 @@ build_single_target() {
 
   export _TOP; _TOP="$(pwd)"
   export _PKGDIR='pkg'
-  export _PREFIX='/usr'
+  _PREFIX='/usr'
   export _PP="${_PKGDIR}${_PREFIX}"
   export _CC_GLOBAL=''
   export _CFLAGS_GLOBAL='-fno-ident'
@@ -436,7 +436,7 @@ build_single_target() {
     _CMAKE_CXX_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++"
   fi
 
-  _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --disable-dependency-tracking --disable-silent-rules"
+  _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --prefix=${_PREFIX} --disable-dependency-tracking --disable-silent-rules"
 
   # Unified, per-target package: Initialize
   export _UNIPKG="curl-${CURL_VER_}${_REVSUFFIX}${_PKGSUFFIX}${_FLAV}"

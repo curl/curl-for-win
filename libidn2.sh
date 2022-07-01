@@ -48,8 +48,7 @@ _VER="$1"
     --disable-rpath \
     --enable-static \
     --disable-shared \
-    --disable-doc \
-    "--prefix=${_PREFIX}" --silent
+    --disable-doc --silent
 # make --jobs 2 clean >/dev/null
   make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
