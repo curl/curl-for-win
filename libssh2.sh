@@ -19,7 +19,7 @@ _VER="$1"
 
   # Build
 
-  rm -r -f pkg
+  rm -r -f "${_PKGDIR}"
 
   [ -f 'Makefile' ] || autoreconf --force --install
 
@@ -38,20 +38,20 @@ _VER="$1"
   if [ -d ../zlib ]; then
     options="${options} --with-libz"
     # These seem to work better than --with-libz-prefix=:
-    CFLAGS="${CFLAGS} -I${_TOP}/zlib/pkg${_PREFIX}/include"
-    LDFLAGS="${LDFLAGS} -L${_TOP}/zlib/pkg${_PREFIX}/lib"
+    CFLAGS="${CFLAGS} -I${_TOP}/zlib/${_PKGDIR}${_PREFIX}/include"
+    LDFLAGS="${LDFLAGS} -L${_TOP}/zlib/${_PKGDIR}${_PREFIX}/lib"
   fi
 
   if [ -d ../libressl ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/libressl/pkg${_PREFIX}"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/libressl/${_PKGDIR}${_PREFIX}"
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DNOCRYPT"
     LDFLAGS="${LDFLAGS} -lbcrypt"
   elif [ -d ../openssl-quic ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/openssl-quic/pkg${_PREFIX}"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/openssl-quic/${_PKGDIR}${_PREFIX}"
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
     LDFLAGS="${LDFLAGS} -lbcrypt"
   elif [ -d ../openssl ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/openssl/pkg${_PREFIX}"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/openssl/${_PKGDIR}${_PREFIX}"
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
     LDFLAGS="${LDFLAGS} -lbcrypt"
   else
@@ -68,10 +68,10 @@ _VER="$1"
     --disable-examples-build \
     "--prefix=${_PREFIX}" --silent
   make --jobs 2 clean >/dev/null
-  make --jobs 2 install "DESTDIR=$(pwd)/pkg" # >/dev/null # V=1
+  make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
   # DESTDIR= + --prefix=
-  _pkg="pkg${_PREFIX}"
+  _pkg="${_PKGDIR}${_PREFIX}"
 
   # Delete .pc and .la files
   rm -r -f "${_pkg}"/lib/pkgconfig

@@ -19,7 +19,7 @@ _VER="$1"
 
   # Build
 
-  rm -r -f pkg CMakeFiles CMakeCache.txt CTestTestfile.cmake cmake_install.cmake
+  rm -r -f "${_PKGDIR}" CMakeFiles CMakeCache.txt CTestTestfile.cmake cmake_install.cmake
 
   find . -name '*.o'   -delete
   find . -name '*.obj' -delete
@@ -40,10 +40,10 @@ _VER="$1"
     '-DLIBRESSL_APPS=OFF' \
     "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
-  make --jobs 2 install "DESTDIR=$(pwd)/pkg"
+  make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}"
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
-  _pkg="pkg${_PREFIX}"
+  _pkg="${_PKGDIR}${_PREFIX}"
 
   # Build fixups for CMake
 

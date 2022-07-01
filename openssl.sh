@@ -31,7 +31,7 @@ _VER="$1"
 
   # Build
 
-  rm -r -f pkg
+  rm -r -f "${_PKGDIR}"
 
   find . -name '*.o'   -delete
   find . -name '*.obj' -delete
@@ -116,17 +116,17 @@ _VER="$1"
     "--openssldir=${_ssldir}"
   SOURCE_DATE_EPOCH=${unixts} TZ=UTC make --jobs 2
   # Ending slash required.
-  make --jobs 2 install "DESTDIR=$(pwd)/pkg/" >/dev/null # 2>&1
+  make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}/" >/dev/null # 2>&1
 
   # DESTDIR= + --prefix=
   # OpenSSL 3.x does not strip the drive letter anymore:
-  #   ./openssl/pkg/C:/Windows/System32/OpenSSL
+  #   ./openssl/${_PKGDIR}/C:/Windows/System32/OpenSSL
   # Some tools (e.g CMake) become weird when colons appear in
   # a filename, so move results to a sane, standard path:
 
-  _pkg="pkg${_PREFIX}"
+  _pkg="${_PKGDIR}${_PREFIX}"
   mkdir -p "./${_pkg}"
-  mv "pkg/${_win_prefix}"/* "${_pkg}"
+  mv "${_PKGDIR}/${_win_prefix}"/* "${_pkg}"
 
   # Rename 'lib64' to 'lib'. This is what most packages expect.
 

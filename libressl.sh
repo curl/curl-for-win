@@ -19,7 +19,7 @@ _VER="$1"
 
   # Build
 
-  rm -r -f pkg
+  rm -r -f "${_PKGDIR}"
 
   find . -name '*.o'   -delete
   find . -name '*.a'   -delete
@@ -56,17 +56,17 @@ _VER="$1"
     "--with-openssldir=${_win_prefix}/${_ssldir}" --silent
 # make clean > /dev/null
   # Ending slash required.
-  make --jobs 2 install "DESTDIR=$(pwd)/pkg/" >/dev/null # 2>&1
+  make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}/" >/dev/null # 2>&1
 
   # DESTDIR= + --prefix=
   # LibreSSL does not strip the drive letter
-  #   ./libressl/pkg/C:/Windows/libressl
+  #   ./libressl/${_PKGDIR}/C:/Windows/libressl
   # Some tools (e.g CMake) become weird when colons appear in
   # a filename, so move results to a sane, standard path:
 
-  _pkg="pkg${_PREFIX}"
+  _pkg="${_PKGDIR}${_PREFIX}"
   mkdir -p "./${_pkg}"
-  mv "pkg/${_win_prefix}"/* "${_pkg}"
+  mv "${_PKGDIR}/${_win_prefix}"/* "${_pkg}"
 
   # Delete .pc and .la files
   rm -r -f "${_pkg}"/lib/pkgconfig

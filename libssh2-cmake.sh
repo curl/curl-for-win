@@ -19,7 +19,7 @@ _VER="$1"
 
   # Build
 
-  rm -r -f pkg CMakeFiles CMakeCache.txt CTestTestfile.cmake cmake_install.cmake
+  rm -r -f "${_PKGDIR}" CMakeFiles CMakeCache.txt CTestTestfile.cmake cmake_install.cmake
 
   find . -name '*.o'   -delete
   find . -name '*.obj' -delete
@@ -38,24 +38,24 @@ _VER="$1"
 
   if [ -d ../zlib ]; then
     options="${options} -DENABLE_ZLIB_COMPRESSION=ON"
-    options="${options} -DZLIB_LIBRARY=${_TOP}/zlib/pkg${_PREFIX}/lib/libz.a"
-    options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/zlib/pkg${_PREFIX}/include"
+    options="${options} -DZLIB_LIBRARY=${_TOP}/zlib/${_PKGDIR}${_PREFIX}/lib/libz.a"
+    options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/zlib/${_PKGDIR}${_PREFIX}/include"
   fi
 
   if [ -d ../libressl ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/libressl/pkg${_PREFIX}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/libressl/pkg${_PREFIX}/include"
+    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/libressl/${_PKGDIR}${_PREFIX}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/libressl/${_PKGDIR}${_PREFIX}/include"
     _CFLAGS="${_CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DNOCRYPT"
   elif [ -d ../openssl-quic ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl-quic/pkg${_PREFIX}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl-quic/pkg${_PREFIX}/include"
+    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl-quic/${_PKGDIR}${_PREFIX}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl-quic/${_PKGDIR}${_PREFIX}/include"
     _CFLAGS="${_CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
   elif [ -d ../openssl ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl/pkg${_PREFIX}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl/pkg${_PREFIX}/include"
+    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl/${_PKGDIR}${_PREFIX}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl/${_PKGDIR}${_PREFIX}/include"
     _CFLAGS="${_CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
   else
     options="${options} -DCRYPTO_BACKEND=WinCNG"
@@ -69,10 +69,10 @@ _VER="$1"
     '-DENABLE_DEBUG_LOGGING=OFF' \
     "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
-  make --jobs 2 install "DESTDIR=$(pwd)/pkg"
+  make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}"
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
-  _pkg="pkg${_PREFIX}"
+  _pkg="${_PKGDIR}${_PREFIX}"
 
   # Delete .pc files
   rm -r -f "${_pkg}"/lib/pkgconfig

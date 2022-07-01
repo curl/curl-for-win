@@ -29,7 +29,7 @@ _VER="$1"
 
   # Build
 
-  rm -r -f pkg CMakeFiles CMakeCache.txt CTestTestfile.cmake cmake_install.cmake
+  rm -r -f "${_PKGDIR}" CMakeFiles CMakeCache.txt CTestTestfile.cmake cmake_install.cmake
 
   find . -name '*.o'   -delete
   find . -name '*.obj' -delete
@@ -136,32 +136,32 @@ _VER="$1"
 
     if [ -d ../zlib ]; then
       options="${options} -DUSE_ZLIB=ON"
-      options="${options} -DZLIB_LIBRARY=${_TOP}/zlib/pkg${_PREFIX}/lib/libz.a"
-      options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/zlib/pkg${_PREFIX}/include"
+      options="${options} -DZLIB_LIBRARY=${_TOP}/zlib/${_PKGDIR}${_PREFIX}/lib/libz.a"
+      options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/zlib/${_PKGDIR}${_PREFIX}/include"
     else
       options="${options} -DUSE_ZLIB=OFF"
     fi
     if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
       options="${options} -DCURL_BROTLI=ON"
-      options="${options} -DBROTLIDEC_LIBRARY=${_TOP}/brotli/pkg${_PREFIX}/lib/libbrotlidec.a"
-      options="${options} -DBROTLICOMMON_LIBRARY=${_TOP}/brotli/pkg${_PREFIX}/lib/libbrotlicommon.a"
-      options="${options} -DBROTLI_INCLUDE_DIR=${_TOP}/brotli/pkg${_PREFIX}/include"
+      options="${options} -DBROTLIDEC_LIBRARY=${_TOP}/brotli/${_PKGDIR}${_PREFIX}/lib/libbrotlidec.a"
+      options="${options} -DBROTLICOMMON_LIBRARY=${_TOP}/brotli/${_PKGDIR}${_PREFIX}/lib/libbrotlicommon.a"
+      options="${options} -DBROTLI_INCLUDE_DIR=${_TOP}/brotli/${_PKGDIR}${_PREFIX}/include"
     else
       options="${options} -DCURL_BROTLI=OFF"
     fi
 
     if [ -d ../libressl ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
-      options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/libressl/pkg${_PREFIX}"
-      options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/libressl/pkg${_PREFIX}/include"
+      options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/libressl/${_PKGDIR}${_PREFIX}"
+      options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/libressl/${_PKGDIR}${_PREFIX}/include"
     elif [ -d ../openssl-quic ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
-      options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl-quic/pkg${_PREFIX}"
-      options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl-quic/pkg${_PREFIX}/include"
+      options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl-quic/${_PKGDIR}${_PREFIX}"
+      options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl-quic/${_PKGDIR}${_PREFIX}/include"
     elif [ -d ../openssl ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
-      options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl/pkg${_PREFIX}"
-      options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl/pkg${_PREFIX}/include"
+      options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl/${_PKGDIR}${_PREFIX}"
+      options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl/${_PKGDIR}${_PREFIX}/include"
     else
       options="${options} -DCURL_USE_OPENSSL=OFF"
     fi
@@ -176,8 +176,8 @@ _VER="$1"
 
     if [ -d ../libssh2 ]; then
       options="${options} -DCURL_USE_LIBSSH2=ON"
-      options="${options} -DLIBSSH2_LIBRARY=${_TOP}/libssh2/pkg${_PREFIX}/lib/libssh2.a"
-      options="${options} -DLIBSSH2_INCLUDE_DIR=${_TOP}/libssh2/pkg${_PREFIX}/include"
+      options="${options} -DLIBSSH2_LIBRARY=${_TOP}/libssh2/${_PKGDIR}${_PREFIX}/lib/libssh2.a"
+      options="${options} -DLIBSSH2_INCLUDE_DIR=${_TOP}/libssh2/${_PKGDIR}${_PREFIX}/include"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lbcrypt"
     else
       options="${options} -DCURL_USE_LIBSSH2=OFF"  # Avoid detecting a copy on the host OS
@@ -185,22 +185,22 @@ _VER="$1"
 
     if [ -d ../nghttp2 ]; then
       options="${options} -DUSE_NGHTTP2=ON"
-      options="${options} -DNGHTTP2_LIBRARY=${_TOP}/nghttp2/pkg${_PREFIX}/lib/libnghttp2.a"
-      options="${options} -DNGHTTP2_INCLUDE_DIR=${_TOP}/nghttp2/pkg${_PREFIX}/include"
+      options="${options} -DNGHTTP2_LIBRARY=${_TOP}/nghttp2/${_PKGDIR}${_PREFIX}/lib/libnghttp2.a"
+      options="${options} -DNGHTTP2_INCLUDE_DIR=${_TOP}/nghttp2/${_PKGDIR}${_PREFIX}/include"
       _CFLAGS="${_CFLAGS} -DNGHTTP2_STATICLIB"
     else
       options="${options} -DUSE_NGHTTP2=OFF"
     fi
     if [ -d ../nghttp3 ] && [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ]; then
       options="${options} -DUSE_NGHTTP3=ON"
-      options="${options} -DNGHTTP3_LIBRARY=${_TOP}/nghttp3/pkg${_PREFIX}/lib/libnghttp3.a"
-      options="${options} -DNGHTTP3_INCLUDE_DIR=${_TOP}/nghttp3/pkg${_PREFIX}/include"
+      options="${options} -DNGHTTP3_LIBRARY=${_TOP}/nghttp3/${_PKGDIR}${_PREFIX}/lib/libnghttp3.a"
+      options="${options} -DNGHTTP3_INCLUDE_DIR=${_TOP}/nghttp3/${_PKGDIR}${_PREFIX}/include"
       _CFLAGS="${_CFLAGS} -DNGHTTP3_STATICLIB"
 
       options="${options} -DUSE_NGTCP2=ON"
-      options="${options} -DNGTCP2_LIBRARY=${_TOP}/ngtcp2/pkg${_PREFIX}/lib/libngtcp2.a"
-      options="${options} -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/pkg${_PREFIX}/include"
-      options="${options} -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/pkg${_PREFIX}/lib"
+      options="${options} -DNGTCP2_LIBRARY=${_TOP}/ngtcp2/${_PKGDIR}${_PREFIX}/lib/libngtcp2.a"
+      options="${options} -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PKGDIR}${_PREFIX}/include"
+      options="${options} -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/${_PKGDIR}${_PREFIX}/lib"
       _CFLAGS="${_CFLAGS} -DNGTCP2_STATICLIB"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lws2_32"  # Necessary for 'CheckQuicSupportInOpenSSL'
     else
@@ -208,13 +208,13 @@ _VER="$1"
       options="${options} -DUSE_NGTCP2=OFF"
     fi
     if [ -d ../libgsasl ]; then
-      _CFLAGS="${_CFLAGS} -DUSE_GSASL -I${_TOP}/libgsasl/pkg${_PREFIX}/include"
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L${_TOP}/libgsasl/pkg${_PREFIX}/lib -lgsasl"
+      _CFLAGS="${_CFLAGS} -DUSE_GSASL -I${_TOP}/libgsasl/${_PKGDIR}${_PREFIX}/include"
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L${_TOP}/libgsasl/${_PKGDIR}${_PREFIX}/lib -lgsasl"
     fi
     if [ -d ../libidn2 ]; then  # Also for Windows XP compatibility
       options="${options} -DUSE_LIBIDN2=ON"
-      _CFLAGS="${_CFLAGS} -I${_TOP}/libidn2/pkg${_PREFIX}/include"
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L${_TOP}/libidn2/pkg${_PREFIX}/lib -lidn2"
+      _CFLAGS="${_CFLAGS} -I${_TOP}/libidn2/${_PKGDIR}${_PREFIX}/include"
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L${_TOP}/libidn2/${_PKGDIR}${_PREFIX}/lib -lidn2"
     elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
       options="${options} -DUSE_LIBIDN2=OFF"
       options="${options} -DUSE_WIN32_IDN=ON"
@@ -246,11 +246,11 @@ _VER="$1"
       "-DCMAKE_EXE_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_EXE}" \
       "-DCMAKE_SHARED_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_DLL}"  # --debug-find
 
-    make --jobs 2 install "DESTDIR=$(pwd)/pkg" VERBOSE=1
+    make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
   done
 
   # DESTDIR= + CMAKE_INSTALL_PREFIX
-  _pkg="pkg${_PREFIX}"
+  _pkg="${_PKGDIR}${_PREFIX}"
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.

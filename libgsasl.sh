@@ -19,7 +19,7 @@ _VER="$1"
 
   # Build
 
-  rm -r -f pkg
+  rm -r -f "${_PKGDIR}"
 
   # To fix this bizarre error when executing 'make':
   #   configure.ac:39: error: version mismatch.  This is Automake 1.16.4,
@@ -49,10 +49,10 @@ _VER="$1"
     --disable-valgrind-tests \
     "--prefix=${_PREFIX}" --silent
   make --jobs 2 clean >/dev/null
-  make --jobs 2 install "DESTDIR=$(pwd)/pkg" # >/dev/null # V=1
+  make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
   # DESTDIR= + --prefix=
-  _pkg="pkg${_PREFIX}"
+  _pkg="${_PKGDIR}${_PREFIX}"
 
   # Delete .pc and .la files
   rm -r -f "${_pkg}"/lib/pkgconfig
