@@ -57,9 +57,9 @@ _VER="$1"
   #   "-DCMAKE_CXX_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CXXFLAGS_GLOBAL}"
   # shellcheck disable=SC2086
   cmake . ${_CMAKE_GLOBAL} ${options} \
-    "-DENABLE_STATIC_LIB=1" \
-    "-DENABLE_SHARED_LIB=0" \
-    "-DCMAKE_CXX_COMPILER_WORKS=1" \
+    '-DENABLE_STATIC_LIB=1' \
+    '-DENABLE_SHARED_LIB=0' \
+    '-DCMAKE_CXX_COMPILER_WORKS=1' \
     "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
   make --jobs 2 install "DESTDIR=$(pwd)/pkg"

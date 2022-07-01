@@ -36,8 +36,8 @@ _VER="$1"
 
   # shellcheck disable=SC2086
   cmake . ${_CMAKE_GLOBAL} \
-    "-DLIBRESSL_TESTS=OFF" \
-    "-DLIBRESSL_APPS=OFF" \
+    '-DLIBRESSL_TESTS=OFF' \
+    '-DLIBRESSL_APPS=OFF' \
     "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
   make --jobs 2 install "DESTDIR=$(pwd)/pkg"
