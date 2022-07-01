@@ -33,7 +33,7 @@ _VER="$1"
 
   options="${_CONFIGURE_GLOBAL}"
   export CC="${_CC_GLOBAL}"
-  export CFLAGS="${_CFLAGS_GLOBAL} -fno-ident -O3 -Wa,--noexecstack"
+  export CFLAGS="${_CFLAGS_GLOBAL} -O3 -Wa,--noexecstack"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LIBS="${_LIBS_GLOBAL}"

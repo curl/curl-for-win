@@ -32,7 +32,7 @@ _VER="$1"
 
   unset CC
 
-  _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -fno-ident -DNDEBUG"
+  _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -DNDEBUG"
 
   options=''
 

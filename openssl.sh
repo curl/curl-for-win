@@ -101,7 +101,6 @@ _VER="$1"
   # shellcheck disable=SC2086
   ./Configure-patched ${options} \
     "--cross-compile-prefix=${_CONF_CCPREFIX}" \
-    -fno-ident \
     -Wl,--nxcompat -Wl,--dynamicbase \
     no-legacy \
     no-apps \

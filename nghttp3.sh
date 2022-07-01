@@ -32,7 +32,7 @@ _VER="$1"
 
   unset CC
 
-  _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -fno-ident -DNDEBUG"
+  _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -DNDEBUG"
 
   # We do not need C++ with ENABLE_LIB_ONLY, so make sure to skip the detection
   # logic and potential detection issues with CMAKE_CXX_COMPILER_WORKS=1

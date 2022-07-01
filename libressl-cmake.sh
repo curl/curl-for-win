@@ -32,7 +32,7 @@ _VER="$1"
 
   unset CC
 
-  _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -fno-ident -ffile-prefix-map=$(pwd)="
+  _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -ffile-prefix-map=$(pwd)="
 
   # shellcheck disable=SC2086
   cmake . ${_CMAKE_GLOBAL} \

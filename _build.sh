@@ -360,7 +360,7 @@ build_single_target() {
   export _TOPDIR; _TOPDIR="$(pwd)"
   export _PREFIX='/usr/local'
   export _CC_GLOBAL=''
-  export _CFLAGS_GLOBAL=''
+  export _CFLAGS_GLOBAL='-fno-ident'
   export _CPPFLAGS_GLOBAL=''
   export _CXXFLAGS_GLOBAL=''
   export _LDFLAGS_GLOBAL=''
