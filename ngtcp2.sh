@@ -64,8 +64,7 @@ _VER="$1"
 
   make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}"
 
-  # DESTDIR= + CMAKE_INSTALL_PREFIX
-  _pkg="${_PP}"
+  _pkg="${_PP}"  # DESTDIR= + _PREFIX
 
   # Rename static libs so they get found by dependents
 

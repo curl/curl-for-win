@@ -249,8 +249,7 @@ _VER="$1"
     make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
   done
 
-  # DESTDIR= + CMAKE_INSTALL_PREFIX
-  _pkg="${_PP}"
+  _pkg="${_PP}"  # DESTDIR= + _PREFIX
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.

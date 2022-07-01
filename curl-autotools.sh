@@ -339,8 +339,7 @@ fi
     make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
   done
 
-  # DESTDIR= + --prefix=
-  _pkg="${_PP}"
+  _pkg="${_PP}"  # DESTDIR= + _PREFIX
 
   # Build fixups
 

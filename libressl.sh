@@ -58,13 +58,12 @@ _VER="$1"
   # Ending slash required.
   make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}/" >/dev/null # 2>&1
 
-  # DESTDIR= + --prefix=
   # LibreSSL does not strip the drive letter
   #   ./libressl/${_PKGDIR}/C:/Windows/libressl
   # Some tools (e.g CMake) become weird when colons appear in
   # a filename, so move results to a sane, standard path:
 
-  _pkg="${_PP}"
+  _pkg="${_PP}"  # DESTDIR= + _PREFIX
   mkdir -p "./${_pkg}"
   mv "${_PKGDIR}/${_win_prefix}"/* "${_pkg}"
 
