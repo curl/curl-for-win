@@ -419,7 +419,10 @@ build_single_target() {
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
     fi
 
+    # This does not work yet, due to:
+    #   /usr/local/bin/x86_64-w64-mingw32-ld: asyn-thread.o:asyn-thread.c:(.rdata$.refptr.__guard_dispatch_icall_fptr[.refptr.__guard_dispatch_icall_fptr]+0x0): undefined reference to `__guard_dispatch_icall_fptr'
   # _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -Xclang -cfguard"
+  # _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Xlinker -guard:cf"
 
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_SYSROOT=${_SYSROOT}"
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}"
