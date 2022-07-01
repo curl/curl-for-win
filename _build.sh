@@ -267,8 +267,9 @@ bld() {
 build_single_target() {
   export _CPU="$1"
 
-  export _TRIPLET=
-  export _SYSROOT=
+  _TRIPLET=''
+  _SYSROOT=''
+
   export _CCPREFIX=
   export _MAKE='make'
   export _WINE=''
