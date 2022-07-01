@@ -482,48 +482,53 @@ build_single_target() {
 
   _ref='curl/CHANGES'
 
-  touch -c -r "${_ref}" "${_UNIMFT}"
+  if ! [ -f "${_ref}" ]; then
+    # This can happen with CW_BLD partial builds.
+    echo '! WARNING: curl is missing. Skip packaging.'
+  else
+    touch -c -r "${_ref}" "${_UNIMFT}"
 
-  (
-    cd "${_DST}"
-    set +x
-    _fn='BUILD-HASHES.txt'
-    {
-      find . -type f | grep -a -E '/(bin|include|lib)/' | sort | while read -r f; do
-        openssl dgst -sha256 "${f}"
-        openssl dgst -sha512 "${f}"
-      done
-    } > "${_fn}"
-    touch -c -r "../${_ref}" "${_fn}"
-  )
+    (
+      cd "${_DST}"
+      set +x
+      _fn='BUILD-HASHES.txt'
+      {
+        find . -type f | grep -a -E '/(bin|include|lib)/' | sort | while read -r f; do
+          openssl dgst -sha256 "${f}"
+          openssl dgst -sha512 "${f}"
+        done
+      } > "${_fn}"
+      touch -c -r "../${_ref}" "${_fn}"
+    )
 
-  _fn="${_DST}/BUILD-README.txt"
-  cat <<EOF > "${_fn}"
+    _fn="${_DST}/BUILD-README.txt"
+    cat <<EOF > "${_fn}"
 Visit the project page for details about these builds and the list of changes:
 
   ${_URL}
 EOF
-  touch -c -r "${_ref}" "${_fn}"
+    touch -c -r "${_ref}" "${_fn}"
 
-  _fn="${_DST}/BUILD-HOMEPAGE.url"
-  cat <<EOF > "${_fn}"
+    _fn="${_DST}/BUILD-HOMEPAGE.url"
+    cat <<EOF > "${_fn}"
 [InternetShortcut]
 URL=${_URL}
 EOF
-  unix2dos --quiet --keepdate "${_fn}"
-  touch -c -r "${_ref}" "${_fn}"
+    unix2dos --quiet --keepdate "${_fn}"
+    touch -c -r "${_ref}" "${_fn}"
 
-  if [ -n "${_LOGURL}" ]; then  # Link to the build log
-    _fn="${_DST}/BUILD-LOG.url"
-    cat <<EOF > "${_fn}"
+    if [ -n "${_LOGURL}" ]; then  # Link to the build log
+      _fn="${_DST}/BUILD-LOG.url"
+      cat <<EOF > "${_fn}"
 [InternetShortcut]
 URL=${_LOGURL}
 EOF
-    unix2dos --quiet --keepdate "${_fn}"
-    touch -c -r "${_ref}" "${_fn}"
-  fi
+      unix2dos --quiet --keepdate "${_fn}"
+      touch -c -r "${_ref}" "${_fn}"
+    fi
 
-  ./_pkg.sh "${_ref}"
+    ./_pkg.sh "${_ref}"
+  fi
 }
 
 # Build binaries

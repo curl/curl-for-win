@@ -8,6 +8,11 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 sort -u "${_BLD}" > "${_BLD}.sorted"
 mv -f "${_BLD}.sorted" "${_BLD}"
 
+if ! ls ./*-*-mingw*.* >/dev/null 2>&1; then
+  echo '! WARNING: Nothing to deploy.'
+  exit 0
+fi
+
 # Use the newest package timestamp for supplementary files
 # shellcheck disable=SC2012
 touch -r "$(ls -1 -t ./*-*-mingw*.* | head -1)" hashes.txt "${_BLD}" "${_LOG}"
