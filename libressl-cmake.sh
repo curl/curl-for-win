@@ -51,7 +51,6 @@ _VER="$1"
   options="${options} -DLIBRESSL_TESTS=OFF"
   options="${options} -DLIBRESSL_APPS=OFF"
   options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
-  options="${options} -DCMAKE_RC_FLAGS=-DGCC_WINDRES"
   options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
 
   if [ "${_CC}" = 'clang' ]; then
