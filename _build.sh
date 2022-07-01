@@ -403,12 +403,15 @@ build_single_target() {
   [ "${_CPU}" = 'x86' ] && _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-asynchronous-unwind-tables"
 
   if [ "${_CC}" = 'clang' ]; then
-    _CC_GLOBAL="clang --target=${_TRIPLET}"
+    _CC_GLOBAL="clang${CW_CCSUFFIX} --target=${_TRIPLET}"
     if [ "${_OS}" != 'win' ]; then
       _CC_GLOBAL="${_CC_GLOBAL} --sysroot=${_SYSROOT}"
       _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
     fi
     if [ "${_OS}" = 'linux' ]; then
+      # This was passed via CFLAGS for CMake to make it detect clang correctly,
+      # so we need to pass this via CFLAGS, even though it is meant for the
+      # linker.
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
     fi
 

@@ -37,9 +37,7 @@ _VER="$1"
   # shellcheck disable=SC2086
   cmake . ${_CMAKE_GLOBAL} \
     '-DCMAKE_RC_FLAGS=-DGCC_WINDRES' \
-    "-DCMAKE_C_FLAGS=${_CFLAGS}" \
-    "-DCMAKE_EXE_LINKER_FLAGS=${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}" \
-    "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
+    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
   make --jobs 2 install "DESTDIR=$(pwd)/pkg"
 

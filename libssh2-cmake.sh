@@ -67,9 +67,7 @@ _VER="$1"
     '-DBUILD_EXAMPLES=OFF' \
     '-DBUILD_TESTING=OFF' \
     '-DENABLE_DEBUG_LOGGING=OFF' \
-    "-DCMAKE_C_FLAGS=${_CFLAGS}" \
-    "-DCMAKE_EXE_LINKER_FLAGS=${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}" \
-    "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
+    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
   make --jobs 2 install "DESTDIR=$(pwd)/pkg"
 

@@ -57,9 +57,7 @@ _VER="$1"
     "-DENABLE_STATIC_LIB=1" \
     "-DENABLE_SHARED_LIB=0" \
     "-DCMAKE_CXX_COMPILER_WORKS=1" \
-    "-DCMAKE_C_FLAGS=${_CFLAGS}" \
-    "-DCMAKE_EXE_LINKER_FLAGS=${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}" \
-    "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
+    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
   make --jobs 2 install "DESTDIR=$(pwd)/pkg"
 

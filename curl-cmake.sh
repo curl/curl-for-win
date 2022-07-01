@@ -242,9 +242,9 @@ _VER="$1"
 
     # shellcheck disable=SC2086
     cmake . ${_CMAKE_GLOBAL} ${options} \
-      "-DCMAKE_C_FLAGS=${_CFLAGS}" \
-      "-DCMAKE_EXE_LINKER_FLAGS=${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_EXE}" \
-      "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_DLL}"  # --debug-find
+      "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"  \
+      "-DCMAKE_EXE_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_EXE}" \
+      "-DCMAKE_SHARED_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_DLL}"  # --debug-find
 
     make --jobs 2 install "DESTDIR=$(pwd)/pkg" VERBOSE=1
   done
