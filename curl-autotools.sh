@@ -146,7 +146,7 @@ fi
       options="${options} --enable-ldap --enable-ldaps --with-ldap-lib=wldap32"
     fi
 
-    # NOTE: root path with spaces breaks all values with '$(pwd)'. But,
+    # NOTE: root path with spaces breaks all values with '${_TOPDIR}'. But,
     #       autotools breaks on spaces anyway, so let us leave it like that.
 
     if [ -d ../zlib ]; then
