@@ -429,8 +429,8 @@ build_single_target() {
     _CMAKE_CXX_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_CXX_COMPILER=clang++${CW_CCSUFFIX}"
   else
     _CC_GLOBAL="${_CCPREFIX}gcc -static-libgcc"
-    _LDFLAGS_GLOBAL="${_OPTM}"
-    _CFLAGS_GLOBAL="${_OPTM} -static-libgcc"
+    _LDFLAGS_GLOBAL="${_OPTM} ${_LDFLAGS_GLOBAL}"
+    _CFLAGS_GLOBAL="${_OPTM} -static-libgcc ${_CFLAGS_GLOBAL}"
 
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=${_CCPREFIX}gcc"
     _CMAKE_CXX_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++"
