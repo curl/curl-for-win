@@ -54,11 +54,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #       win32 -> win-x86
 #             -> win-a64 / win-arm64
 #     Needs updating curl-www also.
-#   - Move --target options into CC variable for all components
 #   - Add support for arm64 builds (requires UCRT)
 #   - Drop XP compatibility for x86 builds also
 #   - Drop x86 builds
-#   - Drop gcc support?
 #   - Make -noftp the default?
 #   - Make -nobrotli the default?
 #   - Enable Control Flow Guard (once FLOSS toolchains support it): -ehcontguard (requires LLVM 13.0.0)
