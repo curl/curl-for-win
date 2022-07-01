@@ -76,17 +76,17 @@ _VER="$1"
     options=''
     options="${options} -DCMAKE_DISABLE_PRECOMPILE_HEADERS=OFF"
 
-    CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
-    CURL_LDFLAG_EXTRAS_EXE=''
-    CURL_LDFLAG_EXTRAS_DLL=''
+    _LDFLAGS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
+    _LDFLAGS_EXE=''
+    _LDFLAGS_DLL=''
     if [ "${_CPU}" = 'x86' ]; then
       _CFLAGS="${_CFLAGS} -D_WIN32_WINNT=0x0501 -DHAVE_ATOMIC"  # For Windows XP compatibility
-      CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--pic-executable,-e,_mainCRTStartup"
+      _LDFLAGS_EXE="${_LDFLAGS_EXE} -Wl,--pic-executable,-e,_mainCRTStartup"
     else
       _CFLAGS="${_CFLAGS} -DHAVE_INET_NTOP -DHAVE_STRUCT_POLLFD"
-      CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--pic-executable,-e,mainCRTStartup"
-      CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,--image-base,0x150000000"
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
+      _LDFLAGS_EXE="${_LDFLAGS_EXE} -Wl,--pic-executable,-e,mainCRTStartup"
+      _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,--image-base,0x150000000"
+      _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va"
     fi
 
     options="${options} -DCURL_OS_SUFFIX=-${_CPU}"
@@ -101,20 +101,20 @@ _VER="$1"
 
     [ "${pass}" = 'shared' ] && options="${options} -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${CURL_DLL_SUFFIX}.dll"  # CMAKE_SHARED_LIBRARY_SUFFIX ignored.
 
-    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,--output-def,libcurl${CURL_DLL_SUFFIX}.def"
+    _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,--output-def,libcurl${CURL_DLL_SUFFIX}.def"
 
     if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-      CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,-Map,curl.map"
-      CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,-Map,libcurl${CURL_DLL_SUFFIX}.map"
+      _LDFLAGS_EXE="${_LDFLAGS_EXE} -Wl,-Map,curl.map"
+      _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,-Map,libcurl${CURL_DLL_SUFFIX}.map"
     fi
 
     # Ugly hack. Everything breaks without this due to the accidental ordering of
     # libs and objects, and offering no universal way to (re)insert libs at
     # specific positions. Linker complains about a missing --end-group, then adds
     # it automatically anyway. Same with '-fuse-ld=lld'.
-    CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--start-group"
+    _LDFLAGS="${_LDFLAGS} -Wl,--start-group"
 
-    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} $(pwd)/libcurl.def"
+    _LDFLAGS_DLL="${_LDFLAGS_DLL} $(pwd)/libcurl.def"
 
     if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
        [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
@@ -131,7 +131,7 @@ _VER="$1"
       [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && _CFLAGS="${_CFLAGS} -DCURL_DISABLE_FTP=1"
 
       _CFLAGS="${_CFLAGS} -DHAVE_LDAP_SSL"
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lwldap32"
+      _LDFLAGS="${_LDFLAGS} -lwldap32"
     fi
 
     if [ -d ../zlib ]; then
@@ -168,7 +168,7 @@ _VER="$1"
     if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ]; then
       options="${options} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON"
       _CFLAGS="${_CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lbcrypt"
+      _LDFLAGS="${_LDFLAGS} -lbcrypt"
     fi
 
     options="${options} -DCURL_USE_SCHANNEL=ON"
@@ -178,7 +178,7 @@ _VER="$1"
       options="${options} -DCURL_USE_LIBSSH2=ON"
       options="${options} -DLIBSSH2_LIBRARY=${_TOP}/libssh2/${_PP}/lib/libssh2.a"
       options="${options} -DLIBSSH2_INCLUDE_DIR=${_TOP}/libssh2/${_PP}/include"
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lbcrypt"
+      _LDFLAGS="${_LDFLAGS} -lbcrypt"
     else
       options="${options} -DCURL_USE_LIBSSH2=OFF"  # Avoid detecting a copy on the host OS
     fi
@@ -202,19 +202,19 @@ _VER="$1"
       options="${options} -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PP}/include"
       options="${options} -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/${_PP}/lib"
       _CFLAGS="${_CFLAGS} -DNGTCP2_STATICLIB"
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lws2_32"  # Necessary for 'CheckQuicSupportInOpenSSL'
+      _LDFLAGS="${_LDFLAGS} -lws2_32"  # Necessary for 'CheckQuicSupportInOpenSSL'
     else
       options="${options} -DUSE_NGHTTP3=OFF"
       options="${options} -DUSE_NGTCP2=OFF"
     fi
     if [ -d ../libgsasl ]; then
       _CFLAGS="${_CFLAGS} -DUSE_GSASL -I${_TOP}/libgsasl/${_PP}/include"
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L${_TOP}/libgsasl/${_PP}/lib -lgsasl"
+      _LDFLAGS="${_LDFLAGS} -L${_TOP}/libgsasl/${_PP}/lib -lgsasl"
     fi
     if [ -d ../libidn2 ]; then  # Also for Windows XP compatibility
       options="${options} -DUSE_LIBIDN2=ON"
       _CFLAGS="${_CFLAGS} -I${_TOP}/libidn2/${_PP}/include"
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L${_TOP}/libidn2/${_PP}/lib -lidn2"
+      _LDFLAGS="${_LDFLAGS} -L${_TOP}/libidn2/${_PP}/lib -lidn2"
     elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
       options="${options} -DUSE_LIBIDN2=OFF"
       options="${options} -DUSE_WIN32_IDN=ON"
@@ -236,15 +236,15 @@ _VER="$1"
     options="${options} -DBUILD_TESTING=OFF"
 
     if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
-      CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
-      CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
+      _LDFLAGS_EXE="${_LDFLAGS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
+      _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
     fi
 
     # shellcheck disable=SC2086
     cmake . ${_CMAKE_GLOBAL} ${options} \
       "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"  \
-      "-DCMAKE_EXE_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_EXE}" \
-      "-DCMAKE_SHARED_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_DLL}"  # --debug-find
+      "-DCMAKE_EXE_LINKER_FLAGS=${_LDFLAGS} ${_LDFLAGS_EXE}" \
+      "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS} ${_LDFLAGS_DLL}"  # --debug-find
 
     make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
   done
