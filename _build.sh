@@ -355,7 +355,7 @@ build_single_target() {
 
   # Setup common toolchain configuration options
 
-  export _TOP; _TOP="$(pwd)"
+  export _TOP; _TOP="$(pwd)"  # Must be an absolute path
   export _PKGDIR="${_TRIPLET}"
   _PREFIX='/usr'
   export _PP="${_PKGDIR}${_PREFIX}"
