@@ -37,13 +37,6 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LIBS="${_LIBS_GLOBAL}"
 
-  if [ "${_CC}" = 'clang' ]; then
-    export RC="${_CCPREFIX}windres"
-    export AR="${_CCPREFIX}ar"
-    export NM="${_CCPREFIX}nm"
-    export RANLIB="${_CCPREFIX}ranlib"
-  fi
-
   # shellcheck disable=SC2086
   ./configure ${options} \
     --disable-dependency-tracking \

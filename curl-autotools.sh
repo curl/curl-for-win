@@ -72,14 +72,6 @@ fi
     export LDFLAGS="${_LDFLAGS_GLOBAL}"
     export LIBS="${_LIBS_GLOBAL}"
 
-    if [ "${_CC}" = 'clang' ]; then
-      export AR="${_CCPREFIX}ar"
-      export LD="${_CCPREFIX}ld"
-      export NM="${_CCPREFIX}nm"
-      export RANLIB="${_CCPREFIX}ranlib"
-    fi
-
-    export RC="${_CCPREFIX}windres"
     export RCFLAGS='--output-format coff -Iinclude'
 
     [ "${_CPU}" = 'x86' ] && RCFLAGS="${RCFLAGS} --target=pe-i386"

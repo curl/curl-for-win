@@ -39,10 +39,6 @@ _VER="$1"
   export LIBS="${_LIBS_GLOBAL}"
 
   if [ "${_CC}" = 'clang' ]; then
-    export RC="${_CCPREFIX}windres"
-    export AR="${_CCPREFIX}ar"
-    export NM="${_CCPREFIX}nm"
-    export RANLIB="${_CCPREFIX}ranlib"
     CFLAGS="${CFLAGS} -Wno-inconsistent-dllimport"
   else
     CFLAGS="${CFLAGS} -Wno-attributes"

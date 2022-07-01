@@ -370,6 +370,12 @@ build_single_target() {
   export _STRIP="${_CCPREFIX}strip"
   export _OBJDUMP="${_CCPREFIX}objdump"
 
+  # for autotools (and openssl)
+  export RC="${_CCPREFIX}windres"
+  export AR="${_CCPREFIX}ar"
+  export NM="${_CCPREFIX}nm"
+  export RANLIB="${_CCPREFIX}ranlib"
+
   if [ "${_OS}" = 'win' ]; then
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -GMSYS Makefiles"
     # Without this, the value '/usr/local' becomes 'msys64/usr/local'

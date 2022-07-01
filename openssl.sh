@@ -60,10 +60,6 @@ _VER="$1"
     # To avoid warnings when passing C compiler options to the linker
     options="${options} -Wno-unused-command-line-argument"
     export CC="${_CC_GLOBAL}"
-    export RC="${_CCPREFIX}windres"
-    export AR="${_CCPREFIX}ar"
-    export NM="${_CCPREFIX}nm"
-    export RANLIB="${_CCPREFIX}ranlib"
     _CONF_CCPREFIX=
   else
     unset CC
