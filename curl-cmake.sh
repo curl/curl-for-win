@@ -178,6 +178,7 @@ _VER="$1"
       options="${options} -DCURL_BROTLI=ON"
       options="${options} -DBROTLIDEC_LIBRARY=$(pwd)/../brotli/pkg/usr/local/lib/libbrotlidec.a"
       options="${options} -DBROTLICOMMON_LIBRARY=$(pwd)/../brotli/pkg/usr/local/lib/libbrotlicommon.a"
+      options="${options} -DBROTLI_INCLUDE_DIR=$(pwd)/../brotli/pkg/usr/local/include"
     else
       options="${options} -DCURL_BROTLI=OFF"
     fi
