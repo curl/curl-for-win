@@ -17,8 +17,6 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  [ "${_OS}" != 'win' ] && options="--build=${_CROSS_HOST} --host=${_TRIPLET}"
-
   # Build
 
   rm -r -f pkg
@@ -38,28 +36,20 @@ _VER="$1"
 #   autoreconf --install
 # fi
 
-  export LDFLAGS=''
-  export CFLAGS='-fno-ident -O3'
-  export CPPFLAGS=''
-  [ "${_CRT}" = 'ucrt' ] && CPPFLAGS="${CPPFLAGS} -D_UCRT"
+  options="${_CONFIGURE_GLOBAL}"
+  export CC="${_CC_GLOBAL}"
+  export CFLAGS="${_CFLAGS_GLOBAL} -fno-ident -O3"
+  export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
+  export LDFLAGS="${_LDFLAGS_GLOBAL}"
+  export LIBS="${_LIBS_GLOBAL}"
 
   if [ "${_CC}" = 'clang' ]; then
-    export CC="clang --target=${_TRIPLET}"
-    if [ "${_OS}" != 'win' ]; then
-      CC="${CC} --sysroot=${_SYSROOT}"
-      options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
-      [ "${_OS}" = 'linux' ] && LDFLAGS="${LDFLAGS} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
-    fi
+    export RC="${_CCPREFIX}windres"
     export AR="${_CCPREFIX}ar"
     export NM="${_CCPREFIX}nm"
     export RANLIB="${_CCPREFIX}ranlib"
-  else
-    export CC="${_CCPREFIX}gcc -static-libgcc"
-    LDFLAGS="${_OPTM} ${LDFLAGS}"
-    CFLAGS="${_OPTM} ${CFLAGS}"
   fi
 
-  [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
   # shellcheck disable=SC2086
   ./configure ${options} \
     --disable-dependency-tracking \
@@ -68,13 +58,13 @@ _VER="$1"
     --disable-rpath \
     --enable-static \
     --disable-shared \
-    --prefix=/usr/local \
+    "--prefix=${_PREFIX}" \
     --silent
 # make --jobs 2 clean >/dev/null
   make --jobs 2 install "DESTDIR=$(pwd)/pkg" # >/dev/null # V=1
 
   # DESTDIR= + --prefix=
-  _pkg='pkg/usr/local'
+  _pkg="pkg${_PREFIX}"
 
   # Delete .pc and .la files
   rm -r -f "${_pkg}"/lib/pkgconfig

@@ -20,16 +20,6 @@ _VER="$1"
 (
   cd "${_NAM}"  # mandatory component
 
-  # Cross-tasks
-
-  if [ "${_OS}" = 'win' ]; then
-    opt_gmsys='-GMSYS Makefiles'
-    # Without this option, the value '/usr/local' becomes 'msys64/usr/local'
-    export MSYS2_ARG_CONV_EXCL='-DCMAKE_INSTALL_PREFIX='
-  else
-    opt_gmsys=''
-  fi
-
   # Set OS string to the autotools value. To test reproducibility across make systems.
   if [ -n "${CW_DEV_FIXUP_OS_STRING:-}" ]; then
     # Windows-* ->
@@ -53,9 +43,6 @@ _VER="$1"
   find . -name '*.def' -delete
   find . -name '*.map' -delete
 
-  # DESTDIR= + CMAKE_INSTALL_PREFIX
-  _pkg='pkg/usr/local'
-
   # Generate .def file for libcurl by parsing curl headers. Useful to export
   # the libcurl function meant to be exported.
   # Without this, the default linker logic kicks in, whereas it exports every
@@ -73,12 +60,6 @@ _VER="$1"
       | sed -E 's|^ *\*? *([a-z_]+) *\(.+$|\1|g'
   } | grep -a -v '^$' | sort | tee -a libcurl.def
 
-  if [ "${_CRT}" = 'ucrt' ] && [ "${_CC}" = 'clang' ]; then
-    uselld=1
-  else
-    uselld=0
-  fi
-
   # CMake cannot build everything in one pass. With BUILD_SHARED_LIBS enabled,
   # it does not build a static lib, and links curl.exe against libcurl DLL
   # with no option to change this. We need to split it into two passes. This
@@ -88,17 +69,13 @@ _VER="$1"
   #   2. build the static libcurl lib + statically linked curl EXE
   for pass in shared static; do
 
-    options=''
-    options="${options} -DCMAKE_SYSTEM_NAME=Windows"
-    options="${options} -DCMAKE_BUILD_TYPE=Release"
-    options="${options} -DCMAKE_DISABLE_PRECOMPILE_HEADERS=OFF"
-    [ "${_OS}" = 'mac' ] && options="${options} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
-    options="${options} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
-    options="${options} -DCMAKE_INSTALL_MESSAGE=NEVER"
-    options="${options} -DCMAKE_INSTALL_PREFIX=/usr/local"
+    unset CC
 
-    _CFLAGS='-fno-ident -W -Wall -DHAVE_STRCASECMP -DHAVE_SIGNAL -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID -DHAVE_STRTOK_R -DUSE_HEADERS_API -DHAVE_FTRUNCATE -DHAVE_GETADDRINFO_THREADSAFE -DHAVE_UNISTD_H'
-    [ "${_CPU}" = 'x86' ] && _CFLAGS="${_CFLAGS} -fno-asynchronous-unwind-tables"
+    _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -fno-ident -W -Wall -DHAVE_STRCASECMP -DHAVE_SIGNAL -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID -DHAVE_STRTOK_R -DUSE_HEADERS_API -DHAVE_FTRUNCATE -DHAVE_GETADDRINFO_THREADSAFE -DHAVE_UNISTD_H"
+
+    options=''
+    options="${options} -DCMAKE_DISABLE_PRECOMPILE_HEADERS=OFF"
+
     CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
     CURL_LDFLAG_EXTRAS_EXE=''
     CURL_LDFLAG_EXTRAS_DLL=''
@@ -110,16 +87,6 @@ _VER="$1"
       CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--pic-executable,-e,mainCRTStartup"
       CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,--image-base,0x150000000"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
-    fi
-
-    if [ "${_CRT}" = 'ucrt' ]; then
-      if [ "${_CC}" = 'clang' ]; then
-        CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -fuse-ld=lld -s"
-      else
-        CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -specs=${_GCCSPECS}"
-      fi
-      _CFLAGS="${_CFLAGS} -D_UCRT"
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lucrt"
     fi
 
     options="${options} -DCURL_OS_SUFFIX=-${_CPU}"
@@ -169,32 +136,32 @@ _VER="$1"
 
     if [ -d ../zlib ]; then
       options="${options} -DUSE_ZLIB=ON"
-      options="${options} -DZLIB_LIBRARY=$(pwd)/../zlib/pkg/usr/local/lib/libz.a"
-      options="${options} -DZLIB_INCLUDE_DIR=$(pwd)/../zlib/pkg/usr/local/include"
+      options="${options} -DZLIB_LIBRARY=${_TOPDIR}/zlib/pkg/usr/local/lib/libz.a"
+      options="${options} -DZLIB_INCLUDE_DIR=${_TOPDIR}/zlib/pkg/usr/local/include"
     else
       options="${options} -DUSE_ZLIB=OFF"
     fi
     if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
       options="${options} -DCURL_BROTLI=ON"
-      options="${options} -DBROTLIDEC_LIBRARY=$(pwd)/../brotli/pkg/usr/local/lib/libbrotlidec.a"
-      options="${options} -DBROTLICOMMON_LIBRARY=$(pwd)/../brotli/pkg/usr/local/lib/libbrotlicommon.a"
-      options="${options} -DBROTLI_INCLUDE_DIR=$(pwd)/../brotli/pkg/usr/local/include"
+      options="${options} -DBROTLIDEC_LIBRARY=${_TOPDIR}/brotli/pkg/usr/local/lib/libbrotlidec.a"
+      options="${options} -DBROTLICOMMON_LIBRARY=${_TOPDIR}/brotli/pkg/usr/local/lib/libbrotlicommon.a"
+      options="${options} -DBROTLI_INCLUDE_DIR=${_TOPDIR}/brotli/pkg/usr/local/include"
     else
       options="${options} -DCURL_BROTLI=OFF"
     fi
 
     if [ -d ../libressl ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
-      options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../libressl/pkg/usr/local"
-      options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../libressl/pkg/usr/local/include"
+      options="${options} -DOPENSSL_ROOT_DIR=${_TOPDIR}/libressl/pkg/usr/local"
+      options="${options} -DOPENSSL_INCLUDE_DIR=${_TOPDIR}/libressl/pkg/usr/local/include"
     elif [ -d ../openssl-quic ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
-      options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../openssl-quic/pkg/usr/local"
-      options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../openssl-quic/pkg/usr/local/include"
+      options="${options} -DOPENSSL_ROOT_DIR=${_TOPDIR}/openssl-quic/pkg/usr/local"
+      options="${options} -DOPENSSL_INCLUDE_DIR=${_TOPDIR}/openssl-quic/pkg/usr/local/include"
     elif [ -d ../openssl ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
-      options="${options} -DOPENSSL_ROOT_DIR=$(pwd)/../openssl/pkg/usr/local"
-      options="${options} -DOPENSSL_INCLUDE_DIR=$(pwd)/../openssl/pkg/usr/local/include"
+      options="${options} -DOPENSSL_ROOT_DIR=${_TOPDIR}/openssl/pkg/usr/local"
+      options="${options} -DOPENSSL_INCLUDE_DIR=${_TOPDIR}/openssl/pkg/usr/local/include"
     else
       options="${options} -DCURL_USE_OPENSSL=OFF"
     fi
@@ -209,8 +176,8 @@ _VER="$1"
 
     if [ -d ../libssh2 ]; then
       options="${options} -DCURL_USE_LIBSSH2=ON"
-      options="${options} -DLIBSSH2_LIBRARY=$(pwd)/../libssh2/pkg/usr/local/lib/libssh2.a"
-      options="${options} -DLIBSSH2_INCLUDE_DIR=$(pwd)/../libssh2/pkg/usr/local/include"
+      options="${options} -DLIBSSH2_LIBRARY=${_TOPDIR}/libssh2/pkg/usr/local/lib/libssh2.a"
+      options="${options} -DLIBSSH2_INCLUDE_DIR=${_TOPDIR}/libssh2/pkg/usr/local/include"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lbcrypt"
     else
       options="${options} -DCURL_USE_LIBSSH2=OFF"  # Avoid detecting a copy on the host OS
@@ -218,22 +185,22 @@ _VER="$1"
 
     if [ -d ../nghttp2 ]; then
       options="${options} -DUSE_NGHTTP2=ON"
-      options="${options} -DNGHTTP2_LIBRARY=$(pwd)/../nghttp2/pkg/usr/local/lib/libnghttp2.a"
-      options="${options} -DNGHTTP2_INCLUDE_DIR=$(pwd)/../nghttp2/pkg/usr/local/include"
+      options="${options} -DNGHTTP2_LIBRARY=${_TOPDIR}/nghttp2/pkg/usr/local/lib/libnghttp2.a"
+      options="${options} -DNGHTTP2_INCLUDE_DIR=${_TOPDIR}/nghttp2/pkg/usr/local/include"
       _CFLAGS="${_CFLAGS} -DNGHTTP2_STATICLIB"
     else
       options="${options} -DUSE_NGHTTP2=OFF"
     fi
     if [ -d ../nghttp3 ] && [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ]; then
       options="${options} -DUSE_NGHTTP3=ON"
-      options="${options} -DNGHTTP3_LIBRARY=$(pwd)/../nghttp3/pkg/usr/local/lib/libnghttp3.a"
-      options="${options} -DNGHTTP3_INCLUDE_DIR=$(pwd)/../nghttp3/pkg/usr/local/include"
+      options="${options} -DNGHTTP3_LIBRARY=${_TOPDIR}/nghttp3/pkg/usr/local/lib/libnghttp3.a"
+      options="${options} -DNGHTTP3_INCLUDE_DIR=${_TOPDIR}/nghttp3/pkg/usr/local/include"
       _CFLAGS="${_CFLAGS} -DNGHTTP3_STATICLIB"
 
       options="${options} -DUSE_NGTCP2=ON"
-      options="${options} -DNGTCP2_LIBRARY=$(pwd)/../ngtcp2/pkg/usr/local/lib/libngtcp2.a"
-      options="${options} -DNGTCP2_INCLUDE_DIR=$(pwd)/../ngtcp2/pkg/usr/local/include"
-      options="${options} -DCMAKE_LIBRARY_PATH=$(pwd)/../ngtcp2/pkg/usr/local/lib"
+      options="${options} -DNGTCP2_LIBRARY=${_TOPDIR}/ngtcp2/pkg/usr/local/lib/libngtcp2.a"
+      options="${options} -DNGTCP2_INCLUDE_DIR=${_TOPDIR}/ngtcp2/pkg/usr/local/include"
+      options="${options} -DCMAKE_LIBRARY_PATH=${_TOPDIR}/ngtcp2/pkg/usr/local/lib"
       _CFLAGS="${_CFLAGS} -DNGTCP2_STATICLIB"
       CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lws2_32"  # Necessary for 'CheckQuicSupportInOpenSSL'
     else
@@ -241,13 +208,13 @@ _VER="$1"
       options="${options} -DUSE_NGTCP2=OFF"
     fi
     if [ -d ../libgsasl ]; then
-      _CFLAGS="${_CFLAGS} -DUSE_GSASL -I$(pwd)/../libgsasl/pkg/usr/local/include"
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L$(pwd)/../libgsasl/pkg/usr/local/lib -lgsasl"
+      _CFLAGS="${_CFLAGS} -DUSE_GSASL -I${_TOPDIR}/libgsasl/pkg/usr/local/include"
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L${_TOPDIR}/libgsasl/pkg/usr/local/lib -lgsasl"
     fi
     if [ -d ../libidn2 ]; then  # Also for Windows XP compatibility
       options="${options} -DUSE_LIBIDN2=ON"
-      _CFLAGS="${_CFLAGS} -I$(pwd)/../libidn2/pkg/usr/local/include"
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L$(pwd)/../libidn2/pkg/usr/local/lib -lidn2"
+      _CFLAGS="${_CFLAGS} -I${_TOPDIR}/libidn2/pkg/usr/local/include"
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L${_TOPDIR}/libidn2/pkg/usr/local/lib -lidn2"
     elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
       options="${options} -DUSE_LIBIDN2=OFF"
       options="${options} -DUSE_WIN32_IDN=ON"
@@ -268,42 +235,22 @@ _VER="$1"
     options="${options} -DENABLE_THREADED_RESOLVER=ON"
     options="${options} -DBUILD_TESTING=OFF"
 
-    if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${uselld}" = '1' ]; then
+    if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
       CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
       CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
     fi
 
-    if [ "${_CC}" = 'clang' ]; then
-      unset CC
-
-      [ "${_OS}" = 'linux' ] && _CFLAGS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${_CFLAGS}"
-
-    # _CFLAGS="${_CFLAGS} -Xclang -cfguard"
-
-      # shellcheck disable=SC2086
-      cmake . ${options} ${opt_gmsys} \
-        "-DCMAKE_SYSROOT=${_SYSROOT}" \
-        "-DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}" \
-        "-DCMAKE_C_COMPILER_TARGET=${_TRIPLET}" \
-        "-DCMAKE_C_COMPILER=clang${CW_CCSUFFIX}" \
-        "-DCMAKE_C_FLAGS=${_CFLAGS}" \
-        "-DCMAKE_EXE_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_EXE}" \
-        "-DCMAKE_SHARED_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_DLL}"  # --debug-find
-    else
-      unset CC
-
-      _CFLAGS="${_OPTM} ${_CFLAGS}"
-
-      # shellcheck disable=SC2086
-      cmake . ${options} ${opt_gmsys} \
-        "-DCMAKE_C_COMPILER=${_CCPREFIX}gcc" \
-        "-DCMAKE_C_FLAGS=-static-libgcc ${_CFLAGS}" \
-        "-DCMAKE_EXE_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_EXE}" \
-        "-DCMAKE_SHARED_LINKER_FLAGS=${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_DLL}"
-    fi
+    # shellcheck disable=SC2086
+    cmake . ${_CMAKE_GLOBAL} ${options} \
+      "-DCMAKE_C_FLAGS=${_CFLAGS}" \
+      "-DCMAKE_EXE_LINKER_FLAGS=${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_EXE}" \
+      "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${CURL_LDFLAG_EXTRAS} ${CURL_LDFLAG_EXTRAS_DLL}"  # --debug-find
 
     make --jobs 2 install "DESTDIR=$(pwd)/pkg" VERBOSE=1
   done
+
+  # DESTDIR= + CMAKE_INSTALL_PREFIX
+  _pkg="pkg${_PREFIX}"
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.
@@ -327,7 +274,7 @@ _VER="$1"
   # - not stripping the .buildid section, which contains a timestamp.
   # LLVM's own llvm-objcopy does not seems to work with Windows binaries,
   # so .exe and .dll stripping is done via the -s linker option.
-  if [ "${uselld}" = '0' ]; then
+  if [ "${_LD}" = 'ld' ]; then
     "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.exe
     "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.dll
     "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/libcurl.dll.a

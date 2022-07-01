@@ -292,7 +292,7 @@ build_single_target() {
     [ "${_CPU}" = 'x86' ] && PATH="/mingw32/bin:${_ori_path}"
     [ "${_CPU}" = 'x64' ] && PATH="/mingw64/bin:${_ori_path}"
     [ "${_CPU}" = 'a64' ] && PATH="/clangarm64/bin:${_ori_path}"
-    export _MAKE='mingw32-make'
+    _MAKE='mingw32-make'
 
     # Install required component
     pip3 --version
@@ -352,6 +352,73 @@ build_single_target() {
       _GCCSPECS="$(realpath gcc-specs-ucrt)"
       "${_CCPREFIX}gcc" -dumpspecs | sed 's|-lmsvcrt|-lucrt|g' > "${_GCCSPECS}"
     fi
+  fi
+
+  # Setup common toolchain configuration options
+
+  export _TOPDIR; _TOPDIR="$(pwd)"
+  export _PREFIX='/usr/local'
+  export _CC_GLOBAL=''
+  export _CFLAGS_GLOBAL=''
+  export _CPPFLAGS_GLOBAL=''
+  export _LDFLAGS_GLOBAL=''
+  export _LIBS_GLOBAL=''
+  export _CONFIGURE_GLOBAL=''
+  export _CMAKE_GLOBAL='-Wno-dev -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_BUILD_TYPE=Release'
+  export _CMAKE_CXX_GLOBAL=''
+  export _LD='ld'  # ld or lld
+
+  if [ "${_OS}" = 'win' ]; then
+    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -GMSYS Makefiles"
+    # Without this, the value '/usr/local' becomes 'msys64/usr/local'
+    export MSYS2_ARG_CONV_EXCL='-DCMAKE_INSTALL_PREFIX='
+  elif [ "${_OS}" = 'mac' ]; then
+    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
+  fi
+
+  _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_MESSAGE=NEVER"
+  _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_PREFIX=${_PREFIX}"
+  _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
+
+  if [ "${_CRT}" = 'ucrt' ]; then
+    if [ "${_CC}" = 'clang' ]; then
+      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -fuse-ld=lld -Wl,-s"
+      _LD='lld'
+    else
+      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -specs=${_GCCSPECS}"
+    fi
+    _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -D_UCRT"
+    _LIBS_GLOBAL="${_LIBS_GLOBAL} -lucrt"
+  fi
+
+  [ "${_OS}" != 'win' ] && _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --build=${_CROSS_HOST} --host=${_TRIPLET}"
+  [ "${_CPU}" = 'x86' ] && _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-asynchronous-unwind-tables"
+
+  if [ "${_CC}" = 'clang' ]; then
+    _CC_GLOBAL="clang --target=${_TRIPLET}"
+    if [ "${_OS}" != 'win' ]; then
+      _CC_GLOBAL="${_CC_GLOBAL} --sysroot=${_SYSROOT}"
+      _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
+    fi
+    if [ "${_OS}" = 'linux' ]; then
+      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
+    fi
+
+  # _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -Xclang -cfguard"
+
+    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_SYSROOT=${_SYSROOT}"
+    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}"
+    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER_TARGET=${_TRIPLET}"
+    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=clang${CW_CCSUFFIX}"
+    _CMAKE_CXX_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}"
+    _CMAKE_CXX_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_CXX_COMPILER=clang++${CW_CCSUFFIX}"
+  else
+    _CC_GLOBAL="${_CCPREFIX}gcc -static-libgcc"
+    _LDFLAGS_GLOBAL="${_OPTM}"
+    _CFLAGS_GLOBAL="${_OPTM} -static-libgcc"
+
+    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=${_CCPREFIX}gcc"
+    _CMAKE_CXX_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++"
   fi
 
   # Unified, per-target package: Initialize

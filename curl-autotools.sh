@@ -65,15 +65,20 @@ fi
 
   for pass in shared static; do
 
-    options=''
+    options="${_CONFIGURE_GLOBAL}"
+    export CC="${_CC_GLOBAL}"
+    export CFLAGS="${_CFLAGS_GLOBAL} -fno-ident -W -Wall"
+    export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
+    export LDFLAGS="${_LDFLAGS_GLOBAL}"
+    export LIBS="${_LIBS_GLOBAL}"
 
-    # Cross-tasks
-    [ "${_OS}" != 'win' ] && options="${options} --build=${_CROSS_HOST} --host=${_TRIPLET}"
+    if [ "${_CC}" = 'clang' ]; then
+      export AR="${_CCPREFIX}ar"
+      export LD="${_CCPREFIX}ld"
+      export NM="${_CCPREFIX}nm"
+      export RANLIB="${_CCPREFIX}ranlib"
+    fi
 
-    export LDFLAGS=''
-    export CFLAGS='-fno-ident -W -Wall'
-    export CPPFLAGS='-DNDEBUG -DHAVE_PROCESS_H'
-    export LIBS=''
     export RC="${_CCPREFIX}windres"
     export RCFLAGS='--output-format coff -Iinclude'
 
@@ -81,48 +86,19 @@ fi
     [ "${_CPU}" = 'x64' ] && RCFLAGS="${RCFLAGS} --target=pe-x86-64"
   # [ "${_CPU}" = 'a64' ] && RCFLAGS="${RCFLAGS} --target=..."  # FIXME
 
+    CPPFLAGS="${CPPFLAGS} -DNDEBUG -DHAVE_PROCESS_H"
+
     # configure: error: --enable-unix-sockets is not available on this platform!
     # due to non-portable verification method.
     CPPFLAGS="${CPPFLAGS} -DUSE_UNIX_SOCKETS"
 
-    uselld=0
-    if [ "${_CRT}" = 'ucrt' ]; then
-      if [ "${_CC}" = 'clang' ]; then
-        LDFLAGS="${LDFLAGS} -fuse-ld=lld -Wl,-s"
-        uselld=1
-      else
-        LDFLAGS="${LDFLAGS} -specs=${_GCCSPECS}"
-      fi
-      CPPFLAGS="${CPPFLAGS} -D_UCRT"
-      LIBS="${LIBS} -lucrt"
-    fi
-
-    if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${uselld}" = '1' ]; then
+    if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
       if [ "${pass}" = 'shared' ]; then
         LDFLAGS="${LDFLAGS} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
       else
         LDFLAGS="${LDFLAGS} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
       fi
     fi
-
-    if [ "${_CC}" = 'clang' ]; then
-      export CC="clang --target=${_TRIPLET}"
-      if [ "${_OS}" != 'win' ]; then
-        CC="${CC} --sysroot=${_SYSROOT}"
-        options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
-        [ "${_OS}" = 'linux' ] && LDFLAGS="${LDFLAGS} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
-      fi
-      export AR="${_CCPREFIX}ar"
-      export LD="${_CCPREFIX}ld"
-      export NM="${_CCPREFIX}nm"
-      export RANLIB="${_CCPREFIX}ranlib"
-    else
-      export CC="${_CCPREFIX}gcc -static-libgcc"
-      LDFLAGS="${_OPTM} ${LDFLAGS}"
-      CFLAGS="${_OPTM} ${CFLAGS}"
-    fi
-
-    [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
 
     LDFLAGS="${LDFLAGS} -Wl,--nxcompat -Wl,--dynamicbase"
     if [ "${_CPU}" = 'x86' ]; then
@@ -182,14 +158,14 @@ fi
     #       autotools breaks on spaces anyway, so let us leave it like that.
 
     if [ -d ../zlib ]; then
-      options="${options} --with-zlib=$(pwd)/../zlib/pkg/usr/local"
+      options="${options} --with-zlib=${_TOPDIR}/zlib/pkg/usr/local"
     else
       options="${options} --without-zlib"
     fi
 
     if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
-      options="${options} --with-brotli=$(pwd)/../brotli/pkg/usr/local"
-      LDFLAGS="${LDFLAGS} -L$(pwd)/../brotli/pkg/usr/local/lib"
+      options="${options} --with-brotli=${_TOPDIR}/brotli/pkg/usr/local"
+      LDFLAGS="${LDFLAGS} -L${_TOPDIR}/brotli/pkg/usr/local/lib"
       LIBS="${LIBS} -lbrotlicommon"
     else
       options="${options} --without-brotli"
@@ -201,15 +177,15 @@ fi
     CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
     if [ -d ../libressl ]; then
-      options="${options} --with-openssl=$(pwd)/../libressl/pkg/usr/local"
+      options="${options} --with-openssl=${_TOPDIR}/libressl/pkg/usr/local"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
     elif [ -d ../openssl-quic ]; then
-      options="${options} --with-openssl=$(pwd)/../openssl-quic/pkg/usr/local"
+      options="${options} --with-openssl=${_TOPDIR}/openssl-quic/pkg/usr/local"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
     elif [ -d ../openssl ]; then
-      options="${options} --with-openssl=$(pwd)/../openssl/pkg/usr/local"
+      options="${options} --with-openssl=${_TOPDIR}/openssl/pkg/usr/local"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
     else
@@ -219,7 +195,7 @@ fi
     options="${options} --without-gnutls --without-mbedtls --without-wolfssl --without-bearssl --without-rustls --without-nss --without-hyper"
 
     if [ -d ../libssh2 ]; then
-      options="${options} --with-libssh2=$(pwd)/../libssh2/pkg/usr/local"
+      options="${options} --with-libssh2=${_TOPDIR}/libssh2/pkg/usr/local"
       LIBS="${LIBS} -lbcrypt"
     else
       options="${options} --without-libssh2"
@@ -229,16 +205,16 @@ fi
     options="${options} --without-librtmp"
 
     if [ -d ../libidn2 ]; then  # Also for Windows XP compatibility
-      options="${options} --with-libidn2=$(pwd)/../libidn2/pkg/usr/local"
+      options="${options} --with-libidn2=${_TOPDIR}/libidn2/pkg/usr/local"
     elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
       options="${options} --without-libidn2"  # Prevent autotools picking up a non-cross copy
       options="${options} --with-winidn"
     fi
 
     if [ -d ../libgsasl ]; then
-      options="${options} --with-libgsasl=$(pwd)/../libgsasl/pkg/usr/local"
-      CPPFLAGS="${CPPFLAGS} -I$(pwd)/../libgsasl/pkg/usr/local/include"
-      LDFLAGS="${LDFLAGS} -L$(pwd)/../libgsasl/pkg/usr/local/lib"
+      options="${options} --with-libgsasl=${_TOPDIR}/libgsasl/pkg/usr/local"
+      CPPFLAGS="${CPPFLAGS} -I${_TOPDIR}/libgsasl/pkg/usr/local/include"
+      LDFLAGS="${LDFLAGS} -L${_TOPDIR}/libgsasl/pkg/usr/local/lib"
     else
       options="${options} --without-libgsasl"
     fi
@@ -246,7 +222,7 @@ fi
     options="${options} --without-libpsl"
 
     if [ -d ../nghttp2 ]; then
-      options="${options} --with-nghttp2=$(pwd)/../nghttp2/pkg/usr/local"
+      options="${options} --with-nghttp2=${_TOPDIR}/nghttp2/pkg/usr/local"
       CPPFLAGS="${CPPFLAGS} -DNGHTTP2_STATICLIB"
     else
       options="${options} --without-nghttp2"
@@ -257,8 +233,8 @@ fi
         # This lib will not appear enabled in the configure summary.
         options="${options} --with-nghttp3=yes"
         CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB -DUSE_NGHTTP3"
-        CPPFLAGS="${CPPFLAGS} -I$(pwd)/../nghttp3/pkg/usr/local/include"
-        LDFLAGS="${LDFLAGS} -L$(pwd)/../nghttp3/pkg/usr/local/lib"
+        CPPFLAGS="${CPPFLAGS} -I${_TOPDIR}/nghttp3/pkg/usr/local/include"
+        LDFLAGS="${LDFLAGS} -L${_TOPDIR}/nghttp3/pkg/usr/local/lib"
         LIBS="${LIBS} -lnghttp3"
       else
         options="${options} --without-nghttp3"
@@ -268,8 +244,8 @@ fi
         # This lib will not appear enabled in the configure summary.
         options="${options} --with-ngtcp2=yes"
         CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB -DUSE_NGTCP2"
-        CPPFLAGS="${CPPFLAGS} -I$(pwd)/../ngtcp2/pkg/usr/local/include"
-        LDFLAGS="${LDFLAGS} -L$(pwd)/../ngtcp2/pkg/usr/local/lib"
+        CPPFLAGS="${CPPFLAGS} -I${_TOPDIR}/ngtcp2/pkg/usr/local/include"
+        LDFLAGS="${LDFLAGS} -L${_TOPDIR}/ngtcp2/pkg/usr/local/lib"
         LIBS="${LIBS} -lngtcp2 -lngtcp2_crypto_openssl"
       else
         options="${options} --without-ngtcp2"
@@ -326,7 +302,7 @@ fi
       --without-ca-path \
       --without-ca-bundle \
       --without-ca-fallback \
-      --prefix=/usr/local
+      "--prefix=${_PREFIX}"
 
     # NOTE: 'make clean' deletes src/tool_hugehelp.c and docs/curl.1. Next,
     #       'make' regenerates them, including the current date in curl.1,
@@ -375,7 +351,7 @@ fi
   done
 
   # DESTDIR= + --prefix=
-  _pkg='pkg/usr/local'
+  _pkg="pkg${_PREFIX}"
 
   # Build fixups
 
@@ -407,7 +383,7 @@ fi
   # - not stripping the .buildid section, which contains a timestamp.
   # LLVM's own llvm-objcopy does not seems to work with Windows binaries,
   # so .exe and .dll stripping is done via the -s linker option.
-  if [ "${uselld}" = '0' ]; then
+  if [ "${_LD}" = 'ld' ]; then
     "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.exe
     "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.dll
     "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/libcurl.dll.a

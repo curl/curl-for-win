@@ -17,10 +17,6 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  # Cross-tasks
-
-  [ "${_OS}" != 'win' ] && options="--build=${_CROSS_HOST} --host=${_TRIPLET}"
-
   # Build
 
   rm -r -f pkg
@@ -35,29 +31,22 @@ _VER="$1"
   find . -name '*.dll' -delete
   find . -name '*.exe' -delete
 
-  export LDFLAGS=''
-  export CFLAGS='-fno-ident -O3 -Wa,--noexecstack'
-  export CPPFLAGS=''
-  [ "${_CRT}" = 'ucrt' ] && CPPFLAGS="${CPPFLAGS} -D_UCRT"
+  options="${_CONFIGURE_GLOBAL}"
+  export CC="${_CC_GLOBAL}"
+  export CFLAGS="${_CFLAGS_GLOBAL} -fno-ident -O3 -Wa,--noexecstack"
+  export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
+  export LDFLAGS="${_LDFLAGS_GLOBAL}"
+  export LIBS="${_LIBS_GLOBAL}"
 
   if [ "${_CC}" = 'clang' ]; then
-    export CC="clang --target=${_TRIPLET}"
-    if [ "${_OS}" != 'win' ]; then
-      CC="${CC} --sysroot=${_SYSROOT}"
-      options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
-      [ "${_OS}" = 'linux' ] && LDFLAGS="${LDFLAGS} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
-    fi
+    export RC="${_CCPREFIX}windres"
     export AR="${_CCPREFIX}ar"
     export NM="${_CCPREFIX}nm"
     export RANLIB="${_CCPREFIX}ranlib"
     CFLAGS="${CFLAGS} -Wno-inconsistent-dllimport"
   else
-    export CC="${_CCPREFIX}gcc -static-libgcc"
-    LDFLAGS="${_OPTM} ${LDFLAGS}"
-    CFLAGS="${_OPTM} ${CFLAGS} -Wno-attributes"
+    CFLAGS="${CFLAGS} -Wno-attributes"
   fi
-
-  [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
 
   _prefix='C:/Windows/libressl'
   _ssldir="ssl"
@@ -81,8 +70,8 @@ _VER="$1"
   # Some tools (e.g CMake) become weird when colons appear in
   # a filename, so move results to a sane, standard path:
 
-  _pkg='pkg/usr/local'
-  mkdir -p 'pkg/usr'
+  _pkg="pkg${_PREFIX}"
+  mkdir -p 'pkg/usr'  # Needs to be kept in sync with _PREFIX content
   mv "pkg/${_prefix}" "${_pkg}"
 
   # Delete .pc and .la files

@@ -17,38 +17,27 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  # Cross-tasks
-
-  [ "${_OS}" != 'win' ] && options="--build=${_CROSS_HOST} --host=${_TRIPLET}"
-
   # Build
 
   rm -r -f pkg
 
   [ -f 'Makefile' ] || autoreconf --force --install
 
-  export LDFLAGS=''
-  export CFLAGS='-fno-ident -O3'
-  export CPPFLAGS='-DHAVE_DECL_SECUREZEROMEMORY=1 -DLIBSSH2_CLEAR_MEMORY'
-  [ "${_CRT}" = 'ucrt' ] && CPPFLAGS="${CPPFLAGS} -D_UCRT"
+  options="${_CONFIGURE_GLOBAL}"
+  export CC="${_CC_GLOBAL}"
+  export CFLAGS="${_CFLAGS_GLOBAL} -fno-ident -O3"
+  export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
+  export LDFLAGS="${_LDFLAGS_GLOBAL}"
+  export LIBS="${_LIBS_GLOBAL}"
 
   if [ "${_CC}" = 'clang' ]; then
-    export CC="clang --target=${_TRIPLET}"
-    if [ "${_OS}" != 'win' ]; then
-      CC="${CC} --sysroot=${_SYSROOT}"
-      options="${options} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
-      [ "${_OS}" = 'linux' ] && LDFLAGS="${LDFLAGS} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
-    fi
+    export RC="${_CCPREFIX}windres"
     export AR="${_CCPREFIX}ar"
     export NM="${_CCPREFIX}nm"
     export RANLIB="${_CCPREFIX}ranlib"
-  else
-    export CC="${_CCPREFIX}gcc -static-libgcc"
-    LDFLAGS="${_OPTM} ${LDFLAGS}"
-    CFLAGS="${_OPTM} ${CFLAGS}"
   fi
 
-  [ "${_CPU}" = 'x86' ] && CFLAGS="${CFLAGS} -fno-asynchronous-unwind-tables"
+  CPPFLAGS="${CPPFLAGS} -DHAVE_DECL_SECUREZEROMEMORY=1 -DLIBSSH2_CLEAR_MEMORY"
 
   # NOTE: root path with spaces breaks all values with '$(pwd)'. But,
   #       autotools breaks on spaces anyway, so let us leave it like that.
@@ -56,20 +45,20 @@ _VER="$1"
   if [ -d ../zlib ]; then
     options="${options} --with-libz"
     # These seem to work better than --with-libz-prefix=:
-    CFLAGS="${CFLAGS} -I$(pwd)/../zlib/pkg/usr/local/include"
-    LDFLAGS="${LDFLAGS} -L$(pwd)/../zlib/pkg/usr/local/lib"
+    CFLAGS="${CFLAGS} -I${_TOPDIR}/zlib/pkg/usr/local/include"
+    LDFLAGS="${LDFLAGS} -L${_TOPDIR}/zlib/pkg/usr/local/lib"
   fi
 
   if [ -d ../libressl ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=$(pwd)/../libressl/pkg/usr/local"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOPDIR}/libressl/pkg/usr/local"
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DNOCRYPT"
     LDFLAGS="${LDFLAGS} -lbcrypt"
   elif [ -d ../openssl-quic ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=$(pwd)/../openssl-quic/pkg/usr/local"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOPDIR}/openssl-quic/pkg/usr/local"
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
     LDFLAGS="${LDFLAGS} -lbcrypt"
   elif [ -d ../openssl ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=$(pwd)/../openssl/pkg/usr/local"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOPDIR}/openssl/pkg/usr/local"
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
     LDFLAGS="${LDFLAGS} -lbcrypt"
   else
@@ -86,13 +75,13 @@ _VER="$1"
     --enable-static \
     --disable-shared \
     --disable-examples-build \
-    --prefix=/usr/local \
+    "--prefix=${_PREFIX}" \
     --silent
   make --jobs 2 clean >/dev/null
   make --jobs 2 install "DESTDIR=$(pwd)/pkg" # >/dev/null # V=1
 
   # DESTDIR= + --prefix=
-  _pkg='pkg/usr/local'
+  _pkg="pkg${_PREFIX}"
 
   # Delete .pc and .la files
   rm -r -f "${_pkg}"/lib/pkgconfig

@@ -40,24 +40,25 @@ _VER="$1"
   [ "${_CPU}" = 'x64' ] && ARCH='w64'
   [ "${_CPU}" = 'a64' ] && ARCH='a64'  # TODO: add upstream support (or switch to curl-cmake)
 
+  export CROSSPREFIX="${_CCPREFIX}"
+  export CURL_CC="${_CC_GLOBAL}"
+
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
   # marking public libcurl functions as 'exported'. Useful to avoid the
   # chance of libcurl functions getting exported from final binaries when
   # linked against the static libcurl lib.
-  export CURL_CFLAG_EXTRAS='-fno-ident -DCURL_STATICLIB -DHAVE_SIGNAL -DNDEBUG -DHAVE_STRTOK_R -DUSE_HEADERS_API -DHAVE_BOOL_T -DHAVE_STDBOOL_H -DHAVE_STRING_H -DHAVE_SETJMP_H -DHAVE_FTRUNCATE -D_FILE_OFFSET_BITS=64 -DSIZEOF_OFF_T=8'
+  export CURL_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -fno-ident -DCURL_STATICLIB -DHAVE_SIGNAL -DNDEBUG -DHAVE_STRTOK_R -DUSE_HEADERS_API -DHAVE_BOOL_T -DHAVE_STDBOOL_H -DHAVE_STRING_H -DHAVE_SETJMP_H -DHAVE_FTRUNCATE -D_FILE_OFFSET_BITS=64 -DSIZEOF_OFF_T=8"
   CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_LIBGEN_H -DHAVE_BASENAME"
-  [ "${_CPU}" = 'x86' ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -fno-asynchronous-unwind-tables"
-  export CURL_LDFLAG_EXTRAS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
-  export CURL_LDFLAG_EXTRAS_EXE
-  export CURL_LDFLAG_EXTRAS_DLL
+  export CURL_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} -static-libgcc -Wl,--nxcompat -Wl,--dynamicbase"
+  export CURL_LDFLAG_EXTRAS_EXE=''
+  export CURL_LDFLAG_EXTRAS_DLL=''
   if [ "${_CPU}" = 'x86' ]; then
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -D_WIN32_WINNT=0x0501 -DHAVE_ATOMIC"  # For Windows XP compatibility
-    CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,_mainCRTStartup'
-    CURL_LDFLAG_EXTRAS_DLL=''
+    CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--pic-executable,-e,_mainCRTStartup"
   else
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_INET_PTON -DHAVE_INET_NTOP"
-    CURL_LDFLAG_EXTRAS_EXE='-Wl,--pic-executable,-e,mainCRTStartup'
-    CURL_LDFLAG_EXTRAS_DLL='-Wl,--image-base,0x150000000'
+    CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--pic-executable,-e,mainCRTStartup"
+    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,--image-base,0x150000000"
     CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
   fi
 
@@ -74,18 +75,6 @@ _VER="$1"
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_LDAP=1 -DCURL_DISABLE_LDAPS=1"
   else
     options="${options}-ldaps"
-  fi
-
-  uselld=0
-  if [ "${_CRT}" = 'ucrt' ]; then
-    if [ "${_CC}" = 'clang' ]; then
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -fuse-ld=lld -s"
-      uselld=1
-    else
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -specs=${_GCCSPECS}"
-    fi
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -D_UCRT"
-    CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -lucrt"
   fi
 
   # Disabled till we flesh out UNICODE support and document it enough to be
@@ -190,24 +179,7 @@ _VER="$1"
 
   [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_FTP=1"
 
-  export CROSSPREFIX="${_CCPREFIX}"
-
-  if [ "${_CC}" = 'clang' ]; then
-  # CURL_CFLAG_EXTRAS="-mretpoline ${CURL_CFLAG_EXTRAS}"
-  # CURL_CFLAG_EXTRAS="-mspeculative-load-hardening ${CURL_CFLAG_EXTRAS}"
-    export CURL_CC="clang${CW_CCSUFFIX}"
-    if [ "${_OS}" != 'win' ]; then
-      CURL_CFLAG_EXTRAS="--target=${_TRIPLET} --sysroot=${_SYSROOT} ${CURL_CFLAG_EXTRAS}"
-      [ "${_OS}" = 'linux' ] && CURL_LDFLAG_EXTRAS="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${CURL_LDFLAG_EXTRAS}"
-      CURL_LDFLAG_EXTRAS="--target=${_TRIPLET} --sysroot=${_SYSROOT} ${CURL_LDFLAG_EXTRAS}"
-    fi
-    # This does not work yet, due to:
-    #   /usr/local/bin/x86_64-w64-mingw32-ld: asyn-thread.o:asyn-thread.c:(.rdata$.refptr.__guard_dispatch_icall_fptr[.refptr.__guard_dispatch_icall_fptr]+0x0): undefined reference to `__guard_dispatch_icall_fptr'
-  # CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -Xclang -cfguard"
-  # CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Xlinker -guard:cf"
-  fi
-
-  if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${uselld}" = '1' ]; then
+  if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
     CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
     CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
   fi
@@ -242,7 +214,7 @@ _VER="$1"
   # - not stripping the .buildid section, which contains a timestamp.
   # LLVM's own llvm-objcopy does not seems to work with Windows binaries,
   # so .exe and .dll stripping is done via the -s linker option.
-  if [ "${uselld}" = '0' ]; then
+  if [ "${_LD}" = 'ld' ]; then
     "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/src/*.exe
     "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/lib/*.dll
     "${_CCPREFIX}strip" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/libcurl.dll.a

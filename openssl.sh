@@ -44,37 +44,23 @@ _VER="$1"
 
   [ "${_CPU}" = 'x86' ] && options='mingw'
   [ "${_CPU}" = 'x64' ] && options='mingw64'
+  [ "${_CPU}" = 'a64' ] && options='...'  # TODO
+
+  options="${options} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
+
   options="${options} no-filenames"
   [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128"
   if [ "${_CPU}" = 'x86' ]; then
-    options="${options} -fno-asynchronous-unwind-tables"
     options="${options} -D_WIN32_WINNT=0x0501"  # For Windows XP compatibility
   else
-    options="${options} -DUSE_BCRYPTGENRANDOM"
+    options="${options} -DUSE_BCRYPTGENRANDOM -lbcrypt"
   fi
 
   if [ "${_CC}" = 'clang' ]; then
     # To avoid warnings when passing C compiler options to the linker
     options="${options} -Wno-unused-command-line-argument"
-    export CC=clang
-    if [ "${_OS}" != 'win' ]; then
-      # Include the target specifier in the CC variable. This hack is necessary
-      # because OpenSSL 3.x detects the symbol prefix for dynamically generated
-      # assembly source code by running ${CC} and extracting the value of the
-      # macro __USER_LABEL_PREFIX__ [1]. On macOS, with pure 'clang', this
-      # returns '_' (as of Homebrew LLVM 13.0.1). This causes all exported
-      # assembly function names getting an underscore prefix. Then, when
-      # building OpenSSL libraries into executables, the linker does not find
-      # these symbols, breaking the builds, including openssl.exe and OpenSSL
-      # DLLs.
-      # [1]: https://github.com/openssl/openssl/blob/openssl-3.0.2/crypto/perlasm/x86_64-xlate.pl#L91
-      # On Linux, this was not an issue, and it seems to affect x64 targets.
-      # But enable the workaround in all cross-builds anyway.
-      CC="${CC} --target=${_TRIPLET}"
-
-      options="${options} --sysroot=${_SYSROOT}"
-      [ "${_OS}" = 'linux' ] && options="-L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1) ${options}"
-    fi
+    export CC="${_CC_GLOBAL}"
+    export RC="${_CCPREFIX}windres"
     export AR="${_CCPREFIX}ar"
     export NM="${_CCPREFIX}nm"
     export RANLIB="${_CCPREFIX}ranlib"
@@ -84,14 +70,12 @@ _VER="$1"
     _CONF_CCPREFIX="${_CCPREFIX}"
   fi
 
-  [ "${_CRT}" = 'ucrt' ] && options="${options} -D_UCRT"
-
   # Patch OpenSSL ./Configure to:
   # - make it accept Windows-style absolute paths as --prefix. Without the
   #   patch it misidentifies all such absolute paths as relative ones and
   #   aborts.
   #   Reported: https://github.com/openssl/openssl/issues/9520
-  # - allow no-apps option to omit building openssl.exe.
+  # - allow no-apps option to save time building openssl.exe.
   sed \
     -e 's|die "Directory given with --prefix|print "Directory given with --prefix|g' \
     -e 's|"aria",$|"apps", "aria",|g' \
@@ -145,8 +129,8 @@ _VER="$1"
   # Some tools (e.g CMake) become weird when colons appear in
   # a filename, so move results to a sane, standard path:
 
-  _pkg='pkg/usr/local'
-  mkdir -p 'pkg/usr'
+  _pkg="pkg${_PREFIX}"
+  mkdir -p 'pkg/usr'  # Needs to be kept in sync with _PREFIX content
   mv "pkg/${_prefix}" "${_pkg}"
 
   # Rename 'lib64' to 'lib'. This is what most packages expect.
