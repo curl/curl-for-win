@@ -145,18 +145,18 @@ fi
       options="${options} --enable-ldap --enable-ldaps --with-ldap-lib=wldap32"
     fi
 
-    # NOTE: root path with spaces breaks all values with '${_TOPDIR}'. But,
+    # NOTE: root path with spaces breaks all values with '${_TOP}'. But,
     #       autotools breaks on spaces anyway, so let us leave it like that.
 
     if [ -d ../zlib ]; then
-      options="${options} --with-zlib=${_TOPDIR}/zlib/pkg${_PREFIX}"
+      options="${options} --with-zlib=${_TOP}/zlib/pkg${_PREFIX}"
     else
       options="${options} --without-zlib"
     fi
 
     if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
-      options="${options} --with-brotli=${_TOPDIR}/brotli/pkg${_PREFIX}"
-      LDFLAGS="${LDFLAGS} -L${_TOPDIR}/brotli/pkg${_PREFIX}/lib"
+      options="${options} --with-brotli=${_TOP}/brotli/pkg${_PREFIX}"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/brotli/pkg${_PREFIX}/lib"
       LIBS="${LIBS} -lbrotlicommon"
     else
       options="${options} --without-brotli"
@@ -168,15 +168,15 @@ fi
     CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
     if [ -d ../libressl ]; then
-      options="${options} --with-openssl=${_TOPDIR}/libressl/pkg${_PREFIX}"
+      options="${options} --with-openssl=${_TOP}/libressl/pkg${_PREFIX}"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
     elif [ -d ../openssl-quic ]; then
-      options="${options} --with-openssl=${_TOPDIR}/openssl-quic/pkg${_PREFIX}"
+      options="${options} --with-openssl=${_TOP}/openssl-quic/pkg${_PREFIX}"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
     elif [ -d ../openssl ]; then
-      options="${options} --with-openssl=${_TOPDIR}/openssl/pkg${_PREFIX}"
+      options="${options} --with-openssl=${_TOP}/openssl/pkg${_PREFIX}"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
     else
@@ -186,7 +186,7 @@ fi
     options="${options} --without-gnutls --without-mbedtls --without-wolfssl --without-bearssl --without-rustls --without-nss --without-hyper"
 
     if [ -d ../libssh2 ]; then
-      options="${options} --with-libssh2=${_TOPDIR}/libssh2/pkg${_PREFIX}"
+      options="${options} --with-libssh2=${_TOP}/libssh2/pkg${_PREFIX}"
       LIBS="${LIBS} -lbcrypt"
     else
       options="${options} --without-libssh2"
@@ -196,16 +196,16 @@ fi
     options="${options} --without-librtmp"
 
     if [ -d ../libidn2 ]; then  # Also for Windows XP compatibility
-      options="${options} --with-libidn2=${_TOPDIR}/libidn2/pkg${_PREFIX}"
+      options="${options} --with-libidn2=${_TOP}/libidn2/pkg${_PREFIX}"
     elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
       options="${options} --without-libidn2"  # Prevent autotools picking up a non-cross copy
       options="${options} --with-winidn"
     fi
 
     if [ -d ../libgsasl ]; then
-      options="${options} --with-libgsasl=${_TOPDIR}/libgsasl/pkg${_PREFIX}"
-      CPPFLAGS="${CPPFLAGS} -I${_TOPDIR}/libgsasl/pkg${_PREFIX}/include"
-      LDFLAGS="${LDFLAGS} -L${_TOPDIR}/libgsasl/pkg${_PREFIX}/lib"
+      options="${options} --with-libgsasl=${_TOP}/libgsasl/pkg${_PREFIX}"
+      CPPFLAGS="${CPPFLAGS} -I${_TOP}/libgsasl/pkg${_PREFIX}/include"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/libgsasl/pkg${_PREFIX}/lib"
     else
       options="${options} --without-libgsasl"
     fi
@@ -213,7 +213,7 @@ fi
     options="${options} --without-libpsl"
 
     if [ -d ../nghttp2 ]; then
-      options="${options} --with-nghttp2=${_TOPDIR}/nghttp2/pkg${_PREFIX}"
+      options="${options} --with-nghttp2=${_TOP}/nghttp2/pkg${_PREFIX}"
       CPPFLAGS="${CPPFLAGS} -DNGHTTP2_STATICLIB"
     else
       options="${options} --without-nghttp2"
@@ -224,8 +224,8 @@ fi
         # This lib will not appear enabled in the configure summary.
         options="${options} --with-nghttp3=yes"
         CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB -DUSE_NGHTTP3"
-        CPPFLAGS="${CPPFLAGS} -I${_TOPDIR}/nghttp3/pkg${_PREFIX}/include"
-        LDFLAGS="${LDFLAGS} -L${_TOPDIR}/nghttp3/pkg${_PREFIX}/lib"
+        CPPFLAGS="${CPPFLAGS} -I${_TOP}/nghttp3/pkg${_PREFIX}/include"
+        LDFLAGS="${LDFLAGS} -L${_TOP}/nghttp3/pkg${_PREFIX}/lib"
         LIBS="${LIBS} -lnghttp3"
       else
         options="${options} --without-nghttp3"
@@ -235,8 +235,8 @@ fi
         # This lib will not appear enabled in the configure summary.
         options="${options} --with-ngtcp2=yes"
         CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB -DUSE_NGTCP2"
-        CPPFLAGS="${CPPFLAGS} -I${_TOPDIR}/ngtcp2/pkg${_PREFIX}/include"
-        LDFLAGS="${LDFLAGS} -L${_TOPDIR}/ngtcp2/pkg${_PREFIX}/lib"
+        CPPFLAGS="${CPPFLAGS} -I${_TOP}/ngtcp2/pkg${_PREFIX}/include"
+        LDFLAGS="${LDFLAGS} -L${_TOP}/ngtcp2/pkg${_PREFIX}/lib"
         LIBS="${LIBS} -lngtcp2 -lngtcp2_crypto_openssl"
       else
         options="${options} --without-ngtcp2"

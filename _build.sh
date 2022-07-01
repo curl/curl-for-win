@@ -355,7 +355,7 @@ build_single_target() {
 
   # Setup common toolchain configuration options
 
-  export _TOPDIR; _TOPDIR="$(pwd)"
+  export _TOP; _TOP="$(pwd)"
   export _PREFIX='/usr'
   export _CC_GLOBAL=''
   export _CFLAGS_GLOBAL='-fno-ident'

@@ -32,26 +32,26 @@ _VER="$1"
 
   CPPFLAGS="${CPPFLAGS} -DHAVE_DECL_SECUREZEROMEMORY=1 -DLIBSSH2_CLEAR_MEMORY"
 
-  # NOTE: root path with spaces breaks all values with '${_TOPDIR}'. But,
+  # NOTE: root path with spaces breaks all values with '${_TOP}'. But,
   #       autotools breaks on spaces anyway, so let us leave it like that.
 
   if [ -d ../zlib ]; then
     options="${options} --with-libz"
     # These seem to work better than --with-libz-prefix=:
-    CFLAGS="${CFLAGS} -I${_TOPDIR}/zlib/pkg${_PREFIX}/include"
-    LDFLAGS="${LDFLAGS} -L${_TOPDIR}/zlib/pkg${_PREFIX}/lib"
+    CFLAGS="${CFLAGS} -I${_TOP}/zlib/pkg${_PREFIX}/include"
+    LDFLAGS="${LDFLAGS} -L${_TOP}/zlib/pkg${_PREFIX}/lib"
   fi
 
   if [ -d ../libressl ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOPDIR}/libressl/pkg${_PREFIX}"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/libressl/pkg${_PREFIX}"
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DNOCRYPT"
     LDFLAGS="${LDFLAGS} -lbcrypt"
   elif [ -d ../openssl-quic ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOPDIR}/openssl-quic/pkg${_PREFIX}"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/openssl-quic/pkg${_PREFIX}"
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
     LDFLAGS="${LDFLAGS} -lbcrypt"
   elif [ -d ../openssl ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOPDIR}/openssl/pkg${_PREFIX}"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/openssl/pkg${_PREFIX}"
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
     LDFLAGS="${LDFLAGS} -lbcrypt"
   else
