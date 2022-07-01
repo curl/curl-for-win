@@ -39,8 +39,6 @@ _VER="$1"
 
   # shellcheck disable=SC2086
   ./configure ${options} \
-    --disable-dependency-tracking \
-    --disable-silent-rules \
     --disable-rpath \
     --enable-static \
     --disable-shared \

@@ -263,8 +263,6 @@ fi
 
     # shellcheck disable=SC2086
     ./configure ${options} \
-      --disable-dependency-tracking \
-      --disable-silent-rules \
       --disable-debug \
       --disable-pthreads \
       --enable-optimize \

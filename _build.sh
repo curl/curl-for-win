@@ -434,6 +434,8 @@ build_single_target() {
     _CMAKE_CXX_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++"
   fi
 
+  _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --disable-dependency-tracking --disable-silent-rules"
+
   # Unified, per-target package: Initialize
   export _UNIPKG="curl-${CURL_VER_}${_REVSUFFIX}${_PKGSUFFIX}${_FLAV}"
   rm -r -f "${_UNIPKG:?}"

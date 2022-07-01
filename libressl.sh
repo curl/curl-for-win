@@ -49,8 +49,7 @@ _VER="$1"
 
   # shellcheck disable=SC2086
   ./configure ${options} \
-    --disable-dependency-tracking \
-    --disable-silent-rules \
+    --enable-static \
     --disable-shared \
     --disable-tests \
     "--prefix=${_win_prefix}" \

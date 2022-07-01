@@ -45,12 +45,10 @@ _VER="$1"
 
   # shellcheck disable=SC2086
   ./configure ${options} \
-    --disable-dependency-tracking \
-    --disable-silent-rules \
-    --disable-doc \
     --disable-rpath \
     --enable-static \
     --disable-shared \
+    --disable-doc \
     "--prefix=${_PREFIX}" --silent
 # make --jobs 2 clean >/dev/null
   make --jobs 2 install "DESTDIR=$(pwd)/pkg" # >/dev/null # V=1
