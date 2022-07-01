@@ -114,10 +114,10 @@ fi
   # LDFLAGS="${LDFLAGS} -municode"
 
     if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-      if [ "${pass}" = 'static' ]; then
-        LDFLAGS="${LDFLAGS} -Wl,-Map,curl.map"
-      else
+      if [ "${pass}" = 'shared' ]; then
         LDFLAGS="${LDFLAGS} -Wl,-Map,libcurl.map"
+      else
+        LDFLAGS="${LDFLAGS} -Wl,-Map,curl.map"
       fi
     fi
 

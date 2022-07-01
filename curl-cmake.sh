@@ -225,12 +225,12 @@ _VER="$1"
 
     options="${options} -DCURL_CA_PATH=none"
     options="${options} -DCURL_CA_BUNDLE=none"
-    if [ "${pass}" = 'static' ]; then
-      options="${options} -DBUILD_SHARED_LIBS=OFF"
-      options="${options} -DBUILD_CURL_EXE=ON"
-    else
+    if [ "${pass}" = 'shared' ]; then
       options="${options} -DBUILD_SHARED_LIBS=ON"
       options="${options} -DBUILD_CURL_EXE=OFF"
+    else
+      options="${options} -DBUILD_SHARED_LIBS=OFF"
+      options="${options} -DBUILD_CURL_EXE=ON"
     fi
     options="${options} -DENABLE_THREADED_RESOLVER=ON"
     options="${options} -DBUILD_TESTING=OFF"

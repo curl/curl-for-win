@@ -180,8 +180,8 @@ _VER="$1"
   [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_FTP=1"
 
   if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
-    CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
     CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
+    CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
   fi
 
   "${_MAKE}" --jobs 2 --directory lib --makefile Makefile.m32 clean
