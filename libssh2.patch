@@ -12,3 +12,16 @@
  # define HAVE_OPAQUE_STRUCTS 1
  #endif
  
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 50c028c45..cb8fee121 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -213,7 +213,7 @@ set(SOURCES
+   userauth.h
+   version.c)
+ 
+-if(WIN32)
++if(WIN32 AND BUILD_SHARED_LIBS)
+   list(APPEND SOURCES ${PROJECT_SOURCE_DIR}/win32/libssh2.rc)
+ endif()
+ 
