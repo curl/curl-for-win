@@ -39,13 +39,13 @@ _VER="$1"
   if [ -d ../openssl-quic ]; then
     options="${options} -DENABLE_OPENSSL=1"
     options="${options} -DHAVE_SSL_IS_QUIC=1"  # Detection fails due to missing -lws2_32 option, so force it.
-    options="${options} -DOPENSSL_ROOT_DIR=../openssl-quic/pkg/usr/local"
-    options="${options} -DOPENSSL_INCLUDE_DIR=../openssl-quic/pkg/usr/local/include"
+    options="${options} -DOPENSSL_ROOT_DIR=../openssl-quic/pkg${_PREFIX}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=../openssl-quic/pkg${_PREFIX}/include"
   fi
 
   if [ -d ../nghttp3 ]; then
-    options="${options} -DLIBNGHTTP3_LIBRARY=../nghttp3/pkg/usr/local/lib"
-    options="${options} -DLIBNGHTTP3_INCLUDE_DIR=../nghttp3/pkg/usr/local/include"
+    options="${options} -DLIBNGHTTP3_LIBRARY=../nghttp3/pkg${_PREFIX}/lib"
+    options="${options} -DLIBNGHTTP3_INCLUDE_DIR=../nghttp3/pkg${_PREFIX}/include"
   fi
 
   options="${options} -DLIBEV_LIBRARY="  # To avoid finding any non-cross copies

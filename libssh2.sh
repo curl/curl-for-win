@@ -38,20 +38,20 @@ _VER="$1"
   if [ -d ../zlib ]; then
     options="${options} --with-libz"
     # These seem to work better than --with-libz-prefix=:
-    CFLAGS="${CFLAGS} -I${_TOPDIR}/zlib/pkg/usr/local/include"
-    LDFLAGS="${LDFLAGS} -L${_TOPDIR}/zlib/pkg/usr/local/lib"
+    CFLAGS="${CFLAGS} -I${_TOPDIR}/zlib/pkg${_PREFIX}/include"
+    LDFLAGS="${LDFLAGS} -L${_TOPDIR}/zlib/pkg${_PREFIX}/lib"
   fi
 
   if [ -d ../libressl ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOPDIR}/libressl/pkg/usr/local"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOPDIR}/libressl/pkg${_PREFIX}"
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DNOCRYPT"
     LDFLAGS="${LDFLAGS} -lbcrypt"
   elif [ -d ../openssl-quic ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOPDIR}/openssl-quic/pkg/usr/local"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOPDIR}/openssl-quic/pkg${_PREFIX}"
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
     LDFLAGS="${LDFLAGS} -lbcrypt"
   elif [ -d ../openssl ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOPDIR}/openssl/pkg/usr/local"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOPDIR}/openssl/pkg${_PREFIX}"
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
     LDFLAGS="${LDFLAGS} -lbcrypt"
   else

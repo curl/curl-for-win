@@ -38,24 +38,24 @@ _VER="$1"
 
   if [ -d ../zlib ]; then
     options="${options} -DENABLE_ZLIB_COMPRESSION=ON"
-    options="${options} -DZLIB_LIBRARY=${_TOPDIR}/zlib/pkg/usr/local/lib/libz.a"
-    options="${options} -DZLIB_INCLUDE_DIR=${_TOPDIR}/zlib/pkg/usr/local/include"
+    options="${options} -DZLIB_LIBRARY=${_TOPDIR}/zlib/pkg${_PREFIX}/lib/libz.a"
+    options="${options} -DZLIB_INCLUDE_DIR=${_TOPDIR}/zlib/pkg${_PREFIX}/include"
   fi
 
   if [ -d ../libressl ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOPDIR}/libressl/pkg/usr/local"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOPDIR}/libressl/pkg/usr/local/include"
+    options="${options} -DOPENSSL_ROOT_DIR=${_TOPDIR}/libressl/pkg${_PREFIX}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOPDIR}/libressl/pkg${_PREFIX}/include"
     _CFLAGS="${_CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DNOCRYPT"
   elif [ -d ../openssl-quic ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOPDIR}/openssl-quic/pkg/usr/local"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOPDIR}/openssl-quic/pkg/usr/local/include"
+    options="${options} -DOPENSSL_ROOT_DIR=${_TOPDIR}/openssl-quic/pkg${_PREFIX}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOPDIR}/openssl-quic/pkg${_PREFIX}/include"
     _CFLAGS="${_CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
   elif [ -d ../openssl ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOPDIR}/openssl/pkg/usr/local"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOPDIR}/openssl/pkg/usr/local/include"
+    options="${options} -DOPENSSL_ROOT_DIR=${_TOPDIR}/openssl/pkg${_PREFIX}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOPDIR}/openssl/pkg${_PREFIX}/include"
     _CFLAGS="${_CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
   else
     options="${options} -DCRYPTO_BACKEND=WinCNG"

@@ -112,7 +112,7 @@ _VER="$1"
 
   # NOTE: Makefile.m32 automatically enables -zlib with -ssh2
   if [ -d ../zlib ]; then
-    export ZLIB_PATH=../../zlib/pkg/usr/local
+    export ZLIB_PATH=../../zlib/pkg${_PREFIX}
     options="${options}-zlib"
 
     # Make sure to link zlib (and only zlib) in static mode when building
@@ -123,18 +123,18 @@ _VER="$1"
   fi
   if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
     options="${options}-brotli"
-    export BROTLI_PATH=../../brotli/pkg/usr/local
+    export BROTLI_PATH=../../brotli/pkg${_PREFIX}
     export BROTLI_LIBS='-Wl,-Bstatic -lbrotlidec -lbrotlicommon -Wl,-Bdynamic'
   fi
 
   if [ -d ../libressl ]; then
-    export OPENSSL_PATH=../../libressl/pkg/usr/local
+    export OPENSSL_PATH=../../libressl/pkg${_PREFIX}
   elif [ -d ../openssl-quic ]; then
-    export OPENSSL_PATH=../../openssl-quic/pkg/usr/local
+    export OPENSSL_PATH=../../openssl-quic/pkg${_PREFIX}
     # Workaround for 3.x deprecation warnings
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DOPENSSL_SUPPRESS_DEPRECATED"
   elif [ -d ../openssl ]; then
-    export OPENSSL_PATH=../../openssl/pkg/usr/local
+    export OPENSSL_PATH=../../openssl/pkg${_PREFIX}
     # Workaround for 3.x deprecation warnings
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DOPENSSL_SUPPRESS_DEPRECATED"
   fi
@@ -151,28 +151,28 @@ _VER="$1"
 
   if [ -d ../libssh2 ]; then
     options="${options}-ssh2"
-    export LIBSSH2_PATH=../../libssh2/pkg/usr/local
+    export LIBSSH2_PATH=../../libssh2/pkg${_PREFIX}
     CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L${LIBSSH2_PATH}/lib"
   fi
   if [ -d ../nghttp2 ]; then
     options="${options}-nghttp2"
-    export NGHTTP2_PATH=../../nghttp2/pkg/usr/local
+    export NGHTTP2_PATH=../../nghttp2/pkg${_PREFIX}
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGHTTP2_STATICLIB"
   fi
   if [ -d ../nghttp3 ] && [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ]; then
     options="${options}-nghttp3-ngtcp2"
-    export NGHTTP3_PATH=../../nghttp3/pkg/usr/local
+    export NGHTTP3_PATH=../../nghttp3/pkg${_PREFIX}
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGHTTP3_STATICLIB"
-    export NGTCP2_PATH=../../ngtcp2/pkg/usr/local
+    export NGTCP2_PATH=../../ngtcp2/pkg${_PREFIX}
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGTCP2_STATICLIB"
   fi
   if [ -d ../libgsasl ]; then
     options="${options}-gsasl"
-    export LIBGSASL_PATH=../../libgsasl/pkg/usr/local
+    export LIBGSASL_PATH=../../libgsasl/pkg${_PREFIX}
   fi
   if [ -d ../libidn2 ]; then  # Also for Windows XP compatibility
     options="${options}-idn2"
-    export LIBIDN2_PATH=../../libidn2/pkg/usr/local
+    export LIBIDN2_PATH=../../libidn2/pkg${_PREFIX}
   elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
     options="${options}-winidn"
   fi
