@@ -33,7 +33,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        nano      build with less features, see README.md
 #        pico      build with less features, see README.md
 #        x64       build x64 target only
-#        noucrt    build against msvcrt instead of UCRT
+#        msvcrt    build against msvcrt instead of UCRT
 #        gcc       build with GCC (use clang if not specified)
 #
 # CW_CCSUFFIX
@@ -331,8 +331,8 @@ build_single_target() {
     fi
   fi
 
-  export _CRT=''
-  [ "${_BRANCH#*noucrt*}" = "${_BRANCH}" ] && _CRT='ucrt'
+  export _CRT='ucrt'
+  [ ! "${_BRANCH#*msvcrt*}" = "${_BRANCH}" ] && _CRT='msvcrt'
 
   export _CCVER
   if [ "${_CC}" = 'clang' ]; then
