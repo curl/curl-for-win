@@ -242,6 +242,12 @@ _VER="$1"
       "-DCMAKE_EXE_LINKER_FLAGS=${_LDFLAGS} ${_LDFLAGS_EXE}" \
       "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS} ${_LDFLAGS_DLL}"  # --debug-find
 
+    if [ "${pass}" = 'static' ]; then
+      # When doing an out of tree build, this is necessary to avoid make
+      # re-generating the embedded manual with blank content.
+      cp -p src/tool_hugehelp.c "${_BLDDIR}-${pass}/src/"
+    fi
+
     make --directory="${_BLDDIR}-${pass}" --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
 
     # Manual copy to DESTDIR
