@@ -59,8 +59,6 @@ _VER="$1"
   #   2. build the static libcurl lib + statically linked curl EXE
   for pass in shared static; do
 
-    unset CC
-
     _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -W -Wall"
 
     _CFLAGS="${_CFLAGS} -DHAVE_STRCASECMP -DHAVE_STRTOK_R -DHAVE_FTRUNCATE -DHAVE_GETADDRINFO_THREADSAFE"

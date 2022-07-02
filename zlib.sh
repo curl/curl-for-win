@@ -19,8 +19,6 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  unset CC
-
   _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -D_LARGEFILE64_SOURCE=1 -D_LFS64_LARGEFILE=1"
 
   # shellcheck disable=SC2086

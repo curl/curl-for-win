@@ -19,8 +19,6 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  unset CC
-
   _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -DNDEBUG"
 
   # We do not need C++ with ENABLE_LIB_ONLY, so make sure to skip the detection

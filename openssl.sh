@@ -53,7 +53,6 @@ _VER="$1"
     export CC="${_CC_GLOBAL}"
     _CONF_CCPREFIX=
   else
-    unset CC
     _CONF_CCPREFIX="${_CCPREFIX}"
   fi
 

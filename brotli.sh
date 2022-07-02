@@ -19,8 +19,6 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  unset CC
-
   _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -DMINGW_HAS_SECURE_API"
 
   # shellcheck disable=SC2086

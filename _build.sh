@@ -368,6 +368,9 @@ build_single_target() {
   export _STRIP="${_CCPREFIX}strip"
   export _OBJDUMP="${_CCPREFIX}objdump"
 
+  # for CMake and openssl
+  unset CC
+
   # for autotools (and openssl)
   export RC="${_CCPREFIX}windres"
   export AR="${_CCPREFIX}ar"
