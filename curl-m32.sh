@@ -122,12 +122,12 @@ _VER="$1"
     # `libcurl.dll`, so that it would not depend on a `zlib1.dll`.
     # In some build environments (such as MSYS2), `libz.dll.a` is also offered
     # along with `libz.a` causing the linker to pick up the shared library.
-    export DLL_LIBS='-Wl,-Bstatic -lz -Wl,-Bdynamic'
+    export DLL_LIBS='-l:z'
   fi
   if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
     options="${options}-brotli"
     export BROTLI_PATH="../../brotli/${_PP}"
-    export BROTLI_LIBS='-Wl,-Bstatic -lbrotlidec -lbrotlicommon -Wl,-Bdynamic'
+    export BROTLI_LIBS='-l:brotlidec -l:brotlicommon'
   fi
 
   if [ -d ../libressl ]; then
