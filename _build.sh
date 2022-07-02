@@ -21,7 +21,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #
 #      Supported keywords:
 #        main      production build
-#        test      test build (VirusTotal upload and publishing disabled, .map files enabled)
+#        test      test build (.map files enabled, VirusTotal upload and publishing disabled)
 #        dev       development build (use source snapshots instead of stable releases)
 #        noh3      build without HTTP/3 (QUIC) support (select stock OpenSSL instead of its QUIC fork)
 #        nobrotli  build without brotli
@@ -49,6 +49,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # TODO:
 #   - Switch curl to CMake builds.
+#   - Cleanup 'clean' operations.
 #   - Update naming-scheme to make room for arm64 builds:
 #       win64 -> win-x64
 #       win32 -> win-x86
