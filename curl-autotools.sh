@@ -335,7 +335,7 @@ fi
       sed -i.bak -E 's|^SUBDIRS = .+|SUBDIRS = lib src|g' ./Makefile
     fi
 
-    make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
+    make --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
   done
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX

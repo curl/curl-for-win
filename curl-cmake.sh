@@ -250,7 +250,7 @@ _VER="$1"
       "-DCMAKE_EXE_LINKER_FLAGS=${_LDFLAGS} ${_LDFLAGS_EXE}" \
       "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS} ${_LDFLAGS_DLL}"  # --debug-find
 
-    make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
+    make --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
   done
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX

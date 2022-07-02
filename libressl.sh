@@ -56,7 +56,7 @@ _VER="$1"
     "--with-openssldir=${_win_prefix}/${_ssldir}" --silent
 # make clean > /dev/null
   # Ending slash required.
-  make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}/" >/dev/null # 2>&1
+  make --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}/" >/dev/null # 2>&1
 
   # LibreSSL does not strip the drive letter
   #   ./libressl/${_PKGDIR}/C:/Windows/libressl

@@ -44,7 +44,7 @@ _VER="$1"
     '-DCMAKE_CXX_COMPILER_WORKS=1' \
     "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
-  make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}"
+  make --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}"
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 

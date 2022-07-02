@@ -66,8 +66,8 @@ _VER="$1"
     --enable-static \
     --disable-shared \
     --disable-examples-build --silent
-  make --jobs 2 clean >/dev/null
-  make --jobs 2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
+  make --jobs=2 clean >/dev/null
+  make --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 
