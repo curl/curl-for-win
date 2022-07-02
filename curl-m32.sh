@@ -96,7 +96,7 @@ _VER="$1"
   fi
 
   # Generate .def file for libcurl by parsing curl headers. Useful to export
-  # the libcurl function meant to be exported.
+  # the libcurl functions meant to be exported.
   # Without this, the default linker logic kicks in, whereas it exports every
   # public function, if none is marked for export explicitly. This leads to
   # exporting every libcurl public function, as well as any other ones from
@@ -216,7 +216,7 @@ _VER="$1"
   # - failing on implibs or creating corrupted output (depending on options).
   # - not stripping the .buildid section, which contains a timestamp.
   # LLVM's own llvm-objcopy does not seems to work with Windows binaries,
-  # so .exe and .dll stripping is done via the -s linker option.
+  # so we do .exe and .dll stripping via the -s linker option.
   if [ "${_LD}" = 'ld' ]; then
     "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/src/*.exe
     "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/lib/*.dll

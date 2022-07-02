@@ -412,9 +412,8 @@ build_single_target() {
       _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
     fi
     if [ "${_OS}" = 'linux' ]; then
-      # This was passed via CFLAGS for CMake to make it detect clang correctly,
-      # so we need to pass this via CFLAGS, even though it is meant for the
-      # linker.
+      # We used to pass this via CFLAGS for CMake to make it detect clang, so
+      # we need to pass this via CMAKE_C_FLAGS, though meant for the linker.
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
     fi
 

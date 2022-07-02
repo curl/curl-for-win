@@ -34,7 +34,7 @@ fi
   sed -i.bak 's|flags_opt_yes="-O[s12]"|flags_opt_yes="-O3"|g' ./configure
 
   # Generate .def file for libcurl by parsing curl headers. Useful to export
-  # the libcurl function meant to be exported.
+  # the libcurl functions meant to be exported.
   # Without this, the default linker logic kicks in, whereas it exports every
   # public function, if none is marked for export explicitly. This leads to
   # exporting every libcurl public function, as well as any other ones from
@@ -250,8 +250,8 @@ fi
     fi
 
     # autotools forces its unixy DLL naming scheme. We prefer to use the same
-    # as with the other curl build systems. The default value is derived from
-    # `VERSIONINFO=` in lib/Makefile.am.
+    # as with the other curl build systems. Autotools calculates the default
+    # value from `VERSIONINFO=` in lib/Makefile.am.
     sed -i.bak -E "s| soname_spec='\\\$libname.+| soname_spec='\\\$libname${CURL_DLL_SUFFIX}\\\$shared_ext'|g" ./configure
 
     (
@@ -366,7 +366,7 @@ fi
   # - failing on implibs or creating corrupted output (depending on options).
   # - not stripping the .buildid section, which contains a timestamp.
   # LLVM's own llvm-objcopy does not seems to work with Windows binaries,
-  # so .exe and .dll stripping is done via the -s linker option.
+  # so we do .exe and .dll stripping via the -s linker option.
   if [ "${_LD}" = 'ld' ]; then
     "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.exe
     "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.dll

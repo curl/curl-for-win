@@ -30,7 +30,7 @@ _VER="$1"
   # Build
 
   # Generate .def file for libcurl by parsing curl headers. Useful to export
-  # the libcurl function meant to be exported.
+  # the libcurl functions meant to be exported.
   # Without this, the default linker logic kicks in, whereas it exports every
   # public function, if none is marked for export explicitly. This leads to
   # exporting every libcurl public function, as well as any other ones from
@@ -48,11 +48,9 @@ _VER="$1"
 
   # CMake cannot build everything in one pass. With BUILD_SHARED_LIBS enabled,
   # it does not build a static lib, and links curl.exe against libcurl DLL
-  # with no option to change this. We need to split it into two passes. This
-  # is be slower than when using a single pass (like in Makefile.m32), but
-  # there is no other way. The two passes are:
-  #   1. build the shared libcurl DLL + implib + .def
-  #   2. build the static libcurl lib + statically linked curl EXE
+  # with no option to change this. We need to split it into two passes:
+  #   1. build shared libcurl DLL + implib + .def
+  #   2. build static libcurl lib + statically linked curl EXE
   for pass in shared static; do
 
     _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -W -Wall"
@@ -88,7 +86,6 @@ _VER="$1"
     [ "${_CPU}" = 'a64' ] && CURL_DLL_SUFFIX="-${_CPU}"
 
     if [ "${pass}" = 'shared' ]; then
-      # CMAKE_SHARED_LIBRARY_SUFFIX is ignored.
       options="${options} -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${CURL_DLL_SUFFIX}.dll"
       _DEF_NAME="libcurl${CURL_DLL_SUFFIX}.def"
       _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,--output-def,${_DEF_NAME}"
@@ -297,7 +294,7 @@ _VER="$1"
   # - failing on implibs or creating corrupted output (depending on options).
   # - not stripping the .buildid section, which contains a timestamp.
   # LLVM's own llvm-objcopy does not seems to work with Windows binaries,
-  # so .exe and .dll stripping is done via the -s linker option.
+  # so we do .exe and .dll stripping via the -s linker option.
   if [ "${_LD}" = 'ld' ]; then
     "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.exe
     "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.dll

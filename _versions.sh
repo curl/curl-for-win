@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# NOTE: Bump nghttp3 and ngtcp2 only when curl is updated.
+# NOTE: Bump nghttp3 and ngtcp2 together with curl.
 
 export CURL_VER_='7.84.0'
 export CURL_HASH=2d118b43f547bfe5bae806d8d47b4e596ea5b25a6c1f080aef49fbcd817c5db8

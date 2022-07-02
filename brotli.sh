@@ -37,7 +37,7 @@ _VER="$1"
 
   rm -f "${_pkg}"/lib/*.dll.a
 
-  # libcurl only uses the decoding functionality
+  # libcurl does not need the encoding functionality
 
   rm -f "${_pkg}"/include/encode.h
   rm -f "${_pkg}"/lib/libbrotlienc.a
