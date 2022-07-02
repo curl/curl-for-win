@@ -79,7 +79,7 @@ _VER="$1"
     _CFLAGS="${_CFLAGS} -DUSE_HEADERS_API"
 
     options=''
-    options="${options} -DCMAKE_DISABLE_PRECOMPILE_HEADERS=OFF"
+    options="${options} -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON"
 
     _LDFLAGS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
     _LDFLAGS_EXE=''
