@@ -17,8 +17,6 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  # Build
-
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
   options="${_CONFIGURE_GLOBAL}"

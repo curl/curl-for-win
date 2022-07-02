@@ -21,8 +21,6 @@ fi
 (
   cd "${_NAM}"  # mandatory component
 
-  # Build
-
   rm -r -f "${_PKGDIR}" "${_BLDDIR}-shared" "${_BLDDIR}-static"
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
