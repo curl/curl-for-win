@@ -19,16 +19,7 @@ _VER="$1"
 
   # Build
 
-  rm -r -f "${_PKGDIR}" CMakeFiles CMakeCache.txt CTestTestfile.cmake cmake_install.cmake
-
-  find . -name '*.o'   -delete
-  find . -name '*.obj' -delete
-  find . -name '*.a'   -delete
-  find . -name '*.lo'  -delete
-  find . -name '*.la'  -delete
-  find . -name '*.lai' -delete
-  find . -name '*.Plo' -delete
-  find . -name '*.pc'  -delete
+  rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
   unset CC
 
@@ -62,14 +53,14 @@ _VER="$1"
   fi
 
   # shellcheck disable=SC2086
-  cmake . ${_CMAKE_GLOBAL} ${options} \
+  cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
     '-DBUILD_SHARED_LIBS=OFF' \
     '-DBUILD_EXAMPLES=OFF' \
     '-DBUILD_TESTING=OFF' \
     '-DENABLE_DEBUG_LOGGING=OFF' \
     "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
-  make --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}"
+  make --directory="${_BLDDIR}" --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}"
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 

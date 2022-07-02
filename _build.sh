@@ -355,6 +355,7 @@ build_single_target() {
   export _PKGDIR="${_CPU}-${_CRT}"
   _PREFIX='/usr'
   export _PP="${_PKGDIR}${_PREFIX}"
+  export _BLDDIR='bld'
   export _CC_GLOBAL=''
   export _CFLAGS_GLOBAL='-fno-ident'
   export _CPPFLAGS_GLOBAL=''

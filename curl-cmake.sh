@@ -20,6 +20,10 @@ _VER="$1"
 (
   cd "${_NAM}"  # mandatory component
 
+  rm -r -f "${_PKGDIR}" "${_BLDDIR}-shared" "${_BLDDIR}-static"
+
+  _pkg="${_PP}"  # DESTDIR= + _PREFIX
+
   # Set OS string to the autotools value. To test reproducibility across make systems.
   if [ -n "${CW_DEV_FIXUP_OS_STRING:-}" ]; then
     # Windows-* ->
@@ -28,20 +32,6 @@ _VER="$1"
   fi
 
   # Build
-
-  rm -r -f "${_PKGDIR}" CMakeFiles CMakeCache.txt CTestTestfile.cmake cmake_install.cmake
-
-  find . -name '*.o'   -delete
-  find . -name '*.obj' -delete
-  find . -name '*.a'   -delete
-  find . -name '*.lo'  -delete
-  find . -name '*.la'  -delete
-  find . -name '*.lai' -delete
-  find . -name '*.Plo' -delete
-  find . -name '*.pc'  -delete
-  find . -name '*.dll' -delete
-  find . -name '*.def' -delete
-  find . -name '*.map' -delete
 
   # Generate .def file for libcurl by parsing curl headers. Useful to export
   # the libcurl function meant to be exported.
@@ -103,13 +93,21 @@ _VER="$1"
     [ "${_CPU}" = 'x64' ] && CURL_DLL_SUFFIX="-${_CPU}"
     [ "${_CPU}" = 'a64' ] && CURL_DLL_SUFFIX="-${_CPU}"
 
-    [ "${pass}" = 'shared' ] && options="${options} -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${CURL_DLL_SUFFIX}.dll"  # CMAKE_SHARED_LIBRARY_SUFFIX ignored.
-
-    _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,--output-def,libcurl${CURL_DLL_SUFFIX}.def"
+    if [ "${pass}" = 'shared' ]; then
+      # CMAKE_SHARED_LIBRARY_SUFFIX is ignored.
+      options="${options} -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${CURL_DLL_SUFFIX}.dll"
+      _DEF_NAME="libcurl${CURL_DLL_SUFFIX}.def"
+      _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,--output-def,${_DEF_NAME}"
+    fi
 
     if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-      _LDFLAGS_EXE="${_LDFLAGS_EXE} -Wl,-Map,curl.map"
-      _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,-Map,libcurl${CURL_DLL_SUFFIX}.map"
+      if [ "${pass}" = 'shared' ]; then
+        _MAP_NAME="libcurl${CURL_DLL_SUFFIX}.map"
+        _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,-Map,${_MAP_NAME}"
+      else
+        _MAP_NAME='curl.map'
+        _LDFLAGS_EXE="${_LDFLAGS_EXE} -Wl,-Map,${_MAP_NAME}"
+      fi
     fi
 
     # Ugly hack. Everything breaks without this due to the accidental ordering of
@@ -245,15 +243,27 @@ _VER="$1"
     fi
 
     # shellcheck disable=SC2086
-    cmake . ${_CMAKE_GLOBAL} ${options} \
+    cmake . -B "${_BLDDIR}-${pass}" ${_CMAKE_GLOBAL} ${options} \
       "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"  \
       "-DCMAKE_EXE_LINKER_FLAGS=${_LDFLAGS} ${_LDFLAGS_EXE}" \
       "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS} ${_LDFLAGS_DLL}"  # --debug-find
 
-    make --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
-  done
+    make --directory="${_BLDDIR}-${pass}" --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
 
-  _pkg="${_PP}"  # DESTDIR= + _PREFIX
+    # Manual copy to DESTDIR
+
+    if [ "${pass}" = 'shared' ]; then
+      cp -p "${_BLDDIR}-${pass}/lib/${_DEF_NAME}" "${_pkg}"/bin/
+    fi
+
+    if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+      if [ "${pass}" = 'shared' ]; then
+        cp -p "${_BLDDIR}-${pass}/lib/${_MAP_NAME}" "${_pkg}"/bin/
+      else
+        cp -p "${_BLDDIR}-${pass}/src/${_MAP_NAME}" "${_pkg}"/bin/
+      fi
+    fi
+  done
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.
@@ -292,12 +302,11 @@ _VER="$1"
 
   touch -c -r "${_ref}" "${_pkg}"/bin/*.exe
   touch -c -r "${_ref}" "${_pkg}"/bin/*.dll
-  touch -c -r "${_ref}" ./lib/*.def
+  touch -c -r "${_ref}" "${_pkg}"/bin/*.def
   touch -c -r "${_ref}" "${_pkg}"/lib/*.a
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-    touch -c -r "${_ref}" ./src/*.map
-    touch -c -r "${_ref}" ./lib/*.map
+    touch -c -r "${_ref}" "${_pkg}"/bin/*.map
   fi
 
   # Tests
@@ -342,7 +351,7 @@ _VER="$1"
   cp -f -p "${_pkg}"/include/curl/*.h "${_DST}/include/curl/"
   cp -f -p "${_pkg}"/bin/*.exe        "${_DST}/bin/"
   cp -f -p "${_pkg}"/bin/*.dll        "${_DST}/bin/"
-  cp -f -p ./lib/*.def                "${_DST}/bin/"
+  cp -f -p "${_pkg}"/bin/*.def        "${_DST}/bin/"
   cp -f -p "${_pkg}"/lib/*.a          "${_DST}/lib/"
   cp -f -p docs/*.md                  "${_DST}/docs/"
   cp -f -p CHANGES                    "${_DST}/CHANGES.txt"
@@ -356,8 +365,7 @@ _VER="$1"
   fi
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-    cp -f -p ./src/*.map              "${_DST}/bin/"
-    cp -f -p ./lib/*.map              "${_DST}/bin/"
+    cp -f -p "${_pkg}"/bin/*.map      "${_DST}/bin/"
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"
