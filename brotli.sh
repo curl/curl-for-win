@@ -26,7 +26,7 @@ _VER="$1"
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 
-  # Remove '-static' suffixes from static lib names to make these behave
+  # Delete '-static' suffixes from static lib names to make these behave
   # like most other projects do.
 
   for fn in "${_pkg}"/lib/*-static.a; do
