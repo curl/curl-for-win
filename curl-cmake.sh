@@ -21,7 +21,7 @@ _VER="$1"
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 
   # Set OS string to the autotools value. To test reproducibility across make systems.
-  if [ -n "${CW_DEV_FIXUP_OS_STRING:-}" ]; then
+  if [ -n "${CW_DEV_CROSSMAKE_REPRO:-}" ]; then
     # Windows-* ->
     # shellcheck disable=SC2016
     sed -i.bak 's|set(OS "\\"${CMAKE_SYSTEM_NAME}${CURL_OS_SUFFIX}\\"")|set(OS \\"x86_64-w64-mingw32\\")|g' ./CMakeLists.txt
