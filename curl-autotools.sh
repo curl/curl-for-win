@@ -23,12 +23,7 @@ fi
 
   # Build
 
-  rm -r -f "${_PKGDIR}"
-
-  find . -name '*.a'   -delete
-  find . -name '*.dll' -delete
-  find . -name '*.def' -delete
-  find . -name '*.map' -delete
+  rm -r -f "${_PKGDIR}" "${_BLDDIR}-shared" "${_BLDDIR}-static"
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 
@@ -265,93 +260,90 @@ fi
     # `VERSIONINFO=` in lib/Makefile.am.
     sed -i.bak -E "s| soname_spec='\\\$libname.+| soname_spec='\\\$libname${CURL_DLL_SUFFIX}\\\$shared_ext'|g" ./configure
 
-    # shellcheck disable=SC2086
-    ./configure ${options} \
-      --disable-debug \
-      --disable-pthreads \
-      --enable-optimize \
-      --enable-symbol-hiding \
-      --enable-headers-api \
-      --disable-ares \
-      --enable-http \
-      --enable-proxy \
-      --enable-manual \
-      --enable-libcurl-option \
-      --enable-ipv6 \
-      --disable-openssl-auto-load-config \
-      --enable-verbose \
-      --enable-sspi \
-      --enable-ntlm \
-      --enable-cookies \
-      --enable-http-auth \
-      --enable-doh \
-      --enable-mime \
-      --enable-dateparse \
-      --enable-netrc \
-      --enable-progress-meter \
-      --enable-dnsshuffle \
-      --enable-get-easy-options \
-      --enable-hsts \
-      --without-ca-path \
-      --without-ca-bundle \
-      --without-ca-fallback
-
-    # NOTE: 'make clean' deletes src/tool_hugehelp.c and docs/curl.1. Next,
-    #       'make' regenerates them, including the current date in curl.1,
-    #       and breaking reproducibility. tool_hugehelp.c might also be
-    #       reflowed/hyphened differently than the source distro, breaking
-    #       reproducibility again. Skip the clean phase to resolve it. Do
-    #       any cleaning manually as necessary.
-    find . -name '*.o'   -delete
-    find . -name '*.lo'  -delete
-    find . -name '*.la'  -delete
-    find . -name '*.lai' -delete
-    find . -name '*.pc'  -delete
-    find . -name '*.exe' -delete
+    (
+      mkdir "${_BLDDIR}-${pass}"
+      cd "${_BLDDIR}-${pass}"
+      # shellcheck disable=SC2086
+      ../configure ${options} \
+        --disable-debug \
+        --disable-pthreads \
+        --enable-optimize \
+        --enable-symbol-hiding \
+        --enable-headers-api \
+        --disable-ares \
+        --enable-http \
+        --enable-proxy \
+        --enable-manual \
+        --enable-libcurl-option \
+        --enable-ipv6 \
+        --disable-openssl-auto-load-config \
+        --enable-verbose \
+        --enable-sspi \
+        --enable-ntlm \
+        --enable-cookies \
+        --enable-http-auth \
+        --enable-doh \
+        --enable-mime \
+        --enable-dateparse \
+        --enable-netrc \
+        --enable-progress-meter \
+        --enable-dnsshuffle \
+        --enable-get-easy-options \
+        --enable-hsts \
+        --without-ca-path \
+        --without-ca-bundle \
+        --without-ca-fallback
+    )
 
     if [ "${pass}" = 'shared' ]; then
 
       # Compile resource
       # shellcheck disable=SC2086
-      "${RC}" ${RCFLAGS} -i lib/libcurl.rc -o lib/libcurl.rc.res
+      "${RC}" ${RCFLAGS} -i lib/libcurl.rc -o "${_BLDDIR}-${pass}/lib/libcurl.rc.res"
 
       # Cannot add this linker option to LDFLAGS as-is, because it gets used
       # by ./configure tests and fails right away. This needs GNU sed.
       # Also add our compiled resource object.
       # shellcheck disable=SC2016
-      sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,libcurl.rc.res -Wl,../libcurl.def' lib/Makefile
+      sed -i.bak "/^LDFLAGS = /a LDFLAGS := \\\$(LDFLAGS) -Wl,libcurl.rc.res -Wl,$(pwd)/libcurl.def" "${_BLDDIR}-${pass}/lib/Makefile"
 
       # Skip building shared version curl.exe. The build itself works, but
       # then autotools tries to create its "ltwrapper", and fails. This only
       # seems to happen when building curl against more than one dependency.
       # I have found no way to skip building that component, even though
       # we do not need it. Skip this pass altogether.
-      sed -i.bak -E 's|^SUBDIRS = .+|SUBDIRS = lib|g' ./Makefile
+      sed -i.bak -E 's|^SUBDIRS = .+|SUBDIRS = lib|g' "${_BLDDIR}-${pass}/Makefile"
     else
       # Compile resource
       # shellcheck disable=SC2086
-      "${RC}" ${RCFLAGS} -i src/curl.rc -o src/curl.rc.res -DCURL_EMBED_MANIFEST
+      "${RC}" ${RCFLAGS} -i src/curl.rc -o "${_BLDDIR}-${pass}/src/curl.rc.res" -DCURL_EMBED_MANIFEST
 
       # Add our compiled resource object.
       # shellcheck disable=SC2016
-      sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,curl.rc.res' src/Makefile
+      sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,curl.rc.res' "${_BLDDIR}-${pass}/src/Makefile"
 
-      sed -i.bak -E 's|^SUBDIRS = .+|SUBDIRS = lib src|g' ./Makefile
+      sed -i.bak -E 's|^SUBDIRS = .+|SUBDIRS = lib src|g' "${_BLDDIR}-${pass}/Makefile"
     fi
 
-    make --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
+    # NOTE: 'make clean' deletes src/tool_hugehelp.c and docs/curl.1. Next,
+    #       'make' regenerates them, including the current date in curl.1,
+    #       and breaking reproducibility. tool_hugehelp.c might also be
+    #       reflowed/hyphened differently than the source distro, breaking
+    #       reproducibility again. Skip the clean phase to resolve it.
+
+    make --directory="${_BLDDIR}-${pass}" --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
     # Manual copy to DESTDIR
 
     if [ "${pass}" = 'shared' ]; then
-      cp -p "lib/${_DEF_NAME}" "${_pkg}"/bin/
+      cp -p "${_BLDDIR}-${pass}/lib/${_DEF_NAME}" "${_pkg}"/bin/
     fi
 
     if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
       if [ "${pass}" = 'shared' ]; then
-        cp -p "lib/${_MAP_NAME}" "${_pkg}"/bin/
+        cp -p "${_BLDDIR}-${pass}/lib/${_MAP_NAME}" "${_pkg}"/bin/
       else
-        cp -p "src/${_MAP_NAME}" "${_pkg}"/bin/
+        cp -p "${_BLDDIR}-${pass}/src/${_MAP_NAME}" "${_pkg}"/bin/
       fi
     fi
   done

@@ -19,16 +19,7 @@ _VER="$1"
 
   # Build
 
-  rm -r -f "${_PKGDIR}"
-
-  find . -name '*.o'   -delete
-  find . -name '*.a'   -delete
-  find . -name '*.lo'  -delete
-  find . -name '*.la'  -delete
-  find . -name '*.lai' -delete
-  find . -name '*.Plo' -delete
-  find . -name '*.pc'  -delete
-  find . -name '*.exe' -delete
+  rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
   # We may need this in the future if an "Automake version mismatch" occurs:
 # if [ ! -f 'Makefile' ]; then
@@ -43,14 +34,18 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LIBS="${_LIBS_GLOBAL}"
 
-  # shellcheck disable=SC2086
-  ./configure ${options} \
-    --disable-rpath \
-    --enable-static \
-    --disable-shared \
-    --disable-doc --silent
-# make --jobs=2 clean >/dev/null
-  make --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
+  (
+    mkdir "${_BLDDIR}"
+    cd "${_BLDDIR}"
+    # shellcheck disable=SC2086
+    ../configure ${options} \
+      --disable-rpath \
+      --enable-static \
+      --disable-shared \
+      --disable-doc --silent
+  )
+
+  make --directory="${_BLDDIR}" --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 

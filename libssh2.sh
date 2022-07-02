@@ -19,7 +19,7 @@ _VER="$1"
 
   # Build
 
-  rm -r -f "${_PKGDIR}"
+  rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
   [ -f 'Makefile' ] || autoreconf --force --install
 
@@ -58,17 +58,21 @@ _VER="$1"
     options="${options} --with-crypto=wincng"
   fi
 
-  # shellcheck disable=SC2086
-  ./configure ${options} \
-    --disable-rpath \
-    --disable-debug \
-    --enable-hidden-symbols \
-    --enable-static \
-    --disable-shared \
-    --disable-examples-build \
-    --disable-tests --silent
-  make --jobs=2 clean >/dev/null
-  make --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
+  (
+    mkdir "${_BLDDIR}"
+    cd "${_BLDDIR}"
+    # shellcheck disable=SC2086
+    ../configure ${options} \
+      --disable-rpath \
+      --disable-debug \
+      --enable-hidden-symbols \
+      --enable-static \
+      --disable-shared \
+      --disable-examples-build \
+      --disable-tests --silent
+  )
+
+  make --directory="${_BLDDIR}" --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 

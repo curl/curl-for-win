@@ -31,16 +31,7 @@ _VER="$1"
 
   # Build
 
-  rm -r -f "${_PKGDIR}"
-
-  find . -name '*.o'   -delete
-  find . -name '*.obj' -delete
-  find . -name '*.a'   -delete
-  find . -name '*.pc'  -delete
-  find . -name '*.def' -delete
-  find . -name '*.dll' -delete
-  find . -name '*.exe' -delete
-  find . -name '*.tmp' -delete
+  rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
   [ "${_CPU}" = 'x86' ] && options='mingw'
   [ "${_CPU}" = 'x64' ] && options='mingw64'
@@ -98,25 +89,30 @@ _VER="$1"
   # dependencies and DLL imports, we explicitly disable them one by one in
   # the 'no-capieng ...' line.
 
-  # shellcheck disable=SC2086
-  ./Configure-patched ${options} \
-    "--cross-compile-prefix=${_CONF_CCPREFIX}" \
-    -Wl,--nxcompat -Wl,--dynamicbase \
-    no-legacy \
-    no-apps \
-    no-capieng no-loadereng no-padlockeng \
-    no-module \
-    no-dso \
-    no-shared \
-    no-idea \
-    no-unit-test \
-    no-tests \
-    no-makedepend \
-    "--prefix=${_win_prefix}" \
-    "--openssldir=${_ssldir}"
-  SOURCE_DATE_EPOCH=${unixts} TZ=UTC make --jobs=2
+  (
+    mkdir "${_BLDDIR}"
+    cd "${_BLDDIR}"
+    # shellcheck disable=SC2086
+    ../Configure-patched ${options} \
+      "--cross-compile-prefix=${_CONF_CCPREFIX}" \
+      -Wl,--nxcompat -Wl,--dynamicbase \
+      no-legacy \
+      no-apps \
+      no-capieng no-loadereng no-padlockeng \
+      no-module \
+      no-dso \
+      no-shared \
+      no-idea \
+      no-unit-test \
+      no-tests \
+      no-makedepend \
+      "--prefix=${_win_prefix}" \
+      "--openssldir=${_ssldir}"
+  )
+
+  SOURCE_DATE_EPOCH=${unixts} TZ=UTC make --directory="${_BLDDIR}" --jobs=2
   # Ending slash required.
-  make --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}/" >/dev/null # 2>&1
+  make --directory="${_BLDDIR}" --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}/" >/dev/null # 2>&1
 
   # OpenSSL 3.x does not strip the drive letter anymore:
   #   ./openssl/${_PKGDIR}/C:/Windows/System32/OpenSSL

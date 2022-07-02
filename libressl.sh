@@ -19,17 +19,7 @@ _VER="$1"
 
   # Build
 
-  rm -r -f "${_PKGDIR}"
-
-  find . -name '*.o'   -delete
-  find . -name '*.a'   -delete
-  find . -name '*.lo'  -delete
-  find . -name '*.la'  -delete
-  find . -name '*.lai' -delete
-  find . -name '*.Plo' -delete
-  find . -name '*.pc'  -delete
-  find . -name '*.dll' -delete
-  find . -name '*.exe' -delete
+  rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
   options="${_CONFIGURE_GLOBAL}"
   export CC="${_CC_GLOBAL}"
@@ -47,16 +37,20 @@ _VER="$1"
   _win_prefix='C:/Windows/libressl'
   _ssldir="ssl"
 
-  # shellcheck disable=SC2086
-  ./configure ${options} \
-    --enable-static \
-    --disable-shared \
-    --disable-tests \
-    "--prefix=${_win_prefix}" \
-    "--with-openssldir=${_win_prefix}/${_ssldir}" --silent
-# make clean > /dev/null
+  (
+    mkdir "${_BLDDIR}"
+    cd "${_BLDDIR}"
+    # shellcheck disable=SC2086
+    ../configure ${options} \
+      --enable-static \
+      --disable-shared \
+      --disable-tests \
+      "--prefix=${_win_prefix}" \
+      "--with-openssldir=${_win_prefix}/${_ssldir}" --silent
+  )
+
   # Ending slash required.
-  make --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}/" >/dev/null # 2>&1
+  make --directory="${_BLDDIR}" --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}/" >/dev/null # 2>&1
 
   # LibreSSL does not strip the drive letter
   #   ./libressl/${_PKGDIR}/C:/Windows/libressl

@@ -19,7 +19,7 @@ _VER="$1"
 
   # Build
 
-  rm -r -f "${_PKGDIR}"
+  rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
   # To fix this bizarre error when executing 'make':
   #   configure.ac:39: error: version mismatch.  This is Automake 1.16.4,
@@ -37,18 +37,22 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LIBS="${_LIBS_GLOBAL}"
 
-  # shellcheck disable=SC2086
-  ./configure ${options} \
-    --disable-rpath \
-    --enable-static \
-    --disable-shared \
-    --disable-server \
-    --enable-scram-sha1 \
-    --enable-scram-sha256 \
-    --disable-obsolete \
-    --disable-valgrind-tests --silent
-  make --jobs=2 clean >/dev/null
-  make --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
+  (
+    mkdir "${_BLDDIR}"
+    cd "${_BLDDIR}"
+    # shellcheck disable=SC2086
+    ../configure ${options} \
+      --disable-rpath \
+      --enable-static \
+      --disable-shared \
+      --disable-server \
+      --enable-scram-sha1 \
+      --enable-scram-sha256 \
+      --disable-obsolete \
+      --disable-valgrind-tests --silent
+  )
+
+  make --directory="${_BLDDIR}" --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 
