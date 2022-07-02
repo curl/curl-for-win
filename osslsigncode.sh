@@ -5,9 +5,6 @@
 # shellcheck disable=SC3040
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
-export _NAM
-export _VER
-
 _NAM="$(basename "$0" | cut -f 1 -d '.')"
 _VER="$1"
 
