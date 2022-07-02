@@ -65,7 +65,8 @@ _VER="$1"
     --enable-hidden-symbols \
     --enable-static \
     --disable-shared \
-    --disable-examples-build --silent
+    --disable-examples-build \
+    --disable-tests --silent
   make --jobs=2 clean >/dev/null
   make --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
