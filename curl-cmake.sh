@@ -175,6 +175,17 @@ _VER="$1"
       options="${options} -DLIBSSH2_LIBRARY=${_TOP}/libssh2/${_PP}/lib/libssh2.a"
       options="${options} -DLIBSSH2_INCLUDE_DIR=${_TOP}/libssh2/${_PP}/include"
       _LDFLAGS="${_LDFLAGS} -lbcrypt"
+
+      if [ -n "${CW_DEV_CROSSMAKE_REPRO:-}" ]; then
+        # By passing -lssh2 _before_ -lcrypto (of openssl/libressl) to the linker,
+        # DLL size becomes closer/identical to autotools/m32-built DLLs. Otherwise
+        # this is not necessary, and there should not be any functional difference.
+        # Could not find the reason for it. File-offset-stripped-then-sorted .map
+        # files are identical either way. It would be useful to have a linker
+        # option to sort object/lib inputs to make output deterministic (these
+        # build do not rely on any ordering side-effects.)
+        _LDFLAGS="${_LDFLAGS} -L${_TOP}/libssh2/${_PP}/lib -lssh2"
+      fi
     else
       options="${options} -DCURL_USE_LIBSSH2=OFF"  # Avoid detecting a copy on the host OS
     fi
