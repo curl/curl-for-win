@@ -66,7 +66,7 @@ fi
     export RCFLAGS='--output-format coff -Iinclude'
     [ "${_CPU}" = 'x86' ] && RCFLAGS="${RCFLAGS} --target=pe-i386"
     [ "${_CPU}" = 'x64' ] && RCFLAGS="${RCFLAGS} --target=pe-x86-64"
-  # [ "${_CPU}" = 'a64' ] && RCFLAGS="${RCFLAGS} --target=..."  # FIXME
+  # [ "${_CPU}" = 'a64' ] && RCFLAGS="${RCFLAGS} --target=..."  # TODO
 
     CPPFLAGS="${CPPFLAGS} -DNDEBUG -DHAVE_PROCESS_H"
 

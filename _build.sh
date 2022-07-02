@@ -272,7 +272,7 @@ build_single_target() {
   # GCC-specific machine selection option
   [ "${_CPU}" = 'x86' ] && _OPTM='-m32'
   [ "${_CPU}" = 'x64' ] && _OPTM='-m64'
-  [ "${_CPU}" = 'a64' ] && _OPTM='-m..'  # FIXME
+  [ "${_CPU}" = 'a64' ] && _OPTM='-m..'  # TODO
 
   [ "${_CPU}" = 'x86' ] && _machine='i686'
   [ "${_CPU}" = 'x64' ] && _machine='x86_64'
@@ -309,7 +309,7 @@ build_single_target() {
       _SYSROOT="/usr/${_TRIPLET}"
     fi
 
-    # FIXME: Run arm64 targets on arm64 linux/mac hosts?
+    # TODO: Run arm64 targets on arm64 linux/mac hosts?
     _WINE='echo'
     if [ "${_OS}" = 'linux' ]; then
       # Execute CPU-native targets only
@@ -324,7 +324,7 @@ build_single_target() {
         _WINE='wine64'
       fi
     elif [ "${_OS}" = 'win' ]; then
-      _WINE='wine'  # FIXME: what targets can an arm64 host run? Can an x64 host run arm64 targets?
+      _WINE='wine'  # TODO: What targets can an arm64 host run? Can an x64 host run arm64 targets?
     fi
   fi
 
