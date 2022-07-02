@@ -85,8 +85,7 @@ _VER="$1"
   # the 'no-capieng ...' line.
 
   (
-    mkdir "${_BLDDIR}"
-    cd "${_BLDDIR}"
+    mkdir "${_BLDDIR}"; cd "${_BLDDIR}"
     # shellcheck disable=SC2086
     ../Configure-patched ${options} \
       "--cross-compile-prefix=${_CONF_CCPREFIX}" \

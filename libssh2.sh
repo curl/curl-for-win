@@ -53,8 +53,7 @@ _VER="$1"
   fi
 
   (
-    mkdir "${_BLDDIR}"
-    cd "${_BLDDIR}"
+    mkdir "${_BLDDIR}"; cd "${_BLDDIR}"
     # shellcheck disable=SC2086
     ../configure ${options} \
       --disable-rpath \

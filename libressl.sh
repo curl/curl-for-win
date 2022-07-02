@@ -32,8 +32,7 @@ _VER="$1"
   _ssldir="ssl"
 
   (
-    mkdir "${_BLDDIR}"
-    cd "${_BLDDIR}"
+    mkdir "${_BLDDIR}"; cd "${_BLDDIR}"
     # shellcheck disable=SC2086
     ../configure ${options} \
       --enable-static \

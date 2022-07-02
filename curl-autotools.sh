@@ -255,8 +255,7 @@ fi
     sed -i.bak -E "s| soname_spec='\\\$libname.+| soname_spec='\\\$libname${CURL_DLL_SUFFIX}\\\$shared_ext'|g" ./configure
 
     (
-      mkdir "${_BLDDIR}-${pass}"
-      cd "${_BLDDIR}-${pass}"
+      mkdir "${_BLDDIR}-${pass}"; cd "${_BLDDIR}-${pass}"
       # shellcheck disable=SC2086
       ../configure ${options} \
         --disable-debug \
