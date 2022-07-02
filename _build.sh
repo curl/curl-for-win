@@ -248,7 +248,7 @@ bld() {
     pkgori="${pkg}"
     # allow selecting an alternate build tool
     withbuildtool="$(echo "${CW_BLD:-}" | \
-      grep -a -o -E "${pkg}-(cmake|autotools|make)" || true)"
+      grep -a -o -E "${pkg}-(cmake|autotools|make|m32)" || true)"
     if [ -n "${withbuildtool}" ] && [ -f "${withbuildtool}.sh" ]; then
       pkg="${withbuildtool}"
     fi

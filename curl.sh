@@ -11,7 +11,7 @@ export _OUT
 export _BAS
 export _DST
 
-_NAM="$(basename "$0" | cut -f 1 -d '.' | sed 's/-make//')"
+_NAM="$(basename "$0" | cut -f 1 -d '.' | sed 's/-m32//')"
 _VER="$1"
 
 (
