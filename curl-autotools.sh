@@ -60,7 +60,7 @@ fi
     export CC="${_CC_GLOBAL}"
     export CFLAGS="${_CFLAGS_GLOBAL} -W -Wall"
     export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
-    export LDFLAGS="${_LDFLAGS_GLOBAL}"
+    export LDFLAGS="${_LDFLAGS_GLOBAL} -static-libgcc"
     export LIBS="${_LIBS_GLOBAL}"
 
     export RCFLAGS='--output-format coff -Iinclude'
