@@ -48,7 +48,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
-#   - Switch curl to CMake builds.
 #   - Cleanup 'clean' operations.
 #   - Update naming-scheme to make room for arm64 builds:
 #       win64 -> win-x64
