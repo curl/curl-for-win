@@ -30,6 +30,8 @@ fi
   find . -name '*.def' -delete
   find . -name '*.map' -delete
 
+  _pkg="${_PP}"  # DESTDIR= + _PREFIX
+
   if [ ! -f 'Makefile' ]; then
     autoreconf --force --install
     cp -f -p Makefile.dist Makefile
@@ -114,10 +116,11 @@ fi
 
     if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
       if [ "${pass}" = 'shared' ]; then
-        LDFLAGS="${LDFLAGS} -Wl,-Map,libcurl.map"
+        _MAP_NAME="libcurl${CURL_DLL_SUFFIX}.map"
       else
-        LDFLAGS="${LDFLAGS} -Wl,-Map,curl.map"
+        _MAP_NAME='curl.map'
       fi
+      LDFLAGS="${LDFLAGS} -Wl,-Map,${_MAP_NAME}"
     fi
 
     if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
@@ -246,7 +249,8 @@ fi
     options="${options} --without-quiche --without-msh3"
 
     if [ "${pass}" = 'shared' ]; then
-      LDFLAGS="${LDFLAGS} -Wl,--output-def,libcurl${CURL_DLL_SUFFIX}.def"
+      _DEF_NAME="libcurl${CURL_DLL_SUFFIX}.def"
+      LDFLAGS="${LDFLAGS} -Wl,--output-def,${_DEF_NAME}"
       CPPFLAGS="${CPPFLAGS} -DCURL_STATICLIB"
 
       options="${options} --disable-static"
@@ -336,17 +340,25 @@ fi
     fi
 
     make --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
-  done
 
-  _pkg="${_PP}"  # DESTDIR= + _PREFIX
+    # Manual copy to DESTDIR
+
+    if [ "${pass}" = 'shared' ]; then
+      cp -p "lib/${_DEF_NAME}" "${_pkg}"/bin/
+    fi
+
+    if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+      if [ "${pass}" = 'shared' ]; then
+        cp -p "lib/${_MAP_NAME}" "${_pkg}"/bin/
+      else
+        cp -p "src/${_MAP_NAME}" "${_pkg}"/bin/
+      fi
+    fi
+  done
 
   # Build fixups
 
   chmod -x "${_pkg}"/lib/*.a
-
-  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-    mv './lib/libcurl.map' "./lib/libcurl${CURL_DLL_SUFFIX}.map"
-  fi
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.
@@ -385,12 +397,11 @@ fi
 
   touch -c -r "${_ref}" "${_pkg}"/bin/*.exe
   touch -c -r "${_ref}" "${_pkg}"/bin/*.dll
-  touch -c -r "${_ref}" ./lib/*.def
+  touch -c -r "${_ref}" "${_pkg}"/bin/*.def
   touch -c -r "${_ref}" "${_pkg}"/lib/*.a
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-    touch -c -r "${_ref}" ./src/*.map
-    touch -c -r "${_ref}" ./lib/*.map
+    touch -c -r "${_ref}" "${_pkg}"/bin/*.map
   fi
 
   # Tests
@@ -435,7 +446,7 @@ fi
   cp -f -p "${_pkg}"/include/curl/*.h "${_DST}/include/curl/"
   cp -f -p "${_pkg}"/bin/*.exe        "${_DST}/bin/"
   cp -f -p "${_pkg}"/bin/*.dll        "${_DST}/bin/"
-  cp -f -p ./lib/*.def                "${_DST}/bin/"
+  cp -f -p "${_pkg}"/bin/*.def        "${_DST}/bin/"
   cp -f -p "${_pkg}"/lib/*.a          "${_DST}/lib/"
   cp -f -p docs/*.md                  "${_DST}/docs/"
   cp -f -p CHANGES                    "${_DST}/CHANGES.txt"
@@ -449,8 +460,7 @@ fi
   fi
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
-    cp -f -p ./src/*.map        "${_DST}/bin/"
-    cp -f -p ./lib/*.map        "${_DST}/bin/"
+    cp -f -p "${_pkg}"/bin/*.map      "${_DST}/bin/"
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"
