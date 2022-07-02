@@ -52,7 +52,7 @@ _VER="$1"
   CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_STDBOOL_H -DHAVE_STRING_H -DHAVE_SETJMP_H"
   CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUSE_HEADERS_API"
 
-  export CURL_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} -static-libgcc -Wl,--nxcompat -Wl,--dynamicbase"
+  export CURL_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} -Wl,--nxcompat -Wl,--dynamicbase"
   export CURL_LDFLAG_EXTRAS_EXE=''
   export CURL_LDFLAG_EXTRAS_DLL=''
   if [ "${_CPU}" = 'x86' ]; then

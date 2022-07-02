@@ -64,7 +64,7 @@ _VER="$1"
 
     options=''
 
-    _LDFLAGS='-static-libgcc -Wl,--nxcompat -Wl,--dynamicbase'
+    _LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
     _LDFLAGS_EXE=''
     _LDFLAGS_DLL=''
     if [ "${_CPU}" = 'x86' ]; then
