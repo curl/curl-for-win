@@ -59,7 +59,6 @@ _VER="$1"
   rm -f    "${_pkg}"/lib/*.la
 
   # List files created
-
   find "${_pkg}" | grep -a -v -F '/share/' | sort
 
   # Make steps for determinism

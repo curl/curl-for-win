@@ -28,17 +28,14 @@ _VER="$1"
 
   # Delete '-static' suffixes from static lib names to make these behave
   # like most other projects do.
-
   for fn in "${_pkg}"/lib/*-static.a; do
     mv "${fn}" "$(echo "${fn}" | sed 's|-static||')"
   done
 
   # Delete implibs
-
   rm -f "${_pkg}"/lib/*.dll.a
 
   # libcurl does not need the encoding functionality
-
   rm -f "${_pkg}"/include/encode.h
   rm -f "${_pkg}"/lib/libbrotlienc.a
   rm -f "${_pkg}"/lib/pkgconfig/libbrotlienc.pc

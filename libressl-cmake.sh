@@ -41,7 +41,6 @@ _VER="$1"
   rm -r -f "${_pkg}"/lib/pkgconfig
 
   # List files created
-
   find "${_pkg}" | grep -a -v -F '/share/' | sort
 
   # Make steps for determinism

@@ -118,7 +118,6 @@ _VER="$1"
   mv "${_PKGDIR}/${_win_prefix}"/* "${_pkg}"
 
   # Rename 'lib64' to 'lib'. This is what most packages expect.
-
   if [ "${_CPU}" = 'x64' ]; then
     mv "${_pkg}/lib64" "${_pkg}/lib"
   fi
@@ -127,7 +126,6 @@ _VER="$1"
   rm -r -f "${_pkg}"/lib/pkgconfig
 
   # List files created
-
   find "${_pkg}" | grep -a -v -F '/share/' | sort
 
   # Make steps for determinism

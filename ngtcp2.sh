@@ -52,7 +52,6 @@ _VER="$1"
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 
   # Rename static libs so they get found by dependents
-
   if [ -d ../openssl-quic ]; then
     mv -f "${_pkg}"/lib/libngtcp2_crypto_openssl_static.a "${_pkg}"/lib/libngtcp2_crypto_openssl.a
   fi
