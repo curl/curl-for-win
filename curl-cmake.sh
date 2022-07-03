@@ -252,7 +252,8 @@ _VER="$1"
       "-DCMAKE_EXE_LINKER_FLAGS=${_LDFLAGS} ${_LDFLAGS_EXE}" \
       "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS} ${_LDFLAGS_DLL}"  # --debug-find
 
-    if [ "${pass}" = 'static' ]; then
+    if [ "${pass}" = 'static' ] && \
+       [ -f src/tool_hugehelp.c ]; then  # File missing when building from a raw source tree.
       # When doing an out of tree build, this is necessary to avoid make
       # re-generating the embedded manual with blank content.
       cp -p src/tool_hugehelp.c "${_BLDDIR}-${pass}/src/"
