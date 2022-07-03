@@ -29,13 +29,14 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  [ "${_CPU}" = 'x86' ] && options='mingw'
-  [ "${_CPU}" = 'x64' ] && options='mingw64'
-  [ "${_CPU}" = 'a64' ] && options='...'  # TODO
+  options=''
 
-  options="${options} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
+  [ "${_CPU}" = 'x86' ] && options="${options} mingw"
+  [ "${_CPU}" = 'x64' ] && options="${options} mingw64"
+  [ "${_CPU}" = 'a64' ] && options="${options} ..."  # TODO
 
-  options="${options} no-filenames"
+  options="${options} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} no-filenames"
+
   [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128"
   if [ "${_CPU}" = 'x86' ]; then
     options="${options} -D_WIN32_WINNT=0x0501"  # For Windows XP compatibility
