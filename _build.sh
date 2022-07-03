@@ -122,6 +122,9 @@ command -v git >/dev/null 2>&1 && _URL="$(git ls-remote --get-url | sed 's|.git$
 export _CC='clang'
 [ ! "${_BRANCH#*gcc*}" = "${_BRANCH}" ] && _CC='gcc'
 
+_CRT='ucrt'
+[ ! "${_BRANCH#*msvcrt*}" = "${_BRANCH}" ] && _CRT='msvcrt'
+
 # Detect host OS
 export _OS
 case "$(uname)" in
@@ -328,9 +331,6 @@ build_single_target() {
       _WINE='wine'  # TODO: What targets can an arm64 host run? Can an x64 host run arm64 targets?
     fi
   fi
-
-  _CRT='ucrt'
-  [ ! "${_BRANCH#*msvcrt*}" = "${_BRANCH}" ] && _CRT='msvcrt'
 
   if [ "${_CC}" = 'clang' ]; then
     # We do not use old mingw toolchain versions when building with clang,
