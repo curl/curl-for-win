@@ -81,19 +81,15 @@ _VER="$1"
       options="${options} -DENABLE_UNICODE=ON"
     fi
 
-    CURL_DLL_SUFFIX=''
-    [ "${_CPU}" = 'x64' ] && CURL_DLL_SUFFIX="-${_CPU}"
-    [ "${_CPU}" = 'a64' ] && CURL_DLL_SUFFIX="-${_CPU}"
-
     if [ "${pass}" = 'shared' ]; then
-      options="${options} -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${CURL_DLL_SUFFIX}.dll"
-      _DEF_NAME="libcurl${CURL_DLL_SUFFIX}.def"
+      options="${options} -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${_CURL_DLL_SUFFIX}.dll"
+      _DEF_NAME="libcurl${_CURL_DLL_SUFFIX}.def"
       _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,--output-def,${_DEF_NAME}"
     fi
 
     if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
       if [ "${pass}" = 'shared' ]; then
-        _MAP_NAME="libcurl${CURL_DLL_SUFFIX}.map"
+        _MAP_NAME="libcurl${_CURL_DLL_SUFFIX}.map"
         _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,-Map,${_MAP_NAME}"
       else
         _MAP_NAME='curl.map'

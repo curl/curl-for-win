@@ -50,10 +50,6 @@ fi
       | sed -E 's|^ *\*? *([a-z_]+) *\(.+$|\1|g'
   } | grep -a -v '^$' | sort | tee -a libcurl.def
 
-  CURL_DLL_SUFFIX=''
-  [ "${_CPU}" = 'x64' ] && CURL_DLL_SUFFIX="-${_CPU}"
-  [ "${_CPU}" = 'a64' ] && CURL_DLL_SUFFIX="-${_CPU}"
-
   for pass in shared static; do
 
     options="${_CONFIGURE_GLOBAL}"
@@ -101,7 +97,7 @@ fi
 
     if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
       if [ "${pass}" = 'shared' ]; then
-        _MAP_NAME="libcurl${CURL_DLL_SUFFIX}.map"
+        _MAP_NAME="libcurl${_CURL_DLL_SUFFIX}.map"
       else
         _MAP_NAME='curl.map'
       fi
@@ -234,7 +230,7 @@ fi
     options="${options} --without-quiche --without-msh3"
 
     if [ "${pass}" = 'shared' ]; then
-      _DEF_NAME="libcurl${CURL_DLL_SUFFIX}.def"
+      _DEF_NAME="libcurl${_CURL_DLL_SUFFIX}.def"
       LDFLAGS="${LDFLAGS} -Wl,--output-def,${_DEF_NAME}"
       CPPFLAGS="${CPPFLAGS} -DCURL_STATICLIB"
 
@@ -248,7 +244,7 @@ fi
     # autotools forces its unixy DLL naming scheme. We prefer to use the same
     # as with the other curl build systems. Autotools calculates the default
     # value from `VERSIONINFO=` in lib/Makefile.am.
-    sed -i.bak -E "s| soname_spec='\\\$libname.+| soname_spec='\\\$libname${CURL_DLL_SUFFIX}\\\$shared_ext'|g" ./configure
+    sed -i.bak -E "s| soname_spec='\\\$libname.+| soname_spec='\\\$libname${_CURL_DLL_SUFFIX}\\\$shared_ext'|g" ./configure
 
     (
       mkdir "${_BLDDIR}-${pass}"; cd "${_BLDDIR}-${pass}"

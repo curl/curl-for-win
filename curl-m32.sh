@@ -85,14 +85,12 @@ _VER="$1"
     CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -municode"
   fi
 
-  export CURL_DLL_SUFFIX=''
-  [ "${_CPU}" = 'x64' ] && CURL_DLL_SUFFIX="-${_CPU}"
-  [ "${_CPU}" = 'a64' ] && CURL_DLL_SUFFIX="-${_CPU}"
+  export CURL_DLL_SUFFIX="${_CURL_DLL_SUFFIX}"
   export CURL_DLL_A_SUFFIX=.dll
 
   if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
     CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,-Map,curl.map"
-    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,-Map,libcurl${CURL_DLL_SUFFIX}.map"
+    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,-Map,libcurl${_CURL_DLL_SUFFIX}.map"
   fi
 
   # Generate .def file for libcurl by parsing curl headers. Useful to export
