@@ -364,6 +364,7 @@ build_single_target() {
   export _CFLAGS_GLOBAL='-fno-ident'
   export _CPPFLAGS_GLOBAL=''
   export _CXXFLAGS_GLOBAL=''
+  export _RCFLAGS_GLOBAL=''
   export _LDFLAGS_GLOBAL=''
   export _LIBS_GLOBAL=''
   export _CONFIGURE_GLOBAL=''
@@ -381,6 +382,11 @@ build_single_target() {
   export AR="${_CCPREFIX}ar"
   export NM="${_CCPREFIX}nm"
   export RANLIB="${_CCPREFIX}ranlib"
+
+  # for cmake-autotools.sh
+  [ "${_CPU}" = 'x86' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-i386"
+  [ "${_CPU}" = 'x64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-x86-64"
+# [ "${_CPU}" = 'a64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=..."  # TODO
 
   if [ "${_OS}" = 'win' ]; then
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -GMSYS Makefiles"

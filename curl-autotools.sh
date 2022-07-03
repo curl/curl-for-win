@@ -60,13 +60,9 @@ fi
     export CC="${_CC_GLOBAL}"
     export CFLAGS="${_CFLAGS_GLOBAL} -W -Wall"
     export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
+    export RCFLAGS="${_RCFLAGS_GLOBAL} --output-format coff -Iinclude"
     export LDFLAGS="${_LDFLAGS_GLOBAL}"
     export LIBS="${_LIBS_GLOBAL}"
-
-    export RCFLAGS='--output-format coff -Iinclude'
-    [ "${_CPU}" = 'x86' ] && RCFLAGS="${RCFLAGS} --target=pe-i386"
-    [ "${_CPU}" = 'x64' ] && RCFLAGS="${RCFLAGS} --target=pe-x86-64"
-  # [ "${_CPU}" = 'a64' ] && RCFLAGS="${RCFLAGS} --target=..."  # TODO
 
     CPPFLAGS="${CPPFLAGS} -DNDEBUG -DHAVE_PROCESS_H"
 
