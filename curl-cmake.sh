@@ -104,8 +104,10 @@ _VER="$1"
     # Ugly hack. Everything breaks without this due to the accidental ordering of
     # libs and objects, and offering no universal way to (re)insert libs at
     # specific positions. Linker complains about a missing --end-group, then adds
-    # it automatically anyway. Same with '-fuse-ld=lld'.
-    _LDFLAGS="${_LDFLAGS} -Wl,--start-group"
+    # it automatically anyway.
+    if [ "${_LD}" = 'ld' ]; then
+      _LDFLAGS="${_LDFLAGS} -Wl,--start-group"
+    fi
 
     _LDFLAGS_DLL="${_LDFLAGS_DLL} $(pwd)/libcurl.def"
 
