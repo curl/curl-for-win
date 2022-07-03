@@ -186,7 +186,7 @@ _VER="$1"
         _LDFLAGS="${_LDFLAGS} -L${_TOP}/libssh2/${_PP}/lib -lssh2"
       fi
     else
-      options="${options} -DCURL_USE_LIBSSH2=OFF"  # Avoid detecting a copy on the host OS
+      options="${options} -DCURL_USE_LIBSSH2=OFF"
     fi
 
     if [ -d ../nghttp2 ]; then
