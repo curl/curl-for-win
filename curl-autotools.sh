@@ -98,10 +98,10 @@ fi
       LDFLAGS="${LDFLAGS} -Wl,--high-entropy-va"
     fi
 
-    # Disabled till we flesh out UNICODE support and document it enough to be
-    # safe to use.
-  # CPPFLAGS="${CPPFLAGS} -DUNICODE -D_UNICODE"
-  # LDFLAGS="${LDFLAGS} -municode"
+    if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
+      CPPFLAGS="${CPPFLAGS} -DUNICODE -D_UNICODE"
+      LDFLAGS="${LDFLAGS} -municode"
+    fi
 
     if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
       if [ "${pass}" = 'shared' ]; then

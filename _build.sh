@@ -35,6 +35,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        x64       build x64 target only
 #        msvcrt    build against msvcrt instead of UCRT
 #        gcc       build with GCC (use clang if not specified)
+#        unicode   build curl in UNICODE mode [EXPERIMENTAL]
 #
 # CW_CCSUFFIX
 #      clang suffix. E.g. '-8' for clang-8.

@@ -77,9 +77,9 @@ _VER="$1"
 
     options="${options} -DCURL_OS_SUFFIX=-${_CPU}"
 
-    # Disabled till we flesh out UNICODE support and document it enough to be
-    # safe to use.
-  # options="${options} -DENABLE_UNICODE=ON"
+    if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
+      options="${options} -DENABLE_UNICODE=ON"
+    fi
 
     CURL_DLL_SUFFIX=''
     [ "${_CPU}" = 'x64' ] && CURL_DLL_SUFFIX="-${_CPU}"

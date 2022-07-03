@@ -80,10 +80,10 @@ _VER="$1"
     options="${options}-ldaps"
   fi
 
-  # Disabled till we flesh out UNICODE support and document it enough to be
-  # safe to use.
-# CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUNICODE -D_UNICODE"
-# CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -municode"
+  if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUNICODE -D_UNICODE"
+    CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -municode"
+  fi
 
   export CURL_DLL_SUFFIX=''
   [ "${_CPU}" = 'x64' ] && CURL_DLL_SUFFIX="-${_CPU}"
