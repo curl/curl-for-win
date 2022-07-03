@@ -32,7 +32,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        micro     build with less features, see README.md
 #        nano      build with less features, see README.md
 #        pico      build with less features, see README.md
+#        a64       build arm64 target only
 #        x64       build x64 target only
+#        x86       build x86 target only
 #        msvcrt    build against msvcrt instead of UCRT
 #        gcc       build with GCC (use clang if not specified)
 #        unicode   build curl in UNICODE mode [EXPERIMENTAL]
@@ -265,6 +267,8 @@ bld() {
 
 build_single_target() {
   export _CPU="$1"
+
+  [ "${_CPU}" = 'a64' ] && return
 
   _TRIPLET=''
   _SYSROOT=''
@@ -538,9 +542,16 @@ EOF
 }
 
 # Build binaries
-build_single_target x64
-if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ]; then
-# build_single_target a64
+if [ "${_BRANCH#*a64*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*x86*}" = "${_BRANCH}" ]; then
+  build_single_target x64
+fi
+if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*x86*}" = "${_BRANCH}" ]; then
+  build_single_target a64
+fi
+if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*a64*}" = "${_BRANCH}" ]; then
   build_single_target x86
 fi
 
