@@ -223,25 +223,6 @@ if [ -s "${SIGN_CODE_KEY}" ]; then
   "$(dirname "$0")/osslsigncode-local" --version
 fi
 
-clangver=''
-[ "${_CC}" = 'clang' ] && clangver="clang$("clang${CW_CCSUFFIX}" --version | grep -o -a -E ' [0-9]*\.[0-9]*[\.][0-9]*')"
-
-mingwver=''
-case "${_OS}" in
-  mac)
-    mingwver="$(brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
-  linux)
-    [ -n "${mingwver}" ] || mingwver="$(dpkg   --status       mingw-w64-common)"
-    [ -n "${mingwver}" ] || mingwver="$(rpm    --query        mingw64-crt)"
-    [ -n "${mingwver}" ] || mingwver="$(pacman --query --info mingw-w64-crt)"
-    [ -n "${mingwver}" ] && mingwver="$(printf '%s' "${mingwver}" | grep -a '^Version' | grep -a -m 1 -o -E '[0-9.-]+')"
-    ;;
-esac
-[ -n "${mingwver}" ] && mingwver="mingw-w64 ${mingwver}"
-
-[ -n "${clangver}" ] && echo ".${clangver}" >> "${_BLD}"
-[ -n "${mingwver}" ] && echo ".${mingwver}" >> "${_BLD}"
-
 _ori_path="${PATH}"
 
 bld() {
@@ -457,6 +438,23 @@ build_single_target() {
   rm -r -f "${_UNIPKG:?}"
   mkdir -p "${_UNIPKG}"
   export _UNIMFT="${_UNIPKG}/BUILD-MANIFEST.txt"
+
+  # Detect versions
+  clangver=''
+  [ "${_CC}" = 'clang' ] && clangver="clang$("clang${CW_CCSUFFIX}" --version | grep -o -a -E ' [0-9]*\.[0-9]*[\.][0-9]*')"
+
+  mingwver=''
+  case "${_OS}" in
+    mac)
+      mingwver="$(brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
+    linux)
+      [ -n "${mingwver}" ] || mingwver="$(dpkg   --status       mingw-w64-common)"
+      [ -n "${mingwver}" ] || mingwver="$(rpm    --query        mingw64-crt)"
+      [ -n "${mingwver}" ] || mingwver="$(pacman --query --info mingw-w64-crt)"
+      [ -n "${mingwver}" ] && mingwver="$(printf '%s' "${mingwver}" | grep -a '^Version' | grep -a -m 1 -o -E '[0-9.-]+')"
+      ;;
+  esac
+  [ -n "${mingwver}" ] && mingwver="mingw-w64 ${mingwver}"
 
   gccver=''
   [ "${_CC}" = 'clang' ] || gccver="gcc $("${_CCPREFIX}gcc" -dumpversion)"
