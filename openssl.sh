@@ -118,7 +118,7 @@ _VER="$1"
   mv "${_PKGDIR}/${_win_prefix}"/* "${_pkg}"
 
   # Rename 'lib64' to 'lib'. This is what most packages expect.
-  if [ "${_CPU}" = 'x64' ]; then
+  if [ -d "${_pkg}/lib64" ]; then
     mv "${_pkg}/lib64" "${_pkg}/lib"
   fi
 
