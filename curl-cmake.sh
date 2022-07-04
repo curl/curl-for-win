@@ -2,6 +2,8 @@
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
 
+# CMake build takes 25% longer than Makefile.m32, as of 2022-07-04.
+
 # https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html
 # https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html
 
