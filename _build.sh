@@ -457,6 +457,14 @@ build_single_target() {
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
       fi
     fi
+    if [ "${_CPU}" = 'a64' ]; then
+      # Turns out autotools/libtool (in curl?) is overbusy/stupid enough to
+      # delete LDFLAGS it does not recognize. This can explain why nothing
+      # worked before moving `--target=` and `--sysroot=` into CC from LDFLAGS.
+      # Do the same with this option, to avoid yet another libtool fail.
+      # autotools and OpenSSL use this variable, CMake does not.
+      _CC_GLOBAL="${_CC_GLOBAL} -rtlib=compiler-rt"
+    fi
 
     # This does not work yet, due to:
     #   /usr/local/bin/x86_64-w64-mingw32-ld: asyn-thread.o:asyn-thread.c:(.rdata$.refptr.__guard_dispatch_icall_fptr[.refptr.__guard_dispatch_icall_fptr]+0x0): undefined reference to `__guard_dispatch_icall_fptr'
