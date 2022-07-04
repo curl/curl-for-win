@@ -51,7 +51,7 @@ _VER="$1"
           bn_ops           => add("SIXTY_FOUR_BIT RC4_CHAR"),
           asm_arch         => "aarch64",
           uplink_arch      => undef,
-          perlasm_scheme   => "linux64",
+          perlasm_scheme   => "coff",
           shared_rcflag    => "",
           multilib         => "",
         }
