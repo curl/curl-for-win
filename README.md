@@ -1,7 +1,7 @@
 [![License](https://raw.githubusercontent.com/curl/curl-for-win/main/MIT.svg?sanitize=1)](LICENSE.md)
 [![Build status](https://ci.appveyor.com/api/projects/status/8yf6xjgq7u0cm013/branch/main?svg=true)](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main)
 
-# Reproducible, transparent, Windows builds for curl
+# Reproducible curl binaries for Windows
 
 - We provide binary packages in `.zip` and `.tar.xz` formats,
   signed with PGP key:
@@ -105,7 +105,7 @@ Libs: -lcurl -lz -lcrypt32
 ```
 </p></details>
 
-# Official binary downloads
+# Downloads
 
 * Latest version:
   <br><https://curl.se/windows/>
