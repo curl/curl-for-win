@@ -32,9 +32,13 @@ _VER="$1"
   options='mingw32-ipv6-sspi-srp'
 
   export ARCH
-  [ "${_CPU}" = 'x86' ] && ARCH='w32'
-  [ "${_CPU}" = 'x64' ] && ARCH='w64'
-  [ "${_CPU}" = 'a64' ] && ARCH='a64'  # TODO: add upstream support (or switch to curl-cmake)
+  if [ "${_CPU}" = 'x64' ]; then
+    ARCH='w64'
+  elif [ "${_CPU}" = 'x86' ]; then
+    ARCH='w32'
+  else
+    ARCH='custom'
+  fi
 
   export CROSSPREFIX="${_CCPREFIX}"
   export CURL_CC="${_CC_GLOBAL}"

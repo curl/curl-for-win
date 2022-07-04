@@ -15,6 +15,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      List of components to (re-)download. E.g. 'zlib curl' or 'none'.
 #      Optional. Default: (all)
 #
+# CW_LLVM_MINGW_PATH
+#      Point to LLVM-mingw installation (required for ARM builds).
+#
 # CW_CONFIG
 #      Build configuration. Certain keywords select certain configurations. E.g.: 'main-micro'.
 #      Optional. Default: 'main' (inherited from the active repo branch name)
@@ -51,12 +54,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
-#   - Update naming-scheme to make room for arm64 builds:
-#       win64 -> win-x64
-#       win32 -> win-x86
-#             -> win-a64 / win-arm64
+#   - Update naming-scheme to make room for arm64 builds?:
+#     -win-x64, -win-x86, -win-a64 / -win-arm64
 #     Needs updating curl-www also.
-#   - Add support for arm64 builds (requires UCRT)
 #   - Drop XP compatibility for x86 builds also
 #   - Drop x86 builds
 #   - Make -noftp the default?
@@ -69,7 +69,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     - rustls (experimental, no rand)
 
 # Resources:
-#   - https://github.com/mstorsjo/llvm-mingw
 #   - https://blog.llvm.org/2019/11/deterministic-builds-with-clang-and-lld.html
 
 # Supported build tools:
@@ -191,6 +190,14 @@ export _REVSUFFIX="${_REV}"; [ -z "${_REVSUFFIX}" ] || _REVSUFFIX="_${_REVSUFFIX
 # Download sources
 ./_dl.sh
 
+# Find and setup llvm-mingw downloaded above.
+if [ -z "${CW_LLVM_MINGW_PATH:-}" ] && \
+   [ -d 'llvm-mingw' ]; then
+  export CW_LLVM_MINGW_PATH; CW_LLVM_MINGW_PATH="$(pwd)/llvm-mingw"
+  export CW_LLVM_MINGW_VER_; CW_LLVM_MINGW_VER_="$(cat 'llvm-mingw/version.txt')"
+  echo "! Using llvm-mingw: '${CW_LLVM_MINGW_PATH}' (${CW_LLVM_MINGW_VER_})"
+fi
+
 # Decrypt package signing key
 SIGN_PKG_KEY='sign-pkg.gpg.asc'
 if [ -s "${SIGN_PKG_KEY}" ] && \
@@ -249,7 +256,18 @@ bld() {
 build_single_target() {
   export _CPU="$1"
 
-  [ "${_CPU}" = 'a64' ] && return
+  # In initial support for a64, _CPU = a64 means using CW_LLVM_MINGW_PATH and
+  # the llvm-mingw toolchain. When mingw-w64 and other toolchains distributed
+  # via package managers receive ARM support, we will have to reshuffle this.
+
+  if [ "${_CPU}" = 'a64' ]; then
+    if [ "${_CC}" != 'clang' ] || \
+       [ "${_CRT}" != 'ucrt' ] || \
+       [ -z "${CW_LLVM_MINGW_PATH:-}" ]; then
+      echo '! WARNING: ARM builds require clang, UCRT and CW_LLVM_MINGW_PATH. Skipping.'
+      return
+    fi
+  fi
 
   _TRIPLET=''
   _SYSROOT=''
@@ -261,7 +279,7 @@ build_single_target() {
   # GCC-specific machine selection option
   [ "${_CPU}" = 'x86' ] && _OPTM='-m32'
   [ "${_CPU}" = 'x64' ] && _OPTM='-m64'
-  [ "${_CPU}" = 'a64' ] && _OPTM='-m..'  # TODO
+  [ "${_CPU}" = 'a64' ] && _OPTM='-marm64pe'
 
   [ "${_CPU}" = 'x86' ] && _machine='i686'
   [ "${_CPU}" = 'x64' ] && _machine='x86_64'
@@ -272,22 +290,27 @@ build_single_target() {
   [ "${_CPU}" = 'a64' ] && _CURL_DLL_SUFFIX="-${_CPU}"
 
   export _PKGSUFFIX
-  [ "${_CPU}" = 'x86' ] && _PKGSUFFIX='-win32-mingw'  # TODO: -> '-win-x86-mingw'
-  [ "${_CPU}" = 'x64' ] && _PKGSUFFIX='-win64-mingw'  # TODO: -> '-win-x64-mingw'
-  [ "${_CPU}" = 'a64' ] && _PKGSUFFIX='-win-a64-mingw'
+  [ "${_CPU}" = 'x86' ] && _PKGSUFFIX='-win32-mingw'
+  [ "${_CPU}" = 'x64' ] && _PKGSUFFIX='-win64-mingw'
+  [ "${_CPU}" = 'a64' ] && _PKGSUFFIX='-win64a-mingw'
+
+  # Reset for each target
+  PATH="${_ori_path}"
 
   if [ "${_OS}" = 'win' ]; then
     export PATH
     [ "${_CPU}" = 'x86' ] && PATH="/mingw32/bin:${_ori_path}"
     [ "${_CPU}" = 'x64' ] && PATH="/mingw64/bin:${_ori_path}"
-    [ "${_CPU}" = 'a64' ] && PATH="/clangarm64/bin:${_ori_path}"
+    [ "${_CPU}" = 'a64' ] && PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
     _MAKE='mingw32-make'
 
     # Install required component
     pip3 --version
     pip3 --disable-pip-version-check --no-cache-dir install --user "pefile==${PEFILE_VER_}"
   else
-    if [ "${_CC}" = 'clang' ] && [ "${_OS}" = 'mac' ]; then
+    if [ "${_CPU}" = 'a64' ]; then
+      export PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
+    elif [ "${_CC}" = 'clang' ] && [ "${_OS}" = 'mac' ]; then
       export PATH="/usr/local/opt/llvm/bin:${_ori_path}"
     fi
     _TRIPLET="${_machine}-w64-mingw32"
@@ -296,10 +319,12 @@ build_single_target() {
     # one, or as prefix + `gcc-ar`, `gcc-nm`, `gcc-runlib`.
     _CCPREFIX="${_TRIPLET}-"
     # mingw-w64 sysroots
-    if [ "${_OS}" = 'mac' ]; then
-      _SYSROOT="/usr/local/opt/mingw-w64/toolchain-${_machine}"
-    else
-      _SYSROOT="/usr/${_TRIPLET}"
+    if [ "${_CPU}" != 'a64' ]; then
+      if [ "${_OS}" = 'mac' ]; then
+        _SYSROOT="/usr/local/opt/mingw-w64/toolchain-${_machine}"
+      elif [ "${_OS}" = 'linux' ]; then
+        _SYSROOT="/usr/${_TRIPLET}"
+      fi
     fi
 
     # TODO: Run arm64 targets on arm64 linux/mac hosts?
@@ -359,6 +384,13 @@ build_single_target() {
   export _STRIP="${_CCPREFIX}strip"
   export _OBJDUMP="${_CCPREFIX}objdump"
 
+  # NOTE: LLVM strip does not support its own output:
+  #         `aarch64-w64-mingw32-strip: error: option not supported by llvm-objcopy for COFF`
+  #       .a output is reproducible by default, so not a showstopper.
+  if [ "${_CPU}" = 'a64' ]; then
+    _STRIP='echo'
+  fi
+
   # for CMake and openssl
   unset CC
 
@@ -371,14 +403,18 @@ build_single_target() {
   # for cmake-autotools.sh
   [ "${_CPU}" = 'x86' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-i386"
   [ "${_CPU}" = 'x64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-x86-64"
-# [ "${_CPU}" = 'a64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=..."  # TODO
+  [ "${_CPU}" = 'a64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=${_TRIPLET}"  # llvm windres supports triplets here. https://github.com/llvm/llvm-project/blob/main/llvm/tools/llvm-rc/llvm-rc.cpp
 
   if [ "${_OS}" = 'win' ]; then
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -GMSYS Makefiles"
     # Without this, the value '/usr/local' becomes 'msys64/usr/local'
     export MSYS2_ARG_CONV_EXCL='-DCMAKE_INSTALL_PREFIX='
   elif [ "${_OS}" = 'mac' ]; then
-    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
+    if [ "${_CPU}" = 'a64' ]; then
+      _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${CW_LLVM_MINGW_PATH}/bin/${_CCPREFIX}ar"
+    else
+      _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
+    fi
   fi
 
   _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_MESSAGE=NEVER"
@@ -387,8 +423,11 @@ build_single_target() {
 
   if [ "${_CRT}" = 'ucrt' ]; then
     if [ "${_CC}" = 'clang' ]; then
-      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -fuse-ld=lld -Wl,-s"
       _LD='lld'
+      if [ "${_CPU}" != 'a64' ]; then
+        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -fuse-ld=lld"
+      fi
+      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-s"
     else
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -specs=${_GCCSPECS}"
     fi
@@ -396,21 +435,26 @@ build_single_target() {
     _LIBS_GLOBAL="${_LIBS_GLOBAL} -lucrt"
   fi
 
-  [ "${_OS}" != 'win' ] && _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --build=${_CROSS_HOST} --host=${_TRIPLET}"
+  _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --build=${_CROSS_HOST} --host=${_TRIPLET}"
   [ "${_CPU}" = 'x86' ] && _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-asynchronous-unwind-tables"
 
   if [ "${_CC}" = 'clang' ]; then
     _CC_GLOBAL="clang${CW_CCSUFFIX} --target=${_TRIPLET}"
     _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} --target=${_TRIPLET}"  # Seems necessary for CMake to recognize clang++
-    if [ "${_OS}" != 'win' ]; then
+    _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET}"
+    if [ -n "${_SYSROOT}" ]; then
       _CC_GLOBAL="${_CC_GLOBAL} --sysroot=${_SYSROOT}"
       _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} --sysroot=${_SYSROOT}"
-      _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET} --with-sysroot=${_SYSROOT}"
+      _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --with-sysroot=${_SYSROOT}"
     fi
     if [ "${_OS}" = 'linux' ]; then
       # We used to pass this via CFLAGS for CMake to make it detect clang, so
       # we need to pass this via CMAKE_C_FLAGS, though meant for the linker.
-      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
+      if [ "${_CPU}" = 'a64' ]; then
+        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${CW_LLVM_MINGW_PATH}/${_TRIPLET}/lib"
+      else
+        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
+      fi
     fi
 
     # This does not work yet, due to:
@@ -418,7 +462,9 @@ build_single_target() {
   # _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -Xclang -cfguard"
   # _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Xlinker -guard:cf"
 
-    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_SYSROOT=${_SYSROOT}"
+    if [ -n "${_SYSROOT}" ]; then
+      _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_SYSROOT=${_SYSROOT}"
+    fi
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}"
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER_TARGET=${_TRIPLET}"
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=clang${CW_CCSUFFIX}"
@@ -433,7 +479,11 @@ build_single_target() {
     _CMAKE_CXX_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++"
   fi
 
-  _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -static-libgcc"
+  if [ "${_CPU}" = 'a64' ]; then
+    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt"
+  else
+    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -static-libgcc"
+  fi
 
   _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --prefix=${_PREFIX} --disable-dependency-tracking --disable-silent-rules"
 
@@ -447,35 +497,44 @@ build_single_target() {
   clangver=''
   [ "${_CC}" = 'clang' ] && clangver="clang$("clang${CW_CCSUFFIX}" --version | grep -o -a -E ' [0-9]*\.[0-9]*[\.][0-9]*')"
 
+  versuffix=''
   mingwver=''
-  case "${_OS}" in
-    mac)
-      mingwver="$(brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
-    linux)
-      [ -n "${mingwver}" ] || mingwver="$(dpkg   --status       mingw-w64-common)"
-      [ -n "${mingwver}" ] || mingwver="$(rpm    --query        mingw64-crt)"
-      [ -n "${mingwver}" ] || mingwver="$(pacman --query --info mingw-w64-crt)"
-      [ -n "${mingwver}" ] && mingwver="$(printf '%s' "${mingwver}" | grep -a '^Version' | grep -a -m 1 -o -E '[0-9.-]+')"
-      ;;
-  esac
-  [ -n "${mingwver}" ] && mingwver="mingw-w64 ${mingwver}"
+  binver=''
+  if [ "${_CPU}" = 'a64' ]; then
+    mingwver='llvm-mingw'
+    [ -n "${CW_LLVM_MINGW_VER_:-}" ] && mingwver="${mingwver} ${CW_LLVM_MINGW_VER_}"
+    versuffix=' (arm64)'
+  else
+    case "${_OS}" in
+      mac)
+        mingwver="$(brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
+      linux)
+        [ -n "${mingwver}" ] || mingwver="$(dpkg   --status       mingw-w64-common)"
+        [ -n "${mingwver}" ] || mingwver="$(rpm    --query        mingw64-crt)"
+        [ -n "${mingwver}" ] || mingwver="$(pacman --query --info mingw-w64-crt)"
+        [ -n "${mingwver}" ] && mingwver="$(printf '%s' "${mingwver}" | grep -a '^Version' | grep -a -m 1 -o -E '[0-9.-]+')"
+        ;;
+    esac
+    [ -n "${mingwver}" ] && mingwver="mingw-w64 ${mingwver}"
+
+    binver="binutils $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
+  fi
 
   gccver=''
   [ "${_CC}" = 'clang' ] || gccver="gcc $("${_CCPREFIX}gcc" -dumpversion)"
-  binver="binutils $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
 
   {
-    [ -n "${clangver}" ] && echo ".${clangver}"
-    [ -n "${gccver}" ]   && echo ".${gccver}"
-    [ -n "${mingwver}" ] && echo ".${mingwver}"
-    echo ".${binver}"
+    [ -n "${clangver}" ] && echo ".${clangver}${versuffix}"
+    [ -n "${gccver}" ]   && echo ".${gccver}${versuffix}"
+    [ -n "${mingwver}" ] && echo ".${mingwver}${versuffix}"
+    [ -n "${binver}" ]   && echo ".${binver}${versuffix}"
   } >> "${_BLD}"
 
   {
     [ -n "${clangver}" ] && echo ".${clangver}"
     [ -n "${gccver}" ]   && echo ".${gccver}"
     [ -n "${mingwver}" ] && echo ".${mingwver}"
-    echo ".${binver}"
+    [ -n "${binver}" ]   && echo ".${binver}"
   } >> "${_UNIMFT}"
 
   bld zlib             "${ZLIB_VER_}"

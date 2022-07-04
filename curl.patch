@@ -23,3 +23,103 @@ index 45d763d5a9c1d..4df2393063dd1 100644
    endif()
    if(ENABLE_UNICODE)
      add_definitions(-DUNICODE -D_UNICODE)
+diff --git a/lib/Makefile.m32 b/lib/Makefile.m32
+index 1987b237e5d4e..bf8d1b400a1ea 100644
+--- a/lib/Makefile.m32
++++ b/lib/Makefile.m32
+@@ -115,7 +115,7 @@ LDFLAGS = $(CURL_LDFLAG_EXTRAS) $(CURL_LDFLAG_EXTRAS_DLL)
+ AR = $(CURL_AR)
+ RANLIB = $(CURL_RANLIB)
+ RC = $(CROSSPREFIX)windres
+-RCFLAGS = --include-dir=$(PROOT)/include -DDEBUGBUILD=0 -O coff
++RCFLAGS = --include-dir=$(PROOT)/include -O coff
+ STRIP   = $(CROSSPREFIX)strip -g
+ 
+ # Set environment var ARCH to your architecture to override autodetection.
+diff --git a/docs/examples/Makefile.m32 b/docs/examples/Makefile.m32
+index 15eaf82b3a8b7..c00899ec008ed 100644
+--- a/docs/examples/Makefile.m32
++++ b/docs/examples/Makefile.m32
+@@ -118,7 +118,7 @@ CC = $(CURL_CC)
+ CFLAGS = -O3 $(CURL_CFLAG_EXTRAS) -W -Wall
+ LDFLAGS = $(CURL_LDFLAG_EXTRAS) $(CURL_LDFLAG_EXTRAS_EXE)
+ RC = $(CROSSPREFIX)windres
+-RCFLAGS = --include-dir=$(PROOT)/include -O coff
++RCFLAGS = --include-dir=$(PROOT)/include -O coff $(CURL_RCFLAG_EXTRAS)
+ 
+ # Set environment var ARCH to your architecture to override autodetection.
+ ifndef ARCH
+@@ -129,6 +129,7 @@ ARCH = w32
+ endif
+ endif
+ 
++ifneq ($(ARCH),custom)
+ ifeq ($(ARCH),w64)
+ CFLAGS  += -m64
+ LDFLAGS += -m64
+@@ -138,6 +139,7 @@ CFLAGS  += -m32
+ LDFLAGS += -m32
+ RCFLAGS += -F pe-i386
+ endif
++endif
+ 
+ # Platform-dependent helper tool macros
+ ifeq ($(findstring /sh,$(SHELL)),/sh)
+diff --git a/lib/Makefile.m32 b/lib/Makefile.m32
+index bf8d1b400a1ea..85c3dd55676fd 100644
+--- a/lib/Makefile.m32
++++ b/lib/Makefile.m32
+@@ -115,7 +115,7 @@ LDFLAGS = $(CURL_LDFLAG_EXTRAS) $(CURL_LDFLAG_EXTRAS_DLL)
+ AR = $(CURL_AR)
+ RANLIB = $(CURL_RANLIB)
+ RC = $(CROSSPREFIX)windres
+-RCFLAGS = --include-dir=$(PROOT)/include -O coff
++RCFLAGS = --include-dir=$(PROOT)/include -O coff $(CURL_RCFLAG_EXTRAS)
+ STRIP   = $(CROSSPREFIX)strip -g
+ 
+ # Set environment var ARCH to your architecture to override autodetection.
+@@ -127,6 +127,7 @@ ARCH = w32
+ endif
+ endif
+ 
++ifneq ($(ARCH),custom)
+ ifeq ($(ARCH),w64)
+ CFLAGS  += -m64
+ LDFLAGS += -m64
+@@ -136,6 +137,7 @@ CFLAGS  += -m32
+ LDFLAGS += -m32
+ RCFLAGS += -F pe-i386
+ endif
++endif
+ 
+ # Platform-dependent helper tool macros
+ ifeq ($(findstring /sh,$(SHELL)),/sh)
+diff --git a/src/Makefile.m32 b/src/Makefile.m32
+index b3d3cf9631f08..caa0fdf721b62 100644
+--- a/src/Makefile.m32
++++ b/src/Makefile.m32
+@@ -119,7 +119,7 @@ CFLAGS = -O3 $(CURL_CFLAG_EXTRAS) -W -Wall
+ LDFLAGS = $(CURL_LDFLAG_EXTRAS) $(CURL_LDFLAG_EXTRAS_EXE)
+ AR = $(CURL_AR)
+ RC = $(CROSSPREFIX)windres
+-RCFLAGS = --include-dir=$(PROOT)/include -O coff -DCURL_EMBED_MANIFEST
++RCFLAGS = --include-dir=$(PROOT)/include -O coff -DCURL_EMBED_MANIFEST $(CURL_RCFLAG_EXTRAS)
+ STRIP   = $(CROSSPREFIX)strip -g
+ 
+ # We may need these someday
+@@ -135,6 +135,7 @@ ARCH = w32
+ endif
+ endif
+ 
++ifneq ($(ARCH),custom)
+ ifeq ($(ARCH),w64)
+ CFLAGS  += -m64
+ LDFLAGS += -m64
+@@ -144,6 +145,7 @@ CFLAGS  += -m32
+ LDFLAGS += -m32
+ RCFLAGS += -F pe-i386
+ endif
++endif
+ 
+ # Platform-dependent helper tool macros
+ ifeq ($(findstring /sh,$(SHELL)),/sh)

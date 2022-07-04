@@ -94,6 +94,21 @@ cat <<EOF
     "name": "pefile",
     "url": "https://github.com/erocarrera/pefile/releases/download/v{ver}/pefile-{ver}.tar.gz",
     "redir": "redir"
+  },
+  {
+    "name": "llvm-mingw-linux",
+    "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-ubuntu-18.04-x86_64.tar.xz",
+    "redir": "redir"
+  },
+  {
+    "name": "llvm-mingw-mac",
+    "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-macos-universal.tar.xz",
+    "redir": "redir"
+  },
+  {
+    "name": "llvm-mingw-win",
+    "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-x86_64.zip",
+    "redir": "redir"
   }
 ]
 EOF
@@ -102,7 +117,7 @@ EOF
 my_curl() {
   # >&2 echo "|$@|"
   curl --disable --user-agent '' --fail --silent --show-error \
-    --connect-timeout 15 --max-time 20 --retry 3 --max-redirs 10 "$@"
+    --connect-timeout 15 --max-time 60 --retry 3 --max-redirs 10 "$@"
 }
 
 my_gpg() {
@@ -126,7 +141,7 @@ gpg_recv_key() {
   my_curl "https://keyserver.ubuntu.com/${req}" | my_gpg --import --status-fd 1
 }
 
-# convert 'x.y.z' to zero-padded "000x0y0z" numeric format
+# convert 'x.y.z' to zero-padded "000x0y0z" numeric format (or leave as-is)
 to8digit() {
   local ver maj min rel
   ver="$(cat)"
@@ -134,13 +149,10 @@ to8digit() {
     maj="${BASH_REMATCH[1]}"
     min="${BASH_REMATCH[2]}"
     rel="${BASH_REMATCH[3]}"
+    printf '%04d%02d%02d' "${maj}" "${min}" "${rel}"
   else
-    >&2 echo "! Internal error: Failed to parse version string: '${ver}'"
-    maj=0
-    min=0
-    rel=0
+    printf '%s' "${ver}"
   fi
-  printf '%04d%02d%02d' "${maj}" "${min}" "${rel}"
 }
 
 check_update() {
@@ -430,6 +442,25 @@ live_dl() {
     fi
   fi
 }
+
+# Download llvm-mingw
+if [ -n "${CW_DL_LLVM_MINGW:-}" ] && \
+   [ ! -d 'llvm-mingw' ]; then
+  name=''; vers=''; hash=''
+  if   [ "${_OS}" = 'linux' ]; then
+    name='llvm-mingw-linux'; vers="${LLVM_MINGW_LINUX_VER_}"; hash="${LLVM_MINGW_LINUX_HASH}"
+  elif [ "${_OS}" = 'mac' ]; then
+    name='llvm-mingw-mac';   vers="${LLVM_MINGW_MAC_VER_}";   hash="${LLVM_MINGW_MAC_HASH}"
+  elif [ "${_OS}" = 'win' ]; then
+    name='llvm-mingw-win';   vers="${LLVM_MINGW_WIN_VER_}";   hash="${LLVM_MINGW_WIN_HASH}"
+  fi
+  if [ -n "${name}" ]; then
+    CW_GET='' live_dl "${name}" "${vers}"
+    CW_GET='' live_xt "${name}" "${hash}"
+    mv "${name}" 'llvm-mingw'
+    echo "${vers}" > 'llvm-mingw/version.txt'
+  fi
+fi
 
 live_dl zlib "${ZLIB_VER_}"
 live_xt zlib "${ZLIB_HASH}"

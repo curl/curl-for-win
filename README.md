@@ -17,7 +17,7 @@
   [More](https://www.msys2.org/docs/environments/#msvcrt-vs-ucrt),
   [information](https://docs.microsoft.com/cpp/porting/upgrade-your-code-to-the-universal-crt),
   [here](https://docs.microsoft.com/cpp/windows/universal-crt-deployment).
-- x64 binaries require Vista, x86 require XP. We plan to bump it to Vista soon.
+- x64 binaries need Vista. x86 supports XP. We plan to bump it to Vista soon.
 - Binary packages also contain all static libraries for curl and its
   dependencies.
 - curl/libcurl have
@@ -31,6 +31,7 @@
   via [Debian](https://packages.debian.org/testing/mingw-w64),
   [Homebrew](https://formulae.brew.sh/formula/mingw-w64),
   [MSYS2](https://www.msys2.org/).
+  [`llvm-mingw`](https://github.com/mstorsjo/llvm-mingw) for ARM64 [EXPERIMENTAL].
   C compiler is [LLVM/Clang](https://clang.llvm.org/).
 - Binaries cross-built and published from Linux
   via [AppVeyor CI](https://www.appveyor.com/). Using reproducible OS image
