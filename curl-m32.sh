@@ -17,6 +17,7 @@ _VER="$1"
 
   find . -name '*.dll' -delete
   find . -name '*.def' -delete
+  find . -name '*.map' -delete
 
   # Set OS string to the autotools value. To test reproducibility across make systems.
   if [ -n "${CW_DEV_CROSSMAKE_REPRO:-}" ]; then
