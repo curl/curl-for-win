@@ -480,7 +480,7 @@ build_single_target() {
     _CMAKE_CXX_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++"
   fi
 
-  if [ "${_CPU}" = 'a64' ]; then
+  if [ "${_CC}" = 'clang' ] && [ "${_CPU}" = 'a64' ]; then
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt"
   else
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -static-libgcc"
