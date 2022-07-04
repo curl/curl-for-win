@@ -55,8 +55,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # TODO:
 #   - Update naming-scheme to make room for arm64 builds?:
-#     -win-x64, -win-x86, -win-a64 / -win-arm64
+#     -win-x64, -win-x86, -win-a64 / -win-arm64 / -win-arm
 #     Needs updating curl-www also.
+#   - Rename a64 -> arm internally? (and -win64a -> -winarm)
 #   - Drop XP compatibility for x86 builds also
 #   - Drop x86 builds
 #   - Make -noftp the default?
