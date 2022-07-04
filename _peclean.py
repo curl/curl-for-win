@@ -15,10 +15,12 @@ import pefile
 if len(sys.argv) > 2:
     ts = calendar.timegm(
         datetime.datetime.fromtimestamp(
-            os.path.getmtime(os.path.normpath(sys.argv[1]))).timetuple())
+            os.path.getmtime(os.path.normpath(sys.argv[1]))
+        ).timetuple()
+    )
     for argv in sys.argv[2:]:
         for fname in glob.glob(argv):
-            print(datetime.datetime.fromtimestamp(ts).isoformat() + ' -> ' + fname)
+            print(datetime.datetime.fromtimestamp(ts).isoformat() + " -> " + fname)
             pe = pefile.PE(fname)
             pe.FILE_HEADER.TimeDateStamp = ts
             try:
