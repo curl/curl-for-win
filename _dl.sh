@@ -176,7 +176,7 @@ check_update() {
       fi
     else
       newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases/latest" \
-        | jq --raw-output '.tag_name' | sed 's|^v||')"
+        | jq --raw-output '.tag_name' | sed 's/^v//')"
       if [[ "${newver}" =~ ^[0-9]+\.[0-9]+$ ]]; then
         newver="${newver}.0"
       fi
@@ -287,8 +287,8 @@ bump() {
         url="$(     printf '%s' "${jp}" | jq --raw-output '.url')"
         desc="$(    printf '%s' "${jp}" | jq --raw-output '.descending')"
         pin="$(     printf '%s' "${jp}" | jq --raw-output '.pinned')"
-        tag="$(     printf '%s' "${jp}" | jq --raw-output '.tag' | sed 's|null||')"
-        hasfile="$( printf '%s' "${jp}" | jq --raw-output '.hasfile' | sed 's|null||')"
+        tag="$(     printf '%s' "${jp}" | jq --raw-output '.tag' | sed 's/^null$//')"
+        hasfile="$( printf '%s' "${jp}" | jq --raw-output '.hasfile' | sed 's/^null$//')"
 
         if [ "${pin}" = 'true' ]; then
           >&2 echo "! ${name}: Version pinned. Skipping."
@@ -298,10 +298,10 @@ bump() {
             >&2 echo "! ${name}: New version found: |${newver}|"
 
             if [ -n "${hash}" ]; then
-              sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's|^null$||g')"
-              sha="$(  printf '%s' "${jp}" | jq --raw-output '.sha' | sed 's|^null$||g')"
+              sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's/^null$//')"
+              sha="$(  printf '%s' "${jp}" | jq --raw-output '.sha' | sed 's/^null$//')"
               redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"
-              keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's|^null$||g')"
+              keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
 
               urlver="$(printf '%s' "${url}" | sed \
                   -e "s|{ver}|${newver}|g" \
@@ -336,8 +336,8 @@ bump() {
       [ -n "${hash}" ] && echo "export ${hashenv}=${newhash}"
     fi
   done <<< "$(env | grep -a -E '^[A-Z0-9_]+_VER_' | \
-    sed "s|^${keypkg}|0X0X|g" | sort | \
-    sed "s|^0X0X|${keypkg}|g")"
+    sed "s/^${keypkg}/0X0X/g" | sort | \
+    sed "s/^0X0X/${keypkg}/g")"
 
   if [ "${newcurl}" = '1' ]; then
     _REV=''  # Reset revision on each curl version bump
@@ -411,9 +411,9 @@ live_dl() {
         -e "s|{ver}|${ver}|g" \
         -e "s|{vermm}|$(echo "${ver}" | cut -d . -f -2)|g" \
       )"
-    sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's|^null$||g')"
+    sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's/^null$//')"
     redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"
-    keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's|^null$||g')"
+    keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
 
     options=()
     [ "${redir}" = 'redir' ] && options+=(--location --proto-redir '=https')

@@ -26,7 +26,7 @@ _VER="$1"
   if [ -n "${CW_DEV_CROSSMAKE_REPRO:-}" ]; then
     # Windows-* ->
     # shellcheck disable=SC2016
-    sed -i.bak 's|set(OS "\\"${CMAKE_SYSTEM_NAME}${CURL_OS_SUFFIX}\\"")|set(OS \\"x86_64-w64-mingw32\\")|g' ./CMakeLists.txt
+    sed -i.bak 's/set(OS "\\"${CMAKE_SYSTEM_NAME}${CURL_OS_SUFFIX}\\"")/set(OS \\"x86_64-w64-mingw32\\")/g' ./CMakeLists.txt
   fi
 
   # Build

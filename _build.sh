@@ -116,7 +116,7 @@ export _BRANCH="${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF:-}$
 [ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD)"
 [ -n "${_BRANCH}" ] || _BRANCH='main'
 export _URL=''
-command -v git >/dev/null 2>&1 && _URL="$(git ls-remote --get-url | sed 's|.git$||')"
+command -v git >/dev/null 2>&1 && _URL="$(git ls-remote --get-url | sed 's/\.git$//')"
 [ -n "${_URL}" ] || _URL="https://github.com/${APPVEYOR_REPO_NAME:-}${GITHUB_REPOSITORY:-}"
 
 [ -n "${CW_CCSUFFIX:-}" ] || CW_CCSUFFIX=''
@@ -360,7 +360,7 @@ build_single_target() {
     if [ "${_CRT}" = 'ucrt' ]; then
       # https://stackoverflow.com/questions/57528555/how-do-i-build-against-the-ucrt-with-mingw-w64
       _GCCSPECS="$(realpath gcc-specs-ucrt)"
-      "${_CCPREFIX}gcc" -dumpspecs | sed 's|-lmsvcrt|-lucrt|g' > "${_GCCSPECS}"
+      "${_CCPREFIX}gcc" -dumpspecs | sed 's/-lmsvcrt/-lucrt/g' > "${_GCCSPECS}"
     fi
   fi
 

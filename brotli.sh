@@ -29,7 +29,7 @@ _VER="$1"
   # Delete '-static' suffixes from static lib names to make these behave
   # like most other projects do.
   for fn in "${_pkg}"/lib/*-static.a; do
-    mv "${fn}" "$(echo "${fn}" | sed 's|-static||')"
+    mv "${fn}" "$(echo "${fn}" | sed 's/-static//')"
   done
 
   # Delete implibs

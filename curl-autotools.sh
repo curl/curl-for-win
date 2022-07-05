@@ -30,11 +30,11 @@ fi
   fi
 
   # patch autotools to not refuse to link a shared library against static libs
-  sed -i.bak -E 's|^deplibs_check_method=.+|deplibs_check_method=pass_all|g' ./configure
+  sed -i.bak -E 's/^deplibs_check_method=.+/deplibs_check_method=pass_all/g' ./configure
 
   # autotools forces its -On option (gcc = -O2, clang = -Os) and removes custom
   # ones. We patch ./configure to customize it.
-  sed -i.bak 's|flags_opt_yes="-O[s12]"|flags_opt_yes="-O3"|g' ./configure
+  sed -i.bak 's/flags_opt_yes="-O[s12]"/flags_opt_yes="-O3"/g' ./configure
 
   # Generate .def file for libcurl by parsing curl headers. Useful to export
   # the libcurl functions meant to be exported.
@@ -247,7 +247,7 @@ fi
     # autotools forces its unixy DLL naming scheme. We prefer to use the same
     # as with the other curl build systems. Autotools calculates the default
     # value from `VERSIONINFO=` in lib/Makefile.am.
-    sed -i.bak -E "s| soname_spec='\\\$libname.+| soname_spec='\\\$libname${_CURL_DLL_SUFFIX}\\\$shared_ext'|g" ./configure
+    sed -i.bak -E "s/ soname_spec='\\\$libname.+/ soname_spec='\\\$libname${_CURL_DLL_SUFFIX}\\\$shared_ext'/g" ./configure
 
     (
       mkdir "${_BLDDIR}-${pass}"; cd "${_BLDDIR}-${pass}"
@@ -300,7 +300,7 @@ fi
       # seems to happen when building curl against more than one dependency.
       # I have found no way to skip building that component, even though
       # we do not need it. Skip this pass altogether.
-      sed -i.bak -E 's|^SUBDIRS = .+|SUBDIRS = lib|g' "${_BLDDIR}-${pass}/Makefile"
+      sed -i.bak -E 's/^SUBDIRS = .+/SUBDIRS = lib/g' "${_BLDDIR}-${pass}/Makefile"
     else
       # Compile resource
       # shellcheck disable=SC2086
@@ -310,7 +310,7 @@ fi
       # shellcheck disable=SC2016
       sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,curl.rc.res' "${_BLDDIR}-${pass}/src/Makefile"
 
-      sed -i.bak -E 's|^SUBDIRS = .+|SUBDIRS = lib src|g' "${_BLDDIR}-${pass}/Makefile"
+      sed -i.bak -E 's/^SUBDIRS = .+/SUBDIRS = lib src/g' "${_BLDDIR}-${pass}/Makefile"
     fi
 
     # NOTE: 'make clean' deletes src/tool_hugehelp.c and docs/curl.1. Next,
