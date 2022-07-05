@@ -1,1 +1,14 @@
-openssl.patch
+diff --git a/crypto/bn/rsaz_exp_x2.c b/crypto/bn/rsaz_exp_x2.c
+index 6b04486e3f56355711b93861f5ae7f1178c55ee0..f979cebd6fb783474f6c66598fda23d36cfc73f7 100644
+--- a/crypto/bn/rsaz_exp_x2.c
++++ b/crypto/bn/rsaz_exp_x2.c
+@@ -257,6 +257,9 @@ int ossl_rsaz_mod_exp_avx512_x2(BN_ULONG *res1,
+     from_words52(res1, factor_size, rr1_red);
+     from_words52(res2, factor_size, rr2_red);
+ 
++    /* bn_reduce_once_in_place expects number of BN_ULONG, not bit size */
++    factor_size /= sizeof(BN_ULONG) * 8;
++
+     bn_reduce_once_in_place(res1, /*carry=*/0, m1, storage, factor_size);
+     bn_reduce_once_in_place(res2, /*carry=*/0, m2, storage, factor_size);
+ 
