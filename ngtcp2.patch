@@ -11,3 +11,17 @@ index f8d8e518..b1f28096 100644
    *p = hostshort & 0xffu;
    return res;
  }
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8afc9314..0f4f5a0a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -114,6 +114,9 @@ if(ENABLE_OPENSSL AND OPENSSL_FOUND)
+   cmake_push_check_state()
+   set(CMAKE_REQUIRED_INCLUDES   "${OPENSSL_INCLUDE_DIR}")
+   set(CMAKE_REQUIRED_LIBRARIES  "${OPENSSL_LIBRARIES}")
++  if(WIN32)
++    set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES}" "ws2_32" "bcrypt")
++  endif()
+   check_symbol_exists(SSL_is_quic "openssl/ssl.h" HAVE_SSL_IS_QUIC)
+   if(NOT HAVE_SSL_IS_QUIC)
+     message(WARNING "Disabling OpenSSL due to lack of QUIC support in ${OPENSSL_LIBRARIES}")

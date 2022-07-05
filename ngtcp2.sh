@@ -23,9 +23,6 @@ _VER="$1"
     options="${options} -DENABLE_OPENSSL=1"
     options="${options} -DOPENSSL_ROOT_DIR=../openssl-quic/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=../openssl-quic/${_PP}/include"
-    # Detection fails due to missing -lws2_32 -lbcrypt options, so force it.
-    #   https://github.com/ngtcp2/ngtcp2/pull/481
-    options="${options} -DHAVE_SSL_IS_QUIC=1"
   fi
 
   if [ -d ../nghttp3 ]; then
