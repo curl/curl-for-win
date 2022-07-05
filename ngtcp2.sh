@@ -30,8 +30,6 @@ _VER="$1"
     options="${options} -DLIBNGHTTP3_INCLUDE_DIR=../nghttp3/${_PP}/include"
   fi
 
-  options="${options} -DLIBEV_LIBRARY="  # Avoid finding non-cross copies
-
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
     '-DENABLE_STATIC_LIB=1' \
