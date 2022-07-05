@@ -43,11 +43,11 @@ _VER="$1"
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 
-  # Rename static libs so they get found by dependents
-  if [ -d ../openssl-quic ]; then
-    mv -f "${_pkg}"/lib/libngtcp2_crypto_openssl_static.a "${_pkg}"/lib/libngtcp2_crypto_openssl.a
-  fi
-  mv -f "${_pkg}"/lib/libngtcp2_static.a "${_pkg}"/lib/libngtcp2.a
+  # Delete '_static' suffixes from static lib names to make these behave
+  # like most other projects do and dependents find it.
+  for fn in "${_pkg}"/lib/*_static.a; do
+    mv "${fn}" "$(echo "${fn}" | sed 's/_static//')"
+  done
 
   # Delete .pc files
   rm -r -f "${_pkg}"/lib/pkgconfig
