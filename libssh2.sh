@@ -38,15 +38,15 @@ _VER="$1"
 
   if [ -d ../libressl ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/libressl/${_PP}"
-    CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DNOCRYPT"
+    CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
     LDFLAGS="${LDFLAGS} -lbcrypt"
   elif [ -d ../openssl-quic ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/openssl-quic/${_PP}"
-    CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
+    CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LDFLAGS="${LDFLAGS} -lbcrypt"
   elif [ -d ../openssl ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/openssl/${_PP}"
-    CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
+    CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LDFLAGS="${LDFLAGS} -lbcrypt"
   else
     options="${options} --with-crypto=wincng"
