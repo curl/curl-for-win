@@ -35,17 +35,12 @@ _VER="$1"
 
   options="${options} -DLIBEV_LIBRARY="  # Avoid finding non-cross copies
 
-  # We do not need C++ with ENABLE_LIB_ONLY, so make sure to skip the detection
-  # logic and potential detection issues with CMAKE_CXX_COMPILER_WORKS=1. Some
-  # success was achieve by adding these instead to the cmake command-line:
-  #   ${_CMAKE_CXX_GLOBAL}
-  #   "-DCMAKE_CXX_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CXXFLAGS_GLOBAL}"
   # shellcheck disable=SC2086
-  cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
+  cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
     '-DENABLE_STATIC_LIB=1' \
     '-DENABLE_SHARED_LIB=0' \
-    '-DCMAKE_CXX_COMPILER_WORKS=1' \
-    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
+    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}" \
+    "-DCMAKE_CXX_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
   make --directory="${_BLDDIR}" --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}"
 

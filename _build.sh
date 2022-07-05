@@ -442,11 +442,9 @@ build_single_target() {
 
   if [ "${_CC}" = 'clang' ]; then
     _CC_GLOBAL="clang${CW_CCSUFFIX} --target=${_TRIPLET}"
-    _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} --target=${_TRIPLET}"  # Seems necessary for CMake to recognize clang++
     _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET}"
     if [ -n "${_SYSROOT}" ]; then
       _CC_GLOBAL="${_CC_GLOBAL} --sysroot=${_SYSROOT}"
-      _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} --sysroot=${_SYSROOT}"
       _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --with-sysroot=${_SYSROOT}"
     fi
     if [ "${_OS}" = 'linux' ]; then
@@ -478,8 +476,8 @@ build_single_target() {
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_LIBRARY_ARCHITECTURE=${_TRIPLET}"
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER_TARGET=${_TRIPLET}"
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=clang${CW_CCSUFFIX}"
-    _CMAKE_CXX_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}"
-    _CMAKE_CXX_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_CXX_COMPILER=clang++${CW_CCSUFFIX}"
+    _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}"
+    _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=clang++${CW_CCSUFFIX}"
   else
     _CC_GLOBAL="${_CCPREFIX}gcc -static-libgcc"
     _LDFLAGS_GLOBAL="${_OPTM} ${_LDFLAGS_GLOBAL}"
@@ -490,7 +488,7 @@ build_single_target() {
   fi
 
   if [ "${_CC}" = 'clang' ] && [ "${_CPU}" = 'a64' ]; then
-    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt"
+    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt -stdlib=libc++"
   else
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -static-libgcc"
   fi
