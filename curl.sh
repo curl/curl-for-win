@@ -1,1 +1,1 @@
-curl-cmake.sh
+curl-m32.sh
