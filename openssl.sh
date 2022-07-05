@@ -83,8 +83,8 @@ _VER="$1"
   # changes, option order/duplicates do change binary output. Options like
   # `--sysroot=` are specific to the build environment, so this feature makes
   # it impossible to create reproducible binaries across build environments.
-  # Patch OpenSSL to omit `CC` variable where we pass `--sysroot`:
-  sed -i.bak '/mkbuildinf/s/$(CC) //' crypto/build.info
+  # Patch OpenSSL to omit build options from its binary:
+  sed -i.bak -E '/mkbuildinf/s/".+/""/' crypto/build.info
 
   # Patch OpenSSL ./Configure to:
   # - make it accept Windows-style absolute paths as --prefix. Without the
