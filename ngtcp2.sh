@@ -33,7 +33,7 @@ _VER="$1"
     options="${options} -DLIBNGHTTP3_INCLUDE_DIR=../nghttp3/${_PP}/include"
   fi
 
-  options="${options} -DLIBEV_LIBRARY="  # To avoid finding any non-cross copies
+  options="${options} -DLIBEV_LIBRARY="  # Avoid finding non-cross copies
 
   # We do not need C++ with ENABLE_LIB_ONLY, so make sure to skip the detection
   # logic and potential detection issues with CMAKE_CXX_COMPILER_WORKS=1. Some

@@ -70,7 +70,7 @@ _VER="$1"
   fi
 
   if [ "${_CC}" = 'clang' ]; then
-    # To avoid warnings when passing C compiler options to the linker
+    # Avoid warnings when passing C compiler options to the linker:
     options="${options} -Wno-unused-command-line-argument"
     export CC="${_CC_GLOBAL}"
     _CONF_CCPREFIX=
