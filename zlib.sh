@@ -33,11 +33,6 @@ _VER="$1"
   # Stick to the name expected by everyone
   mv -f "${_pkg}"/lib/libzlibstatic.a "${_pkg}"/lib/libz.a
 
-  # curl Makefile.m32 assumes the headers and lib to be in the
-  # same directory.
-  cp -f -p "${_pkg}"/include/*.h "${_pkg}/"
-  cp -f -p "${_pkg}"/lib/libz.a  "${_pkg}/"
-
   # Delete .pc files
   rm -r -f "${_pkg}"/lib/pkgconfig
 
@@ -49,6 +44,11 @@ _VER="$1"
 
   touch -c -r "${_ref}" "${_pkg}"/include/*.h
   touch -c -r "${_ref}" "${_pkg}"/lib/*.a
+
+  # curl Makefile.m32 assumes the headers and lib to be in the
+  # same directory.
+  cp -f -p "${_pkg}"/include/*.h "${_pkg}/"
+  cp -f -p "${_pkg}"/lib/libz.a  "${_pkg}/"
 
   # Create package
 
