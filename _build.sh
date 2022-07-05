@@ -29,7 +29,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        noh3      build without HTTP/3 (QUIC) support (select stock OpenSSL instead of its QUIC fork)
 #        nobrotli  build without brotli
 #        noftp     build without FTP/FTPS support
-#        libressl  build with LibreSSL instead of OpenSSL
+#        libressl  build with LibreSSL
 #        schannel  build with Schannel
 #        mini      build with less features, see README.md
 #        micro     build with less features, see README.md
