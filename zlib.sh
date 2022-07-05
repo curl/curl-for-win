@@ -15,7 +15,7 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -D_LARGEFILE64_SOURCE=1 -D_LFS64_LARGEFILE=1"
+  _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
 
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
