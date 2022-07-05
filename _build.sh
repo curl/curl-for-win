@@ -54,6 +54,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
+#   - Finalize ARM DLL suffix. Maybe -a64 -> -arm? Any quasi-standard here?
 #   - Update naming-scheme to make room for arm64 builds?:
 #     -win-x64, -win-x86, -win-a64 / -win-arm64 / -win-arm
 #     Needs updating curl-www also.
