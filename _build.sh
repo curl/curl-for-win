@@ -23,24 +23,24 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Default: 'main' (inherited from the active repo branch name)
 #
 #      Supported keywords:
-#        main      production build
-#        test      test build (.map files enabled, VirusTotal upload and publishing disabled)
-#        dev       development build (use source snapshots instead of stable releases)
-#        noh3      build without HTTP/3 (QUIC) support (select stock OpenSSL instead of its QUIC fork)
-#        nobrotli  build without brotli
-#        noftp     build without FTP/FTPS support
-#        libressl  build with LibreSSL
-#        schannel  build with Schannel
-#        mini      build with less features, see README.md
-#        micro     build with less features, see README.md
-#        nano      build with less features, see README.md
-#        pico      build with less features, see README.md
-#        a64       build arm64 target only
-#        x64       build x64 target only
-#        x86       build x86 target only
-#        msvcrt    build against msvcrt instead of UCRT
-#        gcc       build with GCC (use clang if not specified)
-#        unicode   build curl in UNICODE mode [EXPERIMENTAL]
+#        main       production build
+#        test       test build (.map files enabled, VirusTotal upload and publishing disabled)
+#        dev        development build (use source snapshots instead of stable releases)
+#        noh3       build without HTTP/3 (QUIC) support (select stock OpenSSL instead of its QUIC fork)
+#        nobrotli   build without brotli
+#        noftp      build without FTP/FTPS support
+#        libressl   build with LibreSSL
+#        schannel   build with Schannel
+#        mini       build with less features, see README.md
+#        micro      build with less features, see README.md
+#        nano       build with less features, see README.md
+#        pico       build with less features, see README.md
+#        a64        build arm64 target only
+#        x64        build x64 target only
+#        x86        build x86 target only
+#        msvcrt     build against msvcrt instead of UCRT
+#        gcc        build with GCC (use clang if not specified)
+#        unicode    build curl in UNICODE mode [EXPERIMENTAL]
 #
 # CW_CCSUFFIX
 #      clang suffix. E.g. '-8' for clang-8.
@@ -75,17 +75,17 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # Supported build tools:
 #
-#   zlib      cmake
-#   brotli    cmake
-#   libgsasl  autotools
-#   libidn2   autotools
-#   nghttp2   cmake
-#   nghttp3   cmake
-#   ngtcp2    cmake
-#   openssl   proprietary
-#   libressl  autotools, cmake
-#   libssh2   autotools, cmake
-#   curl      cmake, autotools, Makefile.m32
+#   zlib       cmake
+#   brotli     cmake
+#   libgsasl   autotools
+#   libidn2    autotools
+#   nghttp2    cmake
+#   nghttp3    cmake
+#   ngtcp2     cmake
+#   openssl    proprietary
+#   libressl   autotools, cmake
+#   libssh2    autotools, cmake
+#   curl       cmake, autotools, Makefile.m32
 
 cd "$(dirname "$0")"
 
