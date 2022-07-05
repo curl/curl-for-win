@@ -190,8 +190,10 @@ _VER="$1"
     CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
   fi
 
-  "${_MAKE}" --jobs=2 --directory=lib --makefile=Makefile.m32 clean
-  "${_MAKE}" --jobs=2 --directory=src --makefile=Makefile.m32 clean
+  if [ -z "${CW_DEV_INCREMENTAL:-}" ]; then
+    "${_MAKE}" --jobs=2 --directory=lib --makefile=Makefile.m32 clean
+    "${_MAKE}" --jobs=2 --directory=src --makefile=Makefile.m32 clean
+  fi
 
   "${_MAKE}" --jobs=2 --directory=lib --makefile=Makefile.m32 CFG="${options}"
   "${_MAKE}" --jobs=2 --directory=src --makefile=Makefile.m32 CFG="${options}"
