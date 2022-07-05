@@ -320,8 +320,14 @@ _VER="$1"
 
   # Tests
 
-  "${_OBJDUMP}" --all-headers "${_pkg}"/bin/*.exe | grep -a -E -i "(file format|dll name)"
-  "${_OBJDUMP}" --all-headers "${_pkg}"/bin/*.dll | grep -a -E -i "(file format|dll name)"
+  # Show the reference timestamp in UTC.
+  case "${_OS}" in
+    bsd|mac) TZ=UTC stat -f '%N: %Sm' -t '%Y-%m-%d %H:%M' "${_ref}";;
+    *)       TZ=UTC stat --format '%n: %y' "${_ref}";;
+  esac
+
+  TZ=UTC "${_OBJDUMP}" --all-headers "${_pkg}"/bin/*.exe | grep -a -E -i "(file format|DLL Name|Time/Date)"
+  TZ=UTC "${_OBJDUMP}" --all-headers "${_pkg}"/bin/*.dll | grep -a -E -i "(file format|DLL Name|Time/Date)"
 
   # Execute curl and compiled-in dependency code. This is not secure, but
   # the build process already requires executing external code
