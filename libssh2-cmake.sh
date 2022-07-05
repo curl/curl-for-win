@@ -30,20 +30,23 @@ _VER="$1"
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/libressl/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/libressl/${_PP}/include"
-    _CFLAGS="${_CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DNOCRYPT"
+    _CFLAGS="${_CFLAGS} -DNOCRYPT"
     _LDFLAGS="${_LDFLAGS} -lbcrypt"
+    _LDFLAGS="${_LDFLAGS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
   elif [ -d ../openssl-quic ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl-quic/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl-quic/${_PP}/include"
-    _CFLAGS="${_CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
+    _CFLAGS="${_CFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     _LDFLAGS="${_LDFLAGS} -lbcrypt"
+    _LDFLAGS="${_LDFLAGS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
   elif [ -d ../openssl ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl/${_PP}/include"
-    _CFLAGS="${_CFLAGS} -DHAVE_EVP_AES_128_CTR=1 -DOPENSSL_SUPPRESS_DEPRECATED"
+    _CFLAGS="${_CFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     _LDFLAGS="${_LDFLAGS} -lbcrypt"
+    _LDFLAGS="${_LDFLAGS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
   else
     options="${options} -DCRYPTO_BACKEND=WinCNG"
   fi
