@@ -18,8 +18,8 @@ export NGHTTP3_VER_='0.5.0'
 export NGHTTP3_HASH=017c56dea814c973a15962c730840d33c6ecbfa92535236df3d5b66f0cb08de0
 export NGTCP2_VER_='0.6.0'
 export NGTCP2_HASH=7f88db4fb40af9838ed7655899606431d746988a2a19904cab8f95c134fcd78a
-export OPENSSL_QUIC_VER_='3.0.4'
-export OPENSSL_QUIC_HASH=99cea8cc43a3e879f883b44942d438b8461de2052c26eca6181f5f9784f213ee
+export OPENSSL_QUIC_VER_='3.0.5'
+export OPENSSL_QUIC_HASH=766878d2c97d13ea36254ae3b1bf553939ac111f3f1b3449b8d777aca7671366
 export OPENSSL_VER_='3.0.5'
 export OPENSSL_HASH=aa7d8d9bef71ad6525c55ba11e5f4397889ce49c2c9349dcea6d3e4f0b024a7a
 export LIBRESSL_VER_='3.5.3'
@@ -40,4 +40,4 @@ export PEFILE_VER_='2022.5.30'
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='3'
+export _REV='4'
