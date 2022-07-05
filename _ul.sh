@@ -23,11 +23,11 @@ cat "${_BLD}"
 
 # Strip '-built-on-*' suffix for the single-file artifact.
 find . -maxdepth 1 -type f -name '*-*-mingw*.*' | sort | while read -r f; do
-  new="$(echo "${f}" | sed 's|-built-on-[^.]*||g')"
+  new="$(echo "${f}" | sed 's/-built-on-[^.]*//g')"
   [ "${f}" = "${new}" ] || mv -f "${f}" "${new}"
 done
 
-sed 's|-built-on-[^.]*||g' hashes.txt | sort > hashes.txt.all
+sed 's/-built-on-[^.]*//g' hashes.txt | sort > hashes.txt.all
 touch -r hashes.txt hashes.txt.all
 mv -f hashes.txt.all hashes.txt
 

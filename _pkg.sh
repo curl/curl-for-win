@@ -101,7 +101,7 @@ create_pkg() {
      [ -n "${VIRUSTOTAL_APIKEY:+1}" ]; then
 
     hshl="$(openssl dgst -sha256 "${_pkg}" \
-      | sed -n -E 's,.+= ([0-9a-fA-F]{64}),\1,p')"
+      | sed -n -E 's/.+= ([0-9a-fA-F]{64})/\1/p')"
     # https://developers.virustotal.com/v3.0/reference
     out="$(curl --disable --user-agent '' --fail --silent --show-error \
       --connect-timeout 10 --max-time 60 --retry 1 \

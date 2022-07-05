@@ -304,8 +304,8 @@ bump() {
               keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
 
               urlver="$(printf '%s' "${url}" | sed \
-                  -e "s|{ver}|${newver}|g" \
-                  -e "s|{vermm}|$(echo "${newver}" | cut -d . -f -2)|g" \
+                  -e "s/{ver}/${newver}/g" \
+                  -e "s/{vermm}/$(echo "${newver}" | cut -d . -f -2)/g" \
                 )"
               newhash="$(check_dl "${name}" "${urlver}" "${sig}" "${sha}" "${redir}" "${keys}")"
             else
@@ -408,8 +408,8 @@ live_dl() {
       ".[] | select(.name == \"${name}\")")"
 
     url="$(  printf '%s' "${jp}" | jq --raw-output '.url' | sed \
-        -e "s|{ver}|${ver}|g" \
-        -e "s|{vermm}|$(echo "${ver}" | cut -d . -f -2)|g" \
+        -e "s/{ver}/${ver}/g" \
+        -e "s/{vermm}/$(echo "${ver}" | cut -d . -f -2)/g" \
       )"
     sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's/^null$//')"
     redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"

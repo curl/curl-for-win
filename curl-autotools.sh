@@ -50,7 +50,7 @@ fi
       | sed 's/CURL_EXTERN \([a-zA-Z_\* ]*\)[\* ]\([a-z_]*\)(\(.*\)$/\2/g'
     # curl_easy_option_by_name(const char *name);
     grep -a -h -E '^ *\*? *[a-z_]+ *\(.+\);$' include/curl/*.h \
-      | sed -E 's|^ *\*? *([a-z_]+) *\(.+$|\1|g'
+      | sed -E 's/^ *\*? *([a-z_]+) *\(.+$/\1/g'
   } | grep -a -v '^$' | sort | tee -a libcurl.def
 
   for pass in shared static; do

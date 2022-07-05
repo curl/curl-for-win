@@ -93,8 +93,8 @@ _VER="$1"
   #   Reported: https://github.com/openssl/openssl/issues/9520
   # - allow no-apps option to save time building openssl.exe.
   sed \
-    -e 's|die "Directory given with --prefix|print "Directory given with --prefix|g' \
-    -e 's|"aria",$|"apps", "aria",|g' \
+    -e 's/die "Directory given with --prefix/print "Directory given with --prefix/g' \
+    -e 's/"aria",$/"apps", "aria",/g' \
     < ./Configure > ./Configure-patched
   chmod a+x ./Configure-patched
 
