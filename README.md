@@ -27,7 +27,7 @@
 - Transparent builds, using open source code, and running them in
   [public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
   with auditable [logs](#build-logs).
-- Build environment is `mingw-w64`
+- Build environment is [`mingw-w64`](https://sourceforge.net/p/mingw-w64/)
   via [Debian](https://packages.debian.org/testing/mingw-w64),
   [Homebrew](https://formulae.brew.sh/formula/mingw-w64),
   [MSYS2](https://www.msys2.org/).
