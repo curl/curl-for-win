@@ -262,6 +262,7 @@ build_single_target() {
   export _CPU="$1"
 
   # Toolchain
+  export _TOOLCHAIN
   if [ "${_CPU}" = 'a64' ]; then  # WARNING: Keep this in sync with `versuffix` condition and value below.
     if [ "${_CC}" != 'clang' ] || \
        [ "${_CRT}" != 'ucrt' ] || \

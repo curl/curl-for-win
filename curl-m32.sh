@@ -138,16 +138,20 @@ _VER="$1"
     export OPENSSL_PATH="../../libressl/${_PP}"
   elif [ -d ../boringssl ]; then
     export OPENSSL_PATH="../../boringssl/${_PP}"
-    # Bad workaround for:
-    # ```
-    # ld.lld: error: undefined symbol: _setjmp
-    # >>> referenced by ../src/thread.c:1518
-    # >>>               libwinpthread.a(libwinpthread_la-thread.o):(pthread_create_wrapper)
-    # clang-14: error: linker command failed with exit code 1 (use -v to see invocation)
-    # ```
-    # This seems to be an issue with winpthread static lib being incompatible with UCRT.
-    # Ref: https://github.com/niXman/mingw-builds/issues/498
-    OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"  # FIXME
+    if [ "${_TOOLCHAIN}" = 'mingw-w64' ]; then
+      # Workaround for mingw-w64 macOS/Homebrew:
+      # ```
+      # ld.lld: error: undefined symbol: _setjmp
+      # >>> referenced by ../src/thread.c:1518
+      # >>>               libwinpthread.a(libwinpthread_la-thread.o):(pthread_create_wrapper)
+      # clang-14: error: linker command failed with exit code 1 (use -v to see invocation)
+      # ```
+      # This seems to be an issue with winpthread static lib being incompatible with UCRT.
+      # Ref: https://github.com/niXman/mingw-builds/issues/498
+      OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"  # FIXME
+    else
+      OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
+    fi
   elif [ -d ../openssl-quic ]; then
     export OPENSSL_PATH="../../openssl-quic/${_PP}"
     # Workaround for 3.x deprecation warnings

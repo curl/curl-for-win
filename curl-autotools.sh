@@ -161,7 +161,12 @@ fi
     elif [ -d ../boringssl ]; then
       options="${options} --with-openssl=${_TOP}/boringssl/${_PP}"
       options="${options} --disable-tls-srp"
-      LIBS="${LIBS} -lpthread"  # FIXME: force using the shared lib or fix the root cause
+      # FIXME: We must force link this in static mode. Except with mingw-w64
+      #        where we must force link it in shared mode (till this bug is
+      #        fixed upstream). Both prevented by libtool, so here we can only
+      #        link it the default mode, which is static with EXE and shared
+      #        with DLL.
+      LIBS="${LIBS} -lpthread"
     elif [ -d ../openssl-quic ]; then
       options="${options} --with-openssl=${_TOP}/openssl-quic/${_PP}"
       options="${options} --enable-tls-srp"
