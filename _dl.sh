@@ -6,6 +6,12 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 gpgdir="$(mktemp -d)"
 
+# NOTE: We would prefer using the canonical source for BoringSSL. But, the
+#       tarball does change for each download (the timestamps in it), so we
+#       cannot checksum it:
+#          https://boringssl.googlesource.com/boringssl/+archive/{ver}.tar.gz
+#       Ref: https://github.com/google/gitiles/issues/84 (closed)
+
 dependencies_json() {
 cat <<EOF
 [
@@ -392,7 +398,7 @@ live_xt() {
     hash="$(openssl dgst -sha256 pkg.bin)"
     echo "${hash}"
     echo "${hash}" | grep -q -a -F -- "${2:-}" || exit 1
-    rm -f -r "${pkg}"; mkdir "${pkg}"; tar --strip-components 1 -xf pkg.bin -C "${pkg}"
+    rm -f -r "${pkg}"; mkdir "${pkg}"; tar --strip-components "${3:-1}" -xf pkg.bin -C "${pkg}"
     rm -f pkg.bin pkg.sig
     [ -f "${pkg}${_patsuf}.patch" ] && dos2unix < "${pkg}${_patsuf}.patch" | patch -N -p1 -d "${pkg}"
   fi
