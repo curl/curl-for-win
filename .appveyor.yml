@@ -4,19 +4,17 @@ version: 1.0.{build}
 branches:
   only:
     - main
-    - main-quic
     - main-libressl
+    - main-boringssl
     - main-mini
     - dev
-    - dev-quic
     - dev-libressl
+    - dev-boringssl
     - dev-mini
-    - dev-appveyor
     - test
-    - test-quic
     - test-libressl
+    - test-boringssl
     - test-mini
-    - test-appveyor
 # https://www.appveyor.com/docs/build-environment/#build-worker-images
 image: Ubuntu2004
 services:
