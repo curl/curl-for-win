@@ -90,6 +90,7 @@ _VER="$1"
     CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -municode"
   fi
 
+  # shellcheck disable=SC2153
   export CURL_DLL_SUFFIX="${_CURL_DLL_SUFFIX}"
   export CURL_DLL_A_SUFFIX=.dll
 
