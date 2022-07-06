@@ -147,21 +147,30 @@ _VER="$1"
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/libressl/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/libressl/${_PP}/include"
+      _CFLAGS="${_CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
+      _LDFLAGS="${_LDFLAGS} -lbcrypt"
+    elif [ -d ../boringssl ]; then
+      options="${options} -DCURL_USE_OPENSSL=ON"
+      options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/boringssl/${_PP}"
+      options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/boringssl/${_PP}/include"
+      _LDFLAGS="${_LDFLAGS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"  # FIXME
     elif [ -d ../openssl-quic ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl-quic/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl-quic/${_PP}/include"
+      _CFLAGS="${_CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
+      _LDFLAGS="${_LDFLAGS} -lbcrypt"
     elif [ -d ../openssl ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl/${_PP}/include"
+      _CFLAGS="${_CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
+      _LDFLAGS="${_LDFLAGS} -lbcrypt"
     else
       options="${options} -DCURL_USE_OPENSSL=OFF"
     fi
-    if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ]; then
+    if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ] || [ -d ../boringssl ]; then
       options="${options} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON"
-      _CFLAGS="${_CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
-      _LDFLAGS="${_LDFLAGS} -lbcrypt"
     fi
 
     options="${options} -DCURL_USE_SCHANNEL=ON"
@@ -248,7 +257,7 @@ _VER="$1"
     cmake . -B "${_BLDDIR}-${pass}" ${_CMAKE_GLOBAL} ${options} \
       "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"  \
       "-DCMAKE_EXE_LINKER_FLAGS=${_LDFLAGS} ${_LDFLAGS_EXE}" \
-      "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS} ${_LDFLAGS_DLL}"  # --debug-find
+      "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS} ${_LDFLAGS_DLL}"  # --debug-find --debug-trycompile
 
     if [ "${pass}" = 'static' ] && \
        [ -f src/tool_hugehelp.c ]; then  # File missing when building from a raw source tree.
@@ -276,7 +285,7 @@ _VER="$1"
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.
-  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ]; then
+  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ] || [ -d ../boringssl ]; then
     [ -f '../ca-bundle.crt' ] || \
       curl --disable --user-agent '' --fail --silent --show-error \
         --remote-time --xattr \
@@ -374,7 +383,7 @@ _VER="$1"
   cp -f -p README                     "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES              "${_DST}/RELEASE-NOTES.txt"
 
-  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ]; then
+  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ] || [ -d ../boringssl ]; then
     cp -f -p scripts/mk-ca-bundle.pl "${_DST}/"
     cp -f -p ../ca-bundle.crt        "${_DST}/bin/curl-ca-bundle.crt"
   fi

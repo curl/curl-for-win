@@ -29,6 +29,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        noh3       build without HTTP/3 (QUIC) support (select stock OpenSSL instead of its QUIC fork)
 #        nobrotli   build without brotli
 #        noftp      build without FTP/FTPS support
+#        boringssl  build with BoringSSL
 #        libressl   build with LibreSSL
 #        schannel   build with Schannel
 #        mini       build with less features, see README.md
@@ -66,6 +67,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - Enable Control Flow Guard (once FLOSS toolchains support it): -ehcontguard (requires LLVM 13.0.0)
 #   - LLVM -mretpoline
 #   - Change default TLS to
+#     - BoringSSL (no TLS-SRP)
 #     - Schannel (no QUIC, no TLSv1.3, no TLS-SRP)
 #     - LibreSSL (no QUIC, no ed25519 in libssh2)
 #     - rustls (experimental, no rand)
@@ -83,6 +85,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   nghttp3    cmake
 #   ngtcp2     cmake
 #   openssl    proprietary
+#   boringssl  cmake
 #   libressl   autotools, cmake
 #   libssh2    autotools, cmake
 #   curl       cmake, autotools, Makefile.m32
@@ -551,6 +554,7 @@ build_single_target() {
   bld libgsasl     "${LIBGSASL_VER_}"
   bld nghttp2       "${NGHTTP2_VER_}"
   bld nghttp3       "${NGHTTP3_VER_}"
+  bld boringssl   "${BORINGSSL_VER_}"
   bld libressl     "${LIBRESSL_VER_}"
   bld openssl       "${OPENSSL_VER_}"
   bld openssl  "${OPENSSL_QUIC_VER_}" openssl-quic

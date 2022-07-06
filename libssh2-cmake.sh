@@ -33,6 +33,11 @@ _VER="$1"
     _CFLAGS="${_CFLAGS} -DNOCRYPT"
     _LDFLAGS="${_LDFLAGS} -lbcrypt"
     _LDFLAGS="${_LDFLAGS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
+  elif [ -d ../boringssl ]; then
+    options="${options} -DCRYPTO_BACKEND=OpenSSL"
+    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/boringssl/${_PP}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/boringssl/${_PP}/include"
+    _LDFLAGS="${_LDFLAGS} -lpthread"  # to detect HAVE_EVP_AES_128_CTR
   elif [ -d ../openssl-quic ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl-quic/${_PP}"

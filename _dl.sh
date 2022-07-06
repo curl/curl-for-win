@@ -78,6 +78,12 @@ cat <<EOF
     "keys": "A1EB079B8D3EB92B4EBD3139663AF51BD5E4D8D5"
   },
   {
+    "name": "boringssl",
+    "url": "https://github.com/google/boringssl/archive/{ver}.tar.gz",
+    "redir": "redir",
+    "tag": "^master$"
+  },
+  {
     "name": "osslsigncode",
     "url": "https://github.com/mtrojnar/osslsigncode/releases/download/{vermm}/osslsigncode-{ver}.tar.gz",
     "sig": ".asc",
@@ -512,6 +518,9 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
   if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ]; then
     live_dl libressl "${LIBRESSL_VER_}"
     live_xt libressl "${LIBRESSL_HASH}"
+  elif [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
+    live_dl boringssl "${BORINGSSL_VER_}"
+    live_xt boringssl "${BORINGSSL_HASH}"
   elif [ "${_BRANCH#*noh3*}" != "${_BRANCH}" ]; then
     if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
       OPENSSL_VER_='3.0.0-beta2'

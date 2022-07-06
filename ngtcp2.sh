@@ -19,7 +19,13 @@ _VER="$1"
 
   options=''
 
-  if [ -d ../openssl-quic ]; then
+  if [ -d ../boringssl ]; then
+    options="${options} -DENABLE_OPENSSL=0"
+    options="${options} -DENABLE_BORINGSSL=1"
+    options="${options} -DBORINGSSL_INCLUDE_DIR=${_TOP}/boringssl/${_PP}/include"
+    options="${options} -DBORINGSSL_LIBRARIES=${_TOP}/boringssl/${_PP}/lib/libcrypto.a;${_TOP}/boringssl/${_PP}/lib/libssl.a;-lpthread;-lws2_32"
+    _CFLAGS="${_CFLAGS} -DNOCRYPT"
+  elif [ -d ../openssl-quic ]; then
     options="${options} -DENABLE_OPENSSL=1"
     options="${options} -DOPENSSL_ROOT_DIR=../openssl-quic/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=../openssl-quic/${_PP}/include"
@@ -74,6 +80,14 @@ _VER="$1"
   cp -f -p AUTHORS                      "${_DST}/AUTHORS.txt"
   cp -f -p COPYING                      "${_DST}/COPYING.txt"
   cp -f -p README.rst                   "${_DST}/"
+
+  # curl-cmake recognizes BoringSSL as OpenSSL. Make sure it finds this
+  # crypto library as well:
+  if [ -d ../boringssl ]; then
+    cp -p \
+      "${_pkg}"/lib/libngtcp2_crypto_boringssl.a \
+      "${_pkg}"/lib/libngtcp2_crypto_openssl.a
+  fi
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

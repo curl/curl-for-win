@@ -40,6 +40,9 @@ _VER="$1"
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/libressl/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
     LDFLAGS="${LDFLAGS} -lbcrypt"
+  elif [ -d ../boringssl ]; then
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/boringssl/${_PP}"
+    LDFLAGS="${LDFLAGS} -lpthread"
   elif [ -d ../openssl-quic ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/openssl-quic/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"

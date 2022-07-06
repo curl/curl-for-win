@@ -133,8 +133,21 @@ _VER="$1"
     export BROTLI_LIBS='-Wl,-Bstatic -lbrotlidec -lbrotlicommon -Wl,-Bdynamic'
   fi
 
+  export OPENSSL_LIBS=''
   if [ -d ../libressl ]; then
     export OPENSSL_PATH="../../libressl/${_PP}"
+  elif [ -d ../boringssl ]; then
+    export OPENSSL_PATH="../../boringssl/${_PP}"
+    # Bad workaround for:
+    # ```
+    # ld.lld: error: undefined symbol: _setjmp
+    # >>> referenced by ../src/thread.c:1518
+    # >>>               libwinpthread.a(libwinpthread_la-thread.o):(pthread_create_wrapper)
+    # clang-14: error: linker command failed with exit code 1 (use -v to see invocation)
+    # ```
+    # This seems to be an issue with winpthread static lib being incompatible with UCRT.
+    # Ref: https://github.com/niXman/mingw-builds/issues/498
+    OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"  # FIXME
   elif [ -d ../openssl-quic ]; then
     export OPENSSL_PATH="../../openssl-quic/${_PP}"
     # Workaround for 3.x deprecation warnings
@@ -149,7 +162,7 @@ _VER="$1"
     options="${options}-ssl"
     export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
     export OPENSSL_LIBPATH="${OPENSSL_PATH}/lib"
-    export OPENSSL_LIBS='-lssl -lcrypto -lbcrypt'
+    OPENSSL_LIBS="${OPENSSL_LIBS} -lssl -lcrypto -lbcrypt"
   fi
 
   options="${options}-schannel"
@@ -171,6 +184,12 @@ _VER="$1"
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGHTTP3_STATICLIB"
     export NGTCP2_PATH="../../ngtcp2/${_PP}"
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGTCP2_STATICLIB"
+    export NGTCP2_LIBS='-lngtcp2'
+    if [ -d ../boringssl ]; then
+      NGTCP2_LIBS="${NGTCP2_LIBS} -lngtcp2_crypto_boringssl"
+    elif [ -d ../openssl-quic ]; then
+      NGTCP2_LIBS="${NGTCP2_LIBS} -lngtcp2_crypto_openssl"
+    fi
   fi
   if [ -d ../libgsasl ]; then
     options="${options}-gsasl"
@@ -202,7 +221,7 @@ _VER="$1"
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.
-  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ]; then
+  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ] || [ -d ../boringssl ]; then
     [ -f '../ca-bundle.crt' ] || \
       curl --disable --user-agent '' --fail --silent --show-error \
         --remote-time --xattr \
@@ -301,7 +320,7 @@ _VER="$1"
   cp -f -p README                     "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES              "${_DST}/RELEASE-NOTES.txt"
 
-  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ]; then
+  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ] || [ -d ../boringssl ]; then
     cp -f -p scripts/mk-ca-bundle.pl "${_DST}/"
     cp -f -p ../ca-bundle.crt        "${_DST}/bin/curl-ca-bundle.crt"
   fi

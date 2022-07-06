@@ -53,7 +53,7 @@
   incomplete fix in default OpenSSL Windows builds. The OpenSSL team rejected
   all attempts to fix it. Even though the patch is trivial, we do not promise
   to maintain it for an indefinite time. Another option under consideration
-  is migrating to an alternative backend, e.g. LibreSSL, rustls or Schannel.
+  is migrating to an alternative backend.
 - Generated binaries are automatically uploaded
   to [VirusTotal](https://www.virustotal.com/).
 - You can verify hashes by looking up the correct values in the build log.

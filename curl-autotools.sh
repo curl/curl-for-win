@@ -158,6 +158,10 @@ fi
       options="${options} --with-openssl=${_TOP}/libressl/${_PP}"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
+    elif [ -d ../boringssl ]; then
+      options="${options} --with-openssl=${_TOP}/boringssl/${_PP}"
+      options="${options} --disable-tls-srp"
+      LIBS="${LIBS} -lpthread"  # FIXME: force using the shared lib or fix the root cause
     elif [ -d ../openssl-quic ]; then
       options="${options} --with-openssl=${_TOP}/openssl-quic/${_PP}"
       options="${options} --enable-tls-srp"
@@ -224,9 +228,12 @@ fi
         CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB -DUSE_NGTCP2"
         CPPFLAGS="${CPPFLAGS} -I${_TOP}/ngtcp2/${_PP}/include"
         LDFLAGS="${LDFLAGS} -L${_TOP}/ngtcp2/${_PP}/lib"
-        LIBS="${LIBS} -lngtcp2 -lngtcp2_crypto_openssl"
-      else
-        options="${options} --without-ngtcp2"
+        LIBS="${LIBS} -lngtcp2"
+        if [ -d ../boringssl ]; then
+          LIBS="${LIBS} -lngtcp2_crypto_boringssl"
+        elif [ -d ../openssl-quic ]; then
+          LIBS="${LIBS} -lngtcp2_crypto_openssl"
+        fi
       fi
     fi
 
@@ -342,7 +349,7 @@ fi
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.
-  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ]; then
+  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ] || [ -d ../boringssl ]; then
     [ -f '../ca-bundle.crt' ] || \
       curl --disable --user-agent '' --fail --silent --show-error \
         --remote-time --xattr \
@@ -440,7 +447,7 @@ fi
   cp -f -p README                     "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES              "${_DST}/RELEASE-NOTES.txt"
 
-  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ]; then
+  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ] || [ -d ../boringssl ]; then
     cp -f -p scripts/mk-ca-bundle.pl "${_DST}/"
     cp -f -p ../ca-bundle.crt        "${_DST}/bin/curl-ca-bundle.crt"
   fi

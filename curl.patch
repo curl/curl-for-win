@@ -123,3 +123,94 @@ index b3d3cf9631f08..caa0fdf721b62 100644
  
  # Platform-dependent helper tool macros
  ifeq ($(findstring /sh,$(SHELL)),/sh)
+diff --git a/docs/examples/Makefile.m32 b/docs/examples/Makefile.m32
+index 6ff03a6a1..3a98b66bd 100644
+--- a/docs/examples/Makefile.m32
++++ b/docs/examples/Makefile.m32
+@@ -278,7 +278,12 @@ ifdef SSL
+     curl_LDADD += -L"$(NGHTTP3_PATH)/lib" -lnghttp3
+     ifdef NGTCP2
+       CFLAGS += -DUSE_NGTCP2
+-      curl_LDADD += -L"$(NGTCP2_PATH)/lib" -lngtcp2 -lngtcp2_crypto_openssl
++      curl_LDADD += -L"$(NGTCP2_PATH)/lib"
++      ifdef NGTCP2_LIBS
++        curl_LDADD += $(NGTCP2_LIBS)
++      else
++        curl_LDADD += -lngtcp2 -lngtcp2_crypto_openssl
++      endif
+     endif
+   endif
+ 
+diff --git a/lib/Makefile.m32 b/lib/Makefile.m32
+index 3311a89ea..8cc72dae5 100644
+--- a/lib/Makefile.m32
++++ b/lib/Makefile.m32
+@@ -293,7 +293,12 @@ ifdef SSL
+     ifdef NGTCP2
+       INCLUDES += -I"$(NGTCP2_PATH)/include"
+       CFLAGS += -DUSE_NGTCP2
+-      DLL_LIBS += -L"$(NGTCP2_PATH)/lib" -lngtcp2 -lngtcp2_crypto_openssl
++      DLL_LIBS += -L"$(NGTCP2_PATH)/lib"
++      ifdef NGTCP2_LIBS
++        DLL_LIBS += $(NGTCP2_LIBS)
++      else
++        DLL_LIBS += -lngtcp2 -lngtcp2_crypto_openssl
++      endif
+     endif
+   endif
+ 
+diff --git a/src/Makefile.m32 b/src/Makefile.m32
+index 8d57debec..b202bf087 100644
+--- a/src/Makefile.m32
++++ b/src/Makefile.m32
+@@ -303,7 +303,12 @@ ifdef SSL
+     curl_LDADD += -L"$(NGHTTP3_PATH)/lib" -lnghttp3
+     ifdef NGTCP2
+       CFLAGS += -DUSE_NGTCP2
+-      curl_LDADD += -L"$(NGTCP2_PATH)/lib" -lngtcp2 -lngtcp2_crypto_openssl
++      curl_LDADD += -L"$(NGTCP2_PATH)/lib"
++      ifdef NGTCP2_LIBS
++        curl_LDADD += $(NGTCP2_LIBS)
++      else
++        curl_LDADD += -lngtcp2 -lngtcp2_crypto_openssl
++      endif
+     endif
+   endif
+ 
+diff --git a/lib/ldap.c b/lib/ldap.c
+index 51a32dc96..77b719fb3 100644
+--- a/lib/ldap.c
++++ b/lib/ldap.c
+@@ -45,6 +45,13 @@
+ # else
+ #  include <winber.h>
+ # endif
++  /* Undefine wincrypt conflicting symbols for BoringSSL. */
++# undef X509_NAME
++# undef X509_EXTENSIONS
++# undef PKCS7_ISSUER_AND_SERIAL
++# undef PKCS7_SIGNER_INFO
++# undef OCSP_REQUEST
++# undef OCSP_RESPONSE
+ #else
+ # define LDAP_DEPRECATED 1      /* Be sure ldap_init() is defined. */
+ # ifdef HAVE_LBER_H
+diff --git a/lib/vtls/schannel.h b/lib/vtls/schannel.h
+index 0b4c4d934..1b4cfe5fd 100644
+--- a/lib/vtls/schannel.h
++++ b/lib/vtls/schannel.h
+@@ -29,6 +29,14 @@
+ #ifdef USE_SCHANNEL
+ 
+ #include <schnlsp.h>
++/* Undefine wincrypt conflicting symbols for BoringSSL. */
++#undef X509_NAME
++#undef X509_EXTENSIONS
++#undef PKCS7_ISSUER_AND_SERIAL
++#undef PKCS7_SIGNER_INFO
++#undef OCSP_REQUEST
++#undef OCSP_RESPONSE
++
+ #include <schannel.h>
+ #include "curl_sspi.h"
+ 
