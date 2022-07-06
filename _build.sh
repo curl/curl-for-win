@@ -261,17 +261,17 @@ bld() {
 build_single_target() {
   export _CPU="$1"
 
-  # In initial support for a64, _CPU = a64 means using CW_LLVM_MINGW_PATH and
-  # the llvm-mingw toolchain. When mingw-w64 and other toolchains distributed
-  # via package managers receive ARM support, we will have to reshuffle this.
-
-  if [ "${_CPU}" = 'a64' ]; then
+  # Toolchain
+  if [ "${_CPU}" = 'a64' ]; then  # WARNING: Keep this in sync with `versuffix` condition and value below.
     if [ "${_CC}" != 'clang' ] || \
        [ "${_CRT}" != 'ucrt' ] || \
        [ -z "${CW_LLVM_MINGW_PATH:-}" ]; then
-      echo '! WARNING: ARM builds require clang, UCRT and CW_LLVM_MINGW_PATH. Skipping.'
+      echo "! WARNING: '${_CPU}' builds require clang, UCRT and CW_LLVM_MINGW_PATH. Skipping."
       return
     fi
+    _TOOLCHAIN='llvm-mingw'
+  else
+    _TOOLCHAIN='mingw-w64'
   fi
 
   _TRIPLET=''
@@ -304,16 +304,20 @@ build_single_target() {
 
   if [ "${_OS}" = 'win' ]; then
     export PATH
-    [ "${_CPU}" = 'x86' ] && PATH="/mingw32/bin:${_ori_path}"
-    [ "${_CPU}" = 'x64' ] && PATH="/mingw64/bin:${_ori_path}"
-    [ "${_CPU}" = 'a64' ] && PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
+    if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
+      PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
+    else
+      [ "${_CPU}" = 'x86' ] && PATH="/mingw32/bin:${_ori_path}"
+      [ "${_CPU}" = 'x64' ] && PATH="/mingw64/bin:${_ori_path}"
+      [ "${_CPU}" = 'a64' ] && PATH="/clangarm64/bin:${_ori_path}"
+    fi
     _MAKE='mingw32-make'
 
     # Install required component
     pip3 --version
     pip3 --disable-pip-version-check --no-cache-dir install --user "pefile==${PEFILE_VER_}"
   else
-    if [ "${_CPU}" = 'a64' ]; then
+    if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       export PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
     elif [ "${_CC}" = 'clang' ] && [ "${_OS}" = 'mac' ]; then
       export PATH="/usr/local/opt/llvm/bin:${_ori_path}"
@@ -324,7 +328,7 @@ build_single_target() {
     # one, or as prefix + `gcc-ar`, `gcc-nm`, `gcc-runlib`.
     _CCPREFIX="${_TRIPLET}-"
     # mingw-w64 sysroots
-    if [ "${_CPU}" != 'a64' ]; then
+    if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then
       if [ "${_OS}" = 'mac' ]; then
         _SYSROOT="/usr/local/opt/mingw-w64/toolchain-${_machine}"
       elif [ "${_OS}" = 'linux' ]; then
@@ -392,7 +396,7 @@ build_single_target() {
   # NOTE: LLVM strip does not support its own output:
   #         `aarch64-w64-mingw32-strip: error: option not supported by llvm-objcopy for COFF`
   #       .a output is reproducible by default, so not a showstopper.
-  if [ "${_CPU}" = 'a64' ]; then
+  if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
     _STRIP='echo'
   fi
 
@@ -415,7 +419,7 @@ build_single_target() {
     # Without this, the value '/usr/local' becomes 'msys64/usr/local'
     export MSYS2_ARG_CONV_EXCL='-DCMAKE_INSTALL_PREFIX='
   elif [ "${_OS}" = 'mac' ]; then
-    if [ "${_CPU}" = 'a64' ]; then
+    if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${CW_LLVM_MINGW_PATH}/bin/${_CCPREFIX}ar"
     else
       _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
@@ -429,7 +433,7 @@ build_single_target() {
   if [ "${_CRT}" = 'ucrt' ]; then
     if [ "${_CC}" = 'clang' ]; then
       _LD='lld'
-      if [ "${_CPU}" != 'a64' ]; then
+      if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -fuse-ld=lld"
       fi
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-s"
@@ -453,13 +457,13 @@ build_single_target() {
     if [ "${_OS}" = 'linux' ]; then
       # We used to pass this via CFLAGS for CMake to make it detect clang, so
       # we need to pass this via CMAKE_C_FLAGS, though meant for the linker.
-      if [ "${_CPU}" = 'a64' ]; then
+      if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${CW_LLVM_MINGW_PATH}/${_TRIPLET}/lib"
       else
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
       fi
     fi
-    if [ "${_CPU}" = 'a64' ]; then
+    if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       # Turns out autotools/libtool (in curl?) is overbusy/stupid enough to
       # delete LDFLAGS it does not recognize. This can explain why nothing
       # worked before moving `--target=` and `--sysroot=` into CC from LDFLAGS.
@@ -490,7 +494,7 @@ build_single_target() {
     _CMAKE_CXX_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++"
   fi
 
-  if [ "${_CC}" = 'clang' ] && [ "${_CPU}" = 'a64' ]; then
+  if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt -stdlib=libc++"
   else
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -static-libgcc"
@@ -511,10 +515,10 @@ build_single_target() {
   versuffix=''
   mingwver=''
   binver=''
-  if [ "${_CPU}" = 'a64' ]; then
+  if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
     mingwver='llvm-mingw'
     [ -n "${CW_LLVM_MINGW_VER_:-}" ] && mingwver="${mingwver} ${CW_LLVM_MINGW_VER_}"
-    versuffix=' (arm64)'
+    versuffix=' (arm64)'  # TODO: delete this once we build all _CPU targets with the same toolchain
   else
     case "${_OS}" in
       mac)
