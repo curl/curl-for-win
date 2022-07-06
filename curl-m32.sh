@@ -277,8 +277,8 @@ _VER="$1"
     *)       TZ=UTC stat --format '%n: %y' "${_ref}";;
   esac
 
-  TZ=UTC "${_OBJDUMP}" --all-headers "${_pkg}"/src/*.exe | grep -a -E -i "(file format|DLL Name|Time/Date)"
-  TZ=UTC "${_OBJDUMP}" --all-headers "${_pkg}"/lib/*.dll | grep -a -E -i "(file format|DLL Name|Time/Date)"
+  TZ=UTC "${_OBJDUMP}" --all-headers "${_pkg}"/src/*.exe | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r
+  TZ=UTC "${_OBJDUMP}" --all-headers "${_pkg}"/lib/*.dll | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r
 
   # Execute curl and compiled-in dependency code. This is not secure, but
   # the build process already requires executing external code
