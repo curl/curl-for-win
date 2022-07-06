@@ -382,9 +382,9 @@ build_single_target() {
   export _CC_GLOBAL=''
   export _CFLAGS_GLOBAL='-fno-ident'
   export _CPPFLAGS_GLOBAL=''
-  export _CXXFLAGS_GLOBAL=''
   export _RCFLAGS_GLOBAL=''
   export _LDFLAGS_GLOBAL=''
+  export _LDFLAGS_CXX_GLOBAL=''
   export _LIBS_GLOBAL=''
   export _CONFIGURE_GLOBAL=''
   export _CMAKE_GLOBAL='-Wno-dev -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_BUILD_TYPE=Release'
@@ -495,7 +495,8 @@ build_single_target() {
   fi
 
   if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt -stdlib=libc++"
+    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt"
+    _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -stdlib=libc++"
   else
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -static-libgcc"
   fi
