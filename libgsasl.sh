@@ -59,8 +59,8 @@ _VER="$1"
 
   "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
 
-  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
   touch -c -r "${_ref}" "${_pkg}"/include/*.h
+  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
 
   # Create package
 
@@ -71,8 +71,8 @@ _VER="$1"
   mkdir -p "${_DST}/include"
   mkdir -p "${_DST}/lib"
 
-  cp -f -p "${_pkg}"/lib/*.a     "${_DST}/lib/"
   cp -f -p "${_pkg}"/include/*.h "${_DST}/include/"
+  cp -f -p "${_pkg}"/lib/*.a     "${_DST}/lib/"
   cp -f -p NEWS                  "${_DST}/NEWS.txt"
   cp -f -p AUTHORS               "${_DST}/AUTHORS.txt"
   cp -f -p COPYING               "${_DST}/COPYING.txt"

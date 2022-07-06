@@ -166,8 +166,8 @@ _VER="$1"
 
   "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
 
-  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
   touch -c -r "${_ref}" "${_pkg}"/include/openssl/*.h
+  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
 
   # Create package
 
@@ -178,8 +178,8 @@ _VER="$1"
   mkdir -p "${_DST}/include/openssl"
   mkdir -p "${_DST}/lib"
 
-  cp -f -p "${_pkg}"/lib/*.a             "${_DST}/lib"
   cp -f -p "${_pkg}"/include/openssl/*.h "${_DST}/include/openssl/"
+  cp -f -p "${_pkg}"/lib/*.a             "${_DST}/lib"
   cp -f -p CHANGES.md                    "${_DST}/"
   cp -f -p LICENSE.txt                   "${_DST}/"
   cp -f -p README.md                     "${_DST}/"

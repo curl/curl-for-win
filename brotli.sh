@@ -59,8 +59,8 @@ _VER="$1"
   _DST="$(mktemp -d)/${_BAS}"
 
   mkdir -p "${_DST}"
-  mkdir -p "${_DST}/lib"
   mkdir -p "${_DST}/include/brotli"
+  mkdir -p "${_DST}/lib"
 
   cp -f -p "${_pkg}"/include/brotli/*.h "${_DST}/include/brotli/"
   cp -f -p "${_pkg}"/lib/*.a            "${_DST}/lib/"
