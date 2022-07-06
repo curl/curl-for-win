@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Copyright 2017-present Viktor Szakats. See LICENSE.md
 
@@ -11,6 +11,7 @@ time brew update >/dev/null
 time brew upgrade python
 time brew install xz gnu-tar mingw-w64 llvm gettext gnu-sed \
                   jq dos2unix openssl osslsigncode openssh
+[[ "${APPVEYOR_REPO_BRANCH:-}" = *'boringssl'* ]] && time brew install go nasm
 time brew install --cask wine-stable
 time wineboot --init
 

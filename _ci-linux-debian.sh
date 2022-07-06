@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Copyright 2017-present Viktor Szakats. See LICENSE.md
 
@@ -14,5 +14,9 @@ apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
   mingw-w64 clang lld \
   autoconf automake autopoint libtool \
   zip time jq dos2unix secure-delete wine64
+
+[[ "${APPVEYOR_REPO_BRANCH:-}" = *'boringssl'* ]] && \
+apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
+  golang nasm
 
 ./_build.sh
