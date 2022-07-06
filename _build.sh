@@ -508,6 +508,7 @@ build_single_target() {
     _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -stdlib=libc++"
   else
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -static-libgcc"
+    _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -static-libstdc++"
   fi
 
   _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --prefix=${_PREFIX} --disable-dependency-tracking --disable-silent-rules"
