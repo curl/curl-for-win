@@ -383,6 +383,7 @@ build_single_target() {
   export _CC_GLOBAL=''
   export _CFLAGS_GLOBAL='-fno-ident'
   export _CPPFLAGS_GLOBAL=''
+  export _CXXFLAGS_GLOBAL=''
   export _RCFLAGS_GLOBAL=''
   export _LDFLAGS_GLOBAL=''
   export _LDFLAGS_CXX_GLOBAL=''
@@ -461,7 +462,14 @@ build_single_target() {
       if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${CW_LLVM_MINGW_PATH}/${_TRIPLET}/lib"
       else
+        # https://packages.debian.org/testing/amd64/gcc-mingw-w64-x86-64-posix/filelist
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
+        # https://packages.debian.org/testing/amd64/g++-mingw-w64-x86-64-win32/filelist
+        tmp="$(find "/usr/lib/gcc/${_TRIPLET}" -name '*win32' | head -n 1)"
+        _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -L${tmp}"
+        _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++"
+        _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/${_TRIPLET}"
+        _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/backward"
       fi
     fi
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
