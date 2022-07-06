@@ -275,7 +275,7 @@ build_single_target() {
     _TOOLCHAIN='mingw-w64'
   fi
 
-  _TRIPLET=''
+  export _TRIPLET=''
   _SYSROOT=''
 
   export _CCPREFIX=

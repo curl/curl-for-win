@@ -24,9 +24,7 @@ _VER="$1"
 
   # Set OS string to the autotools value. To test reproducibility across make systems.
   if [ -n "${CW_DEV_CROSSMAKE_REPRO:-}" ]; then
-    # Windows-* ->
-    # shellcheck disable=SC2016
-    sed -i.bak 's/set(OS "\\"${CMAKE_SYSTEM_NAME}${CURL_OS_SUFFIX}\\"")/set(OS \\"x86_64-w64-mingw32\\")/g' ./CMakeLists.txt
+    sed -i.bak "s/set(OS \"\\\\\"\${CMAKE_SYSTEM_NAME}\${CURL_OS_SUFFIX}\\\\\"\")/set(OS \\\\\"${_TRIPLET}\\\\\")/g" ./CMakeLists.txt  # Windows-{x64,a64,x86} ->
   fi
 
   # Build

@@ -21,10 +21,9 @@ _VER="$1"
 
   # Set OS string to the autotools value. To test reproducibility across make systems.
   if [ -n "${CW_DEV_CROSSMAKE_REPRO:-}" ]; then
-    # x86_64-pc-win32 ->
     {
       echo '#undef OS'
-      echo '#define OS "x86_64-w64-mingw32"'
+      echo "#define OS \"${_TRIPLET}\""  # {x86_64,aarch64,i386}-pc-win32 ->
     } >> ./lib/config-win32.h
   fi
 
