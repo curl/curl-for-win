@@ -399,7 +399,7 @@ build_single_target() {
   #         `aarch64-w64-mingw32-strip: error: option not supported by llvm-objcopy for COFF`
   #       .a output is reproducible by default, so not a showstopper.
   if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-    _STRIP='echo'
+    _STRIP='echo'  # FIXME: .a output is 4x the size of stripped ones.
   fi
 
   # for CMake and openssl
