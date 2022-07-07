@@ -155,13 +155,10 @@ gpg_recv_key() {
 
 # convert 'x.y.z' to zero-padded "000x0y0z" numeric format (or leave as-is)
 to8digit() {
-  local ver maj min rel
+  local ver
   ver="$(cat)"
   if [[ "${ver}" =~ ([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
-    maj="${BASH_REMATCH[1]}"
-    min="${BASH_REMATCH[2]}"
-    rel="${BASH_REMATCH[3]}"
-    printf '%04d%02d%02d' "${maj}" "${min}" "${rel}"
+    printf '%04d%02d%02d' "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}" "${BASH_REMATCH[3]}"
   else
     printf '%s' "${ver}"
   fi
@@ -566,9 +563,16 @@ else
 fi
 live_xt curl "${CURL_HASH}"
 
-if [ -n "${SIGN_CODE_GPG_PASS:+1}" ] && [ ! -x ./osslsigncode-local ]; then
-  live_dl osslsigncode "${OSSLSIGNCODE_VER_}"
-  live_xt osslsigncode "${OSSLSIGNCODE_HASH}"
+# TODO: Delete this fallback code ASAP
+if [ -n "${SIGN_CODE_GPG_PASS:+1}" ]; then
+  ver="$(osslsigncode --version 2>/dev/null | head -1 | to8digit || true)"
+  if [[ "${ver}" -lt '00020200' ]]; then
+    if [ ! -x ./osslsigncode-local ]; then
+      live_dl osslsigncode "${OSSLSIGNCODE_VER_}"
+      live_xt osslsigncode "${OSSLSIGNCODE_HASH}"
+      ./osslsigncode.sh "${OSSLSIGNCODE_VER_}"
+    fi
+  fi
 fi
 
 rm -r -f "${gpgdir}"

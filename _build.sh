@@ -223,10 +223,9 @@ EOF
 fi
 
 if [ -s "${SIGN_CODE_KEY}" ]; then
-  # build osslsigncode
-  [ -x ./osslsigncode-local ] || ./osslsigncode.sh "${OSSLSIGNCODE_VER_}"
-  ls -l "$(dirname "$0")/osslsigncode-local"*
-  "$(dirname "$0")/osslsigncode-local" --version
+  export _OSSLSIGNCODE="$(pwd)/osslsigncode-local"
+  [ ! -x "${_OSSLSIGNCODE}" ] && _OSSLSIGNCODE=osslsigncode
+  "${_OSSLSIGNCODE}" --version
 fi
 
 _ori_path="${PATH}"
