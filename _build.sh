@@ -308,9 +308,11 @@ build_single_target() {
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
     else
-      [ "${_CPU}" = 'x86' ] && PATH="/mingw32/bin:${_ori_path}"
-      [ "${_CPU}" = 'x64' ] && PATH="/mingw64/bin:${_ori_path}"
-      [ "${_CPU}" = 'a64' ] && PATH="/clangarm64/bin:${_ori_path}"
+      [ "${_CPU}" = 'x86' ] && _MSYSROOT='/mingw32'
+      [ "${_CPU}" = 'x64' ] && _MSYSROOT='/mingw64'
+      [ "${_CPU}" = 'a64' ] && _MSYSROOT='/clangarm64'
+
+      [ -n "${_MSYSROOT}" ] && PATH="${_MSYSROOT}/bin:${_ori_path}"
     fi
     _MAKE='mingw32-make'
 
@@ -509,6 +511,18 @@ build_single_target() {
   else
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -static-libgcc"
     _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -static-libstdc++"
+  fi
+
+  # Absolute path for lib[win]pthread[.dll].a (for curl-autotools)
+  export _LIB_PTHREAD_DIR
+  if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
+    _LIB_PTHREAD_DIR="${CW_LLVM_MINGW_PATH}/${_TRIPLET}/lib"
+  elif [ "${_OS}" = 'linux' ]; then
+    _LIB_PTHREAD_DIR="${_SYSROOT}/lib"  # https://packages.debian.org/testing/all/mingw-w64-x86-64-dev/filelist
+  elif [ "${_OS}" = 'mac' ]; then
+    _LIB_PTHREAD_DIR="${_SYSROOT}/mingw/lib"
+  elif [ "${_OS}" = 'win' ]; then
+    _LIB_PTHREAD_DIR="${_MSYSROOT}/${_TRIPLET}/lib"
   fi
 
   _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --prefix=${_PREFIX} --disable-dependency-tracking --disable-silent-rules"
