@@ -87,7 +87,7 @@ _VER="$1"
       _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,--output-def,${_DEF_NAME}"
     fi
 
-    if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+    if [ "${CW_MAP}" = '1' ]; then
       if [ "${pass}" = 'shared' ]; then
         _MAP_NAME="libcurl${_CURL_DLL_SUFFIX}.map"
         _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,-Map,${_MAP_NAME}"
@@ -277,7 +277,7 @@ _VER="$1"
       cp -p "${_BLDDIR}-${pass}/lib/${_DEF_NAME}" "${_pkg}"/bin/
     fi
 
-    if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+    if [ "${CW_MAP}" = '1' ]; then
       if [ "${pass}" = 'shared' ]; then
         cp -p "${_BLDDIR}-${pass}/lib/${_MAP_NAME}" "${_pkg}"/bin/
       else
@@ -321,7 +321,7 @@ _VER="$1"
   touch -c -r "${_ref}" "${_pkg}"/bin/*.def
   touch -c -r "${_ref}" "${_pkg}"/lib/*.a
 
-  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+  if [ "${CW_MAP}" = '1' ]; then
     touch -c -r "${_ref}" "${_pkg}"/bin/*.map
   fi
 
@@ -386,7 +386,7 @@ _VER="$1"
     cp -f -p ../ca-bundle.crt        "${_DST}/bin/curl-ca-bundle.crt"
   fi
 
-  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+  if [ "${CW_MAP}" = '1' ]; then
     cp -f -p "${_pkg}"/bin/*.map      "${_DST}/bin/"
   fi
 

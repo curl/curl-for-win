@@ -126,6 +126,11 @@ export _CC='clang'
 _CRT='ucrt'
 [ ! "${_BRANCH#*msvcrt*}" = "${_BRANCH}" ] && _CRT='msvcrt'
 
+if [ -z "${CW_MAP:-}" ]; then
+  export CW_MAP='0'
+  [ "${_BRANCH#*main*}" = "${_BRANCH}" ] && CW_MAP='1'
+fi
+
 # Detect host OS
 export _OS
 case "$(uname)" in

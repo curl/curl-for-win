@@ -93,7 +93,7 @@ _VER="$1"
   export CURL_DLL_SUFFIX="${_CURL_DLL_SUFFIX}"
   export CURL_DLL_A_SUFFIX=.dll
 
-  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+  if [ "${CW_MAP}" = '1' ]; then
     CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,-Map,curl.map"
     CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,-Map,libcurl${_CURL_DLL_SUFFIX}.map"
   fi
@@ -261,7 +261,7 @@ _VER="$1"
   touch -c -r "${_ref}" "${_pkg}"/lib/*.def
   touch -c -r "${_ref}" "${_pkg}"/lib/*.a
 
-  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+  if [ "${CW_MAP}" = '1' ]; then
     touch -c -r "${_ref}" "${_pkg}"/src/*.map
     touch -c -r "${_ref}" "${_pkg}"/lib/*.map
   fi
@@ -327,7 +327,7 @@ _VER="$1"
     cp -f -p ../ca-bundle.crt        "${_DST}/bin/curl-ca-bundle.crt"
   fi
 
-  if [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+  if [ "${CW_MAP}" = '1' ]; then
     cp -f -p "${_pkg}"/src/*.map        "${_DST}/bin/"
     cp -f -p "${_pkg}"/lib/*.map        "${_DST}/bin/"
   fi
