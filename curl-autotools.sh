@@ -159,6 +159,7 @@ fi
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
     elif [ -d ../boringssl ]; then
+      CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
       options="${options} --with-openssl=${_TOP}/boringssl/${_PP}"
       options="${options} --disable-tls-srp"
       if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_OS}" = 'mac' ]; then  # FIXME

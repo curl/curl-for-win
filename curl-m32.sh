@@ -137,6 +137,7 @@ _VER="$1"
   if [ -d ../libressl ]; then
     export OPENSSL_PATH="../../libressl/${_PP}"
   elif [ -d ../boringssl ]; then
+    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
     export OPENSSL_PATH="../../boringssl/${_PP}"
     if [ "${_TOOLCHAIN}" = 'mingw-w64' ]; then
       # Workaround for mingw-w64 macOS/Homebrew:

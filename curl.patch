@@ -214,3 +214,21 @@ index 0b4c4d934..1b4cfe5fd 100644
  #include <schannel.h>
  #include "curl_sspi.h"
  
+diff --git a/lib/vtls/openssl.c b/lib/vtls/openssl.c
+index 78aacd0228553..25e065d6cbceb 100644
+--- a/lib/vtls/openssl.c
++++ b/lib/vtls/openssl.c
+@@ -4454,7 +4454,13 @@ static size_t ossl_version(char *buffer, size_t size)
+                    (LIBRESSL_VERSION_NUMBER>>12)&0xff);
+ #endif
+ #elif defined(OPENSSL_IS_BORINGSSL)
++#ifdef CURL_BORINGSSL_VERSION
++  return msnprintf(buffer, size, "%s/%s",
++                   OSSL_PACKAGE,
++                   CURL_BORINGSSL_VERSION);
++#else
+   return msnprintf(buffer, size, OSSL_PACKAGE);
++#endif
+ #elif defined(HAVE_OPENSSL_VERSION) && defined(OPENSSL_VERSION_STRING)
+   return msnprintf(buffer, size, "%s/%s",
+                    OSSL_PACKAGE, OpenSSL_version(OPENSSL_VERSION_STRING));
