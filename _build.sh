@@ -55,6 +55,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
+#   - Change default TLS to BoringSSL?
 #   - Finalize ARM DLL suffix. Maybe -a64 -> -arm? Any quasi-standard here?
 #   - Update naming-scheme to make room for arm64 builds?:
 #     -win-x64, -win-x86, -win-a64 / -win-arm64 / -win-arm
@@ -66,11 +67,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - Make -nobrotli the default?
 #   - Enable Control Flow Guard (once FLOSS toolchains support it): -ehcontguard (requires LLVM 13.0.0)
 #   - LLVM -mretpoline
-#   - Change default TLS to
-#     - BoringSSL (no TLS-SRP)
-#     - Schannel (no QUIC, no TLSv1.3, no TLS-SRP)
-#     - LibreSSL (no QUIC, no ed25519 in libssh2)
-#     - rustls (experimental, no rand)
 
 # Resources:
 #   - https://blog.llvm.org/2019/11/deterministic-builds-with-clang-and-lld.html
@@ -465,10 +461,8 @@ build_single_target() {
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${CW_LLVM_MINGW_PATH}/${_TRIPLET}/lib"
       else
         # https://packages.debian.org/testing/amd64/gcc-mingw-w64-x86-64-posix/filelist
-        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
-        # https://packages.debian.org/testing/amd64/g++-mingw-w64-x86-64-win32/filelist
-        tmp="$(find "/usr/lib/gcc/${_TRIPLET}" -name '*win32' | head -n 1)"
-        _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -L${tmp}"
+        tmp="$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
+        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${tmp}"
         _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++"
         _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/${_TRIPLET}"
         _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/backward"
