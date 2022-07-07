@@ -58,11 +58,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - Change default TLS to BoringSSL?
 #   - cmake: =(ON|OFF) -> =(1|0)
 #   - cmake: _(LD|C)FLAGS(_EXE|_DLL|)([}=]) -> \1FLAGS\1\3
-#   - Finalize ARM64 DLL suffix. Maybe -a64 -> -arm/-arm64/-aarch64? Any quasi-standard here?
 #   - Rename a64 -> arm internally?
-#   - Update naming-scheme to make room for ARM64 builds?:
-#     -win-x64, -win-x86, -win-a64 / -win-arm64 / -win-arm
-#     Needs updating curl-www also.
+#   - Update distro naming-scheme: -win-x64, -win-x86, -win-arm64 (needs curl-www update also.)
 #   - Drop XP compatibility for x86 builds also
 #   - Drop x86 builds
 #   - Make -noftp the default?
@@ -299,7 +296,7 @@ build_single_target() {
 
   export _CURL_DLL_SUFFIX=''
   [ "${_CPU}" = 'x64' ] && _CURL_DLL_SUFFIX="-${_CPU}"
-  [ "${_CPU}" = 'a64' ] && _CURL_DLL_SUFFIX="-${_CPU}"
+  [ "${_CPU}" = 'a64' ] && _CURL_DLL_SUFFIX="-arm64"
 
   export _PKGSUFFIX
   [ "${_CPU}" = 'x86' ] && _PKGSUFFIX='-win32-mingw'
