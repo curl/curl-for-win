@@ -18,7 +18,8 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -lpthread -lws2_32"  # libs for tests
+  _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -ffile-prefix-map=$(pwd)="
+  _CFLAGS="${_CFLAGS} -lpthread -lws2_32"  # libs for tests
 
   options=''
 
@@ -26,8 +27,6 @@ _VER="$1"
   [ "${_CPU}" = 'x64' ] && cpu='x86_64'
   if [ "${_CPU}" = 'a64' ]; then
     cpu='ARM64'
-    # Adding `-DCMAKE_ASM_NASM_COMPILER=nasm` here did not work.
-    # Adding `enable_language(ASM_NASM)` to `./CMakeLists.txt` did not work.
     options="${options} -DOPENSSL_NO_ASM=1"
   fi
 
