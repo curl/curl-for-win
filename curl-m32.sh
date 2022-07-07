@@ -139,7 +139,7 @@ _VER="$1"
   elif [ -d ../boringssl ]; then
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
     export OPENSSL_PATH="../../boringssl/${_PP}"
-    if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_OS}" = 'mac' ]; then
+    if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_OS}" = 'mac' ]; then  # FIXME
       # Workaround for mingw-w64 macOS/Homebrew:
       # ```
       # ld.lld: error: undefined symbol: _setjmp
@@ -149,7 +149,7 @@ _VER="$1"
       # ```
       # This seems to be an issue with winpthread static lib being incompatible with UCRT.
       # Ref: https://github.com/niXman/mingw-builds/issues/498
-      OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"  # FIXME
+      OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
     else
       OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
     fi

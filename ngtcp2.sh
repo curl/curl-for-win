@@ -86,7 +86,7 @@ _VER="$1"
   if [ -d ../boringssl ]; then
     cp -p \
       "${_pkg}"/lib/libngtcp2_crypto_boringssl.a \
-      "${_pkg}"/lib/libngtcp2_crypto_openssl.a
+      "${_pkg}"/lib/libngtcp2_crypto_openssl.a  # FIXME
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"

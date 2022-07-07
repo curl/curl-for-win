@@ -55,6 +55,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
+#   - cmake: =(ON|OFF) -> =(1|0)
+#   - cmake: _(LD|C)FLAGS[}=] -> (LD|C)FLAGS[}=]
 #   - Change default TLS to BoringSSL?
 #   - Finalize ARM DLL suffix. Maybe -a64 -> -arm? Any quasi-standard here?
 #   - Update naming-scheme to make room for arm64 builds?:
@@ -397,7 +399,7 @@ build_single_target() {
   #         `aarch64-w64-mingw32-strip: error: option not supported by llvm-objcopy for COFF`
   #       .a output is reproducible by default, so not a showstopper.
   if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-    _STRIP='echo'  # FIXME: .a output is 4x the size of stripped ones.
+    _STRIP='echo'  # FIXME: BoringSSL .a output is 4x the size of stripped ones.
   fi
 
   # for CMake and openssl

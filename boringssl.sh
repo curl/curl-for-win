@@ -28,8 +28,7 @@ _VER="$1"
   [ "${_CPU}" = 'x86' ] && cpu='x86'
   [ "${_CPU}" = 'x64' ] && cpu='x86_64'
   if [ "${_CPU}" = 'a64' ]; then
-    cpu='ARM64'
-    options="${options} -DOPENSSL_NO_ASM=1"  # FIXME
+    cpu='ARM64'; options="${options} -DOPENSSL_NO_ASM=1"  # FIXME
   fi
 
   # shellcheck disable=SC2086

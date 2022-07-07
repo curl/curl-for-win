@@ -167,11 +167,15 @@ fi
         if [ "${pass}" = 'shared' ]; then
           LIBS="${LIBS} -lpthread"  # shared by default
         else
+          # Triggers warning:
+          #   configure: LIBS note: LIBS should only be used to specify libraries (-lname).
           LIBS="${LIBS} ${_LIB_PTHREAD_DIR}/libpthread.dll.a"
         fi
       else
         # link static pthread
         if [ "${pass}" = 'shared' ]; then
+          # Triggers warning:
+          #   configure: LIBS note: LIBS should only be used to specify libraries (-lname).
           LIBS="${LIBS} ${_LIB_PTHREAD_DIR}/libpthread.a"
         else
           LIBS="${LIBS} -lpthread"  # static by default
@@ -315,7 +319,7 @@ fi
       # by ./configure tests and fails right away. This needs GNU sed.
       # Also add our compiled resource object.
       # shellcheck disable=SC2016
-      sed -i.bak "/^LDFLAGS = /a LDFLAGS := \\\$(LDFLAGS) -Wl,libcurl.rc.res -Wl,$(pwd)/libcurl.def" "${_BLDDIR}-${pass}/lib/Makefile"
+      sed -i.bak "/^LDFLAGS = /a LDFLAGS := \\\$(LDFLAGS) -Wl,libcurl.rc.res -Wl,$(pwd)/libcurl.def" "${_BLDDIR}-${pass}/lib/Makefile"  # needs GNU sed
 
       # Skip building shared version curl.exe. The build itself works, but
       # then autotools tries to create its "ltwrapper", and fails. This only
@@ -330,7 +334,7 @@ fi
 
       # Add our compiled resource object.
       # shellcheck disable=SC2016
-      sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,curl.rc.res' "${_BLDDIR}-${pass}/src/Makefile"
+      sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,curl.rc.res' "${_BLDDIR}-${pass}/src/Makefile"  # needs GNU sed
 
       sed -i.bak -E 's/^SUBDIRS = .+/SUBDIRS = lib src/g' "${_BLDDIR}-${pass}/Makefile"
     fi
