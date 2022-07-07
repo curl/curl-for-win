@@ -395,13 +395,6 @@ build_single_target() {
   export _STRIP="${_CCPREFIX}strip"
   export _OBJDUMP="${_CCPREFIX}objdump"
 
-  # NOTE: LLVM strip does not support its own output:
-  #         `aarch64-w64-mingw32-strip: error: option not supported by llvm-objcopy for COFF`
-  #       .a output is reproducible by default, so not a showstopper.
-  if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-    _STRIP='echo'  # FIXME: BoringSSL .a output is 4x the size of stripped ones.
-  fi
-
   # for CMake and openssl
   unset CC
 

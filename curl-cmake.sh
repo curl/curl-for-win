@@ -309,11 +309,11 @@ _VER="$1"
   # LLVM's own llvm-objcopy does not seems to work with Windows binaries,
   # so we do .exe and .dll stripping via the -s linker option.
   if [ "${_LD}" = 'ld' ]; then
-    "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.exe
-    "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.dll
-    "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/libcurl.dll.a
+    "${_STRIP}" --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.exe
+    "${_STRIP}" --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.dll
+    "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/libcurl.dll.a
   fi
-  "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/libcurl.a
+  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/libcurl.a
 
   ../_peclean.py "${_ref}" "${_pkg}"/bin/*.exe
   ../_peclean.py "${_ref}" "${_pkg}"/bin/*.dll

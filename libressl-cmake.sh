@@ -47,7 +47,7 @@ _VER="$1"
 
   readonly _ref='ChangeLog'
 
-  "${_STRIP}" --preserve-dates --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
+  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
 
   touch -c -r "${_ref}" "${_pkg}"/include/openssl/*.h
   touch -c -r "${_ref}" "${_pkg}"/include/*.h
