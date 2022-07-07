@@ -45,11 +45,6 @@ _VER="$1"
   touch -c -r "${_ref}" "${_pkg}"/include/*.h
   touch -c -r "${_ref}" "${_pkg}"/lib/*.a
 
-  # curl Makefile.m32 assumes the headers and lib to be in the
-  # same directory.
-  cp -f -p "${_pkg}"/include/*.h "${_pkg}/"
-  cp -f -p "${_pkg}"/lib/libz.a  "${_pkg}/"
-
   # Create package
 
   _OUT="${_NAM}-${_VER}${_REVSUFFIX}${_PKGSUFFIX}"
