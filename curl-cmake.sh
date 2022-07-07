@@ -152,7 +152,7 @@ _VER="$1"
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/boringssl/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/boringssl/${_PP}/include"
-      if [ "${_TOOLCHAIN}" = 'mingw-w64' ]; then
+      if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_OS}" = 'mac' ]; then
         _LDFLAGS="${_LDFLAGS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"  # FIXME
       else
         _LDFLAGS="${_LDFLAGS} -Wl,-Bstatic -lpthread -Wl,-Bshared"
