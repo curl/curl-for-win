@@ -23,8 +23,8 @@ _VER="$1"
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 
   # Set OS string to the autotools value. To test reproducibility across make systems.
-  if [ -n "${CW_DEV_CROSSMAKE_REPRO:-}" ]; then
-    sed -i.bak "s/set(OS \"\\\\\"\${CMAKE_SYSTEM_NAME}\${CURL_OS_SUFFIX}\\\\\"\")/set(OS \\\\\"${_TRIPLET}\\\\\")/g" ./CMakeLists.txt  # Windows-{x64,a64,x86} ->
+  if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
+    sed -i.bak "s/set(OS \"\\\\\"\${CMAKE_SYSTEM_NAME}\${CURL_OS_SUFFIX}\\\\\"\")/set(OS \\\\\"${_TRIPLET}\\\\\")/g" ./CMakeLists.txt  # Windows-{x86,x64,a64} ->
   fi
 
   # Build
@@ -185,7 +185,7 @@ _VER="$1"
       options="${options} -DLIBSSH2_INCLUDE_DIR=${_TOP}/libssh2/${_PP}/include"
       _LDFLAGS="${_LDFLAGS} -lbcrypt"
 
-      if [ -n "${CW_DEV_CROSSMAKE_REPRO:-}" ]; then
+      if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
         # By passing -lssh2 _before_ -lcrypto (of openssl/libressl) to the linker,
         # DLL size becomes closer/identical to autotools/m32-built DLLs. Otherwise
         # this is not necessary, and there should not be any functional difference.

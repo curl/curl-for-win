@@ -12,8 +12,8 @@ identity and expression, sexual orientation, disability, personal appearance,
 body size, race, ethnicity, age, or religion.
 
 Examples of unacceptable behavior by participants include the use of sexual
-language or imagery, derogatory comments or personal attacks, trolling,
-public or private harassment, insults, or other unprofessional conduct.
+language or imagery, derogatory comments or personal attacks, trolling, public
+or private harassment, insults, or other unprofessional conduct.
 
 Project maintainers have the right and responsibility to remove, edit, or
 reject comments, commits, code, wiki edits, issues, and other contributions

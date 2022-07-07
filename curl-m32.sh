@@ -20,7 +20,7 @@ _VER="$1"
   find . -name '*.map' -delete
 
   # Set OS string to the autotools value. To test reproducibility across make systems.
-  if [ -n "${CW_DEV_CROSSMAKE_REPRO:-}" ]; then
+  if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
     {
       echo '#undef OS'
       echo "#define OS \"${_TRIPLET}\""  # {x86_64,aarch64,i386}-pc-win32 ->
@@ -216,7 +216,7 @@ _VER="$1"
     CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
   fi
 
-  if [ -z "${CW_DEV_INCREMENTAL:-}" ]; then
+  if [ ! "${CW_DEV_INCREMENTAL:-}" = '1' ]; then
     "${_MAKE}" --jobs=2 --directory=lib --makefile=Makefile.m32 clean
     "${_MAKE}" --jobs=2 --directory=src --makefile=Makefile.m32 clean
   fi

@@ -316,7 +316,7 @@ fi
       "${RC}" ${RCFLAGS} -i lib/libcurl.rc -o "${_BLDDIR}-${pass}/lib/libcurl.rc.res"
 
       # Cannot add this linker option to LDFLAGS as-is, because it gets used
-      # by ./configure tests and fails right away. This needs GNU sed.
+      # by ./configure tests and fails right away.
       # Also add our compiled resource object.
       # shellcheck disable=SC2016
       sed -i.bak "/^LDFLAGS = /a LDFLAGS := \\\$(LDFLAGS) -Wl,libcurl.rc.res -Wl,$(pwd)/libcurl.def" "${_BLDDIR}-${pass}/lib/Makefile"  # needs GNU sed

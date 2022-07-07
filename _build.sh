@@ -16,7 +16,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Default: (all)
 #
 # CW_LLVM_MINGW_PATH
-#      Point to LLVM-mingw installation (required for ARM builds).
+#      Point to LLVM MinGW installation.
 #
 # CW_CONFIG
 #      Build configuration. Certain keywords select certain configurations. E.g.: 'main-micro'.
@@ -36,7 +36,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        micro      build with less features, see README.md
 #        nano       build with less features, see README.md
 #        pico       build with less features, see README.md
-#        a64        build arm64 target only
+#        a64        build ARM64 target only
 #        x64        build x64 target only
 #        x86        build x86 target only
 #        msvcrt     build against msvcrt instead of UCRT
@@ -55,14 +55,14 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
-#   - cmake: =(ON|OFF) -> =(1|0)
-#   - cmake: _(LD|C)FLAGS[}=] -> (LD|C)FLAGS[}=]
 #   - Change default TLS to BoringSSL?
-#   - Finalize ARM DLL suffix. Maybe -a64 -> -arm? Any quasi-standard here?
-#   - Update naming-scheme to make room for arm64 builds?:
+#   - cmake: =(ON|OFF) -> =(1|0)
+#   - cmake: _(LD|C)FLAGS(_EXE|_DLL|)([}=]) -> \1FLAGS\1\3
+#   - Finalize ARM64 DLL suffix. Maybe -a64 -> -arm/-arm64/-aarch64? Any quasi-standard here?
+#   - Rename a64 -> arm internally?
+#   - Update naming-scheme to make room for ARM64 builds?:
 #     -win-x64, -win-x86, -win-a64 / -win-arm64 / -win-arm
 #     Needs updating curl-www also.
-#   - Rename a64 -> arm internally? (and -win64a -> -winarm)
 #   - Drop XP compatibility for x86 builds also
 #   - Drop x86 builds
 #   - Make -noftp the default?
@@ -163,7 +163,7 @@ if [ "${_OS}" != 'win' ]; then
     bsd)   _CROSS_HOST='x86_64-pc-bsd';;
     mac)
       if [ "$(uname -m)" = 'arm64' ]; then
-        _CROSS_HOST='arm-apple-darwin'
+        _CROSS_HOST='aarch64-apple-darwin'
       else
         _CROSS_HOST='x86_64-apple-darwin'
       fi
@@ -268,9 +268,9 @@ build_single_target() {
   fi
 
   if [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
-    versuffix_llvm_mingw='x64, arm64'
+    versuffix_llvm_mingw='ARM64, x64'
   else
-    versuffix_llvm_mingw='arm64'
+    versuffix_llvm_mingw='ARM64'
   fi
 
   # Toolchain
@@ -339,7 +339,7 @@ build_single_target() {
     fi
     _TRIPLET="${_machine}-w64-mingw32"
     # Prefixes do not work with MSYS2/mingw-w64, because `ar`, `nm` and
-    # `runlib` are missing from them. They are accessible either _without_
+    # `ranlib` are missing from them. They are accessible either _without_
     # one, or as prefix + `gcc-ar`, `gcc-nm`, `gcc-runlib`.
     _CCPREFIX="${_TRIPLET}-"
     # mingw-w64 sysroots
@@ -351,7 +351,7 @@ build_single_target() {
       fi
     fi
 
-    # TODO: Run arm64 targets on arm64 linux/mac hosts?
+    # TODO: Run ARM64 targets on ARM64 linux/mac hosts?
     _WINE='echo'
     if [ "${_OS}" = 'linux' ]; then
       # Execute CPU-native targets only
@@ -366,7 +366,7 @@ build_single_target() {
         _WINE='wine64'
       fi
     elif [ "${_OS}" = 'win' ]; then
-      _WINE='wine'  # TODO: What targets can an arm64 host run? Can an x64 host run arm64 targets?
+      _WINE='wine'  # TODO: What targets can an ARM64 host run? Can an x64 host run ARM64 targets?
     fi
   fi
 
