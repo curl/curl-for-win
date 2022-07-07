@@ -383,17 +383,12 @@ fi
 
   readonly _ref='CHANGES'
 
-  # binutils 2.38 has issues handling lld output:
-  # - failing on implibs or creating corrupted output (depending on options).
-  # - not stripping the .buildid section, which contains a timestamp.
-  # LLVM's own llvm-objcopy does not seems to work with Windows binaries,
-  # so we do .exe and .dll stripping via the -s linker option.
-  if [ "${_LD}" = 'ld' ]; then
-    "${_STRIP}" --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.exe
-    "${_STRIP}" --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.dll
-    "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/libcurl.dll.a
-  fi
+  "${_STRIP}" --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.exe
+  "${_STRIP}" --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.dll
   "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/libcurl.a
+  # LLVM strip does not support implibs, but they are deterministic by default:
+  #   error: unsupported object file format
+  [ "${_LD}" = 'ld' ] && "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/libcurl.dll.a
 
   ../_peclean.py "${_ref}" "${_pkg}"/bin/*.exe
   ../_peclean.py "${_ref}" "${_pkg}"/bin/*.dll

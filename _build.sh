@@ -428,10 +428,12 @@ build_single_target() {
   if [ "${_CRT}" = 'ucrt' ]; then
     if [ "${_CC}" = 'clang' ]; then
       _LD='lld'
-      if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then
+      if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then  # llvm-mingw uses these tools by default
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -fuse-ld=lld"
+        _STRIP='llvm-strip'
+        _OBJDUMP='llvm-objdump'  # binutils objdump also works
       fi
-      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-s"
+      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-s"  # Omit .buildid segment with the timestamp in it
     else
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -specs=${_GCCSPECS}"
     fi
