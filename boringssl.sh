@@ -5,7 +5,7 @@
 # https://boringssl.googlesource.com/boringssl/
 # https://bugs.chromium.org/p/boringssl/issues/list
 
-# FIXME: Homebrew mingw-w64 pthread ucrt static linking bug -> requires llvm-mingw
+# FIXME: x64 mingw-w64 pthread ucrt static linking bug -> requires llvm-mingw
 
 # shellcheck disable=SC3040
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail

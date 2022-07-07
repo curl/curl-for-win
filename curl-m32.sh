@@ -139,8 +139,8 @@ _VER="$1"
   elif [ -d ../boringssl ]; then
     CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
     export OPENSSL_PATH="../../boringssl/${_PP}"
-    if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_OS}" = 'mac' ]; then  # FIXME
-      # Workaround for mingw-w64 macOS/Homebrew:
+    if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ]; then  # FIXME
+      # Non-production workaround:
       # ```
       # ld.lld: error: undefined symbol: _setjmp
       # >>> referenced by ../src/thread.c:1518
