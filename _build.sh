@@ -158,16 +158,10 @@ fi
 if [ "${_OS}" != 'win' ]; then
   # https://clang.llvm.org/docs/CrossCompilation.html
   case "${_OS}" in
-    win)   _CROSS_HOST='x86_64-pc-mingw32';;
-    linux) _CROSS_HOST='x86_64-pc-linux';;  # x86_64-pc-linux-gnu
-    bsd)   _CROSS_HOST='x86_64-pc-bsd';;
-    mac)
-      if [ "$(uname -m)" = 'arm64' ]; then
-        _CROSS_HOST='aarch64-apple-darwin'
-      else
-        _CROSS_HOST='x86_64-apple-darwin'
-      fi
-      ;;
+    win)   _CROSS_HOST="$(uname -m)-pc-mingw32";;
+    linux) _CROSS_HOST="$(uname -m)-pc-linux";;
+    bsd)   _CROSS_HOST="$(uname -m)-pc-bsd";;
+    mac)   _CROSS_HOST="$(uname -m)-apple-darwin";;
   esac
 fi
 
