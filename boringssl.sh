@@ -5,6 +5,15 @@
 # https://boringssl.googlesource.com/boringssl/
 # https://bugs.chromium.org/p/boringssl/issues/list
 
+# FIXME:
+# - pthread requirement is causing issues:
+#   - forcing static pthread causes hardship with autotools -> fixed with trick
+#   - Homebrew mingw-w64 pthread ucrt static linking bug -> requires llvm-mingw
+#   - Debian mingw-w64 stdc++ is missing std::thread / _GLIBCXX_HAS_GTHREADS
+#     support -> requires llvm-mingw
+#   - dependence on pthread by static libs also
+# - windows arm64 assembly does not want to use nasm -> disable asm
+
 # shellcheck disable=SC3040
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
