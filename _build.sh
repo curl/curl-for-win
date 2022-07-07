@@ -224,7 +224,7 @@ fi
 
 if [ -s "${SIGN_CODE_KEY}" ]; then
   # build osslsigncode
-  ./osslsigncode.sh "${OSSLSIGNCODE_VER_}"
+  [ -x ./osslsigncode-local ] || ./osslsigncode.sh "${OSSLSIGNCODE_VER_}"
   ls -l "$(dirname "$0")/osslsigncode-local"*
   "$(dirname "$0")/osslsigncode-local" --version
 fi
