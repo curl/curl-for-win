@@ -446,7 +446,7 @@ live_dl() {
 }
 
 # Download llvm-mingw
-if [ "${CW_DL_LLVM_MINGW:-}" = '1' ] && \
+if [ "${CW_LLVM_MINGW_DL:-}" = '1' ] && \
    [ ! -d 'llvm-mingw' ]; then
   name=''; vers=''; hash=''
   if   [ "${_OS}" = 'linux' ]; then
