@@ -55,7 +55,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
-#   - Use RC/AR/NM/RANLIB tools from LLVM when using clang
 #   - Change default TLS to BoringSSL?
 #   - cmake: _(LD|C)FLAGS(_EXE|_DLL|)([}=]) -> \1FLAGS\1\3
 #   - Drop XP compatibility for x86 builds also
@@ -396,17 +395,9 @@ build_single_target() {
   export _CONFIGURE_GLOBAL=''
   export _CMAKE_GLOBAL='-Wno-dev -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_BUILD_TYPE=Release'
   export _CMAKE_CXX_GLOBAL=''
-  export _STRIP="${_CCPREFIX}strip"
-  export _OBJDUMP="${_CCPREFIX}objdump"
 
   # for CMake and openssl
   unset CC
-
-  # for autotools (and openssl)
-  export RC="${_CCPREFIX}windres"
-  export AR="${_CCPREFIX}ar"
-  export NM="${_CCPREFIX}nm"
-  export RANLIB="${_CCPREFIX}ranlib"
 
   # for curl-autotools
   [ "${_CPU}" = 'x86' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-i386"
@@ -417,12 +408,6 @@ build_single_target() {
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -GMSYS Makefiles"
     # Without this, the value '/usr/local' becomes 'msys64/usr/local'
     export MSYS2_ARG_CONV_EXCL='-DCMAKE_INSTALL_PREFIX='
-  elif [ "${_OS}" = 'mac' ]; then
-    if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-      _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${CW_LLVM_MINGW_PATH}/bin/${_CCPREFIX}ar"
-    else
-      _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${_SYSROOT}/bin/${_CCPREFIX}ar"
-    fi
   fi
 
   _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_MESSAGE=NEVER"
@@ -441,6 +426,7 @@ build_single_target() {
   [ "${_CPU}" = 'x86' ] && _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-asynchronous-unwind-tables"
 
   export _LD
+  export _BINUTILS_PREFIX="${_CCPREFIX}"
   if [ "${_CC}" = 'clang' ]; then
     _CC_GLOBAL="clang${CW_CCSUFFIX} --target=${_TRIPLET}"
     _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET}"
@@ -487,9 +473,8 @@ build_single_target() {
 
     _LD='lld'
     if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then  # llvm-mingw uses these tools by default
+      _BINUTILS_PREFIX='llvm-'
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -fuse-ld=lld"
-      _STRIP='llvm-strip'
-      _OBJDUMP='llvm-objdump'  # binutils objdump also works
     fi
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-s"  # Omit .buildid segment with the timestamp in it
   else
@@ -501,6 +486,24 @@ build_single_target() {
     _CMAKE_CXX_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++"
 
     _LD='ld'
+  fi
+
+  export _STRIP="${_BINUTILS_PREFIX}strip"
+  export _OBJDUMP="${_BINUTILS_PREFIX}objdump"
+  # for autotools (and openssl)
+  export RC="${_BINUTILS_PREFIX}windres"
+  export AR="${_BINUTILS_PREFIX}ar"
+  export NM="${_BINUTILS_PREFIX}nm"
+  export RANLIB="${_BINUTILS_PREFIX}ranlib"
+
+  if [ "${_OS}" = 'mac' ]; then
+    if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
+      _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${CW_LLVM_MINGW_PATH}/bin/${AR}"
+    elif [ "${_CC}" = 'clang' ]; then
+      _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${AR}"
+    else
+      _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${_SYSROOT}/bin/${AR}"
+    fi
   fi
 
   if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
@@ -543,7 +546,9 @@ build_single_target() {
     esac
     [ -n "${mingwver}" ] && mingwver="mingw-w64 ${mingwver}"
 
-    binver="binutils $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
+    if [ "${_CC}" = 'gcc' ]; then
+      binver="binutils $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
+    fi
   fi
 
   gccver=''

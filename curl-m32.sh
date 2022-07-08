@@ -40,8 +40,8 @@ _VER="$1"
     ARCH='custom'
   fi
 
-  export CROSSPREFIX="${_CCPREFIX}"
   export CURL_CC="${_CC_GLOBAL}"
+  export CROSSPREFIX="${_BINUTILS_PREFIX}"  # for rc/ar/ranlib/strip
 
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
   # marking public libcurl functions as 'exported'. Useful to avoid the
