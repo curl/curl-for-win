@@ -248,18 +248,23 @@ bld() {
 build_single_target() {
   export _CPU="$1"
 
-  # WARNING: Keep this logic in sync with the `versuffix_llvm_mingw` value below.
-  use_llvm_mingw=0
-  if [ "${_CPU}" = 'a64' ]; then
+  if [ "${CW_LLVM_MINGW_ONLY:-}" = '1' ]; then
     use_llvm_mingw=1
-  elif [ "${_CPU}" = 'x64' ] && [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
-    use_llvm_mingw=1
-  fi
-
-  if [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
-    versuffix_llvm_mingw='ARM64, x64'
+    versuffix_llvm_mingw=''
   else
-    versuffix_llvm_mingw='ARM64'
+    # WARNING: Keep this logic in sync with the `versuffix_llvm_mingw` value below.
+    use_llvm_mingw=0
+    if [ "${_CPU}" = 'a64' ]; then
+      use_llvm_mingw=1
+    elif [ "${_CPU}" = 'x64' ] && [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
+      use_llvm_mingw=1
+    fi
+
+    if [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
+      versuffix_llvm_mingw=' (ARM64, x64)'
+    else
+      versuffix_llvm_mingw=' (ARM64)'
+    fi
   fi
 
   # Toolchain
@@ -531,7 +536,7 @@ build_single_target() {
   if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
     mingwver='llvm-mingw'
     [ -n "${CW_LLVM_MINGW_VER_:-}" ] && mingwver="${mingwver} ${CW_LLVM_MINGW_VER_}"
-    versuffix=" (${versuffix_llvm_mingw})"  # TODO: delete this once we build all targets with the same toolchain
+    versuffix="${versuffix_llvm_mingw}"
   else
     case "${_OS}" in
       mac)

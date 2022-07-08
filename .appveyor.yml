@@ -25,6 +25,7 @@ build:
 environment:
   DOCKER_IMAGE: debian:testing-20220622-slim
   CW_LLVM_MINGW_DL: 1
+  CW_LLVM_MINGW_ONLY: 0
   CW_MAP: 0
   VIRUSTOTAL_APIKEY:
     secure: 9SXnYhOkq6CP97zQ+dUc+NzKpKVIoVACMi0wwtLkaUv9y8BimLo5B7XSWBQ9lYwKbQY8JSJ10JFtyxrKRN6O0PK5U7i6bhg4/B6c40ieHHw=
