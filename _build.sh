@@ -61,7 +61,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - Change default TLS to BoringSSL?
 #   - cmake: =(1|0) -> =(ON|OFF) or vice versa for consistency
 #   - cmake: _(LD|C)FLAGS(_EXE|_DLL|)([}=]) -> \1FLAGS\1\3
-#   - Update distro naming-scheme: -win-x64, -win-x86, -win-arm64 (needs curl-www update also)
 #   - Drop XP compatibility for x86 builds also
 #   - Drop x86 builds
 #   - Make -noftp the default?
