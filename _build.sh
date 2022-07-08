@@ -602,7 +602,6 @@ build_single_target() {
       {
         find . -type f | grep -a -E '/(bin|include|lib)/' | sort | while read -r f; do
           openssl dgst -sha256 "${f}"
-          openssl dgst -sha512 "${f}"
         done
       } > "${_fn}"
       touch -c -r "../${_ref}" "${_fn}"

@@ -362,7 +362,6 @@ fi
         'https://curl.se/ca/cacert.pem'
 
     openssl dgst -sha256 '../ca-bundle.crt'
-    openssl dgst -sha512 '../ca-bundle.crt'
   fi
 
   # Make steps for determinism

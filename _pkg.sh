@@ -89,7 +89,6 @@ create_pkg() {
   esac
 
   openssl dgst -sha256 "${_pkg}" | tee -a hashes.txt
-  openssl dgst -sha512 "${_pkg}" | tee -a hashes.txt
 
   # Sign releases only
   if [ -z "${_suf}" ]; then
