@@ -3,6 +3,10 @@
 
 # Reproducible curl binaries for Windows
 
+- ⚠ If you're using 32-bit (x86) curl-for-win builds, on the next curl release,
+  7.85.0, on 2022-08-31, we will drop support for Windows XP in these binaries,
+  and they will requires Vista.
+  <br><br>
 - We provide binary packages in `.zip` and `.tar.xz` formats,
   signed with PGP key:
   <br><https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc>
@@ -17,8 +21,7 @@
   [More](https://www.msys2.org/docs/environments/#msvcrt-vs-ucrt),
   [information](https://docs.microsoft.com/cpp/porting/upgrade-your-code-to-the-universal-crt),
   [here](https://docs.microsoft.com/cpp/windows/universal-crt-deployment).
-- x64 binaries need Vista. x86 supports XP. We will bump it to Vista with
-  the upcoming curl release 7.85.0, on 2022-08-31.
+- x64 binaries need Vista. x86 supports XP. We plan to bump it to Vista soon.
 - Binary packages also contain all static libraries for curl and its
   dependencies.
 - curl/libcurl have
