@@ -55,8 +55,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
-#   - Change default TLS to BoringSSL?
-#   - cmake: _(LD|C)FLAGS(_EXE|_DLL|)([}=]) -> \1FLAGS\1\3
+#   - Change default TLS to BoringSSL? with OPENSSL_SMALL?
 #   - Drop XP compatibility for x86 builds also
 #   - Drop x86 builds
 #   - Make -noftp the default?
