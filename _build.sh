@@ -55,11 +55,13 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
+#   - Delete osslsigncode local build
+#   - Always use lld with clang (not just with ucrt)
+#   - Use RC/AR/NM/RANLIB tools from LLVM when using clang
 #   - Change default TLS to BoringSSL?
-#   - cmake: =(ON|OFF) -> =(1|0)
+#   - cmake: =(1|0) -> =(ON|OFF) or vice versa for consistency
 #   - cmake: _(LD|C)FLAGS(_EXE|_DLL|)([}=]) -> \1FLAGS\1\3
-#   - Rename a64 -> arm internally?
-#   - Update distro naming-scheme: -win-x64, -win-x86, -win-arm64 (needs curl-www update also.)
+#   - Update distro naming-scheme: -win-x64, -win-x86, -win-arm64 (needs curl-www update also)
 #   - Drop XP compatibility for x86 builds also
 #   - Drop x86 builds
 #   - Make -noftp the default?
