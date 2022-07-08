@@ -20,13 +20,13 @@ _VER="$1"
   options=''
 
   if [ -d ../boringssl ]; then
-    options="${options} -DENABLE_OPENSSL=0"
-    options="${options} -DENABLE_BORINGSSL=1"
+    options="${options} -DENABLE_OPENSSL=OFF"
+    options="${options} -DENABLE_BORINGSSL=ON"
     options="${options} -DBORINGSSL_INCLUDE_DIR=${_TOP}/boringssl/${_PP}/include"
     options="${options} -DBORINGSSL_LIBRARIES=${_TOP}/boringssl/${_PP}/lib/libcrypto.a;${_TOP}/boringssl/${_PP}/lib/libssl.a;-lpthread;-lws2_32"
     _CFLAGS="${_CFLAGS} -DNOCRYPT"
   elif [ -d ../openssl-quic ]; then
-    options="${options} -DENABLE_OPENSSL=1"
+    options="${options} -DENABLE_OPENSSL=ON"
     options="${options} -DOPENSSL_ROOT_DIR=../openssl-quic/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=../openssl-quic/${_PP}/include"
   fi
@@ -38,8 +38,8 @@ _VER="$1"
 
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
-    '-DENABLE_STATIC_LIB=1' \
-    '-DENABLE_SHARED_LIB=0' \
+    '-DENABLE_STATIC_LIB=ON' \
+    '-DENABLE_SHARED_LIB=OFF' \
     "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}" \
     "-DCMAKE_CXX_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
 

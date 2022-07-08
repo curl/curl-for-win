@@ -28,14 +28,14 @@ _VER="$1"
   [ "${_CPU}" = 'x86' ] && cpu='x86'
   [ "${_CPU}" = 'x64' ] && cpu='x86_64'
   if [ "${_CPU}" = 'a64' ]; then
-    cpu='ARM64'; options="${options} -DOPENSSL_NO_ASM=1"  # FIXME
+    cpu='ARM64'; options="${options} -DOPENSSL_NO_ASM=ON"  # FIXME
   fi
 
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
     "-DCMAKE_SYSTEM_PROCESSOR=${cpu}" \
-    '-DBUILD_SHARED_LIBS=0' \
-    '-DOPENSSL_SMALL=0' \
+    '-DBUILD_SHARED_LIBS=OFF' \
+    '-DOPENSSL_SMALL=OFF' \
     "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}" \
     "-DCMAKE_CXX_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
 
