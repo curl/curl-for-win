@@ -31,11 +31,12 @@ _VER="$1"
     cpu='ARM64'; options="${options} -DOPENSSL_NO_ASM=ON"  # FIXME
   fi
 
+  options="${options} -DOPENSSL_SMALL=OFF"  # ON reduces curl binary sizes by ~300 KB
+
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
     "-DCMAKE_SYSTEM_PROCESSOR=${cpu}" \
     '-DBUILD_SHARED_LIBS=OFF' \
-    '-DOPENSSL_SMALL=OFF' \
     "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}" \
     "-DCMAKE_CXX_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
 
