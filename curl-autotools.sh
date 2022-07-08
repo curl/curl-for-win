@@ -163,23 +163,9 @@ fi
       options="${options} --with-openssl=${_TOP}/boringssl/${_PP}"
       options="${options} --disable-tls-srp"
       if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ]; then  # FIXME
-        # link shared pthread
-        if [ "${pass}" = 'shared' ]; then
-          LIBS="${LIBS} -lpthread"  # shared by default
-        else
-          # Triggers warning:
-          #   configure: LIBS note: LIBS should only be used to specify libraries (-lname).
-          LIBS="${LIBS} ${_LIB_PTHREAD_DIR}/libpthread.dll.a"
-        fi
+        LDFLAGS="${LDFLAGS} -Wl,-Bdynamic,-lpthread,-Bstatic"
       else
-        # link static pthread
-        if [ "${pass}" = 'shared' ]; then
-          # Triggers warning:
-          #   configure: LIBS note: LIBS should only be used to specify libraries (-lname).
-          LIBS="${LIBS} ${_LIB_PTHREAD_DIR}/libpthread.a"
-        else
-          LIBS="${LIBS} -lpthread"  # static by default
-        fi
+        LDFLAGS="${LDFLAGS} -Wl,-Bstatic,-lpthread,-Bdynamic"
       fi
     elif [ -d ../openssl-quic ]; then
       options="${options} --with-openssl=${_TOP}/openssl-quic/${_PP}"

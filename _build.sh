@@ -513,18 +513,6 @@ build_single_target() {
     _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -static-libstdc++"
   fi
 
-  # Absolute path for lib[win]pthread[.dll].a (for curl-autotools)
-  export _LIB_PTHREAD_DIR
-  if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-    _LIB_PTHREAD_DIR="${CW_LLVM_MINGW_PATH}/${_TRIPLET}/lib"
-  elif [ "${_OS}" = 'linux' ]; then
-    _LIB_PTHREAD_DIR="${_SYSROOT}/lib"  # https://packages.debian.org/testing/all/mingw-w64-x86-64-dev/filelist
-  elif [ "${_OS}" = 'mac' ]; then
-    _LIB_PTHREAD_DIR="${_SYSROOT}/mingw/lib"
-  elif [ "${_OS}" = 'win' ]; then
-    _LIB_PTHREAD_DIR="${_MSYSROOT}/${_TRIPLET}/lib"
-  fi
-
   _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --prefix=${_PREFIX} --disable-dependency-tracking --disable-silent-rules"
 
   # Unified, per-target package: Initialize
