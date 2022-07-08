@@ -56,6 +56,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # TODO:
 #   - Change default TLS to BoringSSL? with OPENSSL_SMALL?
+#   - Delete VirusTotal upload logic
 #   - Drop XP compatibility for x86 builds also
 #   - Drop x86 builds
 #   - Make -noftp the default?

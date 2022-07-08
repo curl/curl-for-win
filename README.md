@@ -54,8 +54,6 @@
   all attempts to fix it. Even though the patch is trivial, we do not promise
   to maintain it for an indefinite time. Another option under consideration
   is migrating to an alternative backend.
-- Generated binaries are automatically uploaded
-  to [VirusTotal](https://www.virustotal.com/).
 - You can verify hashes by looking up the correct values in the build log.
   Watch for `main` branch, log lines starting with `SHA`:
     <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main>
