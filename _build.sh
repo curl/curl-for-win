@@ -55,7 +55,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
-#   - Always use lld with clang (not just with ucrt)
 #   - Use RC/AR/NM/RANLIB tools from LLVM when using clang
 #   - Change default TLS to BoringSSL?
 #   - cmake: _(LD|C)FLAGS(_EXE|_DLL|)([}=]) -> \1FLAGS\1\3
@@ -397,7 +396,6 @@ build_single_target() {
   export _CONFIGURE_GLOBAL=''
   export _CMAKE_GLOBAL='-Wno-dev -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_BUILD_TYPE=Release'
   export _CMAKE_CXX_GLOBAL=''
-  export _LD='ld'  # ld or lld
   export _STRIP="${_CCPREFIX}strip"
   export _OBJDUMP="${_CCPREFIX}objdump"
 
@@ -432,24 +430,17 @@ build_single_target() {
   _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_RC_COMPILER=${_CCPREFIX}windres"
 
   if [ "${_CRT}" = 'ucrt' ]; then
-    if [ "${_CC}" = 'clang' ]; then
-      _LD='lld'
-      if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then  # llvm-mingw uses these tools by default
-        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -fuse-ld=lld"
-        _STRIP='llvm-strip'
-        _OBJDUMP='llvm-objdump'  # binutils objdump also works
-      fi
-      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-s"  # Omit .buildid segment with the timestamp in it
-    else
-      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -specs=${_GCCSPECS}"
-    fi
     _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -D_UCRT"
     _LIBS_GLOBAL="${_LIBS_GLOBAL} -lucrt"
+    if [ "${_CC}" = 'gcc' ]; then
+      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -specs=${_GCCSPECS}"
+    fi
   fi
 
   _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --build=${_CROSS_HOST} --host=${_TRIPLET}"
   [ "${_CPU}" = 'x86' ] && _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-asynchronous-unwind-tables"
 
+  export _LD
   if [ "${_CC}" = 'clang' ]; then
     _CC_GLOBAL="clang${CW_CCSUFFIX} --target=${_TRIPLET}"
     _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET}"
@@ -493,6 +484,14 @@ build_single_target() {
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=clang${CW_CCSUFFIX}"
     _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}"
     _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=clang++${CW_CCSUFFIX}"
+
+    _LD='lld'
+    if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then  # llvm-mingw uses these tools by default
+      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -fuse-ld=lld"
+      _STRIP='llvm-strip'
+      _OBJDUMP='llvm-objdump'  # binutils objdump also works
+    fi
+    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-s"  # Omit .buildid segment with the timestamp in it
   else
     _CC_GLOBAL="${_CCPREFIX}gcc -static-libgcc"
     _LDFLAGS_GLOBAL="${_OPTM} ${_LDFLAGS_GLOBAL}"
@@ -500,6 +499,8 @@ build_single_target() {
 
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=${_CCPREFIX}gcc"
     _CMAKE_CXX_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++"
+
+    _LD='ld'
   fi
 
   if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
