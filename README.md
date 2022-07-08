@@ -17,7 +17,8 @@
   [More](https://www.msys2.org/docs/environments/#msvcrt-vs-ucrt),
   [information](https://docs.microsoft.com/cpp/porting/upgrade-your-code-to-the-universal-crt),
   [here](https://docs.microsoft.com/cpp/windows/universal-crt-deployment).
-- x64 binaries need Vista. x86 supports XP. We plan to bump it to Vista soon.
+- x64 binaries need Vista. x86 supports XP. We will bump it to Vista with
+  the upcoming curl release 7.85.0, on 2022-08-31.
 - Binary packages also contain all static libraries for curl and its
   dependencies.
 - curl/libcurl have
