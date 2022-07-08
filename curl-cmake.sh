@@ -155,7 +155,7 @@ _VER="$1"
       if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ]; then  # FIXME
         _LDFLAGS="${_LDFLAGS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
       else
-        _LDFLAGS="${_LDFLAGS} -Wl,-Bstatic -lpthread -Wl,-Bshared"
+        _LDFLAGS="${_LDFLAGS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
       fi
     elif [ -d ../openssl-quic ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
