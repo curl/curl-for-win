@@ -6,8 +6,7 @@
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 if [ -s "${SIGN_CODE_KEY}" ] && \
-   [ -n "${SIGN_CODE_KEY_PASS:+1}" ] && \
-   [ -n "${_OSSLSIGNCODE}" ]; then
+   [ -n "${SIGN_CODE_KEY_PASS:+1}" ]; then
 
   _ref="$1"
   shift
@@ -20,9 +19,9 @@ if [ -s "${SIGN_CODE_KEY}" ] && \
   # Add code signature
   for file in "$@"; do
     echo "Code signing: '${file}'"
-    # Requires: osslsigncode 2.2+
+    # Requires: osslsigncode 2.2 or newer
     # -ts 'https://freetsa.org/tsr'
-    "${_OSSLSIGNCODE}" sign \
+    osslsigncode sign \
       -h sha512 \
       -in "${file}" -out "${file}-signed" \
       -st "${unixts}" \
@@ -30,7 +29,7 @@ if [ -s "${SIGN_CODE_KEY}" ] && \
 ${SIGN_CODE_KEY_PASS}
 EOF
   # # Create detached code signature:
-  # "${_OSSLSIGNCODE}" extract-signature \
+  # osslsigncode extract-signature \
   #   -in  "${file}-signed" \
   #   -out "${file}.p7"
     cp -f "${file}-signed" "${file}"

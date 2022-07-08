@@ -90,13 +90,6 @@ cat <<EOF
     "tag": "^master$"
   },
   {
-    "name": "osslsigncode",
-    "url": "https://github.com/mtrojnar/osslsigncode/releases/download/{vermm}/osslsigncode-{ver}.tar.gz",
-    "sig": ".asc",
-    "redir": "redir",
-    "keys": "2BC7E4E67E3CC0C1BEA72F8C2EFC7FF0D416E014"
-  },
-  {
     "name": "zlib",
     "url": "https://zlib.net/zlib-{ver}.tar.xz",
     "sig": ".asc",
@@ -391,7 +384,7 @@ fi
 live_xt() {
   local pkg hash
   pkg="$1"
-  if [ -z "${CW_GET:-}" ] || [ "${pkg}" = 'osslsigncode' ] || echo "${CW_GET}" | grep -q -F "${pkg}"; then
+  if [ -z "${CW_GET:-}" ] || echo "${CW_GET}" | grep -q -F "${pkg}"; then
     hash="$(openssl dgst -sha256 pkg.bin)"
     echo "${hash}"
     echo "${hash}" | grep -q -a -F -- "${2:-}" || exit 1
@@ -407,7 +400,7 @@ live_dl() {
 
   name="$1"
 
-  if [ -z "${CW_GET:-}" ] || [ "${name}" = 'osslsigncode' ] || echo "${CW_GET}" | grep -q -F "${name}"; then
+  if [ -z "${CW_GET:-}" ] || echo "${CW_GET}" | grep -q -F "${name}"; then
 
     ver="$2"
     hash="${3:-}"
@@ -562,17 +555,5 @@ else
   live_dl curl "${CURL_VER_}"
 fi
 live_xt curl "${CURL_HASH}"
-
-# TODO: Delete this fallback code ASAP
-if [ -n "${SIGN_CODE_GPG_PASS:+1}" ]; then
-  ver="$(osslsigncode --version 2>/dev/null | head -1 | to8digit || true)"
-  if [[ "${ver}" -lt '00020200' ]]; then
-    if [ ! -x ./osslsigncode-local ]; then
-      live_dl osslsigncode "${OSSLSIGNCODE_VER_}"
-      live_xt osslsigncode "${OSSLSIGNCODE_HASH}"
-      ./osslsigncode.sh "${OSSLSIGNCODE_VER_}"
-    fi
-  fi
-fi
 
 rm -r -f "${gpgdir}"

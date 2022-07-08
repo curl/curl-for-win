@@ -55,7 +55,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
-#   - Delete osslsigncode local build
 #   - Always use lld with clang (not just with ucrt)
 #   - Use RC/AR/NM/RANLIB tools from LLVM when using clang
 #   - Change default TLS to BoringSSL?
@@ -224,9 +223,7 @@ EOF
 fi
 
 if [ -s "${SIGN_CODE_KEY}" ]; then
-  export _OSSLSIGNCODE="$(pwd)/osslsigncode-local"
-  [ ! -x "${_OSSLSIGNCODE}" ] && _OSSLSIGNCODE=osslsigncode
-  "${_OSSLSIGNCODE}" --version
+  osslsigncode --version  # We need 2.2 or newer
 fi
 
 _ori_path="${PATH}"
