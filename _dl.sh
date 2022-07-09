@@ -364,7 +364,7 @@ set -e
 # Install required component(s)
 if [ "${_OS}" != 'win' ]; then
   pip3 --version
-  pip3 --disable-pip-version-check --no-cache-dir install --user pefile
+  pip3 --disable-pip-version-check --no-cache-dir install --user "pefile==${PEFILE_VER_}"
 fi
 
 if [ "${_OS}" = 'mac' ]; then
