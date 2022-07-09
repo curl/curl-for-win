@@ -391,7 +391,7 @@ build_single_target() {
   export _PP="${_PKGDIR}${_PREFIX}"
   export _BLDDIR='bld'
   export _CC_GLOBAL=''
-  export _CFLAGS_GLOBAL='-fno-ident'
+  export _CFLAGS_GLOBAL=''
   export _CPPFLAGS_GLOBAL=''
   export _CXXFLAGS_GLOBAL=''
   export _RCFLAGS_GLOBAL=''
@@ -494,6 +494,13 @@ build_single_target() {
     _CMAKE_CXX_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++"
 
     _LD='ld'
+  fi
+
+  # Needed to exclude compiler info from objects, but for our Windows COFF
+  # outputs this seems to be a no-op as of clang 13.x/14.x.
+  # Still necessary with GCC 12.1.0 though.
+  if [ "${_CC}" = 'gcc' ]; then
+    _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-ident"
   fi
 
   export _STRIP="${_BINUTILS_PREFIX}strip"
