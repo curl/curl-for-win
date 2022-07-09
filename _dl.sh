@@ -87,7 +87,10 @@ cat <<EOF
     "name": "boringssl",
     "url": "https://github.com/google/boringssl/archive/{ver}.tar.gz",
     "redir": "redir",
-    "tag": "^master$"
+    "tag": "^master$",
+    "ref_url": "https://chromium.googlesource.com/chromium/src/+/refs/heads/main/DEPS?format=text",
+    "ref_expr": "boringssl_revision",
+    "ref_mask": "[0-9a-fA-F]{32,}"
   },
   {
     "name": "zlib",
@@ -165,8 +168,15 @@ check_update() {
   newver=''
   if [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
     slug="${BASH_REMATCH[1]}"
+    if [ -n "$7" ]; then
+      # base64 is there for googlesource.com '?format=text' mode.
+      # raw.githubusercontent.com does not need it.
+      newver="$(my_curl "$7" \
+        | base64 -d \
+        | grep -F "$8" \
+        | grep -a -o -E "$9")"
     # heavily rate-limited
-    if [ -n "$5" ]; then
+    elif [ -n "$5" ]; then
       ref="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/git/refs/heads" \
         | jq --raw-output '.[].ref' \
         | grep -a -E "$5" | sort | tail -1)"
@@ -198,9 +208,15 @@ check_update() {
     fi
   fi
   if [ -n "${newver}" ]; then
-    newvern="$(printf '%s' "${newver}" | to8digit)"
-    if [ "${newvern}" -gt "${ourvern}" ]; then
-      printf '%s' "${newver}"
+    if [ "${#newver}" -ge 32 ]; then
+      if [ "${newver}" != "${ourvern}" ]; then
+        printf '%s' "${newver}"
+      fi
+    else
+      newvern="$(printf '%s' "${newver}" | to8digit)"
+      if [ "${newvern}" -gt "${ourvern}" ]; then
+        printf '%s' "${newver}"
+      fi
     fi
   fi
 }
@@ -291,11 +307,17 @@ bump() {
         pin="$(     printf '%s' "${jp}" | jq --raw-output '.pinned')"
         tag="$(     printf '%s' "${jp}" | jq --raw-output '.tag' | sed 's/^null$//')"
         hasfile="$( printf '%s' "${jp}" | jq --raw-output '.hasfile' | sed 's/^null$//')"
+        ref_url="$( printf '%s' "${jp}" | jq --raw-output '.ref_url' | sed 's/^null$//')"
+        ref_expr="$(printf '%s' "${jp}" | jq --raw-output '.ref_expr' | sed 's/^null$//')"
+        ref_mask="$(printf '%s' "${jp}" | jq --raw-output '.ref_mask' | sed 's/^null$//')"
 
         if [ "${pin}" = 'true' ]; then
           >&2 echo "! ${name}: Version pinned. Skipping."
         else
-          newver="$(check_update "${name}" "${ourvern}" "${url}" "${desc}" "${tag}" "${hasfile}")"
+          newver="$(check_update "${name}" "${ourvern}" "${url}" "${desc}" \
+            "${tag}" \
+            "${hasfile}" \
+            "${ref_url}" "${ref_expr}" "${ref_mask}")"
           if [ -n "${newver}" ]; then
             >&2 echo "! ${name}: New version found: |${newver}|"
 

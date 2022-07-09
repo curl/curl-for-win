@@ -2,10 +2,17 @@
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
 
+# FIXME: x64 mingw-w64 pthread ucrt static linking bug -> requires llvm-mingw
+
 # https://boringssl.googlesource.com/boringssl/
 # https://bugs.chromium.org/p/boringssl/issues/list
 
-# FIXME: x64 mingw-w64 pthread ucrt static linking bug -> requires llvm-mingw
+# https://chromium.googlesource.com/chromium/src/third_party/boringssl/+/c9aca35314ba018fef141535ca9d4dd39d9bc688%5E%21/
+# https://chromium.googlesource.com/chromium/src/third_party/boringssl/
+# https://chromium.googlesource.com/chromium/src/+/refs/heads/main/DEPS
+# https://github.com/chromium/chromium/commit/6a77772b9bacdf2490948f452bdbc34d3e871be1
+# https://github.com/chromium/chromium/tree/main/third_party/boringssl
+# https://raw.githubusercontent.com/chromium/chromium/main/DEPS
 
 # shellcheck disable=SC3040
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
