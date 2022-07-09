@@ -330,7 +330,8 @@ build_single_target() {
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       export PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
     elif [ "${_CC}" = 'clang' ] && [ "${_OS}" = 'mac' ]; then
-      export PATH="/usr/local/opt/llvm/bin:${_ori_path}"
+      _MAC_LLVM_PATH='/usr/local/opt/llvm/bin'
+      export PATH="${_MAC_LLVM_PATH}:${_ori_path}"
     fi
     _TRIPLET="${_machine}-w64-mingw32"
     # Prefixes do not work with MSYS2/mingw-w64, because `ar`, `nm` and
@@ -505,7 +506,7 @@ build_single_target() {
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${CW_LLVM_MINGW_PATH}/bin/${AR}"
     elif [ "${_CC}" = 'clang' ]; then
-      _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${AR}"
+      _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${_MAC_LLVM_PATH}/${AR}"
     else
       _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${_SYSROOT}/bin/${AR}"
     fi
