@@ -43,6 +43,8 @@ _VER="$1"
   export CURL_CC="${_CC_GLOBAL}"
   export CROSSPREFIX="${_BINUTILS_PREFIX}"  # for rc/ar/ranlib/strip
 
+  export CURL_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
+
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
   # marking public libcurl functions as 'exported'. Useful to avoid the
   # chance of libcurl functions getting exported from final binaries when
