@@ -388,7 +388,7 @@ live_xt() {
     hash="$(openssl dgst -sha256 pkg.bin)"
     echo "${hash}"
     echo "${hash}" | grep -q -a -F -- "${2:-}" || exit 1
-    rm -f -r "${pkg}"; mkdir "${pkg}"; tar --strip-components "${3:-1}" -xf pkg.bin -C "${pkg}"
+    rm -r -f "${pkg}"; mkdir "${pkg}"; tar --strip-components "${3:-1}" -xf pkg.bin -C "${pkg}"
     rm -f pkg.bin pkg.sig
     [ -f "${pkg}${_patsuf}.patch" ] && dos2unix < "${pkg}${_patsuf}.patch" | patch -N -p1 -d "${pkg}"
   fi

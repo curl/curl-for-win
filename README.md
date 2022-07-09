@@ -3,9 +3,9 @@
 
 # Reproducible curl binaries for Windows
 
-- ⚠ If you're using 32-bit (x86) curl-for-win builds, on the next curl release,
-  7.85.0, on 2022-08-31, we will drop support for Windows XP in these binaries,
-  and they will require Vista.
+- ⚠ If you are using 32-bit (x86) curl-for-win builds, on the next curl
+  release, 7.85.0, on 2022-08-31, we will drop support for Windows XP in
+  these binaries, and they will require Vista.
   <br><br>
 - We provide binary packages in `.zip` and `.tar.xz` formats,
   signed with PGP key:

@@ -216,7 +216,7 @@ _VER="$1"
     CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
   fi
 
-  if [ ! "${CW_DEV_INCREMENTAL:-}" = '1' ]; then
+  if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
     "${_MAKE}" --jobs=2 --directory=lib --makefile=Makefile.m32 clean
     "${_MAKE}" --jobs=2 --directory=src --makefile=Makefile.m32 clean
   fi
