@@ -93,6 +93,7 @@ export ZIPOPT=
 export ZIP=
 
 readonly _LOG='logurl.txt'
+readonly _SELF='curl-for-win'
 if [ -n "${APPVEYOR_ACCOUNT_NAME:-}" ]; then
   # https://www.appveyor.com/docs/environment-variables/
   _LOGURL="${APPVEYOR_URL}/project/${APPVEYOR_ACCOUNT_NAME}/${APPVEYOR_PROJECT_SLUG}/build/${APPVEYOR_BUILD_VERSION}/job/${APPVEYOR_JOB_ID}"
@@ -600,6 +601,7 @@ build_single_target() {
   [ "${_CC}" = 'clang' ] || gccver="gcc $("${_CCPREFIX}gcc" -dumpversion)"
 
   {
+    [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT}"
     [ -n "${clangver}" ] && echo ".${clangver}${versuffix}"
     [ -n "${gccver}" ]   && echo ".${gccver}${versuffix}"
     [ -n "${mingwver}" ] && echo ".${mingwver}${versuffix}"
@@ -607,6 +609,7 @@ build_single_target() {
   } >> "${_BLD}"
 
   {
+    [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT}"
     [ -n "${clangver}" ] && echo ".${clangver}"
     [ -n "${gccver}" ]   && echo ".${gccver}"
     [ -n "${mingwver}" ] && echo ".${mingwver}"
