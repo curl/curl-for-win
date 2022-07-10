@@ -431,7 +431,7 @@ build_single_target() {
   [ "${_CPU}" = 'x86' ] && _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-asynchronous-unwind-tables"
 
   export _LD
-  export _BINUTILS_PREFIX="${_CCPREFIX}"
+  _BINUTILS_PREFIX="${_CCPREFIX}"
   if [ "${_CC}" = 'clang' ]; then
     _CC_GLOBAL="clang${CW_CCSUFFIX} --target=${_TRIPLET}"
     _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET}"

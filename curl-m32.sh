@@ -41,8 +41,10 @@ _VER="$1"
   fi
 
   export CURL_CC="${_CC_GLOBAL}"
+  export CURL_STRIP="${_STRIP}"
   export CURL_RC="${RC}"
-  export CROSSPREFIX="${_BINUTILS_PREFIX}"  # for ar/ranlib/strip
+  export CURL_AR="${AR}"
+  export CURL_RANLIB="${RANLIB}"
 
   export CURL_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
 
