@@ -51,13 +51,10 @@
 - Patching policy: No locally maintained patches. We apply patches locally if
   already merged upstream or &mdash; if necessary for a successful build
   &mdash; had them submitted upstream with fair confidence of getting accepted.
-  <br>NOTE: Since 2021, we apply a small patch to the OpenSSL `Configure`
-  script, that allows to better mitigate the high-severity vulnerability
-  [CVE-2019-5443](https://curl.se/docs/CVE-2019-5443.html). This still has an
-  incomplete fix in default OpenSSL Windows builds. The OpenSSL team rejected
-  all attempts to fix it. Even though the patch is trivial, we do not promise
-  to maintain it for an indefinite time. Another option under consideration
-  is migrating to an alternative backend.
+- We plan to switch the default TLS backend to BoringSSL. This fixes a
+  long-standing [vulnerability](https://curl.se/docs/CVE-2019-5443.html). It
+  also makes binaries 30% smaller. Downsides are no API/ABI guaranties, pthread
+  dependence and missing TLS-SRP support.
 - You can verify hashes by looking up the correct values in the build log.
   Watch for `main` branch, log lines starting with `SHA`:
     <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main>
