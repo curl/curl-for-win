@@ -97,14 +97,18 @@ if [ -n "${APPVEYOR_ACCOUNT_NAME:-}" ]; then
   # https://www.appveyor.com/docs/environment-variables/
   _LOGURL="${APPVEYOR_URL}/project/${APPVEYOR_ACCOUNT_NAME}/${APPVEYOR_PROJECT_SLUG}/build/${APPVEYOR_BUILD_VERSION}/job/${APPVEYOR_JOB_ID}"
 # _LOGURL="${APPVEYOR_URL}/api/buildjobs/${APPVEYOR_JOB_ID}/log"
+  _COMMIT="${APPVEYOR_REPO_COMMIT}"
 elif [ -n "${GITHUB_RUN_ID:-}" ]; then
-  # https://docs.github.com/actions/reference/environment-variables
+  # https://docs.github.com/actions/learn-github-actions/environment-variables
   _LOGURL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+  _COMMIT="${GITHUB_SHA}"
 elif [ -n "${CI_JOB_ID:-}" ]; then
   # https://docs.gitlab.com/ce/ci/variables/index.html
   _LOGURL="${CI_SERVER_URL}/${CI_PROJECT_PATH}/-/jobs/${CI_JOB_ID}/raw"
+  _COMMIT="${CI_COMMIT_SHA}"
 else
   _LOGURL=''
+  _COMMIT="$(git rev-parse --verify HEAD)"
 fi
 echo "${_LOGURL}" | tee "${_LOG}"
 
@@ -112,7 +116,7 @@ export _BRANCH="${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF:-}$
 [ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD)"
 [ -n "${_BRANCH}" ] || _BRANCH='main'
 export _URL=''
-command -v git >/dev/null 2>&1 && _URL="$(git ls-remote --get-url | sed 's/\.git$//')"
+command -v git >/dev/null 2>&1 && _URL="$(git ls-remote --get-url | sed 's/\.git$//')/tree/${_COMMIT}"
 [ -n "${_URL}" ] || _URL="https://github.com/${APPVEYOR_REPO_NAME:-}${GITHUB_REPOSITORY:-}"
 
 [ -n "${CW_CCSUFFIX:-}" ] || CW_CCSUFFIX=''
@@ -631,15 +635,7 @@ build_single_target() {
       touch -c -r "../${_ref}" "${_fn}"
     )
 
-    _fn="${_DST}/BUILD-README.txt"
-    cat <<EOF > "${_fn}"
-Visit the project page for details about these builds and the list of changes:
-
-  ${_URL}
-EOF
-    touch -c -r "${_ref}" "${_fn}"
-
-    _fn="${_DST}/BUILD-HOMEPAGE.url"
+    _fn="${_DST}/BUILD-README.url"
     cat <<EOF > "${_fn}"
 [InternetShortcut]
 URL=${_URL}
