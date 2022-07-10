@@ -40,6 +40,11 @@ _VER="$1"
 
   options="${options} -DOPENSSL_SMALL=OFF"  # ON reduces curl binary sizes by ~300 KB
 
+  # Patch the build to omit debug info. This results in 50% smaller footprint
+  # for each ${_BLDDIR}. It makes build output slightly different even after
+  # strip.
+# sed -i.bak 's/ -ggdb//g' ./CMakeLists.txt
+
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
     "-DCMAKE_SYSTEM_PROCESSOR=${cpu}" \
