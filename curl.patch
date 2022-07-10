@@ -232,3 +232,78 @@ index 78aacd0228553..25e065d6cbceb 100644
  #elif defined(HAVE_OPENSSL_VERSION) && defined(OPENSSL_VERSION_STRING)
    return msnprintf(buffer, size, "%s/%s",
                     OSSL_PACKAGE, OpenSSL_version(OPENSSL_VERSION_STRING));
+diff --git a/docs/examples/Makefile.m32 b/docs/examples/Makefile.m32
+index 3a98b66bd7fd5..f802d55367f04 100644
+--- a/docs/examples/Makefile.m32
++++ b/docs/examples/Makefile.m32
+@@ -113,11 +113,14 @@ endif
+ ifeq ($(CURL_AR),)
+ CURL_AR := $(CROSSPREFIX)ar
+ endif
++ifeq ($(CURL_RC),)
++CURL_RC := $(CROSSPREFIX)windres
++endif
+ 
+ CC = $(CURL_CC)
+ CFLAGS = -O3 $(CURL_CFLAG_EXTRAS) -W -Wall
+ LDFLAGS = $(CURL_LDFLAG_EXTRAS) $(CURL_LDFLAG_EXTRAS_EXE)
+-RC = $(CROSSPREFIX)windres
++RC = $(CURL_RC)
+ RCFLAGS = --include-dir=$(PROOT)/include -O coff $(CURL_RCFLAG_EXTRAS)
+ 
+ # Set environment var ARCH to your architecture to override autodetection.
+diff --git a/lib/Makefile.m32 b/lib/Makefile.m32
+index 8cc72dae5279e..7166c1b5dc053 100644
+--- a/lib/Makefile.m32
++++ b/lib/Makefile.m32
+@@ -108,15 +108,21 @@ endif
+ ifeq ($(CURL_RANLIB),)
+ CURL_RANLIB := $(CROSSPREFIX)ranlib
+ endif
++ifeq ($(CURL_RC),)
++CURL_RC := $(CROSSPREFIX)windres
++endif
++ifeq ($(CURL_STRIP),)
++CURL_STRIP := $(CROSSPREFIX)strip
++endif
+ 
+ CC = $(CURL_CC)
+ CFLAGS = -O3 $(CURL_CFLAG_EXTRAS) -W -Wall
+ LDFLAGS = $(CURL_LDFLAG_EXTRAS) $(CURL_LDFLAG_EXTRAS_DLL)
+ AR = $(CURL_AR)
+ RANLIB = $(CURL_RANLIB)
+-RC = $(CROSSPREFIX)windres
++RC = $(CURL_RC)
+ RCFLAGS = --include-dir=$(PROOT)/include -O coff $(CURL_RCFLAG_EXTRAS)
+-STRIP   = $(CROSSPREFIX)strip -g
++STRIP   = $(CURL_STRIP) -g
+ 
+ # Set environment var ARCH to your architecture to override autodetection.
+ ifndef ARCH
+diff --git a/src/Makefile.m32 b/src/Makefile.m32
+index b202bf0879085..8ed3fee827a17 100644
+--- a/src/Makefile.m32
++++ b/src/Makefile.m32
+@@ -113,14 +113,20 @@ endif
+ ifeq ($(CURL_AR),)
+ CURL_AR := $(CROSSPREFIX)ar
+ endif
++ifeq ($(CURL_RC),)
++CURL_RC := $(CROSSPREFIX)windres
++endif
++ifeq ($(CURL_STRIP),)
++CURL_STRIP := $(CROSSPREFIX)strip
++endif
+ 
+ CC = $(CURL_CC)
+ CFLAGS = -O3 $(CURL_CFLAG_EXTRAS) -W -Wall
+ LDFLAGS = $(CURL_LDFLAG_EXTRAS) $(CURL_LDFLAG_EXTRAS_EXE)
+ AR = $(CURL_AR)
+-RC = $(CROSSPREFIX)windres
++RC = $(CURL_RC)
+ RCFLAGS = --include-dir=$(PROOT)/include -O coff -DCURL_EMBED_MANIFEST $(CURL_RCFLAG_EXTRAS)
+-STRIP   = $(CROSSPREFIX)strip -g
++STRIP   = $(CURL_STRIP) -g
+ 
+ # We may need these someday
+ # PERL = perl
