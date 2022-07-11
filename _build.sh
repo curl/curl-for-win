@@ -513,7 +513,6 @@ build_single_target() {
   # do not (yet) support adding custom options. Add a variable that always
   # points to the mingw-w64 windres to make such builds work.
   export _RC_BINUTILS="${_CCPREFIX}windres"
-  # for autotools (and openssl)
   export RC
   if [ "${_CC}" = 'clang' ] && \
      [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && \
