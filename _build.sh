@@ -508,13 +508,18 @@ build_single_target() {
 
   export _STRIP="${_BINUTILS_PREFIX}strip"
   export _OBJDUMP="${_BINUTILS_PREFIX}objdump"
+  # In some environments, we need to pair up llvm-windres with the mingw-w64
+  # include dir, and/or we need to pass it the target platform. Some builds
+  # do not (yet) support adding custom options. Add a variable that always
+  # points to the mingw-w64 windres to make such builds work.
+  export _RC_BINUTILS="${_CCPREFIX}windres"
   # for autotools (and openssl)
   export RC
   if [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && [ "${_OS}" = 'linux' ]; then
     # FIXME: llvm-windres alias (to llvm-rc) missing from current debian:testing.
     #        Fall back to binutils one.
     #        https://packages.debian.org/bookworm/amd64/llvm/filelist
-    RC="${_CCPREFIX}windres"
+    RC="${_RC_BINUTILS}"
   else
     RC="${_BINUTILS_PREFIX}windres"
   fi
