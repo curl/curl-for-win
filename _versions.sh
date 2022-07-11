@@ -8,8 +8,8 @@ export BROTLI_VER_='1.0.9'
 export BROTLI_HASH=f9e8d81d0405ba66d181529af42a3354f838c939095ff99930da6aa9cdf6fe46
 export LIBGSASL_VER_='1.10.0'
 export LIBGSASL_HASH=f1b553384dedbd87478449775546a358d6f5140c15cccc8fb574136fdc77329f
-export LIBIDN2_VER_='2.3.2'
-export LIBIDN2_HASH=76940cd4e778e8093579a9d195b25fff5e936e9dc6242068528b437a76764f91
+export LIBIDN2_VER_='2.3.3'
+export LIBIDN2_HASH=f3ac987522c00d33d44b323cae424e2cffcb4c63c6aa6cd1376edacbf1c36eb0
 export LIBSSH2_VER_='1.10.0'
 export LIBSSH2_HASH=2d64e90f3ded394b91d3a2e774ca203a4179f69aebee03003e5a6fa621e41d51
 export NGHTTP2_VER_='1.48.0'
@@ -40,4 +40,4 @@ export PEFILE_VER_='2022.5.30'
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='4'
+export _REV='5'
