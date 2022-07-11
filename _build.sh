@@ -508,11 +508,6 @@ build_single_target() {
 
   export _STRIP="${_BINUTILS_PREFIX}strip"
   export _OBJDUMP="${_BINUTILS_PREFIX}objdump"
-  # In some environments, we need to pair up llvm-windres with the mingw-w64
-  # include dir, and/or we need to pass it the target platform. Some builds
-  # do not (yet) support adding custom options. Add a variable that always
-  # points to the mingw-w64 windres to make such builds work.
-  export _RC_BINUTILS="${_CCPREFIX}windres"
   export RC
   if [ "${_CC}" = 'clang' ] && \
      [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && \
@@ -529,6 +524,22 @@ build_single_target() {
   export AR="${_BINUTILS_PREFIX}ar"
   export NM="${_BINUTILS_PREFIX}nm"
   export RANLIB="${_BINUTILS_PREFIX}ranlib"
+
+  # In some environments, we need to pair up llvm-windres with the mingw-w64
+  # include dir, and/or we need to pass it the target platform. Some builds
+  # do not (yet) support adding custom options. Add a wrapper for these
+  # builds that calls llvm-windres with the necessary custom options.
+  export _RC_WRAPPER=''
+  if [ "${_CC}" = 'clang' ] && \
+     [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && \
+     [ -n "${_RCFLAGS_GLOBAL}" ]; then
+    _RC_WRAPPER="$(pwd)/llvm-windres-wrapper"
+    {
+      echo "#!/bin/sh"
+      echo "'${RC}' ${_RCFLAGS_GLOBAL} \"\$@\""
+    } > "${_RC_WRAPPER}"
+    chmod +x "${_RC_WRAPPER}"
+  fi
 
   if [ "${_OS}" = 'mac' ]; then
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
