@@ -307,3 +307,41 @@ index b202bf0879085..8ed3fee827a17 100644
  
  # We may need these someday
  # PERL = perl
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5ecb944c7b15c..758e7fefa8932 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -67,7 +67,11 @@ message(STATUS "curl version=[${CURL_VERSION}]")
+ # SET(PACKAGE_STRING "curl-")
+ # SET(PACKAGE_BUGREPORT "a suitable curl mailing list => https://curl.se/mail/")
+ set(OPERATING_SYSTEM "${CMAKE_SYSTEM_NAME}")
+-set(OS "\"${CMAKE_SYSTEM_NAME}${CURL_OS_SUFFIX}\"")
++if(CMAKE_C_COMPILER_TARGET)
++  set(OS "\"${CMAKE_C_COMPILER_TARGET}\"")
++else()
++  set(OS "\"${CMAKE_SYSTEM_NAME}\"")
++endif()
+ 
+ include_directories(${CURL_SOURCE_DIR}/include)
+ 
+diff --git a/lib/config-win32.h b/lib/config-win32.h
+index 932515667f916..25e81cf190061 100644
+--- a/lib/config-win32.h
++++ b/lib/config-win32.h
+@@ -663,7 +663,7 @@ Vista
+ /* ---------------------------------------------------------------- */
+ 
+ /* Define cpu-machine-OS */
+-#undef OS
++#if !defined(OS)
+ #if defined(_M_IX86) || defined(__i386__) /* x86 (MSVC or gcc) */
+ #define OS "i386-pc-win32"
+ #elif defined(_M_X64) || defined(__x86_64__) /* x86_64 (MSVC >=2005 or gcc) */
+@@ -677,6 +677,7 @@ Vista
+ #else
+ #define OS "unknown-pc-win32"
+ #endif
++#endif
+ 
+ /* Name of package */
+ #define PACKAGE "curl"
