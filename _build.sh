@@ -515,7 +515,9 @@ build_single_target() {
   export _RC_BINUTILS="${_CCPREFIX}windres"
   # for autotools (and openssl)
   export RC
-  if [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && [ "${_OS}" = 'linux' ]; then
+  if [ "${_CC}" = 'clang' ] && \
+     [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && \
+     [ "${_OS}" = 'linux' ]; then
     # FIXME: llvm-windres alias (to llvm-rc) missing from current debian:testing.
     #        Fall back to binutils one.
     #        https://packages.debian.org/bookworm/amd64/llvm/filelist
