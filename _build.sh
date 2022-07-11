@@ -116,9 +116,15 @@ echo "${_LOGURL}" | tee "${_LOG}"
 export _BRANCH="${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF:-}${CW_CONFIG:-}"
 [ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD)"
 [ -n "${_BRANCH}" ] || _BRANCH='main'
-export _URL=''
-command -v git >/dev/null 2>&1 && _URL="$(git ls-remote --get-url | sed 's/\.git$//')/tree/${_COMMIT}"
-[ -n "${_URL}" ] || _URL="https://github.com/${APPVEYOR_REPO_NAME:-}${GITHUB_REPOSITORY:-}"
+export _URL _TAR
+if command -v git >/dev/null 2>&1; then
+  repourl="$(git ls-remote --get-url | sed 's/\.git$//')"
+  _URL="${repourl}/tree/${_COMMIT}"
+  _TAR="${repourl}/archive/${_COMMIT}.tar.gz"
+else
+  _URL="https://github.com/${APPVEYOR_REPO_NAME:-}${GITHUB_REPOSITORY:-}"
+  _TAR="${_URL}/archive/refs/heads/${_BRANCH}.tar.gz"
+fi
 
 [ -n "${CW_CCSUFFIX:-}" ] || CW_CCSUFFIX=''
 
@@ -178,10 +184,12 @@ else
 fi
 
 export _BLD='build.txt'
+export _URLS='urls.txt'
 
 rm -f ./*-*-mingw*.*
 rm -f hashes.txt
 rm -f "${_BLD}"
+rm -f "${_URLS}"
 
 . ./_versions.sh
 
@@ -609,7 +617,15 @@ build_single_target() {
   } >> "${_BLD}"
 
   {
-    [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT}"
+    [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT} ${_TAR}"
+    [ -n "${clangver}" ] && echo ".${clangver}${versuffix}"
+    [ -n "${gccver}" ]   && echo ".${gccver}${versuffix}"
+    [ -n "${mingwver}" ] && echo ".${mingwver}${versuffix}"
+    [ -n "${binver}" ]   && echo ".${binver}${versuffix}"
+  } >> "${_URLS}"
+
+  {
+    [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT} ${_TAR}"
     [ -n "${clangver}" ] && echo ".${clangver}"
     [ -n "${gccver}" ]   && echo ".${gccver}"
     [ -n "${mingwver}" ] && echo ".${mingwver}"

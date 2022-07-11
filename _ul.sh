@@ -8,6 +8,9 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 sort -u "${_BLD}" > "${_BLD}.sorted"
 mv -f "${_BLD}.sorted" "${_BLD}"
 
+sort -u "${_URLS}" > "${_URLS}.sorted"
+mv -f "${_URLS}.sorted" "${_URLS}"
+
 if ! ls ./*-*-mingw*.* >/dev/null 2>&1; then
   echo '! WARNING: Nothing to deploy.'
   exit 0
@@ -15,11 +18,12 @@ fi
 
 # Use the newest package timestamp for supplementary files
 # shellcheck disable=SC2012
-touch -r "$(ls -1 -t ./*-*-mingw*.* | head -1)" hashes.txt "${_BLD}" "${_LOG}"
+touch -r "$(ls -1 -t ./*-*-mingw*.* | head -1)" hashes.txt "${_BLD}" "${_URLS}" "${_LOG}"
 
 find . -maxdepth 1 -type f -name '*-*-mingw*.*' | sort
 cat hashes.txt
 cat "${_BLD}"
+cat "${_URLS}"
 
 # Strip '-built-on-*' suffix for the single-file artifact.
 find . -maxdepth 1 -type f -name '*-*-mingw*.*' | sort | while read -r f; do
@@ -37,6 +41,7 @@ _ALL="all-mingw-${CURL_VER_}${_REVSUFFIX}${_FLAV}.zip"
   find . -maxdepth 1 -type f -name '*-*-mingw*.*' | sort
   echo 'hashes.txt'
   echo "${_BLD}"
+  echo "${_URLS}"
   echo "${_LOG}"
 } | sort | \
 zip --quiet -0 --strip-extra --names-stdin - > "${_ALL}"

@@ -413,6 +413,7 @@ live_xt() {
     rm -r -f "${pkg}"; mkdir "${pkg}"; tar --strip-components "${3:-1}" -xf pkg.bin -C "${pkg}"
     rm -f pkg.bin pkg.sig
     [ -f "${pkg}${_patsuf}.patch" ] && dos2unix < "${pkg}${_patsuf}.patch" | patch -N -p1 -d "${pkg}"
+    [ -f "__${pkg}.url" ] && mv "__${pkg}.url" "${pkg}/__url__.txt"
   fi
   return 0
 }
@@ -458,6 +459,8 @@ live_dl() {
       done
       my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
     fi
+
+    echo "${url}" > "__${name}.url"
 
     if [ -n "${hash}" ]; then
       live_xt "${name}" "${hash}"

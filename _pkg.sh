@@ -140,7 +140,9 @@ EOF
 
 if [ "${_NAM}" != "${_UNIPKG}" ]; then
   ver="${_NAM} ${_VER}"
-  echo "${ver}" >> "${_UNIMFT}"
+  [ -f "${_NAM}/__url__.txt" ] && url=" $(cat "${_NAM}/__url__.txt")" || url=''
+  echo "${ver}${url}" >> "${_UNIMFT}"
+  echo "${ver}${url}" >> "${_URLS}"
   if ! grep -q -a -F "${ver}" -- "${_BLD}"; then
     echo "${ver}" >> "${_BLD}"
   fi
