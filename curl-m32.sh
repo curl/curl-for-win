@@ -19,14 +19,6 @@ _VER="$1"
   find . -name '*.def' -delete
   find . -name '*.map' -delete
 
-  # Set OS string to the autotools value. To test reproducibility across make systems.
-  if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
-    {
-      echo '#undef OS'
-      echo "#define OS \"${_TRIPLET}\""  # {x86_64,aarch64,i386}-pc-win32 ->
-    } >> ./lib/config-win32.h
-  fi
-
   # Build
 
   options='mingw32-ipv6-sspi-srp'
@@ -53,6 +45,8 @@ _VER="$1"
   # chance of libcurl functions getting exported from final binaries when
   # linked against the static libcurl lib.
   export CURL_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
+
+  CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DOS=\\\"${_TRIPLET}\\\""
 
   CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_STATICLIB -DNDEBUG"
   CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_STRTOK_R -DHAVE_FTRUNCATE -D_FILE_OFFSET_BITS=64"

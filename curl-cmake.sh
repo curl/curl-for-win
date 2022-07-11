@@ -22,11 +22,6 @@ _VER="$1"
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 
-  # Set OS string to the autotools value. To test reproducibility across make systems.
-  if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
-    sed -i.bak "s/set(OS \"\\\\\"\${CMAKE_SYSTEM_NAME}\${CURL_OS_SUFFIX}\\\\\"\")/set(OS \\\\\"${_TRIPLET}\\\\\")/g" ./CMakeLists.txt  # Windows-{x86,x64,a64} ->
-  fi
-
   # Build
 
   # Generate .def file for libcurl by parsing curl headers. Useful to export
