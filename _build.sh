@@ -270,19 +270,13 @@ build_single_target() {
   versuffix_llvm_mingw=''
   if [ "${CW_LLVM_MINGW_ONLY:-}" = '1' ]; then
     use_llvm_mingw=1
-  else
-    # WARNING: Keep this logic in sync with the `versuffix_llvm_mingw` value below.
-    if [ "${_CPU}" = 'x64' ] && [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
-      use_llvm_mingw=1
-    elif [ "${_CPU}" = 'a64' ]; then
-      use_llvm_mingw=1
-    fi
-
-    if [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
-      versuffix_llvm_mingw=' (ARM64, x64)'
-    else
-      versuffix_llvm_mingw=' (ARM64)'
-    fi
+  # llvm-mingw is required for x64 (to avoid pthread link bug with BoringSSL),
+  # but for consistency, use it for all targets when building with BoringSSL.
+  elif [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
+    use_llvm_mingw=1
+  elif [ "${_CPU}" = 'a64' ]; then
+    use_llvm_mingw=1
+    versuffix_llvm_mingw=' (ARM64)'
   fi
 
   # Toolchain
