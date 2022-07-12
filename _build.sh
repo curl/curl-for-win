@@ -99,17 +99,21 @@ if [ -n "${APPVEYOR_ACCOUNT_NAME:-}" ]; then
   _LOGURL="${APPVEYOR_URL}/project/${APPVEYOR_ACCOUNT_NAME}/${APPVEYOR_PROJECT_SLUG}/build/${APPVEYOR_BUILD_VERSION}/job/${APPVEYOR_JOB_ID}"
 # _LOGURL="${APPVEYOR_URL}/api/buildjobs/${APPVEYOR_JOB_ID}/log"
   _COMMIT="${APPVEYOR_REPO_COMMIT}"
+  _COMMIT_SHORT="$(printf '%.8s' "${_COMMIT}")"
 elif [ -n "${GITHUB_RUN_ID:-}" ]; then
   # https://docs.github.com/actions/learn-github-actions/environment-variables
   _LOGURL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
   _COMMIT="${GITHUB_SHA}"
+  _COMMIT_SHORT="$(printf '%.8s' "${_COMMIT}")"
 elif [ -n "${CI_JOB_ID:-}" ]; then
   # https://docs.gitlab.com/ce/ci/variables/index.html
   _LOGURL="${CI_SERVER_URL}/${CI_PROJECT_PATH}/-/jobs/${CI_JOB_ID}/raw"
   _COMMIT="${CI_COMMIT_SHA}"
+  _COMMIT_SHORT="$(printf '%.8s' "${_COMMIT}")"
 else
   _LOGURL=''
   _COMMIT="$(git rev-parse --verify HEAD)"
+  _COMMIT_SHORT="$(git rev-parse --short=8 HEAD)"
 fi
 echo "${_LOGURL}" | tee "${_LOG}"
 
@@ -608,7 +612,7 @@ build_single_target() {
   [ "${_CC}" = 'clang' ] || gccver="gcc $("${_CCPREFIX}gcc" -dumpversion)"
 
   {
-    [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT}"
+    [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT_SHORT}"
     [ -n "${clangver}" ] && echo ".${clangver}${versuffix}"
     [ -n "${gccver}" ]   && echo ".${gccver}${versuffix}"
     [ -n "${mingwver}" ] && echo ".${mingwver}${versuffix}"
@@ -616,7 +620,7 @@ build_single_target() {
   } >> "${_BLD}"
 
   {
-    [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT} ${_TAR}"
+    [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT_SHORT} ${_TAR}"
     [ -n "${clangver}" ] && echo ".${clangver}${versuffix}"
     [ -n "${gccver}" ]   && echo ".${gccver}${versuffix}"
     [ -n "${mingwver}" ] && echo ".${mingwver}${versuffix}"
@@ -624,7 +628,7 @@ build_single_target() {
   } >> "${_URLS}"
 
   {
-    [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT} ${_TAR}"
+    [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT_SHORT} ${_TAR}"
     [ -n "${clangver}" ] && echo ".${clangver}"
     [ -n "${gccver}" ]   && echo ".${gccver}"
     [ -n "${mingwver}" ] && echo ".${mingwver}"
