@@ -139,12 +139,12 @@ EOF
 }
 
 if [ "${_NAM}" != "${_UNIPKG}" ]; then
-  ver="${_NAM} ${_VER}"
+  namver="${_NAM} ${_VER}"
   [ -f "${_NAM}/__url__.txt" ] && url=" $(cat "${_NAM}/__url__.txt")" || url=''
-  echo "${ver}${url}" >> "${_UNIMFT}"
-  echo "${ver}${url}" >> "${_URLS}"
-  if ! grep -q -a -F "${ver}" -- "${_BLD}"; then
-    echo "${ver}" >> "${_BLD}"
+  echo "${namver}${url}" >> "${_UNIMFT}"
+  echo "${namver}${url}" >> "${_URLS}"
+  if ! grep -q -a -F "${namver}" -- "${_BLD}"; then
+    echo "${namver}" >> "${_BLD}"
   fi
 else
   create_pkg "$1" '.tar.xz'
