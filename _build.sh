@@ -518,6 +518,17 @@ build_single_target() {
     _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-ident"
   fi
 
+  # for boringssl
+  export _STRIP_BINUTILS=''
+  if [ "${_CC}" = 'clang' ]; then
+    if [ "${_CPU}" = 'x64' ] || \
+       [ "${_CPU}" = 'x86' ]; then
+      # Make sure to pick the prefixed binutils strip tool from an unmodified
+      # PATH. This avoids picking the llvm-mingw copy using the same name.
+      _STRIP_BINUTILS="$(PATH="${_ori_path}" which "${_CCPREFIX}strip")"
+    fi
+  fi
+
   export _STRIP="${_BINUTILS_PREFIX}strip"
   export _OBJDUMP="${_BINUTILS_PREFIX}objdump"
   export RC
@@ -585,7 +596,6 @@ build_single_target() {
 
   versuffix=''
   mingwver=''
-  binver=''
   if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
     mingwver='llvm-mingw'
     [ -n "${CW_LLVM_MINGW_VER_:-}" ] && mingwver="${mingwver} ${CW_LLVM_MINGW_VER_}"
@@ -602,10 +612,14 @@ build_single_target() {
         ;;
     esac
     [ -n "${mingwver}" ] && mingwver="mingw-w64 ${mingwver}"
+  fi
 
-    if [ "${_CC}" = 'gcc' ]; then
-      binver="binutils $("${_CCPREFIX}ar" V | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
-    fi
+  binver=''
+  if [ "${_CC}" = 'gcc' ]; then
+    binver="binutils $("${_STRIP}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
+  elif [ -n "${_STRIP_BINUTILS}" ] && \
+       [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
+    binver="binutils $("${_STRIP_BINUTILS}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
   fi
 
   gccver=''
@@ -616,7 +630,7 @@ build_single_target() {
     [ -n "${clangver}" ] && echo ".${clangver}${versuffix}"
     [ -n "${gccver}" ]   && echo ".${gccver}${versuffix}"
     [ -n "${mingwver}" ] && echo ".${mingwver}${versuffix}"
-    [ -n "${binver}" ]   && echo ".${binver}${versuffix}"
+    [ -n "${binver}" ]   && echo ".${binver}"
   } >> "${_BLD}"
 
   {
@@ -624,7 +638,7 @@ build_single_target() {
     [ -n "${clangver}" ] && echo ".${clangver}${versuffix}"
     [ -n "${gccver}" ]   && echo ".${gccver}${versuffix}"
     [ -n "${mingwver}" ] && echo ".${mingwver}${versuffix}"
-    [ -n "${binver}" ]   && echo ".${binver}${versuffix}"
+    [ -n "${binver}" ]   && echo ".${binver}"
   } >> "${_URLS}"
 
   {

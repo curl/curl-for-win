@@ -11,7 +11,7 @@
 # - A test object named trampoline-x86_64.asm.obj ends up in libcrypto.a.
 # - nasm includes the first 18 bytes of the HOME directory in its output.
 #   e.g. rdrand-x86_64.asm.obj. This only affects libcrypto.a.
-#   This is intentionally written into a '.file' record and --reproducible
+#   This is intentionally written into a `.file` record and --reproducible
 #   does not disable it. See nasm/output/outcoff.c/coff_write_symbols()
 #   PR: https://github.com/netwide-assembler/nasm/pull/33
 #   binutils strip is able to delete it (llvm-strip is not, as of 14.0.6).
@@ -49,6 +49,9 @@ _VER="$1"
   [ "${_CPU}" = 'x86' ] && cpu='x86'
   [ "${_CPU}" = 'x64' ] && cpu='x86_64'
   if [ "${_CPU}" = 'a64' ]; then
+    # Once we enable ASM for ARM64, we will need to deal with stripping its
+    # non-deterministic `.file` sections. We will need a fix in either
+    # llvm-strip or NASM, or binutils strip getting ARM64 support.
     cpu='ARM64'; options="${options} -DOPENSSL_NO_ASM=ON"  # FIXME
   fi
 
@@ -82,7 +85,40 @@ _VER="$1"
 
   readonly _ref='README.md'
 
+  # FIXME: llvm-strip (as of 14.0.6) has a few bugs:
+  #        - produces different output across build hosts after stripping libs
+  #          compiled with -ggdb.
+  #        - fails to strip the `.file` record from NASM objects.
+  #        - fails to clear timestamps in NASM objects (fixed by --reproducible).
+  #        Work around them by running it through binutils strip. This works for
+  #        x64 and x86, but not for ARM64.
+  #
+  # Most combinations/orders running binutils/llvm strip over the result in
+  # in different output, and except pure llvm-strip, all seem to be
+  # deterministic. We chose to run llvm first and binutils second.
+  #
+  # <combination>                                   <bytes>
+  # libcrypto-noggdb.a                              2858080
+  # libcrypto-noggdb-llvm.a                         2482620
+  # libcrypto-noggdb-llvm-binutils.a                2488078
+  # libcrypto-noggdb-llvm-binutils-llvm.a           2479904
+  # libcrypto-noggdb-llvm-binutils-llvm-binutils.a  2488078
+  # libcrypto-noggdb-binutils.a                     2465310
+  # libcrypto-noggdb-binutils-llvm.a                2479888
+  # libcrypto-noggdb-binutils-llvm-binutils.a       2488078
+  # libcrypto-ggdb.a                                9642542
+  # libcrypto-ggdb-llvm.a                           2482606
+  # libcrypto-ggdb-llvm-binutils.a                  2488066
+  # libcrypto-ggdb-llvm-binutils-llvm.a             2479890
+  # libcrypto-ggdb-llvm-binutils-llvm-binutils.a    2488066
+  # libcrypto-ggdb-binutils.a                       2465298
+  # libcrypto-ggdb-binutils-llvm.a                  2479874
+  # libcrypto-ggdb-binutils-llvm-binutils.a         2488066
+
   "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
+
+  [ -n "${_STRIP_BINUTILS}" ] && \
+  "${_STRIP_BINUTILS}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
 
   touch -c -r "${_ref}" "${_pkg}"/include/openssl/*.h
   touch -c -r "${_ref}" "${_pkg}"/lib/*.a
