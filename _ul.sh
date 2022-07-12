@@ -44,8 +44,8 @@ _ALL="all-mingw-${CURL_VER_}${_REVSUFFIX}${_FLAV}.zip"
   echo "${_URLS}"
   echo "${_LOG}"
 } | sort | \
-zip --quiet -0 --strip-extra --names-stdin - > "${_ALL}"
-zip --latest-time "${_ALL}"
+TZ=UTC zip --quiet -0 --strip-extra --names-stdin - > "${_ALL}"
+TZ=UTC zip --latest-time "${_ALL}"
 
 openssl dgst -sha256 "${_ALL}" | sed 's/^SHA256/SHA2-256/g' | tee "${_ALL}.txt"
 touch -c -r "${_ALL}" "${_ALL}.txt"
