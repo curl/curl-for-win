@@ -60,7 +60,8 @@
     <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main>
 - Packages created across host platforms do not have identical hashes.
   The reason for this is slightly different build options and toolchain
-  builds/versions.
+  builds/versions. Except `llvm-mingw` builds, which are reproducible across
+  build hosts. ARM64 and all BoringSSL builds are like that by default.
 - We code sign with a self-signed certificate, and intentionally not use
   trusted timestamps for reproducibility.
 
