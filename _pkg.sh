@@ -139,7 +139,9 @@ EOF
 }
 
 if [ "${_NAM}" != "${_UNIPKG}" ]; then
-  namver="${_NAM} ${_VER}"
+  ver="${_VER}"
+  [ "${#ver}" -ge 32 ] && ver="$(printf '%.8s' "${ver}")"
+  namver="${_NAM} ${ver}"
   [ -f "${_NAM}/__url__.txt" ] && url=" $(cat "${_NAM}/__url__.txt")" || url=''
   echo "${namver}${url}" >> "${_UNIMFT}"
   echo "${namver}${url}" >> "${_URLS}"
