@@ -96,7 +96,8 @@ _VER="$1"
   #
   # Most combinations/orders running binutils/llvm strip over the result in
   # in different output, and except pure llvm-strip, all seem to be
-  # deterministic. We chose to run llvm first and binutils second.
+  # deterministic. We chose to run binutils first and llvm second. This way
+  # llvm creates the result we publish.
   #
   # <combination>                                   <bytes>
   # libcrypto-noggdb.a                              2858080
@@ -116,10 +117,10 @@ _VER="$1"
   # libcrypto-ggdb-binutils-llvm.a                  2479874
   # libcrypto-ggdb-binutils-llvm-binutils.a         2488066
 
-  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
-
   [ -n "${_STRIP_BINUTILS}" ] && \
   "${_STRIP_BINUTILS}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
+
+  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
 
   touch -c -r "${_ref}" "${_pkg}"/include/openssl/*.h
   touch -c -r "${_ref}" "${_pkg}"/lib/*.a
