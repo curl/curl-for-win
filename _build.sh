@@ -266,15 +266,15 @@ bld() {
 build_single_target() {
   export _CPU="$1"
 
+  use_llvm_mingw=0
+  versuffix_llvm_mingw=''
   if [ "${CW_LLVM_MINGW_ONLY:-}" = '1' ]; then
     use_llvm_mingw=1
-    versuffix_llvm_mingw=''
   else
     # WARNING: Keep this logic in sync with the `versuffix_llvm_mingw` value below.
-    use_llvm_mingw=0
-    if [ "${_CPU}" = 'a64' ]; then
+    if [ "${_CPU}" = 'x64' ] && [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
       use_llvm_mingw=1
-    elif [ "${_CPU}" = 'x64' ] && [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
+    elif [ "${_CPU}" = 'a64' ]; then
       use_llvm_mingw=1
     fi
 
