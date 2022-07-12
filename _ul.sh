@@ -47,7 +47,7 @@ _ALL="all-mingw-${CURL_VER_}${_REVSUFFIX}${_FLAV}.zip"
 zip --quiet -0 --strip-extra --names-stdin - > "${_ALL}"
 zip --latest-time "${_ALL}"
 
-openssl dgst -sha256 "${_ALL}" | tee "${_ALL}.txt"
+openssl dgst -sha256 "${_ALL}" | sed 's/^SHA256/SHA2-256/g' | tee "${_ALL}.txt"
 touch -c -r "${_ALL}" "${_ALL}.txt"
 
 ./_sign-pkg.sh "${_ALL}"
