@@ -43,6 +43,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        gcc        build with GCC (use clang if not specified)
 #        unicode    build curl in UNICODE mode [EXPERIMENTAL]
 #
+# CW_JOBS
+#      Number of parallel make jobs. Default: 2
+#
 # CW_CCSUFFIX
 #      clang suffix. E.g. '-8' for clang-8.
 #      Optional. Default: (empty)
@@ -142,6 +145,9 @@ if [ -z "${CW_MAP:-}" ]; then
   export CW_MAP='0'
   [ "${_BRANCH#*main*}" = "${_BRANCH}" ] && CW_MAP='1'
 fi
+
+export _JOBS=2
+[ -n "${CW_JOBS:-}" ] && _JOBS="${CW_JOBS}"
 
 # Detect host OS
 export _OS

@@ -138,9 +138,9 @@ _VER="$1"
       "--openssldir=${_ssldir}"
   )
 
-  SOURCE_DATE_EPOCH=${unixts} TZ=UTC make --directory="${_BLDDIR}" --jobs=2
+  SOURCE_DATE_EPOCH=${unixts} TZ=UTC make --directory="${_BLDDIR}" --jobs="${_JOBS}"
   # Ending slash required.
-  make --directory="${_BLDDIR}" --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}/" >/dev/null # 2>&1
+  make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}/" >/dev/null # 2>&1
 
   # OpenSSL 3.x does not strip the drive letter anymore:
   #   ./openssl/${_PKGDIR}/C:/Windows/System32/OpenSSL

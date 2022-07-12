@@ -331,7 +331,7 @@ fi
     #       reflowed/hyphened differently than the source distro, breaking
     #       reproducibility again. Skip the clean phase to resolve it.
 
-    make --directory="${_BLDDIR}-${pass}" --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
+    make --directory="${_BLDDIR}-${pass}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
     # Manual copy to DESTDIR
 

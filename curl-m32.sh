@@ -216,12 +216,12 @@ _VER="$1"
   fi
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
-    "${_MAKE}" --jobs=2 --directory=lib --makefile=Makefile.m32 clean
-    "${_MAKE}" --jobs=2 --directory=src --makefile=Makefile.m32 clean
+    "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.m32 clean
+    "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.m32 clean
   fi
 
-  "${_MAKE}" --jobs=2 --directory=lib --makefile=Makefile.m32 CFG="${options}"
-  "${_MAKE}" --jobs=2 --directory=src --makefile=Makefile.m32 CFG="${options}"
+  "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.m32 CFG="${options}"
+  "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.m32 CFG="${options}"
 
   _pkg='.'
 

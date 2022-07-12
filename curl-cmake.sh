@@ -264,7 +264,7 @@ _VER="$1"
       cp -p src/tool_hugehelp.c "${_BLDDIR}-${pass}/src/"
     fi
 
-    make --directory="${_BLDDIR}-${pass}" --jobs=2 install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
+    make --directory="${_BLDDIR}-${pass}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
 
     # Manual copy to DESTDIR
 
