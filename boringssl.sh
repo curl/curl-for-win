@@ -64,7 +64,9 @@ _VER="$1"
   # across build host platforms. Fixed either by patching out this flag here,
   # or by running binutils strip on the result. binutils strip do not support
   # ARM64, so patch it out in that case.
-# sed -i.bak 's/ -ggdb//g' ./CMakeLists.txt
+  if [ "${_CPU}" = 'a64' ]; then
+    sed -i.bak 's/ -ggdb//g' ./CMakeLists.txt
+  fi
 
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
