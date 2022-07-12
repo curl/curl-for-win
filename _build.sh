@@ -622,6 +622,11 @@ build_single_target() {
     binver="binutils $("${_STRIP_BINUTILS}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
   fi
 
+  nasmver=''
+  if [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
+    nasmver="nasm $(nasm --version | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
+  fi
+
   gccver=''
   [ "${_CC}" = 'clang' ] || gccver="gcc $("${_CCPREFIX}gcc" -dumpversion)"
 
@@ -631,6 +636,7 @@ build_single_target() {
     [ -n "${gccver}" ]   && echo ".${gccver}${versuffix}"
     [ -n "${mingwver}" ] && echo ".${mingwver}${versuffix}"
     [ -n "${binver}" ]   && echo ".${binver}"
+    [ -n "${nasmver}" ]  && echo ".${nasmver}"
   } >> "${_BLD}"
 
   {
@@ -639,6 +645,7 @@ build_single_target() {
     [ -n "${gccver}" ]   && echo ".${gccver}${versuffix}"
     [ -n "${mingwver}" ] && echo ".${mingwver}${versuffix}"
     [ -n "${binver}" ]   && echo ".${binver}"
+    [ -n "${nasmver}" ]  && echo ".${nasmver}"
   } >> "${_URLS}"
 
   {
@@ -647,6 +654,7 @@ build_single_target() {
     [ -n "${gccver}" ]   && echo ".${gccver}"
     [ -n "${mingwver}" ] && echo ".${mingwver}"
     [ -n "${binver}" ]   && echo ".${binver}"
+    [ -n "${nasmver}" ]  && echo ".${nasmver}"
   } >> "${_UNIMFT}"
 
   bld zlib             "${ZLIB_VER_}"
