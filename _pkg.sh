@@ -82,6 +82,8 @@ create_pkg() {
     touch -c -r "$1" "${_cdo}/${_pkg}"
   )
 
+  rm -f "${_FLS}"
+
   # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>
   case "${_OS}" in
     bsd|mac) TZ=UTC stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_pkg}";;

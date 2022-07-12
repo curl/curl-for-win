@@ -18,7 +18,7 @@ _VER="$1"
   _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
 
   # FIXME: As of zlib 1.2.12, its CMakeLists.txt prevents passing custom RCFLAGS
-  #        to the RC command. Use our wrapper in such case.
+  #        to the RC command. Use our wrapper as a work around.
   #        PR: https://github.com/madler/zlib/pull/677
   [ -n "${_RC_WRAPPER}" ] && RC="${_RC_WRAPPER}"
 

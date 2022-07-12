@@ -191,9 +191,9 @@ export _BLD='build.txt'
 export _URLS='urls.txt'
 
 rm -f ./*-*-mingw*.*
-rm -f hashes.txt
-rm -f "${_BLD}"
-rm -f "${_URLS}"
+rm -f hashes.txt "${_BLD}" "${_URLS}"
+
+touch hashes.txt "${_BLD}" "${_URLS}"
 
 . ./_versions.sh
 
