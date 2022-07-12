@@ -2,7 +2,21 @@
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
 
-# FIXME: x64 mingw-w64 pthread ucrt static linking bug -> requires llvm-mingw
+# FIXME (upstream):
+# - x64 mingw-w64 pthread ucrt static linking bug -> requires llvm-mingw
+# - Building tests takes 3 minutes per target (on AppVeyor CI, at the time
+#   of this writing) and consumes 9x the disk space for ${_BLDDIR}, that is
+#   32MB -> 283MB (for x64).
+#   Disabling them requires large edits in 3 CMakeList.txt files.
+# - A test object named trampoline-x86_64.asm.obj ends up in libcrypto.a.
+# - nasm includes the first 18 bytes of the HOME directory in its output.
+#   e.g. rdrand-x86_64.asm.obj. This only affects libcrypto.a.
+#   This is intentionally written into a '.file' record and --reproducible
+#   does not disable it. See nasm/output/outcoff.c/coff_write_symbols()
+#   PR: https://github.com/netwide-assembler/nasm/pull/33
+#   binutils strip is able to delete it (llvm-strip is not, as of 14.0.6).
+# - Objects built on different OSes result in a few byte differences.
+#   e.g. windows.c.obj, a_utf8.c.obj. But not a_octet.c.obj.
 
 # https://boringssl.googlesource.com/boringssl/
 # https://bugs.chromium.org/p/boringssl/issues/list
@@ -41,8 +55,12 @@ _VER="$1"
   options="${options} -DOPENSSL_SMALL=OFF"  # ON reduces curl binary sizes by ~300 KB
 
   # Patch the build to omit debug info. This results in 50% smaller footprint
-  # for each ${_BLDDIR}. It makes build output slightly different even after
-  # strip.
+  # for each ${_BLDDIR}. As of llvm 14.0.6, llvm-strip does an imperfect job
+  # when deleting -ggdb debug info and ends up having ~100 bytes of metadata
+  # different (e.g. in windows.c.obj, a_utf8.c.obj, but not a_octet.c.obj)
+  # across build host platforms. Fixed either by patching out this flag here,
+  # or by running binutils strip on the result. binutils strip do not support
+  # ARM64, so patch it out in that case.
 # sed -i.bak 's/ -ggdb//g' ./CMakeLists.txt
 
   # shellcheck disable=SC2086
