@@ -67,6 +67,26 @@ _VER="$1"
   # Enable it for all targets for consistency.
   sed -i.bak 's/ -ggdb//g' ./CMakeLists.txt
 
+  # Patch build to omit building tests. This saves 3 minutes for each target on
+  # the CI machine and reduces disk usage 9x. The cost is these maintaining
+  # these sed expressions:
+  sed -i.bak \
+    -e '/^add_custom_command[(]$/,/[)]$/d' \
+    -e '/^add_custom_target[(]$/,/[)]$/d' \
+    -e '/add_library[(]boringssl_gtest/d' \
+    -e '/target_include_directories[(]boringssl_gtest/d' \
+    -e '/include_directories[(]third_party\/googletest/d' \
+    -e '/add_custom_target[(]all_tests[)]/d' \
+    -e '/add_library[(]crypto_test_data/d' \
+    -E -e '/add_subdirectory[(](ssl\/test|tool|util\/fipstools|decrepit)/d' \
+    ./CMakeLists.txt
+  sed -i.bak \
+    -e '/add_subdirectory[(]test[)]/d' \
+    -e '/^add_executable/,/--/d' \
+    ./crypto/CMakeLists.txt
+  sed -i.bak '/^add_executable/,/--/d' \
+    ./ssl/CMakeLists.txt
+
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
     "-DCMAKE_SYSTEM_PROCESSOR=${cpu}" \
@@ -99,7 +119,7 @@ _VER="$1"
   # deterministic. We chose to run binutils first and llvm second. This way
   # llvm creates the result we publish.
   #
-  # <combination>                                   <bytes>
+  # <strip sequence>                                <bytes>
   # libcrypto-noggdb.a                              2858080
   # libcrypto-noggdb-llvm.a                         2482620
   # libcrypto-noggdb-llvm-binutils.a                2488078
