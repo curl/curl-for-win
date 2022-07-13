@@ -653,12 +653,9 @@ build_single_target() {
   } >> "${_URLS}"
 
   {
-    [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT_SHORT} ${_TAR}"
     [ -n "${clangver}" ] && echo ".${clangver}"
     [ -n "${gccver}" ]   && echo ".${gccver}"
     [ -n "${mingwver}" ] && echo ".${mingwver}"
-    [ -n "${binver}" ]   && echo ".${binver}"
-    [ -n "${nasmver}" ]  && echo ".${nasmver}"
   } >> "${_UNIMFT}"
 
   bld zlib             "${ZLIB_VER_}"
