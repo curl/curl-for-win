@@ -143,9 +143,10 @@ EOF
 
 if [ "${_NAM}" != "${_UNIPKG}" ]; then
   ver="${_VER}"
+  url=''
   [ "${#ver}" -ge 32 ] && ver="$(printf '%.8s' "${ver}")"
   namver="${_NAM} ${ver}"
-  [ -f "${_NAM}/__url__.txt" ] && url=" $(cat "${_NAM}/__url__.txt")" || url=''
+  [ -f "${_NAM}/__url__.txt" ] && url=" $(cat "${_NAM}/__url__.txt")"
   echo "${namver}${url}" >> "${_UNIMFT}"
   echo "${namver}${url}" >> "${_URLS}"
   if ! grep -q -a -F "${namver}" -- "${_BLD}"; then
