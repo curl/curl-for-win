@@ -99,21 +99,25 @@ readonly _LOG='logurl.txt'
 readonly _SELF='curl-for-win'
 if [ -n "${APPVEYOR_ACCOUNT_NAME:-}" ]; then
   # https://www.appveyor.com/docs/environment-variables/
+  _SLUG="${APPVEYOR_REPO_NAME}"
   _LOGURL="${APPVEYOR_URL}/project/${APPVEYOR_ACCOUNT_NAME}/${APPVEYOR_PROJECT_SLUG}/build/${APPVEYOR_BUILD_VERSION}/job/${APPVEYOR_JOB_ID}"
 # _LOGURL="${APPVEYOR_URL}/api/buildjobs/${APPVEYOR_JOB_ID}/log"
   _COMMIT="${APPVEYOR_REPO_COMMIT}"
   _COMMIT_SHORT="$(printf '%.8s' "${_COMMIT}")"
 elif [ -n "${GITHUB_RUN_ID:-}" ]; then
   # https://docs.github.com/actions/learn-github-actions/environment-variables
-  _LOGURL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+  _SLUG="${GITHUB_REPOSITORY}"
+  _LOGURL="${GITHUB_SERVER_URL}/${_SLUG}/actions/runs/${GITHUB_RUN_ID}"
   _COMMIT="${GITHUB_SHA}"
   _COMMIT_SHORT="$(printf '%.8s' "${_COMMIT}")"
 elif [ -n "${CI_JOB_ID:-}" ]; then
   # https://docs.gitlab.com/ce/ci/variables/index.html
-  _LOGURL="${CI_SERVER_URL}/${CI_PROJECT_PATH}/-/jobs/${CI_JOB_ID}/raw"
+  _SLUG="${CI_PROJECT_PATH}"
+  _LOGURL="${CI_SERVER_URL}/${_SLUG}/-/jobs/${CI_JOB_ID}/raw"
   _COMMIT="${CI_COMMIT_SHA}"
   _COMMIT_SHORT="$(printf '%.8s' "${_COMMIT}")"
 else
+  _SLUG="curl/${_SELF}"
   _LOGURL=''
   _COMMIT="$(git rev-parse --verify HEAD)"
   _COMMIT_SHORT="$(git rev-parse --short=8 HEAD)"
@@ -123,14 +127,14 @@ echo "${_LOGURL}" | tee "${_LOG}"
 export _BRANCH="${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF:-}${CW_CONFIG:-}"
 [ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD)"
 [ -n "${_BRANCH}" ] || _BRANCH='main'
-export _URL _TAR
 if command -v git >/dev/null 2>&1; then
-  repourl="$(git ls-remote --get-url | sed 's/\.git$//')"
-  _URL="${repourl}/tree/${_COMMIT}"
-  _TAR="${repourl}/archive/${_COMMIT}.tar.gz"
+  _URL_BASE="$(git ls-remote --get-url | sed 's/\.git$//')"
+  _URL_FULL="${_URL_BASE}/tree/${_COMMIT}"
+  _TAR="${_URL_BASE}/archive/${_COMMIT}.tar.gz"
 else
-  _URL="https://github.com/${APPVEYOR_REPO_NAME:-}${GITHUB_REPOSITORY:-}"
-  _TAR="${_URL}/archive/refs/heads/${_BRANCH}.tar.gz"
+  _URL_BASE="https://github.com/${_SLUG}"
+  _URL_FULL="${_URL_BASE}"
+  _TAR="${_URL_BASE}/archive/refs/heads/${_BRANCH}.tar.gz"
 fi
 
 [ -n "${CW_CCSUFFIX:-}" ] || CW_CCSUFFIX=''
@@ -701,7 +705,7 @@ build_single_target() {
     _fn="${_DST}/BUILD-README.url"
     cat <<EOF > "${_fn}"
 [InternetShortcut]
-URL=${_URL}
+URL=${_URL_FULL}
 EOF
     unix2dos --quiet --keepdate "${_fn}"
     touch -c -r "${_ref}" "${_fn}"
