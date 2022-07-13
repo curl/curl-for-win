@@ -707,16 +707,6 @@ EOF
     unix2dos --quiet --keepdate "${_fn}"
     touch -c -r "${_ref}" "${_fn}"
 
-    if [ -n "${_LOGURL}" ]; then  # Link to the build log
-      _fn="${_DST}/BUILD-LOG.url"
-      cat <<EOF > "${_fn}"
-[InternetShortcut]
-URL=${_LOGURL}
-EOF
-      unix2dos --quiet --keepdate "${_fn}"
-      touch -c -r "${_ref}" "${_fn}"
-    fi
-
     ./_pkg.sh "${_ref}"
   fi
 }
