@@ -705,7 +705,7 @@ build_single_target() {
     _fn="${_DST}/BUILD-README.url"
     cat <<EOF > "${_fn}"
 [InternetShortcut]
-URL=${_URL_FULL}
+URL=${_URL_BASE}
 EOF
     unix2dos --quiet --keepdate "${_fn}"
     touch -c -r "${_ref}" "${_fn}"
