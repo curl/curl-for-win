@@ -600,9 +600,11 @@ build_single_target() {
 
   versuffix=''
   mingwver=''
+  mingwurl=''
   if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
     mingwver='llvm-mingw'
-    [ -n "${CW_LLVM_MINGW_VER_:-}" ] && mingwver="${mingwver} ${CW_LLVM_MINGW_VER_}"
+    [ -f "${mingwver}/__url__.txt" ] && mingwurl=" $(cat "${mingwver}/__url__.txt")"
+    mingwver="${mingwver} ${CW_LLVM_MINGW_VER_:-?}"
     versuffix="${versuffix_llvm_mingw}"
   else
     case "${_OS}" in
@@ -638,7 +640,7 @@ build_single_target() {
     [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT_SHORT}"
     [ -n "${clangver}" ] && echo ".${clangver}${versuffix}"
     [ -n "${gccver}" ]   && echo ".${gccver}${versuffix}"
-    [ -n "${mingwver}" ] && echo ".${mingwver}${versuffix}"
+    [ -n "${mingwver}" ] && echo ".${mingwver}${mingwurl}${versuffix}"
     [ -n "${binver}" ]   && echo ".${binver}"
     [ -n "${nasmver}" ]  && echo ".${nasmver}"
   } >> "${_BLD}"
@@ -647,7 +649,7 @@ build_single_target() {
     [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT_SHORT} ${_TAR}"
     [ -n "${clangver}" ] && echo ".${clangver}${versuffix}"
     [ -n "${gccver}" ]   && echo ".${gccver}${versuffix}"
-    [ -n "${mingwver}" ] && echo ".${mingwver}${versuffix}"
+    [ -n "${mingwver}" ] && echo ".${mingwver}${mingwurl}${versuffix}"
     [ -n "${binver}" ]   && echo ".${binver}"
     [ -n "${nasmver}" ]  && echo ".${nasmver}"
   } >> "${_URLS}"
@@ -655,7 +657,7 @@ build_single_target() {
   {
     [ -n "${clangver}" ] && echo ".${clangver}"
     [ -n "${gccver}" ]   && echo ".${gccver}"
-    [ -n "${mingwver}" ] && echo ".${mingwver}"
+    [ -n "${mingwver}" ] && echo ".${mingwver}${mingwurl}"
   } >> "${_UNIMFT}"
 
   bld zlib             "${ZLIB_VER_}"
