@@ -17,53 +17,9 @@ _VER="$1"
 
   _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -DNDEBUG"
 
-  options=''
-
-  # Experimental. Not necessary for curl.
-  # Apps do not build without adding more dependencies.
-  if false; then
-
-    # Prevent auto-detecting OS-native libs
-    options="${options} -DLIBEVENT_OPENSSL_LIBRARY=OFF"
-    options="${options} -DJANSSON_LIBRARY=OFF"
-    options="${options} -DJEMALLOC_LIBRARY=OFF"
-
-    if [ -d ../zlib ]; then
-      options="${options} -DZLIB_LIBRARY=${_TOP}/zlib/${_PP}/lib/libz.a"
-      options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/zlib/${_PP}/include"
-
-      # Strange hack necessary otherwise it does not find its own header and lib
-      _CFLAGS="${_CFLAGS} -I${_TOP}/nghttp2/lib/includes"
-      _CFLAGS="${_CFLAGS} -L${_TOP}/nghttp2/${_BLDDIR}/lib"
-    fi
-
-    if [ -d ../openssl ]; then
-      options="${options} -DOPENSSL_ROOT_DIR=../openssl/${_PP}"
-      options="${options} -DOPENSSL_INCLUDE_DIR=../openssl/${_PP}/include"
-    elif [ -d ../openssl-quic ]; then
-      options="${options} -DOPENSSL_ROOT_DIR=../openssl-quic/${_PP}"
-      options="${options} -DOPENSSL_INCLUDE_DIR=../openssl-quic/${_PP}/include"
-    fi
-
-    if [ -d ../nghttp3 ] && [ -d ../ngtcp2 ] && [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ]; then
-      options="${options} -DLIBNGHTTP3_LIBRARY=../nghttp3/${_PP}/lib"
-      options="${options} -DLIBNGHTTP3_INCLUDE_DIR=../nghttp3/${_PP}/include"
-      _CFLAGS="${_CFLAGS} -DNGHTTP3_STATICLIB"
-
-      options="${options} -DLIBNGTCP2_LIBRARY=../ngtcp2/${_PP}/lib/libngtcp2.a"
-      options="${options} -DLIBNGTCP2_INCLUDE_DIR=../ngtcp2/${_PP}/include"
-      options="${options} -DLIBNGTCP2_CRYPTO_OPENSSL_LIBRARY=../ngtcp2/${_PP}/lib/libngtcp2_crypto_openssl.a"
-      options="${options} -DLIBNGTCP2_CRYPTO_OPENSSL_INCLUDE_DIR=../ngtcp2/${_PP}/include"
-      _CFLAGS="${_CFLAGS} -DNGTCP2_STATICLIB"
-
-      options="${options} -DENABLE_HTTP3=ON"
-    fi
-  else
-    options="${options} -DENABLE_LIB_ONLY=ON"
-  fi
-
   # shellcheck disable=SC2086
-  cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
+  cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} \
+    '-DENABLE_LIB_ONLY=ON' \
     '-DENABLE_STATIC_LIB=ON' \
     '-DENABLE_SHARED_LIB=OFF' \
     "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}" \
