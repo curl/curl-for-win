@@ -178,31 +178,16 @@ index 8d57debec..b202bf087 100644
    endif
  
 diff --git a/lib/ldap.c b/lib/ldap.c
-index 51a32dc96..77b719fb3 100644
+index 51a32dc964f8c..410dc72e8af3b 100644
 --- a/lib/ldap.c
 +++ b/lib/ldap.c
-@@ -45,6 +45,13 @@
- # else
- #  include <winber.h>
- # endif
-+  /* Undefine wincrypt conflicting symbols for BoringSSL. */
-+# undef X509_NAME
-+# undef X509_EXTENSIONS
-+# undef PKCS7_ISSUER_AND_SERIAL
-+# undef PKCS7_SIGNER_INFO
-+# undef OCSP_REQUEST
-+# undef OCSP_RESPONSE
- #else
- # define LDAP_DEPRECATED 1      /* Be sure ldap_init() is defined. */
- # ifdef HAVE_LBER_H
-diff --git a/lib/vtls/schannel.h b/lib/vtls/schannel.h
-index 0b4c4d934..1b4cfe5fd 100644
---- a/lib/vtls/schannel.h
-+++ b/lib/vtls/schannel.h
-@@ -29,6 +29,14 @@
- #ifdef USE_SCHANNEL
+@@ -37,6 +37,18 @@
+  * OpenLDAP library versions, USE_OPENLDAP shall not be defined.
+  */
  
- #include <schnlsp.h>
++/* Wincrypt must be included before anything that could include OpenSSL. */
++#if defined(USE_WIN32_CRYPTO)
++#include <wincrypt.h>
 +/* Undefine wincrypt conflicting symbols for BoringSSL. */
 +#undef X509_NAME
 +#undef X509_EXTENSIONS
@@ -210,10 +195,34 @@ index 0b4c4d934..1b4cfe5fd 100644
 +#undef PKCS7_SIGNER_INFO
 +#undef OCSP_REQUEST
 +#undef OCSP_RESPONSE
++#endif
 +
+ #ifdef USE_WIN32_LDAP           /* Use Windows LDAP implementation. */
+ # include <winldap.h>
+ # ifndef LDAP_VENDOR_NAME
+diff --git a/lib/vtls/schannel.h b/lib/vtls/schannel.h
+index 0b4c4d934431d..05323c7a7e754 100644
+--- a/lib/vtls/schannel.h
++++ b/lib/vtls/schannel.h
+@@ -28,6 +28,18 @@
+ 
+ #ifdef USE_SCHANNEL
+ 
++/* Wincrypt must be included before anything that could include OpenSSL. */
++#if defined(USE_WIN32_CRYPTO)
++#include <wincrypt.h>
++/* Undefine wincrypt conflicting symbols for BoringSSL. */
++#undef X509_NAME
++#undef X509_EXTENSIONS
++#undef PKCS7_ISSUER_AND_SERIAL
++#undef PKCS7_SIGNER_INFO
++#undef OCSP_REQUEST
++#undef OCSP_RESPONSE
++#endif
++
+ #include <schnlsp.h>
  #include <schannel.h>
  #include "curl_sspi.h"
- 
 diff --git a/lib/vtls/openssl.c b/lib/vtls/openssl.c
 index 78aacd0228553..25e065d6cbceb 100644
 --- a/lib/vtls/openssl.c
