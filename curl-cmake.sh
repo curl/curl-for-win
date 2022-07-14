@@ -70,8 +70,6 @@ _VER="$1"
       _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va"
     fi
 
-    options="${options} -DCURL_OS_SUFFIX=-${_CPU}"
-
     if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
       options="${options} -DENABLE_UNICODE=ON"
     fi
