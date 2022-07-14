@@ -16,7 +16,7 @@ _cdo="$(pwd)"
 if [ "${_NAM}" != "${_UNIPKG}" ]; then
 
   find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' +
-  find "${_DST}" -exec chmod a+r,a-s,go-w '{}' +
+  chmod -R a+rw-s,go-w "${_DST}"
   # NOTE: Not effective on MSYS2:
   find "${_DST}" -name '*.a' -exec chmod a-x '{}' +
   find "${_DST}" \( -name '*.exe' -o -name '*.dll' \) -exec chmod a+x '{}' +
@@ -75,7 +75,7 @@ create_pkg() {
     case "${arch_ext}" in
       .tar.xz) TZ=UTC tar --create \
         --format=ustar \
-        --owner 0 --group 0 --numeric-owner --mode go=rX,u+rw,a-s \
+        --owner 0 --group 0 --numeric-owner \
         --files-from "${_FLS}" | xz > "${_cdo}/${_pkg}";;
       .zip) TZ=UTC zip --quiet -9 --strip-extra \
         --names-stdin - < "${_FLS}" > "${_cdo}/${_pkg}";;
