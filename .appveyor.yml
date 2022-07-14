@@ -27,6 +27,7 @@ environment:
   CW_LLVM_MINGW_DL: 1
   CW_LLVM_MINGW_ONLY: 0
   CW_MAP: 0
+  CW_JOBS: 2
   SIGN_CODE_GPG_PASS:
     secure: N+xoeCLwFHPsb/KBdgOIvJ0NnbVrBI/PLcPkPBTBmedgDVUBlbEZu7HrJcEHNyuR
   SIGN_CODE_KEY_PASS:
