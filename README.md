@@ -9,8 +9,7 @@
   <br><br>
 - We provide binary packages in `.zip` and `.tar.xz` formats,
   signed with PGP key:
-  <br><https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc>
-  <br>`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`
+  <br>[`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
 - Standalone `curl.exe` and `libcurl.dll`.
   [Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/)
   required. UCRT replaces `msvcrt.dll`, and it comes with Windows 10 and later.
