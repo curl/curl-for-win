@@ -670,13 +670,13 @@ build_single_target() {
   bld brotli         "${BROTLI_VER_}"
   bld libidn2       "${LIBIDN2_VER_}"
   bld libgsasl     "${LIBGSASL_VER_}"
-  bld nghttp2       "${NGHTTP2_VER_}"
   bld nghttp3       "${NGHTTP3_VER_}"
   bld boringssl   "${BORINGSSL_VER_}"
   bld libressl     "${LIBRESSL_VER_}"
   bld openssl       "${OPENSSL_VER_}"
   bld openssl  "${OPENSSL_QUIC_VER_}" openssl-quic
   bld ngtcp2         "${NGTCP2_VER_}"
+  bld nghttp2       "${NGHTTP2_VER_}"
   bld libssh2       "${LIBSSH2_VER_}"
   bld curl             "${CURL_VER_}"
 
