@@ -568,7 +568,7 @@ build_single_target() {
      [ -n "${_RCFLAGS_GLOBAL}" ]; then
     _RC_WRAPPER="$(pwd)/llvm-windres-wrapper"
     {
-      echo "#!/bin/sh"
+      echo "#!/bin/sh -e"
       echo "'${RC}' ${_RCFLAGS_GLOBAL} \"\$@\""
     } > "${_RC_WRAPPER}"
     chmod +x "${_RC_WRAPPER}"
