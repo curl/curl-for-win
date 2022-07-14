@@ -20,14 +20,21 @@ _VER="$1"
   options=''
 
   # Experimental. Not necessary for curl.
-  # It does not find its own headers.
+  # Apps do not build without adding more dependencies.
   if false; then
-    options="${options} -DENABLE_LIB_ONLY=OFF"
+
+    # Prevent auto-detecting OS-native libs
+    options="${options} -DLIBEVENT_OPENSSL_LIBRARY=OFF"
+    options="${options} -DJANSSON_LIBRARY=OFF"
+    options="${options} -DJEMALLOC_LIBRARY=OFF"
 
     if [ -d ../zlib ]; then
-      options="${options} -DZLIB_LIBRARY=../zlib/${_PP}/lib/libz.a"
-      options="${options} -DZLIB_INCLUDE_DIR=../zlib/${_PP}/include"
-      _CFLAGS="${_CFLAGS} -I${_TOP}/lib/includes"
+      options="${options} -DZLIB_LIBRARY=${_TOP}/zlib/${_PP}/lib/libz.a"
+      options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/zlib/${_PP}/include"
+
+      # Strange hack necessary otherwise it does not find its own header and lib
+      _CFLAGS="${_CFLAGS} -I${_TOP}/nghttp2/lib/includes"
+      _CFLAGS="${_CFLAGS} -L${_TOP}/nghttp2/${_BLDDIR}/lib"
     fi
 
     if [ -d ../openssl ]; then
