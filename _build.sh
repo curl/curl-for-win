@@ -69,6 +69,12 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # Resources:
 #   - https://blog.llvm.org/2019/11/deterministic-builds-with-clang-and-lld.html
+#   - https://github.com/mstorsjo/llvm-mingw
+#   - https://github.com/llvm/llvm-project
+#   - https://salsa.debian.org/pkg-llvm-team
+#   - https://git.code.sf.net/p/mingw-w64/mingw-w64
+#   - https://sourceware.org/git/binutils-gdb.git
+#   - https://github.com/netwide-assembler/nasm
 
 # Supported build tools:
 #
