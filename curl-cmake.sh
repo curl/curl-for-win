@@ -57,6 +57,8 @@ _VER="$1"
 
     options=''
 
+    [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && options="${options} -DCMAKE_AR=${AR_NORMALIZE}"
+
     _LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
     _LDFLAGS_EXE=''
     _LDFLAGS_DLL=''

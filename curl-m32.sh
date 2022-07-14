@@ -38,6 +38,8 @@ _VER="$1"
   export CURL_AR="${AR}"
   export CURL_RANLIB="${RANLIB}"
 
+  [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && CURL_AR="${AR_NORMALIZE}"
+
   export CURL_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
 
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents

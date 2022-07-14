@@ -29,6 +29,8 @@ fi
     cp -f -p Makefile.dist Makefile
   fi
 
+  [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && AR="${AR_NORMALIZE}"
+
   # patch autotools to not refuse to link a shared library against static libs
   sed -i.bak -E 's/^deplibs_check_method=.+/deplibs_check_method=pass_all/g' ./configure
 

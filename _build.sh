@@ -574,6 +574,18 @@ build_single_target() {
     chmod +x "${_RC_WRAPPER}"
   fi
 
+  # ar wrapper to normalize created libs
+  if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
+    export AR_NORMALIZE
+    AR_NORMALIZE="$(pwd)/ar-wrapper-normalize"
+    {
+      echo "#!/bin/sh -e"
+      echo "'${AR}' \"\$@\""
+      echo "'$(pwd)/_libclean.sh' --ar '${AR}' \"\$@\""
+    } > "${AR_NORMALIZE}"
+    chmod +x "${AR_NORMALIZE}"
+  fi
+
   if [ "${_OS}" = 'mac' ]; then
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${CW_LLVM_MINGW_PATH}/bin/${AR}"
