@@ -81,13 +81,5 @@ _VER="$1"
   cp -f -p COPYING                      "${_DST}/COPYING.txt"
   cp -f -p README.rst                   "${_DST}/"
 
-  # curl-cmake recognizes BoringSSL as OpenSSL. Make sure it finds this
-  # crypto library as well:
-  if [ -d ../boringssl ]; then
-    cp -p \
-      "${_pkg}"/lib/libngtcp2_crypto_boringssl.a \
-      "${_pkg}"/lib/libngtcp2_crypto_openssl.a  # FIXME
-  fi
-
   ../_pkg.sh "$(pwd)/${_ref}"
 )
