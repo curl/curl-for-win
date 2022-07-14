@@ -196,7 +196,7 @@ fi
     if [ -d ../libidn2 ]; then  # Also for Windows XP compatibility
       options="${options} --with-libidn2=${_TOP}/libidn2/${_PP}"
     elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
-      options="${options} --without-libidn2"  # Prevent autotools picking up a non-cross copy
+      options="${options} --without-libidn2"
       options="${options} --with-winidn"
     fi
 
