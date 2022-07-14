@@ -535,7 +535,12 @@ build_single_target() {
        [ "${_CPU}" = 'x86' ]; then
       # Make sure to pick the prefixed binutils strip tool from an unmodified
       # PATH. This avoids picking the llvm-mingw copy using the same name.
-      _STRIP_BINUTILS="$(PATH="${_ori_path}" which "${_CCPREFIX}strip")"
+      tmp="${_CCPREFIX}strip"
+      if command -v "${tmp}" >/dev/null 2>&1; then
+        _STRIP_BINUTILS="$(PATH="${_ori_path}" which "${tmp}")"
+      else
+        echo "! Warning: binutils strip tool '${tmp}' not found. BoringSSL libs may not be fully reproducible."
+      fi
     fi
   fi
 
