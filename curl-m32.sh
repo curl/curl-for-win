@@ -42,14 +42,14 @@ _VER="$1"
 
   export CURL_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
 
-  # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
-  # marking public libcurl functions as 'exported'. Useful to avoid the
-  # chance of libcurl functions getting exported from final binaries when
-  # linked against the static libcurl lib.
   export CURL_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
 
   CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DOS=\\\"${_TRIPLET}\\\""
 
+  # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
+  # marking public libcurl functions as 'exported'. Useful to avoid the
+  # chance of libcurl functions getting exported from final binaries when
+  # linked against the static libcurl lib.
   CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_STATICLIB -DNDEBUG"
   CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_STRTOK_R -DHAVE_FTRUNCATE -D_FILE_OFFSET_BITS=64"
   CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_LIBGEN_H -DHAVE_BASENAME"
