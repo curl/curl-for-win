@@ -193,8 +193,28 @@ fi
     options="${options} --without-libssh --without-wolfssh"
     options="${options} --without-librtmp"
 
-    if [ -d ../libidn2 ]; then  # Also for Windows XP compatibility
+    if [ -d ../libidn2 ]; then
       options="${options} --with-libidn2=${_TOP}/libidn2/${_PP}"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/libidn2/${_PP}/lib"
+      LIBS="${LIBS} -lidn2"
+
+      if [ -d ../libpsl ]; then
+        options="${options} --with-libpsl=${_TOP}/libpsl/${_PP}"
+        CPPFLAGS="${CPPFLAGS} -I${_TOP}/libpsl/${_PP}/include"
+        LDFLAGS="${LDFLAGS} -L${_TOP}/libpsl/${_PP}/lib"
+        LIBS="${LIBS} -lpsl"
+      else
+        options="${options} --without-libpsl"
+      fi
+
+      if [ -d ../libiconv ]; then
+        LDFLAGS="${LDFLAGS} -L${_TOP}/libiconv/${_PP}/lib"
+        LIBS="${LIBS} -liconv"
+      fi
+      if [ -d ../libunistring ]; then
+        LDFLAGS="${LDFLAGS} -L${_TOP}/libunistring/${_PP}/lib"
+        LIBS="${LIBS} -lunistring"
+      fi
     elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
       options="${options} --without-libidn2"
       options="${options} --with-winidn"
@@ -207,8 +227,6 @@ fi
     else
       options="${options} --without-libgsasl"
     fi
-
-    options="${options} --without-libpsl"
 
     if [ -d ../nghttp2 ]; then
       options="${options} --with-nghttp2=${_TOP}/nghttp2/${_PP}"

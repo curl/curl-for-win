@@ -203,9 +203,22 @@ _VER="$1"
     options="${options}-gsasl"
     export LIBGSASL_PATH="../../libgsasl/${_PP}"
   fi
-  if [ -d ../libidn2 ]; then  # Also for Windows XP compatibility
+  if [ -d ../libidn2 ]; then
     options="${options}-idn2"
     export LIBIDN2_PATH="../../libidn2/${_PP}"
+
+    if [ -d ../libpsl ]; then
+      CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUSE_LIBPSL=ON"
+      CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -I../../libpsl/${_PP}/include"
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L../../libpsl/${_PP}/lib -lpsl"
+    fi
+
+    if [ -d ../libiconv ]; then
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L../../libiconv/${_PP}/lib -liconv"
+    fi
+    if [ -d ../libunistring ]; then
+      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L../../libunistring/${_PP}/lib -lunistring"
+    fi
   elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
     options="${options}-winidn"
   fi

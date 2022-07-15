@@ -34,10 +34,27 @@ cat <<EOF
     "keys": "https://ftp.gnu.org/gnu/gnu-keyring.gpg"
   },
   {
+    "name": "libunistring",
+    "url": "https://ftp.gnu.org/gnu/libunistring/libunistring-{ver}.tar.xz",
+    "sig": ".sig",
+    "keys": "https://ftp.gnu.org/gnu/gnu-keyring.gpg"
+  },
+  {
+    "name": "libiconv",
+    "url": "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-{ver}.tar.gz",
+    "sig": ".sig",
+    "keys": "https://ftp.gnu.org/gnu/gnu-keyring.gpg"
+  },
+  {
     "name": "libidn2",
     "url": "https://ftp.gnu.org/gnu/libidn/libidn2-{ver}.tar.gz",
     "sig": ".sig",
     "keys": "https://ftp.gnu.org/gnu/gnu-keyring.gpg"
+  },
+  {
+    "name": "libpsl",
+    "url": "https://github.com/rockdaboot/libpsl/releases/download/{ver}/libpsl-{ver}.tar.gz",
+    "redir": "redir"
   },
   {
     "name": "libssh2",
@@ -513,6 +530,15 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
     live_dl ngtcp2 "${NGTCP2_VER_}"
     live_xt ngtcp2 "${NGTCP2_HASH}"
   fi
+fi
+
+if [ "${_BRANCH#*big*}" != "${_BRANCH}" ]; then
+  live_dl libunistring "${LIBUNISTRING_VER_}"
+  live_xt libunistring "${LIBUNISTRING_HASH}"
+  live_dl libiconv "${LIBICONV_VER_}"
+  live_xt libiconv "${LIBICONV_HASH}"
+  live_dl libpsl "${LIBPSL_VER_}"
+  live_xt libpsl "${LIBPSL_HASH}"
 fi
 
 if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \

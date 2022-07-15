@@ -15,12 +15,6 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  # We may need this in the future if an "Automake version mismatch" occurs:
-# if [ ! -f 'Makefile' ]; then
-#   autopoint --force
-#   autoreconf --install
-# fi
-
   options="${_CONFIGURE_GLOBAL}"
   export CC="${_CC_GLOBAL}"
   export CFLAGS="${_CFLAGS_GLOBAL} -O3"
@@ -28,11 +22,21 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LIBS="${_LIBS_GLOBAL}"
 
-  if [ -d ../libiconv ]; then
-    options="${options} --with-libiconv-prefix=${_TOP}/libiconv/${_PP}"
-  fi
-  if [ -d ../libunistring ]; then
-    options="${options} --with-libunistring-prefix=${_TOP}/libunistring/${_PP}"
+  export PKG_CONFIG_LIBDIR=''  # Avoid picking up non-cross copies
+
+  if [ -d ../libidn2 ] && [ -d ../libiconv ] && [ -d ../libunistring ]; then
+    CPPFLAGS="${CPPFLAGS} -I${_TOP}/libidn2/${_PP}/include"
+    LDFLAGS="${LDFLAGS} -L${_TOP}/libidn2/${_PP}/lib"
+    LIBS="${LIBS} -lws2_32"
+    CPPFLAGS="${CPPFLAGS} -I${_TOP}/libiconv/${_PP}/include"
+    LDFLAGS="${LDFLAGS} -L${_TOP}/libiconv/${_PP}/lib"
+    LIBS="${LIBS} -liconv -lcharset"
+    CPPFLAGS="${CPPFLAGS} -I${_TOP}/libunistring/${_PP}/include"
+    LDFLAGS="${LDFLAGS} -L${_TOP}/libunistring/${_PP}/lib"
+    LIBS="${LIBS} -lunistring"
+    options="${options} --enable-runtime=libidn2"
+  else
+    options="${options} --disable-runtime --disable-builtin"
   fi
 
   (
@@ -42,7 +46,7 @@ _VER="$1"
       --disable-rpath \
       --enable-static \
       --disable-shared \
-      --disable-doc --silent
+      --disable-man --silent
   )
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1

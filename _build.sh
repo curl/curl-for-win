@@ -78,18 +78,21 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # Supported build tools:
 #
-#   zlib       cmake
-#   brotli     cmake
-#   libgsasl   autotools
-#   libidn2    autotools
-#   nghttp2    cmake
-#   nghttp3    cmake
-#   ngtcp2     cmake
-#   openssl    proprietary
-#   boringssl  cmake
-#   libressl   autotools, cmake
-#   libssh2    autotools, cmake
-#   curl       cmake, autotools, Makefile.m32
+#   zlib          cmake
+#   brotli        cmake
+#   libunistring  autotools
+#   libiconv      autotools
+#   libidn2       autotools
+#   libpsl        autotools
+#   libgsasl      autotools
+#   nghttp2       cmake
+#   nghttp3       cmake
+#   ngtcp2        cmake
+#   openssl       proprietary
+#   boringssl     cmake
+#   libressl      autotools, cmake
+#   libssh2       autotools, cmake
+#   curl          cmake, autotools, Makefile.m32
 
 cd "$(dirname "$0")"
 
@@ -683,19 +686,22 @@ build_single_target() {
     [ -n "${mingwver}" ] && echo ".${mingwver}${mingwurl}"
   } >> "${_UNIMFT}"
 
-  bld zlib             "${ZLIB_VER_}"
-  bld brotli         "${BROTLI_VER_}"
-  bld libidn2       "${LIBIDN2_VER_}"
-  bld libgsasl     "${LIBGSASL_VER_}"
-  bld nghttp3       "${NGHTTP3_VER_}"
-  bld boringssl   "${BORINGSSL_VER_}"
-  bld libressl     "${LIBRESSL_VER_}"
-  bld openssl       "${OPENSSL_VER_}"
-  bld openssl  "${OPENSSL_QUIC_VER_}" openssl-quic
-  bld ngtcp2         "${NGTCP2_VER_}"
-  bld nghttp2       "${NGHTTP2_VER_}"
-  bld libssh2       "${LIBSSH2_VER_}"
-  bld curl             "${CURL_VER_}"
+  bld zlib                 "${ZLIB_VER_}"
+  bld brotli             "${BROTLI_VER_}"
+  bld libunistring "${LIBUNISTRING_VER_}"
+  bld libiconv         "${LIBICONV_VER_}"
+  bld libidn2           "${LIBIDN2_VER_}"
+  bld libpsl             "${LIBPSL_VER_}"
+  bld libgsasl         "${LIBGSASL_VER_}"
+  bld nghttp3           "${NGHTTP3_VER_}"
+  bld boringssl       "${BORINGSSL_VER_}"
+  bld libressl         "${LIBRESSL_VER_}"
+  bld openssl           "${OPENSSL_VER_}"
+  bld openssl      "${OPENSSL_QUIC_VER_}" openssl-quic
+  bld ngtcp2             "${NGTCP2_VER_}"
+  bld nghttp2           "${NGHTTP2_VER_}"
+  bld libssh2           "${LIBSSH2_VER_}"
+  bld curl                 "${CURL_VER_}"
 
   # Unified, per-target package: Build
   export _NAM="${_UNIPKG}"

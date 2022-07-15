@@ -15,12 +15,6 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  # We may need this in the future if an "Automake version mismatch" occurs:
-# if [ ! -f 'Makefile' ]; then
-#   autopoint --force
-#   autoreconf --install
-# fi
-
   options="${_CONFIGURE_GLOBAL}"
   export CC="${_CC_GLOBAL}"
   export CFLAGS="${_CFLAGS_GLOBAL} -O3"
@@ -28,21 +22,13 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LIBS="${_LIBS_GLOBAL}"
 
-  if [ -d ../libiconv ]; then
-    options="${options} --with-libiconv-prefix=${_TOP}/libiconv/${_PP}"
-  fi
-  if [ -d ../libunistring ]; then
-    options="${options} --with-libunistring-prefix=${_TOP}/libunistring/${_PP}"
-  fi
-
   (
     mkdir "${_BLDDIR}"; cd "${_BLDDIR}"
     # shellcheck disable=SC2086
     ../configure ${options} \
       --disable-rpath \
       --enable-static \
-      --disable-shared \
-      --disable-doc --silent
+      --disable-shared --silent
   )
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1

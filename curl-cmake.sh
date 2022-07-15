@@ -222,10 +222,23 @@ _VER="$1"
       _CFLAGS="${_CFLAGS} -DUSE_GSASL -I${_TOP}/libgsasl/${_PP}/include"
       _LDFLAGS="${_LDFLAGS} -L${_TOP}/libgsasl/${_PP}/lib -lgsasl"
     fi
-    if [ -d ../libidn2 ]; then  # Also for Windows XP compatibility
+    if [ -d ../libidn2 ]; then
       options="${options} -DUSE_LIBIDN2=ON"
       _CFLAGS="${_CFLAGS} -I${_TOP}/libidn2/${_PP}/include"
       _LDFLAGS="${_LDFLAGS} -L${_TOP}/libidn2/${_PP}/lib -lidn2"
+
+      if [ -d ../libpsl ] && [ -d ../libiconv ] && [ -d ../libunistring ]; then
+        options="${options} -DUSE_LIBPSL=ON"
+        options="${options} -DLIBPSL_LIBRARY=${_TOP}/libpsl/${_PP}/lib/libpsl.a;${_TOP}/libiconv/${_PP}/lib/libiconv.a;${_TOP}/libunistring/${_PP}/lib/libunistring.a"
+        options="${options} -DLIBPSL_INCLUDE_DIR=${_TOP}/libpsl/${_PP}/include"
+      fi
+
+      if [ -d ../libiconv ]; then
+        _LDFLAGS="${_LDFLAGS} -L${_TOP}/libiconv/${_PP}/lib -liconv"
+      fi
+      if [ -d ../libunistring ]; then
+        _LDFLAGS="${_LDFLAGS} -L${_TOP}/libunistring/${_PP}/lib -lunistring"
+      fi
     elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
       options="${options} -DUSE_LIBIDN2=OFF"
       options="${options} -DUSE_WIN32_IDN=ON"
