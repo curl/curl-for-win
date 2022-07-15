@@ -24,7 +24,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #
 #      Supported keywords:
 #        main       production build
-#        test       test build (.map files enabled, VirusTotal upload and publishing disabled)
+#        test       test build (.map files enabled by default, publishing disabled)
 #        dev        development build (use source snapshots instead of stable releases)
 #        noh3       build without HTTP/3 (QUIC) support (select stock OpenSSL instead of its QUIC fork)
 #        nobrotli   build without brotli
@@ -52,14 +52,12 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #
 # SIGN_CODE_GPG_PASS, SIGN_CODE_KEY_PASS: for code signing
 # SIGN_PKG_KEY_ID, SIGN_PKG_GPG_PASS, SIGN_PKG_KEY_PASS: for package signing
-# VIRUSTOTAL_APIKEY: for VirusTotal uploads
 # DEPLOY_GPG_PASS, DEPLOY_KEY_PASS: for publishing results
 #      Secrets used for the above operations.
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
 #   - Change default TLS to BoringSSL? with OPENSSL_SMALL?
-#   - Delete VirusTotal upload logic
 #   - Drop XP compatibility for x86 builds also
 #   - Drop x86 builds
 #   - Make -noftp the default?
