@@ -18,7 +18,7 @@ _VER="$1"
   # FIXME: As of zlib 1.2.12, its CMakeLists.txt prevents passing custom RCFLAGS
   #        to the RC command. Use our wrapper as a work around.
   #        PR: https://github.com/madler/zlib/pull/677
-  [ -n "${_RC_WRAPPER}" ] && RC="${_RC_WRAPPER}"
+  [ -n "${_RC_WRAPPER}" ] && export RC="${_RC_WRAPPER}"
 
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
