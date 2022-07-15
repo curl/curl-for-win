@@ -116,6 +116,14 @@ cat <<EOF
     "keys": "5ED46A6721D365587791E2AA783FCD8E58BCAFBA"
   },
   {
+    "name": "zstd",
+    "url": "https://github.com/facebook/zstd/releases/download/v{ver}/zstd-{ver}.tar.gz",
+    "sig": ".sig",
+    "sha": ".sha256",
+    "redir": "redir",
+    "keys": "4EF4AC63455FC9F4545D9B7DEF8FE99528B52FFD"
+  },
+  {
     "name": "pefile",
     "url": "https://github.com/erocarrera/pefile/releases/download/v{ver}/pefile-{ver}.tar.gz",
     "redir": "redir"
@@ -533,6 +541,9 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
 fi
 
 if [ "${_BRANCH#*big*}" != "${_BRANCH}" ]; then
+  live_dl zstd "${ZSTD_VER_}"
+  live_xt zstd "${ZSTD_HASH}"
+
   live_dl libunistring "${LIBUNISTRING_VER_}"
   live_xt libunistring "${LIBUNISTRING_HASH}"
   live_dl libiconv "${LIBICONV_VER_}"

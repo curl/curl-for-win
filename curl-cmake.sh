@@ -135,6 +135,13 @@ _VER="$1"
     else
       options="${options} -DCURL_BROTLI=OFF"
     fi
+    if [ -d ../zstd ]; then
+      options="${options} -DCURL_ZSTD=ON"
+      options="${options} -DZstd_LIBRARY=${_TOP}/zstd/${_PP}/lib/libzstd.a"
+      options="${options} -DZstd_INCLUDE_DIR=${_TOP}/zstd/${_PP}/include"
+    else
+      options="${options} -DCURL_ZSTD=OFF"
+    fi
 
     if [ -d ../libressl ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"

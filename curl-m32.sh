@@ -135,6 +135,11 @@ _VER="$1"
     export BROTLI_PATH="../../brotli/${_PP}"
     export BROTLI_LIBS='-Wl,-Bstatic -lbrotlidec -lbrotlicommon -Wl,-Bdynamic'
   fi
+  if [ -d ../zstd ]; then
+    options="${options}-zstd"
+    export ZSTD_PATH="../../zstd/${_PP}"
+    export ZSTD_LIBS='-Wl,-Bstatic -lzstd -Wl,-Bdynamic'
+  fi
 
   export OPENSSL_LIBS=''
   if [ -d ../libressl ]; then

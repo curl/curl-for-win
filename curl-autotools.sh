@@ -150,8 +150,13 @@ fi
     else
       options="${options} --without-brotli"
     fi
-
-    options="${options} --without-zstd"
+    if [ -d ../zstd ]; then
+      options="${options} --with-zstd=${_TOP}/zstd/${_PP}"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/zstd/${_PP}/lib"
+      LIBS="${LIBS} -lzstd"
+    else
+      options="${options} --without-zstd"
+    fi
 
     options="${options} --with-schannel"
     CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"

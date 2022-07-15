@@ -79,6 +79,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # Supported build tools:
 #
 #   zlib          cmake
+#   zstd          cmake
 #   brotli        cmake
 #   libunistring  autotools
 #   libiconv      autotools
@@ -687,6 +688,7 @@ build_single_target() {
   } >> "${_UNIMFT}"
 
   bld zlib                 "${ZLIB_VER_}"
+  bld zstd                 "${ZSTD_VER_}"
   bld brotli             "${BROTLI_VER_}"
   bld libunistring "${LIBUNISTRING_VER_}"
   bld libiconv         "${LIBICONV_VER_}"
