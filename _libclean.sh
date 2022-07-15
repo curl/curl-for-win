@@ -7,9 +7,9 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 # Normalize object names inside an .a library, to create reproducible
 # output across build systems:
-#   - strip prefix (sometimes) added by CMake, e.g. `libcurl_la-`
+#   - strip `libname_la-` prefix added by autotools
 #   - change suffix to .o / .res
-#   - alpha-sort objects
+#   - alpha-sort
 #
 # NOTE: This script does not support spaces in filenames.
 
