@@ -48,28 +48,28 @@ _VER="$1"
   #   2. build static libcurl lib + statically linked curl EXE
   for pass in shared static; do
 
-    _CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -W -Wall"
+    CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -W -Wall"
 
-    _CFLAGS="${_CFLAGS} -DHAVE_STRCASECMP -DHAVE_STRTOK_R -DHAVE_FTRUNCATE -DHAVE_GETADDRINFO_THREADSAFE"
-    _CFLAGS="${_CFLAGS} -DHAVE_SIGNAL -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID"
-    _CFLAGS="${_CFLAGS} -DHAVE_UNISTD_H"
-    _CFLAGS="${_CFLAGS} -DUSE_HEADERS_API"
+    CFLAGS="${CFLAGS} -DHAVE_STRCASECMP -DHAVE_STRTOK_R -DHAVE_FTRUNCATE -DHAVE_GETADDRINFO_THREADSAFE"
+    CFLAGS="${CFLAGS} -DHAVE_SIGNAL -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID"
+    CFLAGS="${CFLAGS} -DHAVE_UNISTD_H"
+    CFLAGS="${CFLAGS} -DUSE_HEADERS_API"
 
     options=''
 
     [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && options="${options} -DCMAKE_AR=${AR_NORMALIZE}"
 
-    _LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
-    _LDFLAGS_EXE=''
-    _LDFLAGS_DLL=''
+    LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
+    LDFLAGS_EXE=''
+    LDFLAGS_DLL=''
     if [ "${_CPU}" = 'x86' ]; then
-      _CFLAGS="${_CFLAGS} -D_WIN32_WINNT=0x0501 -DHAVE_ATOMIC"  # For Windows XP compatibility
-      _LDFLAGS_EXE="${_LDFLAGS_EXE} -Wl,--pic-executable,-e,_mainCRTStartup"
+      CFLAGS="${CFLAGS} -D_WIN32_WINNT=0x0501 -DHAVE_ATOMIC"  # For Windows XP compatibility
+      LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--pic-executable,-e,_mainCRTStartup"
     else
-      _CFLAGS="${_CFLAGS} -DHAVE_INET_NTOP -DHAVE_STRUCT_POLLFD"
-      _LDFLAGS_EXE="${_LDFLAGS_EXE} -Wl,--pic-executable,-e,mainCRTStartup"
-      _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,--image-base,0x150000000"
-      _LDFLAGS="${_LDFLAGS} -Wl,--high-entropy-va"
+      CFLAGS="${CFLAGS} -DHAVE_INET_NTOP -DHAVE_STRUCT_POLLFD"
+      LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--pic-executable,-e,mainCRTStartup"
+      LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,--image-base,0x150000000"
+      LDFLAGS="${LDFLAGS} -Wl,--high-entropy-va"
     fi
 
     if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
@@ -79,16 +79,16 @@ _VER="$1"
     if [ "${pass}" = 'shared' ]; then
       options="${options} -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${_CURL_DLL_SUFFIX}.dll"
       _DEF_NAME="libcurl${_CURL_DLL_SUFFIX}.def"
-      _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,--output-def,${_DEF_NAME}"
+      LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,--output-def,${_DEF_NAME}"
     fi
 
     if [ "${CW_MAP}" = '1' ]; then
       if [ "${pass}" = 'shared' ]; then
         _MAP_NAME="libcurl${_CURL_DLL_SUFFIX}.map"
-        _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,-Map,${_MAP_NAME}"
+        LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,-Map,${_MAP_NAME}"
       else
         _MAP_NAME='curl.map'
-        _LDFLAGS_EXE="${_LDFLAGS_EXE} -Wl,-Map,${_MAP_NAME}"
+        LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,-Map,${_MAP_NAME}"
       fi
     fi
 
@@ -97,10 +97,10 @@ _VER="$1"
     # specific positions. Linker complains about a missing --end-group, then adds
     # it automatically anyway.
     if [ "${_LD}" = 'ld' ]; then
-      _LDFLAGS="${_LDFLAGS} -Wl,--start-group"
+      LDFLAGS="${LDFLAGS} -Wl,--start-group"
     fi
 
-    _LDFLAGS_DLL="${_LDFLAGS_DLL} $(pwd)/libcurl.def"
+    LDFLAGS_DLL="${LDFLAGS_DLL} $(pwd)/libcurl.def"
 
     if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
        [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
@@ -114,10 +114,10 @@ _VER="$1"
       options="${options} -DCURL_DISABLE_IMAP=1 -DCURL_DISABLE_POP3=1 -DCURL_DISABLE_SMTP=1"
       options="${options} -DCURL_DISABLE_LDAP=1 -DCURL_DISABLE_LDAPS=1"
     else
-      [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && _CFLAGS="${_CFLAGS} -DCURL_DISABLE_FTP=1"
+      [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CFLAGS="${CFLAGS} -DCURL_DISABLE_FTP=1"
 
-      _CFLAGS="${_CFLAGS} -DHAVE_LDAP_SSL"
-      _LDFLAGS="${_LDFLAGS} -lwldap32"
+      CFLAGS="${CFLAGS} -DHAVE_LDAP_SSL"
+      LDFLAGS="${LDFLAGS} -lwldap32"
     fi
 
     if [ -d ../zlib ]; then
@@ -147,30 +147,30 @@ _VER="$1"
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/libressl/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/libressl/${_PP}/include"
-      _CFLAGS="${_CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
-      _LDFLAGS="${_LDFLAGS} -lbcrypt"
+      CFLAGS="${CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
+      LDFLAGS="${LDFLAGS} -lbcrypt"
     elif [ -d ../boringssl ]; then
-      _CFLAGS="${_CFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+      CFLAGS="${CFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/boringssl/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/boringssl/${_PP}/include"
       if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ]; then  # FIXME
-        _LDFLAGS="${_LDFLAGS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
+        LDFLAGS="${LDFLAGS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
       else
-        _LDFLAGS="${_LDFLAGS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
+        LDFLAGS="${LDFLAGS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
       fi
     elif [ -d ../openssl-quic ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl-quic/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl-quic/${_PP}/include"
-      _CFLAGS="${_CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
-      _LDFLAGS="${_LDFLAGS} -lbcrypt"
+      CFLAGS="${CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
+      LDFLAGS="${LDFLAGS} -lbcrypt"
     elif [ -d ../openssl ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl/${_PP}/include"
-      _CFLAGS="${_CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
-      _LDFLAGS="${_LDFLAGS} -lbcrypt"
+      CFLAGS="${CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
+      LDFLAGS="${LDFLAGS} -lbcrypt"
     else
       options="${options} -DCURL_USE_OPENSSL=OFF"
     fi
@@ -179,13 +179,13 @@ _VER="$1"
     fi
 
     options="${options} -DCURL_USE_SCHANNEL=ON"
-    _CFLAGS="${_CFLAGS} -DHAS_ALPN"
+    CFLAGS="${CFLAGS} -DHAS_ALPN"
 
     if [ -d ../libssh2 ]; then
       options="${options} -DCURL_USE_LIBSSH2=ON"
       options="${options} -DLIBSSH2_LIBRARY=${_TOP}/libssh2/${_PP}/lib/libssh2.a"
       options="${options} -DLIBSSH2_INCLUDE_DIR=${_TOP}/libssh2/${_PP}/include"
-      _LDFLAGS="${_LDFLAGS} -lbcrypt"
+      LDFLAGS="${LDFLAGS} -lbcrypt"
 
       if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
         # By passing -lssh2 _before_ -lcrypto (of openssl/libressl) to the linker,
@@ -195,7 +195,7 @@ _VER="$1"
         # files are identical either way. It would be useful to have a linker
         # option to sort object/lib inputs to make output deterministic (these
         # build do not rely on any ordering side-effects.)
-        _LDFLAGS="${_LDFLAGS} -L${_TOP}/libssh2/${_PP}/lib -lssh2"
+        LDFLAGS="${LDFLAGS} -L${_TOP}/libssh2/${_PP}/lib -lssh2"
       fi
     else
       options="${options} -DCURL_USE_LIBSSH2=OFF"
@@ -205,7 +205,7 @@ _VER="$1"
       options="${options} -DUSE_NGHTTP2=ON"
       options="${options} -DNGHTTP2_LIBRARY=${_TOP}/nghttp2/${_PP}/lib/libnghttp2.a"
       options="${options} -DNGHTTP2_INCLUDE_DIR=${_TOP}/nghttp2/${_PP}/include"
-      _CFLAGS="${_CFLAGS} -DNGHTTP2_STATICLIB"
+      CFLAGS="${CFLAGS} -DNGHTTP2_STATICLIB"
     else
       options="${options} -DUSE_NGHTTP2=OFF"
     fi
@@ -213,26 +213,26 @@ _VER="$1"
       options="${options} -DUSE_NGHTTP3=ON"
       options="${options} -DNGHTTP3_LIBRARY=${_TOP}/nghttp3/${_PP}/lib/libnghttp3.a"
       options="${options} -DNGHTTP3_INCLUDE_DIR=${_TOP}/nghttp3/${_PP}/include"
-      _CFLAGS="${_CFLAGS} -DNGHTTP3_STATICLIB"
+      CFLAGS="${CFLAGS} -DNGHTTP3_STATICLIB"
 
       options="${options} -DUSE_NGTCP2=ON"
       options="${options} -DNGTCP2_LIBRARY=${_TOP}/ngtcp2/${_PP}/lib/libngtcp2.a"
       options="${options} -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PP}/include"
       options="${options} -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/${_PP}/lib"
-      _CFLAGS="${_CFLAGS} -DNGTCP2_STATICLIB"
-      _LDFLAGS="${_LDFLAGS} -lws2_32"  # Necessary for 'CheckQuicSupportInOpenSSL'
+      CFLAGS="${CFLAGS} -DNGTCP2_STATICLIB"
+      LDFLAGS="${LDFLAGS} -lws2_32"  # Necessary for 'CheckQuicSupportInOpenSSL'
     else
       options="${options} -DUSE_NGHTTP3=OFF"
       options="${options} -DUSE_NGTCP2=OFF"
     fi
     if [ -d ../libgsasl ]; then
-      _CFLAGS="${_CFLAGS} -DUSE_GSASL -I${_TOP}/libgsasl/${_PP}/include"
-      _LDFLAGS="${_LDFLAGS} -L${_TOP}/libgsasl/${_PP}/lib -lgsasl"
+      CFLAGS="${CFLAGS} -DUSE_GSASL -I${_TOP}/libgsasl/${_PP}/include"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/libgsasl/${_PP}/lib -lgsasl"
     fi
     if [ -d ../libidn2 ]; then
       options="${options} -DUSE_LIBIDN2=ON"
-      _CFLAGS="${_CFLAGS} -I${_TOP}/libidn2/${_PP}/include"
-      _LDFLAGS="${_LDFLAGS} -L${_TOP}/libidn2/${_PP}/lib -lidn2"
+      CFLAGS="${CFLAGS} -I${_TOP}/libidn2/${_PP}/include"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/libidn2/${_PP}/lib -lidn2"
 
       if [ -d ../libpsl ] && [ -d ../libiconv ] && [ -d ../libunistring ]; then
         options="${options} -DUSE_LIBPSL=ON"
@@ -241,10 +241,10 @@ _VER="$1"
       fi
 
       if [ -d ../libiconv ]; then
-        _LDFLAGS="${_LDFLAGS} -L${_TOP}/libiconv/${_PP}/lib -liconv"
+        LDFLAGS="${LDFLAGS} -L${_TOP}/libiconv/${_PP}/lib -liconv"
       fi
       if [ -d ../libunistring ]; then
-        _LDFLAGS="${_LDFLAGS} -L${_TOP}/libunistring/${_PP}/lib -lunistring"
+        LDFLAGS="${LDFLAGS} -L${_TOP}/libunistring/${_PP}/lib -lunistring"
       fi
     elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
       options="${options} -DUSE_LIBIDN2=OFF"
@@ -252,7 +252,7 @@ _VER="$1"
     fi
 
     options="${options} -DENABLE_MANUAL=ON"  # Does not seem to work.
-    _CFLAGS="${_CFLAGS} -DUSE_MANUAL=1"
+    CFLAGS="${CFLAGS} -DUSE_MANUAL=1"
 
     options="${options} -DCURL_CA_PATH=none"
     options="${options} -DCURL_CA_BUNDLE=none"
@@ -267,15 +267,15 @@ _VER="$1"
     options="${options} -DBUILD_TESTING=OFF"
 
     if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
-      _LDFLAGS_EXE="${_LDFLAGS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
-      _LDFLAGS_DLL="${_LDFLAGS_DLL} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
+      LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
+      LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
     fi
 
     # shellcheck disable=SC2086
     cmake . -B "${_BLDDIR}-${pass}" ${_CMAKE_GLOBAL} ${options} \
-      "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"  \
-      "-DCMAKE_EXE_LINKER_FLAGS=${_LDFLAGS} ${_LDFLAGS_EXE}" \
-      "-DCMAKE_SHARED_LINKER_FLAGS=${_LDFLAGS} ${_LDFLAGS_DLL}"  # --debug-find --debug-trycompile
+      "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"  \
+      "-DCMAKE_EXE_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_EXE}" \
+      "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_DLL}"  # --debug-find --debug-trycompile
 
     if [ "${pass}" = 'static' ] && \
        [ -f src/tool_hugehelp.c ]; then  # File missing when building from a raw source tree.
