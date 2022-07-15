@@ -49,11 +49,12 @@ _VER="$1"
   for pass in shared static; do
 
     CFLAGS='-W -Wall'
+    CPPFLAGS=''
 
-    CFLAGS="${CFLAGS} -DHAVE_STRCASECMP -DHAVE_STRTOK_R -DHAVE_FTRUNCATE -DHAVE_GETADDRINFO_THREADSAFE"
-    CFLAGS="${CFLAGS} -DHAVE_SIGNAL -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID"
-    CFLAGS="${CFLAGS} -DHAVE_UNISTD_H"
-    CFLAGS="${CFLAGS} -DUSE_HEADERS_API"
+    CPPFLAGS="${CPPFLAGS} -DHAVE_STRCASECMP -DHAVE_STRTOK_R -DHAVE_FTRUNCATE -DHAVE_GETADDRINFO_THREADSAFE"
+    CPPFLAGS="${CPPFLAGS} -DHAVE_SIGNAL -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID"
+    CPPFLAGS="${CPPFLAGS} -DHAVE_UNISTD_H"
+    CPPFLAGS="${CPPFLAGS} -DUSE_HEADERS_API"
 
     options=''
 
@@ -63,10 +64,10 @@ _VER="$1"
     LDFLAGS_EXE=''
     LDFLAGS_DLL=''
     if [ "${_CPU}" = 'x86' ]; then
-      CFLAGS="${CFLAGS} -D_WIN32_WINNT=0x0501 -DHAVE_ATOMIC"  # For Windows XP compatibility
+      CPPFLAGS="${CPPFLAGS} -D_WIN32_WINNT=0x0501 -DHAVE_ATOMIC"  # For Windows XP compatibility
       LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--pic-executable,-e,_mainCRTStartup"
     else
-      CFLAGS="${CFLAGS} -DHAVE_INET_NTOP -DHAVE_STRUCT_POLLFD"
+      CPPFLAGS="${CPPFLAGS} -DHAVE_INET_NTOP -DHAVE_STRUCT_POLLFD"
       LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--pic-executable,-e,mainCRTStartup"
       LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,--image-base,0x150000000"
       LDFLAGS="${LDFLAGS} -Wl,--high-entropy-va"
@@ -114,9 +115,9 @@ _VER="$1"
       options="${options} -DCURL_DISABLE_IMAP=1 -DCURL_DISABLE_POP3=1 -DCURL_DISABLE_SMTP=1"
       options="${options} -DCURL_DISABLE_LDAP=1 -DCURL_DISABLE_LDAPS=1"
     else
-      [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CFLAGS="${CFLAGS} -DCURL_DISABLE_FTP=1"
+      [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_FTP=1"
 
-      CFLAGS="${CFLAGS} -DHAVE_LDAP_SSL"
+      CPPFLAGS="${CPPFLAGS} -DHAVE_LDAP_SSL"
       LDFLAGS="${LDFLAGS} -lwldap32"
     fi
 
@@ -147,10 +148,10 @@ _VER="$1"
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/libressl/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/libressl/${_PP}/include"
-      CFLAGS="${CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
+      CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
       LDFLAGS="${LDFLAGS} -lbcrypt"
     elif [ -d ../boringssl ]; then
-      CFLAGS="${CFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+      CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/boringssl/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/boringssl/${_PP}/include"
@@ -163,13 +164,13 @@ _VER="$1"
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl-quic/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl-quic/${_PP}/include"
-      CFLAGS="${CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
+      CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
       LDFLAGS="${LDFLAGS} -lbcrypt"
     elif [ -d ../openssl ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl/${_PP}/include"
-      CFLAGS="${CFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
+      CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
       LDFLAGS="${LDFLAGS} -lbcrypt"
     else
       options="${options} -DCURL_USE_OPENSSL=OFF"
@@ -179,7 +180,7 @@ _VER="$1"
     fi
 
     options="${options} -DCURL_USE_SCHANNEL=ON"
-    CFLAGS="${CFLAGS} -DHAS_ALPN"
+    CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
     if [ -d ../libssh2 ]; then
       options="${options} -DCURL_USE_LIBSSH2=ON"
@@ -205,7 +206,7 @@ _VER="$1"
       options="${options} -DUSE_NGHTTP2=ON"
       options="${options} -DNGHTTP2_LIBRARY=${_TOP}/nghttp2/${_PP}/lib/libnghttp2.a"
       options="${options} -DNGHTTP2_INCLUDE_DIR=${_TOP}/nghttp2/${_PP}/include"
-      CFLAGS="${CFLAGS} -DNGHTTP2_STATICLIB"
+      CPPFLAGS="${CPPFLAGS} -DNGHTTP2_STATICLIB"
     else
       options="${options} -DUSE_NGHTTP2=OFF"
     fi
@@ -213,20 +214,21 @@ _VER="$1"
       options="${options} -DUSE_NGHTTP3=ON"
       options="${options} -DNGHTTP3_LIBRARY=${_TOP}/nghttp3/${_PP}/lib/libnghttp3.a"
       options="${options} -DNGHTTP3_INCLUDE_DIR=${_TOP}/nghttp3/${_PP}/include"
-      CFLAGS="${CFLAGS} -DNGHTTP3_STATICLIB"
+      CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB"
 
       options="${options} -DUSE_NGTCP2=ON"
       options="${options} -DNGTCP2_LIBRARY=${_TOP}/ngtcp2/${_PP}/lib/libngtcp2.a"
       options="${options} -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PP}/include"
       options="${options} -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/${_PP}/lib"
-      CFLAGS="${CFLAGS} -DNGTCP2_STATICLIB"
+      CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB"
       LDFLAGS="${LDFLAGS} -lws2_32"  # Necessary for 'CheckQuicSupportInOpenSSL'
     else
       options="${options} -DUSE_NGHTTP3=OFF"
       options="${options} -DUSE_NGTCP2=OFF"
     fi
     if [ -d ../libgsasl ]; then
-      CFLAGS="${CFLAGS} -DUSE_GSASL -I${_TOP}/libgsasl/${_PP}/include"
+      CPPFLAGS="${CPPFLAGS} -DUSE_GSASL"
+      CFLAGS="${CFLAGS} -I${_TOP}/libgsasl/${_PP}/include"
       LDFLAGS="${LDFLAGS} -L${_TOP}/libgsasl/${_PP}/lib -lgsasl"
     fi
     if [ -d ../libidn2 ]; then
@@ -252,7 +254,7 @@ _VER="$1"
     fi
 
     options="${options} -DENABLE_MANUAL=ON"  # Does not seem to work.
-    CFLAGS="${CFLAGS} -DUSE_MANUAL=1"
+    CPPFLAGS="${CPPFLAGS} -DUSE_MANUAL=1"
 
     options="${options} -DCURL_CA_PATH=none"
     options="${options} -DCURL_CA_BUNDLE=none"
@@ -273,7 +275,7 @@ _VER="$1"
 
     # shellcheck disable=SC2086
     cmake . -B "${_BLDDIR}-${pass}" ${_CMAKE_GLOBAL} ${options} \
-      "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"  \
+      "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"  \
       "-DCMAKE_EXE_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_EXE}" \
       "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_DLL}"  # --debug-find --debug-trycompile
 

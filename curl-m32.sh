@@ -32,27 +32,28 @@ _VER="$1"
     ARCH='custom'
   fi
 
-  CFLAGS="-DOS=\\\"${_TRIPLET}\\\""
+  CFLAGS=''
+  CPPFLAGS="-DOS=\\\"${_TRIPLET}\\\""
 
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
   # marking public libcurl functions as 'exported'. Useful to avoid the
   # chance of libcurl functions getting exported from final binaries when
   # linked against the static libcurl lib.
-  CFLAGS="${CFLAGS} -DCURL_STATICLIB -DNDEBUG"
-  CFLAGS="${CFLAGS} -DHAVE_STRTOK_R -DHAVE_FTRUNCATE -D_FILE_OFFSET_BITS=64"
-  CFLAGS="${CFLAGS} -DHAVE_LIBGEN_H -DHAVE_BASENAME"
-  CFLAGS="${CFLAGS} -DHAVE_SIGNAL -DHAVE_BOOL_T -DSIZEOF_OFF_T=8"
-  CFLAGS="${CFLAGS} -DHAVE_STDBOOL_H -DHAVE_STRING_H -DHAVE_SETJMP_H"
-  CFLAGS="${CFLAGS} -DUSE_HEADERS_API"
+  CPPFLAGS="${CPPFLAGS} -DCURL_STATICLIB -DNDEBUG"
+  CPPFLAGS="${CPPFLAGS} -DHAVE_STRTOK_R -DHAVE_FTRUNCATE -D_FILE_OFFSET_BITS=64"
+  CPPFLAGS="${CPPFLAGS} -DHAVE_LIBGEN_H -DHAVE_BASENAME"
+  CPPFLAGS="${CPPFLAGS} -DHAVE_SIGNAL -DHAVE_BOOL_T -DSIZEOF_OFF_T=8"
+  CPPFLAGS="${CPPFLAGS} -DHAVE_STDBOOL_H -DHAVE_STRING_H -DHAVE_SETJMP_H"
+  CPPFLAGS="${CPPFLAGS} -DUSE_HEADERS_API"
 
   LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
   LDFLAGS_EXE=''
   LDFLAGS_DLL=''
   if [ "${_CPU}" = 'x86' ]; then
-    CFLAGS="${CFLAGS} -D_WIN32_WINNT=0x0501 -DHAVE_ATOMIC"  # For Windows XP compatibility
+    CPPFLAGS="${CPPFLAGS} -D_WIN32_WINNT=0x0501 -DHAVE_ATOMIC"  # For Windows XP compatibility
     LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--pic-executable,-e,_mainCRTStartup"
   else
-    CFLAGS="${CFLAGS} -DHAVE_INET_PTON -DHAVE_INET_NTOP"
+    CPPFLAGS="${CPPFLAGS} -DHAVE_INET_PTON -DHAVE_INET_NTOP"
     LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--pic-executable,-e,mainCRTStartup"
     LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,--image-base,0x150000000"
     LDFLAGS="${LDFLAGS} -Wl,--high-entropy-va"
@@ -60,21 +61,21 @@ _VER="$1"
 
   if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
      [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
-    CFLAGS="${CFLAGS} -DCURL_DISABLE_ALTSVC=1"
+    CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_ALTSVC=1"
   fi
 
   if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
-    CFLAGS="${CFLAGS} -DCURL_DISABLE_CRYPTO_AUTH=1"
-    CFLAGS="${CFLAGS} -DCURL_DISABLE_DICT=1 -DCURL_DISABLE_FILE=1 -DCURL_DISABLE_GOPHER=1 -DCURL_DISABLE_MQTT=1 -DCURL_DISABLE_RTSP=1 -DCURL_DISABLE_SMB=1 -DCURL_DISABLE_TELNET=1 -DCURL_DISABLE_TFTP=1"
-    CFLAGS="${CFLAGS} -DCURL_DISABLE_FTP=1"
-    CFLAGS="${CFLAGS} -DCURL_DISABLE_IMAP=1 -DCURL_DISABLE_POP3=1 -DCURL_DISABLE_SMTP=1"
-    CFLAGS="${CFLAGS} -DCURL_DISABLE_LDAP=1 -DCURL_DISABLE_LDAPS=1"
+    CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_CRYPTO_AUTH=1"
+    CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_DICT=1 -DCURL_DISABLE_FILE=1 -DCURL_DISABLE_GOPHER=1 -DCURL_DISABLE_MQTT=1 -DCURL_DISABLE_RTSP=1 -DCURL_DISABLE_SMB=1 -DCURL_DISABLE_TELNET=1 -DCURL_DISABLE_TFTP=1"
+    CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_FTP=1"
+    CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_IMAP=1 -DCURL_DISABLE_POP3=1 -DCURL_DISABLE_SMTP=1"
+    CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_LDAP=1 -DCURL_DISABLE_LDAPS=1"
   else
     options="${options}-ldaps"
   fi
 
   if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
-    CFLAGS="${CFLAGS} -DUNICODE -D_UNICODE"
+    CPPFLAGS="${CPPFLAGS} -DUNICODE -D_UNICODE"
     LDFLAGS_EXE="${LDFLAGS_EXE} -municode"
   fi
 
@@ -133,7 +134,7 @@ _VER="$1"
   if [ -d ../libressl ]; then
     export OPENSSL_PATH="../../libressl/${_PP}"
   elif [ -d ../boringssl ]; then
-    CFLAGS="${CFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+    CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
     export OPENSSL_PATH="../../boringssl/${_PP}"
     if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ]; then  # FIXME
       # Non-production workaround:
@@ -152,14 +153,14 @@ _VER="$1"
   elif [ -d ../openssl-quic ]; then
     export OPENSSL_PATH="../../openssl-quic/${_PP}"
     # Workaround for 3.x deprecation warnings
-    CFLAGS="${CFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
+    CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
   elif [ -d ../openssl ]; then
     export OPENSSL_PATH="../../openssl/${_PP}"
     # Workaround for 3.x deprecation warnings
-    CFLAGS="${CFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
+    CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
   fi
   if [ -n "${OPENSSL_PATH:-}" ]; then
-    CFLAGS="${CFLAGS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
+    CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
     options="${options}-ssl"
     export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
     export OPENSSL_LIBPATH="${OPENSSL_PATH}/lib"
@@ -167,7 +168,7 @@ _VER="$1"
   fi
 
   options="${options}-schannel"
-  CFLAGS="${CFLAGS} -DHAS_ALPN"
+  CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
   if [ -d ../libssh2 ]; then
     options="${options}-ssh2"
@@ -177,14 +178,14 @@ _VER="$1"
   if [ -d ../nghttp2 ]; then
     options="${options}-nghttp2"
     export NGHTTP2_PATH="../../nghttp2/${_PP}"
-    CFLAGS="${CFLAGS} -DNGHTTP2_STATICLIB"
+    CPPFLAGS="${CPPFLAGS} -DNGHTTP2_STATICLIB"
   fi
   if [ -d ../nghttp3 ] && [ -d ../ngtcp2 ] && [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ]; then
     options="${options}-nghttp3-ngtcp2"
     export NGHTTP3_PATH="../../nghttp3/${_PP}"
-    CFLAGS="${CFLAGS} -DNGHTTP3_STATICLIB"
+    CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB"
     export NGTCP2_PATH="../../ngtcp2/${_PP}"
-    CFLAGS="${CFLAGS} -DNGTCP2_STATICLIB"
+    CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB"
     export NGTCP2_LIBS='-lngtcp2'
     if [ -d ../boringssl ]; then
       NGTCP2_LIBS="${NGTCP2_LIBS} -lngtcp2_crypto_boringssl"
@@ -201,7 +202,7 @@ _VER="$1"
     export LIBIDN2_PATH="../../libidn2/${_PP}"
 
     if [ -d ../libpsl ]; then
-      CFLAGS="${CFLAGS} -DUSE_LIBPSL=ON"
+      CPPFLAGS="${CPPFLAGS} -DUSE_LIBPSL=ON"
       CFLAGS="${CFLAGS} -I../../libpsl/${_PP}/include"
       LDFLAGS="${LDFLAGS} -L../../libpsl/${_PP}/lib -lpsl"
     fi
@@ -216,7 +217,7 @@ _VER="$1"
     options="${options}-winidn"
   fi
 
-  [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CFLAGS="${CFLAGS} -DCURL_DISABLE_FTP=1"
+  [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_FTP=1"
 
   if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
     LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
@@ -233,7 +234,7 @@ _VER="$1"
   [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && CURL_AR="${AR_NORMALIZE}"
 
   export CURL_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
-  export CURL_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS}"
+  export CURL_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS}"
   export CURL_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LDFLAGS}"
   export CURL_LDFLAG_EXTRAS_DLL="${LDFLAGS_DLL}"
   export CURL_LDFLAG_EXTRAS_EXE="${LDFLAGS_EXE}"
