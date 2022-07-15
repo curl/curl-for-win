@@ -15,7 +15,7 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  CFLAGS='-DHAVE_DECL_SECUREZEROMEMORY=1 -D_FILE_OFFSET_BITS=64'
+  CPPFLAGS='-DHAVE_DECL_SECUREZEROMEMORY=1 -D_FILE_OFFSET_BITS=64'
   LIBS=''
 
   options=''
@@ -30,7 +30,7 @@ _VER="$1"
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/libressl/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/libressl/${_PP}/include"
-    CFLAGS="${CFLAGS} -DNOCRYPT"
+    CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
     LIBS="${LIBS} -lbcrypt"
     LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
   elif [ -d ../boringssl ]; then
@@ -42,14 +42,14 @@ _VER="$1"
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl-quic/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl-quic/${_PP}/include"
-    CFLAGS="${CFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
+    CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LIBS="${LIBS} -lbcrypt"
     LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
   elif [ -d ../openssl ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl/${_PP}/include"
-    CFLAGS="${CFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
+    CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LIBS="${LIBS} -lbcrypt"
     LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
   else
@@ -62,7 +62,7 @@ _VER="$1"
     '-DBUILD_EXAMPLES=OFF' \
     '-DBUILD_TESTING=OFF' \
     '-DENABLE_DEBUG_LOGGING=OFF' \
-    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LIBS}"
+    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LIBS}"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
