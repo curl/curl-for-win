@@ -32,7 +32,7 @@ _VER="$1"
   if [ -d ../zlib ]; then
     options="${options} --with-libz"
     # These seem to work better than --with-libz-prefix=:
-    CFLAGS="${CFLAGS} -I${_TOP}/zlib/${_PP}/include"
+    CPPFLAGS="${CPPFLAGS} -I${_TOP}/zlib/${_PP}/include"
     LDFLAGS="${LDFLAGS} -L${_TOP}/zlib/${_PP}/lib"
   fi
 

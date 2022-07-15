@@ -230,13 +230,13 @@ _VER="$1"
     fi
     if [ -d ../libgsasl ]; then
       CPPFLAGS="${CPPFLAGS} -DUSE_GSASL"
-      CFLAGS="${CFLAGS} -I${_TOP}/libgsasl/${_PP}/include"
+      CPPFLAGS="${CPPFLAGS} -I${_TOP}/libgsasl/${_PP}/include"
       LDFLAGS="${LDFLAGS} -L${_TOP}/libgsasl/${_PP}/lib"
       LIBS="${LIBS} -lgsasl"
     fi
     if [ -d ../libidn2 ]; then
       options="${options} -DUSE_LIBIDN2=ON"
-      CFLAGS="${CFLAGS} -I${_TOP}/libidn2/${_PP}/include"
+      CPPFLAGS="${CPPFLAGS} -I${_TOP}/libidn2/${_PP}/include"
       LDFLAGS="${LDFLAGS} -L${_TOP}/libidn2/${_PP}/lib"
       LIBS="${LIBS} -lidn2"
 

@@ -203,8 +203,8 @@ _VER="$1"
     export LIBIDN2_PATH="../../libidn2/${_PP}"
 
     if [ -d ../libpsl ]; then
-      CPPFLAGS="${CPPFLAGS} -DUSE_LIBPSL=ON"
-      CFLAGS="${CFLAGS} -I../../libpsl/${_PP}/include"
+      CPPFLAGS="${CPPFLAGS} -DUSE_LIBPSL"
+      CPPFLAGS="${CPPFLAGS} -I../../libpsl/${_PP}/include"
       LDFLAGS="${LDFLAGS} -L../../libpsl/${_PP}/lib"
       LIBS="${LIBS} -lpsl"
     fi
