@@ -15,7 +15,7 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -DHAVE_DECL_SECUREZEROMEMORY=1 -D_FILE_OFFSET_BITS=64"
+  CFLAGS='-DHAVE_DECL_SECUREZEROMEMORY=1 -D_FILE_OFFSET_BITS=64'
   LDFLAGS=''
 
   options=''
@@ -62,7 +62,7 @@ _VER="$1"
     '-DBUILD_EXAMPLES=OFF' \
     '-DBUILD_TESTING=OFF' \
     '-DENABLE_DEBUG_LOGGING=OFF' \
-    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LDFLAGS}"
+    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LDFLAGS}"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 

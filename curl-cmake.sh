@@ -48,7 +48,7 @@ _VER="$1"
   #   2. build static libcurl lib + statically linked curl EXE
   for pass in shared static; do
 
-    CFLAGS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} -W -Wall"
+    CFLAGS='-W -Wall'
 
     CFLAGS="${CFLAGS} -DHAVE_STRCASECMP -DHAVE_STRTOK_R -DHAVE_FTRUNCATE -DHAVE_GETADDRINFO_THREADSAFE"
     CFLAGS="${CFLAGS} -DHAVE_SIGNAL -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID"
@@ -273,7 +273,7 @@ _VER="$1"
 
     # shellcheck disable=SC2086
     cmake . -B "${_BLDDIR}-${pass}" ${_CMAKE_GLOBAL} ${options} \
-      "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"  \
+      "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"  \
       "-DCMAKE_EXE_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_EXE}" \
       "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_DLL}"  # --debug-find --debug-trycompile
 
