@@ -667,7 +667,7 @@ build_single_target() {
     [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT_SHORT}"
     [ -n "${clangver}" ] && echo ".${clangver}${versuffix}"
     [ -n "${gccver}" ]   && echo ".${gccver}${versuffix}"
-    [ -n "${mingwver}" ] && echo ".${mingwver}${mingwurl}${versuffix}"
+    [ -n "${mingwver}" ] && echo ".${mingwver}${versuffix}"
     [ -n "${binver}" ]   && echo ".${binver}"
     [ -n "${nasmver}" ]  && echo ".${nasmver}"
   } >> "${_BLD}"
