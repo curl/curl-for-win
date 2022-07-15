@@ -80,10 +80,6 @@ _VER="$1"
     LDFLAGS_EXE="${LDFLAGS_EXE} -municode"
   fi
 
-  # shellcheck disable=SC2153
-  export CURL_DLL_SUFFIX="${_CURL_DLL_SUFFIX}"
-  export CURL_DLL_A_SUFFIX=.dll
-
   if [ "${CW_MAP}" = '1' ]; then
     LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,-Map,curl.map"
     LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,-Map,libcurl${_CURL_DLL_SUFFIX}.map"
@@ -109,10 +105,10 @@ _VER="$1"
 
   # NOTE: Makefile.m32 automatically enables -zlib with -ssh2
   if [ -d ../zlib ]; then
+    options="${options}-zlib"
     export ZLIB_PATH="../../zlib/${_PP}/include"
     # Makefile.m32 looks for the lib in ZLIB_PATH, so adjust it manually:
     LDFLAGS="${LDFLAGS} -L../../zlib/${_PP}/lib"
-    options="${options}-zlib"
 
     # Make sure to link zlib (and only zlib) in static mode when building
     # `libcurl.dll`, so that it would not depend on a `zlib1.dll`.
@@ -161,11 +157,11 @@ _VER="$1"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
   fi
   if [ -n "${OPENSSL_PATH:-}" ]; then
-    CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
     options="${options}-ssl"
     export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
     export OPENSSL_LIBPATH="${OPENSSL_PATH}/lib"
     OPENSSL_LIBS="${OPENSSL_LIBS} -lssl -lcrypto -lbcrypt"
+    CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
   fi
 
   options="${options}-schannel"
@@ -242,6 +238,10 @@ _VER="$1"
   export CURL_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LDFLAGS} ${LIBS}"
   export CURL_LDFLAG_EXTRAS_DLL="${LDFLAGS_DLL}"
   export CURL_LDFLAG_EXTRAS_EXE="${LDFLAGS_EXE}"
+
+  # shellcheck disable=SC2153
+  export CURL_DLL_SUFFIX="${_CURL_DLL_SUFFIX}"
+  export CURL_DLL_A_SUFFIX='.dll'
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
     "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.m32 clean
