@@ -60,7 +60,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - Change default TLS to BoringSSL? with OPENSSL_SMALL?
 #   - Drop XP compatibility for x86 builds also
 #   - Drop x86 builds
-#   - Make -noftp the default?
 #   - Make -nobrotli the default?
 #   - Enable Control Flow Guard (once FLOSS toolchains support it): -ehcontguard (requires LLVM 13.0.0)
 #   - LLVM -mretpoline
