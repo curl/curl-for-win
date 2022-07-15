@@ -32,62 +32,50 @@ _VER="$1"
     ARCH='custom'
   fi
 
-  export CURL_CC="${_CC_GLOBAL}"
-  export CURL_STRIP="${_STRIP}"
-  export CURL_RC="${RC}"
-  export CURL_AR="${AR}"
-  export CURL_RANLIB="${RANLIB}"
-
-  [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && CURL_AR="${AR_NORMALIZE}"
-
-  export CURL_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
-
-  export CURL_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
-
-  CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DOS=\\\"${_TRIPLET}\\\""
+  CFLAGS="-DOS=\\\"${_TRIPLET}\\\""
 
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
   # marking public libcurl functions as 'exported'. Useful to avoid the
   # chance of libcurl functions getting exported from final binaries when
   # linked against the static libcurl lib.
-  CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_STATICLIB -DNDEBUG"
-  CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_STRTOK_R -DHAVE_FTRUNCATE -D_FILE_OFFSET_BITS=64"
-  CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_LIBGEN_H -DHAVE_BASENAME"
-  CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_SIGNAL -DHAVE_BOOL_T -DSIZEOF_OFF_T=8"
-  CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_STDBOOL_H -DHAVE_STRING_H -DHAVE_SETJMP_H"
-  CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUSE_HEADERS_API"
+  CFLAGS="${CFLAGS} -DCURL_STATICLIB -DNDEBUG"
+  CFLAGS="${CFLAGS} -DHAVE_STRTOK_R -DHAVE_FTRUNCATE -D_FILE_OFFSET_BITS=64"
+  CFLAGS="${CFLAGS} -DHAVE_LIBGEN_H -DHAVE_BASENAME"
+  CFLAGS="${CFLAGS} -DHAVE_SIGNAL -DHAVE_BOOL_T -DSIZEOF_OFF_T=8"
+  CFLAGS="${CFLAGS} -DHAVE_STDBOOL_H -DHAVE_STRING_H -DHAVE_SETJMP_H"
+  CFLAGS="${CFLAGS} -DUSE_HEADERS_API"
 
-  export CURL_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} -Wl,--nxcompat -Wl,--dynamicbase"
-  export CURL_LDFLAG_EXTRAS_EXE=''
-  export CURL_LDFLAG_EXTRAS_DLL=''
+  LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
+  LDFLAGS_EXE=''
+  LDFLAGS_DLL=''
   if [ "${_CPU}" = 'x86' ]; then
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -D_WIN32_WINNT=0x0501 -DHAVE_ATOMIC"  # For Windows XP compatibility
-    CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--pic-executable,-e,_mainCRTStartup"
+    CFLAGS="${CFLAGS} -D_WIN32_WINNT=0x0501 -DHAVE_ATOMIC"  # For Windows XP compatibility
+    LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--pic-executable,-e,_mainCRTStartup"
   else
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAVE_INET_PTON -DHAVE_INET_NTOP"
-    CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--pic-executable,-e,mainCRTStartup"
-    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,--image-base,0x150000000"
-    CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -Wl,--high-entropy-va"
+    CFLAGS="${CFLAGS} -DHAVE_INET_PTON -DHAVE_INET_NTOP"
+    LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--pic-executable,-e,mainCRTStartup"
+    LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,--image-base,0x150000000"
+    LDFLAGS="${LDFLAGS} -Wl,--high-entropy-va"
   fi
 
   if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
      [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_ALTSVC=1"
+    CFLAGS="${CFLAGS} -DCURL_DISABLE_ALTSVC=1"
   fi
 
   if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_CRYPTO_AUTH=1"
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_DICT=1 -DCURL_DISABLE_FILE=1 -DCURL_DISABLE_GOPHER=1 -DCURL_DISABLE_MQTT=1 -DCURL_DISABLE_RTSP=1 -DCURL_DISABLE_SMB=1 -DCURL_DISABLE_TELNET=1 -DCURL_DISABLE_TFTP=1"
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_FTP=1"
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_IMAP=1 -DCURL_DISABLE_POP3=1 -DCURL_DISABLE_SMTP=1"
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_LDAP=1 -DCURL_DISABLE_LDAPS=1"
+    CFLAGS="${CFLAGS} -DCURL_DISABLE_CRYPTO_AUTH=1"
+    CFLAGS="${CFLAGS} -DCURL_DISABLE_DICT=1 -DCURL_DISABLE_FILE=1 -DCURL_DISABLE_GOPHER=1 -DCURL_DISABLE_MQTT=1 -DCURL_DISABLE_RTSP=1 -DCURL_DISABLE_SMB=1 -DCURL_DISABLE_TELNET=1 -DCURL_DISABLE_TFTP=1"
+    CFLAGS="${CFLAGS} -DCURL_DISABLE_FTP=1"
+    CFLAGS="${CFLAGS} -DCURL_DISABLE_IMAP=1 -DCURL_DISABLE_POP3=1 -DCURL_DISABLE_SMTP=1"
+    CFLAGS="${CFLAGS} -DCURL_DISABLE_LDAP=1 -DCURL_DISABLE_LDAPS=1"
   else
     options="${options}-ldaps"
   fi
 
   if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUNICODE -D_UNICODE"
-    CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -municode"
+    CFLAGS="${CFLAGS} -DUNICODE -D_UNICODE"
+    LDFLAGS_EXE="${LDFLAGS_EXE} -municode"
   fi
 
   # shellcheck disable=SC2153
@@ -95,8 +83,8 @@ _VER="$1"
   export CURL_DLL_A_SUFFIX=.dll
 
   if [ "${CW_MAP}" = '1' ]; then
-    CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,-Map,curl.map"
-    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,-Map,libcurl${_CURL_DLL_SUFFIX}.map"
+    LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,-Map,curl.map"
+    LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,-Map,libcurl${_CURL_DLL_SUFFIX}.map"
   fi
 
   # Generate .def file for libcurl by parsing curl headers. Useful to export
@@ -115,13 +103,13 @@ _VER="$1"
     grep -a -h -E '^ *\*? *[a-z_]+ *\(.+\);$' include/curl/*.h \
       | sed -E 's/^ *\*? *([a-z_]+) *\(.+$/\1/g'
   } | grep -a -v '^$' | sort | tee -a libcurl.def
-  CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} ../libcurl.def"
+  LDFLAGS_DLL="${LDFLAGS_DLL} ../libcurl.def"
 
   # NOTE: Makefile.m32 automatically enables -zlib with -ssh2
   if [ -d ../zlib ]; then
     export ZLIB_PATH="../../zlib/${_PP}/include"
     # Makefile.m32 looks for the lib in ZLIB_PATH, so adjust it manually:
-    CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L../../zlib/${_PP}/lib"
+    LDFLAGS="${LDFLAGS} -L../../zlib/${_PP}/lib"
     options="${options}-zlib"
 
     # Make sure to link zlib (and only zlib) in static mode when building
@@ -145,7 +133,7 @@ _VER="$1"
   if [ -d ../libressl ]; then
     export OPENSSL_PATH="../../libressl/${_PP}"
   elif [ -d ../boringssl ]; then
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+    CFLAGS="${CFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
     export OPENSSL_PATH="../../boringssl/${_PP}"
     if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ]; then  # FIXME
       # Non-production workaround:
@@ -164,14 +152,14 @@ _VER="$1"
   elif [ -d ../openssl-quic ]; then
     export OPENSSL_PATH="../../openssl-quic/${_PP}"
     # Workaround for 3.x deprecation warnings
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DOPENSSL_SUPPRESS_DEPRECATED"
+    CFLAGS="${CFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
   elif [ -d ../openssl ]; then
     export OPENSSL_PATH="../../openssl/${_PP}"
     # Workaround for 3.x deprecation warnings
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DOPENSSL_SUPPRESS_DEPRECATED"
+    CFLAGS="${CFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
   fi
   if [ -n "${OPENSSL_PATH:-}" ]; then
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
+    CFLAGS="${CFLAGS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
     options="${options}-ssl"
     export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
     export OPENSSL_LIBPATH="${OPENSSL_PATH}/lib"
@@ -179,24 +167,24 @@ _VER="$1"
   fi
 
   options="${options}-schannel"
-  CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DHAS_ALPN"
+  CFLAGS="${CFLAGS} -DHAS_ALPN"
 
   if [ -d ../libssh2 ]; then
     options="${options}-ssh2"
     export LIBSSH2_PATH="../../libssh2/${_PP}"
-    CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L${LIBSSH2_PATH}/lib"
+    LDFLAGS="${LDFLAGS} -L${LIBSSH2_PATH}/lib"
   fi
   if [ -d ../nghttp2 ]; then
     options="${options}-nghttp2"
     export NGHTTP2_PATH="../../nghttp2/${_PP}"
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGHTTP2_STATICLIB"
+    CFLAGS="${CFLAGS} -DNGHTTP2_STATICLIB"
   fi
   if [ -d ../nghttp3 ] && [ -d ../ngtcp2 ] && [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ]; then
     options="${options}-nghttp3-ngtcp2"
     export NGHTTP3_PATH="../../nghttp3/${_PP}"
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGHTTP3_STATICLIB"
+    CFLAGS="${CFLAGS} -DNGHTTP3_STATICLIB"
     export NGTCP2_PATH="../../ngtcp2/${_PP}"
-    CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DNGTCP2_STATICLIB"
+    CFLAGS="${CFLAGS} -DNGTCP2_STATICLIB"
     export NGTCP2_LIBS='-lngtcp2'
     if [ -d ../boringssl ]; then
       NGTCP2_LIBS="${NGTCP2_LIBS} -lngtcp2_crypto_boringssl"
@@ -213,27 +201,42 @@ _VER="$1"
     export LIBIDN2_PATH="../../libidn2/${_PP}"
 
     if [ -d ../libpsl ]; then
-      CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DUSE_LIBPSL=ON"
-      CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -I../../libpsl/${_PP}/include"
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L../../libpsl/${_PP}/lib -lpsl"
+      CFLAGS="${CFLAGS} -DUSE_LIBPSL=ON"
+      CFLAGS="${CFLAGS} -I../../libpsl/${_PP}/include"
+      LDFLAGS="${LDFLAGS} -L../../libpsl/${_PP}/lib -lpsl"
     fi
 
     if [ -d ../libiconv ]; then
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L../../libiconv/${_PP}/lib -liconv"
+      LDFLAGS="${LDFLAGS} -L../../libiconv/${_PP}/lib -liconv"
     fi
     if [ -d ../libunistring ]; then
-      CURL_LDFLAG_EXTRAS="${CURL_LDFLAG_EXTRAS} -L../../libunistring/${_PP}/lib -lunistring"
+      LDFLAGS="${LDFLAGS} -L../../libunistring/${_PP}/lib -lunistring"
     fi
   elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
     options="${options}-winidn"
   fi
 
-  [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CURL_CFLAG_EXTRAS="${CURL_CFLAG_EXTRAS} -DCURL_DISABLE_FTP=1"
+  [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CFLAGS="${CFLAGS} -DCURL_DISABLE_FTP=1"
 
   if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
-    CURL_LDFLAG_EXTRAS_DLL="${CURL_LDFLAG_EXTRAS_DLL} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
-    CURL_LDFLAG_EXTRAS_EXE="${CURL_LDFLAG_EXTRAS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
+    LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
+    LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
   fi
+
+  # Load above values into the variables Makefile.m32 expects
+  export CURL_CC="${_CC_GLOBAL}"
+  export CURL_STRIP="${_STRIP}"
+  export CURL_RC="${RC}"
+  export CURL_AR="${AR}"
+  export CURL_RANLIB="${RANLIB}"
+
+  [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && CURL_AR="${AR_NORMALIZE}"
+
+  export CURL_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
+  export CURL_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS}"
+  export CURL_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LDFLAGS}"
+  export CURL_LDFLAG_EXTRAS_DLL="${LDFLAGS_DLL}"
+  export CURL_LDFLAG_EXTRAS_EXE="${LDFLAGS_EXE}"
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
     "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.m32 clean
