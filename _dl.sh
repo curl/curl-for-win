@@ -153,8 +153,8 @@ gpg_recv_key() {
 to8digit() {
   local ver
   ver="$(cat)"
-  if [[ "${ver}" =~ ([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
-    printf '%04d%02d%02d' "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}" "${BASH_REMATCH[3]}"
+  if [[ "${ver}" =~ ([0-9]+)\.([0-9]+)(\.([0-9]+))? ]]; then
+    printf '%04d%02d%02d' "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}" "${BASH_REMATCH[4]:-0}"
   else
     printf '%s' "${ver}"
   fi
