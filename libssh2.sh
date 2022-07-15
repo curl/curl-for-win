@@ -39,18 +39,18 @@ _VER="$1"
   if [ -d ../libressl ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/libressl/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
-    LDFLAGS="${LDFLAGS} -lbcrypt"
+    LIBS="${LIBS} -lbcrypt"
   elif [ -d ../boringssl ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/boringssl/${_PP}"
-    LDFLAGS="${LDFLAGS} -lpthread"
+    LIBS="${LIBS} -lpthread"
   elif [ -d ../openssl-quic ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/openssl-quic/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
-    LDFLAGS="${LDFLAGS} -lbcrypt"
+    LIBS="${LIBS} -lbcrypt"
   elif [ -d ../openssl ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/openssl/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
-    LDFLAGS="${LDFLAGS} -lbcrypt"
+    LIBS="${LIBS} -lbcrypt"
   else
     options="${options} --with-crypto=wincng"
   fi

@@ -60,6 +60,7 @@ _VER="$1"
 
     [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && options="${options} -DCMAKE_AR=${AR_NORMALIZE}"
 
+    LIBS=''
     LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
     LDFLAGS_EXE=''
     LDFLAGS_DLL=''
@@ -118,7 +119,7 @@ _VER="$1"
       [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_FTP=1"
 
       CPPFLAGS="${CPPFLAGS} -DHAVE_LDAP_SSL"
-      LDFLAGS="${LDFLAGS} -lwldap32"
+      LIBS="${LIBS} -lwldap32"
     fi
 
     if [ -d ../zlib ]; then
@@ -149,29 +150,29 @@ _VER="$1"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/libressl/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/libressl/${_PP}/include"
       CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
-      LDFLAGS="${LDFLAGS} -lbcrypt"
+      LIBS="${LIBS} -lbcrypt"
     elif [ -d ../boringssl ]; then
       CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/boringssl/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/boringssl/${_PP}/include"
       if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ]; then  # FIXME
-        LDFLAGS="${LDFLAGS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
+        LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
       else
-        LDFLAGS="${LDFLAGS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
+        LIBS="${LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
       fi
     elif [ -d ../openssl-quic ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl-quic/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl-quic/${_PP}/include"
       CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
-      LDFLAGS="${LDFLAGS} -lbcrypt"
+      LIBS="${LIBS} -lbcrypt"
     elif [ -d ../openssl ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl/${_PP}/include"
       CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
-      LDFLAGS="${LDFLAGS} -lbcrypt"
+      LIBS="${LIBS} -lbcrypt"
     else
       options="${options} -DCURL_USE_OPENSSL=OFF"
     fi
@@ -186,7 +187,7 @@ _VER="$1"
       options="${options} -DCURL_USE_LIBSSH2=ON"
       options="${options} -DLIBSSH2_LIBRARY=${_TOP}/libssh2/${_PP}/lib/libssh2.a"
       options="${options} -DLIBSSH2_INCLUDE_DIR=${_TOP}/libssh2/${_PP}/include"
-      LDFLAGS="${LDFLAGS} -lbcrypt"
+      LIBS="${LIBS} -lbcrypt"
 
       if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
         # By passing -lssh2 _before_ -lcrypto (of openssl/libressl) to the linker,
@@ -196,7 +197,8 @@ _VER="$1"
         # files are identical either way. It would be useful to have a linker
         # option to sort object/lib inputs to make output deterministic (these
         # build do not rely on any ordering side-effects.)
-        LDFLAGS="${LDFLAGS} -L${_TOP}/libssh2/${_PP}/lib -lssh2"
+        LDFLAGS="${LDFLAGS} -L${_TOP}/libssh2/${_PP}/lib"
+        LIBS="${LIBS} -lssh2"
       fi
     else
       options="${options} -DCURL_USE_LIBSSH2=OFF"
@@ -221,7 +223,7 @@ _VER="$1"
       options="${options} -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PP}/include"
       options="${options} -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/${_PP}/lib"
       CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB"
-      LDFLAGS="${LDFLAGS} -lws2_32"  # Necessary for 'CheckQuicSupportInOpenSSL'
+      LIBS="${LIBS} -lws2_32"  # Necessary for 'CheckQuicSupportInOpenSSL'
     else
       options="${options} -DUSE_NGHTTP3=OFF"
       options="${options} -DUSE_NGTCP2=OFF"
@@ -229,12 +231,14 @@ _VER="$1"
     if [ -d ../libgsasl ]; then
       CPPFLAGS="${CPPFLAGS} -DUSE_GSASL"
       CFLAGS="${CFLAGS} -I${_TOP}/libgsasl/${_PP}/include"
-      LDFLAGS="${LDFLAGS} -L${_TOP}/libgsasl/${_PP}/lib -lgsasl"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/libgsasl/${_PP}/lib"
+      LIBS="${LIBS} -lgsasl"
     fi
     if [ -d ../libidn2 ]; then
       options="${options} -DUSE_LIBIDN2=ON"
       CFLAGS="${CFLAGS} -I${_TOP}/libidn2/${_PP}/include"
-      LDFLAGS="${LDFLAGS} -L${_TOP}/libidn2/${_PP}/lib -lidn2"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/libidn2/${_PP}/lib"
+      LIBS="${LIBS} -lidn2"
 
       if [ -d ../libpsl ] && [ -d ../libiconv ] && [ -d ../libunistring ]; then
         options="${options} -DUSE_LIBPSL=ON"
@@ -243,10 +247,12 @@ _VER="$1"
       fi
 
       if [ -d ../libiconv ]; then
-        LDFLAGS="${LDFLAGS} -L${_TOP}/libiconv/${_PP}/lib -liconv"
+        LDFLAGS="${LDFLAGS} -L${_TOP}/libiconv/${_PP}/lib"
+        LIBS="${LIBS} -liconv"
       fi
       if [ -d ../libunistring ]; then
-        LDFLAGS="${LDFLAGS} -L${_TOP}/libunistring/${_PP}/lib -lunistring"
+        LDFLAGS="${LDFLAGS} -L${_TOP}/libunistring/${_PP}/lib"
+        LIBS="${LIBS} -lunistring"
       fi
     elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
       options="${options} -DUSE_LIBIDN2=OFF"
@@ -276,8 +282,8 @@ _VER="$1"
     # shellcheck disable=SC2086
     cmake . -B "${_BLDDIR}-${pass}" ${_CMAKE_GLOBAL} ${options} \
       "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"  \
-      "-DCMAKE_EXE_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_EXE}" \
-      "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_DLL}"  # --debug-find --debug-trycompile
+      "-DCMAKE_EXE_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_EXE} ${LIBS}" \
+      "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_DLL} ${LIBS}"  # --debug-find --debug-trycompile
 
     if [ "${pass}" = 'static' ] && \
        [ -f src/tool_hugehelp.c ]; then  # File missing when building from a raw source tree.

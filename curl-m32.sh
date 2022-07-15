@@ -46,6 +46,7 @@ _VER="$1"
   CPPFLAGS="${CPPFLAGS} -DHAVE_STDBOOL_H -DHAVE_STRING_H -DHAVE_SETJMP_H"
   CPPFLAGS="${CPPFLAGS} -DUSE_HEADERS_API"
 
+  LIBS=''
   LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
   LDFLAGS_EXE=''
   LDFLAGS_DLL=''
@@ -204,14 +205,17 @@ _VER="$1"
     if [ -d ../libpsl ]; then
       CPPFLAGS="${CPPFLAGS} -DUSE_LIBPSL=ON"
       CFLAGS="${CFLAGS} -I../../libpsl/${_PP}/include"
-      LDFLAGS="${LDFLAGS} -L../../libpsl/${_PP}/lib -lpsl"
+      LDFLAGS="${LDFLAGS} -L../../libpsl/${_PP}/lib"
+      LIBS="${LIBS} -lpsl"
     fi
 
     if [ -d ../libiconv ]; then
-      LDFLAGS="${LDFLAGS} -L../../libiconv/${_PP}/lib -liconv"
+      LDFLAGS="${LDFLAGS} -L../../libiconv/${_PP}/lib"
+      LIBS="${LIBS} -liconv"
     fi
     if [ -d ../libunistring ]; then
-      LDFLAGS="${LDFLAGS} -L../../libunistring/${_PP}/lib -lunistring"
+      LDFLAGS="${LDFLAGS} -L../../libunistring/${_PP}/lib"
+      LIBS="${LIBS} -lunistring"
     fi
   elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
     options="${options}-winidn"
@@ -235,7 +239,7 @@ _VER="$1"
 
   export CURL_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
   export CURL_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS}"
-  export CURL_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LDFLAGS}"
+  export CURL_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LDFLAGS} ${LIBS}"
   export CURL_LDFLAG_EXTRAS_DLL="${LDFLAGS_DLL}"
   export CURL_LDFLAG_EXTRAS_EXE="${LDFLAGS_EXE}"
 
