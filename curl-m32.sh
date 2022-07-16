@@ -82,6 +82,7 @@ _VER="$1"
 
   if [ "${CW_MAP}" = '1' ]; then
     LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,-Map,curl.map"
+    # shellcheck disable=SC2153
     LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,-Map,libcurl${_CURL_DLL_SUFFIX}.map"
   fi
 
@@ -239,7 +240,6 @@ _VER="$1"
   export CURL_LDFLAG_EXTRAS_DLL="${LDFLAGS_DLL}"
   export CURL_LDFLAG_EXTRAS_EXE="${LDFLAGS_EXE}"
 
-  # shellcheck disable=SC2153
   export CURL_DLL_SUFFIX="${_CURL_DLL_SUFFIX}"
   export CURL_DLL_A_SUFFIX='.dll'
 
