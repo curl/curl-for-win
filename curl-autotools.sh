@@ -186,6 +186,10 @@ fi
       options="${options} --disable-tls-srp"
     fi
 
+    if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ] || [ -d ../boringssl ]; then
+      options="${options} --disable-openssl-auto-load-config"
+    fi
+
     options="${options} --without-gnutls --without-mbedtls --without-wolfssl --without-bearssl --without-rustls --without-nss --without-hyper"
 
     if [ -d ../libssh2 ]; then
@@ -302,7 +306,6 @@ fi
         --enable-manual \
         --enable-libcurl-option \
         --enable-ipv6 \
-        --disable-openssl-auto-load-config \
         --enable-verbose \
         --enable-sspi \
         --enable-ntlm \
