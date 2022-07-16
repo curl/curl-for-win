@@ -190,7 +190,13 @@ fi
       options="${options} --disable-openssl-auto-load-config"
     fi
 
-    options="${options} --without-gnutls --without-mbedtls --without-wolfssl --without-bearssl --without-rustls --without-nss --without-hyper"
+    if [ -d ../mbedtls ]; then
+      options="${options} --with-mbedtls=${_TOP}/mbedtls/${_PP}"
+    else
+      options="${options} --without-mbedtls"
+    fi
+
+    options="${options} --without-gnutls --without-wolfssl --without-bearssl --without-rustls --without-nss --without-hyper"
 
     if [ -d ../libssh2 ]; then
       options="${options} --with-libssh2=${_TOP}/libssh2/${_PP}"

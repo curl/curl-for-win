@@ -51,6 +51,15 @@ _VER="$1"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LIBS="${LIBS} -lbcrypt"
     LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
+  elif [ -d ../mbedtls ]; then
+    if false; then
+      # Compile errors as of mbedTLS 3.2.1 + libssh 1.10.0
+      options="${options} -DCRYPTO_BACKEND=mbedTLS"
+      options="${options} -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib"
+      options="${options} -DMBEDTLS_LIBRARY=${_TOP}/mbedtls/${_PP}/lib"
+      options="${options} -DMBEDX509_LIBRARY=${_TOP}/mbedtls/${_PP}/lib"
+      options="${options} -DMBEDTLS_INCLUDE_DIR=${_TOP}/mbedtls/${_PP}/include"
+    fi
   else
     options="${options} -DCRYPTO_BACKEND=WinCNG"
   fi

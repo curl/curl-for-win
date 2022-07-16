@@ -86,6 +86,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   nghttp2       cmake
 #   nghttp3       cmake
 #   ngtcp2        cmake
+#   mbedtls       cmake
 #   openssl       proprietary
 #   boringssl     cmake
 #   libressl      autotools, cmake
@@ -693,6 +694,7 @@ build_single_target() {
   bld libpsl             "${LIBPSL_VER_}"
   bld libgsasl         "${LIBGSASL_VER_}"
   bld nghttp3           "${NGHTTP3_VER_}"
+  bld mbedtls           "${MBEDTLS_VER_}"
   bld boringssl       "${BORINGSSL_VER_}"
   bld libressl         "${LIBRESSL_VER_}"
   bld openssl           "${OPENSSL_VER_}"

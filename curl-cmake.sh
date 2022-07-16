@@ -179,6 +179,14 @@ _VER="$1"
       options="${options} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON"
     fi
 
+    if [ -d ../mbedtls ]; then
+      options="${options} -DCURL_USE_MBEDTLS=ON"
+      options="${options} -DMBEDTLS_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedtls.a"
+      options="${options} -DMBEDX509_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedx509.a"
+      options="${options} -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedcrypto.a"
+      options="${options} -DMBEDTLS_INCLUDE_DIRS=${_TOP}/mbedtls/${_PP}/include"
+    fi
+
     options="${options} -DCURL_USE_SCHANNEL=ON"
     CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 

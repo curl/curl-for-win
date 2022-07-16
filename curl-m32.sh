@@ -190,6 +190,13 @@ _VER="$1"
     CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
   fi
 
+  if [ -d ../mbedtls ]; then
+    CPPFLAGS="${CPPFLAGS} -DUSE_MBEDTLS"
+    CPPFLAGS="${CPPFLAGS} -I../../mbedtls/${_PP}/include"
+    LDFLAGS="${LDFLAGS} -L../../mbedtls/${_PP}/lib"
+    LIBS="${LIBS} -lmbedtls -lmbedx509 -lmbedcrypto"
+  fi
+
   options="${options}-schannel"
   CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 

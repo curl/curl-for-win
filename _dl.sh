@@ -80,6 +80,11 @@ cat <<EOF
     "tag": ".+"
   },
   {
+    "name": "mbedtls",
+    "url": "https://github.com/Mbed-TLS/mbedtls/archive/refs/tags/v{ver}.tar.gz",
+    "redir": "redir"
+  },
+  {
     "name": "openssl-quic",
     "url": "https://github.com/quictls/openssl/archive/refs/heads/openssl-{ver}+quic.tar.gz",
     "redir": "redir",
@@ -550,6 +555,11 @@ if [ "${_BRANCH#*big*}" != "${_BRANCH}" ]; then
   live_xt libiconv "${LIBICONV_HASH}"
   live_dl libpsl "${LIBPSL_VER_}"
   live_xt libpsl "${LIBPSL_HASH}"
+fi
+
+if [ "${_BRANCH#*mbedtls*}" != "${_BRANCH}" ]; then
+  live_dl mbedtls "${MBEDTLS_VER_}"
+  live_xt mbedtls "${MBEDTLS_HASH}"
 fi
 
 if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \

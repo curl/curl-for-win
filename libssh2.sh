@@ -51,6 +51,12 @@ _VER="$1"
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/openssl/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LIBS="${LIBS} -lbcrypt"
+  elif [ -d ../mbedtls ]; then
+    if false; then
+      # Compile errors as of mbedTLS 3.2.1 + libssh 1.10.0
+      options="${options} --with-crypto=mbedtls --with-libmbedcrypto-prefix=${_TOP}/mbedtls/${_PP}"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/mbedtls/${_PP}/lib"
+    fi
   else
     options="${options} --with-crypto=wincng"
   fi
