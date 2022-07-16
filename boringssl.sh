@@ -4,6 +4,9 @@
 
 # FIXME (upstream):
 # - x64 mingw-w64 pthread ucrt static linking bug -> requires llvm-mingw
+# - BoringSSL also supports native-Windows threading, but it uses
+#   MSVC-specific hacks, thus cannot be enabled for MinGW:
+#     https://github.com/google/boringssl/blob/master/crypto/thread_win.c
 # - Building tests takes 3 minutes per target (on AppVeyor CI, at the time
 #   of this writing) and consumes 9x the disk space for ${_BLDDIR}, that is
 #   32MB -> 283MB (for x64).
