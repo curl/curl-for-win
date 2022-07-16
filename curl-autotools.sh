@@ -169,7 +169,7 @@ fi
       CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
       options="${options} --with-openssl=${_TOP}/boringssl/${_PP}"
       options="${options} --disable-tls-srp"
-      if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ]; then  # FIXME
+      if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
         LDFLAGS="${LDFLAGS} -Wl,-Bdynamic,-lpthread,-Bstatic"
       else
         LDFLAGS="${LDFLAGS} -Wl,-Bstatic,-lpthread,-Bdynamic"

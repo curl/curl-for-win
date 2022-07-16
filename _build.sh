@@ -69,7 +69,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - https://github.com/mstorsjo/llvm-mingw
 #   - https://github.com/llvm/llvm-project
 #   - https://salsa.debian.org/pkg-llvm-team
-#   - https://git.code.sf.net/p/mingw-w64/mingw-w64
+#   - https://git.code.sf.net/p/mingw-w64/mingw-w64 / https://github.com/mirror/mingw-w64
 #   - https://sourceware.org/git/binutils-gdb.git
 #   - https://github.com/netwide-assembler/nasm
 
@@ -289,7 +289,7 @@ build_single_target() {
     use_llvm_mingw=1
   # llvm-mingw is required for x64 (to avoid pthread link bug with BoringSSL),
   # but for consistency, use it for all targets when building with BoringSSL.
-  elif [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
+  elif [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ] && [ "${_CRT}" = 'ucrt' ]; then
     use_llvm_mingw=1
   elif [ "${_CPU}" = 'a64' ]; then
     use_llvm_mingw=1

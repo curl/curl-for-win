@@ -156,7 +156,7 @@ _VER="$1"
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/boringssl/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/boringssl/${_PP}/include"
-      if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ]; then  # FIXME
+      if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
         LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
       else
         LIBS="${LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"

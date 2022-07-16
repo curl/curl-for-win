@@ -134,15 +134,40 @@ _VER="$1"
   elif [ -d ../boringssl ]; then
     CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
     export OPENSSL_PATH="../../boringssl/${_PP}"
-    if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ]; then  # FIXME
-      # Non-production workaround:
+    if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
+      # Non-production workaround for:
+      # mingw-w64 x64 winpthread static lib incompatible with UCRT.
+      # ```c
+      # /*
+      #    clang
+      #    $ /usr/local/opt/llvm/bin/clang -fuse-ld=lld \
+      #        -target x86_64-w64-mingw32 --sysroot /usr/local/opt/mingw-w64/toolchain-x86_64 \
+      #        test.c -D_UCRT -Wl,-Bstatic -lpthread -Wl,-Bdynamic -lucrt
+      #
+      #    gcc
+      #    $ x86_64-w64-mingw32-gcc -dumpspecs | sed 's/-lmsvcrt/-lucrt/g' > gcc-specs-ucrt
+      #    $ x86_64-w64-mingw32-gcc -specs=gcc-specs-ucrt \
+      #        test.c -D_UCRT -Wl,-Bstatic -lpthread -Wl,-Bdynamic -lucrt
+      #
+      #    ``` clang ->
+      #    ld.lld: error: undefined symbol: _setjmp
+      #    >>> referenced by ../src/thread.c:1518
+      #    >>>               libpthread.a(libwinpthread_la-thread.o):(pthread_create_wrapper)
+      #    clang-14: error: linker command failed with exit code 1 (use -v to see invocation)
+      #    ```
+      #    ``` gcc ->
+      #    /usr/local/Cellar/mingw-w64/10.0.0_1/toolchain-x86_64/bin/x86_64-w64-mingw32-ld: /usr/local/Cellar/mingw-w64/10.0.0_1/toolchain-x86_64/lib/gcc/x86_64-w64-mingw32/12.1.0/../../../../x86_64-w64-mingw32/lib/../lib/libpthread.a(libwinpthread_la-thread.o): in function `pthread_create_wrapper':
+      #    /private/tmp/mingw-w64-20220506-7546-1q81cpu/mingw-w64-v10.0.0/mingw-w64-libraries/winpthreads/build-x86_64/../src/thread.c:1518: undefined reference to `_setjmp'
+      #    collect2: error: ld returned 1 exit status
+      #    ```
+      #  */
+      # #include <pthread.h>
+      # int main(void) {
+      #   pthread_rwlock_t lock;
+      #   pthread_rwlock_init(&lock, NULL);
+      #   return 0;
+      # }
       # ```
-      # ld.lld: error: undefined symbol: _setjmp
-      # >>> referenced by ../src/thread.c:1518
-      # >>>               libwinpthread.a(libwinpthread_la-thread.o):(pthread_create_wrapper)
-      # clang-14: error: linker command failed with exit code 1 (use -v to see invocation)
-      # ```
-      # This seems to be an issue with winpthread static lib being incompatible with UCRT.
       # Ref: https://github.com/niXman/mingw-builds/issues/498
       OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
     else
