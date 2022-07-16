@@ -46,7 +46,6 @@ _VER="$1"
 
   CFLAGS="-ffile-prefix-map=$(pwd)="
   LIBS='-lpthread -lws2_32'  # for tests
-
   options=''
 
   [ "${_CPU}" = 'x86' ] && cpu='x86'

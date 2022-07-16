@@ -48,6 +48,7 @@ _VER="$1"
   #   2. build static libcurl lib + statically linked curl EXE
   for pass in shared static; do
 
+    options=''
     CFLAGS='-W -Wall'
     CPPFLAGS=''
 
@@ -55,8 +56,6 @@ _VER="$1"
     CPPFLAGS="${CPPFLAGS} -DHAVE_SIGNAL -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID"
     CPPFLAGS="${CPPFLAGS} -DHAVE_UNISTD_H"
     CPPFLAGS="${CPPFLAGS} -DUSE_HEADERS_API"
-
-    options=''
 
     [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && options="${options} -DCMAKE_AR=${AR_NORMALIZE}"
 

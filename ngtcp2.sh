@@ -16,7 +16,6 @@ _VER="$1"
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
   CPPFLAGS='-DNDEBUG'
-
   options=''
 
   if [ -d ../boringssl ]; then

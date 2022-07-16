@@ -17,7 +17,6 @@ _VER="$1"
 
   CPPFLAGS='-DHAVE_DECL_SECUREZEROMEMORY=1 -D_FILE_OFFSET_BITS=64'
   LIBS=''
-
   options=''
 
   if [ -d ../zlib ]; then
