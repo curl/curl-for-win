@@ -292,7 +292,7 @@ build_single_target() {
     use_llvm_mingw=1
   # llvm-mingw is required for x64 (to avoid pthread link bug with BoringSSL),
   # but for consistency, use it for all targets when building with BoringSSL.
-  elif [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ] && [ "${_CRT}" = 'ucrt' ]; then
+  elif [ -d boringssl ] && [ "${_CRT}" = 'ucrt' ]; then
     use_llvm_mingw=1
   elif [ "${_CPU}" = 'a64' ]; then
     use_llvm_mingw=1
@@ -651,12 +651,12 @@ build_single_target() {
   if [ "${_CC}" = 'gcc' ]; then
     binver="binutils $("${_STRIP}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
   elif [ -n "${_STRIP_BINUTILS}" ] && \
-       [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
+       [ -d boringssl ]; then
     binver="binutils $("${_STRIP_BINUTILS}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
   fi
 
   nasmver=''
-  if [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
+  if [ -d boringssl ]; then
     nasmver="nasm $(nasm --version | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
   fi
 
