@@ -16,7 +16,7 @@ _VER="$1"
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
   # FIXME: As of zlib 1.2.12, its CMakeLists.txt prevents passing custom RCFLAGS
-  #        to the RC command. Use our wrapper as a work around.
+  #        to the RC command. Use our wrapper as a workaround.
   #        PR: https://github.com/madler/zlib/pull/677
   [ -n "${_RC_WRAPPER}" ] && export RC="${_RC_WRAPPER}"
 
