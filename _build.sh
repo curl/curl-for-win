@@ -152,7 +152,7 @@ fi
 export _CC='clang'
 [ ! "${_BRANCH#*gcc*}" = "${_BRANCH}" ] && _CC='gcc'
 
-_CRT='ucrt'
+export _CRT='ucrt'
 [ ! "${_BRANCH#*msvcrt*}" = "${_BRANCH}" ] && _CRT='msvcrt'
 
 if [ -z "${CW_MAP:-}" ]; then
