@@ -401,3 +401,14 @@ index 5350e8798..5ecb944c7 100644
      CheckQuicSupportInOpenSSL()
    elseif(USE_GNUTLS)
      # TODO add GnuTLS support as vtls library.
+diff --git a/lib/Makefile.m32 b/lib/Makefile.m32
+index 7166c1b5dc053..e8c9682a63c20 100644
+--- a/lib/Makefile.m32
++++ b/lib/Makefile.m32
+@@ -459,6 +459,3 @@ clean:
+ 
+ distclean vclean: clean
+ 	@$(call DEL, $(libcurl_a_LIBRARY) $(libcurl_dll_LIBRARY) $(libcurl_dll_LIBRARY:.dll=.def) $(libcurl_dll_a_LIBRARY))
+-
+-$(LIBCARES_PATH)/libcares.a:
+-	$(MAKE) -C $(LIBCARES_PATH) -f Makefile.m32

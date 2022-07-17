@@ -230,14 +230,10 @@ _VER="$1"
     fi
   fi
   if [ -d ../cares ]; then
-    # Do this manually, otherwise lib/Makefile.m32 wants to build libcares.a.
-  # options="${options}-ares"
-  # export LIBCARES_PATH="../../cares/${_PP}"
-    CPPFLAGS="${CPPFLAGS} -DUSE_ARES"
-    CPPFLAGS="${CPPFLAGS} -DCARES_STATICLIB"
+    options="${options}-ares"
+    export LIBCARES_PATH="../../cares/${_PP}/lib"
     CPPFLAGS="${CPPFLAGS} -I../../cares/${_PP}/include"
-    LDFLAGS="${LDFLAGS} -L../../cares/${_PP}/lib"
-    LIBS="${LIBS} -lcares"
+    CPPFLAGS="${CPPFLAGS} -DCARES_STATICLIB"
   fi
   if [ -d ../libgsasl ]; then
     options="${options}-gsasl"
