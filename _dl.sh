@@ -21,6 +21,13 @@ cat <<EOF
     "redir": "redir"
   },
   {
+    "name": "cares",
+    "descending": true,
+    "url": "https://c-ares.org/download/c-ares-{ver}.tar.gz",
+    "sig": ".asc",
+    "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
+  },
+  {
     "name": "curl",
     "descending": true,
     "url": "https://curl.se/download/curl-{ver}.tar.xz",
@@ -542,6 +549,11 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
   live_dl brotli "${BROTLI_VER_}"
   live_xt brotli "${BROTLI_HASH}"
+fi
+
+if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
+  live_dl cares "${CARES_VER_}"
+  live_xt cares "${CARES_HASH}"
 fi
 
 if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \

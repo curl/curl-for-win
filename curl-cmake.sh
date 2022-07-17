@@ -247,6 +247,12 @@ _VER="$1"
       options="${options} -DUSE_NGHTTP3=OFF"
       options="${options} -DUSE_NGTCP2=OFF"
     fi
+    if [ -d ../cares ]; then
+      options="${options} -DENABLE_ARES=ON"
+      options="${options} -DCARES_LIBRARY=${_TOP}/cares/${_PP}/lib/libcares.a"
+      options="${options} -DCARES_INCLUDE_DIR=${_TOP}/cares/${_PP}/include"
+      CPPFLAGS="${CPPFLAGS} -DCARES_STATICLIB"
+    fi
     if [ -d ../libgsasl ]; then
       CPPFLAGS="${CPPFLAGS} -DUSE_GSASL"
       CPPFLAGS="${CPPFLAGS} -I${_TOP}/libgsasl/${_PP}/include"

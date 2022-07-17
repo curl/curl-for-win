@@ -229,6 +229,16 @@ _VER="$1"
       NGTCP2_LIBS="${NGTCP2_LIBS} -lngtcp2_crypto_openssl"
     fi
   fi
+  if [ -d ../cares ]; then
+    # Do this manually, otherwise lib/Makefile.m32 wants to build libcares.a.
+  # options="${options}-ares"
+  # export LIBCARES_PATH="../../cares/${_PP}"
+    CPPFLAGS="${CPPFLAGS} -DUSE_ARES"
+    CPPFLAGS="${CPPFLAGS} -DCARES_STATICLIB"
+    CPPFLAGS="${CPPFLAGS} -I../../cares/${_PP}/include"
+    LDFLAGS="${LDFLAGS} -L../../cares/${_PP}/lib"
+    LIBS="${LIBS} -lcares"
+  fi
   if [ -d ../libgsasl ]; then
     options="${options}-gsasl"
     export LIBGSASL_PATH="../../libgsasl/${_PP}"

@@ -241,6 +241,13 @@ fi
       options="${options} --with-winidn"
     fi
 
+    if [ -d ../cares ]; then
+      options="${options} --enable-ares=${_TOP}/cares/${_PP}"
+      CPPFLAGS="${CPPFLAGS} -DCARES_STATICLIB"
+    else
+      options="${options} --disable-ares"
+    fi
+
     if [ -d ../libgsasl ]; then
       options="${options} --with-libgsasl=${_TOP}/libgsasl/${_PP}"
       CPPFLAGS="${CPPFLAGS} -I${_TOP}/libgsasl/${_PP}/include"
@@ -312,7 +319,6 @@ fi
         --enable-optimize \
         --enable-symbol-hiding \
         --enable-headers-api \
-        --disable-ares \
         --enable-http \
         --enable-proxy \
         --enable-manual \
