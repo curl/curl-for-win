@@ -264,7 +264,7 @@ _ori_path="${PATH}"
 
 bld() {
   pkg="$1"
-  if [ -z "${CW_BLD:-}" ] || echo "${CW_BLD}" | grep -q -F "${pkg}"; then
+  if [ -z "${CW_BLD:-}" ] || echo "-${CW_BLD}-" | grep -q -F -- "-${pkg}-"; then
     shift
 
     pkgori="${pkg}"
