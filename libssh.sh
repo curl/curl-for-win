@@ -3,8 +3,8 @@
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
 
 # WARNING: libssh uses hard-coded world-writable paths (/etc/..., ~/.ssh/) to
-#          read it configuration from, making it vulnerable for attacks on
-#          Windows. Do not use this component, till these are fixed.
+#          read its configuration from, making it vulnerable to attacks on
+#          Windows. Do not use this component till these are fixed.
 
 # shellcheck disable=SC3040
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
