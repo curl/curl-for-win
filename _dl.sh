@@ -616,7 +616,9 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
 fi
 
 if [ "${_BRANCH#*libssh*}" != "${_BRANCH}" ]; then
+  # shellcheck disable=SC2153
   live_dl libssh "${LIBSSH_VER_}"
+  # shellcheck disable=SC2153
   live_xt libssh "${LIBSSH_HASH}"
 fi
 
