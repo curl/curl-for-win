@@ -204,6 +204,12 @@ _VER="$1"
     options="${options}-ssh2"
     export LIBSSH2_PATH="../../libssh2/${_PP}"
     LDFLAGS="${LDFLAGS} -L${LIBSSH2_PATH}/lib"
+  elif [ -d ../libssh ]; then
+    CPPFLAGS="${CPPFLAGS} -DUSE_LIBSSH -DHAVE_LIBSSH_LIBSSH_H"
+    CPPFLAGS="${CPPFLAGS} -DLIBSSH_STATIC"
+    CPPFLAGS="${CPPFLAGS} -I../../libssh/${_PP}/include"
+    LDFLAGS="${LDFLAGS} -L../../libssh/${_PP}/lib"
+    LIBS="${LIBS} -lssh"
   fi
   if [ -d ../nghttp2 ]; then
     options="${options}-nghttp2"

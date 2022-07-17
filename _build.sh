@@ -90,6 +90,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   openssl       proprietary
 #   boringssl     cmake
 #   libressl      autotools, cmake
+#   libssh        cmake
 #   libssh2       autotools, cmake
 #   curl          cmake, autotools, Makefile.m32
 
@@ -701,6 +702,7 @@ build_single_target() {
   bld openssl      "${OPENSSL_QUIC_VER_}" openssl-quic
   bld ngtcp2             "${NGTCP2_VER_}"
   bld nghttp2           "${NGHTTP2_VER_}"
+  bld libssh             "${LIBSSH_VER_}"
   bld libssh2           "${LIBSSH2_VER_}"
   bld curl                 "${CURL_VER_}"
 

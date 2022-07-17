@@ -192,6 +192,7 @@ _VER="$1"
 
     if [ -d ../libssh2 ]; then
       options="${options} -DCURL_USE_LIBSSH2=ON"
+      options="${options} -DCURL_USE_LIBSSH=OFF"
       options="${options} -DLIBSSH2_LIBRARY=${_TOP}/libssh2/${_PP}/lib/libssh2.a"
       options="${options} -DLIBSSH2_INCLUDE_DIR=${_TOP}/libssh2/${_PP}/include"
       LIBS="${LIBS} -lbcrypt"
@@ -207,8 +208,19 @@ _VER="$1"
         LDFLAGS="${LDFLAGS} -L${_TOP}/libssh2/${_PP}/lib"
         LIBS="${LIBS} -lssh2"
       fi
+    elif [ -d ../libssh ]; then
+      # Detection picks OS-native copy. Only a fully manual configuration worked
+      # to defeat CMake's wisdom.
+      options="${options} -DCURL_USE_LIBSSH=OFF"
+      options="${options} -DCURL_USE_LIBSSH2=OFF"
+      CPPFLAGS="${CPPFLAGS} -DUSE_LIBSSH -DHAVE_LIBSSH_LIBSSH_H"
+      CPPFLAGS="${CPPFLAGS} -DLIBSSH_STATIC"
+      CPPFLAGS="${CPPFLAGS} -I${_TOP}/libssh/${_PP}/include"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/libssh/${_PP}/lib"
+      LIBS="${LIBS} -lssh"
     else
       options="${options} -DCURL_USE_LIBSSH2=OFF"
+      options="${options} -DCURL_USE_LIBSSH=OFF"
     fi
 
     if [ -d ../nghttp2 ]; then

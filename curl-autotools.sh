@@ -200,12 +200,18 @@ fi
 
     if [ -d ../libssh2 ]; then
       options="${options} --with-libssh2=${_TOP}/libssh2/${_PP}"
+      options="${options} --without-libssh"
       LIBS="${LIBS} -lbcrypt"
+    elif [ -d ../libssh ]; then
+      options="${options} --with-libssh=${_TOP}/libssh/${_PP}"
+      options="${options} --without-libssh2"
+      CPPFLAGS="${CPPFLAGS} -DLIBSSH_STATIC"
     else
       options="${options} --without-libssh2"
+      options="${options} --without-libssh"
     fi
 
-    options="${options} --without-libssh --without-wolfssh"
+    options="${options} --without-wolfssh"
     options="${options} --without-librtmp"
 
     if [ -d ../libidn2 ]; then

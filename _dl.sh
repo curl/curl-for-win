@@ -57,6 +57,12 @@ cat <<EOF
     "redir": "redir"
   },
   {
+    "name": "libssh",
+    "url": "https://www.libssh.org/files/{vermm}/libssh-{ver}.tar.xz",
+    "sig": ".asc",
+    "keys": "8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D"
+  },
+  {
     "name": "libssh2",
     "url": "https://www.libssh2.org/download/libssh2-{ver}.tar.gz",
     "sig": ".asc",
@@ -344,7 +350,14 @@ bump() {
         if [ "${pin}" = 'true' ]; then
           >&2 echo "! ${name}: Version pinned. Skipping."
         else
-          newver="$(check_update "${name}" "${ourvern}" "${url}" "${desc}" \
+          # Some projects use part of the version number to form the path.
+          # Caveat: Major/minor upgrades will not be detected in that case.
+          # (e.g. libssh)
+          urlver="$(printf '%s' "${url}" | sed \
+              -e "s/{ver}/${ourver}/g" \
+              -e "s/{vermm}/$(echo "${ourver}" | cut -d . -f -2)/g" \
+            )"
+          newver="$(check_update "${name}" "${ourvern}" "${urlver}" "${desc}" \
             "${tag}" \
             "${hasfile}" \
             "${ref_url}" "${ref_expr}" "${ref_mask}")"
@@ -600,6 +613,11 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
     live_dl openssl-quic "${OPENSSL_QUIC_VER_}"
     live_xt openssl-quic "${OPENSSL_QUIC_HASH}"
   fi
+fi
+
+if [ "${_BRANCH#*libssh*}" != "${_BRANCH}" ]; then
+  live_dl libssh "${LIBSSH_VER_}"
+  live_xt libssh "${LIBSSH_HASH}"
 fi
 
 if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
