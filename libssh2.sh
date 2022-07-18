@@ -43,11 +43,7 @@ _VER="$1"
   elif [ "${_OPENSSL}" = 'boringssl' ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
     LIBS="${LIBS} -lpthread"
-  elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
-    CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
-    LIBS="${LIBS} -lbcrypt"
-  elif [ "${_OPENSSL}" = 'openssl' ]; then
+  elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LIBS="${LIBS} -lbcrypt"

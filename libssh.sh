@@ -50,13 +50,7 @@ _VER="$1"
     options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
     CPPFLAGS="${CPPFLAGS} -DWIN32_LEAN_AND_MEAN"
     LIBS="${LIBS} -lpthread"  # to detect EVP_aes_128_*
-  elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
-    CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
-    LIBS="${LIBS} -lbcrypt"
-    LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
-  elif [ "${_OPENSSL}" = 'openssl' ]; then
+  elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"

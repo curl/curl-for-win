@@ -173,11 +173,7 @@ _VER="$1"
     else
       OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
     fi
-  elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
-    export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
-    # Workaround for 3.x deprecation warnings
-    CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
-  elif [ "${_OPENSSL}" = 'openssl' ]; then
+  elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
     export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
     # Workaround for 3.x deprecation warnings
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"

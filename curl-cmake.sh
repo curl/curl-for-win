@@ -160,13 +160,7 @@ _VER="$1"
       else
         LIBS="${LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
       fi
-    elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
-      options="${options} -DCURL_USE_OPENSSL=ON"
-      options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-      options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
-      CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
-      LIBS="${LIBS} -lbcrypt"
-    elif [ "${_OPENSSL}" = 'openssl' ]; then
+    elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"

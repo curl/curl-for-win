@@ -174,11 +174,7 @@ fi
       else
         LDFLAGS="${LDFLAGS} -Wl,-Bstatic,-lpthread,-Bdynamic"
       fi
-    elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
-      options="${options} --with-openssl=${_TOP}/${_OPENSSL}/${_PP}"
-      options="${options} --enable-tls-srp"
-      LIBS="${LIBS} -lbcrypt"
-    elif [ "${_OPENSSL}" = 'openssl' ]; then
+    elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
       options="${options} --with-openssl=${_TOP}/${_OPENSSL}/${_PP}"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
