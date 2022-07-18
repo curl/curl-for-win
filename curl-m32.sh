@@ -133,7 +133,7 @@ _VER="$1"
     export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
     export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
     export OPENSSL_LIBPATH="${OPENSSL_PATH}/lib"
-    export OPENSSL_LIBS='-lssl -lcrypto -lbcrypt'
+    export OPENSSL_LIBS='-lssl -lcrypto'
     CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
 
     if [ "${_OPENSSL}" = 'boringssl' ]; then
@@ -177,7 +177,10 @@ _VER="$1"
       else
         OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
       fi
+    elif [ "${_OPENSSL}" = 'libressl' ]; then
+      OPENSSL_LIBS="${OPENSSL_LIBS} -lbcrypt"
     elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
+      OPENSSL_LIBS="${OPENSSL_LIBS} -lbcrypt"
       # Workaround for 3.x deprecation warnings
       CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     fi
