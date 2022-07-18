@@ -268,6 +268,7 @@ bld() {
     shift
 
     pkgori="${pkg}"
+    [ -n "${2:-}" ] && pkg="$2"
     # allow selecting an alternate build tool
     withbuildtool="$(echo "${CW_BLD:-}" | \
       grep -a -o -E "${pkg}-(cmake|autotools|make|m32)" || true)"
@@ -275,7 +276,7 @@ bld() {
       pkg="${withbuildtool}"
     fi
 
-    time "./${pkg}.sh" "$@"
+    time "./${pkg}.sh" "$1" "${pkgori}"
 
     if [ "${CW_DEV_MOVEAWAY:-}" = '1' ] && [ "${pkg}" != "${pkgori}" ]; then
       mv -n "${pkgori}" "${pkg}"
@@ -701,7 +702,7 @@ build_single_target() {
   bld boringssl       "${BORINGSSL_VER_}"
   bld libressl         "${LIBRESSL_VER_}"
   bld openssl           "${OPENSSL_VER_}"
-  bld openssl      "${OPENSSL_QUIC_VER_}" openssl-quic
+  bld openssl-quic "${OPENSSL_QUIC_VER_}" openssl
   bld ngtcp2             "${NGTCP2_VER_}"
   bld nghttp2           "${NGHTTP2_VER_}"
   bld libssh             "${LIBSSH_VER_}"
