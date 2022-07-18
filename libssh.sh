@@ -29,8 +29,8 @@ _VER="$1"
   fi
 
   if [ "${_OPENSSL}" = 'libressl' ]; then
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/libressl/${_PP}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/libressl/${_PP}/include"
+    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
     LIBS="${LIBS} -lbcrypt"
     LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
   elif [ "${_OPENSSL}" = 'boringssl' ]; then
@@ -46,19 +46,19 @@ _VER="$1"
     [ -d include/openssl ] || mkdir -p include/openssl
     touch include/openssl/modes.h
 
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/boringssl/${_PP}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/boringssl/${_PP}/include"
+    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
     CPPFLAGS="${CPPFLAGS} -DWIN32_LEAN_AND_MEAN"
     LIBS="${LIBS} -lpthread"  # to detect EVP_aes_128_*
   elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl-quic/${_PP}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl-quic/${_PP}/include"
+    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LIBS="${LIBS} -lbcrypt"
     LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
   elif [ "${_OPENSSL}" = 'openssl' ]; then
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl/${_PP}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl/${_PP}/include"
+    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LIBS="${LIBS} -lbcrypt"
     LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*

@@ -37,18 +37,18 @@ _VER="$1"
   fi
 
   if [ "${_OPENSSL}" = 'libressl' ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/libressl/${_PP}"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
     LIBS="${LIBS} -lbcrypt"
   elif [ "${_OPENSSL}" = 'boringssl' ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/boringssl/${_PP}"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
     LIBS="${LIBS} -lpthread"
   elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/openssl-quic/${_PP}"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LIBS="${LIBS} -lbcrypt"
   elif [ "${_OPENSSL}" = 'openssl' ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/openssl/${_PP}"
+    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LIBS="${LIBS} -lbcrypt"
   elif [ -d ../mbedtls ]; then

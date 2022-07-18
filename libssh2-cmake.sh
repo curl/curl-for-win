@@ -27,27 +27,27 @@ _VER="$1"
 
   if [ "${_OPENSSL}" = 'libressl' ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/libressl/${_PP}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/libressl/${_PP}/include"
+    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
     CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
     LIBS="${LIBS} -lbcrypt"
     LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
   elif [ "${_OPENSSL}" = 'boringssl' ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/boringssl/${_PP}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/boringssl/${_PP}/include"
+    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
     LIBS="${LIBS} -lpthread"  # to detect HAVE_EVP_AES_128_CTR
   elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl-quic/${_PP}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl-quic/${_PP}/include"
+    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LIBS="${LIBS} -lbcrypt"
     LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
   elif [ "${_OPENSSL}" = 'openssl' ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl/${_PP}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl/${_PP}/include"
+    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
+    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LIBS="${LIBS} -lbcrypt"
     LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR

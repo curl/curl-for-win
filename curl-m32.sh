@@ -130,10 +130,10 @@ _VER="$1"
 
   export OPENSSL_LIBS=''
   if [ "${_OPENSSL}" = 'libressl' ]; then
-    export OPENSSL_PATH="../../libressl/${_PP}"
+    export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
   elif [ "${_OPENSSL}" = 'boringssl' ]; then
     CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
-    export OPENSSL_PATH="../../boringssl/${_PP}"
+    export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
     if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
       # Non-production workaround for:
       # mingw-w64 x64 winpthread static lib incompatible with UCRT.
@@ -174,11 +174,11 @@ _VER="$1"
       OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
     fi
   elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
-    export OPENSSL_PATH="../../openssl-quic/${_PP}"
+    export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
     # Workaround for 3.x deprecation warnings
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
   elif [ "${_OPENSSL}" = 'openssl' ]; then
-    export OPENSSL_PATH="../../openssl/${_PP}"
+    export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
     # Workaround for 3.x deprecation warnings
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
   fi
