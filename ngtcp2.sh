@@ -18,13 +18,13 @@ _VER="$1"
   CPPFLAGS='-DNDEBUG'
   options=''
 
-  if [ -d ../boringssl ]; then
+  if [ "${_OPENSSL}" = 'boringssl' ]; then
     options="${options} -DENABLE_OPENSSL=OFF"
     options="${options} -DENABLE_BORINGSSL=ON"
     options="${options} -DBORINGSSL_INCLUDE_DIR=${_TOP}/boringssl/${_PP}/include"
     options="${options} -DBORINGSSL_LIBRARIES=${_TOP}/boringssl/${_PP}/lib/libcrypto.a;${_TOP}/boringssl/${_PP}/lib/libssl.a;-lpthread;-lws2_32"
     CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
-  elif [ -d ../openssl-quic ]; then
+  elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
     options="${options} -DENABLE_OPENSSL=ON"
     options="${options} -DOPENSSL_ROOT_DIR=../openssl-quic/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=../openssl-quic/${_PP}/include"

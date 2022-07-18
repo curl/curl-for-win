@@ -129,9 +129,9 @@ _VER="$1"
   fi
 
   export OPENSSL_LIBS=''
-  if [ -d ../libressl ]; then
+  if [ "${_OPENSSL}" = 'libressl' ]; then
     export OPENSSL_PATH="../../libressl/${_PP}"
-  elif [ -d ../boringssl ]; then
+  elif [ "${_OPENSSL}" = 'boringssl' ]; then
     CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
     export OPENSSL_PATH="../../boringssl/${_PP}"
     if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
@@ -173,11 +173,11 @@ _VER="$1"
     else
       OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
     fi
-  elif [ -d ../openssl-quic ]; then
+  elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
     export OPENSSL_PATH="../../openssl-quic/${_PP}"
     # Workaround for 3.x deprecation warnings
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
-  elif [ -d ../openssl ]; then
+  elif [ "${_OPENSSL}" = 'openssl' ]; then
     export OPENSSL_PATH="../../openssl/${_PP}"
     # Workaround for 3.x deprecation warnings
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
@@ -223,9 +223,9 @@ _VER="$1"
     export NGTCP2_PATH="../../ngtcp2/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB"
     export NGTCP2_LIBS='-lngtcp2'
-    if [ -d ../boringssl ]; then
+    if [ "${_OPENSSL}" = 'boringssl' ]; then
       NGTCP2_LIBS="${NGTCP2_LIBS} -lngtcp2_crypto_boringssl"
-    elif [ -d ../openssl-quic ]; then
+    elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
       NGTCP2_LIBS="${NGTCP2_LIBS} -lngtcp2_crypto_openssl"
     fi
   fi
@@ -299,7 +299,7 @@ _VER="$1"
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.
-  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ] || [ -d ../boringssl ]; then
+  if [ -n "${_OPENSSL}" ]; then
     [ -f '../ca-bundle.crt' ] || \
       curl --disable --user-agent '' --fail --silent --show-error \
         --remote-time --xattr \
@@ -392,7 +392,7 @@ _VER="$1"
   cp -f -p README                     "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES              "${_DST}/RELEASE-NOTES.txt"
 
-  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ] || [ -d ../boringssl ]; then
+  if [ -n "${_OPENSSL}" ]; then
     cp -f -p scripts/mk-ca-bundle.pl "${_DST}/"
     cp -f -p ../ca-bundle.crt        "${_DST}/bin/curl-ca-bundle.crt"
   fi

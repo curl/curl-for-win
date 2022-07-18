@@ -688,6 +688,19 @@ build_single_target() {
     [ -n "${mingwver}" ] && echo ".${mingwver}${mingwurl}"
   } >> "${_UNIMFT}"
 
+  # Select and advertise a single copy of components having multiple
+  # implementations.
+  export _OPENSSL=''
+  if   [ -d ../libressl ]; then
+    _OPENSSL='libressl'
+  elif [ -d ../boringssl ]; then
+    _OPENSSL='boringssl'
+  elif [ -d ../openssl-quic ]; then
+    _OPENSSL='openssl-quic'
+  elif [ -d ../openssl ]; then
+    _OPENSSL='openssl'
+  fi
+
   bld zlib                 "${ZLIB_VER_}"
   bld zstd                 "${ZSTD_VER_}"
   bld brotli             "${BROTLI_VER_}"

@@ -144,13 +144,13 @@ _VER="$1"
       options="${options} -DCURL_ZSTD=OFF"
     fi
 
-    if [ -d ../libressl ]; then
+    if [ "${_OPENSSL}" = 'libressl' ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/libressl/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/libressl/${_PP}/include"
       CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
       LIBS="${LIBS} -lbcrypt"
-    elif [ -d ../boringssl ]; then
+    elif [ "${_OPENSSL}" = 'boringssl' ]; then
       CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/boringssl/${_PP}"
@@ -160,13 +160,13 @@ _VER="$1"
       else
         LIBS="${LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
       fi
-    elif [ -d ../openssl-quic ]; then
+    elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl-quic/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl-quic/${_PP}/include"
       CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
       LIBS="${LIBS} -lbcrypt"
-    elif [ -d ../openssl ]; then
+    elif [ "${_OPENSSL}" = 'openssl' ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl/${_PP}/include"
@@ -175,7 +175,7 @@ _VER="$1"
     else
       options="${options} -DCURL_USE_OPENSSL=OFF"
     fi
-    if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ] || [ -d ../boringssl ]; then
+    if [ -n "${_OPENSSL}" ]; then
       options="${options} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON"
     fi
 
@@ -336,7 +336,7 @@ _VER="$1"
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.
-  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ] || [ -d ../boringssl ]; then
+  if [ -n "${_OPENSSL}" ]; then
     [ -f '../ca-bundle.crt' ] || \
       curl --disable --user-agent '' --fail --silent --show-error \
         --remote-time --xattr \
@@ -428,7 +428,7 @@ _VER="$1"
   cp -f -p README                     "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES              "${_DST}/RELEASE-NOTES.txt"
 
-  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ] || [ -d ../boringssl ]; then
+  if [ -n "${_OPENSSL}" ]; then
     cp -f -p scripts/mk-ca-bundle.pl "${_DST}/"
     cp -f -p ../ca-bundle.crt        "${_DST}/bin/curl-ca-bundle.crt"
   fi

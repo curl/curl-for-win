@@ -25,26 +25,26 @@ _VER="$1"
     options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/zlib/${_PP}/include"
   fi
 
-  if [ -d ../libressl ]; then
+  if [ "${_OPENSSL}" = 'libressl' ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/libressl/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/libressl/${_PP}/include"
     CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
     LIBS="${LIBS} -lbcrypt"
     LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
-  elif [ -d ../boringssl ]; then
+  elif [ "${_OPENSSL}" = 'boringssl' ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/boringssl/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/boringssl/${_PP}/include"
     LIBS="${LIBS} -lpthread"  # to detect HAVE_EVP_AES_128_CTR
-  elif [ -d ../openssl-quic ]; then
+  elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl-quic/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl-quic/${_PP}/include"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LIBS="${LIBS} -lbcrypt"
     LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
-  elif [ -d ../openssl ]; then
+  elif [ "${_OPENSSL}" = 'openssl' ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/openssl/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/openssl/${_PP}/include"

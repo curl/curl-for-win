@@ -161,11 +161,11 @@ fi
     options="${options} --with-schannel"
     CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
-    if [ -d ../libressl ]; then
+    if [ "${_OPENSSL}" = 'libressl' ]; then
       options="${options} --with-openssl=${_TOP}/libressl/${_PP}"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
-    elif [ -d ../boringssl ]; then
+    elif [ "${_OPENSSL}" = 'boringssl' ]; then
       CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
       options="${options} --with-openssl=${_TOP}/boringssl/${_PP}"
       options="${options} --disable-tls-srp"
@@ -174,11 +174,11 @@ fi
       else
         LDFLAGS="${LDFLAGS} -Wl,-Bstatic,-lpthread,-Bdynamic"
       fi
-    elif [ -d ../openssl-quic ]; then
+    elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
       options="${options} --with-openssl=${_TOP}/openssl-quic/${_PP}"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
-    elif [ -d ../openssl ]; then
+    elif [ "${_OPENSSL}" = 'openssl' ]; then
       options="${options} --with-openssl=${_TOP}/openssl/${_PP}"
       options="${options} --enable-tls-srp"
       LIBS="${LIBS} -lbcrypt"
@@ -186,7 +186,7 @@ fi
       options="${options} --disable-tls-srp"
     fi
 
-    if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ] || [ -d ../boringssl ]; then
+    if [ -n "${_OPENSSL}" ]; then
       options="${options} --disable-openssl-auto-load-config"
     fi
 
@@ -283,9 +283,9 @@ fi
         CPPFLAGS="${CPPFLAGS} -I${_TOP}/ngtcp2/${_PP}/include"
         LDFLAGS="${LDFLAGS} -L${_TOP}/ngtcp2/${_PP}/lib"
         LIBS="${LIBS} -lngtcp2"
-        if [ -d ../boringssl ]; then
+        if [ "${_OPENSSL}" = 'boringssl' ]; then
           LIBS="${LIBS} -lngtcp2_crypto_boringssl"
-        elif [ -d ../openssl-quic ]; then
+        elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
           LIBS="${LIBS} -lngtcp2_crypto_openssl"
         fi
       fi
@@ -401,7 +401,7 @@ fi
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.
-  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ] || [ -d ../boringssl ]; then
+  if [ -n "${_OPENSSL}" ]; then
     [ -f '../ca-bundle.crt' ] || \
       curl --disable --user-agent '' --fail --silent --show-error \
         --remote-time --xattr \
@@ -493,7 +493,7 @@ fi
   cp -f -p README                     "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES              "${_DST}/RELEASE-NOTES.txt"
 
-  if [ -d ../libressl ] || [ -d ../openssl ] || [ -d ../openssl-quic ] || [ -d ../boringssl ]; then
+  if [ -n "${_OPENSSL}" ]; then
     cp -f -p scripts/mk-ca-bundle.pl "${_DST}/"
     cp -f -p ../ca-bundle.crt        "${_DST}/bin/curl-ca-bundle.crt"
   fi

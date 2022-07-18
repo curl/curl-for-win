@@ -36,18 +36,18 @@ _VER="$1"
     LDFLAGS="${LDFLAGS} -L${_TOP}/zlib/${_PP}/lib"
   fi
 
-  if [ -d ../libressl ]; then
+  if [ "${_OPENSSL}" = 'libressl' ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/libressl/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
     LIBS="${LIBS} -lbcrypt"
-  elif [ -d ../boringssl ]; then
+  elif [ "${_OPENSSL}" = 'boringssl' ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/boringssl/${_PP}"
     LIBS="${LIBS} -lpthread"
-  elif [ -d ../openssl-quic ]; then
+  elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/openssl-quic/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LIBS="${LIBS} -lbcrypt"
-  elif [ -d ../openssl ]; then
+  elif [ "${_OPENSSL}" = 'openssl' ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/openssl/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
     LIBS="${LIBS} -lbcrypt"
