@@ -144,33 +144,27 @@ _VER="$1"
       options="${options} -DCURL_ZSTD=OFF"
     fi
 
-    if [ "${_OPENSSL}" = 'libressl' ]; then
+    if [ -n "${_OPENSSL}" ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
-      CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
-      LIBS="${LIBS} -lbcrypt"
-    elif [ "${_OPENSSL}" = 'boringssl' ]; then
-      CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
-      options="${options} -DCURL_USE_OPENSSL=ON"
-      options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-      options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
-      if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
-        LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
-      else
-        LIBS="${LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
+      options="${options} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON"
+      if [ "${_OPENSSL}" = 'libressl' ]; then
+        CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
+        LIBS="${LIBS} -lbcrypt"
+      elif [ "${_OPENSSL}" = 'boringssl' ]; then
+        CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+        if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
+          LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
+        else
+          LIBS="${LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
+        fi
+      elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
+        CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
+        LIBS="${LIBS} -lbcrypt"
       fi
-    elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-      options="${options} -DCURL_USE_OPENSSL=ON"
-      options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-      options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
-      CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
-      LIBS="${LIBS} -lbcrypt"
     else
       options="${options} -DCURL_USE_OPENSSL=OFF"
-    fi
-    if [ -n "${_OPENSSL}" ]; then
-      options="${options} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON"
     fi
 
     if [ -d ../mbedtls ]; then

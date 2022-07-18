@@ -36,17 +36,17 @@ _VER="$1"
     LDFLAGS="${LDFLAGS} -L${_TOP}/zlib/${_PP}/lib"
   fi
 
-  if [ "${_OPENSSL}" = 'libressl' ]; then
+  if [ -n "${_OPENSSL}" ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
-    CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
-    LIBS="${LIBS} -lbcrypt"
-  elif [ "${_OPENSSL}" = 'boringssl' ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
-    LIBS="${LIBS} -lpthread"
-  elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
-    CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
-    LIBS="${LIBS} -lbcrypt"
+    if [ "${_OPENSSL}" = 'libressl' ]; then
+      CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
+      LIBS="${LIBS} -lbcrypt"
+    elif [ "${_OPENSSL}" = 'boringssl' ]; then
+      LIBS="${LIBS} -lpthread"
+    elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
+      CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
+      LIBS="${LIBS} -lbcrypt"
+    fi
   elif [ -d ../mbedtls ]; then
     if false; then
       # Compile errors as of mbedTLS 3.2.1 + libssh 1.10.0

@@ -25,25 +25,21 @@ _VER="$1"
     options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/zlib/${_PP}/include"
   fi
 
-  if [ "${_OPENSSL}" = 'libressl' ]; then
+  if [ -n "${_OPENSSL}"  ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
-    CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
-    LIBS="${LIBS} -lbcrypt"
-    LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
-  elif [ "${_OPENSSL}" = 'boringssl' ]; then
-    options="${options} -DCRYPTO_BACKEND=OpenSSL"
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
-    LIBS="${LIBS} -lpthread"  # to detect HAVE_EVP_AES_128_CTR
-  elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-    options="${options} -DCRYPTO_BACKEND=OpenSSL"
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
-    CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
-    LIBS="${LIBS} -lbcrypt"
-    LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
+    if [ "${_OPENSSL}" = 'libressl' ]; then
+      CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
+      LIBS="${LIBS} -lbcrypt"
+      LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
+    elif [ "${_OPENSSL}" = 'boringssl' ]; then
+      LIBS="${LIBS} -lpthread"  # to detect HAVE_EVP_AES_128_CTR
+    elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
+      CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
+      LIBS="${LIBS} -lbcrypt"
+      LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
+    fi
   elif [ -d ../mbedtls ]; then
     if false; then
       # Compile errors as of mbedTLS 3.2.1 + libssh 1.10.0

@@ -28,34 +28,32 @@ _VER="$1"
     options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/zlib/${_PP}/include"
   fi
 
-  if [ "${_OPENSSL}" = 'libressl' ]; then
+  if [ -n "${_OPENSSL}" ]; then
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
-    LIBS="${LIBS} -lbcrypt"
-    LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
-  elif [ "${_OPENSSL}" = 'boringssl' ]; then
+    if [ "${_OPENSSL}" = 'libressl' ]; then
+      LIBS="${LIBS} -lbcrypt"
+      LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
+    elif [ "${_OPENSSL}" = 'boringssl' ]; then
 
-    # FIXME (upstream):
-    # - It collides with wincrypt.h macros. Workaround:
-    CPPFLAGS="${CPPFLAGS} -DNOCRYPT -D__WINCRYPT_H__"
-    # - Wants to compile libcrypto_compat.c and assumes pre-OpenSSL 1.1
-    #   non-opaque structures. Workaround:
-    echo > src/libcrypto-compat.c
-    # - Detects HAVE_OPENSSL_CRYPTO_CTR128_ENCRYPT, and assumes it means
-    #   openssl/modes.h also exists, but with BoringSSL, it does not. Workaround:
-    [ -d include/openssl ] || mkdir -p include/openssl
-    touch include/openssl/modes.h
+      # FIXME (upstream):
+      # - It collides with wincrypt.h macros. Workaround:
+      CPPFLAGS="${CPPFLAGS} -DNOCRYPT -D__WINCRYPT_H__"
+      # - Wants to compile libcrypto_compat.c and assumes pre-OpenSSL 1.1
+      #   non-opaque structures. Workaround:
+      echo > src/libcrypto-compat.c
+      # - Detects HAVE_OPENSSL_CRYPTO_CTR128_ENCRYPT, and assumes it means
+      #   openssl/modes.h also exists, but with BoringSSL, it does not. Workaround:
+      [ -d include/openssl ] || mkdir -p include/openssl
+      touch include/openssl/modes.h
 
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
-    CPPFLAGS="${CPPFLAGS} -DWIN32_LEAN_AND_MEAN"
-    LIBS="${LIBS} -lpthread"  # to detect EVP_aes_128_*
-  elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
-    CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
-    LIBS="${LIBS} -lbcrypt"
-    LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
+      CPPFLAGS="${CPPFLAGS} -DWIN32_LEAN_AND_MEAN"
+      LIBS="${LIBS} -lpthread"  # to detect EVP_aes_128_*
+    elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
+      CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
+      LIBS="${LIBS} -lbcrypt"
+      LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
+    fi
   elif [ -d ../mbedtls ]; then
     if false; then
       # Compile errors as of mbedTLS 3.2.1 + libssh 0.9.6
