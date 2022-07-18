@@ -149,16 +149,16 @@ _VER="$1"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
       options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
       options="${options} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON"
-      if [ "${_OPENSSL}" = 'libressl' ]; then
-        CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
-        LIBS="${LIBS} -lbcrypt"
-      elif [ "${_OPENSSL}" = 'boringssl' ]; then
+      if [ "${_OPENSSL}" = 'boringssl' ]; then
         CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
         if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
           LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
         else
           LIBS="${LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
         fi
+      elif [ "${_OPENSSL}" = 'libressl' ]; then
+        CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
+        LIBS="${LIBS} -lbcrypt"
       elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
         CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
         LIBS="${LIBS} -lbcrypt"

@@ -38,11 +38,11 @@ _VER="$1"
 
   if [ -n "${_OPENSSL}" ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
-    if [ "${_OPENSSL}" = 'libressl' ]; then
+    if [ "${_OPENSSL}" = 'boringssl' ]; then
+      LIBS="${LIBS} -lpthread"
+    elif [ "${_OPENSSL}" = 'libressl' ]; then
       CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
       LIBS="${LIBS} -lbcrypt"
-    elif [ "${_OPENSSL}" = 'boringssl' ]; then
-      LIBS="${LIBS} -lpthread"
     elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
       CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
       LIBS="${LIBS} -lbcrypt"

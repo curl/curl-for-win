@@ -31,10 +31,7 @@ _VER="$1"
   if [ -n "${_OPENSSL}" ]; then
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
-    if [ "${_OPENSSL}" = 'libressl' ]; then
-      LIBS="${LIBS} -lbcrypt"
-      LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
-    elif [ "${_OPENSSL}" = 'boringssl' ]; then
+    if [ "${_OPENSSL}" = 'boringssl' ]; then
 
       # FIXME (upstream):
       # - It collides with wincrypt.h macros. Workaround:
@@ -49,6 +46,9 @@ _VER="$1"
 
       CPPFLAGS="${CPPFLAGS} -DWIN32_LEAN_AND_MEAN"
       LIBS="${LIBS} -lpthread"  # to detect EVP_aes_128_*
+    elif [ "${_OPENSSL}" = 'libressl' ]; then
+      LIBS="${LIBS} -lbcrypt"
+      LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
     elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
       CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
       LIBS="${LIBS} -lbcrypt"

@@ -164,10 +164,7 @@ fi
     if [ -n "${_OPENSSL}" ]; then
       options="${options} --with-openssl=${_TOP}/${_OPENSSL}/${_PP}"
       options="${options} --disable-openssl-auto-load-config"
-      if [ "${_OPENSSL}" = 'libressl' ]; then
-        options="${options} --enable-tls-srp"
-        LIBS="${LIBS} -lbcrypt"
-      elif [ "${_OPENSSL}" = 'boringssl' ]; then
+      if [ "${_OPENSSL}" = 'boringssl' ]; then
         CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
         options="${options} --disable-tls-srp"
         if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
@@ -175,6 +172,9 @@ fi
         else
           LDFLAGS="${LDFLAGS} -Wl,-Bstatic,-lpthread,-Bdynamic"
         fi
+      elif [ "${_OPENSSL}" = 'libressl' ]; then
+        options="${options} --enable-tls-srp"
+        LIBS="${LIBS} -lbcrypt"
       elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
         options="${options} --enable-tls-srp"
         LIBS="${LIBS} -lbcrypt"
