@@ -31,8 +31,8 @@ fi
 
   [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && export AR="${AR_NORMALIZE}"
 
-  # patch autotools to not refuse to link a shared library against static libs
-  sed -i.bak -E 's/^deplibs_check_method=.+/deplibs_check_method=pass_all/g' ./configure
+  # tell libtool to allow building a shared library against static libs
+  export lt_cv_deplibs_check_method='pass_all'
 
   # autotools forces its -On option (gcc = -O2, clang = -Os) and removes custom
   # ones. We patch ./configure to customize it.
