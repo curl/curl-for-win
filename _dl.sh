@@ -128,6 +128,11 @@ cat <<EOF
     "ref_mask": "[0-9a-fA-F]{32,}"
   },
   {
+    "name": "zlibng",
+    "url": "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/{ver}.tar.gz",
+    "redir": "redir"
+  },
+  {
     "name": "zlib",
     "url": "https://zlib.net/zlib-{ver}.tar.xz",
     "sig": ".asc",
@@ -539,8 +544,13 @@ if [ "${CW_LLVM_MINGW_DL:-}" = '1' ] && \
   fi
 fi
 
-live_dl zlib "${ZLIB_VER_}"
-live_xt zlib "${ZLIB_HASH}"
+if [ "${_BRANCH#*zlibng*}" != "${_BRANCH}" ]; then
+  live_dl zlibng "${ZLIBNG_VER_}"
+  live_xt zlibng "${ZLIBNG_HASH}"
+else
+  live_dl zlib "${ZLIB_VER_}"
+  live_xt zlib "${ZLIB_HASH}"
+fi
 
 if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \

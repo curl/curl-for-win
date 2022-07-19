@@ -76,6 +76,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # Supported build tools:
 #
 #   zlib          cmake
+#   zlibng        cmake
 #   zstd          cmake
 #   brotli        cmake
 #   cares         cmake
@@ -290,7 +291,9 @@ build_single_target() {
   # Select and advertise a single copy of components having multiple
   # implementations.
   export _ZLIB=''
-  if [ -d zlib ]; then
+  if   [ -d zlibng ]; then
+    _ZLIB='zlibng'
+  elif [ -d zlib ]; then
     _ZLIB='zlib'
   fi
   export _OPENSSL=''
@@ -706,6 +709,7 @@ build_single_target() {
   } >> "${_UNIMFT}"
 
   bld zlib                 "${ZLIB_VER_}"
+  bld zlibng             "${ZLIBNG_VER_}" zlib
   bld zstd                 "${ZSTD_VER_}"
   bld brotli             "${BROTLI_VER_}"
   bld cares               "${CARES_VER_}"
