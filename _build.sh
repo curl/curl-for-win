@@ -287,13 +287,26 @@ bld() {
 build_single_target() {
   export _CPU="$1"
 
+  # Select and advertise a single copy of components having multiple
+  # implementations.
+  export _OPENSSL=''
+  if   [ -d ../libressl ]; then
+    _OPENSSL='libressl'
+  elif [ -d ../boringssl ]; then
+    _OPENSSL='boringssl'
+  elif [ -d ../openssl-quic ]; then
+    _OPENSSL='openssl-quic'
+  elif [ -d ../openssl ]; then
+    _OPENSSL='openssl'
+  fi
+
   use_llvm_mingw=0
   versuffix_llvm_mingw=''
   if [ "${CW_LLVM_MINGW_ONLY:-}" = '1' ]; then
     use_llvm_mingw=1
   # llvm-mingw is required for x64 (to avoid pthread link bug with BoringSSL),
   # but for consistency, use it for all targets when building with BoringSSL.
-  elif [ -d boringssl ] && [ "${_CRT}" = 'ucrt' ]; then
+  elif [ "${_OPENSSL}" = 'boringssl' ] && [ "${_CRT}" = 'ucrt' ]; then
     use_llvm_mingw=1
   elif [ "${_CPU}" = 'a64' ]; then
     use_llvm_mingw=1
@@ -652,12 +665,12 @@ build_single_target() {
   if [ "${_CC}" = 'gcc' ]; then
     binver="binutils $("${_STRIP}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
   elif [ -n "${_STRIP_BINUTILS}" ] && \
-       [ -d boringssl ]; then
+       [ "${_OPENSSL}" = 'boringssl' ]; then
     binver="binutils $("${_STRIP_BINUTILS}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
   fi
 
   nasmver=''
-  if [ -d boringssl ]; then
+  if [ "${_OPENSSL}" = 'boringssl' ]; then
     nasmver="nasm $(nasm --version | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
   fi
 
@@ -687,19 +700,6 @@ build_single_target() {
     [ -n "${gccver}" ]   && echo ".${gccver}"
     [ -n "${mingwver}" ] && echo ".${mingwver}${mingwurl}"
   } >> "${_UNIMFT}"
-
-  # Select and advertise a single copy of components having multiple
-  # implementations.
-  export _OPENSSL=''
-  if   [ -d ../libressl ]; then
-    _OPENSSL='libressl'
-  elif [ -d ../boringssl ]; then
-    _OPENSSL='boringssl'
-  elif [ -d ../openssl-quic ]; then
-    _OPENSSL='openssl-quic'
-  elif [ -d ../openssl ]; then
-    _OPENSSL='openssl'
-  fi
 
   bld zlib                 "${ZLIB_VER_}"
   bld zstd                 "${ZSTD_VER_}"
