@@ -290,13 +290,13 @@ build_single_target() {
   # Select and advertise a single copy of components having multiple
   # implementations.
   export _OPENSSL=''
-  if   [ -d ../libressl ]; then
+  if   [ -d libressl ]; then
     _OPENSSL='libressl'
-  elif [ -d ../boringssl ]; then
+  elif [ -d boringssl ]; then
     _OPENSSL='boringssl'
-  elif [ -d ../openssl-quic ]; then
+  elif [ -d openssl-quic ]; then
     _OPENSSL='openssl-quic'
-  elif [ -d ../openssl ]; then
+  elif [ -d openssl ]; then
     _OPENSSL='openssl'
   fi
 
