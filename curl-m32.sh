@@ -128,7 +128,7 @@ _VER="$1"
     export ZSTD_LIBS='-Wl,-Bstatic -lzstd -Wl,-Bdynamic'
   fi
 
-  if [ -n "${OPENSSL_PATH:-}" ]; then
+  if [ -n "${_OPENSSL}" ]; then
     options="${options}-ssl"
     export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
     export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
