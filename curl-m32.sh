@@ -105,11 +105,11 @@ _VER="$1"
   LDFLAGS_DLL="${LDFLAGS_DLL} ../libcurl.def"
 
   # NOTE: Makefile.m32 automatically enables -zlib with -ssh2
-  if [ -d ../zlib ]; then
+  if [ -n "${_ZLIB}" ]; then
     options="${options}-zlib"
-    export ZLIB_PATH="../../zlib/${_PP}/include"
+    export ZLIB_PATH="../../${_ZLIB}/${_PP}/include"
     # Makefile.m32 looks for the lib in ZLIB_PATH, so adjust it manually:
-    LDFLAGS="${LDFLAGS} -L../../zlib/${_PP}/lib"
+    LDFLAGS="${LDFLAGS} -L../../${_ZLIB}/${_PP}/lib"
 
     # Make sure to link zlib (and only zlib) in static mode when building
     # `libcurl.dll`, so that it would not depend on a `zlib1.dll`.

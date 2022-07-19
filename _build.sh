@@ -289,6 +289,10 @@ build_single_target() {
 
   # Select and advertise a single copy of components having multiple
   # implementations.
+  export _ZLIB=''
+  if [ -d zlib ]; then
+    _ZLIB='zlib'
+  fi
   export _OPENSSL=''
   if   [ -d libressl ]; then
     _OPENSSL='libressl'

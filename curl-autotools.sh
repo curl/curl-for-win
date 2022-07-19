@@ -137,8 +137,8 @@ fi
     # NOTE: root path with spaces breaks all values with '${_TOP}'. But,
     #       autotools breaks on spaces anyway, so let us leave it like that.
 
-    if [ -d ../zlib ]; then
-      options="${options} --with-zlib=${_TOP}/zlib/${_PP}"
+    if [ -n "${_ZLIB}" ]; then
+      options="${options} --with-zlib=${_TOP}/${_ZLIB}/${_PP}"
     else
       options="${options} --without-zlib"
     fi

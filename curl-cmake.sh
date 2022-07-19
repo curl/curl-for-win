@@ -121,10 +121,10 @@ _VER="$1"
       LIBS="${LIBS} -lwldap32"
     fi
 
-    if [ -d ../zlib ]; then
+    if [ -n "${_ZLIB}" ]; then
       options="${options} -DUSE_ZLIB=ON"
-      options="${options} -DZLIB_LIBRARY=${_TOP}/zlib/${_PP}/lib/libz.a"
-      options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/zlib/${_PP}/include"
+      options="${options} -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
+      options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
     else
       options="${options} -DUSE_ZLIB=OFF"
     fi

@@ -23,9 +23,9 @@ _VER="$1"
   LIBS=''
   options=''
 
-  if [ -d ../zlib ]; then
-    options="${options} -DZLIB_LIBRARY=${_TOP}/zlib/${_PP}/lib/libz.a"
-    options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/zlib/${_PP}/include"
+  if [ -n "${_ZLIB}" ]; then
+    options="${options} -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
+    options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
   fi
 
   if [ -n "${_OPENSSL}" ]; then

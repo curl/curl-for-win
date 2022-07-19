@@ -29,11 +29,11 @@ _VER="$1"
   # NOTE: root path with spaces breaks all values with '${_TOP}'. But,
   #       autotools breaks on spaces anyway, so let us leave it like that.
 
-  if [ -d ../zlib ]; then
+  if [ -n "${_ZLIB}" ]; then
     options="${options} --with-libz"
     # These seem to work better than --with-libz-prefix=:
-    CPPFLAGS="${CPPFLAGS} -I${_TOP}/zlib/${_PP}/include"
-    LDFLAGS="${LDFLAGS} -L${_TOP}/zlib/${_PP}/lib"
+    CPPFLAGS="${CPPFLAGS} -I${_TOP}/${_ZLIB}/${_PP}/include"
+    LDFLAGS="${LDFLAGS} -L${_TOP}/${_ZLIB}/${_PP}/lib"
   fi
 
   if [ -n "${_OPENSSL}" ]; then
