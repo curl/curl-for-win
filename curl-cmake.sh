@@ -197,7 +197,7 @@ _VER="$1"
         LIBS="${LIBS} -lssh2"
       fi
     elif [ -d ../libssh ]; then
-      # Detection picks OS-native copy. Only a fully manual configuration worked
+      # Detection picks OS-native copy. Only a manual configuration worked
       # to defeat CMake's wisdom.
       options="${options} -DCURL_USE_LIBSSH=OFF"
       options="${options} -DCURL_USE_LIBSSH2=OFF"

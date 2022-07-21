@@ -564,7 +564,7 @@ build_single_target() {
       if command -v "${tmp}" >/dev/null 2>&1; then
         _STRIP_BINUTILS="$(PATH="${_ori_path}" which "${tmp}")"
       else
-        echo "! Warning: binutils strip tool '${tmp}' not found. BoringSSL libs may not be fully reproducible."
+        echo "! Warning: binutils strip tool '${tmp}' not found. BoringSSL libs may not be reproducible."
       fi
     fi
   fi
