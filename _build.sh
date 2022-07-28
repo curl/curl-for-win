@@ -190,15 +190,14 @@ fi
 # This is more or less guesswork and this warning remains:
 #    `configure: WARNING: using cross tools not prefixed with host triplet`
 # Even with `_CCPREFIX` provided.
-if [ "${_OS}" != 'win' ]; then
-  # https://clang.llvm.org/docs/CrossCompilation.html
-  case "${_OS}" in
-    win)   _BUILD_HOST="$(uname -m)-pc-mingw32";;
-    linux) _BUILD_HOST="$(uname -m)-pc-linux";;
-    bsd)   _BUILD_HOST="$(uname -m)-pc-bsd";;
-    mac)   _BUILD_HOST="$(uname -m)-apple-darwin";;
-  esac
-fi
+# https://clang.llvm.org/docs/CrossCompilation.html
+case "${_OS}" in
+  win)   _BUILD_HOST="$(uname -m)-pc-mingw32";;
+  linux) _BUILD_HOST="$(uname -m)-pc-linux";;
+  bsd)   _BUILD_HOST="$(uname -m)-pc-bsd";;
+  mac)   _BUILD_HOST="$(uname -m)-apple-darwin";;
+  *)     _BUILD_HOST="$(uname -m)-pc-$(uname -s | tr '[:upper:]' '[:lower:]')";;  # lazy guess
+esac
 
 export PUBLISH_PROD_FROM
 if [ "${APPVEYOR_REPO_PROVIDER:-}" = 'gitHub' ] || \
