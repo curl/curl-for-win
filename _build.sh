@@ -193,10 +193,10 @@ fi
 if [ "${_OS}" != 'win' ]; then
   # https://clang.llvm.org/docs/CrossCompilation.html
   case "${_OS}" in
-    win)   _CROSS_HOST="$(uname -m)-pc-mingw32";;
-    linux) _CROSS_HOST="$(uname -m)-pc-linux";;
-    bsd)   _CROSS_HOST="$(uname -m)-pc-bsd";;
-    mac)   _CROSS_HOST="$(uname -m)-apple-darwin";;
+    win)   _BUILD_HOST="$(uname -m)-pc-mingw32";;
+    linux) _BUILD_HOST="$(uname -m)-pc-linux";;
+    bsd)   _BUILD_HOST="$(uname -m)-pc-bsd";;
+    mac)   _BUILD_HOST="$(uname -m)-apple-darwin";;
   esac
 fi
 
@@ -478,7 +478,7 @@ build_single_target() {
     fi
   fi
 
-  _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --build=${_CROSS_HOST} --host=${_TRIPLET}"
+  _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --build=${_BUILD_HOST} --host=${_TRIPLET}"
   [ "${_CPU}" = 'x86' ] && _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-asynchronous-unwind-tables"
 
   export _LD
