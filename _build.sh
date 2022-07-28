@@ -576,7 +576,7 @@ build_single_target() {
      [ "${_OS}" = 'linux' ] && \
      [ -x /usr/bin/llvm-rc ]; then
     # FIXME: llvm-windres alias (to llvm-rc) missing from current debian:testing.
-    #        Workaround: Create an alias and use to that.
+    #        Workaround: Create an alias and use that.
     #        https://packages.debian.org/bookworm/amd64/llvm/filelist
     RC="$(pwd)/llvm-windres"
     ln -s -f /usr/bin/llvm-rc "${RC}"

@@ -74,7 +74,7 @@ Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mq
 Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM     SPNEGO SSL SSPI threadsafe TLS-SRP UnixSockets
 Libs: -lcurl -lz -lcrypt32 -lwldap32 -lnghttp2 -lssh2 -lgsasl -lbcrypt -lssl -lcrypto -lidn2 -lbrotlidec -lbrotlicommon -lnghttp3 -lngtcp2
 ```
-<details><summary>Alternate configurations with smaller footprint:</summary><p>
+<details><summary>Alternate configurations with different footprints:</summary><p>
 
 ```
 "big":
