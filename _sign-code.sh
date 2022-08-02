@@ -21,6 +21,7 @@ if [ -s "${SIGN_CODE_KEY}" ] && \
     echo "Code signing: '${file}'"
     # Requires: osslsigncode 2.2 or newer
     # -ts 'https://freetsa.org/tsr'
+    # TODO: osslsigncode 2.5 renamed '-st' to '-time'
     osslsigncode sign \
       -h sha512 \
       -in "${file}" -out "${file}-signed" \
