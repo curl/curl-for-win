@@ -56,4 +56,4 @@ export PEFILE_VER_='2022.5.30'
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='6'
+export _REV='7'

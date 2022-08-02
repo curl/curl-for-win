@@ -555,10 +555,16 @@ fi
 if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
-  live_dl brotli "${BROTLI_VER_}"
-  live_xt brotli "${BROTLI_HASH}"
+   [ "${_BRANCH#*mini*}" = "${_BRANCH}" ]; then
+
+  if [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
+    live_dl brotli "${BROTLI_VER_}"
+    live_xt brotli "${BROTLI_HASH}"
+  fi
+  if [ "${_BRANCH#*nozstd*}" = "${_BRANCH}" ]; then
+    live_dl zstd "${ZSTD_VER_}"
+    live_xt zstd "${ZSTD_HASH}"
+  fi
 fi
 
 if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
@@ -581,9 +587,6 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
 fi
 
 if [ "${_BRANCH#*big*}" != "${_BRANCH}" ]; then
-  live_dl zstd "${ZSTD_VER_}"
-  live_xt zstd "${ZSTD_HASH}"
-
   live_dl libunistring "${LIBUNISTRING_VER_}"
   live_xt libunistring "${LIBUNISTRING_HASH}"
   live_dl libiconv "${LIBICONV_VER_}"

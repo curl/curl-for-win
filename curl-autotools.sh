@@ -150,7 +150,7 @@ fi
     else
       options="${options} --without-brotli"
     fi
-    if [ -d ../zstd ]; then
+    if [ -d ../zstd ] && [ "${_BRANCH#*nozstd*}" = "${_BRANCH}" ]; then
       options="${options} --with-zstd=${_TOP}/zstd/${_PP}"
       LDFLAGS="${LDFLAGS} -L${_TOP}/zstd/${_PP}/lib"
       LIBS="${LIBS} -lzstd"
