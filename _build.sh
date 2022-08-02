@@ -63,6 +63,10 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - Make -nobrotli the default?
 #   - Enable Control Flow Guard (once FLOSS toolchains support it): -ehcontguard (requires LLVM 13.0.0)
 #   - LLVM -mretpoline
+#   - GNU multiarg options `--opt value` -> `-—opt=value`?
+#   - rustls
+#     https://github.com/rustls/rustls/archive/refs/tags/v/0.20.6.tar.gz
+#     $ cargo build --target={x86_64-pc-windows-gnullvm,aarch64-pc-windows-gnullvm,i686-pc-windows-gnu}
 
 # Resources:
 #   - https://blog.llvm.org/2019/11/deterministic-builds-with-clang-and-lld.html
