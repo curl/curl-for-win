@@ -172,7 +172,7 @@ EOF
 
 my_curl() {
   # >&2 echo "|$@|"
-  curl --disable --user-agent '' --fail --silent --show-error \
+  curl --disable --user-agent '' --fail --silent --show-error --globoff \
     --connect-timeout 15 --max-time 60 --retry 3 --max-redirs 10 "$@"
 }
 
