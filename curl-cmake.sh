@@ -189,7 +189,14 @@ _VER="$1"
     options="${options} -DCURL_USE_SCHANNEL=ON"
     CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
-    if [ -d ../libssh ]; then
+    if [ -d ../wolfssh ] && [ -d ../wolfssl ]; then
+      # No native support, enable it manually.
+      options="${options} -DCURL_USE_WOLFSSH=ON"
+      CPPFLAGS="${CPPFLAGS} -DUSE_WOLFSSH"
+      CPPFLAGS="${CPPFLAGS} -I${_TOP}/wolfssh/${_PP}/include"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/wolfssh/${_PP}/lib"
+      LIBS="${LIBS} -lwolfssh"
+    elif [ -d ../libssh ]; then
       # Detection picks OS-native copy. Only a manual configuration worked
       # to defeat CMake's wisdom.
       options="${options} -DCURL_USE_LIBSSH=OFF"

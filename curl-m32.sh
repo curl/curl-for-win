@@ -209,7 +209,12 @@ _VER="$1"
   options="${options}-schannel"
   CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
-  if [ -d ../libssh ]; then
+  if [ -d ../wolfssh ] && [ -d ../wolfssl ]; then
+    CPPFLAGS="${CPPFLAGS} -DUSE_WOLFSSH"
+    CPPFLAGS="${CPPFLAGS} -I../../wolfssh/${_PP}/include"
+    LDFLAGS="${LDFLAGS} -L../../wolfssh/${_PP}/lib"
+    LIBS="${LIBS} -lwolfssh"
+  elif [ -d ../libssh ]; then
     CPPFLAGS="${CPPFLAGS} -DUSE_LIBSSH -DHAVE_LIBSSH_LIBSSH_H"
     CPPFLAGS="${CPPFLAGS} -DLIBSSH_STATIC"
     CPPFLAGS="${CPPFLAGS} -I../../libssh/${_PP}/include"

@@ -64,6 +64,13 @@ cat <<EOF
     "redir": "redir"
   },
   {
+    "name": "wolfssh",
+    "url": "https://github.com/wolfSSL/wolfssh/archive/refs/tags/v{ver}-stable.tar.gz",
+    "sig": "https://github.com/wolfSSL/wolfssh/releases/download/v{ver}-stable/wolfssh-{ver}-stable.tar.gz.asc",
+    "redir": "redir",
+    "keys": "A2A48E7BCB96C5BECB987314EBC80E415CA29677"
+  },
+  {
     "name": "libssh",
     "url": "https://www.libssh.org/files/{vermm}/libssh-{ver}.tar.xz",
     "sig": ".asc",
@@ -668,7 +675,10 @@ fi
 if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ]; then
-  if [ "${_BRANCH#*libssh*}" != "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*wolfssh*}" != "${_BRANCH}" ]; then
+    live_dl wolfssh "${WOLFSSH_VER_}"
+    live_xt wolfssh "${WOLFSSH_HASH}"
+  elif [ "${_BRANCH#*libssh*}" != "${_BRANCH}" ]; then
     # shellcheck disable=SC2153
     live_dl libssh "${LIBSSH_VER_}"
     # shellcheck disable=SC2153

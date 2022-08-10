@@ -34,7 +34,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        libressl   build with LibreSSL
 #        schannel   build with Schannel
 #        mbedtls    build with mbedTLS
-#        wolfssl    build with WolfSSL (caveats!)
+#        wolfssl    build with wolfSSL (caveats!)
+#        wolfssh    build with wolfSSH (requires wolfSSL)
 #        libssh     build with libssh
 #        mini       build with less features, see README.md
 #        micro      build with less features, see README.md
@@ -101,6 +102,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   openssl       proprietary
 #   boringssl     cmake
 #   libressl      autotools, cmake
+#   wolfssh       autotools
 #   libssh        cmake
 #   libssh2       autotools, cmake
 #   curl          cmake, autotools, Makefile.m32
@@ -735,6 +737,7 @@ build_single_target() {
   bld openssl-quic "${OPENSSL_QUIC_VER_}" openssl
   bld ngtcp2             "${NGTCP2_VER_}"
   bld nghttp2           "${NGHTTP2_VER_}"
+  bld wolfssh           "${WOLFSSH_VER_}"
   bld libssh             "${LIBSSH_VER_}"
   bld libssh2           "${LIBSSH2_VER_}"
   bld curl                 "${CURL_VER_}"
