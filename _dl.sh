@@ -505,14 +505,20 @@ live_dl() {
         -e "s/{ver}/${ver}/g" \
         -e "s/{vermm}/$(echo "${ver}" | cut -d . -f -2)/g" \
       )"
-    sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's/^null$//')"
+    sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's/^null$//' | sed \
+        -e "s/{ver}/${ver}/g" \
+        -e "s/{vermm}/$(echo "${ver}" | cut -d . -f -2)/g" \
+      )"
     redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"
     keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
 
     options=()
     [ "${redir}" = 'redir' ] && options+=(--location --proto-redir '=https')
     options+=(--output pkg.bin "${url}")
-    [ -n "${sig}" ] && options+=(--output pkg.sig "${url}${sig}")
+    if [ -n "${sig}" ]; then
+      [[ "${sig}" = 'https://'* ]] || sig="${url}${sig}"
+      options+=(--output pkg.sig "${sig}")
+    fi
     set -x
     my_curl "${options[@]}"
 
