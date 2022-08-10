@@ -41,9 +41,9 @@ _VER="$1"
       --enable-psk \
       --enable-harden \
       --enable-altcertchains \
-      --disable-examples \
+      --enable-reproducible-build \
       --disable-benchmark \
-      --enable-reproducible-build --silent
+      --disable-examples --silent
   )
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
@@ -77,7 +77,7 @@ _VER="$1"
   cp -f -p "${_pkg}"/include/wolfssl/wolfcrypt/*.h  "${_DST}/include/wolfssl/wolfcrypt"
   cp -f -p "${_pkg}"/include/wolfssl/*.h            "${_DST}/include/wolfssl"
   cp -f -p "${_pkg}"/lib/*.a                        "${_DST}/lib/"
-  cp -f -p ChangeLog.md                             "${_DST}/ChangeLog.md"
+  cp -f -p ChangeLog.md                             "${_DST}/"
   cp -f -p README.md                                "${_DST}/"
   cp -f -p COPYING                                  "${_DST}/COPYING.txt"
 
