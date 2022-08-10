@@ -665,26 +665,26 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
   fi
 fi
 
-if [ "${_BRANCH#*libssh*}" != "${_BRANCH}" ]; then
-  # shellcheck disable=SC2153
-  live_dl libssh "${LIBSSH_VER_}"
-  # shellcheck disable=SC2153
-  live_xt libssh "${LIBSSH_HASH}"
-fi
-
 if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ]; then
-  if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-    LIBSSH2_VER_='1.10.0-dev'
-    LIBSSH2_HASH=
-    my_curl --location --proto-redir =https \
-      --output pkg.bin \
-      'https://github.com/libssh2/libssh2/archive/635caa90787220ac3773c1d5ba11f1236c22eae8.tar.gz'
+  if [ "${_BRANCH#*libssh*}" != "${_BRANCH}" ]; then
+    # shellcheck disable=SC2153
+    live_dl libssh "${LIBSSH_VER_}"
+    # shellcheck disable=SC2153
+    live_xt libssh "${LIBSSH_HASH}"
   else
-    live_dl libssh2 "${LIBSSH2_VER_}"
+    if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
+      LIBSSH2_VER_='1.10.0-dev'
+      LIBSSH2_HASH=
+      my_curl --location --proto-redir =https \
+        --output pkg.bin \
+        'https://github.com/libssh2/libssh2/archive/635caa90787220ac3773c1d5ba11f1236c22eae8.tar.gz'
+    else
+      live_dl libssh2 "${LIBSSH2_VER_}"
+    fi
+    live_xt libssh2 "${LIBSSH2_HASH}"
   fi
-  live_xt libssh2 "${LIBSSH2_HASH}"
 fi
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then

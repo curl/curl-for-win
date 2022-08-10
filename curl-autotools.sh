@@ -198,17 +198,17 @@ fi
 
     options="${options} --without-gnutls --without-bearssl --without-rustls --without-nss --without-hyper"
 
-    if [ -d ../libssh2 ]; then
-      options="${options} --with-libssh2=${_TOP}/libssh2/${_PP}"
-      options="${options} --without-libssh"
-      LIBS="${LIBS} -lbcrypt"
-    elif [ -d ../libssh ]; then
+    if [ -d ../libssh ]; then
       options="${options} --with-libssh=${_TOP}/libssh/${_PP}"
       options="${options} --without-libssh2"
       CPPFLAGS="${CPPFLAGS} -DLIBSSH_STATIC"
-    else
-      options="${options} --without-libssh2"
+    elif [ -d ../libssh2 ]; then
+      options="${options} --with-libssh2=${_TOP}/libssh2/${_PP}"
       options="${options} --without-libssh"
+      LIBS="${LIBS} -lbcrypt"
+    else
+      options="${options} --without-libssh"
+      options="${options} --without-libssh2"
     fi
 
     options="${options} --without-wolfssh"
