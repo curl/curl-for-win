@@ -93,6 +93,13 @@ cat <<EOF
     "tag": ".+"
   },
   {
+    "name": "wolfssl",
+    "url": "https://github.com/wolfSSL/wolfssl/archive/refs/tags/v{ver}-stable.tar.gz",
+    "sig": "https://github.com/wolfSSL/wolfssl/releases/download/v{ver}-stable/wolfssl-{ver}-stable.tar.gz.asc",
+    "redir": "redir",
+    "keys": "A2A48E7BCB96C5BECB987314EBC80E415CA29677"
+  },
+  {
     "name": "mbedtls",
     "url": "https://github.com/Mbed-TLS/mbedtls/archive/refs/tags/v{ver}.tar.gz",
     "redir": "redir"
@@ -279,7 +286,10 @@ check_dl() {
   options=()
   [ "$5" = 'redir' ] && options+=(--location --proto-redir '=https')
   options+=(--output pkg.bin "${url}")
-  [ -n "${sig}" ] && options+=(--output pkg.sig "${url}${sig}")
+  if [ -n "${sig}" ]; then
+    [[ "${sig}" = 'https://'* ]] || sig="${url}${sig}"
+    options+=(--output pkg.sig "${sig}")
+  fi
   [ -n "${sha}" ] && options+=(--output pkg.sha "${url}${sha}")
   my_curl "${options[@]}"
 
@@ -386,7 +396,11 @@ bump() {
                   -e "s/{ver}/${newver}/g" \
                   -e "s/{vermm}/$(echo "${newver}" | cut -d . -f -2)/g" \
                 )"
-              newhash="$(check_dl "${name}" "${urlver}" "${sig}" "${sha}" "${redir}" "${keys}")"
+              sigver="$(printf '%s' "${sig}" | sed \
+                  -e "s/{ver}/${newver}/g" \
+                  -e "s/{vermm}/$(echo "${newver}" | cut -d . -f -2)/g" \
+                )"
+              newhash="$(check_dl "${name}" "${urlver}" "${sigver}" "${sha}" "${redir}" "${keys}")"
             else
               newhash='-'
             fi
@@ -593,6 +607,11 @@ if [ "${_BRANCH#*big*}" != "${_BRANCH}" ]; then
   live_xt libiconv "${LIBICONV_HASH}"
   live_dl libpsl "${LIBPSL_VER_}"
   live_xt libpsl "${LIBPSL_HASH}"
+fi
+
+if [ "${_BRANCH#*wolfssl*}" != "${_BRANCH}" ]; then
+  live_dl wolfssl "${WOLFSSL_VER_}"
+  live_xt wolfssl "${WOLFSSL_HASH}"
 fi
 
 if [ "${_BRANCH#*mbedtls*}" != "${_BRANCH}" ]; then

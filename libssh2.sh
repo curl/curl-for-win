@@ -47,6 +47,10 @@ _VER="$1"
       CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
       LIBS="${LIBS} -lbcrypt"
     fi
+  elif [ -d ../wolfssl ]; then
+    # UNTESTED
+    options="${options} --with-crypto=wolfssl --with-libwolfssl-prefix=${_TOP}/wolfssl/${_PP}"
+    LDFLAGS="${LDFLAGS} -L${_TOP}/wolfssl/${_PP}/lib"
   elif [ -d ../mbedtls ]; then
     if false; then
       # Compile errors as of mbedTLS 3.2.1 + libssh 1.10.0

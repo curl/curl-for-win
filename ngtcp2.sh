@@ -28,6 +28,11 @@ _VER="$1"
     options="${options} -DENABLE_OPENSSL=ON"
     options="${options} -DOPENSSL_ROOT_DIR=../${_OPENSSL}/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=../${_OPENSSL}/${_PP}/include"
+  elif [ -d ../wolfssl ]; then
+    # UNTESTED
+    options="${options} -DENABLE_WOLFSSL=ON"
+    options="${options} -DWOLFSSL_ROOT_DIR=../${_WOLFSSL}/${_PP}"
+    options="${options} -DWOLFSSL_INCLUDE_DIR=../${_WOLFSSL}/${_PP}/include"
   fi
 
   if [ -d ../nghttp3 ]; then

@@ -171,6 +171,13 @@ _VER="$1"
       options="${options} -DCURL_USE_OPENSSL=OFF"
     fi
 
+    if [ -d ../wolfssl ]; then
+      options="${options} -DCURL_USE_WOLFSSL=ON"
+      options="${options} -DWolfSSL_LIBRARY=${_TOP}/wolfssl/${_PP}/lib/libwolfssl.a"
+      options="${options} -DWolfSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
+      CPPFLAGS="${CPPFLAGS} -DSIZEOF_LONG_LONG=8"
+    fi
+
     if [ -d ../mbedtls ]; then
       options="${options} -DCURL_USE_MBEDTLS=ON"
       options="${options} -DMBEDTLS_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedtls.a"

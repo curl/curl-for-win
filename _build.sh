@@ -34,6 +34,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        libressl   build with LibreSSL
 #        schannel   build with Schannel
 #        mbedtls    build with mbedTLS
+#        wolfssl    build with WolfSSL (caveats!)
 #        mini       build with less features, see README.md
 #        micro      build with less features, see README.md
 #        nano       build with less features, see README.md
@@ -94,6 +95,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   nghttp2       cmake
 #   nghttp3       cmake
 #   ngtcp2        cmake
+#   wolfssl       cmake
 #   mbedtls       cmake
 #   openssl       proprietary
 #   boringssl     cmake
@@ -724,6 +726,7 @@ build_single_target() {
   bld libpsl             "${LIBPSL_VER_}"
   bld libgsasl         "${LIBGSASL_VER_}"
   bld nghttp3           "${NGHTTP3_VER_}"
+  bld wolfssl           "${WOLFSSL_VER_}"
   bld mbedtls           "${MBEDTLS_VER_}"
   bld boringssl       "${BORINGSSL_VER_}"
   bld libressl         "${LIBRESSL_VER_}"

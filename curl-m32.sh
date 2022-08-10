@@ -186,12 +186,25 @@ _VER="$1"
     fi
   fi
 
+  multissl=0
+
+  if [ -d ../wolfssl ]; then
+    CPPFLAGS="${CPPFLAGS} -DUSE_WOLFSSL -DSIZEOF_LONG_LONG=8"
+    CPPFLAGS="${CPPFLAGS} -I../../wolfssl/${_PP}/include"
+    LDFLAGS="${LDFLAGS} -L../../wolfssl/${_PP}/lib"
+    LIBS="${LIBS} -lwolfssl"
+    multissl=1
+  fi
+
   if [ -d ../mbedtls ]; then
     CPPFLAGS="${CPPFLAGS} -DUSE_MBEDTLS"
     CPPFLAGS="${CPPFLAGS} -I../../mbedtls/${_PP}/include"
     LDFLAGS="${LDFLAGS} -L../../mbedtls/${_PP}/lib"
     LIBS="${LIBS} -lmbedtls -lmbedx509 -lmbedcrypto"
+    multissl=1
   fi
+
+  [ "${multissl}" = '1' ] && CPPFLAGS="${CPPFLAGS} -DCURL_WITH_MULTI_SSL"  # Fixup for cases undetected by Makefile.m32
 
   options="${options}-schannel"
   CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"

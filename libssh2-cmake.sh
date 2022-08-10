@@ -16,6 +16,7 @@ _VER="$1"
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
   CPPFLAGS='-DHAVE_DECL_SECUREZEROMEMORY=1 -D_FILE_OFFSET_BITS=64'
+  LDFLAGS=''
   LIBS=''
   options=''
 
@@ -40,6 +41,12 @@ _VER="$1"
       LIBS="${LIBS} -lbcrypt"
       LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
     fi
+  elif [ -d ../wolfssl ] && false; then
+    # UNTESTED. Missing upstream support.
+    options="${options} -DCRYPTO_BACKEND=WolfSSL"
+    CPPFLAGS="${CPPFLAGS} -I${_TOP}/wolfssl/${_PP}/include"
+    LDFLAGS="${LDFLAGS} -L${_TOP}/wolfssl/${_PP}/lib"
+    LIBS="${LIBS} -lwolfssl"
   elif [ -d ../mbedtls ]; then
     if false; then
       # Compile errors as of mbedTLS 3.2.1 + libssh 1.10.0
@@ -59,7 +66,7 @@ _VER="$1"
     '-DBUILD_EXAMPLES=OFF' \
     '-DBUILD_TESTING=OFF' \
     '-DENABLE_DEBUG_LOGGING=OFF' \
-    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LIBS}"
+    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LDFLAGS} ${_LIBS_GLOBAL} ${LIBS}"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 

@@ -184,13 +184,19 @@ fi
       options="${options} --disable-tls-srp"
     fi
 
+    if [ -d ../wolfssl ]; then
+      options="${options} --with-wolfssl=${_TOP}/wolfssl/${_PP}"
+    else
+      options="${options} --without-wolfssl"
+    fi
+
     if [ -d ../mbedtls ]; then
       options="${options} --with-mbedtls=${_TOP}/mbedtls/${_PP}"
     else
       options="${options} --without-mbedtls"
     fi
 
-    options="${options} --without-gnutls --without-wolfssl --without-bearssl --without-rustls --without-nss --without-hyper"
+    options="${options} --without-gnutls --without-bearssl --without-rustls --without-nss --without-hyper"
 
     if [ -d ../libssh2 ]; then
       options="${options} --with-libssh2=${_TOP}/libssh2/${_PP}"
