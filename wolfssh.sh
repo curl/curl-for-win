@@ -1,6 +1,8 @@
 #!/bin/sh
 
 # FIXME (upstream):
+# - enabling SCP results in error:
+#   ../src/wolfscp.c:2277:49: error: incomplete definition of type 'struct dirent'
 # - configure warnings:
 #   ../configure: line 14942: unistd.h: command not found
 #   ../configure: line 14956: unistd.h: command not found
@@ -56,6 +58,7 @@ _VER="$1"
     ../configure ${options} \
       --enable-static \
       --disable-shared \
+      --disable-scp \
       --enable-sftp \
       --disable-term \
       --disable-examples --silent
