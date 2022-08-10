@@ -33,6 +33,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        boringssl  build with BoringSSL
 #        libressl   build with LibreSSL
 #        schannel   build with Schannel
+#        mbedtls    build with mbedTLS
 #        mini       build with less features, see README.md
 #        micro      build with less features, see README.md
 #        nano       build with less features, see README.md
