@@ -35,6 +35,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        schannel   build with Schannel
 #        mbedtls    build with mbedTLS
 #        wolfssl    build with WolfSSL (caveats!)
+#        libssh     build with libssh
 #        mini       build with less features, see README.md
 #        micro      build with less features, see README.md
 #        nano       build with less features, see README.md
