@@ -158,6 +158,8 @@ fi
     options="${options} --with-schannel"
     CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
+    h3='0'
+
     if [ -n "${_OPENSSL}" ]; then
       options="${options} --with-openssl=${_TOP}/${_OPENSSL}/${_PP}"
       options="${options} --disable-openssl-auto-load-config"
@@ -169,12 +171,14 @@ fi
         else
           LDFLAGS="${LDFLAGS} -Wl,-Bstatic,-lpthread,-Bdynamic"
         fi
+        h3='1'
       elif [ "${_OPENSSL}" = 'libressl' ]; then
         options="${options} --enable-tls-srp"
         LIBS="${LIBS} -lbcrypt"
       elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
         options="${options} --enable-tls-srp"
         LIBS="${LIBS} -lbcrypt"
+        [ "${_OPENSSL}" = 'openssl-quic' ] && h3='1'
       fi
     else
       options="${options} --disable-tls-srp"
@@ -252,33 +256,34 @@ fi
     else
       options="${options} --without-nghttp2"
     fi
-    if [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ]; then
-      # HTTP3 does not appear enabled in the configure summary.
-      if [ -d ../nghttp3 ]; then
-        # Detection insists on having a pkg-config, so force feed everything manually.
-        # This lib does not appear enabled in the configure summary.
-        options="${options} --with-nghttp3=yes"
-        CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB -DUSE_NGHTTP3"
-        CPPFLAGS="${CPPFLAGS} -I${_TOP}/nghttp3/${_PP}/include"
-        LDFLAGS="${LDFLAGS} -L${_TOP}/nghttp3/${_PP}/lib"
-        LIBS="${LIBS} -lnghttp3"
-      else
-        options="${options} --without-nghttp3"
+
+    [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ] || h3='0'
+
+    # HTTP3 does not appear enabled in the configure summary.
+    if [ "${h3}" = '1' ] && [ -d ../nghttp3 ] && [ -d ../ngtcp2 ]; then
+      # Detection insists on having a pkg-config, so force feed everything manually.
+      # This lib does not appear enabled in the configure summary.
+      options="${options} --with-nghttp3=yes"
+      CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB -DUSE_NGHTTP3"
+      CPPFLAGS="${CPPFLAGS} -I${_TOP}/nghttp3/${_PP}/include"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/nghttp3/${_PP}/lib"
+      LIBS="${LIBS} -lnghttp3"
+
+      # Detection insists on having a pkg-config, so force feed everything manually.
+      # This lib does not appear enabled in the configure summary.
+      options="${options} --with-ngtcp2=yes"
+      CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB -DUSE_NGTCP2"
+      CPPFLAGS="${CPPFLAGS} -I${_TOP}/ngtcp2/${_PP}/include"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/ngtcp2/${_PP}/lib"
+      LIBS="${LIBS} -lngtcp2"
+      if [ "${_OPENSSL}" = 'boringssl' ]; then
+        LIBS="${LIBS} -lngtcp2_crypto_boringssl"
+      elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
+        LIBS="${LIBS} -lngtcp2_crypto_openssl"
       fi
-      if [ -d ../ngtcp2 ]; then
-        # Detection insists on having a pkg-config, so force feed everything manually.
-        # This lib does not appear enabled in the configure summary.
-        options="${options} --with-ngtcp2=yes"
-        CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB -DUSE_NGTCP2"
-        CPPFLAGS="${CPPFLAGS} -I${_TOP}/ngtcp2/${_PP}/include"
-        LDFLAGS="${LDFLAGS} -L${_TOP}/ngtcp2/${_PP}/lib"
-        LIBS="${LIBS} -lngtcp2"
-        if [ "${_OPENSSL}" = 'boringssl' ]; then
-          LIBS="${LIBS} -lngtcp2_crypto_boringssl"
-        elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
-          LIBS="${LIBS} -lngtcp2_crypto_openssl"
-        fi
-      fi
+    else
+      options="${options} --without-nghttp3"
+      options="${options} --without-ngtcp2"
     fi
 
     options="${options} --without-quiche --without-msh3"
