@@ -24,10 +24,7 @@ fi
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 
-  if [ ! -f 'Makefile' ]; then
-    autoreconf --force --install
-    cp -f -p Makefile.dist Makefile
-  fi
+  [ -f 'configure' ] || autoreconf --force --install
 
   [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && export AR="${AR_NORMALIZE}"
 

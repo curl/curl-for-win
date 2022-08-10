@@ -16,10 +16,7 @@ _VER="$1"
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
   # We may need this in the future if an "Automake version mismatch" occurs:
-# if [ ! -f 'Makefile' ]; then
-#   autopoint --force
-#   autoreconf --install
-# fi
+# [ -f 'configure' ] || autoreconf --force --install
 
   options="${_CONFIGURE_GLOBAL}"
   export CC="${_CC_GLOBAL}"

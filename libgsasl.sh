@@ -22,7 +22,7 @@ _VER="$1"
   #   configure.ac:39: aclocal.m4 with aclocal and run automake again.
   #   [...]
   # Requires: autopoint (sometimes offered by the gettext package)
-  [ -f 'Makefile' ] || autoreconf --force --install
+  [ -f 'configure' ] || autoreconf --force --install
 
   options="${_CONFIGURE_GLOBAL}"
   export CC="${_CC_GLOBAL}"

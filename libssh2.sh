@@ -15,7 +15,7 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  [ -f 'Makefile' ] || autoreconf --force --install
+  [ -f 'configure' ] || autoreconf --force --install
 
   options="${_CONFIGURE_GLOBAL}"
   export CC="${_CC_GLOBAL}"
@@ -58,6 +58,7 @@ _VER="$1"
   fi
 
   (
+    # TODO: add --disable-tests on the next release
     mkdir "${_BLDDIR}"; cd "${_BLDDIR}"
     # shellcheck disable=SC2086
     ../configure ${options} \
@@ -67,7 +68,7 @@ _VER="$1"
       --enable-static \
       --disable-shared \
       --disable-examples-build \
-      --disable-tests --silent
+      --silent
   )
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
