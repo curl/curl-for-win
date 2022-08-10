@@ -50,7 +50,6 @@ _VER="$1"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(mktemp -d)/${_BAS}"
 
-  mkdir -p "${_DST}"
   mkdir -p "${_DST}/include"
   mkdir -p "${_DST}/lib"
 
