@@ -211,6 +211,13 @@ gpg_recv_key() {
   my_curl "https://keyserver.ubuntu.com/${req}" | my_gpg --import --status-fd 1
 }
 
+# replace {ver}/{vermm} macros with the version number
+expandver() {
+  sed \
+    -e "s/{ver}/$1/g" \
+    -e "s/{vermm}/$(echo "$1" | cut -d . -f -2)/g"
+}
+
 # convert 'x.y.z' to zero-padded "000x0y0z" numeric format (or leave as-is)
 to8digit() {
   local ver
@@ -382,10 +389,7 @@ bump() {
           # Some projects use part of the version number to form the path.
           # Caveat: Major/minor upgrades will not be detected in that case.
           # (e.g. libssh)
-          urlver="$(printf '%s' "${url}" | sed \
-              -e "s/{ver}/${ourver}/g" \
-              -e "s/{vermm}/$(echo "${ourver}" | cut -d . -f -2)/g" \
-            )"
+          urlver="$(printf '%s' "${url}" | expandver "${ourver}")"
           newver="$(check_update "${name}" "${ourvern}" "${urlver}" "${desc}" \
             "${tag}" \
             "${hasfile}" \
@@ -399,14 +403,8 @@ bump() {
               redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"
               keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
 
-              urlver="$(printf '%s' "${url}" | sed \
-                  -e "s/{ver}/${newver}/g" \
-                  -e "s/{vermm}/$(echo "${newver}" | cut -d . -f -2)/g" \
-                )"
-              sigver="$(printf '%s' "${sig}" | sed \
-                  -e "s/{ver}/${newver}/g" \
-                  -e "s/{vermm}/$(echo "${newver}" | cut -d . -f -2)/g" \
-                )"
+              urlver="$(printf '%s' "${url}" | expandver "${newver}")"
+              sigver="$(printf '%s' "${sig}" | expandver "${newver}")"
               newhash="$(check_dl "${name}" "${urlver}" "${sigver}" "${sha}" "${redir}" "${keys}")"
             else
               newhash='-'
@@ -508,14 +506,8 @@ live_dl() {
     jp="$(dependencies_json | jq \
       ".[] | select(.name == \"${name}\")")"
 
-    url="$(  printf '%s' "${jp}" | jq --raw-output '.url' | sed \
-        -e "s/{ver}/${ver}/g" \
-        -e "s/{vermm}/$(echo "${ver}" | cut -d . -f -2)/g" \
-      )"
-    sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's/^null$//' | sed \
-        -e "s/{ver}/${ver}/g" \
-        -e "s/{vermm}/$(echo "${ver}" | cut -d . -f -2)/g" \
-      )"
+    url="$(  printf '%s' "${jp}" | jq --raw-output '.url' | expandver "${ver}")"
+    sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's/^null$//' | expandver "${ver}")"
     redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"
     keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
 
