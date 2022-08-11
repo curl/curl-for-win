@@ -28,13 +28,18 @@ _VER="$1"
     options="${options} --with-libz=${_TOP}/${_ZLIB}/${_PP}"
   fi
 
+  # Required for libssh2
+  options="${options} --enable-aesctr"
+
+  # Required for curl
+  options="${options} --enable-curl"
+
   (
     mkdir "${_BLDDIR}"; cd "${_BLDDIR}"
     # shellcheck disable=SC2086
     ../configure ${options} \
       --enable-static \
       --disable-shared \
-      --enable-curl \
       --enable-quic \
       --enable-session-ticket \
       --enable-earlydata \

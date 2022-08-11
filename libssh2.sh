@@ -15,7 +15,9 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  [ -f 'configure' ] || autoreconf --force --install
+  # TODO: Re-add condition on the next release
+# [ -f 'configure' ] || \
+  autoreconf --force --install
 
   options="${_CONFIGURE_GLOBAL}"
   export CC="${_CC_GLOBAL}"
@@ -48,7 +50,6 @@ _VER="$1"
       LIBS="${LIBS} -lbcrypt"
     fi
   elif [ -d ../wolfssl ]; then
-    # UNTESTED
     options="${options} --with-crypto=wolfssl --with-libwolfssl-prefix=${_TOP}/wolfssl/${_PP}"
     LDFLAGS="${LDFLAGS} -L${_TOP}/wolfssl/${_PP}/lib"
   elif [ -d ../mbedtls ]; then
@@ -62,7 +63,6 @@ _VER="$1"
   fi
 
   (
-    # TODO: add --disable-tests on the next release
     mkdir "${_BLDDIR}"; cd "${_BLDDIR}"
     # shellcheck disable=SC2086
     ../configure ${options} \
@@ -72,7 +72,7 @@ _VER="$1"
       --enable-static \
       --disable-shared \
       --disable-examples-build \
-      --silent
+      --disable-tests --silent
   )
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
