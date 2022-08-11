@@ -43,7 +43,7 @@ _VER="$1"
     fi
   elif [ -d ../wolfssl ] && false; then
     # UNTESTED. Missing upstream support.
-    options="${options} -DCRYPTO_BACKEND=WolfSSL"
+    options="${options} -DCRYPTO_BACKEND=wolfSSL"
     CPPFLAGS="${CPPFLAGS} -I${_TOP}/wolfssl/${_PP}/include"
     LDFLAGS="${LDFLAGS} -L${_TOP}/wolfssl/${_PP}/lib"
     LIBS="${LIBS} -lwolfssl"
