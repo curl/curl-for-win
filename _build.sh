@@ -308,7 +308,7 @@ build_single_target() {
   fi
   export _OPENSSL=''
   if   [ -d wolfssl ]; then
-    # Disable OpenSSL when woldSSL is enabled.
+    # Disable OpenSSL when wolfSSL is enabled.
     # These two do not compile or link together.
     _OPENSSL=''
   elif [ -d libressl ]; then
