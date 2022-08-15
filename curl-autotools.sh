@@ -158,7 +158,7 @@ fi
     options="${options} --with-schannel"
     CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
-    h3='0'
+    h3=0
 
     if [ -n "${_OPENSSL}" ]; then
       options="${options} --with-openssl=${_TOP}/${_OPENSSL}/${_PP}"
@@ -171,14 +171,14 @@ fi
         else
           LDFLAGS="${LDFLAGS} -Wl,-Bstatic,-lpthread,-Bdynamic"
         fi
-        h3='1'
+        h3=1
       elif [ "${_OPENSSL}" = 'libressl' ]; then
         options="${options} --enable-tls-srp"
         LIBS="${LIBS} -lbcrypt"
       elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
         options="${options} --enable-tls-srp"
         LIBS="${LIBS} -lbcrypt"
-        [ "${_OPENSSL}" = 'openssl-quic' ] && h3='1'
+        [ "${_OPENSSL}" = 'openssl-quic' ] && h3=1
       fi
     else
       options="${options} --disable-tls-srp"
@@ -271,7 +271,7 @@ fi
       options="${options} --without-nghttp2"
     fi
 
-    [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ] || h3='0'
+    [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ] || h3=0
 
     # HTTP3 does not appear enabled in the configure summary.
     if [ "${h3}" = '1' ] && [ -d ../nghttp3 ] && [ -d ../ngtcp2 ]; then

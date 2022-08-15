@@ -144,7 +144,7 @@ _VER="$1"
       options="${options} -DCURL_ZSTD=OFF"
     fi
 
-    h3='0'
+    h3=0
 
     if [ -n "${_OPENSSL}" ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
@@ -158,14 +158,14 @@ _VER="$1"
         else
           LIBS="${LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
         fi
-        h3='1'
+        h3=1
       elif [ "${_OPENSSL}" = 'libressl' ]; then
         CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
         LIBS="${LIBS} -lbcrypt"
       elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
         CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
         LIBS="${LIBS} -lbcrypt"
-        [ "${_OPENSSL}" = 'openssl-quic' ] && h3='1'
+        [ "${_OPENSSL}" = 'openssl-quic' ] && h3=1
       fi
     else
       options="${options} -DCURL_USE_OPENSSL=OFF"
@@ -238,7 +238,7 @@ _VER="$1"
       options="${options} -DUSE_NGHTTP2=OFF"
     fi
 
-    [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ] || h3='0'
+    [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ] || h3=0
 
     if [ "${h3}" = '1' ] && [ -d ../nghttp3 ] && [ -d ../ngtcp2 ]; then
       options="${options} -DUSE_NGHTTP3=ON"
