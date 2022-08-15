@@ -16,6 +16,8 @@ _VER="$1"
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
   CPPFLAGS='-DNDEBUG'
+  LDFLAGS=''
+  LIBS=''
   options=''
 
   if [ "${_OPENSSL}" = 'boringssl' ]; then
@@ -29,10 +31,15 @@ _VER="$1"
     options="${options} -DOPENSSL_ROOT_DIR=../${_OPENSSL}/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=../${_OPENSSL}/${_PP}/include"
   elif [ -d ../wolfssl ]; then
-    # UNTESTED
     options="${options} -DENABLE_WOLFSSL=ON"
-    options="${options} -DWOLFSSL_ROOT_DIR=../${_WOLFSSL}/${_PP}"
-    options="${options} -DWOLFSSL_INCLUDE_DIR=../${_WOLFSSL}/${_PP}/include"
+    options="${options} -DWOLFSSL_LIBRARY=../wolfssl/${_PP}/lib/libwolfssl.a"
+    options="${options} -DWOLFSSL_INCLUDE_DIR=../wolfssl/${_PP}/include"
+    LIBS="${LIBS} -lws2_32"
+    if [ -n "${_ZLIB}" ]; then  # required by wolfSSL
+      CPPFLAGS="${CPPFLAGS} -I${_TOP}/${_ZLIB}/${_PP}/include"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/${_ZLIB}/${_PP}/lib"
+      LIBS="${LIBS} -lz"
+    fi
   fi
 
   if [ -d ../nghttp3 ]; then
@@ -44,10 +51,17 @@ _VER="$1"
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
     '-DENABLE_STATIC_LIB=ON' \
     '-DENABLE_SHARED_LIB=OFF' \
-    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}" \
-    "-DCMAKE_CXX_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
+    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LDFLAGS} ${_LIBS_GLOBAL} ${LIBS}" \
+    "-DCMAKE_CXX_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LDFLAGS} ${_LIBS_GLOBAL} ${LIBS} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
+
+  # FIXME upstream: For some reason the crypto-specific headers are not
+  # installed for wolfSSL builds. Copy them manually:
+  if [ -d ../wolfssl ]; then
+    cp -p crypto/includes/ngtcp2/ngtcp2_crypto.h         "${_PP}/include/ngtcp2/"
+    cp -p crypto/includes/ngtcp2/ngtcp2_crypto_wolfssl.h "${_PP}/include/ngtcp2/"
+  fi
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 
