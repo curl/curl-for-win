@@ -536,3 +536,335 @@ index 8ed3fee82..633cbaeb8 100644
    ifndef OPENSSL_INCLUDE
      ifeq "$(wildcard $(OPENSSL_PATH)/outinc)" "$(OPENSSL_PATH)/outinc"
        OPENSSL_INCLUDE = $(OPENSSL_PATH)/outinc
+diff --git a/configure.ac b/configure.ac
+index 981bb26a40766..9104d5073d85a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2890,6 +2890,61 @@ if test "x$NGTCP2_ENABLED" = "x1" -a "x$GNUTLS_ENABLED" = "x1"; then
+   fi
+ fi
+ 
++if test "x$NGTCP2_ENABLED" = "x1" -a "x$WOLFSSL_ENABLED" = "x1"; then
++  dnl backup the pre-ngtcp2_crypto_wolfssl variables
++  CLEANLDFLAGS="$LDFLAGS"
++  CLEANCPPFLAGS="$CPPFLAGS"
++  CLEANLIBS="$LIBS"
++
++  CURL_CHECK_PKGCONFIG(libngtcp2_crypto_wolfssl, $want_tcp2_path)
++
++  if test "$PKGCONFIG" != "no" ; then
++    LIB_NGTCP2_CRYPTO_WOLFSSL=`CURL_EXPORT_PCDIR([$want_tcp2_path])
++      $PKGCONFIG --libs-only-l libngtcp2_crypto_wolfssl`
++    AC_MSG_NOTICE([-l is $LIB_NGTCP2_CRYPTO_WOLFSSL])
++
++    CPP_NGTCP2_CRYPTO_WOLFSSL=`CURL_EXPORT_PCDIR([$want_tcp2_path]) dnl
++      $PKGCONFIG --cflags-only-I libngtcp2_crypto_wolfssl`
++    AC_MSG_NOTICE([-I is $CPP_NGTCP2_CRYPTO_WOLFSSL])
++
++    LD_NGTCP2_CRYPTO_WOLFSSL=`CURL_EXPORT_PCDIR([$want_tcp2_path])
++      $PKGCONFIG --libs-only-L libngtcp2_crypto_wolfssl`
++    AC_MSG_NOTICE([-L is $LD_NGTCP2_CRYPTO_WOLFSSL])
++
++    LDFLAGS="$LDFLAGS $LD_NGTCP2_CRYPTO_WOLFSSL"
++    CPPFLAGS="$CPPFLAGS $CPP_NGTCP2_CRYPTO_WOLFSSL"
++    LIBS="$LIB_NGTCP2_CRYPTO_WOLFSSL $LIBS"
++
++    if test "x$cross_compiling" != "xyes"; then
++      DIR_NGTCP2_CRYPTO_WOLFSSL=`echo $LD_NGTCP2_CRYPTO_WOLFSSL | $SED -e 's/^-L//'`
++    fi
++    AC_CHECK_LIB(ngtcp2_crypto_wolfssl, ngtcp2_crypto_recv_client_initial_cb,
++      [
++       AC_CHECK_HEADERS(ngtcp2/ngtcp2_crypto.h,
++          NGTCP2_ENABLED=1
++          AC_DEFINE(USE_NGTCP2_CRYPTO_WOLFSSL, 1, [if ngtcp2_crypto_wolfssl is in use])
++          AC_SUBST(USE_NGTCP2_CRYPTO_WOLFSSL, [1])
++          CURL_LIBRARY_PATH="$CURL_LIBRARY_PATH:$DIR_NGTCP2_CRYPTO_WOLFSSL"
++          export CURL_LIBRARY_PATH
++          AC_MSG_NOTICE([Added $DIR_NGTCP2_CRYPTO_WOLFSSL to CURL_LIBRARY_PATH])
++       )
++      ],
++        dnl not found, revert back to clean variables
++        LDFLAGS=$CLEANLDFLAGS
++        CPPFLAGS=$CLEANCPPFLAGS
++        LIBS=$CLEANLIBS
++    )
++
++  else
++    dnl no ngtcp2_crypto_wolfssl pkg-config found, deal with it
++    if test X"$want_tcp2" != Xdefault; then
++      dnl To avoid link errors, we do not allow --with-ngtcp2 without
++      dnl a pkgconfig file
++      AC_MSG_ERROR([--with-ngtcp2 was specified but could not find ngtcp2_crypto_wolfssl pkg-config file.])
++    fi
++  fi
++fi
++
+ dnl **********************************************************************
+ dnl Check for nghttp3 (HTTP/3 with ngtcp2)
+ dnl **********************************************************************
+diff --git a/docs/HTTP3.md b/docs/HTTP3.md
+index ee65c807ea280..f256c3bbdd888 100644
+--- a/docs/HTTP3.md
++++ b/docs/HTTP3.md
+@@ -110,6 +110,46 @@ Build curl
+      % make
+      % make install
+ 
++## Build with wolfSSL
++
++Build wolfSSL
++
++     % git clone https://github.com/wolfSSL/wolfssl.git
++     % cd wolfssl
++     % ./configure --prefix=<somewhere1> --enable-quic --enable-session-ticket --enable-earlydata --enable-psk --enable-harden --enable-altcertchains
++     % make
++     % make install
++
++Build nghttp3
++
++     % cd ..
++     % git clone https://github.com/ngtcp2/nghttp3
++     % cd nghttp3
++     % autoreconf -fi
++     % ./configure --prefix=<somewhere2> --enable-lib-only
++     % make
++     % make install
++
++Build ngtcp2 (once https://github.com/ngtcp2/ngtcp2/pull/505 is merged)
++
++     % cd ..
++     % git clone https://github.com/ngtcp2/ngtcp2
++     % cd ngtcp2
++     % autoreconf -fi
++     % ./configure PKG_CONFIG_PATH=<somewhere1>/lib/pkgconfig:<somewhere2>/lib/pkgconfig LDFLAGS="-Wl,-rpath,<somewhere1>/lib" --prefix=<somewhere3> --enable-lib-only --with-wolfssl
++     % make
++     % make install
++
++Build curl
++
++     % cd ..
++     % git clone https://github.com/curl/curl
++     % cd curl
++     % autoreconf -fi
++     % ./configure --without-openssl --with-wolfssl=<somewhere1> --with-nghttp3=<somewhere2> --with-ngtcp2=<somewhere3>
++     % make
++     % make install
++
+ # quiche version
+ 
+ ## build
+diff --git a/lib/vquic/ngtcp2.c b/lib/vquic/ngtcp2.c
+index 16d203bbebe13..6ba249b63c5bb 100644
+--- a/lib/vquic/ngtcp2.c
++++ b/lib/vquic/ngtcp2.c
+@@ -38,6 +38,9 @@
+ #elif defined(USE_GNUTLS)
+ #include <ngtcp2/ngtcp2_crypto_gnutls.h>
+ #include "vtls/gtls.h"
++#elif defined(USE_WOLFSSL)
++#include <ngtcp2/ngtcp2_crypto_wolfssl.h>
++#include "vtls/wolfssl.h"
+ #endif
+ #include "urldata.h"
+ #include "sendf.h"
+@@ -101,6 +104,11 @@ struct h3out {
+   "+CHACHA20-POLY1305:+AES-128-CCM:-GROUP-ALL:+GROUP-SECP256R1:" \
+   "+GROUP-X25519:+GROUP-SECP384R1:+GROUP-SECP521R1:" \
+   "%DISABLE_TLS13_COMPAT_MODE"
++#elif defined(USE_WOLFSSL)
++#define QUIC_CIPHERS                                                          \
++  "TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_"               \
++  "POLY1305_SHA256:TLS_AES_128_CCM_SHA256"
++#define QUIC_GROUPS "P-256:P-384:P-521"
+ #endif
+ 
+ /* ngtcp2 default congestion controller does not perform pacing. Limit
+@@ -202,6 +210,12 @@ static int keylog_callback(gnutls_session_t session, const char *label,
+   Curl_tls_keylog_write(label, crandom.data, secret->data, secret->size);
+   return 0;
+ }
++#elif defined(USE_WOLFSSL)
++static void keylog_callback(const WOLFSSL *ssl, const char *line)
++{
++  (void)ssl;
++  Curl_tls_keylog_write_line(line);
++}
+ #endif
+ 
+ static int init_ngh3_conn(struct quicsocket *qs);
+@@ -395,7 +409,105 @@ static int quic_init_ssl(struct quicsocket *qs)
+   gnutls_server_name_set(qs->ssl, GNUTLS_NAME_DNS, hostname, strlen(hostname));
+   return 0;
+ }
++#elif defined(USE_WOLFSSL)
++
++static WOLFSSL_CTX *quic_ssl_ctx(struct Curl_easy *data)
++{
++  struct connectdata *conn = data->conn;
++  WOLFSSL_CTX *ssl_ctx = wolfSSL_CTX_new(wolfTLSv1_3_client_method());
++
++  if(ngtcp2_crypto_wolfssl_configure_client_context(ssl_ctx) != 0) {
++    failf(data, "ngtcp2_crypto_wolfssl_configure_client_context failed");
++    return NULL;
++  }
++
++  wolfSSL_CTX_set_default_verify_paths(ssl_ctx);
++
++  if(wolfSSL_CTX_set_cipher_list(ssl_ctx, QUIC_CIPHERS) != 1) {
++    char error_buffer[256];
++    ERR_error_string_n(ERR_get_error(), error_buffer, sizeof(error_buffer));
++    failf(data, "SSL_CTX_set_ciphersuites: %s", error_buffer);
++    return NULL;
++  }
++
++  if(wolfSSL_CTX_set1_groups_list(ssl_ctx, QUIC_GROUPS) != 1) {
++    failf(data, "SSL_CTX_set1_groups_list failed");
++    return NULL;
++  }
++
++  /* Open the file if a TLS or QUIC backend has not done this before. */
++  Curl_tls_keylog_open();
++  if(Curl_tls_keylog_enabled()) {
++#if defined(HAVE_SECRET_CALLBACK)
++    wolfSSL_CTX_set_keylog_callback(ssl_ctx, keylog_callback);
++#else
++    failf(data, "wolfSSL was built without keylog callback");
++    return NULL;
++#endif
++  }
++
++  if(conn->ssl_config.verifypeer) {
++    const char * const ssl_cafile = conn->ssl_config.CAfile;
++    const char * const ssl_capath = conn->ssl_config.CApath;
++
++    if(ssl_cafile || ssl_capath) {
++      wolfSSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
++      /* tell wolfSSL where to find CA certificates that are used to verify
++         the server's certificate. */
++      if(!wolfSSL_CTX_load_verify_locations(ssl_ctx, ssl_cafile, ssl_capath)) {
++        /* Fail if we insist on successfully verifying the server. */
++        failf(data, "error setting certificate verify locations:"
++              "  CAfile: %s CApath: %s",
++              ssl_cafile ? ssl_cafile : "none",
++              ssl_capath ? ssl_capath : "none");
++        return NULL;
++      }
++      infof(data, " CAfile: %s", ssl_cafile ? ssl_cafile : "none");
++      infof(data, " CApath: %s", ssl_capath ? ssl_capath : "none");
++    }
++#ifdef CURL_CA_FALLBACK
++    else {
++      /* verifying the peer without any CA certificates won't work so
++         use wolfssl's built-in default as fallback */
++      wolfSSL_CTX_set_default_verify_paths(ssl_ctx);
++    }
+ #endif
++  }
++  else {
++    wolfSSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_NONE, NULL);
++  }
++
++  return ssl_ctx;
++}
++
++/** SSL callbacks ***/
++
++static int quic_init_ssl(struct quicsocket *qs)
++{
++  const uint8_t *alpn = NULL;
++  size_t alpnlen = 0;
++  /* this will need some attention when HTTPS proxy over QUIC get fixed */
++  const char * const hostname = qs->conn->host.name;
++
++  DEBUGASSERT(!qs->ssl);
++  qs->ssl = SSL_new(qs->sslctx);
++
++  wolfSSL_set_app_data(qs->ssl, &qs->conn_ref);
++  wolfSSL_set_connect_state(qs->ssl);
++  wolfSSL_set_quic_use_legacy_codepoint(qs->ssl, 0);
++
++  alpn = (const uint8_t *)H3_ALPN_H3_29 H3_ALPN_H3;
++  alpnlen = sizeof(H3_ALPN_H3_29) - 1 + sizeof(H3_ALPN_H3) - 1;
++  if(alpn)
++    wolfSSL_set_alpn_protos(qs->ssl, alpn, (int)alpnlen);
++
++  /* set SNI */
++  wolfSSL_UseSNI(qs->ssl, WOLFSSL_SNI_HOST_NAME,
++                 hostname, strlen(hostname));
++
++  return 0;
++}
++#endif /* defined(USE_WOLFSSL) */
+ 
+ static int cb_handshake_completed(ngtcp2_conn *tconn, void *user_data)
+ {
+@@ -691,6 +804,10 @@ CURLcode Curl_quic_connect(struct Curl_easy *data,
+   result = quic_set_client_cert(data, qs);
+   if(result)
+     return result;
++#elif defined(USE_WOLFSSL)
++  qs->sslctx = quic_ssl_ctx(data);
++  if(!qs->sslctx)
++    return CURLE_QUIC_CONNECT_ERROR;
+ #endif
+ 
+   if(quic_init_ssl(qs))
+@@ -818,6 +935,8 @@ static void qs_disconnect(struct quicsocket *qs)
+     SSL_free(qs->ssl);
+ #elif defined(USE_GNUTLS)
+     gnutls_deinit(qs->ssl);
++#elif defined(USE_WOLFSSL)
++    wolfSSL_free(qs->ssl);
+ #endif
+   qs->ssl = NULL;
+ #ifdef USE_GNUTLS
+@@ -831,6 +950,8 @@ static void qs_disconnect(struct quicsocket *qs)
+   ngtcp2_conn_del(qs->qconn);
+ #ifdef USE_OPENSSL
+   SSL_CTX_free(qs->sslctx);
++#elif defined(USE_WOLFSSL)
++  wolfSSL_CTX_free(qs->sslctx);
+ #endif
+ }
+ 
+@@ -1569,8 +1690,14 @@ static CURLcode ng_has_connected(struct Curl_easy *data,
+     if(result)
+       return result;
+     infof(data, "Verified certificate just fine");
+-#else
++#elif defined(USE_GNUTLS)
+     result = Curl_gtls_verifyserver(data, conn, conn->quic->ssl, FIRSTSOCKET);
++#elif defined(USE_WOLFSSL)
++    char *snihost = Curl_ssl_snihost(data, SSL_HOST_NAME(), NULL);
++    if(!snihost ||
++       (wolfSSL_check_domain_name(conn->quic->ssl, snihost) == SSL_FAILURE))
++      return CURLE_PEER_FAILED_VERIFICATION;
++    infof(data, "Verified certificate just fine");
+ #endif
+   }
+   else
+diff --git a/lib/vquic/ngtcp2.h b/lib/vquic/ngtcp2.h
+index 23fbcb66df267..6539f5fef3d90 100644
+--- a/lib/vquic/ngtcp2.h
++++ b/lib/vquic/ngtcp2.h
+@@ -38,6 +38,10 @@
+ #include <openssl/ssl.h>
+ #elif defined(USE_GNUTLS)
+ #include <gnutls/gnutls.h>
++#elif defined(USE_WOLFSSL)
++#include <wolfssl/options.h>
++#include <wolfssl/ssl.h>
++#include <wolfssl/quic.h>
+ #endif
+ 
+ struct blocked_pkt {
+@@ -62,6 +66,9 @@ struct quicsocket {
+ #elif defined(USE_GNUTLS)
+   gnutls_certificate_credentials_t cred;
+   gnutls_session_t ssl;
++#elif defined(USE_WOLFSSL)
++  WOLFSSL_CTX *sslctx;
++  WOLFSSL *ssl;
+ #endif
+   struct sockaddr_storage local_addr;
+   socklen_t local_addrlen;

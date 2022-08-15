@@ -176,6 +176,7 @@ _VER="$1"
       options="${options} -DWolfSSL_LIBRARY=${_TOP}/wolfssl/${_PP}/lib/libwolfssl.a"
       options="${options} -DWolfSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
       CPPFLAGS="${CPPFLAGS} -DSIZEOF_LONG_LONG=8"
+    # h3=1
     fi
 
     if [ -d ../mbedtls ]; then
@@ -252,6 +253,11 @@ _VER="$1"
       options="${options} -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/${_PP}/lib"
       CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB"
       LIBS="${LIBS} -lws2_32"  # Necessary for 'CheckQuicSupportInOpenSSL'
+      if [ -d ../wolfssl ]; then
+        # BROKEN. Missing upstream support.
+        LDFLAGS="${LDFLAGS} -L${_TOP}/ngtcp2/${_PP}/lib"
+        LIBS="${LIBS} -lngtcp2_crypto_wolfssl"
+      fi
     else
       options="${options} -DUSE_NGHTTP3=OFF"
       options="${options} -DUSE_NGTCP2=OFF"

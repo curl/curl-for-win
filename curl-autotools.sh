@@ -186,6 +186,7 @@ fi
 
     if [ -d ../wolfssl ]; then
       options="${options} --with-wolfssl=${_TOP}/wolfssl/${_PP}"
+      h3=1
     else
       options="${options} --without-wolfssl"
     fi
@@ -294,6 +295,8 @@ fi
         LIBS="${LIBS} -lngtcp2_crypto_boringssl"
       elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
         LIBS="${LIBS} -lngtcp2_crypto_openssl"
+      elif [ -d ../wolfssl ]; then
+        LIBS="${LIBS} -lngtcp2_crypto_wolfssl"
       fi
     else
       options="${options} --without-nghttp3"

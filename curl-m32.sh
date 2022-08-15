@@ -198,6 +198,7 @@ _VER="$1"
     LDFLAGS="${LDFLAGS} -L../../wolfssl/${_PP}/lib"
     LIBS="${LIBS} -lwolfssl"
     multissl=1
+    h3=1
   fi
 
   if [ -d ../mbedtls ]; then
@@ -248,6 +249,8 @@ _VER="$1"
       NGTCP2_LIBS="${NGTCP2_LIBS} -lngtcp2_crypto_boringssl"
     elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
       NGTCP2_LIBS="${NGTCP2_LIBS} -lngtcp2_crypto_openssl"
+    elif [ -d ../wolfssl ]; then
+      NGTCP2_LIBS="${NGTCP2_LIBS} -lngtcp2_crypto_wolfssl"
     fi
   fi
   if [ -d ../cares ]; then
