@@ -128,6 +128,8 @@ _VER="$1"
     export ZSTD_LIBS='-Wl,-Bstatic -lzstd -Wl,-Bdynamic'
   fi
 
+  h3=0
+
   if [ -n "${_OPENSSL}" ]; then
     options="${options}-ssl"
     export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
@@ -177,12 +179,14 @@ _VER="$1"
       else
         OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
       fi
+      h3=1
     elif [ "${_OPENSSL}" = 'libressl' ]; then
       OPENSSL_LIBS="${OPENSSL_LIBS} -lbcrypt"
     elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
       OPENSSL_LIBS="${OPENSSL_LIBS} -lbcrypt"
       # Workaround for 3.x deprecation warnings
       CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
+      [ "${_OPENSSL}" = 'openssl-quic' ] && h3=1
     fi
   fi
 
@@ -230,7 +234,10 @@ _VER="$1"
     export NGHTTP2_PATH="../../nghttp2/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DNGHTTP2_STATICLIB"
   fi
-  if [ -d ../nghttp3 ] && [ -d ../ngtcp2 ] && [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ]; then
+
+  [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ] || h3=0
+
+  if [ "${h3}" = '1' ] && [ -d ../nghttp3 ] && [ -d ../ngtcp2 ]; then
     options="${options}-nghttp3-ngtcp2"
     export NGHTTP3_PATH="../../nghttp3/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB"
