@@ -412,3 +412,127 @@ index 7166c1b5dc053..e8c9682a63c20 100644
 -
 -$(LIBCARES_PATH)/libcares.a:
 -	$(MAKE) -C $(LIBCARES_PATH) -f Makefile.m32
+diff --git a/docs/examples/Makefile.m32 b/docs/examples/Makefile.m32
+index f802d5536..cc1fc9772 100644
+--- a/docs/examples/Makefile.m32
++++ b/docs/examples/Makefile.m32
+@@ -275,21 +275,23 @@ ifdef SSH2
+     endif
+   endif
+ endif
+-ifdef SSL
+-  ifdef NGHTTP3
+-    CFLAGS += -DUSE_NGHTTP3
+-    curl_LDADD += -L"$(NGHTTP3_PATH)/lib" -lnghttp3
+-    ifdef NGTCP2
+-      CFLAGS += -DUSE_NGTCP2
+-      curl_LDADD += -L"$(NGTCP2_PATH)/lib"
+-      ifdef NGTCP2_LIBS
+-        curl_LDADD += $(NGTCP2_LIBS)
+-      else
+-        curl_LDADD += -lngtcp2 -lngtcp2_crypto_openssl
++ifdef NGHTTP3
++  CFLAGS += -DUSE_NGHTTP3
++  curl_LDADD += -L"$(NGHTTP3_PATH)/lib" -lnghttp3
++  ifdef NGTCP2
++    CFLAGS += -DUSE_NGTCP2
++    curl_LDADD += -L"$(NGTCP2_PATH)/lib"
++    ifdef NGTCP2_LIBS
++      curl_LDADD += $(NGTCP2_LIBS)
++    else
++      curl_LDADD += -lngtcp2
++      ifdef SSL
++        curl_LDADD += -lngtcp2_crypto_openssl
+       endif
+     endif
+   endif
+-
++endif
++ifdef SSL
+   ifndef OPENSSL_INCLUDE
+     ifeq "$(wildcard $(OPENSSL_PATH)/outinc)" "$(OPENSSL_PATH)/outinc"
+       OPENSSL_INCLUDE = $(OPENSSL_PATH)/outinc
+diff --git a/lib/Makefile.m32 b/lib/Makefile.m32
+index e8c9682a6..9b8a31569 100644
+--- a/lib/Makefile.m32
++++ b/lib/Makefile.m32
+@@ -291,23 +291,25 @@ ifdef SSH2
+     endif
+   endif
+ endif
+-ifdef SSL
+-  ifdef NGHTTP3
+-    INCLUDES += -I"$(NGHTTP3_PATH)/include"
+-    CFLAGS += -DUSE_NGHTTP3
+-    DLL_LIBS += -L"$(NGHTTP3_PATH)/lib" -lnghttp3
+-    ifdef NGTCP2
+-      INCLUDES += -I"$(NGTCP2_PATH)/include"
+-      CFLAGS += -DUSE_NGTCP2
+-      DLL_LIBS += -L"$(NGTCP2_PATH)/lib"
+-      ifdef NGTCP2_LIBS
+-        DLL_LIBS += $(NGTCP2_LIBS)
+-      else
+-        DLL_LIBS += -lngtcp2 -lngtcp2_crypto_openssl
++ifdef NGHTTP3
++  INCLUDES += -I"$(NGHTTP3_PATH)/include"
++  CFLAGS += -DUSE_NGHTTP3
++  DLL_LIBS += -L"$(NGHTTP3_PATH)/lib" -lnghttp3
++  ifdef NGTCP2
++    INCLUDES += -I"$(NGTCP2_PATH)/include"
++    CFLAGS += -DUSE_NGTCP2
++    DLL_LIBS += -L"$(NGTCP2_PATH)/lib"
++    ifdef NGTCP2_LIBS
++      DLL_LIBS += $(NGTCP2_LIBS)
++    else
++      DLL_LIBS += -lngtcp2
++      ifdef SSL
++        DLL_LIBS += -lngtcp2_crypto_openssl
+       endif
+     endif
+   endif
+-
++endif
++ifdef SSL
+   ifndef OPENSSL_INCLUDE
+     ifeq "$(wildcard $(OPENSSL_PATH)/outinc)" "$(OPENSSL_PATH)/outinc"
+       OPENSSL_INCLUDE = $(OPENSSL_PATH)/outinc
+diff --git a/src/Makefile.m32 b/src/Makefile.m32
+index 8ed3fee82..633cbaeb8 100644
+--- a/src/Makefile.m32
++++ b/src/Makefile.m32
+@@ -303,21 +303,23 @@ ifdef SSH2
+     endif
+   endif
+ endif
+-ifdef SSL
+-  ifdef NGHTTP3
+-    CFLAGS += -DUSE_NGHTTP3
+-    curl_LDADD += -L"$(NGHTTP3_PATH)/lib" -lnghttp3
+-    ifdef NGTCP2
+-      CFLAGS += -DUSE_NGTCP2
+-      curl_LDADD += -L"$(NGTCP2_PATH)/lib"
+-      ifdef NGTCP2_LIBS
+-        curl_LDADD += $(NGTCP2_LIBS)
+-      else
+-        curl_LDADD += -lngtcp2 -lngtcp2_crypto_openssl
++ifdef NGHTTP3
++  CFLAGS += -DUSE_NGHTTP3
++  curl_LDADD += -L"$(NGHTTP3_PATH)/lib" -lnghttp3
++  ifdef NGTCP2
++    CFLAGS += -DUSE_NGTCP2
++    curl_LDADD += -L"$(NGTCP2_PATH)/lib"
++    ifdef NGTCP2_LIBS
++      curl_LDADD += $(NGTCP2_LIBS)
++    else
++      curl_LDADD += -lngtcp2
++      ifdef SSL
++        curl_LDADD += -lngtcp2_crypto_openssl
+       endif
+     endif
+   endif
+-
++endif
++ifdef SSL
+   ifndef OPENSSL_INCLUDE
+     ifeq "$(wildcard $(OPENSSL_PATH)/outinc)" "$(OPENSSL_PATH)/outinc"
+       OPENSSL_INCLUDE = $(OPENSSL_PATH)/outinc
