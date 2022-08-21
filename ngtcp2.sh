@@ -56,6 +56,13 @@ _VER="$1"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
+  # FIXME upstream: For some reason the crypto-specific headers are not
+  # installed for wolfSSL builds. Copy them manually:
+  if [ -d ../wolfssl ]; then
+    cp -p crypto/includes/ngtcp2/ngtcp2_crypto.h         "${_PP}/include/ngtcp2/"
+    cp -p crypto/includes/ngtcp2/ngtcp2_crypto_wolfssl.h "${_PP}/include/ngtcp2/"
+  fi
+
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 
   # Delete '_static' suffixes from static lib names to make these behave
