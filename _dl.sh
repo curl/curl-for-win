@@ -68,6 +68,7 @@ cat <<EOF
     "url": "https://github.com/wolfSSL/wolfssh/archive/refs/tags/v{ver}-stable.tar.gz",
     "sig": "https://github.com/wolfSSL/wolfssh/releases/download/v{ver}-stable/wolfssh-{ver}-stable.tar.gz.asc",
     "redir": "redir",
+    "ref_mask": "[0-9]+\\\\.[0-9]+\\\\.[0-9]+",
     "keys": "A2A48E7BCB96C5BECB987314EBC80E415CA29677"
   },
   {
@@ -104,6 +105,7 @@ cat <<EOF
     "url": "https://github.com/wolfSSL/wolfssl/archive/refs/tags/v{ver}-stable.tar.gz",
     "sig": "https://github.com/wolfSSL/wolfssl/releases/download/v{ver}-stable/wolfssl-{ver}-stable.tar.gz.asc",
     "redir": "redir",
+    "ref_mask": "[0-9]+\\\\.[0-9]+\\\\.[0-9]+",
     "keys": "A2A48E7BCB96C5BECB987314EBC80E415CA29677"
   },
   {
@@ -258,6 +260,7 @@ check_update() {
     else
       newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases/latest" \
         | jq --raw-output '.tag_name' | sed 's/^v//')"
+      [ -n "$9" ] && newver="$(printf '%s' "${newver}" | grep -a -o -E "$9")"
       if [[ "${newver}" =~ ^[0-9]+\.[0-9]+$ ]]; then
         newver="${newver}.0"
       fi
