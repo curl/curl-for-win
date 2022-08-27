@@ -74,6 +74,7 @@ cat <<EOF
   {
     "name": "libssh",
     "url": "https://www.libssh.org/files/{vermm}/libssh-{ver}.tar.xz",
+    "ref_url": "https://www.libssh.org/files/",
     "sig": ".asc",
     "keys": "8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D"
   },
@@ -266,12 +267,20 @@ check_update() {
       fi
     fi
   else
-    mask="${pkg}[._-]v?([0-9]+(\.[0-9]+)+)\.t"
     if [ "$4" = 'true' ]; then
       latest='head'
     else
       latest='tail'
     fi
+    # Special logic for libssh, where each major/minor release resides in
+    # a separate subdirectory.
+    if [ "${pkg}" = 'libssh' ]; then
+      # ugly hack: repurpose 'ref_url' for this case:
+      res="$(my_curl "$7" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
+        | grep -a -o -E -- '[0-9.]+' | "${latest}" -1)"
+      url="$7${res}/dummy"
+    fi
+    mask="${pkg}[._-]v?([0-9]+(\.[0-9]+)+)\.t"
     urldir="$(dirname "${url}")/"
     res="$(my_curl "${urldir}" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
       | grep -a -o -E -- "${mask}" | "${latest}" -1)"
