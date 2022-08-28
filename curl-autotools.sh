@@ -62,7 +62,7 @@ fi
     export LDFLAGS="${_LDFLAGS_GLOBAL}"
     export LIBS="${_LIBS_GLOBAL}"
 
-    CPPFLAGS="${CPPFLAGS} -DNDEBUG -DHAVE_PROCESS_H"
+    CPPFLAGS="${CPPFLAGS} -DNDEBUG -DHAVE_PROCESS_H -DHAVE_INET_PTON -DHAVE_STRUCT_POLLFD"
 
     # configure: error: --enable-unix-sockets is not available on this platform!
     # due to non-portable verification method.
@@ -78,12 +78,10 @@ fi
 
     LDFLAGS="${LDFLAGS} -Wl,--nxcompat -Wl,--dynamicbase"
     if [ "${_CPU}" = 'x86' ]; then
-      CPPFLAGS="${CPPFLAGS} -D_WIN32_WINNT=0x0501"  # For Windows XP compatibility
       if [ "${pass}" = 'static' ]; then
         LDFLAGS="${LDFLAGS} -Wl,--pic-executable,-e,_mainCRTStartup"
       fi
     else
-      CPPFLAGS="${CPPFLAGS} -DHAVE_INET_PTON -DHAVE_STRUCT_POLLFD"
       if [ "${pass}" = 'static' ]; then
         LDFLAGS="${LDFLAGS} -Wl,--pic-executable,-e,mainCRTStartup"
       else

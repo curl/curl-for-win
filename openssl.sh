@@ -60,14 +60,9 @@ _VER="$1"
     options="${options} mingwarm64 no-asm"  # FIXME
   fi
 
-  options="${options} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} no-filenames"
-
+  options="${options} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
+  options="${options} no-filenames -DUSE_BCRYPTGENRANDOM -lbcrypt"
   [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128"
-  if [ "${_CPU}" = 'x86' ]; then
-    options="${options} -D_WIN32_WINNT=0x0501"  # For Windows XP compatibility
-  else
-    options="${options} -DUSE_BCRYPTGENRANDOM -lbcrypt"
-  fi
 
   if [ "${_CC}" = 'clang' ]; then
     # Avoid warnings when passing C compiler options to the linker:
