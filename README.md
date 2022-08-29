@@ -42,9 +42,8 @@
   long-standing [vulnerability](https://curl.se/docs/CVE-2019-5443.html). It
   also makes binaries 30% smaller. Downsides are no API/ABI guaranties, pthread
   dependence and missing TLS-SRP support.
-- You can verify hashes by looking up the correct values in the build log.
-  Watch for `main` branch, log lines starting with `SHA`:
-    <https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main>
+- You can look up the correct distro hashes in lines starting with `SHA` in the
+  [build log](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main).
 - Packages created across host platforms do not have identical hashes.
   The reason for this is slightly different build options and toolchain
   builds/versions. Except `llvm-mingw` builds, which are reproducible across
