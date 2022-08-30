@@ -220,7 +220,7 @@ _VER="$1"
         # Could not find the reason for it. File-offset-stripped-then-sorted .map
         # files are identical either way. It would be useful to have a linker
         # option to sort object/lib inputs to make output deterministic (these
-        # build do not rely on any ordering side-effects.)
+        # builds do not rely on ordering side-effects.)
         LDFLAGS="${LDFLAGS} -L${_TOP}/libssh2/${_PP}/lib"
         LIBS="${LIBS} -lssh2"
       fi
