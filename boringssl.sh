@@ -70,8 +70,8 @@ _VER="$1"
   sed -i.bak 's/ -ggdb//g' ./CMakeLists.txt
 
   # Patch build to omit building tests. This saves 3 minutes for each target on
-  # the CI machine and reduces disk usage 9x. The cost is these maintaining
-  # these sed expressions:
+  # the CI machine and reduces disk usage 9x. The cost is maintaining these sed
+  # expressions:
   sed -i.bak \
     -e '/^add_custom_command[(]$/,/[)]$/d' \
     -e '/^add_custom_target[(]$/,/[)]$/d' \
