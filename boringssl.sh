@@ -116,7 +116,7 @@ _VER="$1"
   #        Work around them by running it through binutils strip. This works for
   #        x64 and x86, but not for ARM64.
   #
-  # Most combinations/orders running binutils/llvm strip over the result in
+  # Most combinations/orders running binutils/llvm strip over the output results
   # in different output, and except pure llvm-strip, all seem to be
   # deterministic. We chose to run binutils first and llvm second. This way
   # llvm creates the result we publish.
