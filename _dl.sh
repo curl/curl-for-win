@@ -333,17 +333,19 @@ check_dl() {
 
     if my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin >/dev/null 2>&1; then
       >&2 echo "! ${name}: Verify: OK (Valid PGP signature)"
-      if [ -n "${sha}" ]; then
-        hash_got="$(grep -a -i -o -E '[0-9A-Fa-f]{64,}' pkg.sha | tr '[:upper:]' '[:lower:]')"
-        if [ "${hash_calc}" = "${hash_got}" ]; then
-          >&2 echo "! ${name}: Verify: OK (Matching hash)"
-          ok='1'
-        fi
-      else
-        ok='1'
-      fi
+      ok='1'
     else
       >&2 echo "! ${name}: Verify: Failed (PGP signature)"
+    fi
+
+    if [ "${ok}" = '1' ] && [ -n "${sha}" ]; then
+      hash_got="$(grep -a -i -o -E '[0-9A-Fa-f]{64,}' pkg.sha | tr '[:upper:]' '[:lower:]')"
+      if [ "${hash_calc}" = "${hash_got}" ]; then
+        >&2 echo "! ${name}: Verify: OK (Matching hash)"
+      else
+        >&2 echo "! ${name}: Verify: Failed (Mismatching hash)"
+        ok='0'
+      fi
     fi
   else
     >&2 echo "! ${name}: Verify: No PGP signature. Continuing without verification."
