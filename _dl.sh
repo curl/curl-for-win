@@ -322,20 +322,25 @@ check_dl() {
   ok='0'
   hash_calc="$(openssl dgst -sha256 pkg.bin | grep -a -i -o -E '[0-9a-f]{64}$')"
   if [ -n "${sig}" ]; then
+    if [ ! -s pkg.sig ]; then
+      >&2 echo "! ${name}: Verify: Failed (Signature expected, but missing)"
+    elif grep -a -q -F 'BEGIN PGP SIGNATURE' pkg.sig; then
+      for key in ${keys}; do
+        if [[ "${key}" = 'https://'* ]]; then
+          my_curl --max-time 60 "${key}" | my_gpg --quiet --import >/dev/null 2>&1
+        else
+          gpg_recv_key "${key}" >/dev/null 2>&1
+        fi
+      done
 
-    for key in ${keys}; do
-      if [[ "${key}" = 'https://'* ]]; then
-        my_curl --max-time 60 "${key}" | my_gpg --quiet --import >/dev/null 2>&1
+      if my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin >/dev/null 2>&1; then
+        >&2 echo "! ${name}: Verify: OK (Valid PGP signature)"
+        ok='1'
       else
-        gpg_recv_key "${key}" >/dev/null 2>&1
+        >&2 echo "! ${name}: Verify: Failed (PGP signature)"
       fi
-    done
-
-    if my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin >/dev/null 2>&1; then
-      >&2 echo "! ${name}: Verify: OK (Valid PGP signature)"
-      ok='1'
     else
-      >&2 echo "! ${name}: Verify: Failed (PGP signature)"
+      >&2 echo "! ${name}: Verify: Failed (Unrecognized signature format)"
     fi
 
     if [ "${ok}" = '1' ] && [ -n "${sha}" ]; then
@@ -536,16 +541,24 @@ live_dl() {
     my_curl "${options[@]}"
 
     if [ -n "${sig}" ]; then
-      for key in ${keys}; do
-        if printf '%s' "${key}" | grep -q -a '^https://'; then
-          # gnu-keyring.gpg can take a long time to import, so allow curl to
-          # run longer.
-          my_curl --max-time 60 "${key}" | my_gpg --quiet --import 2>/dev/null
-        else
-          gpg_recv_key "${key}"
-        fi
-      done
-      my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
+      if [ ! -s pkg.sig ]; then
+        >&2 echo "! ${name}: Verify: Failed (Signature expected, but missing)"
+        exit 1
+      elif grep -a -q -F 'BEGIN PGP SIGNATURE' pkg.sig; then
+        for key in ${keys}; do
+          if printf '%s' "${key}" | grep -q -a '^https://'; then
+            # gnu-keyring.gpg can take a long time to import, so allow curl to
+            # run longer.
+            my_curl --max-time 60 "${key}" | my_gpg --quiet --import 2>/dev/null
+          else
+            gpg_recv_key "${key}"
+          fi
+        done
+        my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
+      else
+        >&2 echo "! ${name}: Verify: Failed (Unrecognized signature format)"
+        exit 1
+      fi
     fi
 
     echo "${url}" > "__${name}.url"
