@@ -188,7 +188,7 @@ EOF
 }
 
 my_curl() {
-  # >&2 echo "|$@|"
+  # >&2 echo "my_curl|$@|"
   curl --disable --user-agent '' --fail --silent --show-error --globoff \
     --connect-timeout 15 --max-time 60 --retry 3 --max-redirs 10 "$@"
 }
@@ -216,6 +216,7 @@ gpg_recv_key() {
 
 # replace {ver}/{vermm} macros with the version number
 expandver() {
+  # >&2 echo "expandver|$@|"
   sed \
     -e "s/{ver}/$1/g" \
     -e "s/{vermm}/$(echo "$1" | cut -d . -f -2)/g"
@@ -249,7 +250,12 @@ check_update() {
         | grep -a -o -E "$9")"
     # heavily rate-limited
     elif [ -n "$5" ]; then
-      ref="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/git/refs/heads" \
+      if [[ "${url}" = *'/refs/heads/'* ]]; then
+        heads_or_tags='heads'
+      else
+        heads_or_tags='tags'
+      fi
+      ref="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/git/refs/${heads_or_tags}" \
         | jq --raw-output '.[].ref' \
         | grep -a -E "$5" | sort | tail -1)"
       newver="$(printf '%s' "${ref}" | grep -a -E -o '\d+\.\d+\.\d')"
