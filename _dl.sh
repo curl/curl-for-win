@@ -330,6 +330,17 @@ check_dl() {
   if [ -n "${sig}" ]; then
     if [ ! -s pkg.sig ]; then
       >&2 echo "! ${name}: Verify: Failed (Signature expected, but missing)"
+    elif grep -a -q -F 'BEGIN SSH SIGNATURE' pkg.sig; then
+      [[ "${key}" = 'https://'* ]] && key="$(my_curl --max-time 60 "${key}")"
+      exec 3<<EOF
+${key}
+EOF
+      if ssh-keygen -Y check-novalidate -n 'file' -f /dev/fd/3 -s pkg.sig < pkg.bin; then
+        >&2 echo "! ${name}: Verify: OK (Valid SSH signature)"
+        ok='1'
+      else
+        >&2 echo "! ${name}: Verify: Failed (SSH signature)"
+      fi
     elif grep -a -q -F 'BEGIN PGP SIGNATURE' pkg.sig; then
       for key in ${keys}; do
         if [[ "${key}" = 'https://'* ]]; then
@@ -550,6 +561,12 @@ live_dl() {
       if [ ! -s pkg.sig ]; then
         >&2 echo "! ${name}: Verify: Failed (Signature expected, but missing)"
         exit 1
+      elif grep -a -q -F 'BEGIN SSH SIGNATURE' pkg.sig; then
+        [[ "${key}" = 'https://'* ]] && key="$(my_curl --max-time 60 "${key}")"
+        exec 3<<EOF
+${key}
+EOF
+        ssh-keygen -Y check-novalidate -n 'file' -f /dev/fd/3 -s pkg.sig < pkg.bin || exit 1
       elif grep -a -q -F 'BEGIN PGP SIGNATURE' pkg.sig; then
         for key in ${keys}; do
           if printf '%s' "${key}" | grep -q -a '^https://'; then
