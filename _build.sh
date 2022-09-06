@@ -575,7 +575,7 @@ build_single_target() {
       # PATH. This avoids picking the llvm-mingw copy using the same name.
       tmp="${_CCPREFIX}strip"
       if command -v "${tmp}" >/dev/null 2>&1; then
-        _STRIP_BINUTILS="$(PATH="${_ori_path}" which "${tmp}")"
+        _STRIP_BINUTILS="$(PATH="${_ori_path}" command -v "${tmp}" 2>/dev/null)"
       else
         echo "! Warning: binutils strip tool '${tmp}' not found. BoringSSL libs may not be reproducible."
       fi
