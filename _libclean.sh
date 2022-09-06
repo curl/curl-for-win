@@ -31,7 +31,7 @@ while [ -n "${1:-}" ]; do
     ff="$(realpath "${f}")"
     (
       cd "${tmp}"
-      "${AR}" x "${ff}"  # --output= option not supported by llvm-ar at 14.x
+      "${AR}" x "${ff}"  # --output= option supported since llvm-ar 15.0.0. TODO: use it.
     )
     for o in "${tmp}"/*; do
       n="$(printf '%s' "${o}" | sed -E \
