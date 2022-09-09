@@ -303,6 +303,8 @@ fi
 
     options="${options} --without-quiche --without-msh3"
 
+    [ "${CURL_VER_}" != '7.85.0' ] && options="${options} --enable-websockets"
+
     if [ "${pass}" = 'shared' ]; then
       _DEF_NAME="libcurl${_CURL_DLL_SUFFIX}.def"
       LDFLAGS="${LDFLAGS} -Wl,--output-def,${_DEF_NAME}"

@@ -313,6 +313,8 @@ _VER="$1"
     options="${options} -DENABLE_THREADED_RESOLVER=ON"
     options="${options} -DBUILD_TESTING=OFF"
 
+    [ "${CURL_VER_}" != '7.85.0' ] && options="${options} -DENABLE_WEBSOCKETS=ON"
+
     if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
       LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
       LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
