@@ -9,8 +9,7 @@
 - Standalone `curl.exe` and `libcurl.dll`. Vista with
   [Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/)
   required.
-- Binary packages also contain all static libraries for curl and its
-  dependencies.
+- Packages ship with all necessary static libraries.
 - curl/libcurl have
   [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3) and
   [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
