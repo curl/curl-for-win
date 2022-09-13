@@ -36,9 +36,9 @@
 - We verify components using SHA-256 hashes and PGP signatures where provided.
 - We build [reproducible](https://reproducible-builds.org/) binaries,
   producing the same hash given the same input sources and C compiler.
-- Patching policy: No locally maintained patches. We apply patches locally if
-  already merged upstream or &mdash; if necessary for a successful build
-  &mdash; had them submitted upstream with fair confidence of getting accepted.
+- Patching policy: No locally maintained patches. We may apply patches if
+  already merged upstream or &mdash; for showstoppers &mdash; had them
+  submitted upstream with a fair confidence of getting accepted.
 - We plan to switch the default TLS backend to BoringSSL. This fixes a
   long-standing [vulnerability](https://curl.se/docs/CVE-2019-5443.html). It
   also makes binaries 30% smaller. Downsides are no API/ABI guaranties, pthread
