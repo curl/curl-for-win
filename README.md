@@ -34,7 +34,7 @@
   [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH),
   except x86, which uses [DWARF](https://en.wikipedia.org/wiki/DWARF).
 - We verify components using SHA-256 hashes and PGP signatures where provided.
-- Generated binaries are [reproducible](https://reproducible-builds.org/),
+- We build [reproducible](https://reproducible-builds.org/) binaries,
   meaning they produce the same hash given the same input sources and C
   compiler.
 - Patching policy: No locally maintained patches. We apply patches locally if
