@@ -17,12 +17,12 @@
 - Transparent builds, using open source code, and running them in
   [public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
   with auditable [logs](#build-logs).
-- Build environment is [`mingw-w64`](https://sourceforge.net/p/mingw-w64/)
-  via [Debian](https://packages.debian.org/testing/mingw-w64),
+- Build environment is [LLVM/Clang](https://clang.llvm.org/) with
+  [`mingw-w64`](https://sourceforge.net/p/mingw-w64/) via
+  [Debian](https://packages.debian.org/testing/mingw-w64),
   [Homebrew](https://formulae.brew.sh/formula/mingw-w64),
   [MSYS2](https://www.msys2.org/).
   [`llvm-mingw`](https://github.com/mstorsjo/llvm-mingw) for ARM64.
-  C compiler is [LLVM/Clang](https://clang.llvm.org/).
 - Binaries cross-built and published from Linux
   via [AppVeyor CI](https://www.appveyor.com/). Using reproducible OS image
   [`debian:testing-slim`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing/slim)
