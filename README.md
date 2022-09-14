@@ -6,16 +6,15 @@
 - We provide binary packages in `.zip` and `.tar.xz` formats,
   signed with PGP key:
   <br>[`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
-- Standalone `curl.exe` and `libcurl.dll`.
+- Standalone `curl.exe` and `libcurl.dll`. Static libraries included.
 - Vista with
   [Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/)
   required.
-- Packages ship with all necessary static libraries.
 - curl/libcurl have
   [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3) and
   [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support enabled.
   Detailed feature list [below](#features).
-- Transparent builds, using open source code, and running them in
+- Transparent builds, using open source code, run in
   [public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
   with auditable [logs](#build-logs).
 - Build environment is [LLVM/Clang](https://clang.llvm.org/) with
@@ -24,11 +23,11 @@
   [Homebrew](https://formulae.brew.sh/formula/mingw-w64),
   [MSYS2](https://www.msys2.org/).
   [`llvm-mingw`](https://github.com/mstorsjo/llvm-mingw) for ARM64.
-- Binaries cross-built and published from Linux
-  via [AppVeyor CI](https://www.appveyor.com/). Using reproducible OS image
+- Cross-built and published from Linux via
+  [AppVeyor CI](https://www.appveyor.com/). Using reproducible OS image
   [`debian:testing-slim`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing/slim)
   via [Docker](https://hub.docker.com/_/debian/).
-- Binaries have supported
+- Built with
   [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29)
   options enabled.
 - Binaries are using
@@ -46,7 +45,7 @@
   dependence and missing TLS-SRP support.
 - You can look up the correct distro hashes in lines starting with `SHA` in the
   [build log](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main).
-- Packages created across host platforms do not have identical hashes.
+- Packages built across host platforms do not have identical hashes.
   The reason for this is slightly different build options and toolchain
   builds/versions. Except `llvm-mingw` builds, which are reproducible across
   build hosts. ARM64 and all BoringSSL builds are like that by default.
