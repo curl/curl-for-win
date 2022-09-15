@@ -23,14 +23,7 @@ _VER="$1"
 
   options='mingw32-ipv6-sspi-srp'
 
-  export ARCH
-  if [ "${_CPU}" = 'x64' ]; then
-    ARCH='w64'
-  elif [ "${_CPU}" = 'x86' ]; then
-    ARCH='w32'
-  else
-    ARCH='custom'
-  fi
+  export ARCH='custom'
 
   CFLAGS=''
   CPPFLAGS="-DOS=\\\"${_TRIPLET}\\\""
