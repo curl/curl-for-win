@@ -24,7 +24,10 @@ fi
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
 
-  [ -f 'configure' ] || autoreconf --force --install
+  if [ ! -f 'configure' ] || \
+     [ "${CURL_VER_}" = '7.85.0' ]; then
+    autoreconf --force --install
+  fi
 
   [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && export AR="${AR_NORMALIZE}"
 
@@ -58,7 +61,7 @@ fi
     export CC="${_CC_GLOBAL}"
     export CFLAGS="${_CFLAGS_GLOBAL} -W -Wall"
     export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
-    export RCFLAGS="${_RCFLAGS_GLOBAL} --output-format coff -Iinclude"
+    export RCFLAGS="${_RCFLAGS_GLOBAL}"
     export LDFLAGS="${_LDFLAGS_GLOBAL}"
     export LIBS="${_LIBS_GLOBAL}"
 
@@ -355,16 +358,10 @@ fi
     )
 
     if [ "${pass}" = 'shared' ]; then
-
-      # Compile resource
-      # shellcheck disable=SC2086
-      "${RC}" ${RCFLAGS} -i lib/libcurl.rc -o "${_BLDDIR}-${pass}/lib/libcurl.rc.res"
-
       # Cannot add this linker option to LDFLAGS as-is, because it gets used
       # by ./configure tests and fails right away.
-      # Also add our compiled resource object.
       # shellcheck disable=SC2016
-      sed -i.bak "/^LDFLAGS = /a LDFLAGS := \\\$(LDFLAGS) -Wl,libcurl.rc.res -Wl,$(pwd)/libcurl.def" "${_BLDDIR}-${pass}/lib/Makefile"  # needs GNU sed
+      sed -i.bak "/^LDFLAGS = /a LDFLAGS := \\\$(LDFLAGS) -Wl,$(pwd)/libcurl.def" "${_BLDDIR}-${pass}/lib/Makefile"  # needs GNU sed
 
       # Skip building shared version curl.exe. The build itself works, but
       # then autotools tries to create its "ltwrapper", and fails. This only
@@ -373,14 +370,6 @@ fi
       # we do not need it. Skip this pass altogether.
       sed -i.bak -E 's/^SUBDIRS = .+/SUBDIRS = lib/g' "${_BLDDIR}-${pass}/Makefile"
     else
-      # Compile resource
-      # shellcheck disable=SC2086
-      "${RC}" ${RCFLAGS} -i src/curl.rc -o "${_BLDDIR}-${pass}/src/curl.rc.res" -DCURL_EMBED_MANIFEST
-
-      # Add our compiled resource object.
-      # shellcheck disable=SC2016
-      sed -i.bak '/^LDFLAGS = /a LDFLAGS := $(LDFLAGS) -Wl,curl.rc.res' "${_BLDDIR}-${pass}/src/Makefile"  # needs GNU sed
-
       sed -i.bak -E 's/^SUBDIRS = .+/SUBDIRS = lib src/g' "${_BLDDIR}-${pass}/Makefile"
     fi
 
