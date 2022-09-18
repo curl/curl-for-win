@@ -15,6 +15,14 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
+  # Skip building tests
+  # to avoid breakage with LLVM/clang 15 on ARM64:
+  #   ../../gltests/select.c:534:25: error: incompatible pointer to integer conversion passing 'HANDLE' (aka 'void *') to parameter of type 'SOCKET' (aka 'unsigned long long') [-Wint-conversion]
+  #           if (FD_ISSET (h, &handle_rfds))
+  #                         ^
+  sed -i.bak 's| gltests||g' ./Makefile.am
+  rm -f ./configure
+
   # Fix this bizarre error when executing 'make':
   #   configure.ac:39: error: version mismatch.  This is Automake 1.16.4,
   #   configure.ac:39: but the definition used by this AM_INIT_AUTOMAKE
