@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Copyright 2014-present Viktor Szakats. See LICENSE.md
+#
+# SPDX-License-Identifier: MIT
+
 # FIXME (upstream):
 # - enabling SCP results in error:
 #   ../src/wolfscp.c:2277:49: error: incomplete definition of type 'struct dirent'
@@ -12,8 +16,6 @@
 #   Seems to be happening in examples/tests, which is always enabled.
 # - Several compiler warnings, some generic, some Windows-specific,
 #   some MSVC-specific.
-
-# Copyright 2014-present Viktor Szakats. See LICENSE.md
 
 # shellcheck disable=SC3040
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail

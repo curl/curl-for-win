@@ -1,6 +1,8 @@
 #!/bin/sh
 
 # Copyright 2021-present Viktor Szakats. See LICENSE.md
+#
+# SPDX-License-Identifier: MIT
 
 if ! command -v hxclean >/dev/null 2>&1; then
   case "$(uname)" in

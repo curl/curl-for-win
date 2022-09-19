@@ -1,6 +1,8 @@
 #!/bin/sh
 
 # Copyright 2018-present Viktor Szakats. See LICENSE.md
+#
+# SPDX-License-Identifier: MIT
 
 # shellcheck disable=SC3040
 set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail

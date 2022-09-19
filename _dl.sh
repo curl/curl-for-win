@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 # Copyright 2015-present Viktor Szakats. See LICENSE.md
+#
+# SPDX-License-Identifier: MIT
 
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 

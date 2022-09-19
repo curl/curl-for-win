@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Copyright 2015-present Viktor Szakats. See LICENSE.md
+#
+# SPDX-License-Identifier: MIT
+
 # NOTE: Bump nghttp3 and ngtcp2 together with curl.
 
 export CURL_VER_='7.85.0'

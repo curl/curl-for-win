@@ -1,6 +1,8 @@
 #!/bin/sh
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
+#
+# SPDX-License-Identifier: MIT
 
 # FIXME (upstream):
 # - x64 mingw-w64 pthread ucrt static linking bug -> requires llvm-mingw

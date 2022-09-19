@@ -1,3 +1,6 @@
+# Copyright 2015-present Viktor Szakats. See LICENSE.md
+#
+# SPDX-License-Identifier: MIT
 ---
 # yamllint disable rule:line-length
 version: 1.0.{build}
