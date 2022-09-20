@@ -1,6 +1,5 @@
 <!--
 Copyright 2014-present Viktor Szakats
-
 SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 [![License](https://raw.githubusercontent.com/curl/curl-for-win/main/MIT.svg?sanitize=1)](LICENSE.md)

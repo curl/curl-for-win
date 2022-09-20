@@ -1,7 +1,6 @@
 #!/bin/sh
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
-#
 # SPDX-License-Identifier: MIT
 
 # CMake build takes 25% longer than Makefile.m32, as of 2022-07-04.

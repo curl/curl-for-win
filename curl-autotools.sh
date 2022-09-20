@@ -1,7 +1,6 @@
 #!/bin/sh
 
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
-#
 # SPDX-License-Identifier: MIT
 
 # autotools build takes 50% longer than Makefile.m32, 18% longer than CMake,

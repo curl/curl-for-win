@@ -1,6 +1,5 @@
 <!--
 Copyright 2014 Coraline Ada Ehmke
-
 SPDX-License-Identifier: CC-BY-4.0
 -->
 Contributor Code of Conduct
