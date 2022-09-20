@@ -65,6 +65,15 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # TODO:
 #   - Change default TLS to BoringSSL. With OPENSSL_SMALL?
 #   - Drop libidn2 in favor of WinIDN?
+#     winidn  -> IDNA 2003 Transitional Processing, like the rest of Windows.
+#     libidn2 -> IDNA 2008 standard, equivalent to the WHATWG URL spec.
+#     Ref: https://curl.se/docs/url-syntax.html#idna
+#     Ref: https://pypi.org/project/idna/
+#     Both methods seemed broken in basic tests run on native Windows and WINE:
+#       $ curl-winidn.exe -v https://é.com/
+#       curl: (3) Failed to convert é.com to ACE; No Unicode translation.
+#       $ curl-libidn2.exe -v https://é.com/
+#       curl: (3) Failed to convert é.com to ACE; could not convert string to UTF-8
 #   - Drop x86 builds
 #   - Enable Control Flow Guard (once toolchains support it): -ehcontguard (requires LLVM 13.0.0)
 #   - LLVM -mretpoline
