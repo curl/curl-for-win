@@ -1,5 +1,6 @@
 <!--
-SPDX-FileCopyrightText: Daniel Stenberg <daniel@haxx.se>
+Copyright 2000 Daniel Stenberg, <daniel@haxx.se>, et al.
+
 SPDX-License-Identifier: curl
 -->
 # Security Policy
