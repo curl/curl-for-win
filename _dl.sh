@@ -657,6 +657,9 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
 fi
 
 if [ "${_BRANCH#*big*}" != "${_BRANCH}" ]; then
+  live_dl libidn2 "${LIBIDN2_VER_}"
+  live_xt libidn2 "${LIBIDN2_HASH}"
+
   live_dl libunistring "${LIBUNISTRING_VER_}"
   live_xt libunistring "${LIBUNISTRING_HASH}"
   live_dl libiconv "${LIBICONV_VER_}"
@@ -673,15 +676,6 @@ fi
 if [ "${_BRANCH#*mbedtls*}" != "${_BRANCH}" ]; then
   live_dl mbedtls "${MBEDTLS_VER_}"
   live_xt mbedtls "${MBEDTLS_HASH}"
-fi
-
-if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*winidn*}" = "${_BRANCH}" ]; then
-  live_dl libidn2 "${LIBIDN2_VER_}"
-  live_xt libidn2 "${LIBIDN2_HASH}"
 fi
 
 if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
