@@ -64,7 +64,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # TODO:
 #   - Change default TLS to BoringSSL. With OPENSSL_SMALL?
-#   - Drop libidn2 in favour of WinIDN?
+#   - Drop libidn2 in favor of WinIDN?
 #   - Drop x86 builds
 #   - Enable Control Flow Guard (once toolchains support it): -ehcontguard (requires LLVM 13.0.0)
 #   - LLVM -mretpoline
