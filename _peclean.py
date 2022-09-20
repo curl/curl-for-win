@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
+# Copyright 2015-present Viktor Szakats. See LICENSE.md
+# SPDX-License-Identifier: MIT
+
 """Sets internal timestamps in PE executables
-Copyright 2015-present Viktor Szakats. See LICENSE.md
-SPDX-License-Identifier: MIT
 """
 
 import datetime
