@@ -1,7 +1,4 @@
-<!--
-Copyright 2022-present Viktor Szakats
-SPDX-License-Identifier: CC0-1.0
--->
+<!-- Copyright 2022-present Viktor Szakats. SPDX-License-Identifier: CC0-1.0 -->
 <svg xmlns="http://www.w3.org/2000/svg" height="20" width="78">
  <path d="M 0,20 v-17     a3,3 0 0 1 3,-3 h44 v20 h-44 a-3, 3 0 0 1 -3,-3 z" fill="#555"/>
  <path d="M47,20 v-20 h28 a3,3 0 0 1 3, 3     v14      a 3,-3 0 0 1 -3, 3 z" fill="#007ec6"/>
