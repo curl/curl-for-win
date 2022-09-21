@@ -472,7 +472,7 @@ build_single_target() {
 
   [ "${_CPU}" = 'x86' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-i386"
   [ "${_CPU}" = 'x64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-x86-64"
-  [ "${_CPU}" = 'a64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=${_TRIPLET}"  # llvm windres supports triplets here. https://github.com/llvm/llvm-project/blob/main/llvm/tools/llvm-rc/llvm-rc.cpp
+  [ "${_CPU}" = 'a64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=${_TRIPLET}"  # llvm-windres supports triplets here. https://github.com/llvm/llvm-project/blob/main/llvm/tools/llvm-rc/llvm-rc.cpp
 
   if [ "${_OS}" = 'win' ]; then
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -GMSYS Makefiles"
@@ -754,9 +754,9 @@ build_single_target() {
 
   _ref='curl/CHANGES'
 
-  if ! [ -f "${_ref}" ]; then
+  if [ ! -f "${_ref}" ]; then
     # This can happen with CW_BLD partial builds.
-    echo '! WARNING: curl is missing. Skip packaging.'
+    echo '! WARNING: curl build missing. Skip packaging.'
   else
     touch -c -r "${_ref}" "${_UNIMFT}"
 
