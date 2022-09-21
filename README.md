@@ -8,8 +8,8 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 # Reproducible curl binaries for Windows
 
 - We provide binary packages in `.zip` and `.tar.xz` formats,
-  signed with PGP key:
-  <br>[`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
+  <br>signed with PGP key:
+  [`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
 - Standalone `curl.exe` and `libcurl.dll`. Static libraries included.
 - Vista with
   [Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/)
