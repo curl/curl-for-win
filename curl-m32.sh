@@ -152,7 +152,7 @@ _VER="$1"
         #    ld.lld: error: undefined symbol: _setjmp
         #    >>> referenced by ../src/thread.c:1518
         #    >>>               libpthread.a(libwinpthread_la-thread.o):(pthread_create_wrapper)
-        #    clang-14: error: linker command failed with exit code 1 (use -v to see invocation)
+        #    clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
         #    ```
         #    ``` gcc ->
         #    /usr/local/Cellar/mingw-w64/10.0.0_3/toolchain-x86_64/bin/x86_64-w64-mingw32-ld: /usr/local/Cellar/mingw-w64/10.0.0_3/toolchain-x86_64/lib/gcc/x86_64-w64-mingw32/12.2.0/../../../../x86_64-w64-mingw32/lib/../lib/libpthread.a(libwinpthread_la-thread.o): in function `pthread_create_wrapper':
