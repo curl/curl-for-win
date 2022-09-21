@@ -9,8 +9,8 @@ index f6364d0e022cd..3a70528e4ab06 100644
 +static int client_new(struct connectdata *conn,
 +                      nghttp2_session_callbacks *callbacks)
 +{
-+#if NGHTTP2_VERSION_NUM < 0x013100
-+  /* before 1.49.0 + patch */
++#if NGHTTP2_VERSION_NUM < 0x013200
++  /* before 1.50.0 */
 +  return nghttp2_session_client_new(&conn->proto.httpc.h2, callbacks, conn);
 +#else
 +  nghttp2_option *o;
