@@ -146,3 +146,25 @@ index 5d093da204838..d9180b0b14827 100644
 +.rc.o:
 +	$(LIBTOOL) --tag=RC --mode=compile $(RC) -I$(top_srcdir)/include -DCURL_EMBED_MANIFEST $(RCFLAGS) -i $< -o $@
 +endif
+diff --git a/configure.ac b/configure.ac
+index 9739eab2c..1a4696e0e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -55,8 +55,6 @@ CURL_CHECK_OPTION_ECH
+ 
+ XC_CHECK_PATH_SEPARATOR
+ 
+-LT_LANG([Windows Resource])
+-
+ #
+ # save the configure arguments
+ #
+@@ -351,6 +349,8 @@ AC_SYS_LARGEFILE
+ 
+ XC_LIBTOOL
+ 
++LT_LANG([Windows Resource])
++
+ #
+ # Automake conditionals based on libtool related checks
+ #
