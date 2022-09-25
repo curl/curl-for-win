@@ -358,6 +358,12 @@ fi
         --without-ca-fallback
     )
 
+    # NOTE: 'make clean' deletes src/tool_hugehelp.c and docs/curl.1. Next,
+    #       'make' regenerates them, including the current date in curl.1,
+    #       and breaking reproducibility. tool_hugehelp.c might also be
+    #       reflowed/hyphened differently than the source distro, breaking
+    #       reproducibility again. Skip the clean phase to resolve it.
+
     if [ "${pass}" = 'shared' ]; then
       # Cannot add this linker option to LDFLAGS as-is, because it gets used
       # by ./configure tests and fails right away.
@@ -369,18 +375,10 @@ fi
       # seems to happen when building curl against more than one dependency.
       # I have found no way to skip building that component, even though
       # we do not need it. Skip this pass altogether.
-      sed -i.bak -E 's/^SUBDIRS = .+/SUBDIRS = lib/g' "${_BLDDIR}-${pass}/Makefile"
+      make --directory="${_BLDDIR}-${pass}/lib" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
     else
-      sed -i.bak -E 's/^SUBDIRS = .+/SUBDIRS = lib src/g' "${_BLDDIR}-${pass}/Makefile"
+      make --directory="${_BLDDIR}-${pass}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
     fi
-
-    # NOTE: 'make clean' deletes src/tool_hugehelp.c and docs/curl.1. Next,
-    #       'make' regenerates them, including the current date in curl.1,
-    #       and breaking reproducibility. tool_hugehelp.c might also be
-    #       reflowed/hyphened differently than the source distro, breaking
-    #       reproducibility again. Skip the clean phase to resolve it.
-
-    make --directory="${_BLDDIR}-${pass}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
     # Manual copy to DESTDIR
 
