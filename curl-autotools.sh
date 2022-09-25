@@ -35,15 +35,11 @@ fi
   # tell libtool to allow building a shared library against static libs
   export lt_cv_deplibs_check_method='pass_all'
 
-  # autotools forces its -On option (gcc = -O2, clang = -Os) and removes custom
-  # ones. We patch ./configure to customize it.
-  sed -i.bak 's/flags_opt_yes="-O[s12]"/flags_opt_yes="-O3"/g' ./configure
-
   for pass in shared static; do
 
     options="${_CONFIGURE_GLOBAL}"
     export CC="${_CC_GLOBAL}"
-    export CFLAGS="${_CFLAGS_GLOBAL} -W -Wall"
+    export CFLAGS="${_CFLAGS_GLOBAL} -O3 -W -Wall"
     export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
     export RCFLAGS="${_RCFLAGS_GLOBAL}"
     export LDFLAGS="${_LDFLAGS_GLOBAL}"
@@ -315,7 +311,6 @@ fi
       ../configure ${options} \
         --disable-debug \
         --disable-pthreads \
-        --enable-optimize \
         --enable-symbol-hiding \
         --enable-headers-api \
         --enable-http \
