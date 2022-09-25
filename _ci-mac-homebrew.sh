@@ -10,7 +10,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ANALYTICS=1
 time brew update >/dev/null
 time brew upgrade python
-time brew install xz gnu-tar mingw-w64 llvm gettext gnu-sed \
+time brew install xz gnu-tar mingw-w64 llvm gettext \
                   jq dos2unix openssl osslsigncode openssh
 [[ "${APPVEYOR_REPO_BRANCH:-}" = *'boringssl'* ]] && time brew install go nasm
 time brew install --cask wine-stable

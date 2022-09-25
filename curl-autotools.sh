@@ -14,10 +14,6 @@ export _NAM _VER _OUT _BAS _DST
 _NAM="$(basename "$0" | cut -f 1 -d '.' | sed 's/-autotools//')"
 _VER="$1"
 
-if [ "${_OS}" = 'mac' ]; then
-  sed() { gsed "$@"; }
-fi
-
 (
   cd "${_NAM}"  # mandatory component
 
