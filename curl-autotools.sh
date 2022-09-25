@@ -300,11 +300,6 @@ fi
       options="${options} --disable-shared"
     fi
 
-    # autotools forces its unixy DLL naming scheme. We prefer to use the same
-    # as with the other curl build systems. Autotools calculates the default
-    # value from `VERSIONINFO=` in lib/Makefile.am.
-    sed -i.bak -E "s/ soname_spec='\\\$libname.+/ soname_spec='\\\$libname${_CURL_DLL_SUFFIX}\\\$shared_ext'/g" ./configure
-
     (
       mkdir "${_BLDDIR}-${pass}"; cd "${_BLDDIR}-${pass}"
       # shellcheck disable=SC2086
@@ -348,7 +343,8 @@ fi
       # seems to happen when building curl against more than one dependency.
       # I have found no way to skip building that component, even though
       # we do not need it. Skip this pass altogether.
-      make --directory="${_BLDDIR}-${pass}/lib" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
+      make "VERSIONINFO=-release ${_CURL_DLL_SUFFIX_NODASH} -avoid-version" \
+        --directory="${_BLDDIR}-${pass}/lib" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
     else
       make --directory="${_BLDDIR}-${pass}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
     fi

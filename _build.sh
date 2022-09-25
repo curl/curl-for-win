@@ -364,8 +364,10 @@ build_single_target() {
   [ "${_CPU}" = 'a64' ] && _machine='aarch64'
 
   export _CURL_DLL_SUFFIX=''
-  [ "${_CPU}" = 'x64' ] && _CURL_DLL_SUFFIX="-${_CPU}"
-  [ "${_CPU}" = 'a64' ] && _CURL_DLL_SUFFIX='-arm64'
+  export _CURL_DLL_SUFFIX_NODASH=''
+  [ "${_CPU}" = 'x64' ] && _CURL_DLL_SUFFIX_NODASH="${_CPU}"
+  [ "${_CPU}" = 'a64' ] && _CURL_DLL_SUFFIX_NODASH='arm64'
+  [ -n "${_CURL_DLL_SUFFIX_NODASH}" ] && _CURL_DLL_SUFFIX="-${_CURL_DLL_SUFFIX_NODASH}"
 
   export _PKGSUFFIX
   [ "${_CPU}" = 'x86' ] && _PKGSUFFIX='-win32-mingw'
