@@ -81,6 +81,12 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - https://sourceware.org/git/binutils-gdb.git
 #   - https://github.com/netwide-assembler/nasm
 
+# Build times (2022-09-26):
+#   - m32:                       38 min 13 sec   2293s   100%
+#   - cmake:                     45 min 48 sec   2748s   120%   100%
+#   - autotools:                 49 min 32 sec   2972s   130%   108%
+#   - autotools w/o recv patch:  54 min  8 sec   3248s   142%   118%
+
 # Supported build tools:
 #
 #   zlib          cmake
