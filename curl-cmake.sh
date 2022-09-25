@@ -25,23 +25,6 @@ _VER="$1"
 
   # Build
 
-  # Generate .def file for libcurl by parsing curl headers. Useful to export
-  # the libcurl functions meant to be exported.
-  # Without this, the default linker logic kicks in, whereas it exports every
-  # public function, if none is marked for export explicitly. This leads to
-  # exporting every libcurl public function, as well as any other ones from
-  # statically linked dependencies, resulting in a larger .dll, an inflated
-  # implib and a non-standard list of exported functions.
-  echo 'EXPORTS' > libcurl.def
-  {
-    # CURL_EXTERN CURLcode curl_easy_send(CURL *curl, const void *buffer,
-    grep -a -h '^CURL_EXTERN ' include/curl/*.h | grep -a -h -F '(' \
-      | sed 's/CURL_EXTERN \([a-zA-Z_\* ]*\)[\* ]\([a-z_]*\)(\(.*\)$/\2/g'
-    # curl_easy_option_by_name(const char *name);
-    grep -a -h -E '^ *\*? *[a-z_]+ *\(.+\);$' include/curl/*.h \
-      | sed -E 's/^ *\*? *([a-z_]+) *\(.+$/\1/g'
-  } | grep -a -v '^$' | sort | tee -a libcurl.def
-
   # CMake cannot build everything in one pass. With BUILD_SHARED_LIBS enabled,
   # it does not build a static lib, and links curl.exe against libcurl DLL
   # with no option to change this. We need to split it into two passes:
@@ -100,8 +83,6 @@ _VER="$1"
     if [ "${_LD}" = 'ld' ]; then
       LDFLAGS="${LDFLAGS} -Wl,--start-group"
     fi
-
-    LDFLAGS_DLL="${LDFLAGS_DLL} $(pwd)/libcurl.def"
 
     if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
        [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
@@ -313,6 +294,8 @@ _VER="$1"
     fi
     options="${options} -DENABLE_THREADED_RESOLVER=ON"
     options="${options} -DBUILD_TESTING=OFF"
+
+    options="${options} -DCURL_HIDDEN_SYMBOLS=ON"
 
     [ "${CURL_VER_}" != '7.85.0' ] && options="${options} -DENABLE_WEBSOCKETS=ON"
 
