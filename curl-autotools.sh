@@ -39,23 +39,6 @@ fi
   # ones. We patch ./configure to customize it.
   sed -i.bak 's/flags_opt_yes="-O[s12]"/flags_opt_yes="-O3"/g' ./configure
 
-  # Generate .def file for libcurl by parsing curl headers. Useful to export
-  # the libcurl functions meant to be exported.
-  # Without this, the default linker logic kicks in, whereas it exports every
-  # public function, if none is marked for export explicitly. This leads to
-  # exporting every libcurl public function, as well as any other ones from
-  # statically linked dependencies, resulting in a larger .dll, an inflated
-  # implib and a non-standard list of exported functions.
-  echo 'EXPORTS' > libcurl.def
-  {
-    # CURL_EXTERN CURLcode curl_easy_send(CURL *curl, const void *buffer,
-    grep -a -h '^CURL_EXTERN ' include/curl/*.h | grep -a -h -F '(' \
-      | sed 's/CURL_EXTERN \([a-zA-Z_\* ]*\)[\* ]\([a-z_]*\)(\(.*\)$/\2/g'
-    # curl_easy_option_by_name(const char *name);
-    grep -a -h -E '^ *\*? *[a-z_]+ *\(.+\);$' include/curl/*.h \
-      | sed -E 's/^ *\*? *([a-z_]+) *\(.+$/\1/g'
-  } | grep -a -v '^$' | sort | tee -a libcurl.def
-
   for pass in shared static; do
 
     options="${_CONFIGURE_GLOBAL}"
@@ -365,11 +348,6 @@ fi
     #       reproducibility again. Skip the clean phase to resolve it.
 
     if [ "${pass}" = 'shared' ]; then
-      # Cannot add this linker option to LDFLAGS as-is, because it gets used
-      # by ./configure tests and fails right away.
-      # shellcheck disable=SC2016
-      sed -i.bak "/^LDFLAGS = /a LDFLAGS := \\\$(LDFLAGS) -Wl,$(pwd)/libcurl.def" "${_BLDDIR}-${pass}/lib/Makefile"  # needs GNU sed
-
       # Skip building shared version curl.exe. The build itself works, but
       # then autotools tries to create its "ltwrapper", and fails. This only
       # seems to happen when building curl against more than one dependency.
