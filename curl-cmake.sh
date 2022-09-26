@@ -19,6 +19,9 @@ _VER="$1"
 (
   cd "${_NAM}"  # mandatory component
 
+  cache='CMakeCache.txt'
+  rm -f "${cache}"
+
   rm -r -f "${_PKGDIR}" "${_BLDDIR}-shared" "${_BLDDIR}-static"
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
@@ -304,6 +307,16 @@ _VER="$1"
       LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
     fi
 
+    if [ -f "${cache}" ]; then
+      mkdir "${_BLDDIR}-${pass}"
+      mv -p "${cache}" "${_BLDDIR}-${pass}"
+      # Keep certain "detected" values only. This also drops the line
+      # '# For build in directory: <dir>', to avoid a warning about
+      # a different than original build directory.
+      grep -a -E '^(HAVE_|CMAKE_HAVE_|SIZEOF_|USE_WINCRYPT:)' "${_BLDDIR}-${pass}/${cache}" > "${_BLDDIR}-${pass}/${cache}.new"
+      mv "${_BLDDIR}-${pass}/${cache}.new" "${_BLDDIR}-${pass}/${cache}"
+    fi
+
     # shellcheck disable=SC2086
     cmake . -B "${_BLDDIR}-${pass}" ${_CMAKE_GLOBAL} ${options} \
       "-DCMAKE_RC_FLAGS=${_RCFLAGS_GLOBAL}" \
@@ -319,6 +332,8 @@ _VER="$1"
     fi
 
     make --directory="${_BLDDIR}-${pass}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
+
+    mv "${_BLDDIR}-${pass}/${cache}" .
 
     # Manual copy to DESTDIR
 
