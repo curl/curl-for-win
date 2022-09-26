@@ -17,6 +17,9 @@ _VER="$1"
 (
   cd "${_NAM}"  # mandatory component
 
+  cache='configure-cache.txt'
+  rm -f "${cache}"
+
   rm -r -f "${_PKGDIR}" "${_BLDDIR}-shared" "${_BLDDIR}-static"
 
   _pkg="${_PP}"  # DESTDIR= + _PREFIX
@@ -295,6 +298,13 @@ _VER="$1"
       options="${options} --enable-static"
       options="${options} --disable-shared"
     fi
+
+    if [ -f "${cache}" ]; then
+      grep -a -v -E '_env_(CPPFLAGS|LDFLAGS)_' "${cache}" > "${cache}.new"
+      mv "${cache}.new" "${cache}"
+    fi
+
+    options="${options} --cache-file=../${cache}"
 
     (
       mkdir "${_BLDDIR}-${pass}"; cd "${_BLDDIR}-${pass}"
