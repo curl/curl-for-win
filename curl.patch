@@ -247,3 +247,63 @@ index cd26f4306..7902cfe7b 100644
        for sel_retv in 'int' 'ssize_t'; do
          for sel_arg1 in 'int' 'ssize_t' 'size_t' 'unsigned long int' 'unsigned int'; do
            for sel_arg234 in 'fd_set *' 'int *' 'void *'; do
+diff --git a/lib/idn_win32.c b/lib/idn_win32.c
+index dacba01d7..2433d927e 100644
+--- a/lib/idn_win32.c
++++ b/lib/idn_win32.c
+@@ -67,10 +67,10 @@ WINBASEAPI int WINAPI IdnToUnicode(DWORD dwFlags,
+ 
+ #define IDN_MAX_LENGTH 255
+ 
+-bool curl_win32_idn_to_ascii(const char *in, char **out);
+-bool curl_win32_ascii_to_idn(const char *in, char **out);
++bool Curl_win32_idn_to_ascii(const char *in, char **out);
++bool Curl_win32_ascii_to_idn(const char *in, char **out);
+ 
+-bool curl_win32_idn_to_ascii(const char *in, char **out)
++bool Curl_win32_idn_to_ascii(const char *in, char **out)
+ {
+   bool success = FALSE;
+ 
+@@ -93,7 +93,7 @@ bool curl_win32_idn_to_ascii(const char *in, char **out)
+   return success;
+ }
+ 
+-bool curl_win32_ascii_to_idn(const char *in, char **out)
++bool Curl_win32_ascii_to_idn(const char *in, char **out)
+ {
+   bool success = FALSE;
+ 
+diff --git a/lib/url.c b/lib/url.c
+index 241e0787e..c355fdd88 100644
+--- a/lib/url.c
++++ b/lib/url.c
+@@ -73,8 +73,8 @@
+ #endif
+ 
+ #elif defined(USE_WIN32_IDN)
+-/* prototype for curl_win32_idn_to_ascii() */
+-bool curl_win32_idn_to_ascii(const char *in, char **out);
++/* prototype for Curl_win32_idn_to_ascii() */
++bool Curl_win32_idn_to_ascii(const char *in, char **out);
+ #endif  /* USE_LIBIDN2 */
+ 
+ #include "doh.h"
+@@ -1648,7 +1648,7 @@ CURLcode Curl_idnconvert_hostname(struct Curl_easy *data,
+ #elif defined(USE_WIN32_IDN)
+     char *ace_hostname = NULL;
+ 
+-    if(curl_win32_idn_to_ascii(host->name, &ace_hostname)) {
++    if(Curl_win32_idn_to_ascii(host->name, &ace_hostname)) {
+       host->encalloc = ace_hostname;
+       /* change the name pointer to point to the encoded hostname */
+       host->name = host->encalloc;
+@@ -1679,7 +1679,7 @@ void Curl_free_idnconverted_hostname(struct hostname *host)
+   }
+ #elif defined(USE_WIN32_IDN)
+   free(host->encalloc); /* must be freed with free() since this was
+-                           allocated by curl_win32_idn_to_ascii */
++                           allocated by Curl_win32_idn_to_ascii */
+   host->encalloc = NULL;
+ #else
+   (void)host;
