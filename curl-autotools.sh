@@ -339,7 +339,9 @@ _VER="$1"
       # seems to happen when building curl against more than one dependency.
       # I have found no way to skip building that component, even though
       # we do not need it. Skip this pass altogether.
-      make "VERSIONINFO=-release '${_CURL_DLL_SUFFIX_NODASH}' -avoid-version" \
+      VERSIONINFO='-avoid-version'
+      [ -n "${_CURL_DLL_SUFFIX_NODASH}" ] && VERSIONINFO="-release '${_CURL_DLL_SUFFIX_NODASH}' ${VERSIONINFO}"
+      make "VERSIONINFO=${VERSIONINFO}" \
         --directory="${_BLDDIR}-${pass}/lib" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
     else
       make --directory="${_BLDDIR}-${pass}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
