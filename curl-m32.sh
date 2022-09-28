@@ -173,10 +173,7 @@ _VER="$1"
         OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
       fi
       h3=1
-    elif [ "${_OPENSSL}" = 'libressl' ]; then
-      OPENSSL_LIBS="${OPENSSL_LIBS} -lbcrypt"
     elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-      OPENSSL_LIBS="${OPENSSL_LIBS} -lbcrypt"
       # Workaround for 3.x deprecation warnings
       CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
       [ "${_OPENSSL}" = 'openssl-quic' ] && h3=1

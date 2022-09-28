@@ -151,10 +151,8 @@ _VER="$1"
         h3=1
       elif [ "${_OPENSSL}" = 'libressl' ]; then
         options="${options} --enable-tls-srp"
-        LIBS="${LIBS} -lbcrypt"
       elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
         options="${options} --enable-tls-srp"
-        LIBS="${LIBS} -lbcrypt"
         [ "${_OPENSSL}" = 'openssl-quic' ] && h3=1
       fi
     else
@@ -191,7 +189,6 @@ _VER="$1"
       options="${options} --with-libssh2=${_TOP}/libssh2/${_PP}"
       options="${options} --without-wolfssh"
       options="${options} --without-libssh"
-      LIBS="${LIBS} -lbcrypt"
     else
       options="${options} --without-wolfssh"
       options="${options} --without-libssh"
