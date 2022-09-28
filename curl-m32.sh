@@ -16,6 +16,7 @@ _VER="$1"
 
   # Prepare build
 
+  find . -name '*.exe' -delete
   find . -name '*.dll' -delete
   find . -name '*.def' -delete
   find . -name '*.map' -delete
