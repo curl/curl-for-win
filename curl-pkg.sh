@@ -1,6 +1,9 @@
 #!/bin/sh
 
-# Common pre-packaging logic for curl, used by all build-systems.
+# Copyright 2014-present Viktor Szakats. See LICENSE.md
+# SPDX-License-Identifier: MIT
+
+# curl pre-packaging, shared between all build-systems.
 
 {
   # Download CA bundle
@@ -76,11 +79,13 @@
   (
     set +x
     for file in docs/*; do
+      # Filter out `Makefile`. Necessary for autotools builds only.
       if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -E '(\.|/Makefile$)'; then
         cp -f -p "${file}" "${_DST}/${file}.txt"
       fi
     done
     for file in docs/libcurl/*; do
+      # Filter out `Makefile`. Necessary for autotools builds only.
       if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -E '(\.|/Makefile$)'; then
         cp -f -p "${file}" "${_DST}/${file}.txt"
       fi
