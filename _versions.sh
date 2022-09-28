@@ -11,8 +11,8 @@ export BROTLI_VER_='1.0.9'
 export BROTLI_HASH=f9e8d81d0405ba66d181529af42a3354f838c939095ff99930da6aa9cdf6fe46
 export CARES_VER_='1.17.2'
 export CARES_HASH=4803c844ce20ce510ef0eb83f8ea41fa24ecaae9d280c468c582d2bb25b3913d
-export GSASL_VER_='1.10.0'
-export GSASL_HASH=f1b553384dedbd87478449775546a358d6f5140c15cccc8fb574136fdc77329f
+export GSASL_VER_='2.2.0'
+export GSASL_HASH=79b868e3b9976dc484d59b29ca0ae8897be96ce4d36d32aed5d935a7a3307759
 export LIBUNISTRING_VER_='1.0'
 export LIBUNISTRING_HASH=5bab55b49f75d77ed26b257997e919b693f29fd4a1bc22e0e6e024c246c72741
 export LIBICONV_VER_='1.17'
@@ -63,4 +63,4 @@ export PEFILE_VER_='2022.5.30'
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='4'
+export _REV='5'

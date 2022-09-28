@@ -37,7 +37,7 @@ cat <<EOF
   },
   {
     "name": "gsasl",
-    "url": "https://ftp.gnu.org/gnu/gsasl/libgsasl-{ver}.tar.gz",
+    "url": "https://ftp.gnu.org/gnu/gsasl/gsasl-{ver}.tar.gz",
     "sig": ".sig",
     "keys": "https://ftp.gnu.org/gnu/gnu-keyring.gpg"
   },
