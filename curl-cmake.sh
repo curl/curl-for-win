@@ -3,8 +3,6 @@
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-# CMake build takes 20% longer than Makefile.m32, as of 2022-09-26.
-
 # https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html
 # https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html
 
