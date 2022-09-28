@@ -302,7 +302,7 @@ _VER="$1"
 
     if [ -f "${cache}" ]; then
       mkdir "${_BLDDIR}-${pass}"
-      mv -p "${cache}" "${_BLDDIR}-${pass}"
+      mv "${cache}" "${_BLDDIR}-${pass}"
       # Keep certain "detected" values only. This also drops the line
       # '# For build in directory: <dir>', to avoid a warning about
       # a different than original build directory.
