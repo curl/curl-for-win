@@ -143,27 +143,26 @@ _VER="$1"
   # Some tools (e.g CMake) become weird when colons appear in
   # a filename, so move results to a sane, standard path:
 
-  _pkg="${_PP}"
-  mkdir -p "./${_pkg}"
-  mv "${_PKGDIR}/${_win_prefix}"/* "${_pkg}"
+  mkdir -p "./${_PP}"
+  mv "${_PKGDIR}/${_win_prefix}"/* "${_PP}"
 
   # Rename 'lib64' to 'lib'. This is what most packages expect.
-  if [ -d "${_pkg}/lib64" ]; then
-    mv "${_pkg}/lib64" "${_pkg}/lib"
+  if [ -d "${_PP}/lib64" ]; then
+    mv "${_PP}/lib64" "${_PP}/lib"
   fi
 
   # Delete .pc files
-  rm -r -f "${_pkg}"/lib/pkgconfig
+  rm -r -f "${_PP}"/lib/pkgconfig
 
   # List files created
-  find "${_pkg}" | grep -a -v -F '/share/' | sort
+  find "${_PP}" | grep -a -v -F '/share/' | sort
 
   # Make steps for determinism
 
-  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
+  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/*.a
 
-  touch -c -r "${_ref}" "${_pkg}"/include/openssl/*.h
-  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
+  touch -c -r "${_ref}" "${_PP}"/include/openssl/*.h
+  touch -c -r "${_ref}" "${_PP}"/lib/*.a
 
   # Create package
 
@@ -174,13 +173,13 @@ _VER="$1"
   mkdir -p "${_DST}/include/openssl"
   mkdir -p "${_DST}/lib"
 
-  cp -f -p "${_pkg}"/include/openssl/*.h "${_DST}/include/openssl/"
-  cp -f -p "${_pkg}"/lib/*.a             "${_DST}/lib"
-  cp -f -p CHANGES.md                    "${_DST}/"
-  cp -f -p LICENSE.txt                   "${_DST}/"
-  cp -f -p README.md                     "${_DST}/"
-  cp -f -p FAQ.md                        "${_DST}/"
-  cp -f -p NEWS.md                       "${_DST}/"
+  cp -f -p "${_PP}"/include/openssl/*.h "${_DST}/include/openssl/"
+  cp -f -p "${_PP}"/lib/*.a             "${_DST}/lib"
+  cp -f -p CHANGES.md                   "${_DST}/"
+  cp -f -p LICENSE.txt                  "${_DST}/"
+  cp -f -p README.md                    "${_DST}/"
+  cp -f -p FAQ.md                       "${_DST}/"
+  cp -f -p NEWS.md                      "${_DST}/"
 
   [ "${_NAM}" = 'openssl-quic' ] && cp -f -p README-OpenSSL.md "${_DST}/"
 

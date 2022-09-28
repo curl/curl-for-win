@@ -67,20 +67,18 @@ _VER="$1"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
-  _pkg="${_PP}"
-
   # Delete .pc and .la files
-  rm -r -f "${_pkg}"/lib/pkgconfig
-  rm -f    "${_pkg}"/lib/*.la
+  rm -r -f "${_PP}"/lib/pkgconfig
+  rm -f    "${_PP}"/lib/*.la
 
   # Make steps for determinism
 
   readonly _ref='ChangeLog.md'
 
-  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
+  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/*.a
 
-  touch -c -r "${_ref}" "${_pkg}"/include/*.h
-  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
+  touch -c -r "${_ref}" "${_PP}"/include/*.h
+  touch -c -r "${_ref}" "${_PP}"/lib/*.a
 
   # Create package
 
@@ -91,11 +89,11 @@ _VER="$1"
   mkdir -p "${_DST}/include/wolfssh"
   mkdir -p "${_DST}/lib"
 
-  cp -f -p "${_pkg}"/include/wolfssh/*.h  "${_DST}/include/wolfssh"
-  cp -f -p "${_pkg}"/lib/*.a              "${_DST}/lib/"
-  cp -f -p ChangeLog.md                   "${_DST}/"
-  cp -f -p README.md                      "${_DST}/"
-  cp -f -p LICENSING                      "${_DST}/LICENSING.txt"
+  cp -f -p "${_PP}"/include/wolfssh/*.h "${_DST}/include/wolfssh"
+  cp -f -p "${_PP}"/lib/*.a             "${_DST}/lib/"
+  cp -f -p ChangeLog.md                 "${_DST}/"
+  cp -f -p README.md                    "${_DST}/"
+  cp -f -p LICENSING                    "${_DST}/LICENSING.txt"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

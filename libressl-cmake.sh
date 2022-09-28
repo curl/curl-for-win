@@ -26,8 +26,6 @@ _VER="$1"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
-  _pkg="${_PP}"
-
   # Build fixups for CMake
 
   # CMake creates static libs with version numbers in them,
@@ -35,24 +33,24 @@ _VER="$1"
   # them.
   # Strip those to make them findable by other projects.
   for l in libcrypto libssl libtls; do
-    mv "${_pkg}/lib/${l}"*.a "${_pkg}/lib/${l}.a"
+    mv "${_PP}/lib/${l}"*.a "${_PP}/lib/${l}.a"
   done
 
   # Delete .pc files
-  rm -r -f "${_pkg}"/lib/pkgconfig
+  rm -r -f "${_PP}"/lib/pkgconfig
 
   # List files created
-  find "${_pkg}" | grep -a -v -F '/share/' | sort
+  find "${_PP}" | grep -a -v -F '/share/' | sort
 
   # Make steps for determinism
 
   readonly _ref='ChangeLog'
 
-  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
+  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/*.a
 
-  touch -c -r "${_ref}" "${_pkg}"/include/openssl/*.h
-  touch -c -r "${_ref}" "${_pkg}"/include/*.h
-  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
+  touch -c -r "${_ref}" "${_PP}"/include/openssl/*.h
+  touch -c -r "${_ref}" "${_PP}"/include/*.h
+  touch -c -r "${_ref}" "${_PP}"/lib/*.a
 
   # Create package
 
@@ -63,12 +61,12 @@ _VER="$1"
   mkdir -p "${_DST}/include/openssl"
   mkdir -p "${_DST}/lib"
 
-  cp -f -p "${_pkg}"/include/openssl/*.h "${_DST}/include/openssl/"
-  cp -f -p "${_pkg}"/include/*.h         "${_DST}/include/"
-  cp -f -p "${_pkg}"/lib/*.a             "${_DST}/lib"
-  cp -f -p ChangeLog                     "${_DST}/ChangeLog.txt"
-  cp -f -p COPYING                       "${_DST}/COPYING.txt"
-  cp -f -p README.md                     "${_DST}/"
+  cp -f -p "${_PP}"/include/openssl/*.h "${_DST}/include/openssl/"
+  cp -f -p "${_PP}"/include/*.h         "${_DST}/include/"
+  cp -f -p "${_PP}"/lib/*.a             "${_DST}/lib"
+  cp -f -p ChangeLog                    "${_DST}/ChangeLog.txt"
+  cp -f -p COPYING                      "${_DST}/COPYING.txt"
+  cp -f -p README.md                    "${_DST}/"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

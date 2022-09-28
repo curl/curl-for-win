@@ -19,8 +19,6 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}-shared" "${_BLDDIR}-static"
 
-  _pkg="${_PP}"
-
   if [ ! -f 'configure' ] || \
      [ "${CURL_VER_}" = '7.85.0' ]; then
     autoreconf --force --install
@@ -354,21 +352,21 @@ _VER="$1"
     # Manual copy to DESTDIR
 
     if [ "${pass}" = 'shared' ]; then
-      cp -p "${_BLDDIR}-${pass}/lib/${_DEF_NAME}" "${_pkg}"/bin/
+      cp -p "${_BLDDIR}-${pass}/lib/${_DEF_NAME}" "${_PP}"/bin/
     fi
 
     if [ "${CW_MAP}" = '1' ]; then
       if [ "${pass}" = 'shared' ]; then
-        cp -p "${_BLDDIR}-${pass}/lib/${_MAP_NAME}" "${_pkg}"/bin/
+        cp -p "${_BLDDIR}-${pass}/lib/${_MAP_NAME}" "${_PP}"/bin/
       else
-        cp -p "${_BLDDIR}-${pass}/src/${_MAP_NAME}" "${_pkg}"/bin/
+        cp -p "${_BLDDIR}-${pass}/src/${_MAP_NAME}" "${_PP}"/bin/
       fi
     fi
   done
 
   # Build fixups
 
-  chmod -x "${_pkg}"/lib/*.a
+  chmod -x "${_PP}"/lib/*.a
 
   . ../curl-pkg.sh
 )

@@ -76,16 +76,14 @@ _VER="$1"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
-  _pkg="${_PP}"
-
   # Make steps for determinism
 
   readonly _ref='ChangeLog'
 
-  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
+  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/*.a
 
-  touch -c -r "${_ref}" "${_pkg}"/include/libssh/*.h
-  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
+  touch -c -r "${_ref}" "${_PP}"/include/libssh/*.h
+  touch -c -r "${_ref}" "${_PP}"/lib/*.a
 
   # Create package
 
@@ -96,12 +94,12 @@ _VER="$1"
   mkdir -p "${_DST}/include/libssh"
   mkdir -p "${_DST}/lib"
 
-  cp -f -p "${_pkg}"/include/libssh/*.h "${_DST}/include/libssh/"
-  cp -f -p "${_pkg}"/lib/*.a            "${_DST}/lib/"
-  cp -f -p ChangeLog                    "${_DST}/ChangeLog.txt"
-  cp -f -p AUTHORS                      "${_DST}/AUTHORS.txt"
-  cp -f -p COPYING                      "${_DST}/COPYING.txt"
-  cp -f -p README                       "${_DST}/README.txt"
+  cp -f -p "${_PP}"/include/libssh/*.h "${_DST}/include/libssh/"
+  cp -f -p "${_PP}"/lib/*.a            "${_DST}/lib/"
+  cp -f -p ChangeLog                   "${_DST}/ChangeLog.txt"
+  cp -f -p AUTHORS                     "${_DST}/AUTHORS.txt"
+  cp -f -p COPYING                     "${_DST}/COPYING.txt"
+  cp -f -p README                      "${_DST}/README.txt"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

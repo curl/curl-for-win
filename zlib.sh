@@ -37,19 +37,17 @@ _VER="$1"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
-  _pkg="${_PP}"
-
-  ls -l "${_pkg}"/lib/*.a
+  ls -l "${_PP}"/lib/*.a
 
   # Delete the implib, if any
-  rm -f "${_pkg}"/lib/*.dll.a
+  rm -f "${_PP}"/lib/*.dll.a
   if [ "${_NAM}" = 'zlib' ]; then
     # Stick to the name expected by everyone
-    mv -f "${_pkg}"/lib/libzlibstatic.a "${_pkg}"/lib/libz.a
+    mv -f "${_PP}"/lib/libzlibstatic.a "${_PP}"/lib/libz.a
   fi
 
   # Delete .pc files
-  rm -r -f "${_pkg}"/lib/pkgconfig
+  rm -r -f "${_PP}"/lib/pkgconfig
 
   # Make steps for determinism
 
@@ -59,10 +57,10 @@ _VER="$1"
     readonly _ref='ChangeLog'
   fi
 
-  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
+  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/*.a
 
-  touch -c -r "${_ref}" "${_pkg}"/include/*.h
-  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
+  touch -c -r "${_ref}" "${_PP}"/include/*.h
+  touch -c -r "${_ref}" "${_PP}"/lib/*.a
 
   # Create package
 
@@ -73,14 +71,14 @@ _VER="$1"
   mkdir -p "${_DST}/include"
   mkdir -p "${_DST}/lib"
 
-  cp -f -p "${_pkg}"/include/*.h "${_DST}/include"
-  cp -f -p "${_pkg}"/lib/*.a     "${_DST}/lib/"
+  cp -f -p "${_PP}"/include/*.h "${_DST}/include"
+  cp -f -p "${_PP}"/lib/*.a     "${_DST}/lib/"
   if [ "${_NAM}" = 'zlibng' ]; then
-    cp -f -p LICENSE.md            "${_DST}/"
-    cp -f -p README.md             "${_DST}/"
+    cp -f -p LICENSE.md           "${_DST}/"
+    cp -f -p README.md            "${_DST}/"
   else
-    cp -f -p ChangeLog             "${_DST}/ChangeLog.txt"
-    cp -f -p README                "${_DST}/COPYING.txt"
+    cp -f -p ChangeLog            "${_DST}/ChangeLog.txt"
+    cp -f -p README               "${_DST}/COPYING.txt"
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"

@@ -31,19 +31,17 @@ _VER="$1"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
-  _pkg="${_PP}"
-
   # Delete .pc files
-  rm -r -f "${_pkg}"/lib/pkgconfig
+  rm -r -f "${_PP}"/lib/pkgconfig
 
   # Make steps for determinism
 
   readonly _ref='CHANGELOG'
 
-  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
+  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/*.a
 
-  touch -c -r "${_ref}" "${_pkg}"/include/*.h
-  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
+  touch -c -r "${_ref}" "${_PP}"/include/*.h
+  touch -c -r "${_ref}" "${_PP}"/lib/*.a
 
   # Create package
 
@@ -54,11 +52,11 @@ _VER="$1"
   mkdir -p "${_DST}/include"
   mkdir -p "${_DST}/lib"
 
-  cp -f -p "${_pkg}"/include/*.h "${_DST}/include/"
-  cp -f -p "${_pkg}"/lib/*.a     "${_DST}/lib/"
-  cp -f -p CHANGELOG             "${_DST}/CHANGELOG.txt"
-  cp -f -p README.md             "${_DST}/"
-  cp -f -p LICENSE               "${_DST}/LICENSE.txt"
+  cp -f -p "${_PP}"/include/*.h "${_DST}/include/"
+  cp -f -p "${_PP}"/lib/*.a     "${_DST}/lib/"
+  cp -f -p CHANGELOG            "${_DST}/CHANGELOG.txt"
+  cp -f -p README.md            "${_DST}/"
+  cp -f -p LICENSE              "${_DST}/LICENSE.txt"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

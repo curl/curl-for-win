@@ -23,33 +23,31 @@ _VER="$1"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
-  _pkg="${_PP}"
-
   # Delete '-static' suffixes from static lib names to make these behave
   # like most other projects do and dependents find it.
-  for fn in "${_pkg}"/lib/*-static.a; do
+  for fn in "${_PP}"/lib/*-static.a; do
     mv "${fn}" "$(echo "${fn}" | sed 's/-static//')"
   done
 
   # Delete implibs
-  rm -f "${_pkg}"/lib/*.dll.a
+  rm -f "${_PP}"/lib/*.dll.a
 
   # libcurl does not need the encoding functionality
-  rm -f "${_pkg}"/include/encode.h
-  rm -f "${_pkg}"/lib/libbrotlienc.a
-  rm -f "${_pkg}"/lib/pkgconfig/libbrotlienc.pc
+  rm -f "${_PP}"/include/encode.h
+  rm -f "${_PP}"/lib/libbrotlienc.a
+  rm -f "${_PP}"/lib/pkgconfig/libbrotlienc.pc
 
   # Delete .pc files
-  rm -r -f "${_pkg}"/lib/pkgconfig
+  rm -r -f "${_PP}"/lib/pkgconfig
 
   # Make steps for determinism
 
   readonly _ref='docs/brotli.1'
 
-  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/*.a
+  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/*.a
 
-  touch -c -r "${_ref}" "${_pkg}"/include/brotli/*.h
-  touch -c -r "${_ref}" "${_pkg}"/lib/*.a
+  touch -c -r "${_ref}" "${_PP}"/include/brotli/*.h
+  touch -c -r "${_ref}" "${_PP}"/lib/*.a
 
   # Create package
 
@@ -60,10 +58,10 @@ _VER="$1"
   mkdir -p "${_DST}/include/brotli"
   mkdir -p "${_DST}/lib"
 
-  cp -f -p "${_pkg}"/include/brotli/*.h "${_DST}/include/brotli/"
-  cp -f -p "${_pkg}"/lib/*.a            "${_DST}/lib/"
-  cp -f -p README.md                    "${_DST}/"
-  cp -f -p LICENSE                      "${_DST}/LICENSE.txt"
+  cp -f -p "${_PP}"/include/brotli/*.h "${_DST}/include/brotli/"
+  cp -f -p "${_PP}"/lib/*.a            "${_DST}/lib/"
+  cp -f -p README.md                   "${_DST}/"
+  cp -f -p LICENSE                     "${_DST}/LICENSE.txt"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

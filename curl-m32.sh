@@ -331,7 +331,5 @@ _VER="$1"
     cp -f -p ./lib/*.map "${_PP}/bin/"
   fi
 
-  _pkg="${_PP}"
-
   . ../curl-pkg.sh
 )
