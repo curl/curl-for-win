@@ -21,6 +21,8 @@ _VER="$1"
   find . -name '*.def' -delete
   find . -name '*.map' -delete
 
+  rm -r -f "${_PKGDIR}"
+
   # Build
 
   options='mingw32-ipv6-sspi-srp'
@@ -312,7 +314,24 @@ _VER="$1"
   "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.m32 CFG="${options}"
   "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.m32 CFG="${options}"
 
-  _pkg='.'
+  # Install manually
+
+  mkdir -p "${_PP}/include/curl"
+  mkdir -p "${_PP}/lib"
+  mkdir -p "${_PP}/bin"
+
+  cp -f -p ./include/curl/*.h "${_PP}/include/curl/"
+  cp -f -p ./src/*.exe        "${_PP}/bin/"
+  cp -f -p ./lib/*.dll        "${_PP}/bin/"
+  cp -f -p ./lib/*.def        "${_PP}/bin/"
+  cp -f -p ./lib/*.a          "${_PP}/lib/"
+
+  if [ "${CW_MAP}" = '1' ]; then
+    cp -f -p ./src/*.map "${_PP}/bin/"
+    cp -f -p ./lib/*.map "${_PP}/bin/"
+  fi
+
+  _pkg="${_PP}"
 
   # Download CA bundle
   # CAVEAT: Build-time download. It can break reproducibility.
@@ -330,27 +349,26 @@ _VER="$1"
 
   readonly _ref='CHANGES'
 
-  "${_STRIP}" --enable-deterministic-archives --strip-all   "${_pkg}"/src/*.exe
-  "${_STRIP}" --enable-deterministic-archives --strip-all   "${_pkg}"/lib/*.dll
+  "${_STRIP}" --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.exe
+  "${_STRIP}" --enable-deterministic-archives --strip-all   "${_pkg}"/bin/*.dll
   "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/libcurl.a
   # LLVM strip does not support implibs, but they are deterministic by default:
   #   error: unsupported object file format
   [ "${_LD}" = 'ld' ] && "${_STRIP}" --enable-deterministic-archives --strip-debug "${_pkg}"/lib/libcurl.dll.a
 
-  ../_peclean.py "${_ref}" "${_pkg}"/src/*.exe
-  ../_peclean.py "${_ref}" "${_pkg}"/lib/*.dll
+  ../_peclean.py "${_ref}" "${_pkg}"/bin/*.exe
+  ../_peclean.py "${_ref}" "${_pkg}"/bin/*.dll
 
-  ../_sign-code.sh "${_ref}" "${_pkg}"/src/*.exe
-  ../_sign-code.sh "${_ref}" "${_pkg}"/lib/*.dll
+  ../_sign-code.sh "${_ref}" "${_pkg}"/bin/*.exe
+  ../_sign-code.sh "${_ref}" "${_pkg}"/bin/*.dll
 
-  touch -c -r "${_ref}" "${_pkg}"/src/*.exe
-  touch -c -r "${_ref}" "${_pkg}"/lib/*.dll
-  touch -c -r "${_ref}" "${_pkg}"/lib/*.def
+  touch -c -r "${_ref}" "${_pkg}"/bin/*.exe
+  touch -c -r "${_ref}" "${_pkg}"/bin/*.dll
+  touch -c -r "${_ref}" "${_pkg}"/bin/*.def
   touch -c -r "${_ref}" "${_pkg}"/lib/*.a
 
   if [ "${CW_MAP}" = '1' ]; then
-    touch -c -r "${_ref}" "${_pkg}"/src/*.map
-    touch -c -r "${_ref}" "${_pkg}"/lib/*.map
+    touch -c -r "${_ref}" "${_pkg}"/bin/*.map
   fi
 
   # Tests
@@ -361,8 +379,8 @@ _VER="$1"
     *)       TZ=UTC stat --format '%n: %y' "${_ref}";;
   esac
 
-  TZ=UTC "${_OBJDUMP}" --all-headers "${_pkg}"/src/*.exe | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f
-  TZ=UTC "${_OBJDUMP}" --all-headers "${_pkg}"/lib/*.dll | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f
+  TZ=UTC "${_OBJDUMP}" --all-headers "${_pkg}"/bin/*.exe | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f
+  TZ=UTC "${_OBJDUMP}" --all-headers "${_pkg}"/bin/*.dll | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f
 
   # Execute curl and compiled-in dependency code. This is not secure, but
   # the build process already requires executing external code
@@ -372,7 +390,7 @@ _VER="$1"
   # `--version` output directly from the binary as strings, but curl creates
   # most of these strings dynamically at runtime, so this is not possible
   # (as of curl 7.83.1).
-  ${_WINE} "${_pkg}"/src/curl.exe --version | tee "curl-${_CPU}.txt"
+  ${_WINE} "${_pkg}"/bin/curl.exe --version | tee "curl-${_CPU}.txt"
 
   # Create package
 
@@ -399,9 +417,9 @@ _VER="$1"
     done
   )
   cp -f -p "${_pkg}"/include/curl/*.h "${_DST}/include/curl/"
-  cp -f -p "${_pkg}"/src/*.exe        "${_DST}/bin/"
-  cp -f -p "${_pkg}"/lib/*.dll        "${_DST}/bin/"
-  cp -f -p "${_pkg}"/lib/*.def        "${_DST}/bin/"
+  cp -f -p "${_pkg}"/bin/*.exe        "${_DST}/bin/"
+  cp -f -p "${_pkg}"/bin/*.dll        "${_DST}/bin/"
+  cp -f -p "${_pkg}"/bin/*.def        "${_DST}/bin/"
   cp -f -p "${_pkg}"/lib/*.a          "${_DST}/lib/"
   cp -f -p docs/*.md                  "${_DST}/docs/"
   cp -f -p CHANGES                    "${_DST}/CHANGES.txt"
@@ -415,8 +433,7 @@ _VER="$1"
   fi
 
   if [ "${CW_MAP}" = '1' ]; then
-    cp -f -p "${_pkg}"/src/*.map      "${_DST}/bin/"
-    cp -f -p "${_pkg}"/lib/*.map      "${_DST}/bin/"
+    cp -f -p "${_pkg}"/bin/*.map      "${_DST}/bin/"
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"
