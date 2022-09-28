@@ -36,16 +36,9 @@ _VER="$1"
     options="${options} --with-openssl=yes"
     CPPFLAGS="${CPPFLAGS} -I${_TOP}/${_OPENSSL}/${_PP}/include"
     LDFLAGS="${LDFLAGS} -L${_TOP}/${_OPENSSL}/${_PP}/lib"
-    LIBS="${LIBS} -lcrypto"
     if [ "${_OPENSSL}" = 'boringssl' ]; then
       LIBS="${LIBS} -lpthread"
     fi
-  elif [ -d ../wolfssl ]; then
-    # UNTESTED
-    options="${options} --with-openssl=${_TOP}/wolfssl/${_PP}"
-    CPPFLAGS="${CPPFLAGS} -I${_TOP}/wolfssl/${_PP}/include/wolfssl"
-    LDFLAGS="${LDFLAGS} -L${_TOP}/wolfssl/${_PP}/lib"
-    LIBS="${LIBS} -lwolfssl"
   fi
 
   (
