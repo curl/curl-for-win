@@ -250,10 +250,10 @@ _VER="$1"
       options="${options} -DCARES_INCLUDE_DIR=${_TOP}/cares/${_PP}/include"
       CPPFLAGS="${CPPFLAGS} -DCARES_STATICLIB"
     fi
-    if [ -d ../libgsasl ]; then
+    if [ -d ../gsasl ]; then
       CPPFLAGS="${CPPFLAGS} -DUSE_GSASL"
-      CPPFLAGS="${CPPFLAGS} -I${_TOP}/libgsasl/${_PP}/include"
-      LDFLAGS="${LDFLAGS} -L${_TOP}/libgsasl/${_PP}/lib"
+      CPPFLAGS="${CPPFLAGS} -I${_TOP}/gsasl/${_PP}/include"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/gsasl/${_PP}/lib"
       LIBS="${LIBS} -lgsasl"
     fi
     if [ -d ../libidn2 ]; then

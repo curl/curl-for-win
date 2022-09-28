@@ -88,7 +88,7 @@ Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mq
 Features: alt-svc AsynchDNS        gsasl HSTS HTTP2                   IDN IPv6 Kerberos Largefile libz          NTLM     SPNEGO SSL SSPI threadsafe         UnixSockets
 Libs: -lcurl -lz -lcrypt32 -lbcrypt -lwldap32 -lnghttp2 -lssh2 -lgsasl
 
-"micro", without libssh2 and libgsasl:
+"micro", without libssh2 and gsasl:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp ws wss
 Features: alt-svc AsynchDNS              HSTS HTTP2                   IDN IPv6 Kerberos Largefile libz          NTLM     SPNEGO SSL SSPI threadsafe         UnixSockets
 Libs: -lcurl -lz -lcrypt32 -lbcrypt -lwldap32 -lnghttp2

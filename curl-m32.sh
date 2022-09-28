@@ -252,9 +252,9 @@ _VER="$1"
     CPPFLAGS="${CPPFLAGS} -I../../cares/${_PP}/include"
     CPPFLAGS="${CPPFLAGS} -DCARES_STATICLIB"
   fi
-  if [ -d ../libgsasl ]; then
+  if [ -d ../gsasl ]; then
     options="${options}-gsasl"
-    export LIBGSASL_PATH="../../libgsasl/${_PP}"
+    export LIBGSASL_PATH="../../gsasl/${_PP}"
   fi
   if [ -d ../libidn2 ]; then
     options="${options}-idn2"

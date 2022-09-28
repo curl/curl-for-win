@@ -234,10 +234,10 @@ _VER="$1"
       options="${options} --disable-ares"
     fi
 
-    if [ -d ../libgsasl ]; then
-      options="${options} --with-libgsasl=${_TOP}/libgsasl/${_PP}"
-      CPPFLAGS="${CPPFLAGS} -I${_TOP}/libgsasl/${_PP}/include"
-      LDFLAGS="${LDFLAGS} -L${_TOP}/libgsasl/${_PP}/lib"
+    if [ -d ../gsasl ]; then
+      options="${options} --with-libgsasl=${_TOP}/gsasl/${_PP}"
+      CPPFLAGS="${CPPFLAGS} -I${_TOP}/gsasl/${_PP}/include"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/gsasl/${_PP}/lib"
     else
       options="${options} --without-libgsasl"
     fi

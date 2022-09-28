@@ -98,7 +98,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   libiconv      autotools
 #   libidn2       autotools
 #   libpsl        autotools
-#   libgsasl      autotools
+#   gsasl         autotools
 #   nghttp2       cmake
 #   nghttp3       cmake
 #   ngtcp2        cmake
@@ -738,7 +738,7 @@ build_single_target() {
   bld libiconv         "${LIBICONV_VER_}"
   bld libidn2           "${LIBIDN2_VER_}"
   bld libpsl             "${LIBPSL_VER_}"
-  bld libgsasl         "${LIBGSASL_VER_}"
+  bld gsasl               "${GSASL_VER_}"
   bld nghttp3           "${NGHTTP3_VER_}"
   bld wolfssl           "${WOLFSSL_VER_}"
   bld mbedtls           "${MBEDTLS_VER_}"

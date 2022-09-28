@@ -36,7 +36,7 @@ cat <<EOF
     "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
   },
   {
-    "name": "libgsasl",
+    "name": "gsasl",
     "url": "https://ftp.gnu.org/gnu/gsasl/libgsasl-{ver}.tar.gz",
     "sig": ".sig",
     "keys": "https://ftp.gnu.org/gnu/gnu-keyring.gpg"
@@ -681,8 +681,8 @@ fi
 if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ]; then
-  live_dl libgsasl "${LIBGSASL_VER_}"
-  live_xt libgsasl "${LIBGSASL_HASH}"
+  live_dl gsasl "${GSASL_VER_}"
+  live_xt gsasl "${GSASL_HASH}"
 fi
 
 if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
