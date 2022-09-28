@@ -45,7 +45,7 @@ _VER="$1"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
-  _pkg="${_PP}"  # DESTDIR= + _PREFIX
+  _pkg="${_PP}"
 
   # Delete .pc and .la files
   rm -r -f "${_pkg}"/lib/pkgconfig

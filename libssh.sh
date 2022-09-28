@@ -76,7 +76,7 @@ _VER="$1"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
-  _pkg="${_PP}"  # DESTDIR= + _PREFIX
+  _pkg="${_PP}"
 
   # Make steps for determinism
 

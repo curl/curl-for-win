@@ -19,7 +19,7 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}-shared" "${_BLDDIR}-static"
 
-  _pkg="${_PP}"  # DESTDIR= + _PREFIX
+  _pkg="${_PP}"
 
   if [ ! -f 'configure' ] || \
      [ "${CURL_VER_}" = '7.85.0' ]; then
