@@ -38,6 +38,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        wolfssl    build with wolfSSL (caveats!)
 #        wolfssh    build with wolfSSH (requires wolfSSL)
 #        libssh     build with libssh
+#        big        build with more features, see README.md
 #        mini       build with less features, see README.md
 #        micro      build with less features, see README.md
 #        nano       build with less features, see README.md
@@ -200,6 +201,8 @@ elif [ "${_BRANCH#*mini*}" != "${_BRANCH}" ]; then
   _FLAV='-mini'
 elif [ "${_BRANCH#*noh3*}" != "${_BRANCH}" ]; then
   _FLAV='-noh3'
+elif [ "${_BRANCH#*big*}" != "${_BRANCH}" ]; then
+  _FLAV='-big'
 fi
 
 # For 'configure'-based builds.
