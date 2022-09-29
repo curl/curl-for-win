@@ -58,7 +58,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 # Features
 
 Default build with OpenSSL (QUIC [fork](https://github.com/quictls/openssl/)),
-and [Schannel](https://docs.microsoft.com/windows/win32/com/schannel)
+and [Schannel](https://learn.microsoft.com/windows/win32/com/schannel)
 runtime-selectable option:
 ```
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
