@@ -16,10 +16,11 @@ _VER="$1"
 
   # Prepare build
 
-  find . -name '*.exe' -delete
-  find . -name '*.dll' -delete
-  find . -name '*.def' -delete
-  find . -name '*.map' -delete
+  find src -name '*.exe' -delete
+  find src -name '*.map' -delete
+  find lib -name '*.dll' -delete
+  find lib -name '*.def' -delete
+  find lib -name '*.map' -delete
 
   rm -r -f "${_PKGDIR}"
 
