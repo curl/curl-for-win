@@ -12,6 +12,7 @@ gpgdir="$(mktemp -d)"
 #       cannot checksum it:
 #          https://boringssl.googlesource.com/boringssl/+archive/{ver}.tar.gz
 #       Ref: https://github.com/google/gitiles/issues/84 (closed)
+#       Ref: https://github.com/google/gitiles/issues/217
 
 dependencies_json() {
 cat <<EOF
