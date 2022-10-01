@@ -79,13 +79,13 @@
   (
     set +x
     for file in docs/*; do
-      # Filter out `Makefile`. Necessary for autotools builds only.
+      # Exclude `Makefile`, necessary for autotools builds.
       if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -E '(\.|/Makefile$)'; then
         cp -f -p "${file}" "${_DST}/${file}.txt"
       fi
     done
     for file in docs/libcurl/*; do
-      # Filter out `Makefile`. Necessary for autotools builds only.
+      # Exclude `Makefile`, necessary for autotools builds.
       if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -E '(\.|/Makefile$)'; then
         cp -f -p "${file}" "${_DST}/${file}.txt"
       fi
