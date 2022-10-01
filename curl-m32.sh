@@ -14,14 +14,6 @@ _VER="$1"
 (
   cd "${_NAM}"  # mandatory component
 
-  # Prepare build
-
-  find src -name '*.exe' -delete
-  find src -name '*.map' -delete
-  find lib -name '*.dll' -delete
-  find lib -name '*.def' -delete
-  find lib -name '*.map' -delete
-
   rm -r -f "${_PKGDIR}"
 
   # Build
@@ -308,8 +300,12 @@ _VER="$1"
   export CURL_DLL_A_SUFFIX='.dll'
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
-    "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.m32 clean
-    "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.m32 clean
+    if [ "${CW_MAP}" = '1' ]; then
+      find src -name '*.map' -delete
+      find lib -name '*.map' -delete
+    fi
+    "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.m32 distclean
+    "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.m32 distclean
   fi
 
   "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.m32 CFG="${options}"
