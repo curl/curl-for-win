@@ -36,11 +36,10 @@ _VER="$1"
     export CFLAGS="${_CFLAGS_GLOBAL} -O3 -W -Wall"
     export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
     export RCFLAGS="${_RCFLAGS_GLOBAL}"
-    export LDFLAGS="${_LDFLAGS_GLOBAL}"
+    export LDFLAGS="${_LDFLAGS_GLOBAL} -Wl,--nxcompat -Wl,--dynamicbase"
     export LIBS="${_LIBS_GLOBAL}"
 
     CPPFLAGS="${CPPFLAGS} -DNDEBUG -DHAVE_PROCESS_H -DHAVE_INET_PTON -DHAVE_STRUCT_POLLFD"
-
     # configure: error: --enable-unix-sockets is not available on this platform!
     # due to non-portable verification method.
     CPPFLAGS="${CPPFLAGS} -DUSE_UNIX_SOCKETS"
@@ -53,7 +52,6 @@ _VER="$1"
       fi
     fi
 
-    LDFLAGS="${LDFLAGS} -Wl,--nxcompat -Wl,--dynamicbase"
     if [ "${_CPU}" = 'x86' ]; then
       if [ "${pass}" = 'static' ]; then
         LDFLAGS="${LDFLAGS} -Wl,--pic-executable,-e,_mainCRTStartup"
