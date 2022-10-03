@@ -96,8 +96,9 @@ _VER="$1"
   # NOTE: Makefile.m32 automatically enables -zlib with -ssh2
   if [ -n "${_ZLIB}" ]; then
     options="${options}-zlib"
+    # Makefile.m32 expects the headers and lib in ZLIB_PATH, so adjust them
+    # manually:
     export ZLIB_PATH="../../${_ZLIB}/${_PP}/include"
-    # Makefile.m32 looks for the lib in ZLIB_PATH, so adjust it manually:
     LDFLAGS="${LDFLAGS} -L../../${_ZLIB}/${_PP}/lib"
 
     # Make sure to link static zlib, avoiding a dependency on `zlib1.dll`
