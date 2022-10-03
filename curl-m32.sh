@@ -314,7 +314,6 @@ _VER="$1"
     export CURL_LDFLAG_EXTRAS_DLL="${LDFLAGS_LIB}"
     export CURL_LDFLAG_EXTRAS_EXE="${LDFLAGS_BIN}"
   else
-    # FIXME: Delete RANLIB references from _build.sh
     export CURL_LDFLAGS_LIB="${LDFLAGS_LIB}"
     export CURL_LDFLAGS_BIN="${LDFLAGS_BIN}"
   fi

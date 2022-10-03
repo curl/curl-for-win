@@ -89,13 +89,13 @@ _VER="$1"
     fi
 
     if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
-      options="${options} -DCURL_DISABLE_CRYPTO_AUTH=1"
-      options="${options} -DCURL_DISABLE_DICT=1 -DCURL_DISABLE_FILE=1 -DCURL_DISABLE_GOPHER=1 -DCURL_DISABLE_MQTT=1 -DCURL_DISABLE_RTSP=1 -DCURL_DISABLE_SMB=1 -DCURL_DISABLE_TELNET=1 -DCURL_DISABLE_TFTP=1"
-      options="${options} -DCURL_DISABLE_FTP=1"
-      options="${options} -DCURL_DISABLE_IMAP=1 -DCURL_DISABLE_POP3=1 -DCURL_DISABLE_SMTP=1"
-      options="${options} -DCURL_DISABLE_LDAP=1 -DCURL_DISABLE_LDAPS=1"
+      options="${options} -DCURL_DISABLE_CRYPTO_AUTH=ON"
+      options="${options} -DCURL_DISABLE_DICT=ON -DCURL_DISABLE_FILE=ON -DCURL_DISABLE_GOPHER=ON -DCURL_DISABLE_MQTT=ON -DCURL_DISABLE_RTSP=ON -DCURL_DISABLE_SMB=ON -DCURL_DISABLE_TELNET=ON -DCURL_DISABLE_TFTP=ON"
+      options="${options} -DCURL_DISABLE_FTP=ON"
+      options="${options} -DCURL_DISABLE_IMAP=ON -DCURL_DISABLE_POP3=ON -DCURL_DISABLE_SMTP=ON"
+      options="${options} -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON"
     else
-      [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_FTP=1"
+      [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_FTP=ON"
 
       CPPFLAGS="${CPPFLAGS} -DHAVE_LDAP_SSL"
       LIBS="${LIBS} -lwldap32"
@@ -276,7 +276,10 @@ _VER="$1"
       options="${options} -DUSE_WIN32_IDN=ON"
     fi
 
-    options="${options} -DENABLE_MANUAL=ON"  # Does not seem to work.
+    # Official method correctly enables the manual, but with the side-effect
+    # of rebuilding tool_hugehelp.c (with empty content). We work around this
+    # by enabling the manual directly via its C flag.
+  # options="${options} -DUSE_MANUAL=ON"
     CPPFLAGS="${CPPFLAGS} -DUSE_MANUAL=1"
 
     options="${options} -DCURL_CA_PATH=none"
