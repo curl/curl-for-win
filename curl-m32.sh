@@ -18,12 +18,24 @@ _VER="$1"
 
   # Build
 
+  oldm32=
+  if ! grep -a -q -F 'CPPFLAGS' 'lib/Makefile.m32'; then
+    oldm32=1
+  fi
+
   options='mingw32-ipv6-sspi-srp'
 
   export ARCH='custom'
 
-  CFLAGS=''
-  CPPFLAGS="-DOS=\\\"${_TRIPLET}\\\""
+  export CC="${_CC_GLOBAL}"
+  export CFLAGS="${_CFLAGS_GLOBAL} -O3 -W -Wall"
+  export CPPFLAGS="${_CPPFLAGS_GLOBAL} -DOS=\\\"${_TRIPLET}\\\""
+  export RCFLAGS="${_RCFLAGS_GLOBAL}"
+  export LDFLAGS="${_LDFLAGS_GLOBAL} -Wl,--nxcompat -Wl,--dynamicbase"
+  export LIBS="${_LIBS_GLOBAL}"
+
+  LDFLAGS_BIN=''
+  LDFLAGS_LIB=''
 
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
   # marking public libcurl functions as 'exported'. Useful to avoid the
@@ -37,10 +49,6 @@ _VER="$1"
   CPPFLAGS="${CPPFLAGS} -DHAVE_STDBOOL_H -DHAVE_STRING_H -DHAVE_SETJMP_H"
   CPPFLAGS="${CPPFLAGS} -DUSE_HEADERS_API"
 
-  LIBS=''
-  LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
-  LDFLAGS_BIN=''
-  LDFLAGS_LIB=''
   if [ "${_CPU}" = 'x86' ]; then
     LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,_mainCRTStartup"
   else
@@ -93,7 +101,6 @@ _VER="$1"
   } | grep -a -v '^$' | sort | tee -a libcurl.def
   LDFLAGS_LIB="${LDFLAGS_LIB} ../libcurl.def"
 
-  # NOTE: Makefile.m32 automatically enables -zlib with -ssh2
   if [ -n "${_ZLIB}" ]; then
     options="${options}-zlib"
     # Makefile.m32 expects the headers and lib in ZLIB_PATH, so adjust them
@@ -121,11 +128,15 @@ _VER="$1"
 
   if [ -n "${_OPENSSL}" ]; then
     options="${options}-ssl"
-    export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
-    export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
-    export OPENSSL_LIBPATH="${OPENSSL_PATH}/lib"
+    if [ -n "${oldm32}" ]; then
+      OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
+      export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
+      export OPENSSL_LIBPATH="${OPENSSL_PATH}/lib"
+      CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
+    else
+      export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
+    fi
     export OPENSSL_LIBS='-lssl -lcrypto'
-    CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
 
     if [ "${_OPENSSL}" = 'boringssl' ]; then
       CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
@@ -214,7 +225,9 @@ _VER="$1"
   elif [ -d ../libssh2 ]; then
     options="${options}-ssh2"
     export LIBSSH2_PATH="../../libssh2/${_PP}"
-    LDFLAGS="${LDFLAGS} -L${LIBSSH2_PATH}/lib"
+    if [ -n "${oldm32}" ]; then
+      LDFLAGS="${LDFLAGS} -L${LIBSSH2_PATH}/lib"
+    fi
   fi
   if [ -d ../nghttp2 ]; then
     options="${options}-nghttp2"
@@ -241,8 +254,12 @@ _VER="$1"
   fi
   if [ -d ../cares ]; then
     options="${options}-ares"
-    export LIBCARES_PATH="../../cares/${_PP}/lib"
-    CPPFLAGS="${CPPFLAGS} -I../../cares/${_PP}/include"
+    if [ -n "${oldm32}" ]; then
+      export LIBCARES_PATH="../../cares/${_PP}/lib"
+      CPPFLAGS="${CPPFLAGS} -I../../cares/${_PP}/include"
+    else
+      export LIBCARES_PATH="../../cares/${_PP}"
+    fi
     CPPFLAGS="${CPPFLAGS} -DCARES_STATICLIB"
   fi
   if [ -d ../gsasl ]; then
@@ -281,23 +298,29 @@ _VER="$1"
     LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
   fi
 
-  # Load above values into the variables Makefile.m32 expects
-  export CURL_CC="${_CC_GLOBAL}"
-  export CURL_STRIP="${_STRIP}"
-  export CURL_RC="${RC}"
-  export CURL_AR="${AR}"
-  export CURL_RANLIB="${RANLIB}"
+  [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && export AR="${AR_NORMALIZE}"
 
-  [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && CURL_AR="${AR_NORMALIZE}"
+  if [ -n "${oldm32}" ]; then  # Fill curl-specific variables for curl 7.85.0 and earlier
+    export CURL_CC="${_CC_GLOBAL}"
+    export CURL_STRIP="${_STRIP}"
+    export CURL_RC="${RC}"
+    export CURL_AR="${AR}"
+    export CURL_RANLIB="${RANLIB}"
 
-  export CURL_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
-  export CURL_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS}"
-  export CURL_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LDFLAGS} ${LIBS}"
-  export CURL_LDFLAG_EXTRAS_DLL="${LDFLAGS_LIB}"
-  export CURL_LDFLAG_EXTRAS_EXE="${LDFLAGS_BIN}"
+    export CURL_RCFLAG_EXTRAS="${RCFLAGS}"
+    export CURL_CFLAG_EXTRAS="${CFLAGS} ${CPPFLAGS}"
+    export CURL_LDFLAG_EXTRAS="${LDFLAGS} ${LIBS}"
+
+    export CURL_LDFLAG_EXTRAS_DLL="${LDFLAGS_LIB}"
+    export CURL_LDFLAG_EXTRAS_EXE="${LDFLAGS_BIN}"
+  else
+    # FIXME: Delete RANLIB references from _build.sh
+    export CURL_LDFLAGS_LIB="${LDFLAGS_LIB}"
+    export CURL_LDFLAGS_BIN="${LDFLAGS_BIN}"
+  fi
 
   export CURL_DLL_SUFFIX="${_CURL_DLL_SUFFIX}"
-  export CURL_DLL_A_SUFFIX='.dll'
+  [ -n "${oldm32}" ] && export CURL_DLL_A_SUFFIX='.dll'
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
     if [ "${CW_MAP}" = '1' ]; then
