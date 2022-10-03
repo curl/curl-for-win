@@ -45,13 +45,13 @@ _VER="$1"
 
     LIBS=''
     LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
-    LDFLAGS_EXE=''
-    LDFLAGS_DLL=''
+    LDFLAGS_BIN=''
+    LDFLAGS_LIB=''
     if [ "${_CPU}" = 'x86' ]; then
-      LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--pic-executable,-e,_mainCRTStartup"
+      LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,_mainCRTStartup"
     else
-      LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--pic-executable,-e,mainCRTStartup"
-      LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,--image-base,0x150000000"
+      LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,mainCRTStartup"
+      LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--image-base,0x150000000"
       LDFLAGS="${LDFLAGS} -Wl,--high-entropy-va"
     fi
 
@@ -62,16 +62,16 @@ _VER="$1"
     if [ "${pass}" = 'shared' ]; then
       options="${options} -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${_CURL_DLL_SUFFIX}.dll"
       _DEF_NAME="libcurl${_CURL_DLL_SUFFIX}.def"
-      LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,--output-def,${_DEF_NAME}"
+      LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--output-def,${_DEF_NAME}"
     fi
 
     if [ "${CW_MAP}" = '1' ]; then
       if [ "${pass}" = 'shared' ]; then
         _MAP_NAME="libcurl${_CURL_DLL_SUFFIX}.map"
-        LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,-Map,${_MAP_NAME}"
+        LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,-Map,${_MAP_NAME}"
       else
         _MAP_NAME='curl.map'
-        LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,-Map,${_MAP_NAME}"
+        LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,-Map,${_MAP_NAME}"
       fi
     fi
 
@@ -296,8 +296,8 @@ _VER="$1"
     [ "${CURL_VER_}" != '7.85.0' ] && options="${options} -DENABLE_WEBSOCKETS=ON"
 
     if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
-      LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
-      LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
+      LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
+      LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
     fi
 
     if [ -f "${cache}" ]; then
@@ -314,8 +314,8 @@ _VER="$1"
     cmake . -B "${_BLDDIR}-${pass}" ${_CMAKE_GLOBAL} ${options} \
       "-DCMAKE_RC_FLAGS=${_RCFLAGS_GLOBAL}" \
       "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"  \
-      "-DCMAKE_EXE_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_EXE} ${LIBS}" \
-      "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_DLL} ${LIBS}"  # --debug-find --debug-trycompile
+      "-DCMAKE_EXE_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_BIN} ${LIBS}" \
+      "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}"  # --debug-find --debug-trycompile
 
     if [ "${pass}" = 'static' ] && \
        [ -f src/tool_hugehelp.c ]; then  # File missing when building from a raw source tree.

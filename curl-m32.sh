@@ -39,13 +39,13 @@ _VER="$1"
 
   LIBS=''
   LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
-  LDFLAGS_EXE=''
-  LDFLAGS_DLL=''
+  LDFLAGS_BIN=''
+  LDFLAGS_LIB=''
   if [ "${_CPU}" = 'x86' ]; then
-    LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--pic-executable,-e,_mainCRTStartup"
+    LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,_mainCRTStartup"
   else
-    LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--pic-executable,-e,mainCRTStartup"
-    LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,--image-base,0x150000000"
+    LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,mainCRTStartup"
+    LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--image-base,0x150000000"
     LDFLAGS="${LDFLAGS} -Wl,--high-entropy-va"
   fi
 
@@ -66,13 +66,13 @@ _VER="$1"
 
   if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
     CPPFLAGS="${CPPFLAGS} -DUNICODE -D_UNICODE"
-    LDFLAGS_EXE="${LDFLAGS_EXE} -municode"
+    LDFLAGS_BIN="${LDFLAGS_BIN} -municode"
   fi
 
   if [ "${CW_MAP}" = '1' ]; then
-    LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,-Map,curl.map"
+    LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,-Map,curl.map"
     # shellcheck disable=SC2153
-    LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,-Map,libcurl${_CURL_DLL_SUFFIX}.map"
+    LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,-Map,libcurl${_CURL_DLL_SUFFIX}.map"
   fi
 
   # Generate .def file for libcurl by parsing curl headers. Useful to export
@@ -91,7 +91,7 @@ _VER="$1"
     grep -a -h -E '^ *\*? *[a-z_]+ *\(.+\);$' include/curl/*.h \
       | sed -E 's/^ *\*? *([a-z_]+) *\(.+$/\1/g'
   } | grep -a -v '^$' | sort | tee -a libcurl.def
-  LDFLAGS_DLL="${LDFLAGS_DLL} ../libcurl.def"
+  LDFLAGS_LIB="${LDFLAGS_LIB} ../libcurl.def"
 
   # NOTE: Makefile.m32 automatically enables -zlib with -ssh2
   if [ -n "${_ZLIB}" ]; then
@@ -104,7 +104,7 @@ _VER="$1"
     # Make sure to link static zlib, avoiding a dependency on `zlib1.dll`
     # in `libcurl.dll`. Some environments (e.g. MSYS2), offer `libz.dll.a`
     # alongside `libz.a` causing the linker to pick up the shared flavor.
-    LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,-Bstatic -lz -Wl,-Bdynamic"
+    LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,-Bstatic -lz -Wl,-Bdynamic"
   fi
   if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
     options="${options}-brotli"
@@ -277,8 +277,8 @@ _VER="$1"
   [ "${CURL_VER_}" != '7.85.0' ] && options="${options} -DUSE_WEBSOCKETS"
 
   if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
-    LDFLAGS_DLL="${LDFLAGS_DLL} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
-    LDFLAGS_EXE="${LDFLAGS_EXE} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
+    LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
+    LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
   fi
 
   # Load above values into the variables Makefile.m32 expects
@@ -293,8 +293,8 @@ _VER="$1"
   export CURL_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
   export CURL_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS}"
   export CURL_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LDFLAGS} ${LIBS}"
-  export CURL_LDFLAG_EXTRAS_DLL="${LDFLAGS_DLL}"
-  export CURL_LDFLAG_EXTRAS_EXE="${LDFLAGS_EXE}"
+  export CURL_LDFLAG_EXTRAS_DLL="${LDFLAGS_LIB}"
+  export CURL_LDFLAG_EXTRAS_EXE="${LDFLAGS_BIN}"
 
   export CURL_DLL_SUFFIX="${_CURL_DLL_SUFFIX}"
   export CURL_DLL_A_SUFFIX='.dll'
