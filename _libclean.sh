@@ -9,7 +9,7 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 # Normalize object names inside an .a library, to create reproducible
 # output across build systems:
 #   - strip `libname_la-` prefix added by autotools
-#   - change suffix to .o / .res
+#   - change suffix to .o
 #   - alpha-sort
 #
 # NOTE: This script does not support spaces in filenames.
@@ -37,8 +37,7 @@ while [ -n "${1:-}" ]; do
     for o in "${tmp}"/*; do
       n="$(printf '%s' "${o}" | sed -E \
         -e 's/lib[a-z0-9]+_la-//g' \
-        -e 's/(\.cc\.obj|\.c\.obj|\.obj)$/.o/g' \
-        -e 's/(\.rc\.res|\.res)/.rc.o/g')"
+        -e 's/(\.cc\.obj|\.c\.obj|\.obj)$/.o/g')"
       [ "${o}" != "${n}" ] && mv -n "${o}" "${n}"
     done
     rm "${f}"
