@@ -303,7 +303,6 @@ _VER="$1"
         --disable-debug \
         --disable-pthreads \
         --enable-symbol-hiding \
-        --enable-headers-api \
         --enable-http \
         --enable-proxy \
         --enable-manual \
