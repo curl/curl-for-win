@@ -290,7 +290,7 @@ _VER="$1"
 
   [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_FTP=1"
 
-  [ "${CURL_VER_}" != '7.85.0' ] && options="${options} -DUSE_WEBSOCKETS"
+  [ "${CURL_VER_}" != '7.85.0' ] && CPPFLAGS="${CPPFLAGS} -DUSE_WEBSOCKETS"
 
   if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
     LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
