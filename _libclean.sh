@@ -38,7 +38,7 @@ while [ -n "${1:-}" ]; do
       n="$(printf '%s' "${o}" | sed -E \
         -e 's/lib[a-z0-9]+_la-//g' \
         -e 's/(\.cc\.obj|\.c\.obj|\.obj)$/.o/g' \
-        -e 's/\.rc\.res/.res/g')"
+        -e 's/(\.rc\.res|\.res)/.rc.o/g')"
       [ "${o}" != "${n}" ] && mv -n "${o}" "${n}"
     done
     rm "${f}"
