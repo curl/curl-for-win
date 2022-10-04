@@ -73,8 +73,7 @@ _VER="$1"
   fi
 
   if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
-    CPPFLAGS="${CPPFLAGS} -DUNICODE -D_UNICODE"
-    LDFLAGS_BIN="${LDFLAGS_BIN} -municode"
+    options="${options}-unicode"
   fi
 
   if [ "${CW_MAP}" = '1' ]; then
