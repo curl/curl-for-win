@@ -48,6 +48,8 @@ _VER="$1"
   CPPFLAGS="${CPPFLAGS} -DHAVE_SIGNAL -DHAVE_BOOL_T -DSIZEOF_OFF_T=8"
   CPPFLAGS="${CPPFLAGS} -DHAVE_STDBOOL_H -DHAVE_STRING_H -DHAVE_SETJMP_H"
 
+  # CPPFLAGS added after this point only affect libcurl.
+
   if [ "${_CPU}" = 'x86' ]; then
     LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,_mainCRTStartup"
   else
