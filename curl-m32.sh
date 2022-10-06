@@ -180,6 +180,8 @@ _VER="$1"
         OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
       fi
       h3=1
+    elif [ "${_OPENSSL}" = 'libressl' ]; then
+      h3=1
     elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
       # Workaround for 3.x deprecation warnings
       CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
@@ -247,7 +249,7 @@ _VER="$1"
     export NGTCP2_LIBS='-lngtcp2'
     if [ "${_OPENSSL}" = 'boringssl' ]; then
       NGTCP2_LIBS="${NGTCP2_LIBS} -lngtcp2_crypto_boringssl"
-    elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
+    elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'libressl' ]; then
       NGTCP2_LIBS="${NGTCP2_LIBS} -lngtcp2_crypto_openssl"
     elif [ -d ../wolfssl ]; then
       NGTCP2_LIBS="${NGTCP2_LIBS} -lngtcp2_crypto_wolfssl"

@@ -138,6 +138,8 @@ _VER="$1"
           LIBS="${LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
         fi
         h3=1
+      elif [ "${_OPENSSL}" = 'libressl' ]; then
+        h3=1
       elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
         CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
         [ "${_OPENSSL}" = 'openssl-quic' ] && h3=1

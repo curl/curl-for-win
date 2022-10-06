@@ -27,7 +27,7 @@ _VER="$1"
     options="${options} -DBORINGSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
     options="${options} -DBORINGSSL_LIBRARIES=${_TOP}/${_OPENSSL}/${_PP}/lib/libcrypto.a;${_TOP}/${_OPENSSL}/${_PP}/lib/libssl.a;-lpthread;-lws2_32"
     CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
-  elif [ "${_OPENSSL}" = 'openssl-quic' ]; then
+  elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'libressl' ]; then
     options="${options} -DENABLE_OPENSSL=ON"
     options="${options} -DOPENSSL_ROOT_DIR=../${_OPENSSL}/${_PP}"
     options="${options} -DOPENSSL_INCLUDE_DIR=../${_OPENSSL}/${_PP}/include"
