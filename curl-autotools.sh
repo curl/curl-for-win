@@ -146,7 +146,7 @@ _VER="$1"
         fi
         h3=1
       elif [ "${_OPENSSL}" = 'libressl' ]; then
-        options="${options} --enable-tls-srp"
+        options="${options} --disable-tls-srp"
       elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
         options="${options} --enable-tls-srp"
         [ "${_OPENSSL}" = 'openssl-quic' ] && h3=1
