@@ -323,11 +323,15 @@ _VER="$1"
       "-DCMAKE_EXE_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_BIN} ${LIBS}" \
       "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}"  # --debug-find --debug-trycompile
 
-    if [ "${pass}" = 'static' ] && \
-       [ -f src/tool_hugehelp.c ]; then  # File missing when building from a raw source tree.
+    if [ "${pass}" = 'static' ]; then
       # When doing an out of tree build, this is necessary to avoid make
       # re-generating the embedded manual with blank content.
-      cp -p src/tool_hugehelp.c "${_BLDDIR}-${pass}/src/"
+      if [ -f src/tool_hugehelp.c ]; then
+        cp -p src/tool_hugehelp.c "${_BLDDIR}-${pass}/src/"
+      elif [ -f src/tool_hugehelp.c.cvs ]; then
+        # Copy the dummy replacement when building from a raw source tree.
+        cp -p src/tool_hugehelp.c.cvs "${_BLDDIR}-${pass}/src/tool_hugehelp.c"
+      fi
     fi
 
     make --directory="${_BLDDIR}-${pass}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
