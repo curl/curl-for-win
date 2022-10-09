@@ -5,7 +5,7 @@
 
 # WARNING: libssh uses hard-coded world-writable paths (/etc/..., ~/.ssh/) to
 #          read its configuration from, making it vulnerable to attacks on
-#          Windows. Do not use this component till these are fixed.
+#          Windows. Do not use this component till there is a fix for these.
 
 # shellcheck disable=SC3040
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
@@ -23,6 +23,14 @@ _VER="$1"
   CPPFLAGS=''
   LIBS=''
   options=''
+
+  # Hack to force pthread to remain undetected and force falling back to Windows
+  # native threading. If there is a better way, I could not find it. Tried these
+  # without success:
+  #   -DCMAKE_THREAD_PREFER_PTHREADS=OFF
+  #   -DTHREADS_PREFER_PTHREAD_FLAG=OFF
+  #   -DCMAKE_USE_WIN32_THREADS_INIT=ON
+  CPPFLAGS="${CPPFLAGS} -Dpthread_create=func_not_existing"
 
   if [ -n "${_ZLIB}" ]; then
     options="${options} -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
