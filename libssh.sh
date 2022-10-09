@@ -48,6 +48,7 @@ _VER="$1"
       CPPFLAGS="${CPPFLAGS} -DWIN32_LEAN_AND_MEAN"
       LIBS="${LIBS} -lpthread"  # to detect EVP_aes_128_*
     elif [ "${_OPENSSL}" = 'libressl' ]; then
+      CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
       LIBS="${LIBS} -lbcrypt"
       LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
     elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
