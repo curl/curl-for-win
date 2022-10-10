@@ -29,7 +29,7 @@ _VER="$1"
 
   export CC="${_CC_GLOBAL}"
   export CFLAGS="${_CFLAGS_GLOBAL} -O3 -W -Wall"
-  export CPPFLAGS="${_CPPFLAGS_GLOBAL} -DOS=\\\"${_TRIPLET}\\\""
+  export CPPFLAGS="${_CPPFLAGS_GLOBAL} -DNDEBUG -DOS=\\\"${_TRIPLET}\\\""
   export RCFLAGS="${_RCFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL} -Wl,--nxcompat -Wl,--dynamicbase"
   export LIBS="${_LIBS_GLOBAL}"
@@ -44,7 +44,6 @@ _VER="$1"
   CPPFLAGS="${CPPFLAGS} -DCURL_STATICLIB"
 
   # Match configuration with other build tools.
-  CPPFLAGS="${CPPFLAGS} -DNDEBUG"
   CPPFLAGS="${CPPFLAGS} -DHAVE_STRTOK_R -DHAVE_FTRUNCATE -D_FILE_OFFSET_BITS=64"
   CPPFLAGS="${CPPFLAGS} -DHAVE_INET_PTON -DHAVE_INET_NTOP"
   CPPFLAGS="${CPPFLAGS} -DHAVE_LIBGEN_H -DHAVE_BASENAME"
