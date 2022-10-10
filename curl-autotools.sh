@@ -40,6 +40,8 @@ _VER="$1"
     export LIBS="${_LIBS_GLOBAL}"
 
     CPPFLAGS="${CPPFLAGS} -DNDEBUG -DHAVE_PROCESS_H -DHAVE_INET_PTON -DHAVE_STRUCT_POLLFD"
+
+    # FIXME (upstream):
     # configure: error: --enable-unix-sockets is not available on this platform!
     # due to non-portable verification method.
     CPPFLAGS="${CPPFLAGS} -DUSE_UNIX_SOCKETS"
