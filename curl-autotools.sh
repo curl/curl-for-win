@@ -39,7 +39,7 @@ _VER="$1"
     export LDFLAGS="${_LDFLAGS_GLOBAL} -Wl,--nxcompat -Wl,--dynamicbase"
     export LIBS="${_LIBS_GLOBAL}"
 
-    CPPFLAGS="${CPPFLAGS} -DHAVE_PROCESS_H -DHAVE_INET_PTON -DHAVE_STRUCT_POLLFD"
+    CPPFLAGS="${CPPFLAGS} -DHAVE_PROCESS_H -DHAVE_STRUCT_POLLFD"
 
     # FIXME (upstream):
     # configure: error: --enable-unix-sockets is not available on this platform!
