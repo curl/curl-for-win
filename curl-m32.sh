@@ -41,7 +41,10 @@ _VER="$1"
   # marking public libcurl functions as 'exported'. Useful to avoid the
   # chance of libcurl functions getting exported from final binaries when
   # linked against the static libcurl lib.
-  CPPFLAGS="${CPPFLAGS} -DCURL_STATICLIB -DNDEBUG"
+  CPPFLAGS="${CPPFLAGS} -DCURL_STATICLIB"
+
+  # Match configuration with other build tools.
+  CPPFLAGS="${CPPFLAGS} -DNDEBUG"
   CPPFLAGS="${CPPFLAGS} -DHAVE_STRTOK_R -DHAVE_FTRUNCATE -D_FILE_OFFSET_BITS=64"
   CPPFLAGS="${CPPFLAGS} -DHAVE_INET_PTON -DHAVE_INET_NTOP"
   CPPFLAGS="${CPPFLAGS} -DHAVE_LIBGEN_H -DHAVE_BASENAME"
