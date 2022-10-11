@@ -14,6 +14,13 @@ _VER="$1"
 (
   cd "${_NAM}"  # mandatory component
 
+  # Always delete targets, including ones made for a different CPU.
+  find src -name '*.exe' -delete
+  find src -name '*.map' -delete
+  find lib -name '*.dll' -delete
+  find lib -name '*.def' -delete
+  find lib -name '*.map' -delete
+
   rm -r -f "${_PKGDIR}"
 
   # Build
