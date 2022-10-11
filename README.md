@@ -45,7 +45,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 - We plan to switch the default TLS backend to BoringSSL. This fixes a
   long-standing [vulnerability](https://curl.se/docs/CVE-2019-5443.html). It
   also makes binaries 30% smaller. Downsides are no API/ABI guaranties, pthread
-  dependence and missing TLS-SRP support.
+  dependence and no TLS-SRP support.
 - You can look up the correct distro hashes in lines starting with `SHA` in the
   [build log](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main).
 - Packages built across host platforms do not have identical hashes.

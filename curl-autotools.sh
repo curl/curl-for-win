@@ -39,7 +39,8 @@ _VER="$1"
     export LDFLAGS="${_LDFLAGS_GLOBAL} -Wl,--nxcompat -Wl,--dynamicbase"
     export LIBS="${_LIBS_GLOBAL}"
 
-    CPPFLAGS="${CPPFLAGS} -DHAVE_PROCESS_H -DHAVE_STRUCT_POLLFD"
+    CPPFLAGS="${CPPFLAGS} -DHAVE_STRUCT_POLLFD"
+    CPPFLAGS="${CPPFLAGS} -DHAVE_PROCESS_H"
 
     if [ "${CURL_VER_}" != '7.85.0' ]; then
       options="${options} --enable-unix-sockets"
