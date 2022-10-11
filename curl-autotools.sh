@@ -312,6 +312,7 @@ _VER="$1"
       ../configure ${options} \
         --disable-debug \
         --disable-pthreads \
+        --enable-threaded-resolver \
         --enable-symbol-hiding \
         --enable-http \
         --enable-proxy \
