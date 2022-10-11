@@ -41,10 +41,14 @@ _VER="$1"
 
     CPPFLAGS="${CPPFLAGS} -DHAVE_PROCESS_H -DHAVE_STRUCT_POLLFD"
 
-    # FIXME (upstream):
-    # configure: error: --enable-unix-sockets is not available on this platform!
-    # due to non-portable verification method.
-    CPPFLAGS="${CPPFLAGS} -DUSE_UNIX_SOCKETS"
+    if [ "${CURL_VER_}" != '7.85.0' ]; then
+      options="${options} --enable-unix-sockets"
+    else
+      # FIXME (upstream):
+      # configure: error: --enable-unix-sockets is not available on this platform!
+      # due to non-portable verification method.
+      CPPFLAGS="${CPPFLAGS} -DUSE_UNIX_SOCKETS"
+    fi
 
     if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
       if [ "${pass}" = 'shared' ]; then
