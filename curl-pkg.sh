@@ -6,9 +6,9 @@
 # curl pre-packaging, shared between all build-systems.
 
 {
-  # Download CA bundle
-  # CAVEAT: Build-time download. It can break reproducibility.
   if [ -n "${_OPENSSL}" ]; then
+    # Download CA bundle
+    # CAVEAT: Build-time download. It can break reproducibility.
     [ -f '../ca-bundle.crt' ] || \
       curl --disable --user-agent '' --fail --silent --show-error \
         --remote-time --xattr \
