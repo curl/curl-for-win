@@ -8,14 +8,21 @@
 {
   if [ -n "${_OPENSSL}" ]; then
     # Download CA bundle
-    # CAVEAT: Build-time download. It can break reproducibility.
     calocal='../ca-bundle.crt'
+    if [ ! -f "${calocal}" ]; then
 
-    [ -f "${calocal}" ] || \
+      if [ -n "${CACERT_VER}" ]; then
+        caremote="cacert-${CACERT_VER}.pem"
+      else
+         # CAVEAT: Unversioned build-time download. It can break reproducibility.
+        caremote='cacert.pem'
+      fi
+
       curl --disable --user-agent '' --fail --silent --show-error \
         --remote-time --xattr \
         --output "${calocal}" \
-        'https://curl.se/ca/cacert.pem'
+        "https://curl.se/ca/${caremote}"
+    fi
 
     openssl dgst -sha256 "${calocal}"
   fi
