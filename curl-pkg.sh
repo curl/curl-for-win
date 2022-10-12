@@ -9,13 +9,15 @@
   if [ -n "${_OPENSSL}" ]; then
     # Download CA bundle
     # CAVEAT: Build-time download. It can break reproducibility.
-    [ -f '../ca-bundle.crt' ] || \
+    calocal='../ca-bundle.crt'
+
+    [ -f "${calocal}" ] || \
       curl --disable --user-agent '' --fail --silent --show-error \
         --remote-time --xattr \
-        --output '../ca-bundle.crt' \
+        --output "${calocal}" \
         'https://curl.se/ca/cacert.pem'
 
-    openssl dgst -sha256 '../ca-bundle.crt'
+    openssl dgst -sha256 "${calocal}"
   fi
 
   # Make steps for determinism
@@ -104,7 +106,7 @@
 
   if [ -n "${_OPENSSL}" ]; then
     cp -f -p scripts/mk-ca-bundle.pl   "${_DST}/"
-    cp -f -p ../ca-bundle.crt          "${_DST}/bin/curl-ca-bundle.crt"
+    cp -f -p "${calocal}"              "${_DST}/bin/curl-ca-bundle.crt"
   fi
 
   if [ "${CW_MAP}" = '1' ]; then
