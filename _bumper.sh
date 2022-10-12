@@ -46,3 +46,11 @@ image="$(curl --disable --user-agent '' --silent --fail --show-error \
   | grep -a -o -E 'Ubuntu[0-9]{4}' | sort | tail -1)"
 
 echo; echo "image: ${image}"
+
+# Find out the latest CA certificate bundle release
+
+image="$(curl --disable --user-agent '' --silent --fail --show-error \
+  'https://curl.se/docs/caextract.html' \
+  | grep -a -o -E '[0-9]{4}-[0-9]{2}-[0-9]{2}' | sort | tail -1)"
+
+echo; echo "CACERT_VER='${image}'"

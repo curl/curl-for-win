@@ -5,6 +5,8 @@
 
 # NOTE: Bump nghttp3 and ngtcp2 together with curl.
 
+export CACERT_VER=''  # '2022-10-11'
+
 export CURL_VER_='7.85.0'
 export CURL_HASH=88b54a6d4b9a48cb4d873c7056dcba997ddd5b7be5a2d537a4acb55c20b04be6
 export BROTLI_VER_='1.0.9'
