@@ -190,7 +190,7 @@ EOF
 }
 
 my_curl() {
-  # >&2 echo "my_curl|$@|"
+  # >&2 echo "my_curl|$*|"
   curl --disable --user-agent '' --fail --silent --show-error --globoff \
     --connect-timeout 15 --max-time 60 --retry 3 --max-redirs 10 "$@"
 }
@@ -218,7 +218,7 @@ gpg_recv_key() {
 
 # replace {ver}/{vermm} macros with the version number
 expandver() {
-  # >&2 echo "expandver|$@|"
+  # >&2 echo "expandver|$*|"
   sed \
     -e "s/{ver}/$1/g" \
     -e "s/{vermm}/$(echo "$1" | cut -d . -f -2)/g"
