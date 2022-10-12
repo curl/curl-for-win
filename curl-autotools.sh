@@ -39,7 +39,6 @@ _VER="$1"
     export LDFLAGS="${_LDFLAGS_GLOBAL} -Wl,--nxcompat -Wl,--dynamicbase"
     export LIBS="${_LIBS_GLOBAL}"
 
-    CPPFLAGS="${CPPFLAGS} -DHAVE_STRUCT_POLLFD"  # TODO: delete after https://github.com/curl/curl/pull/9707
     CPPFLAGS="${CPPFLAGS} -DHAVE_PROCESS_H"  # TODO: delete after https://github.com/curl/curl/pull/9703
 
     if [ "${CURL_VER_}" != '7.85.0' ]; then
@@ -49,6 +48,8 @@ _VER="$1"
       # configure: error: --enable-unix-sockets is not available on this platform!
       # due to non-portable verification method.
       CPPFLAGS="${CPPFLAGS} -DUSE_UNIX_SOCKETS"
+
+      CPPFLAGS="${CPPFLAGS} -DHAVE_STRUCT_POLLFD"
     fi
 
     if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
