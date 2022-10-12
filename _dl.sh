@@ -286,10 +286,16 @@ check_update() {
       # ugly hack: repurpose 'ref_url' for this case:
       res="$(my_curl "$7" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
         | grep -a -o -E -- '[0-9.]+' | "${latest}" -1)"
-      url="$7${res}/dummy"
+      url="$7${res}"
+      urldir="${url}"
+    elif [ -n "$7" ]; then
+      url="$7"
+      urldir="${url}"
+    else
+      urldir="$(dirname "${url}")/"
     fi
     mask="${pkg}[._-]v?([0-9]+(\.[0-9]+)+)\.t"
-    urldir="$(dirname "${url}")/"
+    [ -n "$9" ] && mask="($9)"
     res="$(my_curl "${urldir}" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
       | grep -a -o -E -- "${mask}" | "${latest}" -1)"
     if [[ "${res}" =~ ${mask} ]]; then
