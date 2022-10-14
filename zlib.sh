@@ -18,7 +18,7 @@ _VER="$1"
 
   options=''
 
-  # FIXME: As of zlib 1.2.12 and zlib-ng 2.0.6, their CMakeLists.txt prevents
+  # FIXME: As of zlib 1.2.13 and zlib-ng 2.0.6, their CMakeLists.txt prevents
   #        passing custom RCFLAGS to the RC command. Use our wrapper as a
   #        workaround. PRs:
   #        https://github.com/madler/zlib/pull/677
