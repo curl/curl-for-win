@@ -35,11 +35,10 @@ _VER="$1"
     CFLAGS='-W -Wall'
     CPPFLAGS=''
 
-    CPPFLAGS="${CPPFLAGS} -DHAVE_GETADDRINFO_THREADSAFE"  # TODO: delete after https://github.com/curl/curl/pull/9727
-    CPPFLAGS="${CPPFLAGS} -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID"  # TODO: delete after https://github.com/curl/curl/pull/9726
-    CPPFLAGS="${CPPFLAGS} -DHAVE_SIGNAL"  # TODO: delete after https://github.com/curl/curl/pull/9725
-
     if [ "${CURL_VER_}" = '7.85.0' ]; then
+      CPPFLAGS="${CPPFLAGS} -DHAVE_GETADDRINFO_THREADSAFE"
+      CPPFLAGS="${CPPFLAGS} -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID"
+      CPPFLAGS="${CPPFLAGS} -DHAVE_SIGNAL"
       CPPFLAGS="${CPPFLAGS} -DHAVE_STRUCT_POLLFD"
       CPPFLAGS="${CPPFLAGS} -DHAVE_INET_NTOP"
       CPPFLAGS="${CPPFLAGS} -DHAVE_FTRUNCATE"
