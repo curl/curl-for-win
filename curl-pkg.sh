@@ -6,7 +6,7 @@
 # curl pre-packaging, shared between build systems.
 
 {
-  if [ -n "${_OPENSSL}" ]; then
+  if [ -n "${_OPENSSL}" ] || [ -d ../wolfssl ]; then
     # Download CA bundle
     calocal='../ca-bundle.crt'
     if [ ! -f "${calocal}" ]; then
@@ -111,7 +111,7 @@
   cp -f -p README                    "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES             "${_DST}/RELEASE-NOTES.txt"
 
-  if [ -n "${_OPENSSL}" ]; then
+  if [ -n "${_OPENSSL}" ] || [ -d ../wolfssl ]; then
     cp -f -p scripts/mk-ca-bundle.pl   "${_DST}/"
     cp -f -p "${calocal}"              "${_DST}/bin/curl-ca-bundle.crt"
   fi
