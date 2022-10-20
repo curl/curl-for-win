@@ -3,7 +3,7 @@
 # Copyright 2014-present Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-# curl pre-packaging, shared between all build-systems.
+# curl pre-packaging, shared between build systems.
 
 {
   if [ -n "${_OPENSSL}" ]; then
