@@ -51,9 +51,9 @@ _VER="$1"
   elif [ -d ../mbedtls ]; then
     if false; then  # TODO: pending https://github.com/libssh2/libssh2/pull/759
       options="${options} -DCRYPTO_BACKEND=mbedTLS"
-      options="${options} -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib"
-      options="${options} -DMBEDTLS_LIBRARY=${_TOP}/mbedtls/${_PP}/lib"
-      options="${options} -DMBEDX509_LIBRARY=${_TOP}/mbedtls/${_PP}/lib"
+      options="${options} -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedcrypto.a"
+      options="${options} -DMBEDTLS_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedtls.a"
+      options="${options} -DMBEDX509_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedx509.a"
       options="${options} -DMBEDTLS_INCLUDE_DIR=${_TOP}/mbedtls/${_PP}/include"
     fi
   else
