@@ -58,6 +58,17 @@ _VER="$1"
   rm -r -f "${_PP}"/lib/pkgconfig
   rm -f    "${_PP}"/lib/*.la
 
+  # Tests
+
+  # shellcheck disable=SC2043
+  for bin in \
+    "${_PP}"/bin/openssl.exe \
+  ; do
+    file "${bin}"
+    # Produce 'openssl version -a'-like output without executing the build:
+    strings "${bin}" | grep -a -E '^(LibreSSL [0-9]|built on: |compiler: |platform: |[A-Z]+DIR: )' || true
+  done
+
   # List files created
   find "${_PP}" | grep -a -v -F '/share/' | sort
 
@@ -70,17 +81,6 @@ _VER="$1"
   touch -c -r "${_ref}" "${_PP}"/include/openssl/*.h
   touch -c -r "${_ref}" "${_PP}"/include/*.h
   touch -c -r "${_ref}" "${_PP}"/lib/*.a
-
-  # Tests
-
-  # shellcheck disable=SC2043
-  for bin in \
-    "${_PP}"/bin/openssl.exe \
-  ; do
-    file "${bin}"
-    # Produce 'openssl version -a'-like output without executing the build:
-    strings "${bin}" | grep -a -E '^(LibreSSL [0-9]|built on: |compiler: |platform: |[A-Z]+DIR: )' || true
-  done
 
   # Create package
 
