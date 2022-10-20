@@ -54,8 +54,7 @@ _VER="$1"
     options="${options} --with-crypto=wolfssl --with-libwolfssl-prefix=${_TOP}/wolfssl/${_PP}"
     LDFLAGS="${LDFLAGS} -L${_TOP}/wolfssl/${_PP}/lib"
   elif [ -d ../mbedtls ]; then
-    if false; then
-      # Compile errors as of mbedTLS 3.2.1 + libssh 1.10.0
+    if false; then  # TODO: pending https://github.com/libssh2/libssh2/pull/759
       options="${options} --with-crypto=mbedtls --with-libmbedcrypto-prefix=${_TOP}/mbedtls/${_PP}"
       LDFLAGS="${LDFLAGS} -L${_TOP}/mbedtls/${_PP}/lib"
     fi

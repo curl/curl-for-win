@@ -32,7 +32,9 @@ _VER="$1"
 
   options='mingw32-ipv6-sspi-srp'
 
-  export ARCH='custom'
+  if [ "${CURL_VER_}" != '7.87.0' ]; then
+    export ARCH='custom'  # TODO: Pending https://github.com/curl/curl/pull/9764
+  fi
 
   export CC="${_CC_GLOBAL}"
   export CFLAGS="${_CFLAGS_GLOBAL} -O3 -W -Wall"
