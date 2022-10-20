@@ -6,27 +6,6 @@
 # curl pre-packaging, shared between build systems.
 
 {
-  if [ -n "${_OPENSSL}" ] || [ -d ../wolfssl ]; then
-    # Download CA bundle
-    calocal='../ca-bundle.crt'
-    if [ ! -f "${calocal}" ]; then
-
-      if [ -n "${CACERT_VER}" ]; then
-        caremote="cacert-${CACERT_VER}.pem"
-      else
-         # CAVEAT: Unversioned build-time download. It can break reproducibility.
-        caremote='cacert.pem'
-      fi
-
-      curl --disable --user-agent '' --fail --silent --show-error \
-        --remote-time --xattr \
-        --output "${calocal}" \
-        "https://curl.se/ca/${caremote}"
-    fi
-
-    openssl dgst -sha256 "${calocal}"
-  fi
-
   # Make steps for determinism
 
   readonly _ref='CHANGES'
@@ -111,9 +90,8 @@
   cp -f -p README                    "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES             "${_DST}/RELEASE-NOTES.txt"
 
-  if [ -n "${_OPENSSL}" ] || [ -d ../wolfssl ]; then
+  if [ -d ../cacert ]; then
     cp -f -p scripts/mk-ca-bundle.pl   "${_DST}/"
-    cp -f -p "${calocal}"              "${_DST}/bin/curl-ca-bundle.crt"
   fi
 
   if [ "${CW_MAP}" = '1' ]; then

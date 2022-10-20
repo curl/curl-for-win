@@ -37,6 +37,14 @@ cat <<EOF
     "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
   },
   {
+    "name": "cacert",
+    "descending": true,
+    "url": "https://curl.se/ca/cacert-{ver}.pem",
+    "sha": ".sha256",
+    "ref_url": "https://curl.se/docs/caextract.html",
+    "ref_mask": "[0-9]{4}-[0-9]{2}-[0-9]{2}"
+  },
+  {
     "name": "gsasl",
     "url": "https://ftp.gnu.org/gnu/gsasl/gsasl-{ver}.tar.gz",
     "sig": ".sig",
@@ -192,6 +200,7 @@ EOF
 my_curl() {
   # >&2 echo "my_curl|$*|"
   curl --disable --user-agent '' --fail --silent --show-error --globoff \
+    --remote-time --xattr \
     --connect-timeout 15 --max-time 60 --retry 3 --max-redirs 10 "$@"
 }
 
@@ -309,7 +318,7 @@ check_update() {
       fi
     else
       newvern="$(printf '%s' "${newver}" | to8digit)"
-      if [ "${newvern}" -gt "${ourvern}" ]; then
+      if [[ "${newvern}" > "${ourvern}" ]]; then
         printf '%s' "${newver}"
       fi
     fi
@@ -528,9 +537,14 @@ live_xt() {
     hash="$(openssl dgst -sha256 pkg.bin)"
     echo "${hash}"
     echo "${hash}" | grep -q -a -F -- "${2:-}" || exit 1
-    rm -r -f "${pkg}"; mkdir "${pkg}"; tar --strip-components "${3:-1}" -xf pkg.bin -C "${pkg}"
+    rm -r -f "${pkg}"; mkdir "${pkg}"
+    if [ "${pkg}" = 'cacert' ]; then
+      mv pkg.bin "${pkg}/${_CACERT}"
+    else
+      tar --strip-components "${3:-1}" -xf pkg.bin -C "${pkg}"
+      [ -f "${pkg}${_patsuf}.patch" ] && dos2unix < "${pkg}${_patsuf}.patch" | patch -N -p1 -d "${pkg}"
+    fi
     rm -f pkg.bin pkg.sig
-    [ -f "${pkg}${_patsuf}.patch" ] && dos2unix < "${pkg}${_patsuf}.patch" | patch -N -p1 -d "${pkg}"
     [ -f "__${pkg}.url" ] && mv "__${pkg}.url" "${pkg}/__url__.txt"
   fi
   return 0
@@ -692,6 +706,8 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
   live_xt gsasl "${GSASL_HASH}"
 fi
 
+need_cacert=0
+
 if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
@@ -714,6 +730,7 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
     live_dl openssl-quic "${OPENSSL_QUIC_VER_}"
     live_xt openssl-quic "${OPENSSL_QUIC_HASH}"
   fi
+  need_cacert=1
 fi
 
 if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
@@ -722,6 +739,7 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
   if [ "${_BRANCH#*wolfssh*}" != "${_BRANCH}" ]; then
     live_dl wolfssh "${WOLFSSH_VER_}"
     live_xt wolfssh "${WOLFSSH_HASH}"
+    need_cacert=1
   elif [ "${_BRANCH#*libssh*}" != "${_BRANCH}" ]; then
     # shellcheck disable=SC2153
     live_dl libssh "${LIBSSH_VER_}"
@@ -739,6 +757,11 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
     fi
     live_xt libssh2 "${LIBSSH2_HASH}"
   fi
+fi
+
+if [ "${need_cacert}" = '1' ]; then
+  live_dl cacert "${CACERT_VER_}"
+  live_xt cacert "${CACERT_HASH}"
 fi
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then

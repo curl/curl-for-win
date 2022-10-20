@@ -31,7 +31,7 @@ if [ "${_NAM}" != "${_UNIPKG}" ]; then
       mkdir -p "${unipkg}/dep/${_NAM}"
       rsync --archive --update "${_DST}/docs" "${unipkg}/dep/${_NAM}"
     fi
-    rsync --archive --update "${_DST}/lib" "${unipkg}"
+    [ -d "${_DST}/lib" ]      && rsync --archive --update "${_DST}/lib" "${unipkg}"
     if [ "${_NAM}" = 'curl' ]; then
       cp -f -p "${_DST}"/*.* "${unipkg}"
       rsync --archive --update "${_DST}/docs" "${unipkg}"

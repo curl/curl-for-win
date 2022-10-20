@@ -165,6 +165,8 @@ else
   _TAR="${_URL_BASE}/archive/refs/heads/${_BRANCH}.tar.gz"
 fi
 
+export _CACERT='cacert.pem'
+
 [ -n "${CW_CCSUFFIX:-}" ] || CW_CCSUFFIX=''
 
 export _CC='clang'
@@ -754,6 +756,7 @@ build_single_target() {
   bld wolfssh           "${WOLFSSH_VER_}"
   bld libssh             "${LIBSSH_VER_}"
   bld libssh2           "${LIBSSH2_VER_}"
+  bld cacert             "${CACERT_VER_}"
   bld curl                 "${CURL_VER_}"
 
   # Unified, per-target package: Build
