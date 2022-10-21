@@ -27,7 +27,7 @@ _VER="$1"
   mkdir -p "${_DST}/bin"
 
   # To avoid depending on yet another unversioned download (or vendoring
-  # the license), add link to it instead:
+  # the license), link to it instead:
   _fn="${_DST}/LICENSE.url"
   cat <<EOF > "${_fn}"
 [InternetShortcut]
