@@ -8,10 +8,10 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 # Reproducible curl binaries for Windows
 
 - We provide binary packages in `.zip` and `.tar.xz` formats,
-  <br>signed with PGP key:
+  <br>PGP signed with:
   [`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
 - Standalone `curl.exe` and `libcurl.dll`. Static libraries included.
-- Vista with
+- Vista and
   [Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/)
   required.
 - [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3) and
@@ -20,7 +20,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 - Transparent builds, using open source code, run in
   [public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
   with auditable [logs](#build-logs).
-- Build environment is [LLVM/Clang](https://clang.llvm.org/) with
+- [LLVM/Clang](https://clang.llvm.org/) build environment with
   [`mingw-w64`](https://sourceforge.net/p/mingw-w64/) via
   [Debian](https://packages.debian.org/testing/mingw-w64),
   [Homebrew](https://formulae.brew.sh/formula/mingw-w64),
@@ -39,9 +39,9 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 - We verify components using SHA-256 hashes and PGP signatures where provided.
 - We build [reproducible](https://reproducible-builds.org/) binaries,
   producing the same hash given the same input sources and C compiler.
-- Patching policy: No locally maintained patches. We may apply patches if
-  already merged upstream or &mdash; for showstoppers &mdash; had them
-  submitted with fair confidence of getting merged.
+- Patching policy: No local patches. We may apply patches if already merged
+  upstream or &mdash; for showstoppers &mdash; had them submitted with fair
+  confidence of getting merged.
 - We plan to switch the default TLS backend to BoringSSL. This fixes a
   long-standing [vulnerability](https://curl.se/docs/CVE-2019-5443.html). It
   also makes binaries 30% smaller. Downsides are no API/ABI guaranties, pthread
@@ -52,8 +52,8 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   The reason for this is slightly different build options and toolchain
   builds/versions. Except `llvm-mingw` builds, which are reproducible across
   build hosts. ARM64 and all BoringSSL builds are like that by default.
-- We code sign with a self-signed certificate, and intentionally not use
-  trusted timestamps for reproducibility.
+- We code sign with a self-signed certificate, and avoid trusted timestamps
+  for reproducibility.
 
 # Features
 
