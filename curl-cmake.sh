@@ -35,16 +35,6 @@ _VER="$1"
     CFLAGS='-W -Wall'  # TODO: Pending https://github.com/curl/curl/pull/9783
     CPPFLAGS=''
 
-    if [ "${CURL_VER_}" = '7.85.0' ]; then
-      CPPFLAGS="${CPPFLAGS} -DHAVE_GETADDRINFO_THREADSAFE"
-      CPPFLAGS="${CPPFLAGS} -DHAVE_SOCKADDR_IN6_SIN6_SCOPE_ID"
-      CPPFLAGS="${CPPFLAGS} -DHAVE_SIGNAL"
-      CPPFLAGS="${CPPFLAGS} -DHAVE_STRUCT_POLLFD"
-      CPPFLAGS="${CPPFLAGS} -DHAVE_INET_NTOP"
-      CPPFLAGS="${CPPFLAGS} -DHAVE_FTRUNCATE"
-      CPPFLAGS="${CPPFLAGS} -DHAVE_UNISTD_H -DHAVE_STRCASECMP -DHAVE_STRTOK_R"
-    fi
-
     [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && options="${options} -DCMAKE_AR=${AR_NORMALIZE}"
 
     LIBS=''
@@ -187,7 +177,6 @@ _VER="$1"
       options="${options} -DCURL_USE_LIBSSH=OFF"
       options="${options} -DCURL_USE_LIBSSH2=OFF"
       CPPFLAGS="${CPPFLAGS} -DUSE_LIBSSH"
-      [ "${CURL_VER_}" = '7.85.0' ] && CPPFLAGS="${CPPFLAGS} -DHAVE_LIBSSH_LIBSSH_H"
       CPPFLAGS="${CPPFLAGS} -DLIBSSH_STATIC"
       CPPFLAGS="${CPPFLAGS} -I${_TOP}/libssh/${_PP}/include"
       LDFLAGS="${LDFLAGS} -L${_TOP}/libssh/${_PP}/lib"
@@ -304,7 +293,7 @@ _VER="$1"
 
     options="${options} -DCURL_HIDDEN_SYMBOLS=ON"
 
-    [ "${CURL_VER_}" != '7.85.0' ] && options="${options} -DENABLE_WEBSOCKETS=ON"
+    options="${options} -DENABLE_WEBSOCKETS=ON"
 
     if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
       LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"

@@ -25,11 +25,6 @@ _VER="$1"
 
   # Build
 
-  oldm32=
-  if ! grep -a -q -F 'CPPFLAGS' 'lib/Makefile.m32'; then
-    oldm32=1
-  fi
-
   options='mingw32-ipv6-sspi-srp'
 
   if [ "${CURL_VER_}" != '7.87.0' ]; then
@@ -51,17 +46,6 @@ _VER="$1"
   # chance of libcurl functions getting exported from final binaries when
   # linked against the static libcurl lib.
   CPPFLAGS="${CPPFLAGS} -DCURL_STATICLIB"
-
-  if [ "${CURL_VER_}" = '7.85.0' ]; then
-    # Match configuration with other build tools.
-    CPPFLAGS="${CPPFLAGS} -D_FILE_OFFSET_BITS=64"
-    CPPFLAGS="${CPPFLAGS} -DHAVE_SETJMP_H -DHAVE_STRING_H -DHAVE_SIGNAL"
-    CPPFLAGS="${CPPFLAGS} -DHAVE_STDBOOL_H -DHAVE_BOOL_T"
-    CPPFLAGS="${CPPFLAGS} -DHAVE_INET_PTON -DHAVE_INET_NTOP"
-    CPPFLAGS="${CPPFLAGS} -DHAVE_LIBGEN_H"
-    CPPFLAGS="${CPPFLAGS} -DHAVE_FTRUNCATE -DHAVE_BASENAME -DHAVE_STRTOK_R"
-    CPPFLAGS="${CPPFLAGS} -DSIZEOF_OFF_T=8"
-  fi
 
   # CPPFLAGS added after this point only affect libcurl.
 
@@ -143,14 +127,7 @@ _VER="$1"
 
   if [ -n "${_OPENSSL}" ]; then
     options="${options}-ssl"
-    if [ -n "${oldm32}" ]; then
-      OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
-      export OPENSSL_INCLUDE="${OPENSSL_PATH}/include"
-      export OPENSSL_LIBPATH="${OPENSSL_PATH}/lib"
-      CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG"
-    else
-      export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
-    fi
+    export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
     export OPENSSL_LIBS='-lssl -lcrypto'
 
     if [ "${_OPENSSL}" = 'boringssl' ]; then
@@ -204,48 +181,29 @@ _VER="$1"
     fi
   fi
 
-  multissl=0
-
   if [ -d ../wolfssl ]; then
-    CPPFLAGS="${CPPFLAGS} -DUSE_WOLFSSL -DSIZEOF_LONG_LONG=8"
-    CPPFLAGS="${CPPFLAGS} -I../../wolfssl/${_PP}/include"
-    LDFLAGS="${LDFLAGS} -L../../wolfssl/${_PP}/lib"
-    LIBS="${LIBS} -lwolfssl"
-    multissl=1
+    options="${options}-wolfssl"
+    export WOLFSSL_PATH="../../wolfssl/${_PP}"
     h3=1
   fi
-
   if [ -d ../mbedtls ]; then
-    CPPFLAGS="${CPPFLAGS} -DUSE_MBEDTLS"
-    CPPFLAGS="${CPPFLAGS} -I../../mbedtls/${_PP}/include"
-    LDFLAGS="${LDFLAGS} -L../../mbedtls/${_PP}/lib"
-    LIBS="${LIBS} -lmbedtls -lmbedx509 -lmbedcrypto"
-    multissl=1
+    options="${options}-mbedtls"
+    export MBEDTLS_PATH="../../mbedtls/${_PP}"
   fi
-
-  [ "${multissl}" = '1' ] && CPPFLAGS="${CPPFLAGS} -DCURL_WITH_MULTI_SSL"  # Fixup for cases undetected by Makefile.m32
 
   options="${options}-schannel"
   CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
   if [ -d ../wolfssh ] && [ -d ../wolfssl ]; then
-    CPPFLAGS="${CPPFLAGS} -DUSE_WOLFSSH"
-    CPPFLAGS="${CPPFLAGS} -I../../wolfssh/${_PP}/include"
-    LDFLAGS="${LDFLAGS} -L../../wolfssh/${_PP}/lib"
-    LIBS="${LIBS} -lwolfssh"
+    options="${options}-wolfssh"
+    export WOLFSSH_PATH="../../wolfssh/${_PP}"
   elif [ -d ../libssh ]; then
-    CPPFLAGS="${CPPFLAGS} -DUSE_LIBSSH"
-    [ "${CURL_VER_}" = '7.85.0' ] && CPPFLAGS="${CPPFLAGS} -DHAVE_LIBSSH_LIBSSH_H"
+    options="${options}-libssh"
+    export LIBSSH_PATH="../../libssh/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DLIBSSH_STATIC"
-    CPPFLAGS="${CPPFLAGS} -I../../libssh/${_PP}/include"
-    LDFLAGS="${LDFLAGS} -L../../libssh/${_PP}/lib"
-    LIBS="${LIBS} -lssh"
   elif [ -d ../libssh2 ]; then
     options="${options}-ssh2"
     export LIBSSH2_PATH="../../libssh2/${_PP}"
-    if [ -n "${oldm32}" ]; then
-      LDFLAGS="${LDFLAGS} -L${LIBSSH2_PATH}/lib"
-    fi
   fi
   if [ -d ../nghttp2 ]; then
     options="${options}-nghttp2"
@@ -261,23 +219,10 @@ _VER="$1"
     CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB"
     export NGTCP2_PATH="../../ngtcp2/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB"
-    export NGTCP2_LIBS='-lngtcp2'
-    if [ "${_OPENSSL}" = 'boringssl' ]; then
-      NGTCP2_LIBS="${NGTCP2_LIBS} -lngtcp2_crypto_boringssl"
-    elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'libressl' ]; then
-      NGTCP2_LIBS="${NGTCP2_LIBS} -lngtcp2_crypto_openssl"
-    elif [ -d ../wolfssl ]; then
-      NGTCP2_LIBS="${NGTCP2_LIBS} -lngtcp2_crypto_wolfssl"
-    fi
   fi
   if [ -d ../cares ]; then
     options="${options}-ares"
-    if [ -n "${oldm32}" ]; then
-      export LIBCARES_PATH="../../cares/${_PP}/lib"
-      CPPFLAGS="${CPPFLAGS} -I../../cares/${_PP}/include"
-    else
-      export LIBCARES_PATH="../../cares/${_PP}"
-    fi
+    export LIBCARES_PATH="../../cares/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DCARES_STATICLIB"
   fi
   if [ -d ../gsasl ]; then
@@ -289,10 +234,8 @@ _VER="$1"
     export LIBIDN2_PATH="../../libidn2/${_PP}"
 
     if [ -d ../libpsl ]; then
-      CPPFLAGS="${CPPFLAGS} -DUSE_LIBPSL"
-      CPPFLAGS="${CPPFLAGS} -I../../libpsl/${_PP}/include"
-      LDFLAGS="${LDFLAGS} -L../../libpsl/${_PP}/lib"
-      LIBS="${LIBS} -lpsl"
+      options="${options}-psl"
+      export LIBPSL_PATH="../../libpsl/${_PP}"
     fi
 
     if [ -d ../libiconv ]; then
@@ -309,7 +252,7 @@ _VER="$1"
 
   [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_FTP=1"
 
-  [ "${CURL_VER_}" != '7.85.0' ] && CPPFLAGS="${CPPFLAGS} -DUSE_WEBSOCKETS"
+  CPPFLAGS="${CPPFLAGS} -DUSE_WEBSOCKETS"
 
   if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
     LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
@@ -318,26 +261,10 @@ _VER="$1"
 
   [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && export AR="${AR_NORMALIZE}"
 
-  if [ -n "${oldm32}" ]; then  # Fill curl-specific variables for curl 7.85.0 and earlier
-    export CURL_CC="${_CC_GLOBAL}"
-    export CURL_STRIP="${_STRIP}"
-    export CURL_RC="${RC}"
-    export CURL_AR="${AR}"
-    export CURL_RANLIB="${RANLIB}"
-
-    export CURL_RCFLAG_EXTRAS="${RCFLAGS}"
-    export CURL_CFLAG_EXTRAS="${CFLAGS} ${CPPFLAGS}"
-    export CURL_LDFLAG_EXTRAS="${LDFLAGS} ${LIBS}"
-
-    export CURL_LDFLAG_EXTRAS_DLL="${LDFLAGS_LIB}"
-    export CURL_LDFLAG_EXTRAS_EXE="${LDFLAGS_BIN}"
-  else
-    export CURL_LDFLAGS_LIB="${LDFLAGS_LIB}"
-    export CURL_LDFLAGS_BIN="${LDFLAGS_BIN}"
-  fi
+  export CURL_LDFLAGS_LIB="${LDFLAGS_LIB}"
+  export CURL_LDFLAGS_BIN="${LDFLAGS_BIN}"
 
   export CURL_DLL_SUFFIX="${_CURL_DLL_SUFFIX}"
-  [ -n "${oldm32}" ] && export CURL_DLL_A_SUFFIX='.dll'
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
     if [ "${CW_MAP}" = '1' ]; then

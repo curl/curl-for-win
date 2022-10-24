@@ -19,10 +19,7 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}-shared" "${_BLDDIR}-static"
 
-  if [ ! -f 'configure' ] || \
-     [ "${CURL_VER_}" = '7.85.0' ]; then
-    autoreconf --force --install
-  fi
+  [ -f 'configure' ] || autoreconf --force --install
 
   [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && export AR="${AR_NORMALIZE}"
 
@@ -41,16 +38,7 @@ _VER="$1"
 
     CPPFLAGS="${CPPFLAGS} -DHAVE_PROCESS_H"  # TODO: delete after https://github.com/curl/curl/pull/9703
 
-    if [ "${CURL_VER_}" != '7.85.0' ]; then
-      options="${options} --enable-unix-sockets"
-    else
-      # FIXME (upstream):
-      # configure: error: --enable-unix-sockets is not available on this platform!
-      # due to non-portable verification method.
-      CPPFLAGS="${CPPFLAGS} -DUSE_UNIX_SOCKETS"
-
-      CPPFLAGS="${CPPFLAGS} -DHAVE_STRUCT_POLLFD"
-    fi
+    options="${options} --enable-unix-sockets"
 
     if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
       if [ "${pass}" = 'shared' ]; then
@@ -287,7 +275,7 @@ _VER="$1"
 
     options="${options} --without-quiche --without-msh3"
 
-    [ "${CURL_VER_}" != '7.85.0' ] && options="${options} --enable-websockets"
+    options="${options} --enable-websockets"
 
     if [ "${pass}" = 'shared' ]; then
       _DEF_NAME="libcurl${_CURL_DLL_SUFFIX}.def"
