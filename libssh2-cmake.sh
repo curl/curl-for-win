@@ -48,14 +48,12 @@ _VER="$1"
     CPPFLAGS="${CPPFLAGS} -I${_TOP}/wolfssl/${_PP}/include"
     LDFLAGS="${LDFLAGS} -L${_TOP}/wolfssl/${_PP}/lib"
     LIBS="${LIBS} -lwolfssl"
-  elif [ -d ../mbedtls ]; then
-    if false; then  # TODO: pending https://github.com/libssh2/libssh2/pull/759
-      options="${options} -DCRYPTO_BACKEND=mbedTLS"
-      options="${options} -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedcrypto.a"
-      options="${options} -DMBEDTLS_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedtls.a"
-      options="${options} -DMBEDX509_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedx509.a"
-      options="${options} -DMBEDTLS_INCLUDE_DIR=${_TOP}/mbedtls/${_PP}/include"
-    fi
+  elif [ -d ../mbedtls ] && [ "${LIBSSH2_VER_}" != '1.10.0' ]; then
+    options="${options} -DCRYPTO_BACKEND=mbedTLS"
+    options="${options} -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedcrypto.a"
+    options="${options} -DMBEDTLS_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedtls.a"
+    options="${options} -DMBEDX509_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedx509.a"
+    options="${options} -DMBEDTLS_INCLUDE_DIR=${_TOP}/mbedtls/${_PP}/include"
   else
     options="${options} -DCRYPTO_BACKEND=WinCNG"
   fi
