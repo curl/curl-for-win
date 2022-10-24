@@ -32,7 +32,7 @@ _VER="$1"
   for pass in shared static; do
 
     options=''
-    CFLAGS='-W -Wall'
+    CFLAGS='-W -Wall'  # TODO: Pending https://github.com/curl/curl/pull/9783
     CPPFLAGS=''
 
     if [ "${CURL_VER_}" = '7.85.0' ]; then
