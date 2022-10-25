@@ -444,6 +444,7 @@ build_single_target() {
     fi
   fi
 
+  export _CCVER
   if [ "${_CC}" = 'clang' ]; then
     # We do not use old mingw toolchain versions when building with clang,
     # so this is safe:

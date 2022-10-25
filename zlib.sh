@@ -17,6 +17,7 @@ _VER="$1"
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
   options=''
+  CFLAGS=''
 
   # FIXME: As of zlib 1.2.13 and zlib-ng 2.0.6, their CMakeLists.txt prevents
   #        passing custom RCFLAGS to the RC command. Use our wrapper as a
@@ -29,11 +30,17 @@ _VER="$1"
     options="${options} -DBUILD_SHARED_LIBS=OFF"
     options="${options} -DZLIB_COMPAT=ON"
     options="${options} -DZLIB_ENABLE_TESTS=OFF"
+  else
+    # clang 15+ workaround for: https://github.com/madler/zlib/issues/633
+    if [ "${_CC}" = 'clang' ] && \
+       [ "${_CCVER}" != '14' ]; then
+      CFLAGS="${CFLAGS} -Wno-deprecated-non-prototype"
+    fi
   fi
 
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
-    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
+    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${CFLAGS} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
