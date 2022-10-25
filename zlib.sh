@@ -22,7 +22,7 @@ _VER="$1"
   #        passing custom RCFLAGS to the RC command. Use our wrapper as a
   #        workaround. PRs:
   #        https://github.com/madler/zlib/pull/677
-  #        https://github.com/zlib-ng/zlib-ng/pull/1318
+  #        https://github.com/zlib-ng/zlib-ng/pull/1318 [MERGED]
   [ -n "${_RC_WRAPPER}" ] && export RC="${_RC_WRAPPER}"
 
   if [ "${_NAM}" = 'zlibng' ]; then
