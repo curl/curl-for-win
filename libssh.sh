@@ -52,6 +52,20 @@ _VER="$1"
       #   openssl/modes.h also exists, but with BoringSSL, it does not. Workaround:
       [ -d include/openssl ] || mkdir -p include/openssl
       touch include/openssl/modes.h
+      # - libssh 0.10.0 started to enforce specific OpenSSL version numbers,
+      #   but CMake's version detection (as of 3.24.2) is not aware of BoringSSL
+      #   and fails to detect it. Work this around by the horrible hack of copying
+      #   the necessary PP line where CMake is looking for it:
+      i="${_TOP}/${_OPENSSL}/${_PP}/include/openssl"
+      v="${i}/opensslv.h"
+      if ! grep -q -a 'OPENSSL_VERSION_NUMBER' "${v}"; then
+        l="$(grep --no-filename -a 'OPENSSL_VERSION_NUMBER' "${i}"/* | head -1)"
+        tmp="$(mktemp)"
+        touch -r "${v}" "${tmp}"
+        printf "\n#if 0\n%s\n#endif\n" "${l}" >> "${v}"
+        touch -r "${tmp}" "${v}"
+        rm -f "${tmp}"
+      fi
 
       CPPFLAGS="${CPPFLAGS} -DWIN32_LEAN_AND_MEAN"
       LIBS="${LIBS} -lpthread"  # to detect EVP_aes_128_*
