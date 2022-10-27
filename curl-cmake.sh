@@ -125,7 +125,6 @@ _VER="$1"
     if [ -n "${_OPENSSL}" ]; then
       options="${options} -DCURL_USE_OPENSSL=ON"
       options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-      options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
       options="${options} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON"
       if [ "${_OPENSSL}" = 'boringssl' ]; then
         CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""

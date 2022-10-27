@@ -30,7 +30,6 @@ _VER="$1"
   elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'libressl' ]; then
     options="${options} -DENABLE_OPENSSL=ON"
     options="${options} -DOPENSSL_ROOT_DIR=../${_OPENSSL}/${_PP}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=../${_OPENSSL}/${_PP}/include"
   elif [ -d ../wolfssl ]; then
     options="${options} -DENABLE_WOLFSSL=ON"
     options="${options} -DWOLFSSL_LIBRARY=../wolfssl/${_PP}/lib/libwolfssl.a"

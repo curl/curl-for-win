@@ -38,7 +38,6 @@ _VER="$1"
 
   if [ -n "${_OPENSSL}" ]; then
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
     if [ "${_OPENSSL}" = 'boringssl' ]; then
 
       # FIXME (upstream):

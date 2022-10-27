@@ -29,7 +29,6 @@ _VER="$1"
   if [ -n "${_OPENSSL}"  ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-    options="${options} -DOPENSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
     if [ "${_OPENSSL}" = 'boringssl' ]; then
       LIBS="${LIBS} -lpthread"  # to detect HAVE_EVP_AES_128_CTR
     elif [ "${_OPENSSL}" = 'libressl' ]; then
