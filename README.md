@@ -42,16 +42,16 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 - Patching policy: No local patches. We may apply patches if already merged
   upstream or &mdash; for showstoppers &mdash; had them submitted with fair
   confidence of getting merged.
-- We plan to switch the default TLS backend to BoringSSL. This fixes a
+- We plan switching the default TLS backend to BoringSSL. This fixes a
   long-standing [vulnerability](https://curl.se/docs/CVE-2019-5443.html). It
   also makes binaries 30% smaller. Downsides are no API/ABI guaranties, pthread
   dependence and no TLS-SRP support.
-- You can look up the correct distro hashes in lines starting with `SHA` in the
+- You can look up our package hashes in lines starting with `SHA` in the
   [build log](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main).
-- Packages built across host platforms do not have identical hashes.
-  The reason for this is slightly different build options and toolchain
-  builds/versions. Except `llvm-mingw` builds, which are reproducible across
-  build hosts. ARM64 and all BoringSSL builds are like that by default.
+- Packages built across host platforms do not have identical hashes due to
+  slightly different build options and toolchain builds/versions. Except
+  `llvm-mingw` builds, which are reproducible across platforms. ARM64 and
+  BoringSSL builds are like that by default.
 - We code sign with a self-signed certificate, and avoid trusted timestamps
   for reproducibility.
 
