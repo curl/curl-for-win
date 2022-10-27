@@ -42,7 +42,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 - Patching policy: No local patches. We may apply patches if already merged
   upstream or &mdash; for showstoppers &mdash; had them submitted with fair
   confidence of getting merged.
-- We plan switching the default TLS backend to BoringSSL. This fixes a
+- We plan to switch the default TLS backend to BoringSSL. This fixes a
   long-standing [vulnerability](https://curl.se/docs/CVE-2019-5443.html). It
   also makes binaries 30% smaller. Downsides are no API/ABI guaranties, pthread
   dependence and no TLS-SRP support.
