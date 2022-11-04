@@ -36,7 +36,9 @@ _VER="$1"
     export LDFLAGS="${_LDFLAGS_GLOBAL} -Wl,--nxcompat -Wl,--dynamicbase"
     export LIBS="${_LIBS_GLOBAL}"
 
-    CPPFLAGS="${CPPFLAGS} -DHAVE_PROCESS_H"  # TODO: delete after https://github.com/curl/curl/pull/9703
+    if [ "${CURL_VER_}" != '7.87.0' ]; then
+      CPPFLAGS="${CPPFLAGS} -DHAVE_PROCESS_H"
+    fi
 
     options="${options} --enable-unix-sockets"
 
