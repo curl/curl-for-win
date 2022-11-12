@@ -268,7 +268,7 @@ check_update() {
       fi
       ref="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/git/refs/${heads_or_tags}" \
         | jq --raw-output '.[].ref' \
-        | grep -a -E "$5" | sort | tail -1)"
+        | grep -a -E "$5" | tail -1)"
       newver="$(printf '%s' "${ref}" | grep -a -E -o '\d+\.\d+\.\d')"
       # Optionally, check for the presence of a path
       if [ -n "$6" ] && \
