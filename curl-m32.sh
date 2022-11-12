@@ -25,7 +25,7 @@ _VER="$1"
 
   # Build
 
-  options='mingw32-ipv6-sspi-srp'
+  export CFG='mingw32-ipv6-sspi-srp'
 
   if [ "${CURL_VER_}" != '7.87.0' ]; then
     export ARCH='custom'  # TODO: Pending https://github.com/curl/curl/pull/9764
@@ -69,11 +69,11 @@ _VER="$1"
     CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_IMAP=1 -DCURL_DISABLE_POP3=1 -DCURL_DISABLE_SMTP=1"
     CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_LDAP=1 -DCURL_DISABLE_LDAPS=1"
   else
-    options="${options}-ldaps"
+    CFG="${CFG}-ldaps"
   fi
 
   if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
-    options="${options}-unicode"
+    CFG="${CFG}-unicode"
   fi
 
   if [ "${CW_MAP}" = '1' ]; then
@@ -101,7 +101,7 @@ _VER="$1"
   LDFLAGS_LIB="${LDFLAGS_LIB} ../libcurl.def"
 
   if [ -n "${_ZLIB}" ]; then
-    options="${options}-zlib"
+    CFG="${CFG}-zlib"
     # Makefile.m32 expects the headers and lib in ZLIB_PATH, so adjust them
     # manually:
     export ZLIB_PATH="../../${_ZLIB}/${_PP}/include"
@@ -113,12 +113,12 @@ _VER="$1"
     LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,-Bstatic -lz -Wl,-Bdynamic"
   fi
   if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
-    options="${options}-brotli"
+    CFG="${CFG}-brotli"
     export BROTLI_PATH="../../brotli/${_PP}"
     export BROTLI_LIBS='-Wl,-Bstatic -lbrotlidec -lbrotlicommon -Wl,-Bdynamic'
   fi
   if [ -d ../zstd ] && [ "${_BRANCH#*nozstd*}" = "${_BRANCH}" ]; then
-    options="${options}-zstd"
+    CFG="${CFG}-zstd"
     export ZSTD_PATH="../../zstd/${_PP}"
     export ZSTD_LIBS='-Wl,-Bstatic -lzstd -Wl,-Bdynamic'
   fi
@@ -126,7 +126,7 @@ _VER="$1"
   h3=0
 
   if [ -n "${_OPENSSL}" ]; then
-    options="${options}-ssl"
+    CFG="${CFG}-ssl"
     export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
     export OPENSSL_LIBS='-lssl -lcrypto'
 
@@ -182,31 +182,31 @@ _VER="$1"
   fi
 
   if [ -d ../wolfssl ]; then
-    options="${options}-wolfssl"
+    CFG="${CFG}-wolfssl"
     export WOLFSSL_PATH="../../wolfssl/${_PP}"
     h3=1
   fi
   if [ -d ../mbedtls ]; then
-    options="${options}-mbedtls"
+    CFG="${CFG}-mbedtls"
     export MBEDTLS_PATH="../../mbedtls/${_PP}"
   fi
 
-  options="${options}-schannel"
+  CFG="${CFG}-schannel"
   CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
   if [ -d ../wolfssh ] && [ -d ../wolfssl ]; then
-    options="${options}-wolfssh"
+    CFG="${CFG}-wolfssh"
     export WOLFSSH_PATH="../../wolfssh/${_PP}"
   elif [ -d ../libssh ]; then
-    options="${options}-libssh"
+    CFG="${CFG}-libssh"
     export LIBSSH_PATH="../../libssh/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DLIBSSH_STATIC"
   elif [ -d ../libssh2 ]; then
-    options="${options}-ssh2"
+    CFG="${CFG}-ssh2"
     export LIBSSH2_PATH="../../libssh2/${_PP}"
   fi
   if [ -d ../nghttp2 ]; then
-    options="${options}-nghttp2"
+    CFG="${CFG}-nghttp2"
     export NGHTTP2_PATH="../../nghttp2/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DNGHTTP2_STATICLIB"
   fi
@@ -214,27 +214,27 @@ _VER="$1"
   [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ] || h3=0
 
   if [ "${h3}" = '1' ] && [ -d ../nghttp3 ] && [ -d ../ngtcp2 ]; then
-    options="${options}-nghttp3-ngtcp2"
+    CFG="${CFG}-nghttp3-ngtcp2"
     export NGHTTP3_PATH="../../nghttp3/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB"
     export NGTCP2_PATH="../../ngtcp2/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB"
   fi
   if [ -d ../cares ]; then
-    options="${options}-ares"
+    CFG="${CFG}-ares"
     export LIBCARES_PATH="../../cares/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DCARES_STATICLIB"
   fi
   if [ -d ../gsasl ]; then
-    options="${options}-gsasl"
+    CFG="${CFG}-gsasl"
     export LIBGSASL_PATH="../../gsasl/${_PP}"
   fi
   if [ -d ../libidn2 ]; then
-    options="${options}-idn2"
+    CFG="${CFG}-idn2"
     export LIBIDN2_PATH="../../libidn2/${_PP}"
 
     if [ -d ../libpsl ]; then
-      options="${options}-psl"
+      CFG="${CFG}-psl"
       export LIBPSL_PATH="../../libpsl/${_PP}"
     fi
 
@@ -247,7 +247,7 @@ _VER="$1"
       LIBS="${LIBS} -lunistring"
     fi
   elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
-    options="${options}-winidn"
+    CFG="${CFG}-winidn"
   fi
 
   [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_FTP=1"
@@ -275,8 +275,8 @@ _VER="$1"
     "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.m32 distclean
   fi
 
-  "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.m32 CFG="${options}"
-  "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.m32 CFG="${options}"
+  "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.m32
+  "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.m32
 
   # Install manually
 
