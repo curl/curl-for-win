@@ -25,7 +25,7 @@ _VER="$1"
 
   # Build
 
-  export CFG='mingw32-ipv6-sspi-srp'
+  export CFG='-ipv6-sspi-srp'
 
   if [ "${CURL_VER_}" != '7.87.0' ]; then
     export ARCH='custom'  # TODO: Pending https://github.com/curl/curl/pull/9764
