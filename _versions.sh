@@ -29,14 +29,12 @@ export LIBSSH_VER_='0.10.4'
 export LIBSSH_HASH=07392c54ab61476288d1c1f0a7c557b50211797ad00c34c3af2bbc4dbc4bd97d
 export LIBSSH2_VER_='1.10.0'
 export LIBSSH2_HASH=2d64e90f3ded394b91d3a2e774ca203a4179f69aebee03003e5a6fa621e41d51
-export NGHTTP2_VER_='1.50.0'
-export NGHTTP2_HASH=af24007e34c18c782393a1dc3685f8fd5b50283e90a9191d25488eb50aa2c825
+export NGHTTP2_VER_='1.51.0'
+export NGHTTP2_HASH=66aa76d97c143f42295405a31413e5e7d157968dad9f957bb4b015b598882e6b
 export NGHTTP3_VER_='0.7.1'
 export NGHTTP3_HASH=331d70c2fc8e63d931a7b33b592fa3992bcffd36ed8900691ce541f4d694efa7
-#export NGTCP2_VER_='0.11.0'
-#export NGTCP2_HASH=435ff9795bc12dc8c43d1e48df0a07c09b0abf52e848995fdbbcfd2fcbb46c70
-export NGTCP2_VER_='0.10.0'
-export NGTCP2_HASH=a323f29d8d9968c41f445e48f3a3e5047f2678195a3f2d8f86d60d7a29418940
+export NGTCP2_VER_='0.11.0'
+export NGTCP2_HASH=435ff9795bc12dc8c43d1e48df0a07c09b0abf52e848995fdbbcfd2fcbb46c70
 export WOLFSSL_VER_='5.5.3'
 export WOLFSSL_HASH=fd3135b8657d09fb96a8aad16585da850b96ea420ae8ce5ac4d5fdfc614c2683
 export MBEDTLS_VER_='3.2.1'
@@ -67,4 +65,4 @@ export PEFILE_VER_='2022.5.30'
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='1'
+export _REV='2'
