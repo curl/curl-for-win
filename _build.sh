@@ -446,9 +446,8 @@ build_single_target() {
 
   export _CCVER
   if [ "${_CC}" = 'clang' ]; then
-    # We do not use old mingw toolchain versions when building with clang,
-    # so this is safe:
-    _CCVER='99'
+    _CCVER="$(printf '%02d' \
+      "$("clang${CW_CCSUFFIX}" -dumpversion | grep -a -o -E '^[0-9]+')")"
   else
     _CCVER="$(printf '%02d' \
       "$("${_CCPREFIX}gcc" -dumpversion | grep -a -o -E '^[0-9]+')")"
