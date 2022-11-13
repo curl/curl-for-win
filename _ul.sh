@@ -74,7 +74,8 @@ EOF
     # ssh-keyscan silly.haxx.se
     readonly host_key='silly.haxx.se ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFVVUP9dpjNl2qbHkDYMDS+cTOfxFytjkC04Oh9RNJBg'
     if [ ! -f "${HOME}/.ssh/known_hosts" ]; then
-      mkdir -m 700 "${HOME}/.ssh"
+      [ -d "${HOME}/.ssh" ] || mkdir -m 700 "${HOME}/.ssh"
+      ls -l "${HOME}/.ssh"
       install -m 600 /dev/null "${HOME}/.ssh/known_hosts"
     fi
     if ! grep -q -a -F "${host_key}" -- "${HOME}/.ssh/known_hosts"; then
