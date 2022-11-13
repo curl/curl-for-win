@@ -444,13 +444,10 @@ build_single_target() {
     fi
   fi
 
-  export _CCVER
   if [ "${_CC}" = 'clang' ]; then
-    _CCVER="$(printf '%02d' \
-      "$("clang${CW_CCSUFFIX}" -dumpversion | grep -a -o -E '^[0-9]+')")"
+    ccver="$("clang${CW_CCSUFFIX}" -dumpversion)"
   else
-    _CCVER="$(printf '%02d' \
-      "$("${_CCPREFIX}gcc" -dumpversion | grep -a -o -E '^[0-9]+')")"
+    ccver="$("${_CCPREFIX}gcc" -dumpversion)"
 
     # Create specs files that overrides msvcrt with ucrt. We need this
     # for gcc when building against UCRT.
@@ -460,6 +457,10 @@ build_single_target() {
       "${_CCPREFIX}gcc" -dumpspecs | sed 's/-lmsvcrt/-lucrt/g' > "${_GCCSPECS}"
     fi
   fi
+
+  export _CCVER
+  _CCVER="$(printf '%02d' \
+    "$(printf '%s' "${ccver}" | grep -a -o -E '^[0-9]+')")"
 
   # Setup common toolchain configuration options
 
@@ -670,7 +671,7 @@ build_single_target() {
 
   # Detect versions
   clangver=''
-  [ "${_CC}" = 'clang' ] && clangver="clang$("clang${CW_CCSUFFIX}" --version | grep -o -a -E ' [0-9]*\.[0-9]*[\.][0-9]*')"
+  [ "${_CC}" = 'clang' ] && clangver="clang ${ccver}"
 
   versuffix=''
   mingwver=''
@@ -708,7 +709,7 @@ build_single_target() {
   fi
 
   gccver=''
-  [ "${_CC}" = 'clang' ] || gccver="gcc $("${_CCPREFIX}gcc" -dumpversion)"
+  [ "${_CC}" = 'clang' ] || gccver="gcc ${ccver}"
 
   {
     [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT_SHORT}"
