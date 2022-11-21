@@ -83,7 +83,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - https://github.com/netwide-assembler/nasm
 
 # Build times (2022-09-26):
-#   - m32:                       38 min 13 sec   2293s   100%
+#   - gnumake:                   38 min 13 sec   2293s   100%
 #   - cmake:                     45 min 48 sec   2748s   120%   100%
 #   - autotools:                 49 min 32 sec   2972s   130%   108%
 #   - autotools w/o recv patch:  54 min  8 sec   3248s   142%   118%
@@ -111,7 +111,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   wolfssh       autotools
 #   libssh        cmake
 #   libssh2       autotools, cmake
-#   curl          cmake, autotools, Makefile.m32
+#   curl          cmake, autotools, gnumake
 
 cd "$(dirname "$0")"
 
@@ -285,14 +285,14 @@ _ori_path="${PATH}"
 
 bld() {
   pkg="$1"
-  if [ -z "${CW_BLD:-}" ] || echo " ${CW_BLD} " | grep -q -E " ${pkg}(-(cmake|autotools|make|m32))? "; then
+  if [ -z "${CW_BLD:-}" ] || echo " ${CW_BLD} " | grep -q -E " ${pkg}(-(cmake|autotools|gnumake))? "; then
     shift
 
     pkgori="${pkg}"
     [ -n "${2:-}" ] && pkg="$2"
     # allow selecting an alternate build tool
     withbuildtool="$(echo "${CW_BLD:-}" | \
-      grep -a -o -E "${pkg}-(cmake|autotools|make|m32)" || true)"
+      grep -a -o -E "${pkg}-(cmake|autotools|gnumake)" || true)"
     if [ -n "${withbuildtool}" ] && [ -f "${withbuildtool}.sh" ]; then
       pkg="${withbuildtool}"
     fi

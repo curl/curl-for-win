@@ -1,1 +1,1 @@
-curl-m32.sh
+curl-gnumake.sh
