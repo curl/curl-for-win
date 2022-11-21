@@ -41,6 +41,10 @@ _VER="$1"
   LDFLAGS_BIN=''
   LDFLAGS_LIB=''
 
+  # Link lib dependencies in static mode. Implied by `-static` for curl,
+  # but required for libcurl, which would link to shared libs by default.
+  LIBS="${LIBS} -Wl,-Bstatic"
+
   # Use -DCURL_STATICLIB when compiling libcurl. This option prevents
   # marking public libcurl functions as 'exported'. Useful to avoid the
   # chance of libcurl functions getting exported from final binaries when
@@ -159,9 +163,9 @@ _VER="$1"
         # }
         # ```
         # Ref: https://github.com/niXman/mingw-builds/issues/498
-        export OPENSSL_LIBS='-lssl -lcrypto -Wl,-Bdynamic -lpthread -Wl,-Bstatic'
+        LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
       else
-        export OPENSSL_LIBS='-lssl -lcrypto -Wl,-Bstatic -lpthread -Wl,-Bdynamic'
+        LIBS="${LIBS} -lpthread"
       fi
       h3=1
     elif [ "${_OPENSSL}" = 'libressl' ]; then
