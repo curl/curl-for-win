@@ -80,6 +80,10 @@ _VER="$1"
       LDFLAGS="${LDFLAGS} -Wl,--start-group"
     fi
 
+    # Link lib dependencies in static mode. Implied by `-static` for curl,
+    # but required for libcurl, which would link to shared libs by default.
+    LDFLAGS="${LDFLAGS} -Wl,-Bstatic"
+
     if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
        [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
       options="${options} -DCURL_DISABLE_ALTSVC=ON"
@@ -131,7 +135,7 @@ _VER="$1"
         if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
           LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
         else
-          LIBS="${LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
+          LIBS="${LIBS} -lpthread"
         fi
         h3=1
       elif [ "${_OPENSSL}" = 'libressl' ]; then
