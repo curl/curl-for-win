@@ -106,21 +106,14 @@ _VER="$1"
     # manually:
     export ZLIB_PATH="../../${_ZLIB}/${_PP}/include"
     LDFLAGS="${LDFLAGS} -L../../${_ZLIB}/${_PP}/lib"
-
-    # Make sure to link static zlib, avoiding a dependency on `zlib1.dll`
-    # in `libcurl.dll`. Some environments (e.g. MSYS2), offer `libz.dll.a`
-    # alongside `libz.a` causing the linker to pick up the shared flavor.
-    LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,-Bstatic -lz -Wl,-Bdynamic"
   fi
   if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
     CFG="${CFG}-brotli"
     export BROTLI_PATH="../../brotli/${_PP}"
-    export BROTLI_LIBS='-Wl,-Bstatic -lbrotlidec -lbrotlicommon -Wl,-Bdynamic'
   fi
   if [ -d ../zstd ] && [ "${_BRANCH#*nozstd*}" = "${_BRANCH}" ]; then
     CFG="${CFG}-zstd"
     export ZSTD_PATH="../../zstd/${_PP}"
-    export ZSTD_LIBS='-Wl,-Bstatic -lzstd -Wl,-Bdynamic'
   fi
 
   h3=0
