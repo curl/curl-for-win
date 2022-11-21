@@ -128,7 +128,6 @@ _VER="$1"
   if [ -n "${_OPENSSL}" ]; then
     CFG="${CFG}-ssl"
     export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
-    export OPENSSL_LIBS='-lssl -lcrypto'
 
     if [ "${_OPENSSL}" = 'boringssl' ]; then
       CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
@@ -167,9 +166,9 @@ _VER="$1"
         # }
         # ```
         # Ref: https://github.com/niXman/mingw-builds/issues/498
-        OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
+        LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
       else
-        OPENSSL_LIBS="${OPENSSL_LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
+        LIBS="${LIBS} -Wl,-Bstatic -lpthread -Wl,-Bdynamic"
       fi
       h3=1
     elif [ "${_OPENSSL}" = 'libressl' ]; then

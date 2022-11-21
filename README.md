@@ -63,7 +63,7 @@ runtime-selectable option:
 ```
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
 Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM     SPNEGO SSL SSPI threadsafe TLS-SRP UnixSockets zstd
-Libs: -lcurl -lz -lcrypt32 -lbcrypt -lwldap32 -lnghttp2 -lssh2 -lgsasl -lssl -lcrypto -lbrotlidec -lbrotlicommon -lzstd -lnghttp3 -lngtcp2
+Libs: -lcurl -lz -lcrypt32 -lbcrypt -lwldap32 -lnghttp2 -lssh2 -lgsasl -lssl -lcrypto -lbrotlidec -lbrotlicommon -lzstd -lnghttp3 -lngtcp2 -lngtcp2_crypto_openssl
 ```
 <details><summary>Alternate configurations with different footprints:</summary><p>
 
@@ -71,12 +71,12 @@ Libs: -lcurl -lz -lcrypt32 -lbcrypt -lwldap32 -lnghttp2 -lssh2 -lgsasl -lssl -lc
 "big":
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
 Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM PSL SPNEGO SSL SSPI threadsafe         UnixSockets zstd
-Libs: -lcurl -lz -lcrypt32 -lbcrypt -lwldap32 -lnghttp2 -lssh2 -lgsasl -lssl -lcrypto -lbrotlidec -lbrotlicommon -lzstd -lnghttp3 -lngtcp2 -lidn2 -lpsl -liconv -lunistring
+Libs: -lcurl -lz -lcrypt32 -lbcrypt -lwldap32 -lnghttp2 -lssh2 -lgsasl -lssl -lcrypto -lbrotlidec -lbrotlicommon -lzstd -lnghttp3 -lngtcp2 -lngtcp2_crypto_openssl -lidn2 -lpsl -liconv -lunistring
 
 "boringssl":
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
 Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM     SPNEGO SSL SSPI threadsafe         UnixSockets zstd
-Libs: -lcurl -lz -lcrypt32 -lbcrypt -lwldap32 -lnghttp2 -lssh2 -lgsasl -lssl -lcrypto -lbrotlidec -lbrotlicommon -lzstd -lnghttp3 -lngtcp2
+Libs: -lcurl -lz -lcrypt32 -lbcrypt -lwldap32 -lnghttp2 -lssh2 -lgsasl -lssl -lcrypto -lbrotlidec -lbrotlicommon -lzstd -lnghttp3 -lngtcp2 -lngtcp2_crypto_boringssl
 
 "noh3", HTTP/2:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
