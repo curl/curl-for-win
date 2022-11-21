@@ -72,10 +72,10 @@ _VER="$1"
       fi
     fi
 
-    # Ugly hack. Everything breaks without this due to the accidental ordering of
-    # libs and objects, and offering no universal way to (re)insert libs at
-    # specific positions. Linker complains about a missing --end-group, then adds
-    # it automatically anyway.
+    # Ugly hack. Everything breaks without this due to the accidental ordering
+    # of libs and objects, and offering no universal way to (re)insert libs at
+    # specific positions. Linker complains about a missing --end-group, then
+    # adds it automatically anyway.
     if [ "${_LD}" = 'ld' ]; then
       LDFLAGS="${LDFLAGS} -Wl,--start-group"
     fi
