@@ -46,7 +46,7 @@ _VER="$1"
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
   CFLAGS="-ffile-prefix-map=$(pwd)="
-  LIBS='-lpthread -lws2_32'  # for tests
+  LIBS='-lpthread'  # for tests
   options=''
 
   [ "${_CPU}" = 'x86' ] && cpu='x86'
