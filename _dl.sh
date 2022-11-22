@@ -5,7 +5,7 @@
 
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
-gpgdir="$(mktemp -d)"
+gpgdir="$(mktemp -d)"; chmod 0700 "${gpgdir}"
 
 # NOTE: We would prefer using the canonical source for BoringSSL. But, the
 #       tarball does change for each download (the timestamps in it), so we
