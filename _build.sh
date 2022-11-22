@@ -183,6 +183,9 @@ fi
 export _JOBS=2
 [ -n "${CW_JOBS:-}" ] && _JOBS="${CW_JOBS}"
 
+my_time='time'
+[ -n "${CW_NOTIME:-}" ] && my_time=
+
 # Detect host OS
 export _OS
 case "$(uname)" in
@@ -297,7 +300,7 @@ bld() {
       pkg="${withbuildtool}"
     fi
 
-    time "./${pkg}.sh" "$1" "${pkgori}"
+    ${my_time} "./${pkg}.sh" "$1" "${pkgori}"
 
     if [ "${CW_DEV_MOVEAWAY:-}" = '1' ] && [ "${pkg}" != "${pkgori}" ]; then
       mv -n "${pkgori}" "${pkg}"
