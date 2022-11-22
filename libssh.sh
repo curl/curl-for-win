@@ -60,7 +60,7 @@ _VER="$1"
         l="$(grep --no-filename -a 'OPENSSL_VERSION_NUMBER' "${i}"/* | head -1)"
         tmp="$(mktemp)"
         touch -r "${v}" "${tmp}"
-        printf "\n#if 0\n%s\n#endif\n" "${l}" >> "${v}"
+        printf '\n#if 0\n%s\n#endif\n' "${l}" >> "${v}"
         touch -r "${tmp}" "${v}"
         rm -f "${tmp}"
       fi
