@@ -28,15 +28,19 @@ _VER="$1"
   export CFG='-ipv6-sspi-srp'
 
   if [ "${CURL_VER_}" != '7.87.0' ]; then
-    export ARCH='custom'  # TODO: Pending https://github.com/curl/curl/pull/9764
+    export ARCH='custom'
   fi
 
   export CC="${_CC_GLOBAL}"
   export CFLAGS="${_CFLAGS_GLOBAL} -O3"
-  export CPPFLAGS="${_CPPFLAGS_GLOBAL} -DNDEBUG -DOS=\\\"${_TRIPLET}\\\""
+  export CPPFLAGS="${_CPPFLAGS_GLOBAL} -DOS=\\\"${_TRIPLET}\\\""
   export RCFLAGS="${_RCFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL} -Wl,--nxcompat -Wl,--dynamicbase"
   export LIBS="${_LIBS_GLOBAL}"
+
+  if [ "${CURL_VER_}" != '7.87.0' ]; then
+    CPPFLAGS="${CPPFLAGS} -DNDEBUG"
+  fi
 
   LDFLAGS_BIN=''
   LDFLAGS_LIB=''
@@ -81,9 +85,13 @@ _VER="$1"
   fi
 
   if [ "${CW_MAP}" = '1' ]; then
-    LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,-Map,curl.map"
-    # shellcheck disable=SC2153
-    LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,-Map,libcurl${_CURL_DLL_SUFFIX}.map"
+    if [ "${CURL_VER_}" != '7.87.0' ]; then
+      LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,-Map,curl.map"
+      # shellcheck disable=SC2153
+      LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,-Map,libcurl${_CURL_DLL_SUFFIX}.map"
+    else
+      CFG="${CFG}-map"
+    fi
   fi
 
   # Generate .def file for libcurl by parsing curl headers. Useful to export
@@ -106,10 +114,14 @@ _VER="$1"
 
   if [ -n "${_ZLIB}" ]; then
     CFG="${CFG}-zlib"
-    # Makefile.m32 expects the headers and lib in ZLIB_PATH, so adjust them
-    # manually:
-    export ZLIB_PATH="../../${_ZLIB}/${_PP}/include"
-    LDFLAGS="${LDFLAGS} -L../../${_ZLIB}/${_PP}/lib"
+    if [ "${CURL_VER_}" != '7.87.0' ]; then
+      # Makefile.m32 expects the headers and lib in ZLIB_PATH, so adjust them
+      # manually:
+      export ZLIB_PATH="../../${_ZLIB}/${_PP}/include"
+      LDFLAGS="${LDFLAGS} -L../../${_ZLIB}/${_PP}/lib"
+    else
+      export ZLIB_PATH="../../${_ZLIB}/${_PP}"
+    fi
   fi
   if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
     CFG="${CFG}-brotli"
@@ -262,17 +274,27 @@ _VER="$1"
 
   export CURL_DLL_SUFFIX="${_CURL_DLL_SUFFIX}"
 
-  if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
-    if [ "${CW_MAP}" = '1' ]; then
-      find src -name '*.map' -delete
-      find lib -name '*.map' -delete
+  if [ "${CURL_VER_}" != '7.87.0' ]; then
+    if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
+      if [ "${CW_MAP}" = '1' ]; then
+        find src -name '*.map' -delete
+        find lib -name '*.map' -delete
+      fi
+      "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.m32 distclean
+      "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.m32 distclean
     fi
-    "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.m32 distclean
-    "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.m32 distclean
-  fi
 
-  "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.m32
-  "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.m32
+    "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.m32
+    "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.m32
+  else
+    if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
+      "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.mk distclean
+      "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.mk distclean
+    fi
+
+    "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.mk
+    "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.mk
+  fi
 
   # Install manually
 
