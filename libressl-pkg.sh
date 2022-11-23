@@ -21,7 +21,7 @@
 
   _OUT="${_NAM}-${_VER}${_REVSUFFIX}${_PKGSUFFIX}"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
-  _DST="$(mktemp -d)/${_BAS}"
+  _DST="$(realpath _pkg)"; rm -r -f "${_DST}"
 
   mkdir -p "${_DST}/include/openssl"
   mkdir -p "${_DST}/lib"
