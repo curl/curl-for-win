@@ -49,6 +49,7 @@ _VER="$1"
       --enable-altcertchains \
       --enable-reproducible-build \
       --disable-benchmark \
+      --disable-crypttests \
       --disable-examples --silent
   )
 
