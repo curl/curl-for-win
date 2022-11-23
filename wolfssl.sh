@@ -23,7 +23,7 @@ _VER="$1"
   export CFLAGS="${_CFLAGS_GLOBAL} -O3"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
-  export LIBS="${_LIBS_GLOBAL}"
+  export LIBS="${_LIBS_GLOBAL} -lcrypt32"
 
   if [ -n "${_ZLIB}" ]; then
     options="${options} --with-libz=${_TOP}/${_ZLIB}/${_PP}"
