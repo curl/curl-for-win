@@ -3,6 +3,9 @@
 # Copyright 2021-present Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
+# shellcheck disable=SC3040
+set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
+
 cd "$(dirname "$0")"
 
 if ! command -v hxclean >/dev/null 2>&1; then
