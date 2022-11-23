@@ -1,13 +1,3 @@
-From b845c8bfc80a261fe071ef2049b57a7f8a8ee659 Mon Sep 17 00:00:00 2001
-From: Sean Parkinson <sean@wolfssl.com>
-Date: Mon, 7 Nov 2022 16:34:26 +1000
-Subject: [PATCH] SP int: support mingw64 again
-
-Check for _MSC_VER to determine that we are compiling for MSVC.
----
- wolfcrypt/src/sp_int.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
 diff --git a/wolfcrypt/src/sp_int.c b/wolfcrypt/src/sp_int.c
 index 8a1d125fabe..f86081e1772 100644
 --- a/wolfcrypt/src/sp_int.c
