@@ -103,7 +103,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   nghttp2       cmake
 #   nghttp3       cmake
 #   ngtcp2        cmake
-#   wolfssl       autotools
+#   wolfssl       autotools, cmake
 #   mbedtls       cmake
 #   openssl       proprietary
 #   boringssl     cmake
