@@ -267,6 +267,7 @@ check_update() {
         heads_or_tags='tags'
       fi
       ref="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/git/refs/${heads_or_tags}" \
+        --header 'X-GitHub-Api-Version: 2022-11-28' \
         | jq --raw-output '.[].ref' \
         | grep -a -E "$5" | tail -1)"
       newver="$(printf '%s' "${ref}" | grep -a -E -o '\d+\.\d+\.\d')"
@@ -277,6 +278,7 @@ check_update() {
       fi
     else
       newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases/latest" \
+        --header 'X-GitHub-Api-Version: 2022-11-28' \
         | jq --raw-output '.tag_name' | sed 's/^v//')"
       [ -n "$9" ] && newver="$(printf '%s' "${newver}" | grep -a -o -E "$9")"
       if [[ "${newver}" =~ ^[0-9]+\.[0-9]+$ ]]; then
