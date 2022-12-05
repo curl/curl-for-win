@@ -101,15 +101,20 @@ _VER="$1"
   # exporting every libcurl public function, as well as any other ones from
   # statically linked dependencies, resulting in a larger .dll, an inflated
   # implib and a non-standard list of exported functions.
-  echo 'EXPORTS' > libcurl.def
   {
-    # CURL_EXTERN CURLcode curl_easy_send(CURL *curl, const void *buffer,
-    grep -a -h '^CURL_EXTERN ' include/curl/*.h | grep -a -h -F '(' \
-      | sed 's/CURL_EXTERN \([a-zA-Z_\* ]*\)[\* ]\([a-z_]*\)(\(.*\)$/\2/g'
-    # curl_easy_option_by_name(const char *name);
-    grep -a -h -E '^ *\*? *[a-z_]+ *\(.+\);$' include/curl/*.h \
-      | sed -E 's/^ *\*? *([a-z_]+) *\(.+$/\1/g'
-  } | grep -a -v '^$' | sort | tee -a libcurl.def
+    echo 'EXPORTS'
+    {
+      # CURL_EXTERN CURLcode curl_easy_send(CURL *curl, const void *buffer,
+      cat include/curl/*.h | tr -d '\r' \
+        | tr '\n' '\t' | sed -E 's/ CURL_DEPRECATED\([0-9.]+, "[^\"]*"\)(\t| )/ /g' | tr '\t' '\n' \
+        | grep -a '^CURL_EXTERN ' | grep -a -F '(' \
+        | sed 's/CURL_EXTERN \([a-zA-Z_\* ]*\)[\* ]\([a-z_]*\)(\(.*\)$/\2/g'
+      # curl_easy_option_by_name(const char *name);
+      cat include/curl/*.h | tr -d '\r' \
+        | grep -a -E '^ *\*? *[a-z_]+ *\(.+\);$' \
+        | sed -E 's/^ *\*? *([a-z_]+) *\(.+$/\1/g'
+    } | grep -a -v '^$' | sort -u
+  } | tee libcurl.def
   LDFLAGS_LIB="${LDFLAGS_LIB} ../libcurl.def"
 
   if [ -n "${_ZLIB}" ]; then
