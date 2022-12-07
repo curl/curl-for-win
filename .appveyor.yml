@@ -25,7 +25,7 @@ clone_depth: 8
 build:
   verbosity: detailed
 environment:
-  DOCKER_IMAGE: debian:testing-20221114-slim
+  DOCKER_IMAGE: debian:testing-20221205-slim
   CW_LLVM_MINGW_DL: 1
   CW_LLVM_MINGW_ONLY: 0
   CW_MAP: 0
