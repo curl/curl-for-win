@@ -36,7 +36,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 - Binaries use
   [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH),
   except x86, which uses [DWARF](https://en.wikipedia.org/wiki/DWARF).
-- We verify components using SHA-256 hashes and PGP signatures where provided.
+- We verify components using SHA-256, and PGP where provided.
 - We build [reproducible](https://reproducible-builds.org/) binaries,
   producing the same hash given the same input sources and C compiler.
 - Patching policy: No local patches. We may apply patches if already merged
@@ -51,8 +51,8 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 - Packages built across host platforms do not have identical hashes due to
   slightly different build options and toolchain builds/versions. Except
   `llvm-mingw` builds, which are reproducible across platforms. ARM64 and
-  BoringSSL builds are like that by default.
-- We code sign with a self-signed certificate, and avoid trusted timestamps
+  BoringSSL builds are such by default.
+- We code-sign with a self-signed certificate, and avoid trusted timestamps
   for reproducibility.
 
 # Features

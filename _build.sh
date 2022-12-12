@@ -69,7 +69,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - Enable Control Flow Guard (once toolchains support it): -ehcontguard (requires LLVM 13.0.0)
 #   - LLVM -mretpoline
 #   - GNU multiarg options `--opt value` -> `-—opt=value`?
-#   - rustls
+#   - rustls?
 #     https://github.com/rustls/rustls/archive/refs/tags/v/0.20.6.tar.gz
 #     $ cargo build --target={x86_64-pc-windows-gnullvm,aarch64-pc-windows-gnullvm,i686-pc-windows-gnu}
 
@@ -78,7 +78,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - https://github.com/mstorsjo/llvm-mingw
 #   - https://github.com/llvm/llvm-project
 #   - https://salsa.debian.org/pkg-llvm-team
-#   - https://git.code.sf.net/p/mingw-w64/mingw-w64 / https://github.com/mirror/mingw-w64
+#   - https://git.code.sf.net/p/mingw-w64/mingw-w64
+#     https://github.com/mirror/mingw-w64
 #   - https://sourceware.org/git/binutils-gdb.git
 #   - https://github.com/netwide-assembler/nasm
 
@@ -111,7 +112,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   wolfssh       autotools
 #   libssh        cmake
 #   libssh2       autotools, cmake
-#   curl          cmake, autotools, gnumake
+#   curl          gnumake, autotools, cmake
 
 cd "$(dirname "$0")"
 
@@ -535,9 +536,9 @@ build_single_target() {
       fi
     fi
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-      # Turns out autotools/libtool (in curl?) is overbusy/stupid enough to
-      # delete LDFLAGS it does not recognize. This can explain why nothing
-      # worked before moving `--target=` and `--sysroot=` into CC from LDFLAGS.
+      # Turns out autotools/libtool is overbusy/stupid enough to delete
+      # LDFLAGS it does not recognize. This can explain why nothing worked
+      # before moving `--target=` and `--sysroot=` into CC from LDFLAGS.
       # Do the same with this option, to avoid yet another libtool fail.
       # autotools and OpenSSL use this variable, CMake does not.
       _CC_GLOBAL="${_CC_GLOBAL} -rtlib=compiler-rt"
