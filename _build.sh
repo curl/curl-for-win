@@ -528,7 +528,15 @@ build_single_target() {
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${CW_LLVM_MINGW_PATH}/${_TRIPLET}/lib"
       else
         # https://packages.debian.org/testing/amd64/gcc-mingw-w64-x86-64-posix/filelist
-        tmp="$(find "/usr/lib/gcc/${_TRIPLET}" -name '*posix' | head -n 1)"
+        # https://packages.debian.org/testing/amd64/gcc-mingw-w64-x86-64-win32/filelist
+        # /usr/lib/gcc/x86_64-w64-mingw32/10-posix/
+        # /usr/lib/gcc/x86_64-w64-mingw32/10-win32/
+        # /usr/lib/gcc/x86_64-w64-mingw32/12/
+        tmp="$(find "/usr/lib/gcc/${_TRIPLET}" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+        if [ -z "${tmp}" ]; then
+          >&2 echo '! Error: Failed to detect mingw-w64 dev env root.'
+          exit 1
+        fi
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${tmp}"
         _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++"
         _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/${_TRIPLET}"
