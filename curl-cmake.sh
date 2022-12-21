@@ -34,10 +34,6 @@ _VER="$1"
     options=''
     CPPFLAGS=''
 
-    if [ "${CURL_VER_}" = '7.86.0' ] && [ "${_CC}" = 'clang' ]; then
-      CPPFLAGS="${CPPFLAGS} -W -Wall"
-    fi
-
     [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && options="${options} -DCMAKE_AR=${AR_NORMALIZE}"
 
     LIBS=''
