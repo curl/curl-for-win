@@ -256,6 +256,7 @@ _VER="$1"
   export CURL_LDFLAGS_LIB="${LDFLAGS_LIB}"
   export CURL_LDFLAGS_BIN="${LDFLAGS_BIN}"
 
+  # shellcheck disable=SC2153
   export CURL_DLL_SUFFIX="${_CURL_DLL_SUFFIX}"
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
