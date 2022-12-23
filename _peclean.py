@@ -32,3 +32,4 @@ if len(sys.argv) > 2:
                 pass
             pe.OPTIONAL_HEADER.CheckSum = pe.generate_checksum()
             pe.write(fname)
+            pe.close()
