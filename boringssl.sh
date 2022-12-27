@@ -17,7 +17,8 @@
 #   e.g. rdrand-x86_64.asm.obj. This only affects libcrypto.a.
 #   This is intentionally written into a `.file` record and --reproducible
 #   does not disable it. See nasm/output/outcoff.c/coff_write_symbols()
-#   PR: https://github.com/netwide-assembler/nasm/pull/33 [MERGED]
+#   PR: https://github.com/netwide-assembler/nasm/pull/33
+#       [MERGED, RELEASE in v2.16]
 #   binutils strip is able to delete it (llvm-strip is not, as of 14.0.6).
 # - Objects built on different OSes result in a few byte differences.
 #   e.g. windows.c.obj, a_utf8.c.obj. But not a_octet.c.obj.
