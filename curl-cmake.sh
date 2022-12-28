@@ -128,6 +128,7 @@ _VER="$1"
       options="${options} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON"
       if [ "${_OPENSSL}" = 'boringssl' ]; then
         CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+        CPPFLAGS="${CPPFLAGS} -DHAVE_SSL_SET0_WBIO"
         if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
           LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
         else
@@ -139,6 +140,7 @@ _VER="$1"
         h3=1
       elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
         CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
+        CPPFLAGS="${CPPFLAGS} -DHAVE_SSL_SET0_WBIO"
         LIBS="${LIBS} -lbcrypt"  # for auto-detection
         [ "${_OPENSSL}" = 'openssl-quic' ] && h3=1
       fi

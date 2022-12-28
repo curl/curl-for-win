@@ -124,6 +124,7 @@ _VER="$1"
 
     if [ "${_OPENSSL}" = 'boringssl' ]; then
       CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+      CPPFLAGS="${CPPFLAGS} -DHAVE_SSL_SET0_WBIO"
       if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
         # Non-production workaround for:
         # mingw-w64 x64 winpthread static lib incompatible with UCRT.
@@ -169,6 +170,7 @@ _VER="$1"
     elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
       # Workaround for 3.x deprecation warnings
       CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
+      CPPFLAGS="${CPPFLAGS} -DHAVE_SSL_SET0_WBIO"
       [ "${_OPENSSL}" = 'openssl-quic' ] && h3=1
     fi
   fi
