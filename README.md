@@ -15,8 +15,8 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   [Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/)
   required.
 - [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3) and
-  [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support.
-  Detailed feature list [below](#features).
+  [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support,
+  and [more](#features).
 - Transparent builds, using open source code, run in
   [public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
   with auditable [logs](#build-logs).
