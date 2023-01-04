@@ -81,19 +81,19 @@ Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2       HTTPS-proxy IDN IPv6 K
 
 "mini", Schannel, without brotli and zstd:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
-Features: alt-svc AsynchDNS        gsasl HSTS HTTP2                   IDN IPv6 Kerberos Largefile libz          NTLM     SPNEGO SSL SSPI threadsafe         UnixSockets
+Features: alt-svc AsynchDNS        gsasl HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz          NTLM     SPNEGO SSL SSPI threadsafe         UnixSockets
 
 "micro", without libssh2 and gsasl:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp ws wss
-Features: alt-svc AsynchDNS              HSTS HTTP2                   IDN IPv6 Kerberos Largefile libz          NTLM     SPNEGO SSL SSPI threadsafe         UnixSockets
+Features: alt-svc AsynchDNS              HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz          NTLM     SPNEGO SSL SSPI threadsafe         UnixSockets
 
 "nano", HTTP/1.1:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp ws wss
-Features:         AsynchDNS              HSTS                         IDN IPv6 Kerberos Largefile libz          NTLM     SPNEGO SSL SSPI threadsafe         UnixSockets
+Features:         AsynchDNS              HSTS             HTTPS-proxy IDN IPv6 Kerberos Largefile libz          NTLM     SPNEGO SSL SSPI threadsafe         UnixSockets
 
 "pico", HTTP/1.1-only:
 Protocols:                                   http https
-Features:         AsynchDNS              HSTS                             IPv6          Largefile libz                          SSL SSPI threadsafe         UnixSockets
+Features:         AsynchDNS              HSTS             HTTPS-proxy     IPv6          Largefile libz                          SSL SSPI threadsafe         UnixSockets
 ```
 </p></details>
 
