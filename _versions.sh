@@ -33,8 +33,8 @@ export NGHTTP2_VER_='1.51.0'
 export NGHTTP2_HASH=66aa76d97c143f42295405a31413e5e7d157968dad9f957bb4b015b598882e6b
 export NGHTTP3_VER_='0.8.0'
 export NGHTTP3_HASH=360dff3a914136a3394cd4fe52cb2c7df2528ddbbd8a61231538bf46ab74b2d7
-export NGTCP2_VER_='0.12.0'
-export NGTCP2_HASH=0f7d07c4cd5165061199a3ebb108e92aea9267b44a91d39850b6e08684ea663e
+export NGTCP2_VER_='0.12.1'
+export NGTCP2_HASH=b9dd932b23e4cdac87eae7ca4b19fdfdd706186e6c95dc1da020426c06a04fab
 export WOLFSSL_VER_='5.5.4'
 export WOLFSSL_HASH=b7ee150e49def77c765bc02aac92ddeb0bebefd4cb12aa263d8f95e405221fb8
 export MBEDTLS_VER_='3.3.0'
@@ -65,4 +65,4 @@ export PEFILE_VER_='2022.5.30'
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV=''  # skip 3 for 7.87.0
+export _REV='1'  # skip 3 for 7.87.0
