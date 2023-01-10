@@ -7,8 +7,8 @@
 
 export CURL_VER_='7.87.0'
 export CURL_HASH=ee5f1a1955b0ed413435ef79db28b834ea5f0fb7c8cfb1ce47175cc3bee08fff
-export CACERT_VER_='2022-10-11'
-export CACERT_HASH=2cff03f9efdaf52626bd1b451d700605dc1ea000c5da56bd0fc59f8f43071040
+export CACERT_VER_='2023-01-10'
+export CACERT_HASH=fb1ecd641d0a02c01bc9036d513cb658bbda62a75e246bedbc01764560a639f0
 export BROTLI_VER_='1.0.9'
 export BROTLI_HASH=f9e8d81d0405ba66d181529af42a3354f838c939095ff99930da6aa9cdf6fe46
 export CARES_VER_='1.17.2'
@@ -65,4 +65,4 @@ export PEFILE_VER_='2022.5.30'
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='1'  # skip 3 for 7.87.0
+export _REV='2'  # skip 3 for 7.87.0
