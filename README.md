@@ -2,7 +2,6 @@
 Copyright 2014-present Viktor Szakats
 SPDX-License-Identifier: CC-BY-SA-4.0
 -->
-[![License](https://raw.githubusercontent.com/curl/curl-for-win/main/MIT.svg?sanitize=1)](LICENSE.md)
 [![Build status](https://ci.appveyor.com/api/projects/status/8yf6xjgq7u0cm013/branch/main?svg=true)](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main)
 
 # Reproducible curl binaries for Windows
