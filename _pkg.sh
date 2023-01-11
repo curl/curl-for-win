@@ -16,6 +16,7 @@ _cdo="$(pwd)"
 
 if [ "${_NAM}" != "${_UNIPKG}" ]; then
 
+  find "${_DST}" \( -name '*.txt' -o -name '*.md' -o -name '*.rst' \) -exec unix2dos --quiet --keepdate '{}' +
   find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' +
   chmod -R a+rw-s,go-w "${_DST}"
   # NOTE: Not effective on MSYS2:
