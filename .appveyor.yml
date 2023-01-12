@@ -2,48 +2,48 @@
 # SPDX-License-Identifier: MIT
 ---
 # yamllint disable rule:line-length
-version: 1.0.{build}
+version: '1.0.{build}'
 branches:
   only:
-    - main
-    - main-libressl
-    - main-boringssl
-    - main-mini
-    - dev
-    - dev-libressl
-    - dev-boringssl
-    - dev-mini
-    - test
-    - test-libressl
-    - test-boringssl
-    - test-mini
+    - 'main'
+    - 'main-libressl'
+    - 'main-boringssl'
+    - 'main-mini'
+    - 'dev'
+    - 'dev-libressl'
+    - 'dev-boringssl'
+    - 'dev-mini'
+    - 'test'
+    - 'test-libressl'
+    - 'test-boringssl'
+    - 'test-mini'
 # https://www.appveyor.com/docs/build-environment/#build-worker-images
-image: Ubuntu2004
+image: 'Ubuntu2004'
 services:
-  - docker
+  - 'docker'
 clone_depth: 8
 build:
-  verbosity: detailed
+  verbosity: 'detailed'
 environment:
-  DOCKER_IMAGE: debian:testing-20221219-slim
-  CW_LLVM_MINGW_DL: 1
-  CW_LLVM_MINGW_ONLY: 0
-  CW_MAP: 0
-  CW_JOBS: 2
+  DOCKER_IMAGE: 'debian:testing-20221219-slim'
+  CW_LLVM_MINGW_DL: '1'
+  CW_LLVM_MINGW_ONLY: '0'
+  CW_MAP: '0'
+  CW_JOBS: '2'
   SIGN_CODE_GPG_PASS:
-    secure: N+xoeCLwFHPsb/KBdgOIvJ0NnbVrBI/PLcPkPBTBmedgDVUBlbEZu7HrJcEHNyuR
+    secure: 'N+xoeCLwFHPsb/KBdgOIvJ0NnbVrBI/PLcPkPBTBmedgDVUBlbEZu7HrJcEHNyuR'
   SIGN_CODE_KEY_PASS:
-    secure: vvbDZUlaB2WICMOD2zqO3MyPRpy3S06hE3ShA0q+YXWDdj4GX+am+RepjZIlpxtB
-  SIGN_PKG_KEY_ID: 99480C09BC89B68A07643F308C8F5B1419BDCAB8
+    secure: 'vvbDZUlaB2WICMOD2zqO3MyPRpy3S06hE3ShA0q+YXWDdj4GX+am+RepjZIlpxtB'
+  SIGN_PKG_KEY_ID: '99480C09BC89B68A07643F308C8F5B1419BDCAB8'
   SIGN_PKG_GPG_PASS:
-    secure: QjsSPh1Fo56DuIk+LqHmiMyP2xcAsrtdiFCTOkZkv88/dTFJQDg63RcZFr8+BeFc
+    secure: 'QjsSPh1Fo56DuIk+LqHmiMyP2xcAsrtdiFCTOkZkv88/dTFJQDg63RcZFr8+BeFc'
   SIGN_PKG_KEY_PASS:
-    secure: oiRd7ampzOXgpGQBEkKG1uY/1LIAfEA5HAWPxNrC4smeZHkfqKaNTpKPTE7lzpcv
+    secure: 'oiRd7ampzOXgpGQBEkKG1uY/1LIAfEA5HAWPxNrC4smeZHkfqKaNTpKPTE7lzpcv'
   DEPLOY_GPG_PASS:
-    secure: bnL3+KC1CKO+vEE2MzgeoNX6rGuwB6L/ItM55z6Dd39R3JYVBGig16FQWNMzSRQK
+    secure: 'bnL3+KC1CKO+vEE2MzgeoNX6rGuwB6L/ItM55z6Dd39R3JYVBGig16FQWNMzSRQK'
   DEPLOY_KEY_PASS:
-    secure: yqzKOttlHYVNIqJWC/tnmB8Qu+87mOVxJa7h6uD7WLU32XjUhTEDp9ZwpgmQD1RH
-  DO_NOT_TRACK: 1
+    secure: 'yqzKOttlHYVNIqJWC/tnmB8Qu+87mOVxJa7h6uD7WLU32XjUhTEDp9ZwpgmQD1RH'
+  DO_NOT_TRACK: '1'
 build_script:
   - sh: |
       time docker pull "${DOCKER_IMAGE}"
@@ -55,8 +55,8 @@ build_script:
         sh -c ./_ci-linux-debian.sh
 artifacts:
   - path: '*-*-mingw*.*'
-    name: package
+    name: 'package'
   - path: 'all-mingw*.*'
-    name: all
+    name: 'all'
 # init:
 #   - sh: curl --disable --user-agent '' --fail --silent --location --proto-redir =https 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -

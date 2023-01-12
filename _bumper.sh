@@ -42,7 +42,7 @@ Authorization: Bearer ${token}
 EOF
 )"
 
-echo; echo "  DOCKER_IMAGE: ${name}:${tag}"
+echo; echo "  DOCKER_IMAGE: '${name}:${tag}'"
 
 # Find out the latest AppVeyor CI Ubuntu worker image
 
