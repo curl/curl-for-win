@@ -29,9 +29,6 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   [AppVeyor CI](https://www.appveyor.com/). Using reproducible OS image
   [`debian:testing-slim`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing/slim)
   via [Docker](https://hub.docker.com/_/debian/).
-- Built with
-  [hardening](https://en.wikipedia.org/wiki/Hardening_%28computing%29)
-  options enabled.
 - Binaries use
   [SEH](https://en.wikipedia.org/wiki/Microsoft-specific_exception_handling_mechanisms#SEH),
   except x86, which uses [DWARF](https://en.wikipedia.org/wiki/DWARF).
