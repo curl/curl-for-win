@@ -318,11 +318,7 @@ build_single_target() {
     _ZLIB='zlib'
   fi
   export _OPENSSL=''
-  if   [ -d wolfssl ]; then
-    # Disable OpenSSL when wolfSSL is enabled.
-    # These two do not compile or link together.
-    _OPENSSL=''
-  elif [ -d libressl ]; then
+  if   [ -d libressl ]; then
     _OPENSSL='libressl'
   elif [ -d boringssl ]; then
     _OPENSSL='boringssl'
