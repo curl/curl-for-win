@@ -27,6 +27,7 @@ cat <<EOF
     "descending": true,
     "url": "https://c-ares.org/download/c-ares-{ver}.tar.gz",
     "sig": ".asc",
+    "ref_mask": "c-ares-([0-9]+(\\\\.[0-9]+)+)\\\\.tar.gz",
     "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
   },
   {
@@ -42,7 +43,7 @@ cat <<EOF
     "url": "https://curl.se/ca/cacert-{ver}.pem",
     "sha": ".sha256",
     "ref_url": "https://curl.se/docs/caextract.html",
-    "ref_mask": "[0-9]{4}-[0-9]{2}-[0-9]{2}"
+    "ref_mask": "([0-9]{4}-[0-9]{2}-[0-9]{2})"
   },
   {
     "name": "gsasl",
@@ -78,7 +79,7 @@ cat <<EOF
     "url": "https://github.com/wolfSSL/wolfssh/archive/refs/tags/v{ver}-stable.tar.gz",
     "sig": "https://github.com/wolfSSL/wolfssh/releases/download/v{ver}-stable/wolfssh-{ver}-stable.tar.gz.asc",
     "redir": "redir",
-    "ref_mask": "[0-9]+\\\\.[0-9]+\\\\.[0-9]+",
+    "ref_mask": "([0-9]+\\\\.[0-9]+\\\\.[0-9]+)",
     "keys": "A2A48E7BCB96C5BECB987314EBC80E415CA29677"
   },
   {
@@ -116,7 +117,7 @@ cat <<EOF
     "url": "https://github.com/wolfSSL/wolfssl/archive/refs/tags/v{ver}-stable.tar.gz",
     "sig": "https://github.com/wolfSSL/wolfssl/releases/download/v{ver}-stable/wolfssl-{ver}-stable.tar.gz.asc",
     "redir": "redir",
-    "ref_mask": "[0-9]+\\\\.[0-9]+\\\\.[0-9]+",
+    "ref_mask": "([0-9]+\\\\.[0-9]+\\\\.[0-9]+)",
     "keys": "A2A48E7BCB96C5BECB987314EBC80E415CA29677"
   },
   {
@@ -152,7 +153,7 @@ cat <<EOF
     "tag": "^master$",
     "ref_url": "https://chromium.googlesource.com/chromium/src/+/refs/heads/main/DEPS?format=text",
     "ref_expr": "boringssl_revision",
-    "ref_mask": "[0-9a-fA-F]{32,}"
+    "ref_mask": "([0-9a-fA-F]{32,})"
   },
   {
     "name": "zlibng",
@@ -306,7 +307,7 @@ check_update() {
       urldir="$(dirname "${url}")/"
     fi
     mask="${pkg}[._-]v?([0-9]+(\.[0-9]+)+)\.t"
-    [ -n "$9" ] && mask="($9)"
+    [ -n "$9" ] && mask="$9"
     res="$(my_curl "${urldir}" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
       | grep -a -o -E -- "${mask}" | "${latest}" -1)"
     if [[ "${res}" =~ ${mask} ]]; then
