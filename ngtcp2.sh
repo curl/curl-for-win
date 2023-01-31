@@ -56,12 +56,6 @@ _VER="$1"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
-  # Delete '_static' suffixes from static lib names to make these behave
-  # like most other projects do and dependents find it.
-  for fn in "${_PP}"/lib/*_static.a; do
-    mv "${fn}" "$(echo "${fn}" | sed 's/_static//')"
-  done
-
   # Delete .pc files
   rm -r -f "${_PP}"/lib/pkgconfig
 
