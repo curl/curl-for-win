@@ -194,7 +194,7 @@ esac
 
 # Form suffix for alternate builds
 export _FLAV=''
-if [ "${_BRANCH#*nano*}" != "${_BRANCH}" ]; then
+if [ "${_BRANCH#*pico*}" != "${_BRANCH}" ]; then
   _FLAV='-pico'
 elif [ "${_BRANCH#*nano*}" != "${_BRANCH}" ]; then
   _FLAV='-nano'
