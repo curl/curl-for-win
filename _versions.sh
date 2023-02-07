@@ -59,7 +59,7 @@ export LLVM_MINGW_MAC_VER_='20220906'
 export LLVM_MINGW_MAC_HASH=9c259f125b9a0d5a8b393c3d2a35e9fccd539f46c25d1424fcc62513fa40f786
 export LLVM_MINGW_WIN_VER_='20220906'
 export LLVM_MINGW_WIN_HASH=06c8523447a369303f7a67dda1d2b66a6b2e460640126458f69f1d98afd3fdf1
-export PEFILE_VER_='2022.5.30'
+export PEFILE_VER_='2023.2.7'
 
 # Create revision string
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
