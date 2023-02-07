@@ -15,6 +15,8 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
+  CPPFLAGS='-DWOLFSSL_IP_ALT_NAME'  # https://github.com/wolfSSL/wolfssl/issues/6063
+
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
     '-DBUILD_SHARED_LIBS=OFF' \
@@ -24,7 +26,7 @@ _VER="$1"
     '-DWOLFSSL_AESCTR=ON' \
     '-DWOLFSSL_EXAMPLES=OFF' \
     '-DWOLFSSL_CRYPT_TESTS=OFF' \
-    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
+    "-DCMAKE_C_FLAGS=-Wno-unused-command-line-argument ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
