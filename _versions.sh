@@ -39,8 +39,8 @@ export WOLFSSL_VER_='5.5.4'
 export WOLFSSL_HASH=b7ee150e49def77c765bc02aac92ddeb0bebefd4cb12aa263d8f95e405221fb8
 export MBEDTLS_VER_='3.3.0'
 export MBEDTLS_HASH=113fa84bc3cf862d56e7be0a656806a5d02448215d1e22c98176b1c372345d33
-export OPENSSL_QUIC_VER_='3.0.7'
-export OPENSSL_QUIC_HASH=dcdf14cb7840980217fcb467c56b15cc59a5d44338129e43cf41ec3d4309b6ad
+export OPENSSL_QUIC_VER_='3.0.8'
+export OPENSSL_QUIC_HASH=fee9c341d77625ef4b0a5ae90c2609560a5f50a1b3dafec559cefd5e129cb329
 export OPENSSL_VER_='3.0.8'
 export OPENSSL_HASH=6c13d2bf38fdf31eac3ce2a347073673f5d63263398f1f69d0df4a41253e4b3e
 export BORINGSSL_VER_='62ab404cb560a6886196fe65cd3381f2ae3166ca'
@@ -65,4 +65,4 @@ export PEFILE_VER_='2023.2.7'
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='4'
+export _REV='5'
