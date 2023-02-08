@@ -44,6 +44,7 @@ environment:
   DEPLOY_KEY_PASS:
     secure: 'yqzKOttlHYVNIqJWC/tnmB8Qu+87mOVxJa7h6uD7WLU32XjUhTEDp9ZwpgmQD1RH'
   DO_NOT_TRACK: '1'
+  GOTELEMETRY: 'off'
 build_script:
   - sh: |
       time docker pull "${DOCKER_IMAGE}"
