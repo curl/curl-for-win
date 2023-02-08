@@ -77,8 +77,7 @@ _VER="$1"
     -e '/^add_custom_command[(]$/,/[)]$/d' \
     -e '/^add_custom_target[(]$/,/[)]$/d' \
     -e '/add_library[(]boringssl_gtest/d' \
-    -e '/target_include_directories[(]boringssl_gtest/d' \
-    -e '/include_directories[(]third_party\/googletest/d' \
+    -e '/target_include_directories[(]$/,/[)]$/d' \
     -e '/add_custom_target[(]all_tests[)]/d' \
     -e '/add_library[(]crypto_test_data/d' \
     -E -e '/add_subdirectory[(](ssl\/test|tool|util\/fipstools|decrepit)/d' \
