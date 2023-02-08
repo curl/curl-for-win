@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2014-present Viktor Szakats. See LICENSE.md
+# Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
 # WARNING: libssh uses hard-coded world-writable paths (/etc/..., ~/.ssh/) to

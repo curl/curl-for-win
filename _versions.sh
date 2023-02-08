@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2015-present Viktor Szakats. See LICENSE.md
+# Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
 # NOTE: Bump nghttp3 and ngtcp2 together with curl.

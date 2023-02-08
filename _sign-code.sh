@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2016-present Viktor Szakats. See LICENSE.md
+# Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
 # shellcheck disable=SC3040

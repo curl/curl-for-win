@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2014-present Viktor Szakats. See LICENSE.md
+# Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
 # https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2017-present Viktor Szakats. See LICENSE.md
+# Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
 # shellcheck disable=SC3040

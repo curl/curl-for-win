@@ -1,5 +1,5 @@
 <!--
-Copyright 2022-present Viktor Szakats
+Copyright (C) Viktor Szakats
 SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 # How to contribute to curl-for-win

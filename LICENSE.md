@@ -1,7 +1,7 @@
 The MIT License (MIT)
 =====================
 
-© 2014–present Viktor Szakats
+Copyright (C) Viktor Szakats
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

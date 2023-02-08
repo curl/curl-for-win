@@ -1,5 +1,5 @@
 <!--
-Copyright 2014-present Viktor Szakats
+Copyright (C) Viktor Szakats
 SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 [![Build status](https://ci.appveyor.com/api/projects/status/8yf6xjgq7u0cm013/branch/main?svg=true)](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main)
@@ -116,5 +116,5 @@ not represent or imply any future commitment by the participants of the
 project.
 
 ---
-This document &copy;&nbsp;2014&ndash;present [Viktor Szakats](https://vsz.me/),
+This document &copy [Viktor Szakats](https://vsz.me/),
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
