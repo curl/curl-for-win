@@ -116,5 +116,5 @@ not represent or imply any future commitment by the participants of the
 project.
 
 ---
-This document &copy [Viktor Szakats](https://vsz.me/),
+This document &copy; [Viktor Szakats](https://vsz.me/),
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
