@@ -117,4 +117,4 @@ project.
 
 ---
 This document &copy;&nbsp;2014&ndash;present [Viktor Szakats](https://vsz.me/),
-[CC BY-SA Creative Commons Attribution-ShareAlike 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
