@@ -51,8 +51,8 @@ export ZLIBNG_VER_='2.0.6'
 export ZLIBNG_HASH=8258b75a72303b661a238047cb348203d88d9dddf85d480ed885f375916fcab6
 export ZLIB_VER_='1.2.13'
 export ZLIB_HASH=d14c38e313afc35a9a8760dadf26042f51ea0f5d154b0630a31da0540107fb98
-export ZSTD_VER_='1.5.2'
-export ZSTD_HASH=7c42d56fac126929a6a85dbc73ff1db2411d04f104fae9bdea51305663a83fd0
+export ZSTD_VER_='1.5.4'
+export ZSTD_HASH=0f470992aedad543126d06efab344dc5f3e171893810455787d38347343a4424
 export LLVM_MINGW_LINUX_VER_='20220906'
 export LLVM_MINGW_LINUX_HASH=ee00708bdd65eeaa88d5fa89ad7e3fa1d6bae8093ee4559748e431e55f7568ec
 export LLVM_MINGW_MAC_VER_='20220906'
@@ -65,4 +65,4 @@ export PEFILE_VER_='2023.2.7'
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='6'
+export _REV='7'
