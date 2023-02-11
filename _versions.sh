@@ -7,6 +7,12 @@
 
 export CURL_VER_='7.87.0'
 export CURL_HASH=ee5f1a1955b0ed413435ef79db28b834ea5f0fb7c8cfb1ce47175cc3bee08fff
+# Create revision string
+# NOTE: Set _REV to empty after bumping CURL_VER_, and
+#       set it to 1 then increment by 1 each time bumping a dependency
+#       version or pushing a CI rebuild for the main branch.
+export _REV='7'
+
 export CACERT_VER_='2023-01-10'
 export CACERT_HASH=fb1ecd641d0a02c01bc9036d513cb658bbda62a75e246bedbc01764560a639f0
 export BROTLI_VER_='1.0.9'
@@ -60,9 +66,3 @@ export LLVM_MINGW_MAC_HASH=9c259f125b9a0d5a8b393c3d2a35e9fccd539f46c25d1424fcc62
 export LLVM_MINGW_WIN_VER_='20220906'
 export LLVM_MINGW_WIN_HASH=06c8523447a369303f7a67dda1d2b66a6b2e460640126458f69f1d98afd3fdf1
 export PEFILE_VER_='2023.2.7'
-
-# Create revision string
-# NOTE: Set _REV to empty after bumping CURL_VER_, and
-#       set it to 1 then increment by 1 each time bumping a dependency
-#       version or pushing a CI rebuild for the main branch.
-export _REV='7'
