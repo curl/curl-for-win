@@ -11,7 +11,7 @@ export CURL_HASH=ee5f1a1955b0ed413435ef79db28b834ea5f0fb7c8cfb1ce47175cc3bee08ff
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='7'
+export _REV='8'
 
 export CACERT_VER_='2023-01-10'
 export CACERT_HASH=fb1ecd641d0a02c01bc9036d513cb658bbda62a75e246bedbc01764560a639f0
@@ -35,8 +35,8 @@ export LIBSSH_VER_='0.10.4'
 export LIBSSH_HASH=07392c54ab61476288d1c1f0a7c557b50211797ad00c34c3af2bbc4dbc4bd97d
 export LIBSSH2_VER_='1.10.0'
 export LIBSSH2_HASH=2d64e90f3ded394b91d3a2e774ca203a4179f69aebee03003e5a6fa621e41d51
-export NGHTTP2_VER_='1.51.0'
-export NGHTTP2_HASH=66aa76d97c143f42295405a31413e5e7d157968dad9f957bb4b015b598882e6b
+export NGHTTP2_VER_='1.52.0'
+export NGHTTP2_HASH=3ea9f0439e60469ad4d39cb349938684ffb929dd7e8e06a7bffe9f9d21f8ba7d
 export NGHTTP3_VER_='0.8.0'
 export NGHTTP3_HASH=360dff3a914136a3394cd4fe52cb2c7df2528ddbbd8a61231538bf46ab74b2d7
 export NGTCP2_VER_='0.13.1'
