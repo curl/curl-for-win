@@ -66,7 +66,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # TODO:
 #   - Change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
 #   - Drop x86 builds. https://data.firefox.com/dashboard/hardware
-#   - GNU multiarg options `--opt value` -> `-—opt=value`?
 
 # Resources:
 #   - https://blog.llvm.org/2019/11/deterministic-builds-with-clang-and-lld.html
