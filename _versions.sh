@@ -5,13 +5,13 @@
 
 # NOTE: Bump nghttp3 and ngtcp2 together with curl.
 
-export CURL_VER_='7.87.0'
-export CURL_HASH=ee5f1a1955b0ed413435ef79db28b834ea5f0fb7c8cfb1ce47175cc3bee08fff
+export CURL_VER_='7.88.0'
+export CURL_HASH=fd17432cf28714a4cf39d89e26b8ace0d8901199fe5d01d75eb0ae3bbfcc731f
 # Create revision string
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
 #       version or pushing a CI rebuild for the main branch.
-export _REV='8'
+export _REV=''
 
 export CACERT_VER_='2023-01-10'
 export CACERT_HASH=fb1ecd641d0a02c01bc9036d513cb658bbda62a75e246bedbc01764560a639f0
