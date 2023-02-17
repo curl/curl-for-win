@@ -50,9 +50,9 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 
 # Features
 
-Default build with [quictls](https://github.com/quictls/openssl/),
-and [Schannel](https://learn.microsoft.com/windows/win32/com/schannel)
-runtime-selectable option:
+Uses [quictls](https://github.com/quictls/openssl/),
+with runtime-selectable option
+[Schannel](https://learn.microsoft.com/windows/win32/com/schannel):
 ```
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
 Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM     SPNEGO SSL SSPI threadsafe TLS-SRP UnixSockets zstd
