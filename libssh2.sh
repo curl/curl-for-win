@@ -46,7 +46,7 @@ _VER="$1"
     elif [ "${_OPENSSL}" = 'libressl' ]; then
       CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
       LIBS="${LIBS} -lbcrypt"
-    elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
+    elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
       CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
       LIBS="${LIBS} -lbcrypt"
     fi

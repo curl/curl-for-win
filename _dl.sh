@@ -126,7 +126,7 @@ cat <<EOF
     "redir": "redir"
   },
   {
-    "name": "openssl-quic",
+    "name": "quictls",
     "url": "https://github.com/quictls/openssl/archive/refs/heads/openssl-{ver}+quic.tar.gz",
     "redir": "redir",
     "tag": "openssl-\\\\d+\\\\.\\\\d+\\\\.\\\\d+\\\\+quic$",
@@ -730,8 +730,8 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
     live_dl openssl "${OPENSSL_VER_}"
     live_xt openssl "${OPENSSL_HASH}"
   else
-    live_dl openssl-quic "${OPENSSL_QUIC_VER_}"
-    live_xt openssl-quic "${OPENSSL_QUIC_HASH}"
+    live_dl quictls "${QUICTLS_VER_}"
+    live_xt quictls "${QUICTLS_HASH}"
   fi
   need_cacert=1
 fi

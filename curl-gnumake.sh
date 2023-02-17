@@ -167,11 +167,11 @@ _VER="$1"
       h3=1
     elif [ "${_OPENSSL}" = 'libressl' ]; then
       h3=1
-    elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
+    elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
       # Workaround for 3.x deprecation warnings
       CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
       CPPFLAGS="${CPPFLAGS} -DHAVE_SSL_SET0_WBIO"
-      [ "${_OPENSSL}" = 'openssl-quic' ] && h3=1
+      [ "${_OPENSSL}" = 'quictls' ] && h3=1
     fi
   fi
 

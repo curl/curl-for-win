@@ -85,28 +85,28 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # Supported build tools:
 #
-#   zlib          cmake
-#   zlibng        cmake
-#   zstd          cmake
-#   brotli        cmake
-#   cares         cmake
-#   libunistring  autotools
-#   libiconv      autotools
-#   libidn2       autotools
-#   libpsl        autotools
-#   gsasl         autotools
-#   nghttp2       cmake
-#   nghttp3       cmake
-#   ngtcp2        cmake
-#   wolfssl       autotools, cmake
-#   mbedtls       cmake
-#   openssl       proprietary
-#   boringssl     cmake
-#   libressl      autotools, cmake
-#   wolfssh       autotools
-#   libssh        cmake
-#   libssh2       autotools, cmake
-#   curl          gnumake, autotools, cmake
+#   zlib             cmake
+#   zlibng           cmake
+#   zstd             cmake
+#   brotli           cmake
+#   cares            cmake
+#   libunistring     autotools
+#   libiconv         autotools
+#   libidn2          autotools
+#   libpsl           autotools
+#   gsasl            autotools
+#   nghttp2          cmake
+#   nghttp3          cmake
+#   ngtcp2           cmake
+#   wolfssl          autotools, cmake
+#   mbedtls          cmake
+#   openssl/quictls  proprietary
+#   boringssl        cmake
+#   libressl         autotools, cmake
+#   wolfssh          autotools
+#   libssh           cmake
+#   libssh2          autotools, cmake
+#   curl             gnumake, autotools, cmake
 
 cd "$(dirname "$0")"
 
@@ -321,8 +321,8 @@ build_single_target() {
     _OPENSSL='libressl'
   elif [ -d boringssl ]; then
     _OPENSSL='boringssl'
-  elif [ -d openssl-quic ]; then
-    _OPENSSL='openssl-quic'
+  elif [ -d quictls ]; then
+    _OPENSSL='quictls'
   elif [ -d openssl ]; then
     _OPENSSL='openssl'
   fi
@@ -754,7 +754,7 @@ build_single_target() {
   bld boringssl       "${BORINGSSL_VER_}"
   bld libressl         "${LIBRESSL_VER_}"
   bld openssl           "${OPENSSL_VER_}"
-  bld openssl-quic "${OPENSSL_QUIC_VER_}" openssl
+  bld quictls           "${QUICTLS_VER_}" openssl
   bld gsasl               "${GSASL_VER_}"
   bld ngtcp2             "${NGTCP2_VER_}"
   bld nghttp2           "${NGHTTP2_VER_}"

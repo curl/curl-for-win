@@ -50,7 +50,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 
 # Features
 
-Default build with OpenSSL (QUIC [fork](https://github.com/quictls/openssl/)),
+Default build with [quictls](https://github.com/quictls/openssl/),
 and [Schannel](https://learn.microsoft.com/windows/win32/com/schannel)
 runtime-selectable option:
 ```

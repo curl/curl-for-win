@@ -143,10 +143,10 @@ _VER="$1"
         options="${options} --disable-tls-srp"
         LIBS="${LIBS} -lbcrypt"  # for auto-detection
         h3=1
-      elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
+      elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
         options="${options} --enable-tls-srp"
         LIBS="${LIBS} -lbcrypt"  # for auto-detection
-        [ "${_OPENSSL}" = 'openssl-quic' ] && h3=1
+        [ "${_OPENSSL}" = 'quictls' ] && h3=1
       fi
     else
       options="${options} --disable-tls-srp"
@@ -261,7 +261,7 @@ _VER="$1"
       LIBS="${LIBS} -lngtcp2"
       if [ "${_OPENSSL}" = 'boringssl' ]; then
         LIBS="${LIBS} -lngtcp2_crypto_boringssl"
-      elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'libressl' ]; then
+      elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ]; then
         LIBS="${LIBS} -lngtcp2_crypto_openssl"
       elif [ -d ../wolfssl ]; then
         LIBS="${LIBS} -lngtcp2_crypto_wolfssl"

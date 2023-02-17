@@ -138,11 +138,11 @@ _VER="$1"
       elif [ "${_OPENSSL}" = 'libressl' ]; then
         LIBS="${LIBS} -lbcrypt"  # for auto-detection
         h3=1
-      elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
+      elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
         CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
         CPPFLAGS="${CPPFLAGS} -DHAVE_SSL_SET0_WBIO"
         LIBS="${LIBS} -lbcrypt"  # for auto-detection
-        [ "${_OPENSSL}" = 'openssl-quic' ] && h3=1
+        [ "${_OPENSSL}" = 'quictls' ] && h3=1
       fi
     else
       options="${options} -DCURL_USE_OPENSSL=OFF"

@@ -74,7 +74,7 @@ _VER="$1"
       CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
       LIBS="${LIBS} -lbcrypt"
       LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
-    elif [ "${_OPENSSL}" = 'openssl-quic' ] || [ "${_OPENSSL}" = 'openssl' ]; then
+    elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
       CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
       LIBS="${LIBS} -lbcrypt"
       LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
