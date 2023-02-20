@@ -242,6 +242,8 @@ touch hashes.txt "${_BLD}" "${_URLS}"
 export _REVSUFFIX="${_REV}"; [ -z "${_REVSUFFIX}" ] || _REVSUFFIX="_${_REVSUFFIX}"
 
 # Download sources
+# FIXME: Since 090c1f95f7d063e99a2eca0a352f27bf56036de7, versions/hashes
+#        remain unchanged after overriding them in ./_dl.sh for 'dev' builds.
 ./_dl.sh
 
 # Find and setup llvm-mingw downloaded above.
