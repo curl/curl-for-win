@@ -142,16 +142,16 @@ elif [ -n "${CI_JOB_ID:-}" ]; then
 else
   _SLUG="curl/${_SELF}"
   _LOGURL=''
-  _COMMIT="$(git rev-parse --verify HEAD)"
-  _COMMIT_SHORT="$(git rev-parse --short=8 HEAD)"
+  _COMMIT="$(git rev-parse --verify HEAD || true)"
+  _COMMIT_SHORT="$(git rev-parse --short=8 HEAD || true)"
 fi
 echo "${_LOGURL}" | tee "${_LOG}"
 
 export _BRANCH="${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF:-}${CW_CONFIG:-}"
-[ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD)"
+[ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD || true)"
 [ -n "${_BRANCH}" ] || _BRANCH='main'
 if command -v git >/dev/null 2>&1; then
-  _URL_BASE="$(git ls-remote --get-url | sed 's/\.git$//')"
+  _URL_BASE="$(git ls-remote --get-url || true | sed 's/\.git$//')"
   _URL_FULL="${_URL_BASE}/tree/${_COMMIT}"
   _TAR="${_URL_BASE}/archive/${_COMMIT}.tar.gz"
 else
