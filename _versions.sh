@@ -5,8 +5,8 @@
 
 # NOTE: Bump nghttp3 and ngtcp2 together with curl.
 
-export CURL_VER_='7.88.0'
-export CURL_HASH=fd17432cf28714a4cf39d89e26b8ace0d8901199fe5d01d75eb0ae3bbfcc731f
+export CURL_VER_='7.88.1'
+export CURL_HASH=1dae31b2a7c1fe269de99c0c31bb488346aab3459b5ffca909d6938249ae415f
 # Create revision string
 # NOTE: Set _REV to empty after bumping CURL_VER_, and
 #       set it to 1 then increment by 1 each time bumping a dependency
