@@ -768,11 +768,11 @@ if [ "${need_cacert}" = '1' ]; then
 fi
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-  CURL_VER_='7.86.0-dev'
+  CURL_VER_='7.88.1-dev'
   CURL_HASH=
   my_curl --location --proto-redir =https \
     --output pkg.bin \
-    'https://github.com/curl/curl/archive/038bfb8522a93328b7e65bd2b6b8387c974b9ac8.tar.gz'
+    'https://github.com/curl/curl/archive/41dfb7f516c8a9659782df695528c9d32b5653d6.tar.gz'
 else
   live_dl curl "${CURL_VER_}"
 fi
