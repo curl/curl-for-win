@@ -31,8 +31,8 @@ _VER="$1"
     options="${options} -DZLIB_COMPAT=ON"
     options="${options} -DZLIB_ENABLE_TESTS=OFF"
   else
-    # clang 15+ workaround for: https://github.com/madler/zlib/issues/633
-    if [ "${_CC}" = 'clang' ] && \
+    # llvm/clang 15+ workaround for: https://github.com/madler/zlib/issues/633
+    if [ "${_CC}" = 'llvm' ] && \
        [ "${_CCVER}" != '14' ]; then
       CFLAGS="${CFLAGS} -Wno-deprecated-non-prototype"
     fi

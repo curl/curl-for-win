@@ -65,7 +65,7 @@ _VER="$1"
   options="${options} no-filenames -DUSE_BCRYPTGENRANDOM -lbcrypt"
   [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128"
 
-  if [ "${_CC}" = 'clang' ]; then
+  if [ "${_CC}" = 'llvm' ]; then
     # Avoid warnings when passing C compiler options to the linker:
     options="${options} -Wno-unused-command-line-argument"
     export CC="${_CC_GLOBAL}"

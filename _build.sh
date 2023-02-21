@@ -47,14 +47,14 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        x64        build x64 target only
 #        x86        build x86 target only
 #        msvcrt     build against msvcrt instead of UCRT
-#        gcc        build with GCC (use clang if not specified)
+#        gcc        build with GCC (use llvm if not specified)
 #        unicode    build curl in UNICODE mode [EXPERIMENTAL]
 #
 # CW_JOBS
 #      Number of parallel make jobs. Default: 2
 #
 # CW_CCSUFFIX
-#      clang suffix. E.g. '-8' for clang-8.
+#      llvm/clang suffix. E.g. '-8' for clang-8.
 #      Optional. Default: (empty)
 #
 # SIGN_CODE_GPG_PASS, SIGN_CODE_KEY_PASS: for code signing
@@ -164,7 +164,7 @@ export _CACERT='cacert.pem'
 
 [ -n "${CW_CCSUFFIX:-}" ] || CW_CCSUFFIX=''
 
-export _CC='clang'
+export _CC='llvm'
 [ ! "${_BRANCH#*gcc*}" = "${_BRANCH}" ] && _CC='gcc'
 
 export _CRT='ucrt'
@@ -343,10 +343,10 @@ build_single_target() {
   # Toolchain
   export _TOOLCHAIN
   if [ "${use_llvm_mingw}" = '1' ]; then
-    if [ "${_CC}" != 'clang' ] || \
+    if [ "${_CC}" != 'llvm' ] || \
        [ "${_CRT}" != 'ucrt' ] || \
        [ -z "${CW_LLVM_MINGW_PATH:-}" ]; then
-      echo "! WARNING: '${_BRANCH}/${_CPU}' builds require clang, UCRT and CW_LLVM_MINGW_PATH. Skipping."
+      echo "! WARNING: '${_BRANCH}/${_CPU}' builds require llvm/clang, UCRT and CW_LLVM_MINGW_PATH. Skipping."
       return
     fi
     _TOOLCHAIN='llvm-mingw'
@@ -403,7 +403,7 @@ build_single_target() {
   else
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       export PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
-    elif [ "${_CC}" = 'clang' ] && [ "${_OS}" = 'mac' ]; then
+    elif [ "${_CC}" = 'llvm' ] && [ "${_OS}" = 'mac' ]; then
       _MAC_LLVM_PATH='/usr/local/opt/llvm/bin'
       export PATH="${_MAC_LLVM_PATH}:${_ori_path}"
     fi
@@ -440,7 +440,7 @@ build_single_target() {
     fi
   fi
 
-  if [ "${_CC}" = 'clang' ]; then
+  if [ "${_CC}" = 'llvm' ]; then
     ccver="$("clang${CW_CCSUFFIX}" -dumpversion)"
   else
     ccver="$("${_CCPREFIX}gcc" -dumpversion)"
@@ -506,7 +506,7 @@ build_single_target() {
 
   export _LD
   _BINUTILS_PREFIX="${_CCPREFIX}"
-  if [ "${_CC}" = 'clang' ]; then
+  if [ "${_CC}" = 'llvm' ]; then
     _CC_GLOBAL="clang${CW_CCSUFFIX} --target=${_TRIPLET}"
     _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET}"
     if [ -n "${_SYSROOT}" ]; then
@@ -514,8 +514,8 @@ build_single_target() {
       _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --with-sysroot=${_SYSROOT}"
     fi
     if [ "${_OS}" = 'linux' ]; then
-      # We used to pass this via CFLAGS for CMake to make it detect clang, so
-      # we need to pass this via CMAKE_C_FLAGS, though meant for the linker.
+      # We used to pass this via CFLAGS for CMake to make it detect llvm/clang,
+      # so we need to pass this via CMAKE_C_FLAGS, though meant for the linker.
       if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${CW_LLVM_MINGW_PATH}/${_TRIPLET}/lib"
       else
@@ -578,7 +578,7 @@ build_single_target() {
   fi
 
   # Needed to exclude compiler info from objects, but for our Windows COFF
-  # outputs this seems to be a no-op as of clang 13.x/14.x.
+  # outputs this seems to be a no-op as of llvm/clang 13.x/14.x.
   # Still necessary with GCC 12.1.0 though.
   if [ "${_CC}" = 'gcc' ]; then
     _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-ident"
@@ -586,7 +586,7 @@ build_single_target() {
 
   # for boringssl
   export _STRIP_BINUTILS=''
-  if [ "${_CC}" = 'clang' ]; then
+  if [ "${_CC}" = 'llvm' ]; then
     if [ "${_CPU}" = 'x64' ] || \
        [ "${_CPU}" = 'x86' ]; then
       # Make sure to pick the prefixed binutils strip tool from an unmodified
@@ -603,7 +603,7 @@ build_single_target() {
   export _STRIP="${_BINUTILS_PREFIX}strip"
   export _OBJDUMP="${_BINUTILS_PREFIX}objdump"
   export RC
-  if [ "${_CC}" = 'clang' ] && \
+  if [ "${_CC}" = 'llvm' ] && \
      [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && \
      [ "${_OS}" = 'linux' ] && \
      [ -x /usr/bin/llvm-rc ]; then
@@ -624,7 +624,7 @@ build_single_target() {
   # do not (yet) support adding custom options. Add a wrapper for these
   # builds that calls llvm-windres with the necessary custom options.
   export _RC_WRAPPER=''
-  if [ "${_CC}" = 'clang' ] && \
+  if [ "${_CC}" = 'llvm' ] && \
      [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && \
      [ -n "${_RCFLAGS_GLOBAL}" ]; then
     _RC_WRAPPER="$(pwd)/llvm-windres-wrapper"
@@ -650,7 +650,7 @@ build_single_target() {
   if [ "${_OS}" = 'mac' ]; then
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${CW_LLVM_MINGW_PATH}/bin/${AR}"
-    elif [ "${_CC}" = 'clang' ]; then
+    elif [ "${_CC}" = 'llvm' ]; then
       _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${_MAC_LLVM_PATH}/${AR}"
     else
       _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${_SYSROOT}/bin/${AR}"
@@ -675,7 +675,7 @@ build_single_target() {
 
   # Detect versions
   clangver=''
-  [ "${_CC}" = 'clang' ] && clangver="clang ${ccver}"
+  [ "${_CC}" = 'llvm' ] && clangver="clang ${ccver}"
 
   versuffix=''
   mingwver=''
@@ -713,7 +713,7 @@ build_single_target() {
   fi
 
   gccver=''
-  [ "${_CC}" = 'clang' ] || gccver="gcc ${ccver}"
+  [ "${_CC}" = 'llvm' ] || gccver="gcc ${ccver}"
 
   {
     [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT_SHORT}"

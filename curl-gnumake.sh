@@ -130,7 +130,7 @@ _VER="$1"
         # mingw-w64 x64 winpthread static lib incompatible with UCRT.
         # ```c
         # /*
-        #    clang
+        #    llvm/clang
         #    $ /usr/local/opt/llvm/bin/clang -fuse-ld=lld \
         #        -target x86_64-w64-mingw32 --sysroot /usr/local/opt/mingw-w64/toolchain-x86_64 \
         #        test.c -D_UCRT -Wl,-Bstatic -lpthread -Wl,-Bdynamic -lucrt
@@ -140,7 +140,7 @@ _VER="$1"
         #    $ x86_64-w64-mingw32-gcc -specs=gcc-specs-ucrt \
         #        test.c -D_UCRT -Wl,-Bstatic -lpthread -Wl,-Bdynamic -lucrt
         #
-        #    ``` clang ->
+        #    ``` llvm/clang ->
         #    ld.lld: error: undefined symbol: _setjmp
         #    >>> referenced by ../src/thread.c:1518
         #    >>>               libpthread.a(libwinpthread_la-thread.o):(pthread_create_wrapper)
