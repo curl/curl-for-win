@@ -248,7 +248,7 @@ export _REVSUFFIX="${_REV}"; [ -z "${_REVSUFFIX}" ] || _REVSUFFIX="_${_REVSUFFIX
 if [ "${_OS}" = 'mac' ]; then
   if [ ! -d .venv ]; then
     python3 -m venv .venv
-    .venv/bin/python3 -m pip install pefile
+    PIP_PROGRESS_BAR=off .venv/bin/python3 -m pip --disable-pip-version-check --no-cache-dir --require-virtualenv install pefile
   fi
   export PATH; PATH="$(realpath \
     "$(dirname "${0}")"/.venv/bin):${PATH}"
