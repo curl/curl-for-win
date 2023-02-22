@@ -175,11 +175,6 @@ cat <<EOF
     "keys": "4EF4AC63455FC9F4545D9B7DEF8FE99528B52FFD"
   },
   {
-    "name": "pefile",
-    "url": "https://github.com/erocarrera/pefile/releases/download/v{ver}/pefile-{ver}.tar.gz",
-    "redir": "redir"
-  },
-  {
     "name": "llvm-mingw-linux",
     "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-ubuntu-18.04-x86_64.tar.xz",
     "redir": "redir"
@@ -513,13 +508,11 @@ echo "Build: REV(${_REVSUFFIX})"
 # Quit if any of the lines fail
 set -e
 
-# Install required component(s)
-if [ "${_OS}" != 'win' ]; then
-  pip3 --version
-  pip3 --disable-pip-version-check --no-cache-dir install --user "pefile==${PEFILE_VER_}"
-fi
-
 if [ "${_OS}" = 'mac' ]; then
+  # Install required component(s)
+  pip3 --version
+  pip3 --disable-pip-version-check --no-cache-dir install --user pefile
+
   tar() { gtar "$@"; }
 fi
 
