@@ -37,7 +37,7 @@
   # Show the reference timestamp in UTC.
   case "${_OS}" in
     bsd|mac) TZ=UTC stat -f '%N: %Sm' -t '%Y-%m-%d %H:%M' "${_ref}";;
-    *)       TZ=UTC stat --format '%n: %y' "${_ref}";;
+    *)       TZ=UTC stat --format='%n: %y' "${_ref}";;
   esac
 
   TZ=UTC "${_OBJDUMP}" --all-headers "${_PP}"/bin/*.exe | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f

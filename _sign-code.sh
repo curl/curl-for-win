@@ -14,7 +14,7 @@ if [ -s "${SIGN_CODE_KEY}" ] && \
 
   case "${_OS}" in
     bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${_ref}")";;
-    *)       unixts="$(TZ=UTC stat --format '%Y' "${_ref}")";;
+    *)       unixts="$(TZ=UTC stat --format='%Y' "${_ref}")";;
   esac
 
   # Add code signature

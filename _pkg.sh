@@ -76,7 +76,7 @@ create_pkg() {
     case "${arch_ext}" in
       .tar.xz) TZ=UTC tar --create \
         --format=ustar \
-        --owner 0 --group 0 --numeric-owner \
+        --owner=0 --group=0 --numeric-owner \
         --files-from "${_FLS}" | xz > "${_cdo}/${_pkg}";;
       .zip) TZ=UTC zip --quiet -9 --strip-extra \
         --names-stdin - < "${_FLS}" > "${_cdo}/${_pkg}";;
@@ -89,7 +89,7 @@ create_pkg() {
   # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>
   case "${_OS}" in
     bsd|mac) TZ=UTC stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_pkg}";;
-    *)       TZ=UTC stat --format '%n: %s bytes %y' "${_pkg}";;
+    *)       TZ=UTC stat --format='%n: %s bytes %y' "${_pkg}";;
   esac
 
   openssl dgst -sha256 "${_pkg}" | sed 's/^SHA256/SHA2-256/g' | tee -a hashes.txt
