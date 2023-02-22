@@ -544,8 +544,8 @@ live_xt() {
     if [ "${pkg}" = 'cacert' ]; then
       mv pkg.bin "${pkg}/${_CACERT}"
     else
-      tar --strip-components "${3:-1}" -xf pkg.bin -C "${pkg}"
-      [ -f "${pkg}${_patsuf}.patch" ] && dos2unix < "${pkg}${_patsuf}.patch" | patch -N -p1 -d "${pkg}"
+      tar --strip-components "${3:-1}" -xf pkg.bin --directory="${pkg}"
+      [ -f "${pkg}${_patsuf}.patch" ] && dos2unix < "${pkg}${_patsuf}.patch" | patch --forward --strip=1 --directory="${pkg}"
     fi
     rm -f pkg.bin pkg.sig
     [ -f "__${pkg}.url" ] && mv "__${pkg}.url" "${pkg}/__url__.txt"
