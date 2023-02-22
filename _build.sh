@@ -244,6 +244,16 @@ export _REVSUFFIX="${_REV}"; [ -z "${_REVSUFFIX}" ] || _REVSUFFIX="_${_REVSUFFIX
 # Download sources
 . ./_dl.sh
 
+# Install required component
+if [ "${_OS}" = 'mac' ]; then
+  if [ ! -d .venv ]; then
+    python3 -m venv .venv
+    .venv/bin/python3 -m pip install pefile
+  fi
+  export PATH; PATH="$(realpath \
+    "$(dirname "${0}")"/.venv/bin):${PATH}"
+fi
+
 # Find and setup llvm-mingw downloaded above.
 if [ -z "${CW_LLVM_MINGW_PATH:-}" ] && \
    [ -d 'llvm-mingw' ]; then

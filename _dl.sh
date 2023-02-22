@@ -509,10 +509,6 @@ echo "Build: REV(${_REVSUFFIX})"
 set -e
 
 if [ "${_OS}" = 'mac' ]; then
-  # Install required component(s)
-  pip3 --version
-  pip3 --disable-pip-version-check --no-cache-dir install --user pefile
-
   tar() { gtar "$@"; }
 fi
 
