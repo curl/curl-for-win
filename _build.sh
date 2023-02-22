@@ -123,7 +123,7 @@ readonly _SELF='curl-for-win'
 if [ -n "${APPVEYOR_ACCOUNT_NAME:-}" ]; then
   # https://www.appveyor.com/docs/environment-variables/
   _SLUG="${APPVEYOR_REPO_NAME}"
-  _LOGURL="${APPVEYOR_URL}/project/${APPVEYOR_ACCOUNT_NAME}/${APPVEYOR_PROJECT_SLUG}/build/${APPVEYOR_BUILD_VERSION}/job/${APPVEYOR_JOB_ID}"
+  _LOGURL="${APPVEYOR_URL}/project/${APPVEYOR_ACCOUNT_NAME}/${APPVEYOR_PROJECT_SLUG}/build/${APPVEYOR_BUILD_VERSION}/job/${APPVEYOR_JOB_ID}?fullLog=true"
 # _LOGURL="${APPVEYOR_URL}/api/buildjobs/${APPVEYOR_JOB_ID}/log"
   _COMMIT="${APPVEYOR_REPO_COMMIT}"
   _COMMIT_SHORT="$(printf '%.8s' "${_COMMIT}")"
