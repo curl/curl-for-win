@@ -739,15 +739,16 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
     live_xt libssh "${LIBSSH_HASH}"
   else
     if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-      LIBSSH2_VER_='1.10.0-dev'
       LIBSSH2_HASH=
       my_curl --location --proto-redir =https \
         --output pkg.bin \
-        'https://github.com/libssh2/libssh2/archive/635caa90787220ac3773c1d5ba11f1236c22eae8.tar.gz'
+        'https://github.com/libssh2/libssh2/archive/master.tar.gz'
+      live_xt libssh2 "${LIBSSH2_HASH}"
+      LIBSSH2_VER_="$(grep -a -F 'define LIBSSH2_VERSION ' 'libssh2/include/libssh2.h' | grep -o -E '".+"' | tr -d '"')"
     else
       live_dl libssh2 "${LIBSSH2_VER_}"
+      live_xt libssh2 "${LIBSSH2_HASH}"
     fi
-    live_xt libssh2 "${LIBSSH2_HASH}"
   fi
 fi
 
@@ -757,14 +758,15 @@ if [ "${need_cacert}" = '1' ]; then
 fi
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
-  CURL_VER_='7.88.1-dev'
   CURL_HASH=
   my_curl --location --proto-redir =https \
     --output pkg.bin \
-    'https://github.com/curl/curl/archive/41dfb7f516c8a9659782df695528c9d32b5653d6.tar.gz'
+    'https://github.com/curl/curl/archive/master.tar.gz'
+  live_xt curl "${CURL_HASH}"
+  CURL_VER_="$(grep -a -F 'define LIBCURL_VERSION' 'curl/include/curl/curlver.h' | grep -o -E '".+"' | tr -d '"')"
 else
   live_dl curl "${CURL_VER_}"
+  live_xt curl "${CURL_HASH}"
 fi
-live_xt curl "${CURL_HASH}"
 
 rm -r -f "${gpgdir}"
