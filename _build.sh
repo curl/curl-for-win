@@ -473,6 +473,7 @@ build_single_target() {
   export _BLDDIR='bld'
   export _CC_GLOBAL=''
   export _CFLAGS_GLOBAL=''
+  export _CFLAGS_GLOBAL_CMAKE=''
   export _CPPFLAGS_GLOBAL=''
   export _CXXFLAGS_GLOBAL=''
   export _RCFLAGS_GLOBAL=''
@@ -572,6 +573,10 @@ build_single_target() {
       fi
     fi
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-s"  # Omit .buildid segment with the timestamp in it
+
+    # Avoid warnings when passing C compiler options to the linker.
+    # Use it with CMake and OpenSSL's proprietary build system.
+    _CFLAGS_GLOBAL_CMAKE="${_CFLAGS_GLOBAL_CMAKE} -Wno-unused-command-line-argument"
   else
     _CC_GLOBAL="${_CCPREFIX}gcc -static-libgcc"
     _LDFLAGS_GLOBAL="${_OPTM} ${_LDFLAGS_GLOBAL}"
