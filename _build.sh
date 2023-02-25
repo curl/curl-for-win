@@ -432,17 +432,20 @@ build_single_target() {
     if [ "${_OS}" = 'linux' ]; then
       # Execute CPU-native targets only
       if [ "${_CPU}" = 'x64' ] && \
-         [ "$(uname -m)" = 'x86_64' ]; then
+         [ "$(uname -m)" = 'x86_64' ] && \
+         command -v wine64 >/dev/null 2>&1; then
         _WINE='wine64'
       fi
     elif [ "${_OS}" = 'mac' ]; then
       if [ "${_CPU}" = 'x64' ] && \
          [ "$(uname -m)" = 'x86_64' ] && \
-         [ "$(sysctl -i -n sysctl.proc_translated)" != '1' ]; then
+         [ "$(sysctl -i -n sysctl.proc_translated)" != '1' ] && \
+         command -v wine64 >/dev/null 2>&1; then
         _WINE='wine64'
       fi
-    elif [ "${_OS}" = 'win' ]; then
-      _WINE='wine'  # TODO: What targets can an ARM64 host run? Can an x64 host run ARM64 targets?
+    elif [ ! "${_OS}" = 'win' ] && \
+         command -v wine >/dev/null 2>&1; then
+      _WINE='wine'
     fi
   fi
 
