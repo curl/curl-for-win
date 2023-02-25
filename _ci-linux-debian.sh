@@ -11,7 +11,6 @@ cat /etc/*-release
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 update
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
   curl git gpg rsync python3-pefile make cmake \
-  libssl-dev \
   mingw-w64 llvm clang lld \
   autoconf automake autopoint libtool osslsigncode \
   zip time jq dos2unix secure-delete wine64
