@@ -9,7 +9,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ANALYTICS=1
 time brew update >/dev/null
-time brew upgrade python
 time brew install xz gnu-tar mingw-w64 llvm gettext \
                   jq dos2unix osslsigncode openssh
 [[ "${APPVEYOR_REPO_BRANCH:-}" = *'boringssl'* ]] && time brew install go nasm
