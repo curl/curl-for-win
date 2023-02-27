@@ -84,6 +84,10 @@ _VER="$1"
       options="${options} -DCURL_WERROR=ON"
     fi
 
+    if [ ! "${_BRANCH#*debug*}" = "${_BRANCH}" ]; then
+      options="${options} -DENABLE_DEBUG=ON"
+    fi
+
     if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
        [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
       options="${options} -DCURL_DISABLE_ALTSVC=ON"

@@ -50,6 +50,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        gcc        build with GCC (use llvm if not specified)
 #        unicode    build curl in UNICODE mode [EXPERIMENTAL]
 #        werror     turn compiler warnings into errors
+#        debug      debug build
 #
 # CW_JOBS
 #      Number of parallel make jobs. Default: 2

@@ -31,7 +31,7 @@ _VER="$1"
     options="${_CONFIGURE_GLOBAL}"
     export CC="${_CC_GLOBAL}"
     export CFLAGS="${_CFLAGS_GLOBAL} -O3"
-    export CPPFLAGS="${_CPPFLAGS_GLOBAL} -DNDEBUG"
+    export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
     export RCFLAGS="${_RCFLAGS_GLOBAL}"
     export LDFLAGS="${_LDFLAGS_GLOBAL} -Wl,--nxcompat -Wl,--dynamicbase"
     export LIBS="${_LIBS_GLOBAL}"
@@ -40,6 +40,13 @@ _VER="$1"
 
     if [ ! "${_BRANCH#*werror*}" = "${_BRANCH}" ]; then
       options="${options} --enable-werror"
+    fi
+
+    if [ ! "${_BRANCH#*debug*}" = "${_BRANCH}" ]; then
+      options="${options} --enable-debug"
+    else
+      options="${options} --disable-debug"
+      CPPFLAGS="${CPPFLAGS} -DNDEBUG"
     fi
 
     if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
@@ -302,7 +309,6 @@ _VER="$1"
       mkdir "${_BLDDIR}-${pass}"; cd "${_BLDDIR}-${pass}"
       # shellcheck disable=SC2086
       ../configure ${options} \
-        --disable-debug \
         --disable-pthreads \
         --enable-warnings \
         --enable-threaded-resolver \
