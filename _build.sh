@@ -427,25 +427,29 @@ build_single_target() {
       fi
     fi
 
-    # TODO: Run ARM64 targets on ARM64 linux/mac hosts?
     _WINE='echo'
-    if [ "${_OS}" = 'linux' ]; then
-      # Execute CPU-native targets only
+    if [ "${_OS}" = 'linux' ] || \
+       [ "${_OS}" = 'bsd' ]; then
+      # Run x64 targets on same CPU:
       if [ "${_CPU}" = 'x64' ] && \
          [ "$(uname -m)" = 'x86_64' ] && \
          command -v wine64 >/dev/null 2>&1; then
         _WINE='wine64'
       fi
     elif [ "${_OS}" = 'mac' ]; then
+      # Run x64 targets on Intel and ARM (requires Wine 6.0.1):
       if [ "${_CPU}" = 'x64' ] && \
-         [ "$(uname -m)" = 'x86_64' ] && \
-         [ "$(sysctl -i -n sysctl.proc_translated)" != '1' ] && \
          command -v wine64 >/dev/null 2>&1; then
         _WINE='wine64'
       fi
-    elif [ ! "${_OS}" = 'win' ] && \
-         command -v wine >/dev/null 2>&1; then
-      _WINE='wine'
+    elif [ "${_OS}" = 'win' ]; then
+      # Skip ARM64 target on 64-bit Intel, run all targets on ARM64:
+      if [ "$(uname -m)" = 'x86_64' ] && \
+         [ "${_CPU}" != 'a64' ]; then
+        _WINE=
+      elif [ "$(uname -m)" = 'aarch64' ]; then
+        _WINE=
+      fi
     fi
   fi
 
