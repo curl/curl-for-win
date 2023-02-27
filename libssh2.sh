@@ -16,9 +16,11 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  # TODO: Re-add condition on the next release
-# [ -f 'configure' ] || \
-  autoreconf --force --install
+  if [ "${LIBSSH2_VER_}" != '1.10.0' ]; then
+    [ -f 'configure' ] || autoreconf --force --install
+  else
+    autoreconf --force --install
+  fi
 
   options="${_CONFIGURE_GLOBAL}"
   export CC="${_CC_GLOBAL}"
