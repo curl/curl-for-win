@@ -37,6 +37,10 @@ _VER="$1"
   LDFLAGS_BIN=''
   LDFLAGS_LIB=''
 
+  if [ ! "${_BRANCH#*werror*}" = "${_BRANCH}" ]; then
+    CPPFLAGS="${CPPFLAGS} -Werror"
+  fi
+
   # Enable a bunch of warnings as seen in CMake PICKY_COMPILER (default)
   # builds with llvm/clang 15 and gcc 12.2:
   #   https://clang.llvm.org/docs/DiagnosticsReference.html

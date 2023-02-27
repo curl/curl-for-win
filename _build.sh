@@ -49,6 +49,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        msvcrt     build against msvcrt instead of UCRT
 #        gcc        build with GCC (use llvm if not specified)
 #        unicode    build curl in UNICODE mode [EXPERIMENTAL]
+#        werror     turn compiler warnings into errors
 #
 # CW_JOBS
 #      Number of parallel make jobs. Default: 2

@@ -38,6 +38,10 @@ _VER="$1"
 
     options="${options} --enable-unix-sockets"
 
+    if [ ! "${_BRANCH#*werror*}" = "${_BRANCH}" ]; then
+      options="${options} --enable-werror"
+    fi
+
     if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
       if [ "${pass}" = 'shared' ]; then
         LDFLAGS="${LDFLAGS} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"

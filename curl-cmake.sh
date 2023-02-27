@@ -80,6 +80,10 @@ _VER="$1"
     # but required for libcurl, which would link to shared libs by default.
     LDFLAGS="${LDFLAGS} -Wl,-Bstatic"
 
+    if [ ! "${_BRANCH#*werror*}" = "${_BRANCH}" ]; then
+      options="${options} -DCURL_WERROR=ON"
+    fi
+
     if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
        [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
       options="${options} -DCURL_DISABLE_ALTSVC=ON"
