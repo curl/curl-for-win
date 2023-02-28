@@ -267,3 +267,17 @@ index 60c0c2c34..cc5c40d4d 100644
  # define LIBSSH2_ED25519 1
  #else
  # define LIBSSH2_ED25519 0
+diff --git a/src/openssl.h b/src/openssl.h
+index cc5c40d4d..6d75007ab 100644
+--- a/src/openssl.h
++++ b/src/openssl.h
+@@ -39,6 +39,9 @@
+  * OF SUCH DAMAGE.
+  */
+ 
++/* disable deprecated warnings in OpenSSL 3 */
++#define OPENSSL_SUPPRESS_DEPRECATED
++
+ #ifdef LIBSSH2_WOLFSSL
+ 
+ #include <wolfssl/options.h>

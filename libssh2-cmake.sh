@@ -36,7 +36,6 @@ _VER="$1"
       LIBS="${LIBS} -lbcrypt"
       LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
     elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-      CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
       LIBS="${LIBS} -lbcrypt"
       LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
     fi
