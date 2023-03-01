@@ -21,7 +21,7 @@ _VER="$1"
   [ "${_CPU}" = 'x86' ] && ARCH='w32'
   # FIXME: ARM64 support missing from upstream.
 
-  CPPFLAGS='-DHAVE_STRTOI64 -DHAVE_DECL_SECUREZEROMEMORY=1'
+  CPPFLAGS='-DHAVE_STRTOI64 -DHAVE_DECL_SECUREZEROMEMORY=1 -DLIBSSH2_CLEAR_MEMORY'
 
   if [ -n "${_ZLIB}" ]; then
     export ZLIB_PATH="../../${_ZLIB}/${_PP}/include"
