@@ -29,7 +29,7 @@ _VER="$1"
   fi
 
   if [ -n "${_OPENSSL}"  ]; then
-    CPPFLAGS='-DHAVE_EVP_AES_128_CTR'
+    CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR"
     export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
     if [ "${_OPENSSL}" = 'boringssl' ]; then
       CPPFLAGS="${CPPFLAGS} -DNOCRYPT"  # Necessary due to the settings in win32/libss2_config.h
