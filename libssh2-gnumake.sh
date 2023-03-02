@@ -17,8 +17,8 @@ _VER="$1"
   cd "${_NAM}" || exit 0
 
   if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
-    [ "${_CPU}" = 'x64' ] && ARCH='w64'
-    [ "${_CPU}" = 'x86' ] && ARCH='w32'
+    [ "${_CPU}" = 'x64' ] && export ARCH='w64'
+    [ "${_CPU}" = 'x86' ] && export ARCH='w32'
     # ARM64 support missing from upstream.
   else
     export ARCH='custom'
