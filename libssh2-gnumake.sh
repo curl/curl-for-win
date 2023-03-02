@@ -24,6 +24,7 @@ _VER="$1"
     export ARCH='custom'
   fi
 
+  CFLAGS=''
   CPPFLAGS='-DHAVE_STRTOLL'
 
   if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
@@ -60,7 +61,7 @@ _VER="$1"
   export LIBSSH2_RC="${RC}"
   export LIBSSH2_AR="${AR}"
   export LIBSSH2_RANLIB="${RANLIB}"
-  export LIBSSH2_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS}"
+  export LIBSSH2_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${CFLAGS} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS}"
   export LIBSSH2_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL}"
   export LIBSSH2_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
   export LIBSSH2_DLL_A_SUFFIX='.dll'
