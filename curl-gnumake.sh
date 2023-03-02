@@ -28,7 +28,7 @@ _VER="$1"
   export CFG='-ipv6-sspi-srp'
 
   export CC="${_CC_GLOBAL}"
-  export CFLAGS="${_CFLAGS_GLOBAL} -O3"
+  export CFLAGS="${_CFLAGS_GLOBAL} -O3 ${_CFLAGS_GLOBAL_WEXTRA}"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL} -DOS=\\\"${_TRIPLET}\\\""
   export RCFLAGS="${_RCFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL} -Wl,--nxcompat -Wl,--dynamicbase"
@@ -44,14 +44,6 @@ _VER="$1"
   if [ ! "${_BRANCH#*debug*}" = "${_BRANCH}" ]; then
     CFG="${CFG}-debug-trackmem"
   fi
-
-  # Enable a bunch of warnings as seen in CMake PICKY_COMPILER (default)
-  # builds with llvm/clang 15 and gcc 12.2:
-  #   https://clang.llvm.org/docs/DiagnosticsReference.html
-  #   https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
-  CFLAGS="${CFLAGS} -pedantic -Wpointer-arith -Wwrite-strings -Wunused -Wshadow -Winline -Wnested-externs -Wmissing-declarations -Wmissing-prototypes -Wfloat-equal -Wsign-compare -Wundef -Wendif-labels -Wstrict-prototypes -Wdeclaration-after-statement -Wcast-align -Wtype-limits -Wempty-body -Wignored-qualifiers -Wconversion -Wvla -Wdouble-promotion -Wenum-conversion -Wno-long-long -Wno-multichar -Wno-format-nonliteral -Wno-sign-conversion -Wno-system-headers"
-  [ "${_CC}" = 'gcc' ] && \
-  CFLAGS="${CFLAGS} -Wstrict-aliasing=3 -Wold-style-declaration -Wmissing-parameter-type -Wclobbered -Warith-conversion -Wno-pedantic-ms-format"
 
   # Link lib dependencies in static mode. Implied by `-static` for curl,
   # but required for libcurl, which would link to shared libs by default.
