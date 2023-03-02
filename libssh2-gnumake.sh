@@ -39,10 +39,12 @@ _VER="$1"
   if [ -n "${_OPENSSL}"  ]; then
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR"
     export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
-    if [ "${_OPENSSL}" = 'boringssl' ]; then
-      CPPFLAGS="${CPPFLAGS} -DNOCRYPT"  # Necessary due to the settings in win32/libss2_config.h
-    elif [ "${_OPENSSL}" = 'libressl' ]; then
-      CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
+    if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
+      if [ "${_OPENSSL}" = 'boringssl' ]; then
+        CPPFLAGS="${CPPFLAGS} -DNOCRYPT"  # Necessary due to the settings in win32/libss2_config.h
+      elif [ "${_OPENSSL}" = 'libressl' ]; then
+        CPPFLAGS="${CPPFLAGS} -DNOCRYPT"  # Avoid warnings
+      fi
     fi
   elif [ -d ../wolfssl ]; then
     CPPFLAGS="${CPPFLAGS} -DLIBSSH2_WOLFSSL"

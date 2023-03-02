@@ -48,7 +48,6 @@ _VER="$1"
     if [ "${_OPENSSL}" = 'boringssl' ]; then
       LIBS="${LIBS} -lpthread"
     elif [ "${_OPENSSL}" = 'libressl' ]; then
-      CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
       LIBS="${LIBS} -lbcrypt"
     elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
       LIBS="${LIBS} -lbcrypt"

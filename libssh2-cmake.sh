@@ -36,7 +36,6 @@ _VER="$1"
     if [ "${_OPENSSL}" = 'boringssl' ]; then
       LIBS="${LIBS} -lpthread"  # to detect HAVE_EVP_AES_128_CTR
     elif [ "${_OPENSSL}" = 'libressl' ]; then
-      CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
       LIBS="${LIBS} -lbcrypt"
       LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
     elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
