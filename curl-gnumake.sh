@@ -38,7 +38,7 @@ _VER="$1"
   LDFLAGS_LIB=''
 
   if [ ! "${_BRANCH#*werror*}" = "${_BRANCH}" ]; then
-    CPPFLAGS="${CPPFLAGS} -Werror"
+    CFLAGS="${CFLAGS} -Werror"
   fi
 
   if [ ! "${_BRANCH#*debug*}" = "${_BRANCH}" ]; then
@@ -49,9 +49,9 @@ _VER="$1"
   # builds with llvm/clang 15 and gcc 12.2:
   #   https://clang.llvm.org/docs/DiagnosticsReference.html
   #   https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
-  CPPFLAGS="${CPPFLAGS} -pedantic -Wpointer-arith -Wwrite-strings -Wunused -Wshadow -Winline -Wnested-externs -Wmissing-declarations -Wmissing-prototypes -Wfloat-equal -Wsign-compare -Wundef -Wendif-labels -Wstrict-prototypes -Wdeclaration-after-statement -Wcast-align -Wtype-limits -Wempty-body -Wignored-qualifiers -Wconversion -Wdouble-promotion -Wenum-conversion -Wno-long-long -Wno-multichar -Wno-format-nonliteral -Wno-sign-conversion -Wno-system-headers"
+  CFLAGS="${CFLAGS} -pedantic -Wpointer-arith -Wwrite-strings -Wunused -Wshadow -Winline -Wnested-externs -Wmissing-declarations -Wmissing-prototypes -Wfloat-equal -Wsign-compare -Wundef -Wendif-labels -Wstrict-prototypes -Wdeclaration-after-statement -Wcast-align -Wtype-limits -Wempty-body -Wignored-qualifiers -Wconversion -Wvla -Wdouble-promotion -Wenum-conversion -Wno-long-long -Wno-multichar -Wno-format-nonliteral -Wno-sign-conversion -Wno-system-headers"
   [ "${_CC}" = 'gcc' ] && \
-  CPPFLAGS="${CPPFLAGS} -Wstrict-aliasing=3 -Wold-style-declaration -Wmissing-parameter-type -Wclobbered -Warith-conversion -Wno-pedantic-ms-format"
+  CFLAGS="${CFLAGS} -Wstrict-aliasing=3 -Wold-style-declaration -Wmissing-parameter-type -Wclobbered -Warith-conversion -Wno-pedantic-ms-format"
 
   # Link lib dependencies in static mode. Implied by `-static` for curl,
   # but required for libcurl, which would link to shared libs by default.
@@ -126,9 +126,7 @@ _VER="$1"
   if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
     CFG="${CFG}-brotli"
     export BROTLI_PATH="../../brotli/${_PP}"
-  else
-    # Workaround for -Wvla triggering warnings in brotli headers:
-    CPPFLAGS="${CPPFLAGS} -Wvla"
+    CFLAGS="${CFLAGS} -Wno-vla"  # Workaround to avoid warnings in brotli headers
   fi
   if [ -d ../zstd ] && [ "${_BRANCH#*nozstd*}" = "${_BRANCH}" ]; then
     CFG="${CFG}-zstd"
