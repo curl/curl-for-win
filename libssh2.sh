@@ -29,7 +29,9 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LIBS="${_LIBS_GLOBAL}"
 
-  CPPFLAGS="${CPPFLAGS} -DHAVE_DECL_SECUREZEROMEMORY=1 -DLIBSSH2_CLEAR_MEMORY"
+  if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
+    CPPFLAGS="${CPPFLAGS} -DHAVE_DECL_SECUREZEROMEMORY=1 -DLIBSSH2_CLEAR_MEMORY"
+  fi
 
   # NOTE: root path with spaces breaks all values with '${_TOP}'. But,
   #       autotools breaks on spaces anyway, so let us leave it like that.

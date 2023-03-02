@@ -16,12 +16,19 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  export ARCH
-  [ "${_CPU}" = 'x64' ] && ARCH='w64'
-  [ "${_CPU}" = 'x86' ] && ARCH='w32'
-  # FIXME: ARM64 support missing from upstream.
+  if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
+    [ "${_CPU}" = 'x64' ] && ARCH='w64'
+    [ "${_CPU}" = 'x86' ] && ARCH='w32'
+    # ARM64 support missing from upstream.
+  else
+    export ARCH='custom'
+  fi
 
-  CPPFLAGS='-DHAVE_STRTOLL -DHAVE_DECL_SECUREZEROMEMORY=1 -DLIBSSH2_CLEAR_MEMORY'
+  CPPFLAGS='-DHAVE_STRTOLL'
+
+  if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
+    CPPFLAGS="${CPPFLAGS} -DHAVE_DECL_SECUREZEROMEMORY=1 -DLIBSSH2_CLEAR_MEMORY"
+  fi
 
   if [ -n "${_ZLIB}" ]; then
     export ZLIB_PATH="../../${_ZLIB}/${_PP}/include"
@@ -46,12 +53,16 @@ _VER="$1"
     export WITH_WINCNG=1
   fi
 
-  export CROSSPREFIX="${_BINUTILS_PREFIX}"  # for windres
+  if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
+    export CROSSPREFIX="${_BINUTILS_PREFIX}"  # for windres
+  fi
   export LIBSSH2_CC="${_CC_GLOBAL}"
+  export LIBSSH2_RC="${RC}"
   export LIBSSH2_AR="${AR}"
   export LIBSSH2_RANLIB="${RANLIB}"
   export LIBSSH2_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS}"
   export LIBSSH2_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL}"
+  export LIBSSH2_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
   export LIBSSH2_DLL_A_SUFFIX='.dll'
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then

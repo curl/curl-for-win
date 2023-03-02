@@ -16,10 +16,14 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  CPPFLAGS='-DHAVE_DECL_SECUREZEROMEMORY=1 -D_FILE_OFFSET_BITS=64'
+  CPPFLAGS='-D_FILE_OFFSET_BITS=64'
   LDFLAGS=''
   LIBS=''
   options=''
+
+  if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
+    CPPFLAGS="${CPPFLAGS} -DHAVE_DECL_SECUREZEROMEMORY=1"
+  fi
 
   if [ -n "${_ZLIB}" ]; then
     options="${options} -DENABLE_ZLIB_COMPRESSION=ON"

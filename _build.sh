@@ -522,7 +522,9 @@ build_single_target() {
 
   export _LD
   _BINUTILS_PREFIX="${_CCPREFIX}"
-  export _BINUTILS_PREFIX  # Exclusively for libssh2-gnumake.sh
+  if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
+    export _BINUTILS_PREFIX  # Exclusively for libssh2-gnumake.sh
+  fi
   if [ "${_CC}" = 'llvm' ]; then
     _CC_GLOBAL="clang${CW_CCSUFFIX} --target=${_TRIPLET}"
     _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET}"
