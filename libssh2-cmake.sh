@@ -30,7 +30,7 @@ _VER="$1"
     options="${options} -DZLIB_ROOT=${_TOP}/${_ZLIB}/${_PP}"
   fi
 
-  if [ -n "${_OPENSSL}"  ]; then
+  if [ -n "${_OPENSSL}" ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     if [ "${_OPENSSL}" = 'boringssl' ]; then

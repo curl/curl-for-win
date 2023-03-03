@@ -36,7 +36,7 @@ _VER="$1"
     export WITH_ZLIB=1
   fi
 
-  if [ -n "${_OPENSSL}"  ]; then
+  if [ -n "${_OPENSSL}" ]; then
     CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR"
     export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
     if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
