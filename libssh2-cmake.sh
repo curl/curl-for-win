@@ -35,12 +35,14 @@ _VER="$1"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     if [ "${_OPENSSL}" = 'boringssl' ]; then
       LIBS="${LIBS} -lpthread"  # to detect HAVE_EVP_AES_128_CTR
-    elif [ "${_OPENSSL}" = 'libressl' ]; then
-      LIBS="${LIBS} -lbcrypt"
-      LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
-    elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-      LIBS="${LIBS} -lbcrypt"
-      LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
+    elif [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
+      if [ "${_OPENSSL}" = 'libressl' ]; then
+        LIBS="${LIBS} -lbcrypt"
+        LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
+      elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
+        LIBS="${LIBS} -lbcrypt"
+        LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
+      fi
     fi
   elif [ -d ../wolfssl ] && false; then
     # UNTESTED. Missing upstream support.
