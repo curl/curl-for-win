@@ -614,8 +614,6 @@ build_single_target() {
   #   https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
   _CFLAGS_GLOBAL_WEXTRA='-pedantic -Wpointer-arith -Wwrite-strings -Wunused -Wshadow -Winline -Wnested-externs -Wmissing-declarations -Wmissing-prototypes -Wfloat-equal -Wsign-compare -Wundef -Wendif-labels -Wstrict-prototypes -Wdeclaration-after-statement -Wcast-align -Wtype-limits -Wempty-body -Wignored-qualifiers -Wconversion -Wvla -Wdouble-promotion -Wenum-conversion -Wno-long-long -Wno-multichar -Wno-format-nonliteral -Wno-sign-conversion -Wno-system-headers'
   [ "${_CC}" = 'gcc' ] && \
-  CFLAGS="${CFLAGS} -Wstrict-aliasing=3 -Wold-style-declaration -Wmissing-parameter-type -Wclobbered -Warith-conversion -Wno-pedantic-ms-format"
-  [ "${_CC}" = 'gcc' ] && \
   _CFLAGS_GLOBAL_WEXTRA="${_CFLAGS_GLOBAL_WEXTRA} -Wstrict-aliasing=3 -Wold-style-declaration -Wmissing-parameter-type -Wclobbered -Warith-conversion -Wno-pedantic-ms-format"
 
   # for boringssl
