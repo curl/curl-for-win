@@ -72,7 +72,7 @@ _VER="$1"
       --enable-static \
       --disable-shared \
       --disable-examples-build \
-      --disable-tests --silent
+      --disable-tests
   )
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
