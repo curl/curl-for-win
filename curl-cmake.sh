@@ -101,8 +101,7 @@ _VER="$1"
       options="${options} -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON"
     else
       [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && options="${options} -DCURL_DISABLE_FTP=ON"
-
-      CPPFLAGS="${CPPFLAGS} -DHAVE_LDAP_SSL"
+      [ "${CURL_VER_}" = '7.88.1' ] && CPPFLAGS="${CPPFLAGS} -DHAVE_LDAP_SSL"
       LIBS="${LIBS} -lwldap32"
     fi
 
