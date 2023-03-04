@@ -100,7 +100,7 @@ _VER="$1"
       options="${options} -DCURL_DISABLE_IMAP=ON -DCURL_DISABLE_POP3=ON -DCURL_DISABLE_SMTP=ON"
       options="${options} -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON"
     else
-      [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_FTP=ON"
+      [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && options="${options} -DCURL_DISABLE_FTP=ON"
 
       CPPFLAGS="${CPPFLAGS} -DHAVE_LDAP_SSL"
       LIBS="${LIBS} -lwldap32"
