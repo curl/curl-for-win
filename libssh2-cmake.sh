@@ -44,12 +44,12 @@ _VER="$1"
         LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
       fi
     fi
-  elif [ -d ../wolfssl ] && false; then
-    # UNTESTED. Missing upstream support.
-    options="${options} -DCRYPTO_BACKEND=wolfSSL"
-    CPPFLAGS="${CPPFLAGS} -I${_TOP}/wolfssl/${_PP}/include"
-    LDFLAGS="${LDFLAGS} -L${_TOP}/wolfssl/${_PP}/lib"
-    LIBS="${LIBS} -lwolfssl"
+  elif [ -d ../wolfssl ]; then
+    if [ "${LIBSSH2_VER_}" != '1.10.0' ]; then
+      options="${options} -DCRYPTO_BACKEND=wolfSSL"
+      options="${options} -DWOLFSSL_LIBRARY=${_TOP}/wolfssl/${_PP}/lib/libwolfssl.a"
+      options="${options} -DWOLFSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
+    fi
   elif [ -d ../mbedtls ] && [ "${LIBSSH2_VER_}" != '1.10.0' ]; then
     options="${options} -DCRYPTO_BACKEND=mbedTLS"
     options="${options} -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedcrypto.a"
