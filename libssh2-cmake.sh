@@ -44,6 +44,10 @@ _VER="$1"
         LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
       fi
     fi
+    # Silence unuseful libssh2 warnings about missing runtime DLLs
+    touch \
+      "${_TOP}/${_OPENSSL}/${_PP}/crypto.dll" \
+      "${_TOP}/${_OPENSSL}/${_PP}/ssl.dll"
   elif [ -d ../wolfssl ]; then
     if [ "${LIBSSH2_VER_}" != '1.10.0' ]; then
       options="${options} -DCRYPTO_BACKEND=wolfSSL"
