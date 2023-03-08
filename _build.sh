@@ -501,7 +501,9 @@ build_single_target() {
   [ "${_CPU}" = 'a64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=${_TRIPLET}"  # llvm-windres supports triplets here. https://github.com/llvm/llvm-project/blob/main/llvm/tools/llvm-rc/llvm-rc.cpp
 
   if [ "${_OS}" = 'win' ]; then
-    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -GMSYS Makefiles"
+    # '-G MSYS Makefiles' command-line option is problematic due to spaces
+    # and unwanted escaping/splitting. Pass it via envvar instead.
+    export CMAKE_GENERATOR='MSYS Makefiles'
     # Without this, the value '/usr/local' becomes 'msys64/usr/local'
     export MSYS2_ARG_CONV_EXCL='-DCMAKE_INSTALL_PREFIX='
   fi
