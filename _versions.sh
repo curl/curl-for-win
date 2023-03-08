@@ -8,9 +8,8 @@
 export CURL_VER_='7.88.1'
 export CURL_HASH=1dae31b2a7c1fe269de99c0c31bb488346aab3459b5ffca909d6938249ae415f
 # Create revision string
-# NOTE: Set _REV to empty after bumping CURL_VER_, and
-#       set it to 1 then increment by 1 each time bumping a dependency
-#       version or pushing a CI rebuild for the main branch.
+# NOTE: Set _REV to 1 after bumping CURL_VER_, then increment for each
+#       CI rebuild via `main` branch push (e.g. after bumping a dependency).
 export _REV='2'
 
 export CACERT_VER_='2023-01-10'
