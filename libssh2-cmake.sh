@@ -27,7 +27,8 @@ _VER="$1"
 
   if [ -n "${_ZLIB}" ]; then
     options="${options} -DENABLE_ZLIB_COMPRESSION=ON"
-    options="${options} -DZLIB_ROOT=${_TOP}/${_ZLIB}/${_PP}"
+    options="${options} -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
+    options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
   fi
 
   if [ -n "${_OPENSSL}" ]; then
