@@ -490,8 +490,11 @@ build_single_target() {
   export _LDFLAGS_CXX_GLOBAL=''
   export _LIBS_GLOBAL=''
   export _CONFIGURE_GLOBAL=''
-  export _CMAKE_GLOBAL='-Wno-dev -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_BUILD_TYPE=Release'
+  export _CMAKE_GLOBAL='-DCMAKE_SYSTEM_NAME=Windows -DCMAKE_BUILD_TYPE=Release'
   export _CMAKE_CXX_GLOBAL=''
+
+  # Suppress CMake warnings meant for upstream developers
+  _CMAKE_GLOBAL="-Wno-dev ${_CMAKE_GLOBAL}"
 
   # for CMake and openssl
   unset CC
