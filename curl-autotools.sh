@@ -165,6 +165,8 @@ _VER="$1"
 
     if [ -d ../wolfssl ]; then
       options="${options} --with-wolfssl=${_TOP}/wolfssl/${_PP}"
+      CPPFLAGS="${CPPFLAGS} -DHAVE_UINTPTR_T"
+      LIBS="${LIBS} -lcrypt32"  # for QUIC auto-detection
       h3=1
     else
       options="${options} --without-wolfssl"

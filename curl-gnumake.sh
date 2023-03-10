@@ -182,6 +182,7 @@ _VER="$1"
   if [ -d ../wolfssl ]; then
     CFG="${CFG}-wolfssl"
     export WOLFSSL_PATH="../../wolfssl/${_PP}"
+    CPPFLAGS="${CPPFLAGS} -DHAVE_UINTPTR_T"
     h3=1
   fi
   if [ -d ../mbedtls ]; then
