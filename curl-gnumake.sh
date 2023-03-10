@@ -116,7 +116,6 @@ _VER="$1"
   if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
     CFG="${CFG}-brotli"
     export BROTLI_PATH="../../brotli/${_PP}"
-    CFLAGS="${CFLAGS} -Wno-vla"  # Workaround to avoid warnings in brotli headers
   fi
   if [ -d ../zstd ] && [ "${_BRANCH#*nozstd*}" = "${_BRANCH}" ]; then
     CFG="${CFG}-zstd"
