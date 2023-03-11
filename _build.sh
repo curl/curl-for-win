@@ -308,6 +308,10 @@ bld() {
       grep -a -o -E -- "${pkg}-${bldtools}" || true)"
     if [ -n "${withbuildtool}" ] && [ -f "${withbuildtool}.sh" ]; then
       pkg="${withbuildtool}"
+
+      bldtool="$(echo "${pkg}" | \
+        grep -a -o -E -- "-${bldtools}")"
+      _BLDDIR="${_BLDDIR}${bldtool}-${_CC}-${_CPU}"
     fi
 
     ${my_time} "./${pkg}.sh" "$1" "${pkgori}"
