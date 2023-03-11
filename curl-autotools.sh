@@ -71,6 +71,7 @@ _VER="$1"
     fi
 
     if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
+      CPPFLAGS="${CPPFLAGS} -Dmain=wmain"  # FIXME: upstream. https://github.com/curl/curl/issues/7229
       CPPFLAGS="${CPPFLAGS} -DUNICODE -D_UNICODE"
       LDFLAGS="${LDFLAGS} -municode"
     fi
