@@ -162,7 +162,7 @@ _VER="$1"
       options="${options} -DWolfSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
       CPPFLAGS="${CPPFLAGS} -DSIZEOF_LONG_LONG=8 -DHAVE_UINTPTR_T"
       LIBS="${LIBS} -lcrypt32"  # for QUIC auto-detection
-    # h3=1
+      [ "${CURL_VER_}" != '7.88.1' ] && h3=1  # PENDING: https://github.com/curl/curl/pull/10739
     fi
 
     if [ -d ../mbedtls ]; then
@@ -240,11 +240,6 @@ _VER="$1"
       options="${options} -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/${_PP}/lib"
       CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB"
       LIBS="${LIBS} -lws2_32"  # Necessary for 'CheckQuicSupportInOpenSSL'
-      if [ -d ../wolfssl ]; then
-        # BROKEN. Missing upstream support.
-        LDFLAGS="${LDFLAGS} -L${_TOP}/ngtcp2/${_PP}/lib"
-        LIBS="${LIBS} -lngtcp2_crypto_wolfssl"
-      fi
     else
       options="${options} -DUSE_NGHTTP3=OFF"
       options="${options} -DUSE_NGTCP2=OFF"
