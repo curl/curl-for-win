@@ -296,15 +296,16 @@ fi
 _ori_path="${PATH}"
 
 bld() {
+  bldtools='(cmake|autotools|gnumake)'
   pkg="$1"
-  if [ -z "${CW_BLD:-}" ] || echo " ${CW_BLD} " | grep -q -E -- " ${pkg}(-(cmake|autotools|gnumake))? "; then
+  if [ -z "${CW_BLD:-}" ] || echo " ${CW_BLD} " | grep -q -E -- " ${pkg}(-${bldtools})? "; then
     shift
 
     pkgori="${pkg}"
     [ -n "${2:-}" ] && pkg="$2"
     # allow selecting an alternate build tool
     withbuildtool="$(echo "${CW_BLD:-}" | \
-      grep -a -o -E -- "${pkg}-(cmake|autotools|gnumake)" || true)"
+      grep -a -o -E -- "${pkg}-${bldtools}" || true)"
     if [ -n "${withbuildtool}" ] && [ -f "${withbuildtool}.sh" ]; then
       pkg="${withbuildtool}"
     fi
