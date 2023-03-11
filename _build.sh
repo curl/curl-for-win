@@ -107,7 +107,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   libressl         autotools, cmake
 #   wolfssh          autotools
 #   libssh           cmake
-#   libssh2          autotools, cmake
+#   libssh2          autotools, gnumake, cmake
 #   curl             gnumake, autotools, cmake
 
 cd "$(dirname "$0")"
