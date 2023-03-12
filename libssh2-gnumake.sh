@@ -58,11 +58,11 @@ _VER="$1"
 
   if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
     export CROSSPREFIX="${_BINUTILS_PREFIX}"  # for windres
+    export LIBSSH2_RANLIB="${RANLIB}"
   fi
   export LIBSSH2_CC="${_CC_GLOBAL}"
   export LIBSSH2_RC="${RC}"
   export LIBSSH2_AR="${AR}"
-  export LIBSSH2_RANLIB="${RANLIB}"
   export LIBSSH2_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${CFLAGS} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS}"
   export LIBSSH2_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL}"
   export LIBSSH2_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
