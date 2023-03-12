@@ -16,24 +16,27 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
+  CFLAGS=''
+  CPPFLAGS=''
+
   if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
     [ "${_CPU}" = 'x64' ] && export ARCH='w64'
     [ "${_CPU}" = 'x86' ] && export ARCH='w32'
     # ARM64 support missing from upstream.
-  else
-    export ARCH='custom'
-  fi
 
-  CFLAGS=''
-  CPPFLAGS='-DHAVE_STRTOLL'
-
-  if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
+    CPPFLAGS="${CPPFLAGS} -DHAVE_STRTOLL"
     CPPFLAGS="${CPPFLAGS} -DHAVE_DECL_SECUREZEROMEMORY=1 -DLIBSSH2_CLEAR_MEMORY -D_FILE_OFFSET_BITS=64"
+  else
+    CFLAGS="${CFLAGS} -O3"
   fi
 
   if [ -n "${_ZLIB}" ]; then
-    export ZLIB_PATH="../../${_ZLIB}/${_PP}/include"
-    export WITH_ZLIB=1
+    if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
+      export ZLIB_PATH="../../${_ZLIB}/${_PP}/include"
+      export WITH_ZLIB=1
+    else
+      export ZLIB_PATH="../../${_ZLIB}/${_PP}"
+    fi
   fi
 
   if [ -n "${_OPENSSL}" ]; then
@@ -47,9 +50,13 @@ _VER="$1"
       fi
     fi
   elif [ -d ../wolfssl ]; then
-    CPPFLAGS="${CPPFLAGS} -DLIBSSH2_WOLFSSL"
-    CPPFLAGS="${CPPFLAGS} -I../../wolfssl/${_PP}/include"
-    export OPENSSL_INCLUDE="../../wolfssl/${_PP}/include/wolfssl"
+    if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
+      CPPFLAGS="${CPPFLAGS} -DLIBSSH2_WOLFSSL"
+      CPPFLAGS="${CPPFLAGS} -I../../wolfssl/${_PP}/include"
+      export OPENSSL_INCLUDE="../../wolfssl/${_PP}/include/wolfssl"
+    else
+      export WOLFSSL_PATH="../../wolfssl/${_PP}"
+    fi
   elif [ -d ../mbedtls ] && [ "${LIBSSH2_VER_}" != '1.10.0' ]; then
     export MBEDTLS_PATH="../../mbedtls/${_PP}"
   else
@@ -58,20 +65,29 @@ _VER="$1"
 
   if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
     export CROSSPREFIX="${_BINUTILS_PREFIX}"  # for windres
+    export LIBSSH2_CC="${CC}"
+    export LIBSSH2_RC="${RC}"
+    export LIBSSH2_AR="${AR}"
     export LIBSSH2_RANLIB="${RANLIB}"
+    export LIBSSH2_DLL_A_SUFFIX='.dll'
+    export LIBSSH2_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${CFLAGS} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS}"
+    export LIBSSH2_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL}"
+    export LIBSSH2_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
+  else
+    export CC="${_CC_GLOBAL}"
+    export CFLAGS="${_CFLAGS_GLOBAL} ${CFLAGS}"
+    export CPPFLAGS="${_CPPFLAGS_GLOBAL} ${CPPFLAGS}"
+    export LDFLAGS="${_LDFLAGS_GLOBAL}"
+    export LIBS="${_LIBS_GLOBAL}"
+    export RCFLAGS="${_RCFLAGS_GLOBAL}"
   fi
-  export LIBSSH2_CC="${_CC_GLOBAL}"
-  export LIBSSH2_RC="${RC}"
-  export LIBSSH2_AR="${AR}"
-  export LIBSSH2_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${CFLAGS} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS}"
-  export LIBSSH2_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL}"
-  export LIBSSH2_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
-  export LIBSSH2_DLL_A_SUFFIX='.dll'
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
     make --directory=win32 --jobs="${_JOBS}" distclean
   fi
   make --directory=win32 --jobs="${_JOBS}" lib
+# make --directory=win32 --jobs="${_JOBS}" dll
+# make --directory=win32 --jobs="${_JOBS}" test
 
   # Install manually
 
