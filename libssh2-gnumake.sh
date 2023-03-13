@@ -85,8 +85,7 @@ _VER="$1"
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
     make --directory=win32 --jobs="${_JOBS}" distclean
   fi
-  make --directory=win32 --jobs="${_JOBS}" lib
-# make --directory=win32 --jobs="${_JOBS}" dll
+  make --directory=win32 --jobs="${_JOBS}" lib  # dll
 # make --directory=win32 --jobs="${_JOBS}" test
 
   # Install manually
