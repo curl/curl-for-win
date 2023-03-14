@@ -162,7 +162,7 @@ _VER="$1"
       options="${options} -DWolfSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
       CPPFLAGS="${CPPFLAGS} -DSIZEOF_LONG_LONG=8 -DHAVE_UINTPTR_T"
       LIBS="${LIBS} -lcrypt32"  # for QUIC auto-detection
-      [ "${CURL_VER_}" != '7.88.1' ] && h3=1  # PENDING: https://github.com/curl/curl/pull/10739
+      [ "${CURL_VER_}" != '7.88.1' ] && h3=1
     fi
 
     if [ -d ../mbedtls ]; then
