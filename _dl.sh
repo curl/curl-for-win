@@ -134,6 +134,7 @@ cat <<EOF
   },
   {
     "name": "openssl",
+    "descending": true,
     "url": "https://www.openssl.org/source/openssl-{ver}.tar.gz",
     "sig": ".asc",
     "sha": ".sha256",
