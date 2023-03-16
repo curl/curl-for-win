@@ -35,7 +35,7 @@ _VER="$1"
   [ "${_CPU}" = 'x86' ] && options="${options} mingw"
   [ "${_CPU}" = 'x64' ] && options="${options} mingw64"
   if [ "${_CPU}" = 'a64' ]; then
-    # https://github.com/openssl/openssl/issues/10533
+    # Source: https://github.com/openssl/openssl/issues/10533
     echo '## -*- mode: perl; -*-
       my %targets = (
         "mingw-arm64" => {
@@ -45,7 +45,7 @@ _VER="$1"
           perlasm_scheme   => "win64",
           multilib         => "64",
         }
-      );' > Configurations/11-curl-for-win-mingwarm64.conf
+      );' > Configurations/11-curl-for-win-mingw-arm64.conf
 
     options="${options} mingw-arm64"
   fi
