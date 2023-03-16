@@ -35,30 +35,20 @@ _VER="$1"
   [ "${_CPU}" = 'x86' ] && options="${options} mingw"
   [ "${_CPU}" = 'x64' ] && options="${options} mingw64"
   if [ "${_CPU}" = 'a64' ]; then
-    # This does not do much besides changing names. Based on sources,
-    # `RC4_CHAR` and/or `SIXTY_FOUR_BITS` may or may not be necessary
-    # in `bn_ops`. `perlasm_scheme` might be `coff` or `mingw64` or `linux64`.
-    #   https://github.com/openssl/openssl/issues/10533#issuecomment-559376317
-    #   https://github.com/openssl/openssl/blob/c267588fd400593c090ebb24643c2be5158bfbcc/Configurations/50-win-onecore.conf
-    #   https://github.com/msys2/MINGW-packages/blob/9ae13173d3b2176f5a8c3a25a4eed22e38eac121/mingw-w64-openssl/openssl-1.1.1-mingw-arm.patch
-    # Without `no-asm`, it fails with this (and some more):
-    #   ../crypto/armcap.c:38:8: error: unknown type name 'sigset_t'; did you mean '_sigset_t'?
+    # https://github.com/openssl/openssl/issues/10533
     echo '## -*- mode: perl; -*-
       my %targets = (
-        "mingwarm64" => {
+        "mingw-arm64" => {
           inherit_from     => [ "mingw-common" ],
-          cflags           => "",
-          sys_id           => "MINGWARM64",
-          bn_ops           => add("SIXTY_FOUR_BIT RC4_CHAR"),
+          cc               => "clang",
+          bn_ops           => add("RC4_CHAR"),
           asm_arch         => "aarch64",
-          uplink_arch      => undef,
-          perlasm_scheme   => "coff",
-          shared_rcflag    => "",
-          multilib         => "",
+          perlasm_scheme   => "win64",
+          multilib         => "64",
         }
       );' > Configurations/11-curl-for-win-mingwarm64.conf
 
-    options="${options} mingwarm64 no-asm"  # FIXME
+    options="${options} mingw-arm64"
   fi
 
   options="${options} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
