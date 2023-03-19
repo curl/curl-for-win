@@ -68,7 +68,7 @@ _VER="$1"
     ../configure ${options} \
       --disable-rpath \
       --disable-debug \
-      --enable-hidden-symbols \
+      --disable-hidden-symbols \
       --enable-static \
       --disable-shared \
       --disable-examples-build \
