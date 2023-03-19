@@ -19,18 +19,16 @@ _VER="$1"
   options=''
   CFLAGS=''
 
-  # FIXME: As of zlib 1.2.13 and zlib-ng 2.0.6, their CMakeLists.txt prevents
-  #        passing custom RCFLAGS to the RC command. Use our wrapper as a
-  #        workaround. PRs:
-  #        https://github.com/madler/zlib/pull/677
-  #        https://github.com/zlib-ng/zlib-ng/pull/1318 [MERGED]
-  [ -n "${_RC_WRAPPER}" ] && export RC="${_RC_WRAPPER}"
-
   if [ "${_NAM}" = 'zlibng' ]; then
     options="${options} -DBUILD_SHARED_LIBS=OFF"
     options="${options} -DZLIB_COMPAT=ON"
     options="${options} -DZLIB_ENABLE_TESTS=OFF"
   else
+    # FIXME (upstream): zlib v1.2.13's prevents passing custom RCFLAGS to
+    #                   the RC command. Use our wrapper as a workaround.
+    #                   PR: https://github.com/madler/zlib/pull/677
+    [ -n "${_RC_WRAPPER}" ] && export RC="${_RC_WRAPPER}"
+
     # llvm/clang 15+ workaround for: https://github.com/madler/zlib/issues/633
     if [ "${_CC}" = 'llvm' ] && \
        [ "${_CCVER}" != '14' ]; then
