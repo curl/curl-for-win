@@ -101,7 +101,6 @@ _VER="$1"
       options="${options} -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON"
     else
       [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && options="${options} -DCURL_DISABLE_FTP=ON"
-      [ "${CURL_VER_}" = '7.88.1' ] && CPPFLAGS="${CPPFLAGS} -DHAVE_LDAP_SSL"
       LIBS="${LIBS} -lwldap32"
     fi
 
@@ -161,7 +160,7 @@ _VER="$1"
       options="${options} -DWolfSSL_LIBRARY=${_TOP}/wolfssl/${_PP}/lib/libwolfssl.a"
       options="${options} -DWolfSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
       CPPFLAGS="${CPPFLAGS} -DSIZEOF_LONG_LONG=8"
-      [ "${CURL_VER_}" != '7.88.1' ] && h3=1
+      h3=1
     fi
 
     if [ -d ../mbedtls ]; then

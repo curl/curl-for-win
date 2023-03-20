@@ -95,10 +95,9 @@ Features:         AsynchDNS              HSTS             HTTPS-proxy     IPv6  
 * Latest version:
   <br><https://curl.se/windows/>
 * Specific versions, back to 7.80.0:<br>
-  `https://curl.se/windows/dl-<curl-version>[_<build-number>]/`
-  <br>Examples:
-  <br><https://curl.se/windows/dl-7.80.0/>
-  <br><https://curl.se/windows/dl-7.83.1_2/>
+  `https://curl.se/windows/dl-<curl-version>_<build-1-to-N>/`
+  <br>Example:
+  <br><https://curl.se/windows/dl-8.0.0_1/>
 
 # Build logs
 
