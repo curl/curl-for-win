@@ -439,9 +439,12 @@ build_single_target() {
        [ "${_OS}" = 'bsd' ]; then
       # Run x64 targets on same CPU:
       if [ "${_CPU}" = 'x64' ] && \
-         [ "$(uname -m)" = 'x86_64' ] && \
-         command -v wine64 >/dev/null 2>&1; then
-        _WINE='wine64'
+         [ "$(uname -m)" = 'x86_64' ]; then
+        if command -v wine64 >/dev/null 2>&1; then
+          _WINE='wine64'
+        elif command -v wine >/dev/null 2>&1; then
+          _WINE='wine'
+        fi
       fi
     elif [ "${_OS}" = 'mac' ]; then
       # Run x64 targets on Intel and ARM (requires Wine 6.0.1):
