@@ -24,10 +24,16 @@ _VER="$1"
     options="${options} -DZLIB_COMPAT=ON"
     options="${options} -DZLIB_ENABLE_TESTS=OFF"
   else
-    # FIXME (upstream): zlib v1.2.13's prevents passing custom RCFLAGS to
-    #                   the RC command. Use our wrapper as a workaround.
-    #                   PR: https://github.com/madler/zlib/pull/677
-    [ -n "${_RC_WRAPPER}" ] && export RC="${_RC_WRAPPER}"
+    # Unset this to use an alternative workaround which does not need our
+    # _RC_WRAPPER trickery:
+    zlib_use_rc_wrapper='1'
+
+    if [ "${zlib_use_rc_wrapper}" = '1' ]; then
+      # FIXME (upstream): zlib v1.2.13's prevents passing custom RCFLAGS to
+      #                   the RC command. Use our wrapper as a workaround.
+      #                   PR: https://github.com/madler/zlib/pull/677
+      [ -n "${_RC_WRAPPER}" ] && export RC="${_RC_WRAPPER}"
+    fi
 
     # llvm/clang 15+ workaround for: https://github.com/madler/zlib/issues/633
     if [ "${_CC}" = 'llvm' ] && \
@@ -42,6 +48,23 @@ _VER="$1"
     "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${CFLAGS} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
+
+  if [ "${_NAM}" = 'zlib' ] && \
+     [ "${zlib_use_rc_wrapper}" != '1' ]; then
+    # Building shared lib has issues compiling resources:
+    #   PR: https://github.com/madler/zlib/pull/677
+    # Workaround to build static only and install manually:
+    make --directory="${_BLDDIR}" --jobs="${_JOBS}" zlibstatic
+
+    mkdir -p "${_PP}/include"
+    mkdir -p "${_PP}/lib"
+
+    cp -f -p ./zlib.h             "${_PP}/include/"
+    cp -f -p "${_BLDDIR}"/zconf.h "${_PP}/include/"
+    cp -f -p "${_BLDDIR}"/*.a     "${_PP}/lib/"
+  else
+    make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
+  fi
 
   ls -l "${_PP}"/lib/*.a
 
