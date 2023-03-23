@@ -153,11 +153,17 @@ export _BRANCH="${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF:-}$
 [ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD || true)"
 [ -n "${_BRANCH}" ] || _BRANCH='main'
 if command -v git >/dev/null 2>&1; then
+  # Broken on AppVeyor CI since around 2023-02:
+  #   fatal: No remote configured to list refs from.
   _URL_BASE="$(git ls-remote --get-url | sed 's/\.git$//' || true)"
+fi
+if [ -z "${_URL_BASE}" ]; then
+  _URL_BASE="https://github.com/${_SLUG}"
+fi
+if [ -n "${_COMMIT}" ]; then
   _URL_FULL="${_URL_BASE}/tree/${_COMMIT}"
   _TAR="${_URL_BASE}/archive/${_COMMIT}.tar.gz"
 else
-  _URL_BASE="https://github.com/${_SLUG}"
   _URL_FULL="${_URL_BASE}"
   _TAR="${_URL_BASE}/archive/refs/heads/${_BRANCH}.tar.gz"
 fi
