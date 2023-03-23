@@ -664,8 +664,9 @@ build_single_target() {
   if [ "${_CC}" = 'llvm' ] && \
      [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && \
      [ "${_OS}" = 'linux' ] && \
+     ! command -v "${RC}" >/dev/null 2>&1 && \
      [ -x "/usr/bin/${_BINUTILS_PREFIX}rc${_BINUTILS_SUFFIX}" ]; then
-    # FIXME: llvm-windres alias (to llvm-rc) missing from current debian:testing.
+    # FIXME: llvm-windres alias (to llvm-rc) may be missing from llvm.
     #        Workaround: Create an alias and use that.
     #        https://packages.debian.org/testing/amd64/llvm/filelist
     RC="$(pwd)/${RC}"
