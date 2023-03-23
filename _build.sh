@@ -381,8 +381,13 @@ build_single_target() {
   _SYSROOT=''
 
   export _CCPREFIX=
+  export _CCSUFFIX=
   export _MAKE='make'
   export _WINE=''
+
+  if [ ! "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
+    _CCSUFFIX="${CW_CCSUFFIX}"
+  fi
 
   # GCC-specific machine selection option
   [ "${_CPU}" = 'x86' ] && _OPTM='-m32'
@@ -470,7 +475,7 @@ build_single_target() {
   fi
 
   if [ "${_CC}" = 'llvm' ]; then
-    ccver="$("clang${CW_CCSUFFIX}" -dumpversion)"
+    ccver="$("clang${_CCSUFFIX}" -dumpversion)"
   else
     ccver="$("${_CCPREFIX}gcc" -dumpversion)"
 
@@ -541,11 +546,12 @@ build_single_target() {
 
   export _LD
   _BINUTILS_PREFIX="${_CCPREFIX}"
+  _BINUTILS_SUFFIX=''
   if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
     export _BINUTILS_PREFIX  # Exclusively for libssh2-gnumake.sh
   fi
   if [ "${_CC}" = 'llvm' ]; then
-    _CC_GLOBAL="clang${CW_CCSUFFIX} --target=${_TRIPLET}"
+    _CC_GLOBAL="clang${_CCSUFFIX} --target=${_TRIPLET}"
     _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET}"
     if [ -n "${_SYSROOT}" ]; then
       _CC_GLOBAL="${_CC_GLOBAL} --sysroot=${_SYSROOT}"
@@ -591,14 +597,15 @@ build_single_target() {
       _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_SYSROOT=${_SYSROOT}"
     fi
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER_TARGET=${_TRIPLET}"
-    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=clang${CW_CCSUFFIX}"
+    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=clang${_CCSUFFIX}"
     _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}"
-    _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=clang++${CW_CCSUFFIX}"
+    _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=clang++${_CCSUFFIX}"
 
     _LD='lld'
     if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then  # llvm-mingw uses these tools by default
       _BINUTILS_PREFIX='llvm-'
-      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -fuse-ld=lld"
+      _BINUTILS_SUFFIX="${_CCSUFFIX}"
+      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -fuse-ld=lld${_CCSUFFIX}"
       if [ "${_OS}" = 'mac' ]; then
         _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} -I${_SYSROOT}/${_TRIPLET}/include"
       fi
@@ -651,24 +658,22 @@ build_single_target() {
     fi
   fi
 
-  export _STRIP="${_BINUTILS_PREFIX}strip"
-  export _OBJDUMP="${_BINUTILS_PREFIX}objdump"
-  export RC
+  export _STRIP="${_BINUTILS_PREFIX}strip${_BINUTILS_SUFFIX}"
+  export _OBJDUMP="${_BINUTILS_PREFIX}objdump${_BINUTILS_SUFFIX}"
+  export RC="${_BINUTILS_PREFIX}windres${_BINUTILS_SUFFIX}"
   if [ "${_CC}" = 'llvm' ] && \
      [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && \
      [ "${_OS}" = 'linux' ] && \
-     [ -x /usr/bin/llvm-rc ]; then
+     [ -x "/usr/bin/${_BINUTILS_PREFIX}rc${_BINUTILS_SUFFIX}" ]; then
     # FIXME: llvm-windres alias (to llvm-rc) missing from current debian:testing.
     #        Workaround: Create an alias and use that.
     #        https://packages.debian.org/testing/amd64/llvm/filelist
-    RC="$(pwd)/llvm-windres"
-    ln -s -f /usr/bin/llvm-rc "${RC}"
-  else
-    RC="${_BINUTILS_PREFIX}windres"
+    RC="$(pwd)/${RC}"
+    ln -s -f "/usr/bin/${_BINUTILS_PREFIX}rc${_BINUTILS_SUFFIX}" "${RC}"
   fi
-  export AR="${_BINUTILS_PREFIX}ar"
-  export NM="${_BINUTILS_PREFIX}nm"
-  export RANLIB="${_BINUTILS_PREFIX}ranlib"
+  export AR="${_BINUTILS_PREFIX}ar${_BINUTILS_SUFFIX}"
+  export NM="${_BINUTILS_PREFIX}nm${_BINUTILS_SUFFIX}"
+  export RANLIB="${_BINUTILS_PREFIX}ranlib${_BINUTILS_SUFFIX}"
 
   # In some environments, we need to pair up llvm-windres with the mingw-w64
   # include dir, and/or we need to pass it the target platform. Some builds
