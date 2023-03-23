@@ -8,10 +8,13 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 cat /etc/*-release
 
+export CW_CCSUFFIX='-15'
+
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 update
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
   curl git gpg rsync python3-pefile make cmake \
-  mingw-w64 llvm clang lld \
+  mingw-w64 \
+  "llvm${CW_CCSUFFIX}" "clang${CW_CCSUFFIX}" "lld${CW_CCSUFFIX}" \
   autoconf automake autopoint libtool osslsigncode \
   zip time jq dos2unix secure-delete wine64
 
