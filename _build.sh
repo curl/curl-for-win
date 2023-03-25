@@ -307,6 +307,8 @@ bld() {
   if [ -z "${CW_BLD:-}" ] || echo " ${CW_BLD} " | grep -q -E -- " ${pkg}(-${bldtools})? "; then
     shift
 
+    export _BLDDIR="${_BLDDIR_BASE}"
+
     pkgori="${pkg}"
     [ -n "${2:-}" ] && pkg="$2"
     # allow selecting an alternate build tool
@@ -495,10 +497,10 @@ build_single_target() {
   # Setup common toolchain configuration options
 
   export _TOP; _TOP="$(pwd)"  # Must be an absolute path
+  _BLDDIR_BASE='bld'
   export _PKGDIR="${_CPU}-${_CRT}"
   _PREFIX='/usr'
   export _PP="${_PKGDIR}${_PREFIX}"
-  export _BLDDIR='bld'
   export _CC_GLOBAL=''
   export _CFLAGS_GLOBAL=''
   export _CFLAGS_GLOBAL_CMAKE=''
