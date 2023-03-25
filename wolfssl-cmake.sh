@@ -18,8 +18,6 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  CPPFLAGS='-DWOLFSSL_IP_ALT_NAME'  # https://github.com/wolfSSL/wolfssl/issues/6063
-
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
     '-DBUILD_SHARED_LIBS=OFF' \
