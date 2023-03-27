@@ -120,6 +120,8 @@ export GREP_OPTIONS=
 export ZIPOPT=
 export ZIP=
 
+unamem="$(uname -m)"
+
 readonly _LOG='logurl.txt'
 readonly _SELF='curl-for-win'
 if [ -n "${APPVEYOR_ACCOUNT_NAME:-}" ]; then
@@ -221,11 +223,11 @@ fi
 # Even with `_CCPREFIX` provided.
 # https://clang.llvm.org/docs/CrossCompilation.html
 case "${_OS}" in
-  win)   _BUILD_HOST="$(uname -m)-pc-mingw32";;
-  linux) _BUILD_HOST="$(uname -m)-pc-linux";;
-  bsd)   _BUILD_HOST="$(uname -m)-pc-bsd";;
-  mac)   _BUILD_HOST="$(uname -m)-apple-darwin";;
-  *)     _BUILD_HOST="$(uname -m)-pc-$(uname -s | tr '[:upper:]' '[:lower:]')";;  # lazy guess
+  win)   _BUILD_HOST="${unamem}-pc-mingw32";;
+  linux) _BUILD_HOST="${unamem}-pc-linux";;
+  bsd)   _BUILD_HOST="${unamem}-pc-bsd";;
+  mac)   _BUILD_HOST="${unamem}-apple-darwin";;
+  *)     _BUILD_HOST="${unamem}-pc-$(uname -s | tr '[:upper:]' '[:lower:]')";;  # lazy guess
 esac
 
 export PUBLISH_PROD_FROM
@@ -452,7 +454,7 @@ build_single_target() {
        [ "${_OS}" = 'bsd' ]; then
       # Run x64 targets on same CPU:
       if [ "${_CPU}" = 'x64' ] && \
-         [ "$(uname -m)" = 'x86_64' ]; then
+         [ "${unamem}" = 'x86_64' ]; then
         if command -v wine64 >/dev/null 2>&1; then
           _WINE='wine64'
         elif command -v wine >/dev/null 2>&1; then
@@ -467,10 +469,10 @@ build_single_target() {
       fi
     elif [ "${_OS}" = 'win' ]; then
       # Skip ARM64 target on 64-bit Intel, run all targets on ARM64:
-      if [ "$(uname -m)" = 'x86_64' ] && \
+      if [ "${unamem}" = 'x86_64' ] && \
          [ "${_CPU}" != 'a64' ]; then
         _WINE=
-      elif [ "$(uname -m)" = 'aarch64' ]; then
+      elif [ "${unamem}" = 'aarch64' ]; then
         _WINE=
       fi
     fi
