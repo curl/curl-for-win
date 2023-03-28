@@ -31,11 +31,7 @@ while [ -n "${1:-}" ]; do
      [ "${f#*.dll.a}" = "${f}" ]; then
     echo "! Normalizing library: '${f}'"
     tmp="$(mktemp -d)"
-    ff="$(realpath "${f}")"
-    (
-      cd "${tmp}"
-      "${AR}" x "${ff}"  # --output= option supported since llvm-ar 15.0.0. TODO: use it.
-    )
+    "${AR}" x --output="${tmp}" "${f}"  # --output= option requires llvm-ar v15.0.0 or binutils
     for o in "${tmp}"/*; do
       n="$(printf '%s' "${o}" | sed -E \
         -e 's/lib[a-z0-9]+_la-//g' \
