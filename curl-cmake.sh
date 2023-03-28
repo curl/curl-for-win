@@ -146,7 +146,7 @@ _VER="$1"
         LIBS="${LIBS} -lbcrypt"  # for auto-detection
         h3=1
       elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-        CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
+        [ "${CURL_VER_}" = '8.0.1' ] && CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
         CPPFLAGS="${CPPFLAGS} -DHAVE_SSL_SET0_WBIO"
         LIBS="${LIBS} -lbcrypt"  # for auto-detection
         [ "${_OPENSSL}" = 'quictls' ] && h3=1

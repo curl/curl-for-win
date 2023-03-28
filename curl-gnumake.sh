@@ -25,7 +25,7 @@ _VER="$1"
 
   # Build
 
-  export CFG='-ipv6-sspi-srp'
+  export CFG='-ipv6-sspi'
 
   export CC="${_CC_GLOBAL}"
   export CFLAGS="${_CFLAGS_GLOBAL} -O3 ${_CFLAGS_GLOBAL_WEXTRA}"
@@ -36,6 +36,8 @@ _VER="$1"
 
   LDFLAGS_BIN=''
   LDFLAGS_LIB=''
+
+  [ "${CURL_VER_}" = '8.0.1' ] && CFG="${CFG}-srp"
 
   if [ ! "${_BRANCH#*werror*}" = "${_BRANCH}" ]; then
     CFLAGS="${CFLAGS} -Werror"

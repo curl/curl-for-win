@@ -156,7 +156,11 @@ _VER="$1"
         LIBS="${LIBS} -lbcrypt"  # for auto-detection
         h3=1
       elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-        options="${options} --enable-tls-srp"
+        if [ "${CURL_VER_}" = '8.0.1' ]; then
+          options="${options} --enable-tls-srp"
+        else
+          options="${options} --disable-tls-srp"
+        fi
         LIBS="${LIBS} -lbcrypt"  # for auto-detection
         [ "${_OPENSSL}" = 'quictls' ] && h3=1
       fi
