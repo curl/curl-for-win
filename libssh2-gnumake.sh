@@ -18,6 +18,7 @@ _VER="$1"
 
   CFLAGS=''
   CPPFLAGS=''
+  LIBS=''
 
   if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
     [ "${_CPU}" = 'x64' ] && export ARCH='w64'
@@ -49,6 +50,14 @@ _VER="$1"
         CPPFLAGS="${CPPFLAGS} -DNOCRYPT"  # Avoid warnings
       fi
     fi
+    if [ "${_OPENSSL}" = 'boringssl' ]; then
+      # for DLL
+      if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
+        LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
+      else
+        LIBS="${LIBS} -lpthread"
+      fi
+    fi
   elif [ -d ../wolfssl ]; then
     if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
       CPPFLAGS="${CPPFLAGS} -DLIBSSH2_WOLFSSL"
@@ -71,14 +80,14 @@ _VER="$1"
     export LIBSSH2_RANLIB="${RANLIB}"
     export LIBSSH2_DLL_A_SUFFIX='.dll'
     export LIBSSH2_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${CFLAGS} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS}"
-    export LIBSSH2_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL}"
+    export LIBSSH2_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL} ${LIBS}"
     export LIBSSH2_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
   else
     export CC="${_CC_GLOBAL}"
     export CFLAGS="${_CFLAGS_GLOBAL} ${CFLAGS}"
     export CPPFLAGS="${_CPPFLAGS_GLOBAL} ${CPPFLAGS}"
     export LDFLAGS="${_LDFLAGS_GLOBAL}"
-    export LIBS="${_LIBS_GLOBAL}"
+    export LIBS="${_LIBS_GLOBAL} ${LIBS}"
     export RCFLAGS="${_RCFLAGS_GLOBAL}"
   fi
 

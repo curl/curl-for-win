@@ -45,6 +45,14 @@ _VER="$1"
         LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
       fi
     fi
+    if [ "${_OPENSSL}" = 'boringssl' ]; then
+      # for DLL
+      if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
+        LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
+      else
+        LIBS="${LIBS} -lpthread"
+      fi
+    fi
     # Silence useless libssh2 warnings about missing runtime DLLs
     touch \
       "${_TOP}/${_OPENSSL}/${_PP}/crypto.dll" \
