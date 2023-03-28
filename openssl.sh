@@ -55,6 +55,12 @@ _VER="$1"
   options="${options} no-filenames -DUSE_BCRYPTGENRANDOM -lbcrypt"
   [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128"
 
+  if false && [ -n "${_ZLIB}" ]; then
+    options="${options} --with-zlib-lib=${_TOP}/${_ZLIB}/${_PP}/lib"
+    options="${options} --with-zlib-include=${_TOP}/${_ZLIB}/${_PP}/include"
+    options="${options} zlib"
+  fi
+
   export CC="${_CC_GLOBAL}"
 
   # OpenSSL's ./Configure dumps build flags into object `crypto/cversion.o`
