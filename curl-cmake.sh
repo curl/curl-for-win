@@ -68,14 +68,6 @@ _VER="$1"
       fi
     fi
 
-    # Ugly hack. Everything breaks without this due to the accidental ordering
-    # of libs and objects, and offering no universal way to (re)insert libs at
-    # specific positions. Linker complains about a missing --end-group, then
-    # adds it automatically anyway.
-    if [ "${_LD}" = 'ld' ]; then
-      LDFLAGS="${LDFLAGS} -Wl,--start-group"
-    fi
-
     # Link lib dependencies in static mode. Implied by `-static` for curl,
     # but required for libcurl, which would link to shared libs by default.
     LDFLAGS="${LDFLAGS} -Wl,-Bstatic"
@@ -320,6 +312,7 @@ _VER="$1"
     cmake . -B "${_BLDDIR}-${pass}" ${_CMAKE_GLOBAL} ${options} \
       "-DCMAKE_RC_FLAGS=${_RCFLAGS_GLOBAL}" \
       "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}" \
+      "-DCMAKE_C_STANDARD_LIBRARIES=${LIBS}" \
       "-DCMAKE_EXE_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_BIN} ${LIBS}" \
       "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}"  # --debug-find --debug-trycompile
 
