@@ -16,7 +16,9 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 while [ "${1#--*}" != "${1:-}" ]; do
   if [ "$1" = '--ar' ]; then
-    shift; AR="$1"
+    shift; AR="$1"; shift
+  elif [ "$1" = '--strip' ]; then
+    shift; strip="$1"; shift
   fi
 done
 
@@ -40,6 +42,7 @@ while [ -n "${1:-}" ]; do
         -e 's/(\.cc\.obj|\.c\.obj|\.obj)$/.o/g')"
       [ "${o}" != "${n}" ] && mv -n "${o}" "${n}"
     done
+    [ -n "${strip}" ] && "${strip}" --enable-deterministic-archives --strip-debug "${tmp}"/*
     rm "${f}"
     # shellcheck disable=SC2046
     "${AR}" crD "${f}" $(find "${tmp}" -type f | sort)

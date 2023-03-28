@@ -110,7 +110,9 @@ _VER="$1"
   #        - produces different output across build hosts after stripping libs
   #          compiled with -ggdb.
   #        - fails to strip the `.file` record from NASM objects.
-  #        - fails to clear timestamps in NASM objects (fixed by --reproducible).
+  #          (fixed by --reproducible with nasm v2.16)
+  #        - fails to clear timestamps in NASM objects.
+  #          (fixed by --reproducible with nasm v2.15.05)
   #        Work around them by running it through binutils strip. This works for
   #        x64 and x86, but not for ARM64.
   #
@@ -137,10 +139,14 @@ _VER="$1"
   # libcrypto-ggdb-binutils-llvm.a                  2479874
   # libcrypto-ggdb-binutils-llvm-binutils.a         2488066
 
-  [ -n "${_STRIP_BINUTILS}" ] && \
-  "${_STRIP_BINUTILS}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/*.a
+  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/libssl.a
+  # FIXME: llvm-strip corrupts nasm objects as of LLVM v16.0.0
+# "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/libcrypto.a
 
-  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/*.a
+  # FIXME: Use binutils strip instead, directly on objects, to avoid
+  #        binutils strip v2.40 error `invalid operation` when run on
+  #        the whole lib:
+  ../_libclean.sh --strip "${_STRIP_BINUTILS}" "${_PP}"/lib/libcrypto.a
 
   touch -c -r "${_ref}" "${_PP}"/include/openssl/*.h
   touch -c -r "${_ref}" "${_PP}"/lib/*.a
