@@ -141,13 +141,19 @@ _VER="$1"
   # libcrypto-ggdb-binutils-llvm-binutils.a         2488066
 
   "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/libssl.a
-  # FIXME: llvm-strip corrupts nasm objects as of LLVM v16.0.0
-# "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/libcrypto.a
 
-  # FIXME: Use binutils strip instead, directly on objects, to avoid
-  #        binutils strip v2.40 error `invalid operation` when run on
-  #        the whole lib:
-  ../_libclean.sh --strip "${_STRIP_BINUTILS}" "${_PP}"/lib/libcrypto.a
+  if [ -n "${_STRIP_BINUTILS}" ]; then
+    # FIXME: llvm-strip corrupts nasm objects as of LLVM v16.0.0
+  # "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/libcrypto.a
+
+    # FIXME: Use binutils strip instead, directly on objects, to avoid
+    #        binutils strip v2.40 error `invalid operation` when run on
+    #        the whole lib:
+    ../_libclean.sh --strip "${_STRIP_BINUTILS}" "${_PP}"/lib/libcrypto.a
+  else
+    # We don't yet use ASM with ARM64 builds, so it's safe to use llvm-strip:
+    "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/libcrypto.a
+  fi
 
   touch -c -r "${_ref}" "${_PP}"/include/openssl/*.h
   touch -c -r "${_ref}" "${_PP}"/lib/*.a
