@@ -14,8 +14,6 @@ _VER="$1"
 (
   cd "${_NAM}"  # mandatory component
 
-  # TODO: try LDFLAGS='-static -all-static'
-
   cache='configure-cache.txt'
   rm -f "${cache}"
 
