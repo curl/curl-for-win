@@ -56,6 +56,8 @@ _VER="$1"
     # non-deterministic `.file` sections. We will need a fix in either
     # llvm-strip or NASM, or binutils strip getting ARM64 support.
     cpu='ARM64'; options="${options} -DOPENSSL_NO_ASM=ON"  # FIXME
+  else
+    options="${options} -DCMAKE_ASM_NASM_FLAGS=--reproducible"
   fi
 
   options="${options} -DOPENSSL_SMALL=OFF"  # ON reduces curl binary sizes by ~300 KB
@@ -93,7 +95,6 @@ _VER="$1"
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
     "-DCMAKE_SYSTEM_PROCESSOR=${cpu}" \
     '-DBUILD_SHARED_LIBS=OFF' \
-    '-DCMAKE_ASM_NASM_FLAGS=--reproducible' \
     "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LIBS}" \
     "-DCMAKE_CXX_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LIBS} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
 
