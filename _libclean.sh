@@ -11,6 +11,7 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 #   - strip `libname_la-` prefix added by autotools
 #   - change suffix to .o
 #   - alpha-sort
+#   - optionally strip objects when called with `--strip <strip-tool>`
 #
 # NOTE: This script does not support spaces in filenames.
 
