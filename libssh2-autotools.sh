@@ -52,7 +52,6 @@ _VER="$1"
       else
         LDFLAGS="${LDFLAGS} -Wl,-Bstatic,-lpthread,-Bdynamic"
       fi
-    fi
     elif [ "${_OPENSSL}" = 'libressl' ]; then
       LIBS="${LIBS} -lbcrypt"
     elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
