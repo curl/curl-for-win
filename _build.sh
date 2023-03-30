@@ -384,8 +384,8 @@ build_single_target() {
   export _TRIPLET=''
   _SYSROOT=''
 
-  export _CCPREFIX=
-  export _CCSUFFIX=
+  _CCPREFIX=
+  _CCSUFFIX=
   export _MAKE='make'
   export _WINE=''
 
