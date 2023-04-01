@@ -15,6 +15,8 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 #
 # NOTE: This script does not support spaces in filenames.
 
+strip=''
+
 while [ "${1#--*}" != "${1:-}" ]; do
   if [ "$1" = '--ar' ]; then
     shift; AR="$1"; shift
