@@ -68,7 +68,7 @@ _VER="$1"
     fi
   elif [ -d ../mbedtls ] && [ "${LIBSSH2_VER_}" != '1.10.0' ]; then
     export MBEDTLS_PATH="../../mbedtls/${_PP}"
-  else
+  elif [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
     export WITH_WINCNG=1
   fi
 
