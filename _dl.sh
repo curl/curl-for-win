@@ -11,8 +11,11 @@ gpgdir="$(realpath .cw-gpg)"; rm -r -f "${gpgdir}"; mkdir -p "${gpgdir}"; chmod 
 #       tarball does change for each download (the timestamps in it), so we
 #       cannot checksum it:
 #          https://boringssl.googlesource.com/boringssl/+archive/{ver}.tar.gz
+#          https://boringssl.googlesource.com/boringssl/+archive/58472cc752c92554343d032ab34c683005f63e30.tar.gz
 #       Ref: https://github.com/google/gitiles/issues/84 (closed)
 #       Ref: https://github.com/google/gitiles/issues/217
+#       It can happen that the active revision is not yet published via the
+#       GitHub repo. This results in a 404 when trying to download the archive.
 
 dependencies_json() {
 cat <<EOF
