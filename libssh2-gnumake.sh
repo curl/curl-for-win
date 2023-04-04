@@ -92,10 +92,10 @@ _VER="$1"
   fi
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
-    "${_MAKE}" --directory=win32 --jobs="${_JOBS}" distclean
+    "${_MAKE}" --jobs="${_JOBS}" --directory=win32 distclean
   fi
-  "${_MAKE}" --directory=win32 --jobs="${_JOBS}" lib  # dll
-# "${_MAKE}" --directory=win32 --jobs="${_JOBS}" test
+  "${_MAKE}" --jobs="${_JOBS}" --directory=win32 lib  # dll
+# "${_MAKE}" --jobs="${_JOBS}" --directory=win32 test
 
   # Install manually
 
