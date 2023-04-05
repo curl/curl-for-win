@@ -10,7 +10,7 @@ export CURL_HASH=0a381cd82f4d00a9a334438b8ca239afea5bfefcfa9a1025f2bf118e79e0b5f
 # Create revision string
 # NOTE: Set _REV to 1 after bumping CURL_VER_, then increment for each
 #       CI rebuild via `main` branch push (e.g. after bumping a dependency).
-export _REV='5'
+export _REV='6'
 
 export CACERT_VER_='2023-01-10'
 export CACERT_HASH=fb1ecd641d0a02c01bc9036d513cb658bbda62a75e246bedbc01764560a639f0
@@ -56,8 +56,8 @@ export ZLIBNG_VER_='2.0.7'
 export ZLIBNG_HASH=6c0853bb27738b811f2b4d4af095323c3d5ce36ceed6b50e5f773204fb8f7200
 export ZLIB_VER_='1.2.13'
 export ZLIB_HASH=d14c38e313afc35a9a8760dadf26042f51ea0f5d154b0630a31da0540107fb98
-export ZSTD_VER_='1.5.4'
-export ZSTD_HASH=0f470992aedad543126d06efab344dc5f3e171893810455787d38347343a4424
+export ZSTD_VER_='1.5.5'
+export ZSTD_HASH=9c4396cc829cfae319a6e2615202e82aad41372073482fce286fac78646d3ee4
 export LLVM_MINGW_LINUX_VER_='20230320'
 export LLVM_MINGW_LINUX_HASH=bc367753dea829d219be32e2e64e2d15d03158ce8e700ae5210ca3d78e6a07ea
 export LLVM_MINGW_MAC_VER_='20230320'
