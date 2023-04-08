@@ -27,21 +27,23 @@ _VER="$1"
 
     CPPFLAGS="${CPPFLAGS} -DHAVE_STRTOLL"
     CPPFLAGS="${CPPFLAGS} -DHAVE_DECL_SECUREZEROMEMORY=1 -DLIBSSH2_CLEAR_MEMORY -D_FILE_OFFSET_BITS=64"
+    TOP_DIR='../'
   else
     CFLAGS="${CFLAGS} -O3"
+    TOP_DIR=''
   fi
 
   if [ -n "${_ZLIB}" ]; then
     if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
-      export ZLIB_PATH="../../${_ZLIB}/${_PP}/include"
+      export ZLIB_PATH="${TOP_DIR}../${_ZLIB}/${_PP}/include"
       export WITH_ZLIB=1
     else
-      export ZLIB_PATH="../../${_ZLIB}/${_PP}"
+      export ZLIB_PATH="${TOP_DIR}../${_ZLIB}/${_PP}"
     fi
   fi
 
   if [ -n "${_OPENSSL}" ]; then
-    export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
+    export OPENSSL_PATH="${TOP_DIR}../${_OPENSSL}/${_PP}"
     if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
       CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR"
       if [ "${_OPENSSL}" = 'boringssl' ]; then
@@ -61,13 +63,13 @@ _VER="$1"
   elif [ -d ../wolfssl ]; then
     if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
       CPPFLAGS="${CPPFLAGS} -DLIBSSH2_WOLFSSL"
-      CPPFLAGS="${CPPFLAGS} -I../../wolfssl/${_PP}/include"
-      export OPENSSL_INCLUDE="../../wolfssl/${_PP}/include/wolfssl"
+      CPPFLAGS="${CPPFLAGS} -I${TOP_DIR}../wolfssl/${_PP}/include"
+      export OPENSSL_INCLUDE="${TOP_DIR}../wolfssl/${_PP}/include/wolfssl"
     else
-      export WOLFSSL_PATH="../../wolfssl/${_PP}"
+      export WOLFSSL_PATH="${TOP_DIR}../wolfssl/${_PP}"
     fi
   elif [ -d ../mbedtls ] && [ "${LIBSSH2_VER_}" != '1.10.0' ]; then
-    export MBEDTLS_PATH="../../mbedtls/${_PP}"
+    export MBEDTLS_PATH="${TOP_DIR}../mbedtls/${_PP}"
   elif [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
     export WITH_WINCNG=1
   fi
@@ -82,6 +84,13 @@ _VER="$1"
     export LIBSSH2_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${CFLAGS} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS}"
     export LIBSSH2_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL} ${LIBS}"
     export LIBSSH2_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
+    BLD_DIR='win32'
+
+    if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
+      "${_MAKE}" --jobs="${_JOBS}" --directory=win32 distclean
+    fi
+    "${_MAKE}" --jobs="${_JOBS}" --directory=win32 lib  # dll
+  # "${_MAKE}" --jobs="${_JOBS}" --directory=win32 test
   else
     export CC="${_CC_GLOBAL}"
     export CFLAGS="${_CFLAGS_GLOBAL} ${CFLAGS}"
@@ -89,21 +98,22 @@ _VER="$1"
     export LDFLAGS="${_LDFLAGS_GLOBAL}"
     export LIBS="${_LIBS_GLOBAL} ${LIBS}"
     export RCFLAGS="${_RCFLAGS_GLOBAL}"
-  fi
+    export BLD_DIR="${_BLDDIR}"
 
-  if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
-    "${_MAKE}" --jobs="${_JOBS}" --directory=win32 distclean
+    if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
+      "${_MAKE}" --jobs="${_JOBS}" --makefile=Makefile.mk distclean
+    fi
+    "${_MAKE}" --jobs="${_JOBS}" --makefile=Makefile.mk lib  # dyn
+  # "${_MAKE}" --jobs="${_JOBS}" --makefile=Makefile.mk test
   fi
-  "${_MAKE}" --jobs="${_JOBS}" --directory=win32 lib  # dll
-# "${_MAKE}" --jobs="${_JOBS}" --directory=win32 test
 
   # Install manually
 
   mkdir -p "${_PP}/include"
   mkdir -p "${_PP}/lib"
 
-  cp -f -p ./include/*.h "${_PP}/include/"
-  cp -f -p ./win32/*.a   "${_PP}/lib/"
+  cp -f -p include/*.h       "${_PP}/include/"
+  cp -f -p "${BLD_DIR}"/*.a  "${_PP}/lib/"
 
   . ../libssh2-pkg.sh
 )
