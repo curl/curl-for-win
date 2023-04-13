@@ -638,13 +638,13 @@ build_single_target() {
   fi
 
   export _CFLAGS_GLOBAL_WPICKY
-  # Extra compiler warnings as seen in curl's CMake PICKY_COMPILER (default)
+  # Picky compiler warnings as seen in curl CMake/autotools.
   # builds with llvm/clang 15 and gcc 12.2:
   #   https://clang.llvm.org/docs/DiagnosticsReference.html
   #   https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
-  _CFLAGS_GLOBAL_WPICKY='-pedantic -Wpointer-arith -Wwrite-strings -Wunused -Wshadow -Winline -Wnested-externs -Wmissing-declarations -Wmissing-prototypes -Wfloat-equal -Wsign-compare -Wundef -Wendif-labels -Wstrict-prototypes -Wdeclaration-after-statement -Wcast-align -Wtype-limits -Wempty-body -Wignored-qualifiers -Wconversion -Wvla -Wdouble-promotion -Wenum-conversion -Wno-long-long -Wno-multichar -Wno-format-nonliteral -Wno-sign-conversion -Wno-system-headers'
-  [ "${_CC}" = 'gcc' ] && \
-  _CFLAGS_GLOBAL_WPICKY="${_CFLAGS_GLOBAL_WPICKY} -Wstrict-aliasing=3 -Wold-style-declaration -Wmissing-parameter-type -Wclobbered -Warith-conversion -Wno-pedantic-ms-format"
+  _CFLAGS_GLOBAL_WPICKY='-pedantic -Wcast-align -Wconversion -Wdeclaration-after-statement -Wdouble-promotion -Wempty-body -Wendif-labels -Wenum-conversion -Wfloat-equal -Wignored-qualifiers -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-format-nonliteral -Wno-long-long -Wno-multichar -Wno-sign-conversion -Wno-system-headers -Wpointer-arith -Wshadow -Wsign-compare -Wstrict-prototypes -Wtype-limits -Wundef -Wunused -Wunused-const-variable -Wvla -Wwrite-strings'
+  [ "${_CC}" = 'llvm' ] && _CFLAGS_GLOBAL_WPICKY="${_CFLAGS_GLOBAL_WPICKY} -Wassign-enum -Wcomma -Wextra-semi-stmt -Wshift-sign-overflow -Wshorten-64-to-32"
+  [ "${_CC}" = 'gcc'  ] && _CFLAGS_GLOBAL_WPICKY="${_CFLAGS_GLOBAL_WPICKY} -Walloc-zero -Warith-conversion -Warray-bounds=2 -Wduplicated-branches -Wduplicated-cond -Wformat-overflow=2 -Wformat-truncation=1 -Wformat=2 -Wmissing-parameter-type -Wno-pedantic-ms-format -Wnull-dereference -Wold-style-declaration -Wrestrict -Wshift-negative-value -Wshift-overflow=2 -Wstrict-aliasing=3 -fdelete-null-pointer-checks -ftree-vrp"
 
   # for boringssl
   export _STRIP_BINUTILS=''
