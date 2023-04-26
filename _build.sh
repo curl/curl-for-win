@@ -768,7 +768,7 @@ build_single_target() {
   else
     case "${_OS}" in
       mac)
-        mingwver="$(brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
+        mingwver="$(HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_FROM_API=1 brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
       linux)
         [ -n "${mingwver}" ] || mingwver="$(dpkg   --status       mingw-w64-common)"
         [ -n "${mingwver}" ] || mingwver="$(rpm    --query        mingw64-crt)"
