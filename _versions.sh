@@ -10,7 +10,7 @@ export CURL_HASH=0a381cd82f4d00a9a334438b8ca239afea5bfefcfa9a1025f2bf118e79e0b5f
 # Create revision string
 # NOTE: Set _REV to 1 after bumping CURL_VER_, then increment for each
 #       CI rebuild via `main` branch push (e.g. after bumping a dependency).
-export _REV='7'
+export _REV='8'
 
 export CACERT_VER_='2023-01-10'
 export CACERT_HASH=fb1ecd641d0a02c01bc9036d513cb658bbda62a75e246bedbc01764560a639f0
@@ -36,10 +36,10 @@ export LIBSSH2_VER_='1.10.0'
 export LIBSSH2_HASH=2d64e90f3ded394b91d3a2e774ca203a4179f69aebee03003e5a6fa621e41d51
 export NGHTTP2_VER_='1.52.0'
 export NGHTTP2_HASH=3ea9f0439e60469ad4d39cb349938684ffb929dd7e8e06a7bffe9f9d21f8ba7d
-export NGHTTP3_VER_='0.10.0'
-export NGHTTP3_HASH=4cde2aaefd5ad84438eeae661e1e42b0181fbd906e547088c91098c3ca169a82
-export NGTCP2_VER_='0.14.1'
-export NGTCP2_HASH=ce9786481b2218a244166218c9f68aceb758592e5993c577a0f8fc1163993ebf
+export NGHTTP3_VER_='0.11.0'
+export NGHTTP3_HASH=dcd85fc092eab8e08021c286d87e40eb3539bbd133b437fcd70c2b9ff460a09f
+export NGTCP2_VER_='0.15.0'
+export NGTCP2_HASH=730b6700e4766fa70b311bcf88f1004f78ef3288f18e6e9cf42dfe9b655d412e
 export WOLFSSL_VER_='5.6.0'
 export WOLFSSL_HASH=c1e689e21a17aa9b838e67a37c3eadfa578c8e260f8c77fb028c0316309f0636
 export MBEDTLS_VER_='3.4.0'
