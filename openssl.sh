@@ -48,7 +48,6 @@ _VER="$1"
       );' > Configurations/11-curl-for-win-mingw-arm64.conf
 
     options="${options} mingw-arm64"
-    options="${options} no-asm"  # FIXME: delete this line, when quictls 3.1.0 is out
   fi
 
   options="${options} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
