@@ -152,11 +152,11 @@ _VER="$1"
         #    ld.lld: error: undefined symbol: _setjmp
         #    >>> referenced by ../src/thread.c:1518
         #    >>>               libpthread.a(libwinpthread_la-thread.o):(pthread_create_wrapper)
-        #    clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
+        #    clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
         #    ```
         #    ``` gcc ->
-        #    /usr/local/Cellar/mingw-w64/10.0.0_3/toolchain-x86_64/bin/x86_64-w64-mingw32-ld: /usr/local/Cellar/mingw-w64/10.0.0_3/toolchain-x86_64/lib/gcc/x86_64-w64-mingw32/12.2.0/../../../../x86_64-w64-mingw32/lib/../lib/libpthread.a(libwinpthread_la-thread.o): in function `pthread_create_wrapper':
-        #    /private/tmp/mingw-w64-20220820-4738-rfttcn/mingw-w64-v10.0.0/mingw-w64-libraries/winpthreads/build-x86_64/../src/thread.c:1518: undefined reference to `_setjmp'
+        #    /usr/local/Cellar/mingw-w64/11.0.0/toolchain-x86_64/bin/x86_64-w64-mingw32-ld: /usr/local/Cellar/mingw-w64/11.0.0/toolchain-x86_64/lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/lib/../lib/libpthread.a(libwinpthread_la-thread.o): in function `pthread_create_wrapper':
+        #    /private/tmp/mingw-w64-20230429-5372-1inz9ux/mingw-w64-v11.0.0/mingw-w64-libraries/winpthreads/build-x86_64/../src/thread.c:1518: undefined reference to `_setjmp'
         #    collect2: error: ld returned 1 exit status
         #    ```
         #  */
