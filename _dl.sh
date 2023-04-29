@@ -180,7 +180,7 @@ cat <<EOF
   },
   {
     "name": "llvm-mingw-linux",
-    "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-ubuntu-18.04-x86_64.tar.xz",
+    "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-ubuntu-20.04-x86_64.tar.xz",
     "redir": "redir"
   },
   {
