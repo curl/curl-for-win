@@ -298,7 +298,7 @@ check_update() {
       res="$(my_curl "$7" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
         | grep -a -o -E -- '[0-9.]+' | "${latest}" -1)"
       url="$7${res}"
-      urldir="${url}"
+      urldir="${url}/"
     elif [ -n "$7" ]; then
       url="$7"
       urldir="${url}"
@@ -309,6 +309,7 @@ check_update() {
     [ -n "$9" ] && mask="$9"
     res="$(my_curl "${urldir}" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
       | grep -a -o -E -- "${mask}" | "${latest}" -1)"
+    # >&2 echo "res|${res}|"
     if [[ "${res}" =~ ${mask} ]]; then
       newver="${BASH_REMATCH[1]}"
     fi
