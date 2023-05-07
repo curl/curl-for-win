@@ -23,6 +23,8 @@ _VER="$1"
   if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
     # TODO: Also delete all `CPPFLAGS` references when deleting this.
     CPPFLAGS="${CPPFLAGS} -DHAVE_DECL_SECUREZEROMEMORY=1 -D_FILE_OFFSET_BITS=64"
+  else
+    options="${options} -DCMAKE_UNITY_BUILD=ON"
   fi
 
   if [ -n "${_ZLIB}" ]; then
