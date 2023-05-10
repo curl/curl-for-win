@@ -8,6 +8,8 @@
 
   readonly _ref='NEWS'
 
+  rm -f "${_PP}"/lib/*.dll.a
+
   "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/*.a
 
   touch -c -r "${_ref}" "${_PP}"/include/*.h
