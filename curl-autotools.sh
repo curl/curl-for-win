@@ -144,7 +144,6 @@ _VER="$1"
       options="${options} --disable-openssl-auto-load-config"
       if [ "${_OPENSSL}" = 'boringssl' ]; then
         CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
-        options="${options} --disable-tls-srp"
         if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
           LDFLAGS="${LDFLAGS} -Wl,-Bdynamic,-lpthread,-Bstatic"
         else
@@ -152,20 +151,12 @@ _VER="$1"
         fi
         h3=1
       elif [ "${_OPENSSL}" = 'libressl' ]; then
-        options="${options} --disable-tls-srp"
         LIBS="${LIBS} -lbcrypt"  # for auto-detection
         h3=1
       elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-        if [ "${CURL_VER_}" = '8.0.1' ]; then
-          options="${options} --enable-tls-srp"
-        else
-          options="${options} --disable-tls-srp"
-        fi
         LIBS="${LIBS} -lbcrypt"  # for auto-detection
         [ "${_OPENSSL}" = 'quictls' ] && h3=1
       fi
-    else
-      options="${options} --disable-tls-srp"
     fi
 
     if [ -d ../wolfssl ]; then
@@ -318,6 +309,7 @@ _VER="$1"
       # shellcheck disable=SC2086
       ../configure ${options} \
         --disable-pthreads \
+        --disable-tls-srp \
         --enable-warnings \
         --enable-threaded-resolver \
         --enable-symbol-hiding \

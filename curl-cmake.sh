@@ -135,12 +135,9 @@ _VER="$1"
         fi
         h3=1
       elif [ "${_OPENSSL}" = 'libressl' ]; then
-        [ "${CURL_VER_}" = '8.0.1' ] && LIBS="${LIBS} -lbcrypt"  # for auto-detection
         h3=1
       elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-        [ "${CURL_VER_}" = '8.0.1' ] && CPPFLAGS="${CPPFLAGS} -DHAVE_OPENSSL_SRP -DUSE_TLS_SRP"
         CPPFLAGS="${CPPFLAGS} -DHAVE_SSL_SET0_WBIO"
-        [ "${CURL_VER_}" = '8.0.1' ] && LIBS="${LIBS} -lbcrypt"  # for auto-detection
         [ "${_OPENSSL}" = 'quictls' ] && h3=1
       fi
     else
@@ -188,7 +185,6 @@ _VER="$1"
       options="${options} -DCURL_USE_LIBSSH=OFF"
       options="${options} -DLIBSSH2_LIBRARY=${_TOP}/libssh2/${_PP}/lib/libssh2.a"
       options="${options} -DLIBSSH2_INCLUDE_DIR=${_TOP}/libssh2/${_PP}/include"
-      [ "${CURL_VER_}" = '8.0.1' ] && LIBS="${LIBS} -lbcrypt"  # for auto-detection
 
       if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
         # By passing -lssh2 _before_ -lcrypto (of openssl/libressl) to the
@@ -229,7 +225,6 @@ _VER="$1"
       options="${options} -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PP}/include"
       options="${options} -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/${_PP}/lib"
       CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB"
-      [ "${CURL_VER_}" = '8.0.1' ] && LIBS="${LIBS} -lws2_32"  # Necessary for 'CheckQuicSupportInOpenSSL'
     else
       options="${options} -DUSE_NGHTTP3=OFF"
       options="${options} -DUSE_NGTCP2=OFF"

@@ -37,8 +37,6 @@ _VER="$1"
   LDFLAGS_BIN=''
   LDFLAGS_LIB=''
 
-  [ "${CURL_VER_}" = '8.0.1' ] && CFG="${CFG}-srp"
-
   if [ ! "${_BRANCH#*werror*}" = "${_BRANCH}" ]; then
     CFLAGS="${CFLAGS} -Werror"
   fi
