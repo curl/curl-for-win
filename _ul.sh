@@ -19,7 +19,7 @@ fi
 
 # Use the newest package timestamp for supplementary files
 # shellcheck disable=SC2012
-touch -r "$(ls -1 -t ./*-*-mingw*.* | head -1)" hashes.txt "${_BLD}" "${_URLS}" "${_LOG}"
+touch -r "$(ls -1 -t ./*-*-mingw*.* | head -n 1)" hashes.txt "${_BLD}" "${_URLS}" "${_LOG}"
 
 find . -maxdepth 1 -type f -name '*-*-mingw*.*' | sort
 cat hashes.txt

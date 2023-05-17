@@ -58,7 +58,7 @@ _VER="$1"
       i="${_TOP}/${_OPENSSL}/${_PP}/include/openssl"
       v="${i}/opensslv.h"
       if ! grep -q -a 'OPENSSL_VERSION_NUMBER' "${v}"; then
-        l="$(grep --no-filename -a 'OPENSSL_VERSION_NUMBER' "${i}"/* | head -1)"
+        l="$(grep --no-filename -a 'OPENSSL_VERSION_NUMBER' "${i}"/* | head -n 1)"
         tmp="${l}.tmp"
         touch -r "${v}" "${tmp}"
         printf '\n#if 0\n%s\n#endif\n' "${l}" >> "${v}"
