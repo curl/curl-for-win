@@ -104,7 +104,7 @@ _VER="$1"
       "${_MAKE}" --jobs="${_JOBS}" --makefile=Makefile.mk distclean
     fi
     "${_MAKE}" --jobs="${_JOBS}" --makefile=Makefile.mk lib  # dyn
-  # "${_MAKE}" --jobs="${_JOBS}" --makefile=Makefile.mk test
+  # "${_MAKE}" --jobs="${_JOBS}" --makefile=Makefile.mk test example
   fi
 
   # Install manually
