@@ -30,6 +30,11 @@ _VER="$1"
   elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ]; then
     options="${options} -DENABLE_OPENSSL=ON"
     options="${options} -DOPENSSL_ROOT_DIR=../${_OPENSSL}/${_PP}"
+    # FIXME: This is not enough for picky ld linker (with gcc)
+    if [ -n "${_ZLIB}" ]; then  # required by OpenSSL built with zlib
+      LDFLAGS="${LDFLAGS} -L${_TOP}/${_ZLIB}/${_PP}/lib"
+      LIBS="${LIBS} -lz"
+    fi
   elif [ -d ../wolfssl ]; then
     options="${options} -DENABLE_WOLFSSL=ON"
     options="${options} -DWOLFSSL_LIBRARY=../wolfssl/${_PP}/lib/libwolfssl.a"
