@@ -1,0 +1,50 @@
+# https://docs.github.com/actions/learn-github-actions
+name: daily
+"on":
+  schedule:
+    # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
+    - cron: '32 22,0 * * *'
+
+permissions: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 8
+      - name: 'build'
+        env:
+          DOCKER_IMAGE: 'debian:testing-slim'
+          CW_CONFIG: 'dev'
+          CW_LLVM_MINGW_DL: '1'
+          CW_LLVM_MINGW_ONLY: '0'
+          CW_MAP: '1'
+          CW_JOBS: '3'
+          DO_NOT_TRACK: '1'
+        run: |
+          time docker pull "${DOCKER_IMAGE}"
+          docker images --digests
+          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+            --env-file <(env | grep -a -E \
+              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
+            "${DOCKER_IMAGE}" \
+            sh -c ./_ci-linux-debian.sh
+
+      # https://github.com/actions/upload-artifact
+
+      - name: 'save artifacts: packages'
+        uses: actions/upload-artifact@v3
+        with:
+          name: 'packages'
+          path: '*-*-mingw*.*'
+          retention-days: 60
+
+      - name: 'save artifacts: all'
+        uses: actions/upload-artifact@v3
+        with:
+          name: 'all'
+          path: 'all-mingw*.*'
+          retention-days: 10
