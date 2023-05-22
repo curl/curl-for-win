@@ -151,7 +151,12 @@ else
 fi
 echo "${_LOGURL}" | tee "${_LOG}"
 
-export _BRANCH="${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF:-}${CW_CONFIG:-}"
+export _BRANCH
+if [ -n "${CW_CONFIG:-}" ]; then
+  _BRANCH="${CW_CONFIG}"
+else
+  _BRANCH="${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF:-}"
+fi
 [ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD || true)"
 [ -n "${_BRANCH}" ] || _BRANCH='main'
 if command -v git >/dev/null 2>&1; then
