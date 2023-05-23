@@ -745,9 +745,9 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
   else
     if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
       LIBSSH2_HASH=
-      my_curl --location --proto-redir =https \
-        --output pkg.bin \
-        "https://github.com/libssh2/libssh2/archive/${LIBSSH2_REV_:-master}.tar.gz"
+      url="https://github.com/libssh2/libssh2/archive/${LIBSSH2_REV_:-master}.tar.gz"
+      echo "${url}" > '__libssh2.url'
+      my_curl --location --proto-redir =https --output pkg.bin "${url}"
       live_xt libssh2 "${LIBSSH2_HASH}"
       LIBSSH2_VER_="$(grep -a -F 'define LIBSSH2_VERSION ' 'libssh2/include/libssh2.h' | grep -o -E '".+"' | tr -d '"')"
     else
@@ -764,9 +764,9 @@ fi
 
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   CURL_HASH=
-  my_curl --location --proto-redir =https \
-    --output pkg.bin \
-    "https://github.com/curl/curl/archive/${CURL_REV_:-master}.tar.gz"
+  url="https://github.com/curl/curl/archive/${CURL_REV_:-master}.tar.gz"
+  echo "${url}" > '__curl.url'
+  my_curl --location --proto-redir =https --output pkg.bin "${url}"
   live_xt curl "${CURL_HASH}"
   CURL_VER_="$(grep -a -F 'define LIBCURL_VERSION' 'curl/include/curl/curlver.h' | grep -o -E '".+"' | tr -d '"')"
 else
