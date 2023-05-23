@@ -3,7 +3,7 @@ name: daily
 on:
   schedule:
     # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
-    - cron: '40 20,12 * * *'
+    - cron: '59 20,12 * * *'
 
 permissions: {}
 
