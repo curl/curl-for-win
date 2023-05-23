@@ -24,6 +24,7 @@ jobs:
           CW_JOBS: '3'
           DO_NOT_TRACK: '1'
         run: |
+          export CW_REVISION="$(TZ=UTC date +'%Y%m%d_%H%M')"
           time docker pull "${DOCKER_IMAGE}"
           docker images --digests
           time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \

@@ -10,7 +10,7 @@ export CURL_HASH=08a948e061929645597c1ef7194e07b308b22084ff03fa7400b465e6c05149e
 # Create revision string
 # NOTE: Set _REV to 1 after bumping CURL_VER_, then increment for each
 #       CI rebuild via `main` branch push (e.g. after bumping a dependency).
-export _REV='1'
+export _REV="${CW_REVISION:-1}"
 
 export CACERT_VER_='2023-01-10'
 export CACERT_HASH=fb1ecd641d0a02c01bc9036d513cb658bbda62a75e246bedbc01764560a639f0

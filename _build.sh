@@ -59,6 +59,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      llvm/clang suffix. E.g. '-8' for clang-8.
 #      Optional. Default: (empty)
 #
+# CW_REVISION
+#      Override the stable build revision number.
+#
 # SIGN_CODE_GPG_PASS, SIGN_CODE_KEY_PASS: for code signing
 # SIGN_PKG_KEY_ID, SIGN_PKG_GPG_PASS, SIGN_PKG_KEY_PASS: for package signing
 # DEPLOY_GPG_PASS, DEPLOY_KEY_PASS: for publishing results
