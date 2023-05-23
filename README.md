@@ -103,6 +103,10 @@ Features:         AsynchDNS              HSTS             HTTPS-proxy     IPv6  
 
 <https://ci.appveyor.com/project/curlorg/curl-for-win/history>
 
+# Unstable/development daily builds
+
+<https://github.com/curl/curl-for-win/actions/workflows/daily.yml>
+
 # Guarantees and Liability
 
 See [LICENSE](LICENSE.md).
