@@ -16,7 +16,6 @@ jobs:
           fetch-depth: 8
       - name: 'build'
         env:
-          DOCKER_IMAGE: 'debian:testing-20230522-slim'
           CW_CONFIG: 'dev'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
@@ -24,6 +23,7 @@ jobs:
           CW_JOBS: '3'
           DO_NOT_TRACK: '1'
         run: |
+          . ./_versions.sh
           export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           time docker pull "${DOCKER_IMAGE}"
           docker images --digests

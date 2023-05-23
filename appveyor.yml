@@ -25,7 +25,6 @@ clone_depth: 8
 build:
   verbosity: 'detailed'
 environment:
-  DOCKER_IMAGE: 'debian:testing-20230522-slim'
   CW_LLVM_MINGW_DL: '1'
   CW_LLVM_MINGW_ONLY: '0'
   CW_MAP: '0'
@@ -46,6 +45,7 @@ environment:
   DO_NOT_TRACK: '1'
 build_script:
   - sh: |
+      . ./_versions.sh
       time docker pull "${DOCKER_IMAGE}"
       docker images --digests
       time docker run --volume="$(pwd):$(pwd)" --workdir="$(pwd)" \
@@ -53,10 +53,12 @@ build_script:
           '^(CW_|SIGN_|DEPLOY_|APPVEYOR_|CI_|DO_NOT_TRACK)') \
         "${DOCKER_IMAGE}" \
         sh -c ./_ci-linux-debian.sh
+
 artifacts:
   - path: '*-*-mingw*.*'
     name: 'package'
   - path: 'all-mingw*.*'
     name: 'all'
+
 # init:
 #   - sh: curl --disable --user-agent '' --fail --silent --location --proto-redir =https 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
