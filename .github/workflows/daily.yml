@@ -38,7 +38,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: 'binaries'
-          retention-days: 60
+          retention-days: 42
           path: |
             *-*-mingw*.*
             urls.txt
