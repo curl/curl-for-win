@@ -1,3 +1,6 @@
+# Copyright (C) Viktor Szakats. See LICENSE.md
+# SPDX-License-Identifier: MIT
+---
 # https://docs.github.com/actions/learn-github-actions
 name: daily
 on:
