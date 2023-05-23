@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 8
       - name: 'build'
         env:
-          DOCKER_IMAGE: 'debian:testing-slim'
+          DOCKER_IMAGE: 'debian:testing-20230522-slim'
           CW_CONFIG: 'dev'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
