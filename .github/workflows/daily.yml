@@ -3,7 +3,7 @@ name: daily
 on:
   schedule:
     # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
-    - cron: '40 22,11 * * *'
+    - cron: '40 20,12 * * *'
 
 permissions: {}
 
@@ -24,7 +24,7 @@ jobs:
           CW_JOBS: '3'
           DO_NOT_TRACK: '1'
         run: |
-          export CW_REVISION="$(TZ=UTC date +'%Y%m%d_%H%M')"
+          export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           time docker pull "${DOCKER_IMAGE}"
           docker images --digests
           time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
