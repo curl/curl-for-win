@@ -31,6 +31,7 @@ _VER="$1"
 
   # Required for libssh2
   options="${options} --enable-aesctr"
+  options="${options} --enable-aesgcm-stream"
 
   # Required for curl
   options="${options} --enable-curl"
