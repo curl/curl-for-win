@@ -29,7 +29,8 @@ _VER="$1"
     options="${options} --with-libz=${_TOP}/${_ZLIB}/${_PP}"
   fi
 
-  # Required for libssh2
+  # for libssh2
+  options="${options} --enable-keygen"
   options="${options} --enable-aesctr"
   options="${options} --enable-aesgcm-stream"
 

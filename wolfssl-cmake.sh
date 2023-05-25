@@ -18,13 +18,17 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
+  options=''
+
+  # for libssh2
+  options="${options} -DWOLFSSL_AESCTR=ON"
+
   # shellcheck disable=SC2086
-  cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
+  cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
     '-DBUILD_SHARED_LIBS=OFF' \
     '-DBUILD_SELFTEST=OFF' \
     '-DWOLFSSL_REPRODUCIBLE_BUILD=ON' \
     '-DWOLFSSL_OPENSSLEXTRA=ON' \
-    '-DWOLFSSL_AESCTR=ON' \
     '-DWOLFSSL_EXAMPLES=OFF' \
     '-DWOLFSSL_CRYPT_TESTS=OFF' \
     "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
