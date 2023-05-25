@@ -36,8 +36,9 @@ jobs:
             "${DOCKER_IMAGE}" \
             sh -c ./_ci-linux-debian.sh
 
+      - name: 'list dependencies'
+        run: cat urls.txt
       # https://github.com/actions/upload-artifact
-
       - uses: actions/upload-artifact@v3
         with:
           name: 'binaries'
