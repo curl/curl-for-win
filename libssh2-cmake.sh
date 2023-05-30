@@ -16,16 +16,8 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  CPPFLAGS=''
   LIBS=''
   options=''
-
-  if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
-    # TODO: Also delete all `CPPFLAGS` references when deleting this.
-    CPPFLAGS="${CPPFLAGS} -DHAVE_DECL_SECUREZEROMEMORY=1 -D_FILE_OFFSET_BITS=64"
-  else
-    options="${options} -DCMAKE_UNITY_BUILD=ON"
-  fi
 
   if [ -n "${_ZLIB}" ]; then
     options="${options} -DENABLE_ZLIB_COMPRESSION=ON"
@@ -36,17 +28,6 @@ _VER="$1"
   if [ -n "${_OPENSSL}" ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-    if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
-      if [ "${_OPENSSL}" = 'boringssl' ]; then
-        LIBS="${LIBS} -lpthread"  # to detect HAVE_EVP_AES_128_CTR
-      elif [ "${_OPENSSL}" = 'libressl' ]; then
-        LIBS="${LIBS} -lbcrypt"
-        LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
-      elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-        LIBS="${LIBS} -lbcrypt"
-        LIBS="${LIBS} -lws2_32"  # to detect HAVE_EVP_AES_128_CTR
-      fi
-    fi
     if [ "${_OPENSSL}" = 'boringssl' ]; then
       # for DLL
       if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
@@ -60,12 +41,10 @@ _VER="$1"
       "${_TOP}/${_OPENSSL}/${_PP}/crypto.dll" \
       "${_TOP}/${_OPENSSL}/${_PP}/ssl.dll"
   elif [ -d ../wolfssl ]; then
-    if [ "${LIBSSH2_VER_}" != '1.10.0' ]; then
-      options="${options} -DCRYPTO_BACKEND=wolfSSL"
-      options="${options} -DWOLFSSL_LIBRARY=${_TOP}/wolfssl/${_PP}/lib/libwolfssl.a"
-      options="${options} -DWOLFSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
-    fi
-  elif [ -d ../mbedtls ] && [ "${LIBSSH2_VER_}" != '1.10.0' ]; then
+    options="${options} -DCRYPTO_BACKEND=wolfSSL"
+    options="${options} -DWOLFSSL_LIBRARY=${_TOP}/wolfssl/${_PP}/lib/libwolfssl.a"
+    options="${options} -DWOLFSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
+  elif [ -d ../mbedtls ]; then
     options="${options} -DCRYPTO_BACKEND=mbedTLS"
     options="${options} -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedcrypto.a"
     options="${options} -DMBEDTLS_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedtls.a"
@@ -77,11 +56,12 @@ _VER="$1"
 
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
+    '-DCMAKE_UNITY_BUILD=ON' \
     '-DBUILD_SHARED_LIBS=OFF' \
     '-DBUILD_EXAMPLES=OFF' \
     '-DBUILD_TESTING=OFF' \
     '-DENABLE_DEBUG_LOGGING=OFF' \
-    "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LIBS}"  # --debug-trycompile
+    "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LIBS}"  # --debug-trycompile
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 

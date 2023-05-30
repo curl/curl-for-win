@@ -16,11 +16,7 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR}" "${_BLDDIR}"
 
-  if [ "${LIBSSH2_VER_}" != '1.10.0' ]; then
-    [ -f 'configure' ] || autoreconf --force --install
-  else
-    autoreconf --force --install
-  fi
+  [ -f 'configure' ] || autoreconf --force --install
 
   options="${_CONFIGURE_GLOBAL}"
   export CC="${_CC_GLOBAL}"
@@ -29,10 +25,6 @@ _VER="$1"
   export RCFLAGS="${_RCFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LIBS="${_LIBS_GLOBAL}"
-
-  if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
-    CPPFLAGS="${CPPFLAGS} -DHAVE_DECL_SECUREZEROMEMORY=1 -DLIBSSH2_CLEAR_MEMORY"
-  fi
 
   # NOTE: root path with spaces breaks all values with '${_TOP}'. But,
   #       autotools breaks on spaces anyway, so we leave it like that.
@@ -61,7 +53,7 @@ _VER="$1"
   elif [ -d ../wolfssl ]; then
     options="${options} --with-crypto=wolfssl --with-libwolfssl-prefix=${_TOP}/wolfssl/${_PP}"
     LDFLAGS="${LDFLAGS} -L${_TOP}/wolfssl/${_PP}/lib"
-  elif [ -d ../mbedtls ] && [ "${LIBSSH2_VER_}" != '1.10.0' ]; then
+  elif [ -d ../mbedtls ]; then
     options="${options} --with-crypto=mbedtls --with-libmbedcrypto-prefix=${_TOP}/mbedtls/${_PP}"
     LDFLAGS="${LDFLAGS} -L${_TOP}/mbedtls/${_PP}/lib"
   else

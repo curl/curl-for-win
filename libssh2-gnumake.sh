@@ -16,42 +16,20 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  CFLAGS=''
-  CPPFLAGS=''
-  LIBS=''
-
-  if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
-    [ "${_CPU}" = 'x64' ] && export ARCH='w64'
-    [ "${_CPU}" = 'x86' ] && export ARCH='w32'
-    # ARM64 support missing from upstream.
-
-    CPPFLAGS="${CPPFLAGS} -DHAVE_STRTOLL"
-    CPPFLAGS="${CPPFLAGS} -DHAVE_DECL_SECUREZEROMEMORY=1 -DLIBSSH2_CLEAR_MEMORY -D_FILE_OFFSET_BITS=64"
-    TOP_DIR='../'
-  else
-    CFLAGS="${CFLAGS} -O3"
-    TOP_DIR=''
-  fi
+  export CC="${_CC_GLOBAL}"
+  export CFLAGS="${_CFLAGS_GLOBAL} -O3"
+  export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
+  export LDFLAGS="${_LDFLAGS_GLOBAL}"
+  export LIBS="${_LIBS_GLOBAL}"
+  export RCFLAGS="${_RCFLAGS_GLOBAL}"
+  export BLD_DIR="${_BLDDIR}"
 
   if [ -n "${_ZLIB}" ]; then
-    if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
-      export ZLIB_PATH="${TOP_DIR}../${_ZLIB}/${_PP}/include"
-      export WITH_ZLIB=1
-    else
-      export ZLIB_PATH="${TOP_DIR}../${_ZLIB}/${_PP}"
-    fi
+    export ZLIB_PATH="../${_ZLIB}/${_PP}"
   fi
 
   if [ -n "${_OPENSSL}" ]; then
-    export OPENSSL_PATH="${TOP_DIR}../${_OPENSSL}/${_PP}"
-    if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
-      CPPFLAGS="${CPPFLAGS} -DHAVE_EVP_AES_128_CTR"
-      if [ "${_OPENSSL}" = 'boringssl' ]; then
-        CPPFLAGS="${CPPFLAGS} -DNOCRYPT"  # Necessary due to the settings in win32/libss2_config.h
-      elif [ "${_OPENSSL}" = 'libressl' ]; then
-        CPPFLAGS="${CPPFLAGS} -DNOCRYPT"  # Avoid warnings
-      fi
-    fi
+    export OPENSSL_PATH="../${_OPENSSL}/${_PP}"
     if [ "${_OPENSSL}" = 'boringssl' ]; then
       # for DLL
       if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
@@ -61,51 +39,16 @@ _VER="$1"
       fi
     fi
   elif [ -d ../wolfssl ]; then
-    if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
-      CPPFLAGS="${CPPFLAGS} -DLIBSSH2_WOLFSSL"
-      CPPFLAGS="${CPPFLAGS} -I${TOP_DIR}../wolfssl/${_PP}/include"
-      export OPENSSL_INCLUDE="${TOP_DIR}../wolfssl/${_PP}/include/wolfssl"
-    else
-      export WOLFSSL_PATH="${TOP_DIR}../wolfssl/${_PP}"
-    fi
-  elif [ -d ../mbedtls ] && [ "${LIBSSH2_VER_}" != '1.10.0' ]; then
-    export MBEDTLS_PATH="${TOP_DIR}../mbedtls/${_PP}"
-  elif [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
-    export WITH_WINCNG=1
+    export WOLFSSL_PATH="../wolfssl/${_PP}"
+  elif [ -d ../mbedtls ]; then
+    export MBEDTLS_PATH="../mbedtls/${_PP}"
   fi
 
-  if [ "${LIBSSH2_VER_}" = '1.10.0' ]; then
-    export CROSSPREFIX="${_BINUTILS_PREFIX}"  # for windres
-    export LIBSSH2_CC="${CC}"
-    export LIBSSH2_RC="${RC}"
-    export LIBSSH2_AR="${AR}"
-    export LIBSSH2_RANLIB="${RANLIB}"
-    export LIBSSH2_DLL_A_SUFFIX='.dll'
-    export LIBSSH2_CFLAG_EXTRAS="${_CFLAGS_GLOBAL} ${CFLAGS} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS}"
-    export LIBSSH2_LDFLAG_EXTRAS="${_LDFLAGS_GLOBAL} ${LIBS}"
-    export LIBSSH2_RCFLAG_EXTRAS="${_RCFLAGS_GLOBAL}"
-    BLD_DIR='win32'
-
-    if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
-      "${_MAKE}" --jobs="${_JOBS}" --directory=win32 distclean
-    fi
-    "${_MAKE}" --jobs="${_JOBS}" --directory=win32 lib  # dll
-  # "${_MAKE}" --jobs="${_JOBS}" --directory=win32 test
-  else
-    export CC="${_CC_GLOBAL}"
-    export CFLAGS="${_CFLAGS_GLOBAL} ${CFLAGS}"
-    export CPPFLAGS="${_CPPFLAGS_GLOBAL} ${CPPFLAGS}"
-    export LDFLAGS="${_LDFLAGS_GLOBAL}"
-    export LIBS="${_LIBS_GLOBAL} ${LIBS}"
-    export RCFLAGS="${_RCFLAGS_GLOBAL}"
-    export BLD_DIR="${_BLDDIR}"
-
-    if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
-      "${_MAKE}" --jobs="${_JOBS}" --makefile=Makefile.mk distclean
-    fi
-    "${_MAKE}" --jobs="${_JOBS}" --makefile=Makefile.mk lib  # dyn
-  # "${_MAKE}" --jobs="${_JOBS}" --makefile=Makefile.mk test example
+  if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
+    "${_MAKE}" --jobs="${_JOBS}" --makefile=Makefile.mk distclean
   fi
+  "${_MAKE}" --jobs="${_JOBS}" --makefile=Makefile.mk lib  # dyn
+# "${_MAKE}" --jobs="${_JOBS}" --makefile=Makefile.mk test example
 
   # Install manually
 
