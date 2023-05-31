@@ -20,13 +20,12 @@ if [ -s "${SIGN_CODE_KEY}" ] && \
   # Add code signature
   for file in "$@"; do
     echo "Code signing: '${file}'"
-    # Requires: osslsigncode 2.2 or newer
+    # Requires: osslsigncode 2.4 or newer
     # -ts 'https://freetsa.org/tsr'
-    # TODO: osslsigncode 2.4 renamed '-st' to '-time'
     osslsigncode sign \
       -h sha512 \
       -in "${file}" -out "${file}-signed" \
-      -st "${unixts}" \
+      -time "${unixts}" \
       -pkcs12 "${SIGN_CODE_KEY}" -readpass /dev/stdin <<EOF
 ${SIGN_CODE_KEY_PASS}
 EOF
