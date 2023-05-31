@@ -137,7 +137,6 @@ cat <<EOF
   },
   {
     "name": "openssl",
-    "descending": true,
     "url": "https://www.openssl.org/source/openssl-{ver}.tar.gz",
     "sig": ".asc",
     "sha": ".sha256",
@@ -307,6 +306,7 @@ check_update() {
     fi
     mask="${pkg}[._-]v?([0-9]+(\.[0-9]+)+)\.t"
     [ -n "$9" ] && mask="$9"
+    # >&2 echo "mask|${mask}|"
     res="$(my_curl "${urldir}" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
       | grep -a -o -E -- "${mask}" | "${latest}" -1)"
     # >&2 echo "res|${res}|"
