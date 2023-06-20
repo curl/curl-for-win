@@ -20,6 +20,8 @@ if ! command -v hxclean >/dev/null 2>&1; then
   esac
 fi
 
+_BRANCH=''
+
 . ./_versions.sh
 
 ./_dl.sh bump
