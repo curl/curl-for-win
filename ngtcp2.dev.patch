@@ -37,13 +37,6 @@ index 10f91222..477c10d1 100644
        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ngtcp2")
  endif()
  
-diff --git a/crypto/quictls/.gitignore b/crypto/quictls/.gitignore
-index 296fddc1..6f4bcf87 100644
---- a/crypto/quictls/.gitignore
-+++ b/crypto/quictls/.gitignore
-@@ -1 +1 @@
--/libngtcp2_crypto_openssl.pc
-+/libngtcp2_crypto_quictls.pc
 diff --git a/crypto/shared.h b/crypto/shared.h
 index 8c7c88d0..d69fd212 100644
 --- a/crypto/shared.h
