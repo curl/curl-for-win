@@ -697,7 +697,7 @@ build_single_target() {
       RC="$(pwd)/${RC}"
       ln -s -f "/usr/bin/${_BINUTILS_PREFIX}rc${_BINUTILS_SUFFIX}" "${RC}"
       # llvm-windres/llvm-rc wants to find clang on the same path as itself
-      # (or in PATH), with the hard-wired name of clang (or <TRIPLIET>-clang,
+      # (or in PATH), with the hard-wired name of clang (or <TRIPLET>-clang,
       # or clang-cl). Workaround: create an alias for it:
       ln -s -f "/usr/bin/clang${_CCSUFFIX}" "$(pwd)/clang"
     fi
