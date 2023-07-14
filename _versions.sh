@@ -12,7 +12,7 @@ export CURL_HASH=31b1118eb8bfd43cd95d9a3f146f814ff874f6ed3999b29d94f4d1e7dbac5ef
 # Create revision string
 # NOTE: Set _REV to 1 after bumping CURL_VER_, then increment for each
 #       CI rebuild via `main` branch push (e.g. after bumping a dependency).
-export _REV="${CW_REVISION:-4}"
+export _REV="${CW_REVISION:-5}"
 
 export CACERT_VER_='2023-05-30'
 export CACERT_HASH=5fadcae90aa4ae041150f8e2d26c37d980522cdb49f923fc1e1b5eb8d74e71ad
@@ -38,8 +38,8 @@ export LIBSSH2_VER_='1.10.0'
 export LIBSSH2_HASH=2d64e90f3ded394b91d3a2e774ca203a4179f69aebee03003e5a6fa621e41d51
 export LIBSSH2_VER_='1.11.0'
 export LIBSSH2_HASH=a488a22625296342ddae862de1d59633e6d446eff8417398e06674a49be3d7c2
-export NGHTTP2_VER_='1.55.0'
-export NGHTTP2_HASH=bc5b9d33fc08b195f0f2e685aa70bfd3f2f265a8d48039a701b7d67b375a783f
+export NGHTTP2_VER_='1.55.1'
+export NGHTTP2_HASH=19490b7c8c2ded1cf7c3e3a54ef4304e3a7876ae2d950d60a81d0dc6053be419
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
 export NGHTTP3_VER_='0.13.0'
 export NGHTTP3_HASH=2b01b69c83f4506e7be3bc1a615b1818a92e762ec4be197a7931946e2ae005a0
