@@ -7,12 +7,12 @@
 
 export DOCKER_IMAGE='debian:testing-20230703-slim'
 
-export CURL_VER_='8.1.2'
-export CURL_HASH=31b1118eb8bfd43cd95d9a3f146f814ff874f6ed3999b29d94f4d1e7dbac5ef6
+export CURL_VER_='8.2.0'
+export CURL_HASH=2859ec79e2cd96e976a99493547359b8001af1d1e21f3a3a3b846544ef54500f
 # Create revision string
 # NOTE: Set _REV to 1 after bumping CURL_VER_, then increment for each
 #       CI rebuild via `main` branch push (e.g. after bumping a dependency).
-export _REV="${CW_REVISION:-5}"
+export _REV="${CW_REVISION:-1}"
 
 export CACERT_VER_='2023-05-30'
 export CACERT_HASH=5fadcae90aa4ae041150f8e2d26c37d980522cdb49f923fc1e1b5eb8d74e71ad
@@ -40,17 +40,10 @@ export LIBSSH2_VER_='1.11.0'
 export LIBSSH2_HASH=a488a22625296342ddae862de1d59633e6d446eff8417398e06674a49be3d7c2
 export NGHTTP2_VER_='1.55.1'
 export NGHTTP2_HASH=19490b7c8c2ded1cf7c3e3a54ef4304e3a7876ae2d950d60a81d0dc6053be419
-if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
 export NGHTTP3_VER_='0.13.0'
 export NGHTTP3_HASH=2b01b69c83f4506e7be3bc1a615b1818a92e762ec4be197a7931946e2ae005a0
 export NGTCP2_VER_='0.17.0'
 export NGTCP2_HASH=c652e44788c1cbab6f9bab0f38b139712ab25a6f9f8c4287e409f1e1f30ec441
-else
-export NGHTTP3_VER_='0.11.0'
-export NGHTTP3_HASH=dcd85fc092eab8e08021c286d87e40eb3539bbd133b437fcd70c2b9ff460a09f
-export NGTCP2_VER_='0.15.0'
-export NGTCP2_HASH=730b6700e4766fa70b311bcf88f1004f78ef3288f18e6e9cf42dfe9b655d412e
-fi
 export WOLFSSL_VER_='5.6.3'
 export WOLFSSL_HASH=2e74a397fa797c2902d7467d500de904907666afb4ff80f6464f6efd5afb114a
 export MBEDTLS_VER_='3.4.0'

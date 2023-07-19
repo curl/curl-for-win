@@ -272,11 +272,7 @@ _VER="$1"
       if [ "${_OPENSSL}" = 'boringssl' ]; then
         LIBS="${LIBS} -lngtcp2_crypto_boringssl"
       elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ]; then
-        if [ "${NGTCP2_VER_}" = '0.17.0' ]; then
-          LIBS="${LIBS} -lngtcp2_crypto_quictls"
-        else
-          LIBS="${LIBS} -lngtcp2_crypto_openssl"
-        fi
+        LIBS="${LIBS} -lngtcp2_crypto_quictls"
       elif [ -d ../wolfssl ]; then
         LIBS="${LIBS} -lngtcp2_crypto_wolfssl"
       fi
