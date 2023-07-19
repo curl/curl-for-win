@@ -70,7 +70,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # TODO:
 #   - Change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
-#   - Drop x86 builds. https://data.firefox.com/dashboard/hardware
+#   - Drop x86 builds.
+#     https://data.firefox.com/dashboard/hardware
+#     https://gs.statcounter.com/windows-version-market-share
 #   - quictls: switch to +locks branch?
 #     https://github.com/quictls/openssl/tree/openssl-3.1.0+quic+locks
 
