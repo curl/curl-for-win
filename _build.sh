@@ -71,8 +71,15 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # TODO:
 #   - Change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
 #   - Drop x86 builds.
-#     https://data.firefox.com/dashboard/hardware
-#     https://gs.statcounter.com/windows-version-market-share
+#       https://data.firefox.com/dashboard/hardware
+#       https://gs.statcounter.com/windows-version-market-share
+#     A hidden aspect of x86: The Chocolatey package manager installs x86
+#     binaries on ARM systems to run them in emulated mode. Windows as of ~2021
+#     got the ability to run x64 in emulated mode, but tooling support is
+#     missing, just like support for native ARM binaries:
+#       https://github.com/chocolatey/choco/issues/1803
+#       https://github.com/chocolatey/choco/issues/2172
+#     winget and scoop both support native ARM64.
 #   - quictls: switch to +locks branch?
 #     https://github.com/quictls/openssl/tree/openssl-3.1.0+quic+locks
 
