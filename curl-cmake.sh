@@ -60,11 +60,11 @@ _VER="$1"
 
     if [ "${CW_MAP}" = '1' ]; then
       if [ "${pass}" = 'shared' ]; then
-        _MAP_NAME="libcurl${_CURL_DLL_SUFFIX}.map"
-        LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,-Map,${_MAP_NAME}"
+        _MAP_NAME_LIB="libcurl${_CURL_DLL_SUFFIX}.map"
+        LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,-Map,${_MAP_NAME_LIB}"
       else
-        _MAP_NAME='curl.map'
-        LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,-Map,${_MAP_NAME}"
+        _MAP_NAME_BIN='curl.map'
+        LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,-Map,${_MAP_NAME_BIN}"
       fi
     fi
 
@@ -342,9 +342,9 @@ _VER="$1"
 
     if [ "${CW_MAP}" = '1' ]; then
       if [ "${pass}" = 'shared' ]; then
-        cp -p "${_BLDDIR}-${pass}/lib/${_MAP_NAME}" "${_PP}"/bin/
+        cp -p "${_BLDDIR}-${pass}/lib/${_MAP_NAME_LIB}" "${_PP}"/bin/
       else
-        cp -p "${_BLDDIR}-${pass}/src/${_MAP_NAME}" "${_PP}"/bin/
+        cp -p "${_BLDDIR}-${pass}/src/${_MAP_NAME_BIN}" "${_PP}"/bin/
       fi
     fi
   done
