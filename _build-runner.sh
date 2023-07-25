@@ -3,7 +3,7 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-# WORK-IN-PROGRESS / EXPERIMENTAL
+# EXPERIMENTAL
 
 # This script makes a local curl (and dependencies) build.
 # Start it in a curl-for-win repo sandbox.
