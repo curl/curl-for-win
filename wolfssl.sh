@@ -34,6 +34,11 @@ _VER="$1"
   options="${options} --enable-aesctr"
   options="${options} --enable-aesgcm-stream"
 
+  # Smaller wolfSSL for curl?
+  #   https://www.wolfssl.com/how-to-build-a-smaller-wolfssl-library-when-used-with-curl/
+  # options="${options} –-enable-opensslextra=x509small"
+  # CPPFLAGS="${CPPFLAGS} -DHAVE_CURL"
+
   # Required for curl
   options="${options} --enable-curl"
 
