@@ -494,7 +494,7 @@ bump() {
     sed "s/^0X0X/${keypkg}/g")"
 
   if [ "${newcurl}" = '1' ]; then
-    _REV=''  # Reset revision on each curl version bump
+    _REV='1'  # Reset revision on each curl version bump
   elif [ "${newdep}" = '1' ]; then
     ((_REV+=1))  # Bump revision with each dependency version bump
   fi
