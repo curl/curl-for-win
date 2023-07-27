@@ -106,23 +106,23 @@ _VER="$1"
 
     if [ -n "${_ZLIB}" ]; then
       options="${options} -DUSE_ZLIB=ON"
-      options="${options} -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
       options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
+      options="${options} -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
     else
       options="${options} -DUSE_ZLIB=OFF"
     fi
     if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
       options="${options} -DCURL_BROTLI=ON"
+      options="${options} -DBROTLI_INCLUDE_DIR=${_TOP}/brotli/${_PP}/include"
       options="${options} -DBROTLIDEC_LIBRARY=${_TOP}/brotli/${_PP}/lib/libbrotlidec.a"
       options="${options} -DBROTLICOMMON_LIBRARY=${_TOP}/brotli/${_PP}/lib/libbrotlicommon.a"
-      options="${options} -DBROTLI_INCLUDE_DIR=${_TOP}/brotli/${_PP}/include"
     else
       options="${options} -DCURL_BROTLI=OFF"
     fi
     if [ -d ../zstd ] && [ "${_BRANCH#*nozstd*}" = "${_BRANCH}" ]; then
       options="${options} -DCURL_ZSTD=ON"
-      options="${options} -DZstd_LIBRARY=${_TOP}/zstd/${_PP}/lib/libzstd.a"
       options="${options} -DZstd_INCLUDE_DIR=${_TOP}/zstd/${_PP}/include"
+      options="${options} -DZstd_LIBRARY=${_TOP}/zstd/${_PP}/lib/libzstd.a"
     else
       options="${options} -DCURL_ZSTD=OFF"
     fi
@@ -154,18 +154,18 @@ _VER="$1"
 
     if [ -d ../wolfssl ]; then
       options="${options} -DCURL_USE_WOLFSSL=ON"
-      options="${options} -DWolfSSL_LIBRARY=${_TOP}/wolfssl/${_PP}/lib/libwolfssl.a"
       options="${options} -DWolfSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
+      options="${options} -DWolfSSL_LIBRARY=${_TOP}/wolfssl/${_PP}/lib/libwolfssl.a"
       CPPFLAGS="${CPPFLAGS} -DSIZEOF_LONG_LONG=8"
       h3=1
     fi
 
     if [ -d ../mbedtls ]; then
       options="${options} -DCURL_USE_MBEDTLS=ON"
+      options="${options} -DMBEDTLS_INCLUDE_DIRS=${_TOP}/mbedtls/${_PP}/include"
       options="${options} -DMBEDTLS_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedtls.a"
       options="${options} -DMBEDX509_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedx509.a"
       options="${options} -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedcrypto.a"
-      options="${options} -DMBEDTLS_INCLUDE_DIRS=${_TOP}/mbedtls/${_PP}/include"
     fi
 
     options="${options} -DCURL_USE_SCHANNEL=ON"
@@ -191,8 +191,8 @@ _VER="$1"
     elif [ -d ../libssh2 ]; then
       options="${options} -DCURL_USE_LIBSSH2=ON"
       options="${options} -DCURL_USE_LIBSSH=OFF"
-      options="${options} -DLIBSSH2_LIBRARY=${_TOP}/libssh2/${_PP}/lib/libssh2.a"
       options="${options} -DLIBSSH2_INCLUDE_DIR=${_TOP}/libssh2/${_PP}/include"
+      options="${options} -DLIBSSH2_LIBRARY=${_TOP}/libssh2/${_PP}/lib/libssh2.a"
 
       if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
         # By passing -lssh2 _before_ -lcrypto (of openssl/libressl) to the
@@ -213,8 +213,8 @@ _VER="$1"
 
     if [ -d ../nghttp2 ]; then
       options="${options} -DUSE_NGHTTP2=ON"
-      options="${options} -DNGHTTP2_LIBRARY=${_TOP}/nghttp2/${_PP}/lib/libnghttp2.a"
       options="${options} -DNGHTTP2_INCLUDE_DIR=${_TOP}/nghttp2/${_PP}/include"
+      options="${options} -DNGHTTP2_LIBRARY=${_TOP}/nghttp2/${_PP}/lib/libnghttp2.a"
       CPPFLAGS="${CPPFLAGS} -DNGHTTP2_STATICLIB"
     else
       options="${options} -DUSE_NGHTTP2=OFF"
@@ -224,13 +224,13 @@ _VER="$1"
 
     if [ "${h3}" = '1' ] && [ -d ../nghttp3 ] && [ -d ../ngtcp2 ]; then
       options="${options} -DUSE_NGHTTP3=ON"
-      options="${options} -DNGHTTP3_LIBRARY=${_TOP}/nghttp3/${_PP}/lib/libnghttp3.a"
       options="${options} -DNGHTTP3_INCLUDE_DIR=${_TOP}/nghttp3/${_PP}/include"
+      options="${options} -DNGHTTP3_LIBRARY=${_TOP}/nghttp3/${_PP}/lib/libnghttp3.a"
       CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB"
 
       options="${options} -DUSE_NGTCP2=ON"
-      options="${options} -DNGTCP2_LIBRARY=${_TOP}/ngtcp2/${_PP}/lib/libngtcp2.a"
       options="${options} -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PP}/include"
+      options="${options} -DNGTCP2_LIBRARY=${_TOP}/ngtcp2/${_PP}/lib/libngtcp2.a"
       options="${options} -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/${_PP}/lib"
       CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB"
     else
@@ -239,8 +239,8 @@ _VER="$1"
     fi
     if [ -d ../cares ]; then
       options="${options} -DENABLE_ARES=ON"
-      options="${options} -DCARES_LIBRARY=${_TOP}/cares/${_PP}/lib/libcares.a"
       options="${options} -DCARES_INCLUDE_DIR=${_TOP}/cares/${_PP}/include"
+      options="${options} -DCARES_LIBRARY=${_TOP}/cares/${_PP}/lib/libcares.a"
       CPPFLAGS="${CPPFLAGS} -DCARES_STATICLIB"
     fi
     if [ -d ../gsasl ]; then
@@ -257,8 +257,8 @@ _VER="$1"
 
       if [ -d ../libpsl ] && [ -d ../libiconv ] && [ -d ../libunistring ]; then
         options="${options} -DUSE_LIBPSL=ON"
-        options="${options} -DLIBPSL_LIBRARY=${_TOP}/libpsl/${_PP}/lib/libpsl.a;${_TOP}/libiconv/${_PP}/lib/libiconv.a;${_TOP}/libunistring/${_PP}/lib/libunistring.a"
         options="${options} -DLIBPSL_INCLUDE_DIR=${_TOP}/libpsl/${_PP}/include"
+        options="${options} -DLIBPSL_LIBRARY=${_TOP}/libpsl/${_PP}/lib/libpsl.a;${_TOP}/libiconv/${_PP}/lib/libiconv.a;${_TOP}/libunistring/${_PP}/lib/libunistring.a"
       fi
 
       if [ -d ../libiconv ]; then

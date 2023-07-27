@@ -37,8 +37,8 @@ _VER="$1"
     fi
   elif [ -d ../wolfssl ]; then
     options="${options} -DENABLE_WOLFSSL=ON"
-    options="${options} -DWOLFSSL_LIBRARY=../wolfssl/${_PP}/lib/libwolfssl.a"
     options="${options} -DWOLFSSL_INCLUDE_DIR=../wolfssl/${_PP}/include"
+    options="${options} -DWOLFSSL_LIBRARY=../wolfssl/${_PP}/lib/libwolfssl.a"
     LIBS="${LIBS} -lws2_32"
     if [ -n "${_ZLIB}" ]; then  # required by wolfSSL
       CPPFLAGS="${CPPFLAGS} -I${_TOP}/${_ZLIB}/${_PP}/include"
@@ -48,8 +48,8 @@ _VER="$1"
   fi
 
   if [ -d ../nghttp3 ]; then
-    options="${options} -DLIBNGHTTP3_LIBRARY=../nghttp3/${_PP}/lib"
     options="${options} -DLIBNGHTTP3_INCLUDE_DIR=../nghttp3/${_PP}/include"
+    options="${options} -DLIBNGHTTP3_LIBRARY=../nghttp3/${_PP}/lib"
   fi
 
   # shellcheck disable=SC2086
