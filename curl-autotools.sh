@@ -192,6 +192,10 @@ _VER="$1"
       options="${options} --without-wolfssh"
       options="${options} --without-libssh"
       LIBS="${LIBS} -lbcrypt"  # for auto-detection
+
+      # Workaround for libssh2 1.11.0 regression:
+      # Omit __declspec(dllimport) with libssh2 1.11.0+ to link statically
+      [ "${LIBSSH2_VER_}" = '1.11.0' ] && CPPFLAGS="${CPPFLAGS} -DLIBSSH2_API="
     else
       options="${options} --without-wolfssh"
       options="${options} --without-libssh"
