@@ -57,11 +57,13 @@ _VER="$1"
 
   # CPPFLAGS added after this point only affect libcurl.
 
-  # https://lists.ffmpeg.org/pipermail/ffmpeg-devel/2015-September/179242.html
-  if [ "${_CPU}" = 'x86' ]; then
-    LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,_mainCRTStartup"
-  else
-    LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,mainCRTStartup"
+  if [ "${_LD}" = 'ld' ]; then
+    # https://lists.ffmpeg.org/pipermail/ffmpeg-devel/2015-September/179242.html
+    if [ "${_CPU}" = 'x86' ]; then
+      LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,_mainCRTStartup"
+    else
+      LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,mainCRTStartup"
+    fi
   fi
 
   if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \

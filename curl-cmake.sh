@@ -42,10 +42,12 @@ if [ "${CURL_VER_}" = '8.2.1' ]; then
     LDFLAGS=''
     LDFLAGS_BIN=''
     LDFLAGS_LIB=''
-    if [ "${_CPU}" = 'x86' ]; then
-      LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,_mainCRTStartup"
-    else
-      LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,mainCRTStartup"
+    if [ "${_LD}" = 'ld' ]; then
+      if [ "${_CPU}" = 'x86' ]; then
+        LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,_mainCRTStartup"
+      else
+        LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,mainCRTStartup"
+      fi
     fi
 
     if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
