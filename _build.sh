@@ -95,7 +95,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # Build times (2022-09-26):
 #   - gnumake:                   38 min 13 sec   2293s   100%
-#   - cmake:                     45 min 48 sec   2748s   120%   100%
+#   - cmake w/o dual patch:      45 min 48 sec   2748s   120%   100%
 #   - autotools:                 49 min 32 sec   2972s   130%   108%
 #   - autotools w/o recv patch:  54 min  8 sec   3248s   142%   118%
 
