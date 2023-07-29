@@ -57,6 +57,7 @@ _VER="$1"
 
   # CPPFLAGS added after this point only affect libcurl.
 
+  # https://lists.ffmpeg.org/pipermail/ffmpeg-devel/2015-September/179242.html
   if [ "${_CPU}" = 'x86' ]; then
     LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,_mainCRTStartup"
   else
