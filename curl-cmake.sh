@@ -39,14 +39,13 @@ if [ "${CURL_VER_}" = '8.2.1' ]; then
     [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && options="${options} -DCMAKE_AR=${AR_NORMALIZE}"
 
     LIBS=''
-    LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
+    LDFLAGS=''
     LDFLAGS_BIN=''
     LDFLAGS_LIB=''
     if [ "${_CPU}" = 'x86' ]; then
       LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,_mainCRTStartup"
     else
       LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,mainCRTStartup"
-      LDFLAGS="${LDFLAGS} -Wl,--high-entropy-va"
     fi
 
     if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
@@ -360,14 +359,13 @@ else
   [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && options="${options} -DCMAKE_AR=${AR_NORMALIZE}"
 
   LIBS=''
-  LDFLAGS='-Wl,--nxcompat -Wl,--dynamicbase'
+  LDFLAGS=''
   LDFLAGS_BIN=''
   LDFLAGS_LIB=''
   if [ "${_CPU}" = 'x86' ]; then
     LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,_mainCRTStartup"
   else
     LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,mainCRTStartup"
-    LDFLAGS="${LDFLAGS} -Wl,--high-entropy-va"
   fi
 
   if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then

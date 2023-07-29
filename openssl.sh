@@ -106,7 +106,6 @@ _VER="$1"
     mkdir "${_BLDDIR}"; cd "${_BLDDIR}"
     # shellcheck disable=SC2086
     ../Configure-patched ${options} \
-      -Wl,--nxcompat -Wl,--dynamicbase \
       no-legacy \
       no-apps \
       no-capieng no-loadereng no-padlockeng \

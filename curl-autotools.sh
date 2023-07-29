@@ -33,7 +33,7 @@ _VER="$1"
     export CFLAGS="${_CFLAGS_GLOBAL} -O3"
     export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
     export RCFLAGS="${_RCFLAGS_GLOBAL}"
-    export LDFLAGS="${_LDFLAGS_GLOBAL} -Wl,--nxcompat -Wl,--dynamicbase"
+    export LDFLAGS="${_LDFLAGS_GLOBAL}"
     export LIBS="${_LIBS_GLOBAL}"
 
     options="${options} --enable-unix-sockets"
@@ -65,7 +65,6 @@ _VER="$1"
       if [ "${pass}" = 'static' ]; then
         LDFLAGS="${LDFLAGS} -Wl,--pic-executable,-e,mainCRTStartup"
       fi
-      LDFLAGS="${LDFLAGS} -Wl,--high-entropy-va"
     fi
 
     if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
