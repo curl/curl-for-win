@@ -61,7 +61,6 @@ _VER="$1"
     LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,_mainCRTStartup"
   else
     LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,mainCRTStartup"
-    LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--image-base,0x150000000"
     LDFLAGS="${LDFLAGS} -Wl,--high-entropy-va"
   fi
 

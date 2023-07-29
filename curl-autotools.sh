@@ -64,8 +64,6 @@ _VER="$1"
     else
       if [ "${pass}" = 'static' ]; then
         LDFLAGS="${LDFLAGS} -Wl,--pic-executable,-e,mainCRTStartup"
-      else
-        LDFLAGS="${LDFLAGS} -Wl,--image-base,0x150000000"
       fi
       LDFLAGS="${LDFLAGS} -Wl,--high-entropy-va"
     fi

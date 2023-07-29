@@ -46,7 +46,6 @@ if [ "${CURL_VER_}" = '8.2.1' ]; then
       LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,_mainCRTStartup"
     else
       LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,mainCRTStartup"
-      LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--image-base,0x150000000"
       LDFLAGS="${LDFLAGS} -Wl,--high-entropy-va"
     fi
 
@@ -368,7 +367,6 @@ else
     LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,_mainCRTStartup"
   else
     LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,mainCRTStartup"
-    LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--image-base,0x150000000"
     LDFLAGS="${LDFLAGS} -Wl,--high-entropy-va"
   fi
 
