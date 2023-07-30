@@ -57,12 +57,8 @@ _VER="$1"
       fi
     fi
 
-    if [ "${pass}" = 'static' ] && [ "${_LD}" = 'ld' ]; then
-      if [ "${_CPU}" = 'x86' ]; then
-        LDFLAGS="${LDFLAGS} -Wl,--pic-executable,-e,_mainCRTStartup"
-      else
-        LDFLAGS="${LDFLAGS} -Wl,--pic-executable,-e,mainCRTStartup"
-      fi
+    if [ "${pass}" = 'static' ]; then
+      LDFLAGS="${LDFLAGS} ${_LDFLAGS_BIN_GLOBAL}"
     fi
 
     if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then

@@ -528,6 +528,7 @@ build_single_target() {
   export _CXXFLAGS_GLOBAL=''
   export _RCFLAGS_GLOBAL=''
   export _LDFLAGS_GLOBAL=''
+  export _LDFLAGS_BIN_GLOBAL=''
   export _LDFLAGS_CXX_GLOBAL=''
   export _LIBS_GLOBAL=''
   export _CONFIGURE_GLOBAL=''
@@ -637,6 +638,12 @@ build_single_target() {
   else
     _CC_GLOBAL="${_CCPREFIX}gcc -static-libgcc"
     _LDFLAGS_GLOBAL="${_OPTM} ${_LDFLAGS_GLOBAL}"
+    # https://lists.ffmpeg.org/pipermail/ffmpeg-devel/2015-September/179242.html
+    if [ "${_CPU}" = 'x86' ]; then
+      _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -Wl,--pic-executable,-e,_mainCRTStartup"
+    else
+      _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -Wl,--pic-executable,-e,mainCRTStartup"
+    fi
     _CFLAGS_GLOBAL="${_OPTM} ${_CFLAGS_GLOBAL}"
 
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=${_CCPREFIX}gcc"

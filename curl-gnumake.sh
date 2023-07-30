@@ -34,7 +34,7 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LIBS="${_LIBS_GLOBAL}"
 
-  LDFLAGS_BIN=''
+  LDFLAGS_BIN="${_LDFLAGS_BIN_GLOBAL}"
   LDFLAGS_LIB=''
 
   if [ ! "${_BRANCH#*werror*}" = "${_BRANCH}" ]; then
@@ -56,15 +56,6 @@ _VER="$1"
   CPPFLAGS="${CPPFLAGS} -DCURL_STATICLIB"
 
   # CPPFLAGS added after this point only affect libcurl.
-
-  if [ "${_LD}" = 'ld' ]; then
-    # https://lists.ffmpeg.org/pipermail/ffmpeg-devel/2015-September/179242.html
-    if [ "${_CPU}" = 'x86' ]; then
-      LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,_mainCRTStartup"
-    else
-      LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--pic-executable,-e,mainCRTStartup"
-    fi
-  fi
 
   if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
      [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
