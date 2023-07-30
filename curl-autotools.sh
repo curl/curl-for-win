@@ -57,15 +57,11 @@ _VER="$1"
       fi
     fi
 
-    if [ "${_LD}" = 'ld' ]; then
+    if [ "${pass}" = 'static' ] && [ "${_LD}" = 'ld' ]; then
       if [ "${_CPU}" = 'x86' ]; then
-        if [ "${pass}" = 'static' ]; then
-          LDFLAGS="${LDFLAGS} -Wl,--pic-executable,-e,_mainCRTStartup"
-        fi
+        LDFLAGS="${LDFLAGS} -Wl,--pic-executable,-e,_mainCRTStartup"
       else
-        if [ "${pass}" = 'static' ]; then
-          LDFLAGS="${LDFLAGS} -Wl,--pic-executable,-e,mainCRTStartup"
-        fi
+        LDFLAGS="${LDFLAGS} -Wl,--pic-executable,-e,mainCRTStartup"
       fi
     fi
 
