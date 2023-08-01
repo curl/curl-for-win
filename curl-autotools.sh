@@ -141,12 +141,9 @@ _VER="$1"
           LDFLAGS="${LDFLAGS} -Wl,-Bstatic,-lpthread,-Bdynamic"
         fi
         h3=1
-      elif [ "${_OPENSSL}" = 'libressl' ]; then
+      elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ] || [ "${_OPENSSL}" = 'openssl' ]; then
         LIBS="${LIBS} -lbcrypt"  # for auto-detection
-        h3=1
-      elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-        LIBS="${LIBS} -lbcrypt"  # for auto-detection
-        [ "${_OPENSSL}" = 'quictls' ] && h3=1
+        [ "${_OPENSSL}" = 'openssl' ] || h3=1
       fi
     fi
 

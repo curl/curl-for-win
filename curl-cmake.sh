@@ -446,10 +446,8 @@ else
         LIBS="${LIBS} -lpthread"
       fi
       h3=1
-    elif [ "${_OPENSSL}" = 'libressl' ]; then
+    elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ]; then
       h3=1
-    elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-      [ "${_OPENSSL}" = 'quictls' ] && h3=1
     fi
   else
     options="${options} -DCURL_USE_OPENSSL=OFF"
