@@ -80,8 +80,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #       https://github.com/chocolatey/choco/issues/1803
 #       https://github.com/chocolatey/choco/issues/2172
 #     winget and scoop both support native ARM64.
-#   - quictls: switch to +locks branch?
-#     https://github.com/quictls/openssl/tree/openssl-3.1.0+quic+locks
 
 # Resources:
 #   - https://blog.llvm.org/2019/11/deterministic-builds-with-clang-and-lld.html
