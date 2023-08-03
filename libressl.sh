@@ -48,8 +48,8 @@ _VER="$1"
 
   # LibreSSL does not strip the drive letter
   #   ./libressl/${_PKGDIR}/C:/Windows/libressl
-  # Some tools (e.g CMake) become weird when colons appear in
-  # a filename, so move results to a sane, standard path:
+  # Some tools (e.g. CMake) become weird when colons appear in a filename,
+  # so move results to a sane, standard path:
 
   mkdir -p "./${_PP}"
   mv "${_PKGDIR}/${_win_prefix}"/* "${_PP}"

@@ -126,8 +126,8 @@ _VER="$1"
 
   # OpenSSL 3.x does not strip the drive letter anymore:
   #   ./openssl/${_PKGDIR}/C:/Windows/System32/OpenSSL
-  # Some tools (e.g CMake) become weird when colons appear in
-  # a filename, so move results to a sane, standard path:
+  # Some tools (e.g. CMake) become weird when colons appear in a filename,
+  # so move results to a sane, standard path:
 
   mkdir -p "./${_PP}"
   mv "${_PKGDIR}/${_win_prefix}"/* "${_PP}"
