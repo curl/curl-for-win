@@ -152,7 +152,7 @@ _VER="$1"
     ../_libclean.sh --strip "${_STRIP_BINUTILS}" "${_PP}"/lib/libcrypto.a
   else
     # We do not yet use ASM with ARM64 builds,
-    # making it is safe to use llvm-strip:
+    # making it safe to use llvm-strip:
     "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/libcrypto.a
   fi
 
