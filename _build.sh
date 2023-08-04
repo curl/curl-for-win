@@ -598,10 +598,19 @@ build_single_target() {
       fi
     fi
 
-    # This does not work yet, due to:
-    #   /usr/local/bin/x86_64-w64-mingw32-ld: asyn-thread.o:asyn-thread.c:(.rdata$.refptr.__guard_dispatch_icall_fptr[.refptr.__guard_dispatch_icall_fptr]+0x0): undefined reference to `__guard_dispatch_icall_fptr'
-  # _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -Xclang -cfguard"
-  # _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Xlinker -guard:cf"
+    if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
+      # Requires llvm v16 and presumably mingw-w64 v11 with `--enable-cfguard`.
+      # This is currently satified by llvm-mingw. The build also succeeds with
+      # this combo without the `--enable-cfguard` option, with this warning:
+      #   ld.lld: warning: Control Flow Guard is enabled but '_load_config_used' is missing
+      # Refs:
+      #   https://github.com/mstorsjo/llvm-mingw/issues/301
+      #   https://gist.github.com/alvinhochun/a65e4177e2b34d551d7ecb02b55a4b0a
+      #   https://github.com/mstorsjo/llvm-mingw/compare/master...alvinhochun:llvm-mingw:alvin/cfguard.diff
+      #   https://github.com/mingw-w64/mingw-w64/compare/master...alvinhochun:mingw-w64:alvin/cfguard.diff
+      _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -mguard=cf"
+      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -mguard=cf"
+    fi
 
     if [ -n "${_SYSROOT}" ]; then
       _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_SYSROOT=${_SYSROOT}"
