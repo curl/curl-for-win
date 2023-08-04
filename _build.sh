@@ -685,6 +685,7 @@ build_single_target() {
 
   export _STRIP="${_BINUTILS_PREFIX}strip${_BINUTILS_SUFFIX}"
   export _OBJDUMP="${_BINUTILS_PREFIX}objdump${_BINUTILS_SUFFIX}"
+  export _READELF="${_BINUTILS_PREFIX}readelf${_BINUTILS_SUFFIX}"
   export RC="${_BINUTILS_PREFIX}windres${_BINUTILS_SUFFIX}"
   if [ "${_CC}" = 'llvm' ] && \
      [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && \

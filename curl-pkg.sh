@@ -42,8 +42,13 @@
 
   for suffix in exe dll; do
     TZ=UTC "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f
-    # Dump 'DllCharacteristics' flags
+    # Dump 'DllCharacteristics' flags, e.g. HIGH_ENTROPY_VA, DYNAMIC_BASE, NX_COMPAT, GUARD_CF, TERMINAL_SERVICE_AWARE
            "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -E -o '^\s+[A-Z_]{4,}$' | sort
+    # Dump cfguard load configuration flags
+    if [ "${_CC}" = 'llvm' ]; then  # binutils readelf (as of v2.40) does not recognize this option
+      # CF_FUNCTION_TABLE_PRESENT, CF_INSTRUMENTED, CF_LONGJUMP_TABLE_PRESENT (optional)
+      "${_READELF}" --coff-load-config "${_PP}"/bin/*."${suffix}" | grep -a -E 'CF_[A-Z_]' | sort
+    fi
   done
 
   # Execute curl and compiled-in dependency code. This is not secure, but
