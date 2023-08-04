@@ -244,10 +244,10 @@ _VER="$1"
 
     [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ] || h3=0
 
-    # HTTP3 does not appear enabled in the configure summary.
+    # We enable HTTP/3 manually, so it shows up "disabled" in 'configure summary'.
     if [ "${h3}" = '1' ] && [ -d ../nghttp3 ] && [ -d ../ngtcp2 ]; then
       # Detection insists on having a pkg-config, so force feed everything manually.
-      # This lib does not appear enabled in the configure summary.
+      # We enable this lib manually, so it shows up "disabled" in 'configure summary'.
       options="${options} --with-nghttp3=yes"
       CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB -DUSE_NGHTTP3"
       CPPFLAGS="${CPPFLAGS} -I${_TOP}/nghttp3/${_PP}/include"
@@ -255,7 +255,7 @@ _VER="$1"
       LIBS="${LIBS} -lnghttp3"
 
       # Detection insists on having a pkg-config, so force feed everything manually.
-      # This lib does not appear enabled in the configure summary.
+      # We enable this lib manually, so it shows up "disabled" in 'configure summary'.
       options="${options} --with-ngtcp2=yes"
       CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB -DUSE_NGTCP2"
       CPPFLAGS="${CPPFLAGS} -I${_TOP}/ngtcp2/${_PP}/include"
