@@ -599,8 +599,10 @@ build_single_target() {
     fi
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       # Turns out autotools/libtool is overbusy/stupid enough to delete
-      # LDFLAGS it does not recognize. This can explain why nothing worked
-      # before moving `--target=` and `--sysroot=` into CC from LDFLAGS.
+      # LDFLAGS it does not recognize.
+      #   https://www.gnu.org/software/libtool/manual/html_node/Stripped-link-flags.html
+      # This explains why nothing worked before moving `--target=` and
+      # `--sysroot=` into CC from LDFLAGS.
       # Do the same with this option, to avoid yet another libtool fail.
       # autotools and OpenSSL use this variable, CMake does not.
       _CC_GLOBAL="${_CC_GLOBAL} -rtlib=compiler-rt"
