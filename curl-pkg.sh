@@ -40,8 +40,11 @@
     *)       TZ=UTC stat --format='%n: %y' "${_ref}";;
   esac
 
-  TZ=UTC "${_OBJDUMP}" --all-headers "${_PP}"/bin/*.exe | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f
-  TZ=UTC "${_OBJDUMP}" --all-headers "${_PP}"/bin/*.dll | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f
+  for suffix in exe dll; do
+    TZ=UTC "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f
+    # Dump 'DllCharacteristics' flags
+           "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -E -o '^\s+[A-Z_]{4,}$' | sort
+  done
 
   # Execute curl and compiled-in dependency code. This is not secure, but
   # the build process already requires executing external code
