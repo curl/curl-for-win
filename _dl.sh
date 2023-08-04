@@ -178,8 +178,13 @@ cat <<EOF
     "keys": "4EF4AC63455FC9F4545D9B7DEF8FE99528B52FFD"
   },
   {
-    "name": "llvm-mingw-linux",
+    "name": "llvm-mingw-linux-x86-64",
     "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-ubuntu-20.04-x86_64.tar.xz",
+    "redir": "redir"
+  },
+  {
+    "name": "llvm-mingw-linux-aarch64",
+    "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-ubuntu-20.04-aarch64.tar.xz",
     "redir": "redir"
   },
   {
@@ -625,9 +630,11 @@ EOF
 # Download llvm-mingw
 if [ "${CW_LLVM_MINGW_DL:-}" = '1' ] && \
    [ ! -d 'llvm-mingw' ]; then
-  name=''; vers=''; hash=''
-  if   [ "${_OS}" = 'linux' ]; then
-    name='llvm-mingw-linux'; vers="${LLVM_MINGW_LINUX_VER_}"; hash="${LLVM_MINGW_LINUX_HASH}"
+  name=''; vers=''; hash=''; arch="$(uname -m)"
+  if   [ "${_OS}-${arch}" = 'linux-x86_64' ]; then
+    name='llvm-mingw-linux-x86-64'; vers="${LLVM_MINGW_LINUX_X86_64_VER_}"; hash="${LLVM_MINGW_LINUX_X86_64_HASH}"
+  elif [ "${_OS}-${arch}" = 'linux-aarch64' ]; then
+    name='llvm-mingw-linux-aarch64'; vers="${LLVM_MINGW_LINUX_AARCH64_VER_}"; hash="${LLVM_MINGW_LINUX_AARCH64_HASH}"
   elif [ "${_OS}" = 'mac' ]; then
     name='llvm-mingw-mac';   vers="${LLVM_MINGW_MAC_VER_}";   hash="${LLVM_MINGW_MAC_HASH}"
   elif [ "${_OS}" = 'win' ]; then
