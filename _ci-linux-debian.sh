@@ -8,7 +8,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 cat /etc/*-release
 
-export CW_CCSUFFIX='-15'
+export CW_CCSUFFIX='-16'
 
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 update
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
