@@ -20,7 +20,7 @@ if ! command -v hxclean >/dev/null 2>&1; then
   esac
 fi
 
-_BRANCH=''
+export _BRANCH="${1:-}"
 
 . ./_versions.sh
 
