@@ -36,8 +36,7 @@ _VER="$1"
     fi
 
     # llvm/clang 15+ workaround for: https://github.com/madler/zlib/issues/633
-    if [ "${_CC}" = 'llvm' ] && \
-       [ "${_CCVER}" != '14' ]; then
+    if [ "${_CC}" = 'llvm' ]; then
       CFLAGS="${CFLAGS} -Wno-deprecated-non-prototype"
     fi
   fi
