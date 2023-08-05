@@ -613,10 +613,10 @@ build_single_target() {
       # The build is successful with standard distro llvm 16 + mingw-w64 11,
       # but executables fail to run. The linker shows this warning:
       #   ld.lld: warning: Control Flow Guard is enabled but '_load_config_used' is missing
-      # Omitting the `-mguard=cf` linker option make the warning disappear, but
+      # Omitting linker option `-mguard=cf` makes the warning disappear, but
       # the executables fail to run anyway. It means that cfguard needs
-      # llvm-mingw with all objects compiled with cfguard and enabled at link
-      # time to end up with a runnable exe.
+      # llvm-mingw with all objects compiled with cfguard, and cfguard enabled
+      # at link time to end up with a runnable exe.
       _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -mguard=cf"
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -mguard=cf"
     fi
