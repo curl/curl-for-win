@@ -21,6 +21,9 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 - [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3),
   [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support,
   and [more](#features).
+- ARM64 builds are
+  [Control Flow Guard](https://learn.microsoft.com/windows/win32/secbp/control-flow-guard)
+  enabled.
 - Transparent builds, using open source code, run in
   [public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
   with auditable [logs](#build-logs).
