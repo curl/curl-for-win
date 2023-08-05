@@ -526,6 +526,7 @@ build_single_target() {
   export _CXXFLAGS_GLOBAL=''
   export _RCFLAGS_GLOBAL=''
   export _LDFLAGS_GLOBAL=''
+  export _LDFLAGS_GLOBAL_AUTOTOOLS=''
   export _LDFLAGS_BIN_GLOBAL=''
   export _LDFLAGS_CXX_GLOBAL=''
   export _LIBS_GLOBAL=''
@@ -760,10 +761,11 @@ build_single_target() {
   fi
 
   if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-    # `-Wc,...` is necessary for libtool in autotools to avoid it silently
-    # stripping this option and make it pass to the compiler at link-time.
+    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt"
+    # `-Wc,...` is necessary for libtool to pass this option to the compiler
+    # at link-time. Otherwise libtool strips it.
     #   https://www.gnu.org/software/libtool/manual/html_node/Stripped-link-flags.html
-    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wc,-rtlib=compiler-rt -rtlib=compiler-rt"
+    _LDFLAGS_GLOBAL_AUTOTOOLS="${_LDFLAGS_GLOBAL_AUTOTOOLS} -Wc,-rtlib=compiler-rt"
     _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -stdlib=libc++"
   else
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -static-libgcc"

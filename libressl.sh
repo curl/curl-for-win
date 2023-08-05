@@ -20,7 +20,7 @@ _VER="$1"
   export CC="${_CC_GLOBAL}"
   export CFLAGS="${_CFLAGS_GLOBAL} -O3 -Wa,--noexecstack"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
-  export LDFLAGS="${_LDFLAGS_GLOBAL}"
+  export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
   export LIBS="${_LIBS_GLOBAL}"
 
   if [ "${_CC}" = 'llvm' ]; then
