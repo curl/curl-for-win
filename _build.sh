@@ -712,9 +712,7 @@ build_single_target() {
       #        when suffixed:
       #          llvm-windres-15 -O coff  --target=pe-x86-64 -I../include -i libcurl.rc -o x86_64-w64-windows-gnu/libcurl.res
       #          llvm-rc: Unable to find clang, skipping preprocessing.
-      #          Pass -no-cpp to disable preprocessing. This will be an error in the future.
-      #        (the final name of that option is -no-preprocess, though we do
-      #        need preprocessing here.)
+      #          Pass --no-preprocess to disable preprocessing. This will be an error in the future.
       #          https://reviews.llvm.org/D100755
       #          https://github.com/llvm/llvm-project/blob/main/llvm/tools/llvm-rc/llvm-rc.cpp
       #          https://github.com/msys2/MINGW-packages/discussions/8736
@@ -740,7 +738,7 @@ build_single_target() {
      [ -n "${_RCFLAGS_GLOBAL}" ]; then
     _RC_WRAPPER="$(pwd)/llvm-windres-wrapper"
     {
-      echo "#!/bin/sh -e"
+      echo '#!/bin/sh -e'
       echo "'${RC}' ${_RCFLAGS_GLOBAL} \"\$@\""
     } > "${_RC_WRAPPER}"
     chmod +x "${_RC_WRAPPER}"
@@ -751,7 +749,7 @@ build_single_target() {
     export AR_NORMALIZE
     AR_NORMALIZE="$(pwd)/ar-wrapper-normalize"
     {
-      echo "#!/bin/sh -e"
+      echo '#!/bin/sh -e'
       echo "'${AR}' \"\$@\""
       echo "'$(pwd)/_libclean.sh' --ar '${AR}' \"\$@\""
     } > "${AR_NORMALIZE}"
