@@ -372,6 +372,7 @@ build_single_target() {
 
   use_llvm_mingw=0
   versuffix_llvm_mingw=''
+  versuffix_non_llvm_mingw=''
   if [ "${CW_LLVM_MINGW_ONLY:-}" = '1' ]; then
     use_llvm_mingw=1
   # llvm-mingw is required for x64 (to avoid pthread link bug with BoringSSL),
@@ -784,7 +785,6 @@ build_single_target() {
   clangver=''
   [ "${_CC}" = 'llvm' ] && clangver="clang ${ccver}"
 
-  versuffix=''
   mingwver=''
   mingwurl=''
   if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
@@ -804,6 +804,7 @@ build_single_target() {
         ;;
     esac
     [ -n "${mingwver}" ] && mingwver="mingw-w64 ${mingwver}"
+    versuffix="${versuffix_non_llvm_mingw}"
   fi
 
   binver=''
