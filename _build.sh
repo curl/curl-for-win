@@ -702,12 +702,15 @@ build_single_target() {
      [ -n "${_BINUTILS_SUFFIX}" ]; then
     # FIXME: llvm-windres present, but unable to find its clang counterpart
     #        when suffixed:
-    #          llvm-windres-15 -O coff  --target=pe-x86-64 -I../include -i libcurl.rc -o x86_64-w64-windows-gnu/libcurl.res
+    #          llvm-windres-16 -O coff  --target=pe-x86-64 -I../include -i libcurl.rc -o x86_64-w64-windows-gnu/libcurl.res
     #          llvm-rc: Unable to find clang, skipping preprocessing.
     #          Pass --no-preprocess to disable preprocessing. This will be an error in the future.
     #          https://reviews.llvm.org/D100755
     #          https://github.com/llvm/llvm-project/blob/main/llvm/tools/llvm-rc/llvm-rc.cpp
     #          https://github.com/msys2/MINGW-packages/discussions/8736
+    #        Partially fixed in v16.0.2, additional fix pending for v17.0.0:
+    #          https://reviews.llvm.org/D157241
+    #          https://github.com/curl/curl-for-win/commit/caaae171ac43af5b883403714dafd42030d8de61
     RC="$(pwd)/${RC}"
     ln -s -f "/usr/bin/${_BINUTILS_PREFIX}rc${_BINUTILS_SUFFIX}" "${RC}"
     # llvm-windres/llvm-rc wants to find clang on the same path as itself
