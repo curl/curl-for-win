@@ -23,6 +23,8 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
   export LIBS="${_LIBS_GLOBAL}"
 
+  [ "${LIBRESSL_VER_}" = '3.8.0' ] && options="${options} --disable-asm"
+
   if [ "${_CC}" = 'llvm' ]; then
     CFLAGS="${CFLAGS} -Wno-inconsistent-dllimport"
   else
@@ -57,17 +59,6 @@ _VER="$1"
   # Delete .pc and .la files
   rm -r -f "${_PP}"/lib/pkgconfig
   rm -f    "${_PP}"/lib/*.la
-
-  # Tests
-
-  # shellcheck disable=SC2043
-  for bin in \
-    "${_PP}"/bin/openssl.exe \
-  ; do
-    file "${bin}"
-    # Produce 'openssl version -a'-like output without executing the build:
-    strings "${bin}" | grep -a -E '^(LibreSSL [0-9]|built on: |compiler: |platform: |[A-Z]+DIR: )' || true
-  done
 
   . ../libressl-pkg.sh
 )
