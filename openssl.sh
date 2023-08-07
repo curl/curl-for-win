@@ -51,7 +51,7 @@ _VER="$1"
   fi
 
   options="${options} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
-  options="${options} no-filenames -DUSE_BCRYPTGENRANDOM -lbcrypt"
+  options="${options} -DUSE_BCRYPTGENRANDOM -lbcrypt"
   [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128"
 
   if false && [ -n "${_ZLIB}" ]; then
@@ -104,6 +104,7 @@ _VER="$1"
     mkdir "${_BLDDIR}"; cd "${_BLDDIR}"
     # shellcheck disable=SC2086
     ../Configure-patched ${options} \
+      no-filenames \
       no-legacy \
       no-apps \
       no-autoload-config \
