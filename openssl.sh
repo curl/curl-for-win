@@ -108,6 +108,7 @@ _VER="$1"
     ../Configure-patched ${options} \
       no-legacy \
       no-apps \
+      no-autoload-config \
       no-capieng no-loadereng no-padlockeng \
       no-module \
       no-dso \
