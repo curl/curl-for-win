@@ -52,7 +52,7 @@ _VER="$1"
 
   options="${options} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
   options="${options} -DUSE_BCRYPTGENRANDOM -lbcrypt"
-  [ "${_CPU}" = 'x64' ] && options="${options} enable-ec_nistp_64_gcc_128"
+  [ "${_CPU}" = 'x86' ] || options="${options} enable-ec_nistp_64_gcc_128"
 
   if false && [ -n "${_ZLIB}" ]; then
     options="${options} --with-zlib-lib=${_TOP}/${_ZLIB}/${_PP}/lib"
