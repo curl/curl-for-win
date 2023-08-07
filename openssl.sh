@@ -98,9 +98,7 @@ _VER="$1"
   _ssldir="ssl"
 
   # 'no-dso' implies 'no-dynamic-engine' which in turn compiles in these
-  # engines non-dynamically. To avoid them, along with their system DLL
-  # dependencies and DLL imports, we explicitly disable them one by one in
-  # the 'no-capieng ...' line.
+  # engines non-dynamically. To avoid them, also set `no-engine`.
 
   (
     mkdir "${_BLDDIR}"; cd "${_BLDDIR}"
@@ -109,7 +107,7 @@ _VER="$1"
       no-legacy \
       no-apps \
       no-autoload-config \
-      no-capieng no-loadereng no-padlockeng \
+      no-engine \
       no-module \
       no-dso \
       no-shared \
