@@ -112,6 +112,7 @@ _VER="$1"
       no-module \
       no-dso \
       no-shared \
+      no-srp \
       no-idea \
       no-tests \
       no-makedepend \
