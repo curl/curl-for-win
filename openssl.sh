@@ -113,7 +113,6 @@ _VER="$1"
       no-dso \
       no-shared \
       no-idea \
-      no-unit-test \
       no-tests \
       no-makedepend \
       "--prefix=${_win_prefix}" \
