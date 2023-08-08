@@ -7,7 +7,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 # Reproducible curl binaries for Windows
 
 - **We are switching the default TLS backend to LibreSSL upon the next curl
-  release when LibreSSL 3.8.1 (or newer) becomes available. This fixes a
+  release when LibreSSL 3.8.x stable becomes available. This fixes a
   long-standing OpenSSL
   [vulnerability](https://curl.se/docs/CVE-2019-5443.html). It also makes
   binaries 40% smaller. Major crypto and curl features remain the same.**
