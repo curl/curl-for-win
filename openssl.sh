@@ -58,6 +58,8 @@ _VER="$1"
     options="${options} --with-zlib-lib=${_TOP}/${_ZLIB}/${_PP}/lib"
     options="${options} --with-zlib-include=${_TOP}/${_ZLIB}/${_PP}/include"
     options="${options} zlib"
+  else
+    options="${options} no-comp"
   fi
 
   export CC="${_CC_GLOBAL}"
