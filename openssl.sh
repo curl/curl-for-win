@@ -115,6 +115,7 @@ _VER="$1"
       no-dso \
       no-shared \
       no-srp no-nextprotoneg \
+      no-bf no-rc4 no-cast \
       no-idea no-cmac no-rc2 no-mdc2 no-whirlpool \
       no-tests \
       no-makedepend \

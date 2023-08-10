@@ -18,7 +18,7 @@ _VER="$1"
 
   export CC="${_CC_GLOBAL}"
   export CFLAGS="${_CFLAGS_GLOBAL} -O3"
-  export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
+  export CPPFLAGS="${_CPPFLAGS_GLOBAL} ${LIBSSH2_CPPFLAGS}"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LIBS="${_LIBS_GLOBAL}"
   export RCFLAGS="${_RCFLAGS_GLOBAL}"
