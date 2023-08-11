@@ -12,8 +12,8 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   long-standing OpenSSL
   [vulnerability](https://curl.se/docs/CVE-2019-5443.html). It also makes
   binaries 40% smaller. Major crypto and curl features remain the same.**
-- **Starting the next live build, we disable these long-time obsolete libssh2
-  features: `blowfish-cbc`, `cast128-cbc`, `arcfour`, `arcfour128`,
+- **Upon the next live build, we disable these obsolete SSH algos in libssh2:
+  `blowfish-cbc`, `cast128-cbc`, `arcfour`, `arcfour128`,
   `hmac-ripemd160`, `hmac-ripemd160@openssh.com`, `3des-cbc`, `hmac-md5`,
   `hmac-md5-96`**
 - [Download](https://curl.se/windows/) our
