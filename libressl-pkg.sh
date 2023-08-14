@@ -8,6 +8,7 @@
 # - Enabling ASM support broken with CMake with MinGW.
 #   One of the issues can be worked around by setting `-DCMAKE_SYSTEM_NAME=MINGW`.
 #   The other one needs patching.
+#   Fix merged: https://github.com/libressl/portable/commit/ca8ea65259f95b424040ff6f905044fb876a2180 (expected in 3.8.1)
 # - Building broken executables with ASM support enabled (both autotools and CMake).
 #   Regression since 3.7.3.
 # - Still loads config/DLLs from the hardcoded prefix. (improvments coming in 3.8.1)
