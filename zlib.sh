@@ -35,8 +35,8 @@ _VER="$1"
       [ -n "${_RC_WRAPPER}" ] && export RC="${_RC_WRAPPER}"
     fi
 
-    # llvm/clang 15+ workaround for: https://github.com/madler/zlib/issues/633
-    if [ "${_CC}" = 'llvm' ]; then
+    # llvm/clang 15+ workaround for: https://github.com/madler/zlib/issues/633 [FIXED]
+    if [ "${_CC}" = 'llvm' ] && [ "${ZLIB_VER_}" = '1.2.13' ]; then
       CFLAGS="${CFLAGS} -Wno-deprecated-non-prototype"
     fi
   fi
