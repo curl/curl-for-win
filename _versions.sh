@@ -12,7 +12,7 @@ export CURL_HASH=dd322f6bd0a20e6cebdfd388f69e98c3d183bed792cf4713c8a7ef498cba489
 # Create revision string
 # NOTE: Set _REV to 1 after bumping CURL_VER_, then increment for each
 #       CI rebuild via `main` branch push (e.g. after bumping a dependency).
-export _REV="${CW_REVISION:-5}"
+export _REV="${CW_REVISION:-6}"
 
 export CACERT_VER_='2023-05-30'
 export CACERT_HASH=5fadcae90aa4ae041150f8e2d26c37d980522cdb49f923fc1e1b5eb8d74e71ad
@@ -57,8 +57,8 @@ export LIBRESSL_VER_='3.7.3'
 export LIBRESSL_HASH=7948c856a90c825bd7268b6f85674a8dcd254bae42e221781b24e3f8dc335db3
 export ZLIBNG_VER_='2.1.3'
 export ZLIBNG_HASH=d20e55f89d71991c59f1c5ad1ef944815e5850526c0d9cd8e504eaed5b24491a
-export ZLIB_VER_='1.2.13'
-export ZLIB_HASH=d14c38e313afc35a9a8760dadf26042f51ea0f5d154b0630a31da0540107fb98
+export ZLIB_VER_='1.3'
+export ZLIB_HASH=8a9ba2898e1d0d774eca6ba5b4627a11e5588ba85c8851336eb38de4683050a7
 export ZSTD_VER_='1.5.5'
 export ZSTD_HASH=9c4396cc829cfae319a6e2615202e82aad41372073482fce286fac78646d3ee4
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
