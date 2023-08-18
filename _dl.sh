@@ -94,7 +94,7 @@ cat <<EOF
   },
   {
     "name": "libssh2",
-    "url": "https://www.libssh2.org/download/libssh2-{ver}.tar.xz",
+    "url": "https://libssh2.org/download/libssh2-{ver}.tar.xz",
     "sig": ".asc",
     "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
   },
