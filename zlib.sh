@@ -29,15 +29,10 @@ _VER="$1"
     zlib_use_rc_wrapper='1'
 
     if [ "${zlib_use_rc_wrapper}" = '1' ]; then
-      # FIXME (upstream): zlib v1.2.13's prevents passing custom RCFLAGS to
+      # FIXME (upstream): zlib v1.3 prevents passing custom RCFLAGS to
       #                   the RC command. Use our wrapper as a workaround.
       #                   PR: https://github.com/madler/zlib/pull/677
       [ -n "${_RC_WRAPPER}" ] && export RC="${_RC_WRAPPER}"
-    fi
-
-    # llvm/clang 15+ workaround for: https://github.com/madler/zlib/issues/633 [FIXED]
-    if [ "${_CC}" = 'llvm' ] && [ "${ZLIB_VER_}" = '1.2.13' ]; then
-      CFLAGS="${CFLAGS} -Wno-deprecated-non-prototype"
     fi
   fi
 
