@@ -19,13 +19,16 @@ _VER="$1"
   options=''
 
   if [ "${_NAM}" = 'zlibng' ]; then
-    options="${options} -DBUILD_SHARED_LIBS=OFF"
     options="${options} -DZLIB_COMPAT=ON"
     options="${options} -DZLIB_ENABLE_TESTS=OFF"
   fi
 
+  # `BUILD_SHARED_LIBS=OFF` broken as of zlib v1.3.
+  # PR: https://github.com/madler/zlib/pull/347
+
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
+    "-DBUILD_SHARED_LIBS=OFF" \
     "-DCMAKE_RC_FLAGS=${_RCFLAGS_GLOBAL}" \
     "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
