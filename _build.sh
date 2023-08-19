@@ -722,22 +722,6 @@ build_single_target() {
   export NM="${_BINUTILS_PREFIX}nm${_BINUTILS_SUFFIX}"
   export RANLIB="${_BINUTILS_PREFIX}ranlib${_BINUTILS_SUFFIX}"
 
-  # In some environments, we need to pair up llvm-windres with the mingw-w64
-  # include dir, and/or we need to pass it the target platform. Some builds
-  # do not (yet) support adding custom options. Add a wrapper for these
-  # builds that calls llvm-windres with the necessary custom options.
-  export _RC_WRAPPER=''
-  if [ "${_CC}" = 'llvm' ] && \
-     [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && \
-     [ -n "${_RCFLAGS_GLOBAL}" ]; then
-    _RC_WRAPPER="$(pwd)/llvm-windres-wrapper"
-    {
-      echo '#!/bin/sh -e'
-      echo "'${RC}' ${_RCFLAGS_GLOBAL} \"\$@\""
-    } > "${_RC_WRAPPER}"
-    chmod +x "${_RC_WRAPPER}"
-  fi
-
   # ar wrapper to normalize created libs
   if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
     export AR_NORMALIZE

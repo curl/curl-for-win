@@ -22,17 +22,6 @@ _VER="$1"
     options="${options} -DBUILD_SHARED_LIBS=OFF"
     options="${options} -DZLIB_COMPAT=ON"
     options="${options} -DZLIB_ENABLE_TESTS=OFF"
-  else
-    # Unset this to use an alternative workaround which does not need our
-    # _RC_WRAPPER trickery:
-    zlib_use_rc_wrapper='1'
-
-    if [ "${zlib_use_rc_wrapper}" = '1' ]; then
-      # FIXME (upstream): zlib v1.3 prevents passing custom RCFLAGS to
-      #                   the RC command. Use our wrapper as a workaround.
-      #                   PR: https://github.com/madler/zlib/pull/677
-      [ -n "${_RC_WRAPPER}" ] && export RC="${_RC_WRAPPER}"
-    fi
   fi
 
   # shellcheck disable=SC2086
@@ -42,11 +31,10 @@ _VER="$1"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
-  if [ "${_NAM}" = 'zlib' ] && \
-     [ "${zlib_use_rc_wrapper}" != '1' ]; then
-    # Building shared lib has issues compiling resources:
-    #   PR: https://github.com/madler/zlib/pull/677
-    # Workaround to build static only and install manually:
+  if [ "${_NAM}" = 'zlib' ]; then
+    # zlib's RC compilation is broken as of v1.3 (2023-08-18) with broken CMake
+    # option to disable shared libs. `install` wants to build all targets.
+    # Workaround: Build static only and install manually.
     make --directory="${_BLDDIR}" --jobs="${_JOBS}" zlibstatic
 
     mkdir -p "${_PP}/include"
