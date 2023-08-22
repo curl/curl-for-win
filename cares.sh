@@ -28,11 +28,6 @@ _VER="$1"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
-  # Delete the implib (when CARES_SHARED=ON)
-  rm -f "${_PP}"/lib/*.dll.a
-  # Delete '-static' suffix (when CARES_SHARED=ON)
-  [ -f "${_PP}"/lib/libcares_static.a ] && mv -f "${_PP}"/lib/libcares_static.a "${_PP}"/lib/libcares.a
-
   # Delete .pc files
   rm -r -f "${_PP}"/lib/pkgconfig
 
