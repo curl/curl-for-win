@@ -40,7 +40,6 @@ _VER="$1"
       my %targets = (
         "mingw-arm64" => {
           inherit_from     => [ "mingw-common" ],
-          bn_ops           => add("RC4_CHAR"),
           asm_arch         => "aarch64",
           perlasm_scheme   => "win64",
           multilib         => "64",
