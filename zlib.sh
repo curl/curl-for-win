@@ -32,8 +32,6 @@ _VER="$1"
     "-DCMAKE_RC_FLAGS=${_RCFLAGS_GLOBAL}" \
     "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
-  make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
-
   if [ "${_NAM}" = 'zlib' ]; then
     # zlib's RC compilation is broken as of v1.3 (2023-08-18) with broken CMake
     # option to disable shared libs. `install` wants to build all targets.
