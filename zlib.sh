@@ -86,8 +86,8 @@ _VER="$1"
     cp -f -p LICENSE.md           "${_DST}/"
     cp -f -p README.md            "${_DST}/"
   else
+    cp -f -p LICENSE              "${_DST}/LICENSE.txt"
     cp -f -p ChangeLog            "${_DST}/ChangeLog.txt"
-    cp -f -p README               "${_DST}/COPYING.txt"
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"
