@@ -50,8 +50,6 @@ _VER="$1"
 
   ls -l "${_PP}"/lib/*.a
 
-  # Delete the implib, if any
-  rm -f "${_PP}"/lib/*.dll.a
   if [ "${_NAM}" = 'zlib' ]; then
     # Stick to the name expected by everyone
     mv -f "${_PP}"/lib/libzlibstatic.a "${_PP}"/lib/libz.a
