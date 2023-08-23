@@ -12,7 +12,7 @@ if [ -s "${SIGN_CODE_KEY}" ] && \
   _ref="$1"
   shift
 
-  case "${_OS}" in
+  case "${_HOSTOS}" in
     bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${_ref}")";;
     *)       unixts="$(TZ=UTC stat --format='%Y' "${_ref}")";;
   esac

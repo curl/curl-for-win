@@ -208,13 +208,13 @@ my_time='time'
 [ -n "${CW_NOTIME:-}" ] && my_time=
 
 # Detect host OS
-export _OS
+export _HOSTOS
 case "$(uname)" in
-  *_NT*)   _OS='win';;
-  Linux*)  _OS='linux';;
-  Darwin*) _OS='mac';;
-  *BSD)    _OS='bsd';;
-  *)       _OS='unrecognized';;
+  *_NT*)   _HOSTOS='win';;
+  Linux*)  _HOSTOS='linux';;
+  Darwin*) _HOSTOS='mac';;
+  *BSD)    _HOSTOS='bsd';;
+  *)       _HOSTOS='unrecognized';;
 esac
 
 # Form suffix for alternate builds
@@ -238,7 +238,7 @@ fi
 #    `configure: WARNING: using cross tools not prefixed with host triplet`
 # Even with `_CCPREFIX` provided.
 # https://clang.llvm.org/docs/CrossCompilation.html
-case "${_OS}" in
+case "${_HOSTOS}" in
   win)   _BUILD_HOST="${unamem}-pc-mingw32";;
   linux) _BUILD_HOST="${unamem}-pc-linux";;
   bsd)   _BUILD_HOST="${unamem}-pc-bsd";;
@@ -271,7 +271,7 @@ export _REVSUFFIX="${_REV}"; [ -z "${_REVSUFFIX}" ] || _REVSUFFIX="_${_REVSUFFIX
 . ./_dl.sh
 
 # Install required component
-if [ "${_OS}" = 'mac' ]; then
+if [ "${_HOSTOS}" = 'mac' ]; then
   if [ ! -d .venv ]; then
     python3 -m venv .venv
     PIP_PROGRESS_BAR=off .venv/bin/python3 -m pip --disable-pip-version-check --no-cache-dir --require-virtualenv install pefile
@@ -433,7 +433,7 @@ build_single_target() {
   # Reset for each target
   PATH="${_ori_path}"
 
-  if [ "${_OS}" = 'win' ]; then
+  if [ "${_HOSTOS}" = 'win' ]; then
     export PATH
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
@@ -448,7 +448,7 @@ build_single_target() {
   else
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       export PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
-    elif [ "${_CC}" = 'llvm' ] && [ "${_OS}" = 'mac' ]; then
+    elif [ "${_CC}" = 'llvm' ] && [ "${_HOSTOS}" = 'mac' ]; then
       _MAC_LLVM_PATH='/usr/local/opt/llvm/bin'
       export PATH="${_MAC_LLVM_PATH}:${_ori_path}"
     fi
@@ -459,16 +459,16 @@ build_single_target() {
     _CCPREFIX="${_TRIPLET}-"
     # mingw-w64 sysroots
     if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then
-      if [ "${_OS}" = 'mac' ]; then
+      if [ "${_HOSTOS}" = 'mac' ]; then
         _SYSROOT="/usr/local/opt/mingw-w64/toolchain-${_machine}"
-      elif [ "${_OS}" = 'linux' ]; then
+      elif [ "${_HOSTOS}" = 'linux' ]; then
         _SYSROOT="/usr/${_TRIPLET}"
       fi
     fi
 
     _WINE='echo'
-    if [ "${_OS}" = 'linux' ] || \
-       [ "${_OS}" = 'bsd' ]; then
+    if [ "${_HOSTOS}" = 'linux' ] || \
+       [ "${_HOSTOS}" = 'bsd' ]; then
       # Run x64 targets on same CPU:
       if [ "${_CPU}" = 'x64' ] && \
          [ "${unamem}" = 'x86_64' ]; then
@@ -478,13 +478,13 @@ build_single_target() {
           _WINE='wine'
         fi
       fi
-    elif [ "${_OS}" = 'mac' ]; then
+    elif [ "${_HOSTOS}" = 'mac' ]; then
       # Run x64 targets on Intel and ARM (requires Wine 6.0.1):
       if [ "${_CPU}" = 'x64' ] && \
          command -v wine64 >/dev/null 2>&1; then
         _WINE='wine64'
       fi
-    elif [ "${_OS}" = 'win' ]; then
+    elif [ "${_HOSTOS}" = 'win' ]; then
       # Skip ARM64 target on 64-bit Intel, run all targets on ARM64:
       if [ "${unamem}" = 'x86_64' ] && \
          [ "${_CPU}" != 'a64' ]; then
@@ -545,7 +545,7 @@ build_single_target() {
   [ "${_CPU}" = 'x64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-x86-64"
   [ "${_CPU}" = 'a64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=${_TRIPLET}"  # llvm-windres supports triplets here. https://github.com/llvm/llvm-project/blob/main/llvm/tools/llvm-rc/llvm-rc.cpp
 
-  if [ "${_OS}" = 'win' ]; then
+  if [ "${_HOSTOS}" = 'win' ]; then
     # '-G MSYS Makefiles' command-line option is problematic due to spaces
     # and unwanted escaping/splitting. Pass it via envvar instead.
     export CMAKE_GENERATOR='MSYS Makefiles'
@@ -577,7 +577,7 @@ build_single_target() {
       _CC_GLOBAL="${_CC_GLOBAL} --sysroot=${_SYSROOT}"
       _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --with-sysroot=${_SYSROOT}"
     fi
-    if [ "${_OS}" = 'linux' ]; then
+    if [ "${_HOSTOS}" = 'linux' ]; then
       # We used to pass this via CFLAGS for CMake to make it detect llvm/clang,
       # so we need to pass this via CMAKE_C_FLAGS, though meant for the linker.
       if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
@@ -634,7 +634,7 @@ build_single_target() {
       _BINUTILS_PREFIX='llvm-'
       _BINUTILS_SUFFIX="${_CCSUFFIX}"
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -fuse-ld=lld${_CCSUFFIX}"
-      if [ "${_OS}" = 'mac' ]; then
+      if [ "${_HOSTOS}" = 'mac' ]; then
         _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} -I${_SYSROOT}/${_TRIPLET}/include"
       fi
     fi
@@ -698,7 +698,7 @@ build_single_target() {
   export RC="${_BINUTILS_PREFIX}windres${_BINUTILS_SUFFIX}"
   if [ "${_CC}" = 'llvm' ] && \
      [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && \
-     [ "${_OS}" = 'linux' ] && \
+     [ "${_HOSTOS}" = 'linux' ] && \
      [ -n "${_BINUTILS_SUFFIX}" ]; then
     # FIXME: llvm-windres present, but unable to find its clang counterpart
     #        when suffixed:
@@ -734,7 +734,7 @@ build_single_target() {
     chmod +x "${AR_NORMALIZE}"
   fi
 
-  if [ "${_OS}" = 'mac' ]; then
+  if [ "${_HOSTOS}" = 'mac' ]; then
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${CW_LLVM_MINGW_PATH}/bin/${AR}"
     elif [ "${_CC}" = 'llvm' ]; then
@@ -776,7 +776,7 @@ build_single_target() {
     mingwver="${mingwver} ${CW_LLVM_MINGW_VER_:-?}"
     versuffix="${versuffix_llvm_mingw}"
   else
-    case "${_OS}" in
+    case "${_HOSTOS}" in
       mac)
         mingwver="$(HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_FROM_API=1 brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
       linux)
@@ -908,7 +908,7 @@ if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ] && \
   build_single_target x86
 fi
 
-case "${_OS}" in
+case "${_HOSTOS}" in
   mac)   rm -f -P "${SIGN_CODE_KEY}";;
   linux) [ -w "${SIGN_CODE_KEY}" ] && srm "${SIGN_CODE_KEY}";;
 esac

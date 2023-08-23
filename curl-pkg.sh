@@ -35,7 +35,7 @@
   # Tests
 
   # Show the reference timestamp in UTC.
-  case "${_OS}" in
+  case "${_HOSTOS}" in
     bsd|mac) TZ=UTC stat -f '%N: %Sm' -t '%Y-%m-%d %H:%M' "${_ref}";;
     *)       TZ=UTC stat --format='%n: %y' "${_ref}";;
   esac

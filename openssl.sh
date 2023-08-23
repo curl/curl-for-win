@@ -15,11 +15,11 @@ _VER="$1"
   cd "${_NAM}" || exit 0
 
   # Required on MSYS2 for pod2man and pod2html in 'make install' phase
-  [ "${_OS}" = 'win' ] && export PATH="${PATH}:/usr/bin/core_perl"
+  [ "${_HOSTOS}" = 'win' ] && export PATH="${PATH}:/usr/bin/core_perl"
 
   readonly _ref='CHANGES.md'
 
-  case "${_OS}" in
+  case "${_HOSTOS}" in
     bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${_ref}")";;
     *)       unixts="$(TZ=UTC stat --format='%Y' "${_ref}")";;
   esac

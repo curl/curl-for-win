@@ -8,7 +8,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 cd "$(dirname "$0")"
 
-if [ "${_OS}" = 'mac' ]; then
+if [ "${_HOSTOS}" = 'mac' ]; then
   tar() { gtar "$@"; }
 fi
 
@@ -53,11 +53,11 @@ create_pkg() {
   fi
   # Alter filename for non-release packages
   if [ "${_BRANCH#*main*}" != "${_BRANCH}" ]; then
-    if [ "${PUBLISH_PROD_FROM}" != "${_OS}" ]; then
-      _suf="${_suf}-built-on-${_OS}"
+    if [ "${PUBLISH_PROD_FROM}" != "${_HOSTOS}" ]; then
+      _suf="${_suf}-built-on-${_HOSTOS}"
     fi
   else
-    _suf="${_suf}-test-built-on-${_OS}"
+    _suf="${_suf}-test-built-on-${_HOSTOS}"
   fi
 
   _pkg="${_OUT}${_suf}${arch_ext}"
@@ -66,7 +66,7 @@ create_pkg() {
 
   (
     cd "${_DST}/.."
-    case "${_OS}" in
+    case "${_HOSTOS}" in
       win) find "${_BAS}" -exec attrib +A -R '{}' \;
     esac
 
@@ -87,7 +87,7 @@ create_pkg() {
   rm -f "${_FLS}"
 
   # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>
-  case "${_OS}" in
+  case "${_HOSTOS}" in
     bsd|mac) TZ=UTC stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_pkg}";;
     *)       TZ=UTC stat --format='%n: %s bytes %y' "${_pkg}";;
   esac
