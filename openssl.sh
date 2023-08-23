@@ -14,10 +14,8 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  if [ "${_OS}" = 'win' ]; then
-    # Required on MSYS2 for pod2man and pod2html in 'make install' phase
-    export PATH="${PATH}:/usr/bin/core_perl"
-  fi
+  # Required on MSYS2 for pod2man and pod2html in 'make install' phase
+  [ "${_OS}" = 'win' ] && export PATH="${PATH}:/usr/bin/core_perl"
 
   readonly _ref='CHANGES.md'
 
