@@ -67,6 +67,6 @@ export DEPLOY_GPG_PASS=
 export DEPLOY_KEY_PASS=
 
 # Run
-ln -s -f "${CURL_SCRIPT}" curl
+[ -n "${CURL_SCRIPT:-}" ] && ln -s -f "${CURL_SCRIPT}.sh" 'curl.sh'
 
 ./_build.sh 2>&1 | stdbuf -i0 -o0 -e0 tee "log-$(date '+%s').txt"
