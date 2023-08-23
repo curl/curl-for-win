@@ -12,14 +12,14 @@ export CW_CCSUFFIX='-16'
 
 extra=''
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} golang nasm"
+[[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} mingw-w64 osslsigncode wine64"
 
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 update
 # shellcheck disable=SC2086
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
   curl git gpg rsync python3-pefile make cmake \
-  mingw-w64 \
   "llvm${CW_CCSUFFIX}" "clang${CW_CCSUFFIX}" "lld${CW_CCSUFFIX}" \
-  autoconf automake autopoint libtool osslsigncode \
-  zip time jq dos2unix secure-delete wine64 ${extra}
+  autoconf automake autopoint libtool \
+  zip time jq dos2unix secure-delete ${extra}
 
 ./_build.sh

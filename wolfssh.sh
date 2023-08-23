@@ -46,7 +46,9 @@ _VER="$1"
 
   if [ -d ../wolfssl ]; then
     options="${options} --with-wolfssl=${_TOP}/wolfssl/${_PP}"
-    LIBS="${LIBS} -lws2_32"
+    if [ "${_OS}" = 'win' ]; then
+      LIBS="${LIBS} -lws2_32"
+    fi
     if [ -n "${_ZLIB}" ]; then
       LDFLAGS="${LDFLAGS} -L${_TOP}/${_ZLIB}/${_PP}/lib"
       LIBS="${LIBS} -lz"

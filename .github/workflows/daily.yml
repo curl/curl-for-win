@@ -11,7 +11,7 @@ on:
 permissions: {}
 
 jobs:
-  build:
+  win:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 8
       - name: 'build'
         env:
-          CW_CONFIG: 'dev'
+          CW_CONFIG: 'dev-win'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
           CW_MAP: '1'
@@ -43,7 +43,7 @@ jobs:
       # https://github.com/actions/upload-artifact
       - uses: actions/upload-artifact@v3
         with:
-          name: 'binaries'
+          name: 'Windows binaries'
           retention-days: 42
           path: |
             *-*-mingw*.*

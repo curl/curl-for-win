@@ -25,7 +25,7 @@ _VER="$1"
 
   # Build
 
-  export CFG='-ipv6-sspi'
+  export CFG='-ipv6'
 
   export CC="${_CC_GLOBAL}"
   export CFLAGS="${_CFLAGS_GLOBAL} -O3 ${_CFLAGS_GLOBAL_WPICKY}"
@@ -36,6 +36,10 @@ _VER="$1"
 
   LDFLAGS_BIN="${_LDFLAGS_BIN_GLOBAL}"
   LDFLAGS_LIB=''
+
+  if [ "${_OS}" = 'win' ]; then
+    CFG="${CFG}-sspi"
+  fi
 
   if [ ! "${_BRANCH#*werror*}" = "${_BRANCH}" ]; then
     CFLAGS="${CFLAGS} -Werror"
@@ -72,7 +76,7 @@ _VER="$1"
     CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_LDAP=1 -DCURL_DISABLE_LDAPS=1"
   fi
 
-  if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
+  if [ "${_OS}" = 'win' ] && [ "${_BRANCH#*unicode*}" != "${_BRANCH}" ]; then
     CFG="${CFG}-unicode"
   fi
 
@@ -160,7 +164,9 @@ _VER="$1"
     export MBEDTLS_PATH="../../mbedtls/${_PP}"
   fi
 
-  CFG="${CFG}-schannel"
+  if [ "${_OS}" = 'win' ]; then
+    CFG="${CFG}-schannel"
+  fi
   CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
   if [ -d ../wolfssh ] && [ -d ../wolfssl ]; then
@@ -215,7 +221,7 @@ _VER="$1"
       LDFLAGS="${LDFLAGS} -L../../libunistring/${_PP}/lib"
       LIBS="${LIBS} -lunistring"
     fi
-  elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
+  elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && [ "${_OS}" = 'win' ]; then
     CFG="${CFG}-winidn"
   fi
 
@@ -224,8 +230,8 @@ _VER="$1"
   CPPFLAGS="${CPPFLAGS} -DUSE_WEBSOCKETS"
 
   if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
-    LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
-    LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
+    LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dyn.tar"
+    LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-bin.tar"
   fi
 
   [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && export AR="${AR_NORMALIZE}"

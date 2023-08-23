@@ -48,7 +48,9 @@ _VER="$1"
   fi
 
   options="${options} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
-  options="${options} -DUSE_BCRYPTGENRANDOM -lbcrypt"
+  if [ "${_OS}" = 'win' ]; then
+    options="${options} -DUSE_BCRYPTGENRANDOM -lbcrypt"
+  fi
   [ "${_CPU}" = 'x86' ] || options="${options} enable-ec_nistp_64_gcc_128"
 
   if false && [ -n "${_ZLIB}" ]; then
@@ -81,19 +83,23 @@ _VER="$1"
     < ./Configure > ./Configure-patched
   chmod a+x ./Configure-patched
 
-  # Space or backslash not allowed. Needs to be a folder restricted
-  # to Administrators across Windows installations, versions and
-  # configurations. We do avoid using the new default prefix set since
-  # OpenSSL 1.1.1d, because by using the C:\Program Files*\ value, the
-  # prefix remains vulnerable on localized Windows versions. The default
-  # below gives a "more secure" configuration for most Windows installations.
-  # Also notice that said OpenSSL default breaks OpenSSL's own build system
-  # when used in cross-build scenarios. I submitted the working patch, but
-  # closed subsequently due to mixed/no response. The secure solution would
-  # be to disable loading anything from hard-coded paths and preferably to
-  # detect OS location at runtime and adjust config paths accordingly; none
-  # supported by OpenSSL.
-  _my_prefix='C:/Windows/System32/OpenSSL'
+  if [ "${_OS}" = 'win' ]; then
+    # Space or backslash not allowed. Needs to be a folder restricted
+    # to Administrators across Windows installations, versions and
+    # configurations. We do avoid using the new default prefix set since
+    # OpenSSL 1.1.1d, because by using the C:\Program Files*\ value, the
+    # prefix remains vulnerable on localized Windows versions. The default
+    # below gives a "more secure" configuration for most Windows installations.
+    # Also notice that said OpenSSL default breaks OpenSSL's own build system
+    # when used in cross-build scenarios. I submitted the working patch, but
+    # closed subsequently due to mixed/no response. The secure solution would
+    # be to disable loading anything from hard-coded paths and preferably to
+    # detect OS location at runtime and adjust config paths accordingly; none
+    # supported by OpenSSL.
+    _my_prefix='C:/Windows/System32/OpenSSL'
+  else
+    _my_prefix='/etc'
+  fi
   _ssldir="ssl"
 
   # 'no-dso' implies 'no-dynamic-engine' which in turn compiles in these

@@ -36,10 +36,12 @@ _VER="$1"
         LIBS="${LIBS} -lpthread"
       fi
     fi
-    # Silence useless libssh2 warnings about missing runtime DLLs
-    touch \
-      "${_TOP}/${_OPENSSL}/${_PP}/crypto.dll" \
-      "${_TOP}/${_OPENSSL}/${_PP}/ssl.dll"
+    if [ "${_OS}" = 'win' ]; then
+      # Silence useless libssh2 warnings about missing runtime DLLs
+      touch \
+        "${_TOP}/${_OPENSSL}/${_PP}/crypto.dll" \
+        "${_TOP}/${_OPENSSL}/${_PP}/ssl.dll"
+    fi
   elif [ -d ../wolfssl ]; then
     options="${options} -DCRYPTO_BACKEND=wolfSSL"
     options="${options} -DWOLFSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
@@ -53,7 +55,7 @@ _VER="$1"
       options="${options} -DMBEDTLS_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedtls.a"
       options="${options} -DMBEDX509_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedx509.a"
     fi
-  else
+  elif [ "${_OS}" = 'win' ]; then
     options="${options} -DCRYPTO_BACKEND=WinCNG"
   fi
 

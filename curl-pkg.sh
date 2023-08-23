@@ -17,8 +17,8 @@
   #   error: unsupported object file format
   [ "${_LD}" = 'ld' ] && "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/libcurl.dll.a
 
-  ../_peclean.py "${_ref}" "${_PP}"/bin/*.exe
-  ../_peclean.py "${_ref}" "${_PP}"/bin/*.dll
+  ../_clean-bin.sh "${_ref}" "${_PP}"/bin/*.exe
+  ../_clean-bin.sh "${_ref}" "${_PP}"/bin/*.dll
 
   ../_sign-code.sh "${_ref}" "${_PP}"/bin/*.exe
   ../_sign-code.sh "${_ref}" "${_PP}"/bin/*.dll
@@ -40,7 +40,7 @@
     *)       TZ=UTC stat --format='%n: %y' "${_ref}";;
   esac
 
-  for suffix in exe dll; do
+  for suffix in exe dyn; do
     TZ=UTC "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f
 
     # Verify exported curl symbols

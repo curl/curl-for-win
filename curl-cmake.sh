@@ -31,7 +31,7 @@ _VER="$1"
   LDFLAGS_BIN="${_LDFLAGS_BIN_GLOBAL}"
   LDFLAGS_LIB=''
 
-  if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
+  if [ "${_OS}" = 'win' ] && [ "${_BRANCH#*unicode*}" != "${_BRANCH}" ]; then
     options="${options} -DENABLE_UNICODE=ON"
   fi
 
@@ -258,7 +258,9 @@ _VER="$1"
     fi
   elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
     options="${options} -DUSE_LIBIDN2=OFF"
-    options="${options} -DUSE_WIN32_IDN=ON"
+    if [ "${_OS}" = 'win' ]; then
+      options="${options} -DUSE_WIN32_IDN=ON"
+    fi
   fi
 
   # Official method correctly enables the manual, but with the side-effect
@@ -268,8 +270,8 @@ _VER="$1"
   CPPFLAGS="${CPPFLAGS} -DUSE_MANUAL=1"
 
   if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
-    LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
-    LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
+    LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-bin.tar"
+    LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dyn.tar"
   fi
 
   # shellcheck disable=SC2086
