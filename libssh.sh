@@ -66,19 +66,25 @@ _VER="$1"
         rm -f "${tmp}"
       fi
 
-      CPPFLAGS="${CPPFLAGS} -DWIN32_LEAN_AND_MEAN"
+      if [ "${_OS}" = 'win' ]; then
+        CPPFLAGS="${CPPFLAGS} -DWIN32_LEAN_AND_MEAN"
+      fi
       LIBS="${LIBS} -lpthread"  # to detect EVP_aes_128_*
     elif [ "${_OPENSSL}" = 'libressl' ]; then
       # FIXME (upstream):
       # - Public function explicit_bzero() clashes with libressl.
       #   Workaround: put -lssh before -lcrypto.
       CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
-      LIBS="${LIBS} -lbcrypt"
-      LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
+      if [ "${_OS}" = 'win' ]; then
+        LIBS="${LIBS} -lbcrypt"
+        LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
+      fi
     elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
       CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
-      LIBS="${LIBS} -lbcrypt"
-      LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
+      if [ "${_OS}" = 'win' ]; then
+        LIBS="${LIBS} -lbcrypt"
+        LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
+      fi
     fi
   elif [ -d ../mbedtls ]; then
     if false; then
@@ -89,10 +95,16 @@ _VER="$1"
     fi
   fi
 
+  if [ "${_OS}" = 'win' ]; then
+    _my_prefix='C:/Windows/System32/ssh'
+  else
+    _my_prefix='/etc/ssh'
+  fi
+
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
-    '-DGLOBAL_CLIENT_CONFIG=C:/Windows/System32/ssh/ssh_config' \
-    '-DGLOBAL_BIND_CONFIG=C:/Windows/System32/ssh/libssh_server_config' \
+    "-DGLOBAL_CLIENT_CONFIG=${_my_prefix}/ssh_config" \
+    "-DGLOBAL_BIND_CONFIG=${_my_prefix}/libssh_server_config" \
     '-DBUILD_SHARED_LIBS=OFF' \
     '-DWITH_SERVER=OFF' \
     '-DWITH_EXAMPLES=OFF' \

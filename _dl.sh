@@ -638,7 +638,8 @@ EOF
 }
 
 # Download llvm-mingw
-if [ "${CW_LLVM_MINGW_DL:-}" = '1' ] && \
+if [ "${_OS}" = 'win' ] && \
+   [ "${CW_LLVM_MINGW_DL:-}" = '1' ] && \
    [ ! -d 'llvm-mingw' ]; then
   name=''; vers=''; hash=''; arch="$(uname -m)"
   if   [ "${_HOSTOS}-${arch}" = 'linux-x86_64' ]; then
@@ -725,13 +726,19 @@ if [ "${_BRANCH#*mbedtls*}" != "${_BRANCH}" ]; then
   live_xt mbedtls "${MBEDTLS_HASH}"
 fi
 
-need_cacert=0
+need_openssl=0
+if [ "${_OS}" != 'win' ]; then
+  need_openssl=1
+elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+     [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
+     [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
+     [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
+     [ "${_BRANCH#*schannel*}" = "${_BRANCH}" ]; then
+  need_openssl=1
+fi
 
-if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*schannel*}" = "${_BRANCH}" ]; then
+need_cacert=0
+if [ "${need_openssl}" = '1' ]; then
   if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ]; then
     live_dl libressl "${LIBRESSL_VER_}"
     live_xt libressl "${LIBRESSL_HASH}"

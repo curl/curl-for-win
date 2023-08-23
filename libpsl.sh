@@ -28,7 +28,9 @@ _VER="$1"
   if [ -d ../libidn2 ] && [ -d ../libiconv ] && [ -d ../libunistring ]; then
     CPPFLAGS="${CPPFLAGS} -I${_TOP}/libidn2/${_PP}/include"
     LDFLAGS="${LDFLAGS} -L${_TOP}/libidn2/${_PP}/lib"
-    LIBS="${LIBS} -lws2_32"
+    if [ "${_OS}" = 'win' ]; then
+      LIBS="${LIBS} -lws2_32"
+    fi
     CPPFLAGS="${CPPFLAGS} -I${_TOP}/libiconv/${_PP}/include"
     LDFLAGS="${LDFLAGS} -L${_TOP}/libiconv/${_PP}/lib"
     LIBS="${LIBS} -liconv -lcharset"

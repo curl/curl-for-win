@@ -51,6 +51,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        unicode    build curl in UNICODE mode [EXPERIMENTAL]
 #        werror     turn compiler warnings into errors
 #        debug      debug build
+#        mac        build macOS target (requires macOS host)
+#        linux      build Linux target (requires Linux host)
 #
 # CW_JOBS
 #      Number of parallel make jobs. Default: 2
@@ -70,6 +72,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # TODO:
 #   - Change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
+#   - Linux: use musl.
+#   - Rename _BRANCH to CW_CONFIG internally.
+#   - Replace .zip with .tar.gz for all-packages artifact (in _ul.sh)?
 #   - Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
 #       https://gs.statcounter.com/windows-version-market-share
@@ -186,6 +191,20 @@ else
   _TAR="${_URL_BASE}/archive/refs/heads/${_BRANCH}.tar.gz"
 fi
 
+# Detect host OS
+export _HOSTOS
+case "$(uname)" in
+  *_NT*)   _HOSTOS='win';;
+  Linux*)  _HOSTOS='linux';;
+  Darwin*) _HOSTOS='mac';;
+  *BSD)    _HOSTOS='bsd';;
+  *)       _HOSTOS='unrecognized';;
+esac
+
+export _OS='win'
+[ ! "${_BRANCH#*mac*}" = "${_BRANCH}" ] && _OS='mac'
+[ ! "${_BRANCH#*linux*}" = "${_BRANCH}" ] && _OS='linux'
+
 export _CACERT='cacert.pem'
 
 [ -n "${CW_CCSUFFIX:-}" ] || CW_CCSUFFIX=''
@@ -206,16 +225,6 @@ export _JOBS=2
 
 my_time='time'
 [ -n "${CW_NOTIME:-}" ] && my_time=
-
-# Detect host OS
-export _HOSTOS
-case "$(uname)" in
-  *_NT*)   _HOSTOS='win';;
-  Linux*)  _HOSTOS='linux';;
-  Darwin*) _HOSTOS='mac';;
-  *BSD)    _HOSTOS='bsd';;
-  *)       _HOSTOS='unrecognized';;
-esac
 
 # Form suffix for alternate builds
 export _FLAV=''
@@ -271,7 +280,7 @@ export _REVSUFFIX="${_REV}"; [ -z "${_REVSUFFIX}" ] || _REVSUFFIX="_${_REVSUFFIX
 . ./_dl.sh
 
 # Install required component
-if [ "${_HOSTOS}" = 'mac' ]; then
+if [ "${_OS}" = 'win' ] && [ "${_HOSTOS}" = 'mac' ]; then
   if [ ! -d .venv ]; then
     python3 -m venv .venv
     PIP_PROGRESS_BAR=off .venv/bin/python3 -m pip --disable-pip-version-check --no-cache-dir --require-virtualenv install pefile
@@ -585,7 +594,7 @@ build_single_target() {
       _CC_GLOBAL="${_CC_GLOBAL} --sysroot=${_SYSROOT}"
       _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --with-sysroot=${_SYSROOT}"
     fi
-    if [ "${_HOSTOS}" = 'linux' ]; then
+    if [ "${_HOSTOS}" = 'linux' ] && [ "${_OS}" = 'win' ]; then
       # We used to pass this via CFLAGS for CMake to make it detect llvm/clang,
       # so we need to pass this via CMAKE_C_FLAGS, though meant for the linker.
       if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
@@ -640,7 +649,7 @@ build_single_target() {
       _BINUTILS_PREFIX='llvm-'
       _BINUTILS_SUFFIX="${_CCSUFFIX}"
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -fuse-ld=lld${_CCSUFFIX}"
-      if [ "${_HOSTOS}" = 'mac' ]; then
+      if [ "${_HOSTOS}" = 'mac' ] && [ "${_OS}" = 'win' ]; then
         _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} -I${_SYSROOT}/${_TRIPLET}/include"
       fi
     fi

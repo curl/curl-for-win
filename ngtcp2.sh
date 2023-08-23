@@ -25,7 +25,7 @@ _VER="$1"
     options="${options} -DENABLE_OPENSSL=OFF"
     options="${options} -DENABLE_BORINGSSL=ON"
     options="${options} -DBORINGSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
-    options="${options} -DBORINGSSL_LIBRARIES=${_TOP}/${_OPENSSL}/${_PP}/lib/libcrypto.a;${_TOP}/${_OPENSSL}/${_PP}/lib/libssl.a;-lpthread;-lws2_32"
+    options="${options} -DBORINGSSL_LIBRARIES=${_TOP}/${_OPENSSL}/${_PP}/lib/libcrypto.a;${_TOP}/${_OPENSSL}/${_PP}/lib/libssl.a;-lpthread"; [ "${_OS}" = 'win' ] && options="${options};-lws2_32"
     CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
   elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ]; then
     options="${options} -DENABLE_OPENSSL=ON"
@@ -39,7 +39,9 @@ _VER="$1"
     options="${options} -DENABLE_WOLFSSL=ON"
     options="${options} -DWOLFSSL_INCLUDE_DIR=../wolfssl/${_PP}/include"
     options="${options} -DWOLFSSL_LIBRARY=../wolfssl/${_PP}/lib/libwolfssl.a"
-    LIBS="${LIBS} -lws2_32"
+    if [ "${_OS}" = 'win' ]; then
+      LIBS="${LIBS} -lws2_32"
+    fi
     if [ -n "${_ZLIB}" ]; then  # required by wolfSSL
       CPPFLAGS="${CPPFLAGS} -I${_TOP}/${_ZLIB}/${_PP}/include"
       LDFLAGS="${LDFLAGS} -L${_TOP}/${_ZLIB}/${_PP}/lib"

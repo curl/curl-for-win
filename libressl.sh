@@ -31,7 +31,11 @@ _VER="$1"
     CFLAGS="${CFLAGS} -Wno-attributes"
   fi
 
-  _my_prefix='C:/Windows/libressl'
+  if [ "${_OS}" = 'win' ]; then
+    _my_prefix='C:/Windows/libressl'
+  else
+    _my_prefix='/etc'
+  fi
   _ssldir="ssl"
 
   (

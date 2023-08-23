@@ -51,9 +51,9 @@ _VER="$1"
 
     if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
       if [ "${pass}" = 'shared' ]; then
-        LDFLAGS="${LDFLAGS} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dll.tar"
+        LDFLAGS="${LDFLAGS} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dyn.tar"
       else
-        LDFLAGS="${LDFLAGS} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-exe.tar"
+        LDFLAGS="${LDFLAGS} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-bin.tar"
       fi
     fi
 
@@ -61,7 +61,7 @@ _VER="$1"
       LDFLAGS="${LDFLAGS} ${_LDFLAGS_BIN_GLOBAL}"
     fi
 
-    if [ ! "${_BRANCH#*unicode*}" = "${_BRANCH}" ]; then
+    if [ "${_OS}" = 'win' ] && [ "${_BRANCH#*unicode*}" != "${_BRANCH}" ]; then
       CPPFLAGS="${CPPFLAGS} -Dmain=wmain"  # FIXME: upstream. https://github.com/curl/curl/issues/7229
       CPPFLAGS="${CPPFLAGS} -DUNICODE -D_UNICODE"
       LDFLAGS="${LDFLAGS} -municode"
@@ -125,7 +125,9 @@ _VER="$1"
       options="${options} --without-zstd"
     fi
 
-    options="${options} --with-schannel"
+    if [ "${_OS}" = 'win' ]; then
+      options="${options} --with-schannel"
+    fi
     CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
     h3=0
@@ -142,7 +144,9 @@ _VER="$1"
         fi
         h3=1
       elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-        LIBS="${LIBS} -lbcrypt"  # for auto-detection
+        if [ "${_OS}" = 'win' ]; then
+          LIBS="${LIBS} -lbcrypt"  # for auto-detection
+        fi
         [ "${_OPENSSL}" = 'openssl' ] || h3=1
       fi
     fi
@@ -180,11 +184,13 @@ _VER="$1"
       options="${options} --with-libssh2=${_TOP}/libssh2/${_PP}"
       options="${options} --without-wolfssh"
       options="${options} --without-libssh"
-      LIBS="${LIBS} -lbcrypt"  # for auto-detection
+      if [ "${_OS}" = 'win' ]; then
+        LIBS="${LIBS} -lbcrypt"  # for auto-detection
 
-      # Workaround for libssh2 1.11.0 regression:
-      # Omit __declspec(dllimport) with libssh2 1.11.0 to link statically
-      [ "${LIBSSH2_VER_}" = '1.11.0' ] && CPPFLAGS="${CPPFLAGS} -DLIBSSH2_API="
+        # Workaround for libssh2 1.11.0 regression:
+        # Omit __declspec(dllimport) with libssh2 1.11.0 to link statically
+        [ "${LIBSSH2_VER_}" = '1.11.0' ] && CPPFLAGS="${CPPFLAGS} -DLIBSSH2_API="
+      fi
     else
       options="${options} --without-wolfssh"
       options="${options} --without-libssh"
@@ -217,7 +223,9 @@ _VER="$1"
       fi
     elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
       options="${options} --without-libidn2"
-      options="${options} --with-winidn"
+      if [ "${_OS}" = 'win' ]; then
+        options="${options} --with-winidn"
+      fi
     fi
 
     if [ -d ../cares ]; then
@@ -273,6 +281,10 @@ _VER="$1"
       options="${options} --without-ngtcp2"
     fi
 
+    if [ "${_OS}" = 'win' ]; then
+      options="${options} --enable-sspi"
+    fi
+
     options="${options} --without-quiche --without-msh3"
 
     options="${options} --enable-websockets"
@@ -310,7 +322,6 @@ _VER="$1"
         --enable-libcurl-option \
         --enable-ipv6 \
         --enable-verbose \
-        --enable-sspi \
         --enable-ntlm \
         --enable-cookies \
         --enable-http-auth \

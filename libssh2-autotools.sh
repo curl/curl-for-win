@@ -38,15 +38,17 @@ _VER="$1"
 
   if [ -n "${_OPENSSL}" ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
-    if [ "${_OPENSSL}" = 'boringssl' ]; then
-      # for DLL
-      if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
-        LDFLAGS="${LDFLAGS} -Wl,-Bdynamic,-lpthread,-Bstatic"
-      else
-        LDFLAGS="${LDFLAGS} -Wl,-Bstatic,-lpthread,-Bdynamic"
+    if [ "${_OS}" = 'win' ]; then
+      if [ "${_OPENSSL}" = 'boringssl' ]; then
+        # for DLL
+        if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
+          LDFLAGS="${LDFLAGS} -Wl,-Bdynamic,-lpthread,-Bstatic"
+        else
+          LDFLAGS="${LDFLAGS} -Wl,-Bstatic,-lpthread,-Bdynamic"
+        fi
+      elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ] || [ "${_OPENSSL}" = 'openssl' ]; then
+        LIBS="${LIBS} -lbcrypt"
       fi
-    elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-      LIBS="${LIBS} -lbcrypt"
     fi
   elif [ -d ../wolfssl ]; then
     options="${options} --with-crypto=wolfssl --with-libwolfssl-prefix=${_TOP}/wolfssl/${_PP}"
@@ -54,7 +56,7 @@ _VER="$1"
   elif [ -d ../mbedtls ]; then
     options="${options} --with-crypto=mbedtls --with-libmbedcrypto-prefix=${_TOP}/mbedtls/${_PP}"
     LDFLAGS="${LDFLAGS} -L${_TOP}/mbedtls/${_PP}/lib"
-  else
+  elif [ "${_OS}" = 'win' ]; then
     options="${options} --with-crypto=wincng"
   fi
 

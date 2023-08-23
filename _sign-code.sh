@@ -6,7 +6,11 @@
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
-if [ -s "${SIGN_CODE_KEY}" ] && \
+# TODO: add support for code signing Unixy binaries
+#       E.g. 'codesign' for mac.
+#       Linux: https://stackoverflow.com/questions/1732927/signed-executables-under-linux
+if [ "${_OS}" = 'win' ] && \
+   [ -s "${SIGN_CODE_KEY}" ] && \
    [ -n "${SIGN_CODE_KEY_PASS:+1}" ]; then
 
   _ref="$1"

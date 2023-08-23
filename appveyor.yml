@@ -46,7 +46,7 @@ environment:
   DOCKER_CONTENT_TRUST: '1'
 build_script:
   - sh: |
-      export CW_CONFIG="${APPVEYOR_REPO_BRANCH}"
+      export CW_CONFIG="${APPVEYOR_REPO_BRANCH}-win"
       . ./_versions.sh
       docker trust inspect --pretty "${DOCKER_IMAGE}"
       time docker pull "${DOCKER_IMAGE}"
