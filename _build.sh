@@ -126,6 +126,11 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   libssh2          autotools, gnumake, cmake
 #   curl             gnumake, autotools, cmake
 
+# Linux target notes:
+# - Debian packages required:
+#   - cmake
+#   - musl musl-dev musl-tools
+
 cd "$(dirname "$0")"
 
 export LC_ALL=C
@@ -212,8 +217,16 @@ export _CACERT='cacert.pem'
 export _CC='llvm'
 [ ! "${_BRANCH#*gcc*}" = "${_BRANCH}" ] && _CC='gcc'
 
-export _CRT='ucrt'
-[ ! "${_BRANCH#*msvcrt*}" = "${_BRANCH}" ] && _CRT='msvcrt'
+export _CRT
+if [ "${_OS}" = 'win' ]; then
+  _CRT='ucrt'
+  [ ! "${_BRANCH#*msvcrt*}" = "${_BRANCH}" ] && _CRT='msvcrt'
+elif [ "${_OS}" = 'linux' ]; then
+  _CRT='musl'
+  [ ! "${_BRANCH#*glibc*}" = "${_BRANCH}" ] && _CRT='glibc'
+else
+  _CRT=''
+fi
 
 if [ -z "${CW_MAP:-}" ]; then
   export CW_MAP='0'
@@ -395,16 +408,20 @@ build_single_target() {
 
   # Toolchain
   export _TOOLCHAIN
-  if [ "${use_llvm_mingw}" = '1' ]; then
-    if [ "${_CC}" != 'llvm' ] || \
-       [ "${_CRT}" != 'ucrt' ] || \
-       [ -z "${CW_LLVM_MINGW_PATH:-}" ]; then
-      echo "! WARNING: '${_BRANCH}/${_CPU}' builds require llvm/clang, UCRT and CW_LLVM_MINGW_PATH. Skipping."
-      return
+  if [ "${_OS}" = 'win' ]; then
+    if [ "${use_llvm_mingw}" = '1' ]; then
+      if [ "${_CC}" != 'llvm' ] || \
+         [ "${_CRT}" != 'ucrt' ] || \
+         [ -z "${CW_LLVM_MINGW_PATH:-}" ]; then
+        echo "! WARNING: '${_BRANCH}/${_CPU}' builds require llvm/clang, UCRT and CW_LLVM_MINGW_PATH. Skipping."
+        return
+      fi
+      _TOOLCHAIN='llvm-mingw'
+    else
+      _TOOLCHAIN='mingw-w64'
     fi
-    _TOOLCHAIN='llvm-mingw'
   else
-    _TOOLCHAIN='mingw-w64'
+    _TOOLCHAIN=''
   fi
 
   export _TRIPLET=''
@@ -430,14 +447,22 @@ build_single_target() {
 
   export _CURL_DLL_SUFFIX=''
   export _CURL_DLL_SUFFIX_NODASH=''
-  [ "${_CPU}" = 'x64' ] && _CURL_DLL_SUFFIX_NODASH="${_CPU}"
-  [ "${_CPU}" = 'a64' ] && _CURL_DLL_SUFFIX_NODASH='arm64'
-  [ -n "${_CURL_DLL_SUFFIX_NODASH}" ] && _CURL_DLL_SUFFIX="-${_CURL_DLL_SUFFIX_NODASH}"
+  if [ "${_OS}" = 'win' ]; then
+    [ "${_CPU}" = 'x64' ] && _CURL_DLL_SUFFIX_NODASH="${_CPU}"
+    [ "${_CPU}" = 'a64' ] && _CURL_DLL_SUFFIX_NODASH='arm64'
+    [ -n "${_CURL_DLL_SUFFIX_NODASH}" ] && _CURL_DLL_SUFFIX="-${_CURL_DLL_SUFFIX_NODASH}"
+  fi
 
   export _PKGSUFFIX
-  [ "${_CPU}" = 'x86' ] && _PKGSUFFIX='-win32-mingw'
-  [ "${_CPU}" = 'x64' ] && _PKGSUFFIX='-win64-mingw'
-  [ "${_CPU}" = 'a64' ] && _PKGSUFFIX='-win64a-mingw'
+  if [ "${_OS}" = 'win' ]; then
+    [ "${_CPU}" = 'x86' ] && _PKGSUFFIX='-win32-mingw'
+    [ "${_CPU}" = 'x64' ] && _PKGSUFFIX='-win64-mingw'
+    [ "${_CPU}" = 'a64' ] && _PKGSUFFIX='-win64a-mingw'
+  else
+    [ "${_CPU}" = 'x86' ] && _PKGSUFFIX="-i686-${_OS}"
+    [ "${_CPU}" = 'x64' ] && _PKGSUFFIX="-x86_64-${_OS}"
+    [ "${_CPU}" = 'a64' ] && _PKGSUFFIX="-aarch64-${_OS}"
+  fi
 
   # Reset for each target
   PATH="${_ori_path}"
@@ -450,71 +475,80 @@ build_single_target() {
     fi
   fi
 
-  if [ "${_HOSTOS}" = 'win' ]; then
-    export PATH
-    if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-      PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
-    else
-      [ "${_CPU}" = 'x86' ] && _MSYSROOT='/mingw32'
-      [ "${_CPU}" = 'x64' ] && _MSYSROOT='/mingw64'
-      [ "${_CPU}" = 'a64' ] && _MSYSROOT='/clangarm64'
+  if [ "${_OS}" = 'win' ]; then
+    if [ "${_HOSTOS}" = 'win' ]; then
+      export PATH
+      if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
+        PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
+      else
+        [ "${_CPU}" = 'x86' ] && _MSYSROOT='/mingw32'
+        [ "${_CPU}" = 'x64' ] && _MSYSROOT='/mingw64'
+        [ "${_CPU}" = 'a64' ] && _MSYSROOT='/clangarm64'
 
-      [ -n "${_MSYSROOT}" ] && PATH="${_MSYSROOT}/bin:${_ori_path}"
-    fi
-    _MAKE='mingw32-make'
-  else
-    if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-      export PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
-    elif [ "${_CC}" = 'llvm' ] && [ "${_HOSTOS}" = 'mac' ]; then
-      _MAC_LLVM_PATH="${brew_root}/opt/llvm/bin"
-      export PATH="${_MAC_LLVM_PATH}:${_ori_path}"
-    fi
-    _TRIPLET="${_machine}-w64-mingw32"
-    # Prefixes do not work with MSYS2/mingw-w64, because `ar`, `nm` and
-    # `ranlib` are missing from them. They are accessible either _without_
-    # one, or as prefix + `gcc-ar`, `gcc-nm`, `gcc-runlib`.
-    _CCPREFIX="${_TRIPLET}-"
-    # mingw-w64 sysroots
-    if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then
-      if [ "${_HOSTOS}" = 'mac' ]; then
-        _SYSROOT="${brew_root}/opt/mingw-w64/toolchain-${_machine}"
-      elif [ "${_HOSTOS}" = 'linux' ]; then
-        _SYSROOT="/usr/${_TRIPLET}"
+        [ -n "${_MSYSROOT}" ] && PATH="${_MSYSROOT}/bin:${_ori_path}"
       fi
-    fi
-
-    _WINE='echo'
-    if [ "${_HOSTOS}" = 'linux' ] || \
-       [ "${_HOSTOS}" = 'bsd' ]; then
-      # Run x64 targets on same CPU:
-      if [ "${_CPU}" = 'x64' ] && \
-         [ "${unamem}" = 'x86_64' ]; then
-        if command -v wine64 >/dev/null 2>&1; then
-          _WINE='wine64'
-        elif command -v wine >/dev/null 2>&1; then
-          _WINE='wine'
+      _MAKE='mingw32-make'
+    else
+      if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
+        export PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
+      elif [ "${_CC}" = 'llvm' ] && [ "${_HOSTOS}" = 'mac' ]; then
+        _MAC_LLVM_PATH="${brew_root}/opt/llvm/bin"
+        export PATH="${_MAC_LLVM_PATH}:${_ori_path}"
+      fi
+      _TRIPLET="${_machine}-w64-mingw32"
+      # Prefixes do not work with MSYS2/mingw-w64, because `ar`, `nm` and
+      # `ranlib` are missing from them. They are accessible either _without_
+      # one, or as prefix + `gcc-ar`, `gcc-nm`, `gcc-runlib`.
+      _CCPREFIX="${_TRIPLET}-"
+      # mingw-w64 sysroots
+      if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then
+        if [ "${_HOSTOS}" = 'mac' ]; then
+          _SYSROOT="${brew_root}/opt/mingw-w64/toolchain-${_machine}"
+        elif [ "${_HOSTOS}" = 'linux' ]; then
+          _SYSROOT="/usr/${_TRIPLET}"
         fi
       fi
-    elif [ "${_HOSTOS}" = 'mac' ]; then
-      # Run x64 targets on Intel and ARM (requires Wine 6.0.1):
-      if [ "${_CPU}" = 'x64' ] && \
-         command -v wine64 >/dev/null 2>&1; then
-        _WINE='wine64'
-      fi
-    elif [ "${_HOSTOS}" = 'win' ]; then
-      # Skip ARM64 target on 64-bit Intel, run all targets on ARM64:
-      if [ "${unamem}" = 'x86_64' ] && \
-         [ "${_CPU}" != 'a64' ]; then
-        _WINE=
-      elif [ "${unamem}" = 'aarch64' ]; then
-        _WINE=
+
+      _WINE='echo'
+      if [ "${_HOSTOS}" = 'linux' ] || \
+         [ "${_HOSTOS}" = 'bsd' ]; then
+        # Run x64 targets on same CPU:
+        if [ "${_CPU}" = 'x64' ] && \
+           [ "${unamem}" = 'x86_64' ]; then
+          if command -v wine64 >/dev/null 2>&1; then
+            _WINE='wine64'
+          elif command -v wine >/dev/null 2>&1; then
+            _WINE='wine'
+          fi
+        fi
+      elif [ "${_HOSTOS}" = 'mac' ]; then
+        # Run x64 targets on Intel and ARM (requires Wine 6.0.1):
+        if [ "${_CPU}" = 'x64' ] && \
+           command -v wine64 >/dev/null 2>&1; then
+          _WINE='wine64'
+        fi
+      elif [ "${_HOSTOS}" = 'win' ]; then
+        # Skip ARM64 target on 64-bit Intel, run all targets on ARM64:
+        if [ "${unamem}" = 'x86_64' ] && \
+           [ "${_CPU}" != 'a64' ]; then
+          _WINE=
+        elif [ "${unamem}" = 'aarch64' ]; then
+          _WINE=
+        fi
       fi
     fi
+  else
+    # TODO: add support for linux and mac cross-builds
+    _TRIPLET="${_BUILD_HOST}"
   fi
 
   if [ "${_CC}" = 'llvm' ]; then
     ccver="$("clang${_CCSUFFIX}" -dumpversion)"
   else
+    if [ "${_CRT}" = 'musl' ]; then
+      _CCPREFIX='musl-'
+    fi
+
     ccver="$("${_CCPREFIX}gcc" -dumpversion)"
 
     if [ "${_CRT}" = 'ucrt' ]; then
@@ -549,8 +583,12 @@ build_single_target() {
   export _LDFLAGS_CXX_GLOBAL=''
   export _LIBS_GLOBAL=''
   export _CONFIGURE_GLOBAL=''
-  export _CMAKE_GLOBAL='-DCMAKE_SYSTEM_NAME=Windows -DCMAKE_BUILD_TYPE=Release'
+  export _CMAKE_GLOBAL='-DCMAKE_BUILD_TYPE=Release'
   export _CMAKE_CXX_GLOBAL=''
+
+  if [ "${_OS}" = 'win' ]; then
+    _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Windows ${_CMAKE_GLOBAL}"
+  fi
 
   # Suppress CMake warnings meant for upstream developers
   _CMAKE_GLOBAL="-Wno-dev ${_CMAKE_GLOBAL}"
@@ -558,11 +596,13 @@ build_single_target() {
   # for CMake and openssl
   unset CC
 
-  [ "${_CPU}" = 'x86' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-i386"
-  [ "${_CPU}" = 'x64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-x86-64"
-  [ "${_CPU}" = 'a64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=${_TRIPLET}"  # llvm-windres supports triplets here. https://github.com/llvm/llvm-project/blob/main/llvm/tools/llvm-rc/llvm-rc.cpp
+  if [ "${_OS}" = 'win' ]; then
+    [ "${_CPU}" = 'x86' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-i386"
+    [ "${_CPU}" = 'x64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-x86-64"
+    [ "${_CPU}" = 'a64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=${_TRIPLET}"  # llvm-windres supports triplets here. https://github.com/llvm/llvm-project/blob/main/llvm/tools/llvm-rc/llvm-rc.cpp
+  fi
 
-  if [ "${_HOSTOS}" = 'win' ]; then
+  if [ "${_HOSTOS}" = 'win' ] && [ "${_OS}" = 'win' ]; then
     # '-G MSYS Makefiles' command-line option is problematic due to spaces
     # and unwanted escaping/splitting. Pass it via envvar instead.
     export CMAKE_GENERATOR='MSYS Makefiles'
@@ -585,7 +625,11 @@ build_single_target() {
   [ "${_CPU}" = 'x86' ] && _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-asynchronous-unwind-tables"
 
   export _LD
-  _BINUTILS_PREFIX="${_CCPREFIX}"
+  if [ "${_CRT}" = 'musl' ]; then
+    _BINUTILS_PREFIX=''
+  else
+    _BINUTILS_PREFIX="${_CCPREFIX}"
+  fi
   _BINUTILS_SUFFIX=''
   if [ "${_CC}" = 'llvm' ]; then
     _CC_GLOBAL="clang${_CCSUFFIX} --target=${_TRIPLET}"
@@ -659,15 +703,19 @@ build_single_target() {
     # Use it with CMake and OpenSSL's proprietary build system.
     _CFLAGS_GLOBAL_CMAKE="${_CFLAGS_GLOBAL_CMAKE} -Wno-unused-command-line-argument"
   else
-    _CC_GLOBAL="${_CCPREFIX}gcc -static-libgcc"
-    _LDFLAGS_GLOBAL="${_OPTM} ${_LDFLAGS_GLOBAL}"
-    # https://lists.ffmpeg.org/pipermail/ffmpeg-devel/2015-September/179242.html
-    if [ "${_CPU}" = 'x86' ]; then
-      _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -Wl,--pic-executable,-e,_mainCRTStartup"
-    else
-      _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -Wl,--pic-executable,-e,mainCRTStartup"
+    _CC_GLOBAL="${_CCPREFIX}gcc"
+
+    if [ "${_OS}" = 'win' ]; then
+      _CC_GLOBAL="${_CC_GLOBAL} -static-libgcc"
+      _LDFLAGS_GLOBAL="${_OPTM} ${_LDFLAGS_GLOBAL}"
+      # https://lists.ffmpeg.org/pipermail/ffmpeg-devel/2015-September/179242.html
+      if [ "${_CPU}" = 'x86' ]; then
+        _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -Wl,--pic-executable,-e,_mainCRTStartup"
+      else
+        _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -Wl,--pic-executable,-e,mainCRTStartup"
+      fi
+      _CFLAGS_GLOBAL="${_OPTM} ${_CFLAGS_GLOBAL}"
     fi
-    _CFLAGS_GLOBAL="${_OPTM} ${_CFLAGS_GLOBAL}"
 
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=${_CCPREFIX}gcc"
     _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++"
@@ -696,7 +744,7 @@ build_single_target() {
 
   # for boringssl
   export _STRIP_BINUTILS=''
-  if [ "${_CC}" = 'llvm' ]; then
+  if [ "${_OS}" = 'win' ] && [ "${_CC}" = 'llvm' ]; then
     if [ "${_CPU}" = 'x64' ] || \
        [ "${_CPU}" = 'x86' ]; then
       # Make sure to pick the prefixed binutils strip tool from an unmodified
@@ -713,8 +761,11 @@ build_single_target() {
   export _STRIP="${_BINUTILS_PREFIX}strip${_BINUTILS_SUFFIX}"
   export _OBJDUMP="${_BINUTILS_PREFIX}objdump${_BINUTILS_SUFFIX}"
   export _READELF="${_BINUTILS_PREFIX}readelf${_BINUTILS_SUFFIX}"
-  export RC="${_BINUTILS_PREFIX}windres${_BINUTILS_SUFFIX}"
-  if [ "${_CC}" = 'llvm' ] && \
+  if [ "${_OS}" = 'win' ]; then
+    export RC="${_BINUTILS_PREFIX}windres${_BINUTILS_SUFFIX}"
+  fi
+  if [ "${_OS}" = 'win' ] && \
+     [ "${_CC}" = 'llvm' ] && \
      [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && \
      [ "${_HOSTOS}" = 'linux' ] && \
      [ -n "${_BINUTILS_SUFFIX}" ]; then
@@ -752,7 +803,7 @@ build_single_target() {
     chmod +x "${AR_NORMALIZE}"
   fi
 
-  if [ "${_HOSTOS}" = 'mac' ]; then
+  if [ "${_OS}" = 'win' ] && [ "${_HOSTOS}" = 'mac' ]; then
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${CW_LLVM_MINGW_PATH}/bin/${AR}"
     elif [ "${_CC}" = 'llvm' ]; then
@@ -770,8 +821,10 @@ build_single_target() {
     _LDFLAGS_GLOBAL_AUTOTOOLS="${_LDFLAGS_GLOBAL_AUTOTOOLS} -Wc,-rtlib=compiler-rt"
     _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -stdlib=libc++"
   else
-    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -static-libgcc"
-    _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -static-libstdc++"
+    if [ "${_OS}" = 'win' ]; then
+      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -static-libgcc"
+      _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -static-libstdc++"
+    fi
   fi
 
   _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --prefix=${_PREFIX} --disable-dependency-tracking --disable-silent-rules"
@@ -793,7 +846,7 @@ build_single_target() {
     [ -f "${mingwver}/__url__.txt" ] && mingwurl=" $(cat "${mingwver}/__url__.txt")"
     mingwver="${mingwver} ${CW_LLVM_MINGW_VER_:-?}"
     versuffix="${versuffix_llvm_mingw}"
-  else
+  elif [ "${_OS}" = 'win' ]; then
     case "${_HOSTOS}" in
       mac)
         mingwver="$(HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_FROM_API=1 brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
@@ -806,6 +859,8 @@ build_single_target() {
     esac
     [ -n "${mingwver}" ] && mingwver="mingw-w64 ${mingwver}"
     versuffix="${versuffix_non_llvm_mingw}"
+  else
+    versuffix=''
   fi
 
   binver=''
@@ -900,30 +955,39 @@ build_single_target() {
       touch -c -r "../${_ref}" "${_fn}"
     )
 
-    _fn="${_DST}/BUILD-README.url"
-    cat <<EOF > "${_fn}"
+    if [ "${_OS}" = 'win' ]; then
+      _fn="${_DST}/BUILD-README.url"
+      cat <<EOF > "${_fn}"
 [InternetShortcut]
 URL=${_URL_BASE}
 EOF
-    unix2dos --quiet --keepdate "${_fn}"
-    touch -c -r "${_ref}" "${_fn}"
+      unix2dos --quiet --keepdate "${_fn}"
+      touch -c -r "${_ref}" "${_fn}"
+    fi
 
     ./_pkg.sh "${_ref}"
   fi
 }
 
 # Build binaries
-if [ "${_BRANCH#*a64*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*x86*}" = "${_BRANCH}" ]; then
-  build_single_target x64
-fi
-if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*x86*}" = "${_BRANCH}" ]; then
-  build_single_target a64
-fi
-if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*a64*}" = "${_BRANCH}" ]; then
-  build_single_target x86
+if [ "${_OS}" = 'win' ]; then
+  if [ "${_BRANCH#*a64*}" = "${_BRANCH}" ] && \
+     [ "${_BRANCH#*x86*}" = "${_BRANCH}" ]; then
+    build_single_target x64
+  fi
+  if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ] && \
+     [ "${_BRANCH#*x86*}" = "${_BRANCH}" ]; then
+    build_single_target a64
+  fi
+  if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ] && \
+     [ "${_BRANCH#*a64*}" = "${_BRANCH}" ]; then
+    build_single_target x86
+  fi
+else
+  [ "${unamem}" = 'i686'    ] && cpu='x86'
+  [ "${unamem}" = 'x86_64'  ] && cpu='x64'
+  [ "${unamem}" = 'aarch64' ] && cpu='a64'
+  build_single_target "${cpu}"
 fi
 
 case "${_HOSTOS}" in
