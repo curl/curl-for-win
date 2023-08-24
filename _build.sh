@@ -123,8 +123,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   libressl         autotools, cmake
 #   wolfssh          autotools
 #   libssh           cmake
-#   libssh2          autotools, gnumake, cmake
-#   curl             gnumake, autotools, cmake
+#   libssh2          autotools, gnumake [windows-only], cmake
+#   curl             gnumake [windows-only], cmake [non-windows default], autotools
 
 # Linux target notes:
 # - Debian packages required:
@@ -225,7 +225,8 @@ elif [ "${_OS}" = 'linux' ]; then
   _CRT='musl'
   [ ! "${_BRANCH#*glibc*}" = "${_BRANCH}" ] && _CRT='glibc'
 else
-  _CRT=''
+  # macOS: /usr/lib/libSystem.B.dylib
+  _CRT='sys'
 fi
 
 if [ -z "${CW_MAP:-}" ]; then
@@ -268,6 +269,15 @@ case "${_HOSTOS}" in
   *)     _BUILD_HOST="${unamem}-pc-$(uname -s | tr '[:upper:]' '[:lower:]')";;  # lazy guess
 esac
 
+export _PKGOS
+if [ "${_OS}" = 'win' ]; then
+  _PKGOS='mingw'
+elif [ "${_OS}" = 'mac' ]; then
+  _PKGOS='macos'
+else
+  _PKGOS="${_OS}"
+fi
+
 export PUBLISH_PROD_FROM
 if [ "${APPVEYOR_REPO_PROVIDER:-}" = 'gitHub' ] || \
    [ -n "${GITHUB_RUN_ID:-}" ]; then
@@ -279,7 +289,7 @@ fi
 export _BLD='build.txt'
 export _URLS='urls.txt'
 
-rm -f ./*-*-mingw*.*
+rm -f ./*-*-"${_PKGOS}"*.*
 rm -f hashes.txt "${_BLD}" "${_URLS}"
 
 touch hashes.txt "${_BLD}" "${_URLS}"
@@ -303,7 +313,8 @@ if [ "${_OS}" = 'win' ] && [ "${_HOSTOS}" = 'mac' ]; then
 fi
 
 # Find and setup llvm-mingw downloaded above.
-if [ -z "${CW_LLVM_MINGW_PATH:-}" ] && \
+if [ "${_OS}" = 'win' ] && \
+   [ -z "${CW_LLVM_MINGW_PATH:-}" ] && \
    [ -d 'llvm-mingw' ]; then
   export CW_LLVM_MINGW_PATH; CW_LLVM_MINGW_PATH="$(pwd)/llvm-mingw"
   export CW_LLVM_MINGW_VER_; CW_LLVM_MINGW_VER_="$(cat 'llvm-mingw/version.txt')"
@@ -335,7 +346,8 @@ ${SIGN_CODE_GPG_PASS}
 EOF
 fi
 
-if [ -s "${SIGN_CODE_KEY}" ]; then
+if [ "${_OS}" = 'win' ] && \
+   [ -s "${SIGN_CODE_KEY}" ]; then
   osslsigncode --version  # We need 2.2 or newer
 fi
 
@@ -395,15 +407,17 @@ build_single_target() {
   use_llvm_mingw=0
   versuffix_llvm_mingw=''
   versuffix_non_llvm_mingw=''
-  if [ "${CW_LLVM_MINGW_ONLY:-}" = '1' ]; then
-    use_llvm_mingw=1
-  # llvm-mingw is required for x64 (to avoid pthread link bug with BoringSSL),
-  # but for consistency, use it for all targets when building with BoringSSL.
-  elif [ "${_OPENSSL}" = 'boringssl' ] && [ "${_CRT}" = 'ucrt' ]; then
-    use_llvm_mingw=1
-  elif [ "${_CPU}" = 'a64' ]; then
-    use_llvm_mingw=1
-    versuffix_llvm_mingw=' (ARM64)'
+  if [ "${_OS}" = 'win' ]; then
+    if [ "${CW_LLVM_MINGW_ONLY:-}" = '1' ]; then
+      use_llvm_mingw=1
+    # llvm-mingw is required for x64 (to avoid pthread link bug with BoringSSL),
+    # but for consistency, use it for all targets when building with BoringSSL.
+    elif [ "${_OPENSSL}" = 'boringssl' ] && [ "${_CRT}" = 'ucrt' ]; then
+      use_llvm_mingw=1
+    elif [ "${_CPU}" = 'a64' ]; then
+      use_llvm_mingw=1
+      versuffix_llvm_mingw=' (ARM64)'
+    fi
   fi
 
   # Toolchain
@@ -453,16 +467,15 @@ build_single_target() {
     [ -n "${_CURL_DLL_SUFFIX_NODASH}" ] && _CURL_DLL_SUFFIX="-${_CURL_DLL_SUFFIX_NODASH}"
   fi
 
-  export _PKGSUFFIX
   if [ "${_OS}" = 'win' ]; then
-    [ "${_CPU}" = 'x86' ] && _PKGSUFFIX='-win32-mingw'
-    [ "${_CPU}" = 'x64' ] && _PKGSUFFIX='-win64-mingw'
-    [ "${_CPU}" = 'a64' ] && _PKGSUFFIX='-win64a-mingw'
+    [ "${_CPU}" = 'x86' ] && pkgcpu='win32'
+    [ "${_CPU}" = 'x64' ] && pkgcpu='win64'
+    [ "${_CPU}" = 'a64' ] && pkgcpu='win64a'
   else
-    [ "${_CPU}" = 'x86' ] && _PKGSUFFIX="-i686-${_OS}"
-    [ "${_CPU}" = 'x64' ] && _PKGSUFFIX="-x86_64-${_OS}"
-    [ "${_CPU}" = 'a64' ] && _PKGSUFFIX="-aarch64-${_OS}"
+    # TODO: add support for macOS universal (multi-CPU) builds?
+    pkgcpu="${_machine}"
   fi
+  export _PKGSUFFIX="-${pkgcpu}-${_PKGOS}"
 
   # Reset for each target
   PATH="${_ori_path}"
@@ -729,7 +742,7 @@ build_single_target() {
   # Needed to exclude compiler info from objects, but for our Windows COFF
   # outputs this seems to be a no-op as of llvm/clang 13.x/14.x.
   # Still necessary with GCC 12.1.0 though.
-  if [ "${_CC}" = 'gcc' ]; then
+  if [ "${_CC}" = 'gcc' ] && [ "${_OS}" != 'mac' ]; then
     _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-ident"
   fi
 
@@ -758,7 +771,12 @@ build_single_target() {
     fi
   fi
 
-  export _STRIP="${_BINUTILS_PREFIX}strip${_BINUTILS_SUFFIX}"
+  export _STRIP
+  if [ "${_OS}" = 'mac' ]; then
+    _STRIP='echo'  # Xcode strip does not support the options we need
+  else
+    _STRIP="${_BINUTILS_PREFIX}strip${_BINUTILS_SUFFIX}"
+  fi
   export _OBJDUMP="${_BINUTILS_PREFIX}objdump${_BINUTILS_SUFFIX}"
   export _READELF="${_BINUTILS_PREFIX}readelf${_BINUTILS_SUFFIX}"
   if [ "${_OS}" = 'win' ]; then
@@ -864,7 +882,7 @@ build_single_target() {
   fi
 
   binver=''
-  if [ "${_CC}" = 'gcc' ]; then
+  if [ "${_CC}" = 'gcc' ] && [ "${_STRIP}" != 'echo' ]; then
     binver="binutils $("${_STRIP}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
   elif [ -n "${_STRIP_BINUTILS}" ] && \
        [ "${_OPENSSL}" = 'boringssl' ]; then
@@ -962,8 +980,11 @@ build_single_target() {
 URL=${_URL_BASE}
 EOF
       unix2dos --quiet --keepdate "${_fn}"
-      touch -c -r "${_ref}" "${_fn}"
+    else
+      _fn="${_DST}/BUILD-README-URL.txt"
+      echo "${_URL_BASE}" > "${_fn}"
     fi
+    touch -c -r "${_ref}" "${_fn}"
 
     ./_pkg.sh "${_ref}"
   fi

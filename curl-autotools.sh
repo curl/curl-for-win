@@ -67,7 +67,7 @@ _VER="$1"
       LDFLAGS="${LDFLAGS} -municode"
     fi
 
-    if [ "${CW_MAP}" = '1' ]; then
+    if [ "${CW_MAP}" = '1' ] && [ "${_OS}" != 'mac' ]; then
       if [ "${pass}" = 'shared' ]; then
         _MAP_NAME="libcurl${_CURL_DLL_SUFFIX}.map"
       else
@@ -98,7 +98,9 @@ _VER="$1"
         options="${options} --disable-ftp"
       fi
       options="${options} --enable-imap --enable-pop3 --enable-smtp"
-      options="${options} --enable-ldap --enable-ldaps --with-ldap-lib=wldap32"
+      if [ "${_OS}" = 'win' ]; then
+        options="${options} --enable-ldap --enable-ldaps --with-ldap-lib=wldap32"
+      fi
     fi
 
     # NOTE: root path with spaces breaks all values with '${_TOP}'. But,
@@ -290,8 +292,10 @@ _VER="$1"
     options="${options} --enable-websockets"
 
     if [ "${pass}" = 'shared' ]; then
-      _DEF_NAME="libcurl${_CURL_DLL_SUFFIX}.def"
-      LDFLAGS="${LDFLAGS} -Wl,--output-def,${_DEF_NAME}"
+      if [ "${_OS}" = 'win' ]; then
+        _DEF_NAME="libcurl${_CURL_DLL_SUFFIX}.def"
+        LDFLAGS="${LDFLAGS} -Wl,--output-def,${_DEF_NAME}"
+      fi
 
       options="${options} --disable-static"
       options="${options} --enable-shared"
@@ -360,11 +364,11 @@ _VER="$1"
 
     # Manual copy to DESTDIR
 
-    if [ "${pass}" = 'shared' ]; then
+    if [ "${_OS}" = 'win' ] && [ "${pass}" = 'shared' ]; then
       cp -p "${_BLDDIR}-${pass}/lib/${_DEF_NAME}" "${_PP}"/bin/
     fi
 
-    if [ "${CW_MAP}" = '1' ]; then
+    if [ "${CW_MAP}" = '1' ] && [ "${_OS}" != 'mac' ]; then
       if [ "${pass}" = 'shared' ]; then
         cp -p "${_BLDDIR}-${pass}/lib/${_MAP_NAME}" "${_PP}"/bin/
       else

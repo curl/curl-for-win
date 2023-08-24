@@ -35,28 +35,32 @@ _VER="$1"
     options="${options} -DENABLE_UNICODE=ON"
   fi
 
-  options="${options} -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${_CURL_DLL_SUFFIX}.dll"
-  _DEF_NAME="libcurl${_CURL_DLL_SUFFIX}.def"
-  LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--output-def,${_DEF_NAME}"
+  if [ "${_OS}" = 'win' ]; then
+    options="${options} -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${_CURL_DLL_SUFFIX}.dll"
+    _DEF_NAME="libcurl${_CURL_DLL_SUFFIX}.def"
+    LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--output-def,${_DEF_NAME}"
+  fi
 
-  if [ "${CW_MAP}" = '1' ]; then
+  if [ "${CW_MAP}" = '1' ] && [ "${_OS}" != 'mac' ]; then
     _MAP_NAME_LIB="libcurl${_CURL_DLL_SUFFIX}.map"
     LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,-Map,${_MAP_NAME_LIB}"
     _MAP_NAME_BIN='curl.map'
     LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,-Map,${_MAP_NAME_BIN}"
   fi
 
-  # Ugly hack. Everything breaks without this due to the accidental ordering
-  # of libs and objects, and offering no universal way to (re)insert libs at
-  # specific positions. Linker complains about a missing --end-group, then
-  # adds it automatically anyway.
-  if [ "${_LD}" = 'ld' ]; then
-    LDFLAGS="${LDFLAGS} -Wl,--start-group"
-  fi
+  if [ "${_OS}" = 'win' ]; then
+    # Ugly hack. Everything breaks without this due to the accidental ordering
+    # of libs and objects, and offering no universal way to (re)insert libs at
+    # specific positions. Linker complains about a missing --end-group, then
+    # adds it automatically anyway.
+    if [ "${_LD}" = 'ld' ]; then
+      LDFLAGS="${LDFLAGS} -Wl,--start-group"
+    fi
 
-  # Link lib dependencies in static mode. Implied by `-static` for curl,
-  # but required for libcurl, which would link to shared libs by default.
-  LDFLAGS="${LDFLAGS} -Wl,-Bstatic"
+    # Link lib dependencies in static mode. Implied by `-static` for curl,
+    # but required for libcurl, which would link to shared libs by default.
+    LDFLAGS="${LDFLAGS} -Wl,-Bstatic"
+  fi
 
   if [ ! "${_BRANCH#*werror*}" = "${_BRANCH}" ]; then
     options="${options} -DCURL_WERROR=ON"
@@ -88,7 +92,9 @@ _VER="$1"
     options="${options} -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON"
   else
     [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && options="${options} -DCURL_DISABLE_FTP=ON"
-    LIBS="${LIBS} -lwldap32"
+    if [ "${_OS}" = 'win' ]; then
+      LIBS="${LIBS} -lwldap32"
+    fi
   fi
 
   if [ -n "${_ZLIB}" ]; then
@@ -151,7 +157,9 @@ _VER="$1"
     options="${options} -DMBEDX509_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedx509.a"
   fi
 
-  options="${options} -DCURL_USE_SCHANNEL=ON"
+  if [ "${_OS}" = 'win' ]; then
+    options="${options} -DCURL_USE_SCHANNEL=ON"
+  fi
   CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
   if [ "${CURL_VER_}" != '8.3.0' ]; then
@@ -258,9 +266,12 @@ _VER="$1"
     fi
   elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
     options="${options} -DUSE_LIBIDN2=OFF"
+    options="${options} -DCURL_USE_LIBPSL=OFF"
     if [ "${_OS}" = 'win' ]; then
       options="${options} -DUSE_WIN32_IDN=ON"
     fi
+  else
+    options="${options} -DCURL_USE_LIBPSL=OFF"
   fi
 
   # Official method correctly enables the manual, but with the side-effect
@@ -308,9 +319,11 @@ _VER="$1"
 
   # Manual copy to DESTDIR
 
-  cp -p "${_BLDDIR}/lib/${_DEF_NAME}" "${_PP}"/bin/
+  if [ "${_OS}" = 'win' ]; then
+    cp -p "${_BLDDIR}/lib/${_DEF_NAME}" "${_PP}"/bin/
+  fi
 
-  if [ "${CW_MAP}" = '1' ]; then
+  if [ "${CW_MAP}" = '1' ] && [ "${_OS}" != 'mac' ]; then
     cp -p "${_BLDDIR}/lib/${_MAP_NAME_LIB}" "${_PP}"/bin/
     cp -p "${_BLDDIR}/src/${_MAP_NAME_BIN}" "${_PP}"/bin/
   fi

@@ -28,12 +28,18 @@ _VER="$1"
 
   # To avoid depending on yet another unversioned download (or vendoring
   # the license), link to it instead:
-  _fn="${_DST}/LICENSE.url"
-  cat <<EOF > "${_fn}"
+  url='https://www.mozilla.org/media/MPL/2.0/index.txt'
+  if [ "${_OS}" = 'win' ]; then
+    _fn="${_DST}/LICENSE.url"
+    cat <<EOF > "${_fn}"
 [InternetShortcut]
-URL=https://www.mozilla.org/media/MPL/2.0/index.txt
+URL=${url}
 EOF
-  unix2dos --quiet --keepdate "${_fn}"
+    unix2dos --quiet --keepdate "${_fn}"
+  else
+    _fn="${_DST}/LICENSE-URL.txt"
+    echo "${url}" > "${_fn}"
+  fi
   touch -c -r "${_ref}" "${_fn}"
 
   cp -f -p "${_CACERT}" "${_DST}/bin/curl-ca-bundle.crt"
