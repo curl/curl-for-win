@@ -93,7 +93,7 @@ _VER="$1"
   # be to disable loading anything from hard-coded paths and preferably to
   # detect OS location at runtime and adjust config paths accordingly; none
   # supported by OpenSSL.
-  _win_prefix='C:/Windows/System32/OpenSSL'
+  _my_prefix='C:/Windows/System32/OpenSSL'
   _ssldir="ssl"
 
   # 'no-dso' implies 'no-dynamic-engine' which in turn compiles in these
@@ -116,7 +116,7 @@ _VER="$1"
       no-idea no-cmac no-rc2 no-mdc2 no-whirlpool \
       no-tests \
       no-makedepend \
-      "--prefix=${_win_prefix}" \
+      "--prefix=${_my_prefix}" \
       "--openssldir=${_ssldir}"
   )
 
@@ -130,7 +130,7 @@ _VER="$1"
   # so move results to a sane, standard path:
 
   mkdir -p "./${_PP}"
-  mv "${_PKGDIR}/${_win_prefix}"/* "${_PP}"
+  mv "${_PKGDIR}/${_my_prefix}"/* "${_PP}"
 
   # Rename 'lib64' to 'lib'. This is what most packages expect.
   if [ -d "${_PP}/lib64" ]; then

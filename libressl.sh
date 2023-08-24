@@ -31,7 +31,7 @@ _VER="$1"
     CFLAGS="${CFLAGS} -Wno-attributes"
   fi
 
-  _win_prefix='C:/Windows/libressl'
+  _my_prefix='C:/Windows/libressl'
   _ssldir="ssl"
 
   (
@@ -41,8 +41,8 @@ _VER="$1"
       --enable-static \
       --disable-shared \
       --disable-tests \
-      "--prefix=${_win_prefix}" \
-      "--with-openssldir=${_win_prefix}/${_ssldir}" --silent
+      "--prefix=${_my_prefix}" \
+      "--with-openssldir=${_my_prefix}/${_ssldir}" --silent
   )
 
   # Ending slash required.
@@ -54,7 +54,7 @@ _VER="$1"
   # so move results to a sane, standard path:
 
   mkdir -p "./${_PP}"
-  mv "${_PKGDIR}/${_win_prefix}"/* "${_PP}"
+  mv "${_PKGDIR}/${_my_prefix}"/* "${_PP}"
 
   # Delete .pc and .la files
   rm -r -f "${_PP}"/lib/pkgconfig
