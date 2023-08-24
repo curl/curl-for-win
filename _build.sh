@@ -229,6 +229,23 @@ else
   _CRT='sys'
 fi
 
+export DYN_DIR
+export DYN_EXT
+export BIN_EXT
+if [ "${_OS}" = 'win' ]; then
+  DYN_DIR='bin'
+  DYN_EXT='.dll'
+  BIN_EXT='.exe'
+elif [ "${_OS}" = 'mac' ]; then
+  DYN_DIR='lib'
+  DYN_EXT='.dylib'
+  BIN_EXT=''
+elif [ "${_OS}" = 'linux' ]; then
+  DYN_DIR='lib'
+  DYN_EXT='.so'
+  BIN_EXT=''
+fi
+
 if [ -z "${CW_MAP:-}" ]; then
   export CW_MAP='0'
   [ "${_BRANCH#*main*}" = "${_BRANCH}" ] && CW_MAP='1'

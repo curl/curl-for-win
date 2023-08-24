@@ -41,7 +41,7 @@
 
   # shellcheck disable=SC2043
   for bin in \
-    "${_PP}"/bin/openssl.exe \
+    "${_PP}/bin/openssl${BIN_EXT}" \
   ; do
     if [ -f "${bin}" ]; then
       file "${bin}"

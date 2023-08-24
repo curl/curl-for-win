@@ -72,7 +72,7 @@ create_pkg() {
       win) find "${_BAS}" -exec attrib +A -R '{}' \;
     esac
 
-    find "${_BAS}" -type f | sort > "${_FLS}"
+    find "${_BAS}" -type f -o -type l | sort > "${_FLS}"
 
     rm -f "${_cdo}/${_pkg}"
     case "${arch_ext}" in
@@ -115,7 +115,9 @@ if [ "${_NAM}" != "${_UNIPKG}" ]; then
   fi
 else
   create_pkg "$1" '.tar.xz'
-  create_pkg "$1" '.zip'
+  if [ "${_OS}" = 'win' ]; then
+    create_pkg "$1" '.zip'
+  fi
 fi
 
 rm -r -f "${_DST:?}"
