@@ -49,7 +49,7 @@ _VER="$1"
 
   ls -l "${_PP}"/lib/*.a
 
-  if [ "${_NAM}" = 'zlib' ]; then
+  if [ "${_NAM}" = 'zlib' ] && [ -f "${_PP}"/lib/libzlibstatic.a ]; then
     # Stick to the name expected by everyone
     mv -f "${_PP}"/lib/libzlibstatic.a "${_PP}"/lib/libz.a
   fi

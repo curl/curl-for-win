@@ -30,21 +30,23 @@ _VER="$1"
 
   options=''
 
-  [ "${_CPU}" = 'x86' ] && options="${options} mingw"
-  [ "${_CPU}" = 'x64' ] && options="${options} mingw64"
-  if [ "${_CPU}" = 'a64' ]; then
-    # Source: https://github.com/openssl/openssl/issues/10533
-    echo '## -*- mode: perl; -*-
-      my %targets = (
-        "mingw-arm64" => {
-          inherit_from     => [ "mingw-common" ],
-          asm_arch         => "aarch64",
-          perlasm_scheme   => "win64",
-          multilib         => "64",
-        }
-      );' > Configurations/11-curl-for-win-mingw-arm64.conf
+  if [ "${_OS}" = 'win' ]; then
+    [ "${_CPU}" = 'x86' ] && options="${options} mingw"
+    [ "${_CPU}" = 'x64' ] && options="${options} mingw64"
+    if [ "${_CPU}" = 'a64' ]; then
+      # Source: https://github.com/openssl/openssl/issues/10533
+      echo '## -*- mode: perl; -*-
+        my %targets = (
+          "mingw-arm64" => {
+            inherit_from     => [ "mingw-common" ],
+            asm_arch         => "aarch64",
+            perlasm_scheme   => "win64",
+            multilib         => "64",
+          }
+        );' > Configurations/11-curl-for-win-mingw-arm64.conf
 
-    options="${options} mingw-arm64"
+      options="${options} mingw-arm64"
+    fi
   fi
 
   options="${options} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"

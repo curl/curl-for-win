@@ -6,6 +6,12 @@
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
+# Unixy platforms require the configure phase, thus cannot build with pure GNU Make.
+if [ "${_OS}" != 'win' ]; then
+  ./curl-cmake.sh "$@"
+  exit
+fi
+
 export _NAM _VER _OUT _BAS _DST
 
 _NAM="$(basename "$0" | cut -f 1 -d '.' | sed 's/-gnumake//')"

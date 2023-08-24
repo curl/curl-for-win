@@ -12,22 +12,22 @@ mv -f "${_BLD}.sorted" "${_BLD}"
 sort -u "${_URLS}" > "${_URLS}.sorted"
 mv -f "${_URLS}.sorted" "${_URLS}"
 
-if ! ls ./*-*-mingw*.* >/dev/null 2>&1; then
+if ! ls ./*-*-"${_PKGOS}"*.* >/dev/null 2>&1; then
   echo '! WARNING: Nothing to deploy.'
   exit 0
 fi
 
 # Use the newest package timestamp for supplementary files
 # shellcheck disable=SC2012
-touch -r "$(ls -1 -t ./*-*-mingw*.* | head -n 1)" hashes.txt "${_BLD}" "${_URLS}" "${_LOG}"
+touch -r "$(ls -1 -t ./*-*-"${_PKGOS}"*.* | head -n 1)" hashes.txt "${_BLD}" "${_URLS}" "${_LOG}"
 
-find . -maxdepth 1 -type f -name '*-*-mingw*.*' | sort
+find . -maxdepth 1 -type f -name "*-*-${_PKGOS}*.*" | sort
 cat hashes.txt
 cat "${_BLD}"
 cat "${_URLS}"
 
 # Strip '-built-on-*' suffix for the single-file artifact.
-find . -maxdepth 1 -type f -name '*-*-mingw*.*' | sort | while read -r f; do
+find . -maxdepth 1 -type f -name "*-*-${_PKGOS}*.*" | sort | while read -r f; do
   new="$(echo "${f}" | sed 's/-built-on-[^.]*//g')"
   [ "${f}" = "${new}" ] || mv -f "${f}" "${new}"
 done
@@ -41,9 +41,9 @@ if [ "${_OS}" != 'win' ]; then
 fi
 
 # Create an artifact that includes all packages
-_ALL="all-mingw-${CURL_VER_}${_REVSUFFIX}${_FLAV}.zip"
+_ALL="all-${_PKGOS}-${CURL_VER_}${_REVSUFFIX}${_FLAV}.zip"
 {
-  find . -maxdepth 1 -type f -name '*-*-mingw*.*' | sort
+  find . -maxdepth 1 -type f -name "*-*-${_PKGOS}*.*" | sort
   echo 'hashes.txt'
   echo "${_BLD}"
   echo "${_URLS}"

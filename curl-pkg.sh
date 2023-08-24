@@ -28,7 +28,7 @@
   touch -c -r "${_ref}" "${_PP}"/bin/*.def
   touch -c -r "${_ref}" "${_PP}"/lib/*.a
 
-  if [ "${CW_MAP}" = '1' ]; then
+  if [ "${CW_MAP}" = '1' ] && [ "${_OS}" != 'mac' ]; then
     touch -c -r "${_ref}" "${_PP}"/bin/*.map
   fi
 
@@ -110,7 +110,7 @@
     cp -f -p scripts/mk-ca-bundle.pl   "${_DST}/"
   fi
 
-  if [ "${CW_MAP}" = '1' ]; then
+  if [ "${CW_MAP}" = '1' ] && [ "${_OS}" != 'mac' ]; then
     cp -f -p "${_PP}"/bin/*.map        "${_DST}/bin/"
   fi
 
