@@ -270,7 +270,7 @@ _VER="$1"
 
   if [ "${CW_MAP}" = '1' ]; then
     cp -f -p ./src/*.map "${_PP}/bin/"
-    cp -f -p ./lib/*.map "${_PP}/bin/"
+    cp -f -p ./lib/*.map "${_PP}/${DYN_DIR}/"
   fi
 
   . ../curl-pkg.sh

@@ -324,7 +324,7 @@ _VER="$1"
   fi
 
   if [ "${CW_MAP}" = '1' ] && [ "${_OS}" != 'mac' ]; then
-    cp -p "${_BLDDIR}/lib/${_MAP_NAME_LIB}" "${_PP}"/bin/
+    cp -p "${_BLDDIR}/lib/${_MAP_NAME_LIB}" "${_PP}/${DYN_DIR}/"
     cp -p "${_BLDDIR}/src/${_MAP_NAME_BIN}" "${_PP}"/bin/
   fi
 

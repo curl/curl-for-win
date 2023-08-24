@@ -370,7 +370,7 @@ _VER="$1"
 
     if [ "${CW_MAP}" = '1' ] && [ "${_OS}" != 'mac' ]; then
       if [ "${pass}" = 'shared' ]; then
-        cp -p "${_BLDDIR}-${pass}/lib/${_MAP_NAME}" "${_PP}"/bin/
+        cp -p "${_BLDDIR}-${pass}/lib/${_MAP_NAME}" "${_PP}/${DYN_DIR}/"
       else
         cp -p "${_BLDDIR}-${pass}/src/${_MAP_NAME}" "${_PP}"/bin/
       fi
