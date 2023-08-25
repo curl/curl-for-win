@@ -290,6 +290,14 @@ _VER="$1"
     LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dyn.tar"
   fi
 
+  if [ "${_OS}" != 'win' ]; then
+    # Workaround to suppress warning about unused `CMAKE_RC_FLAGS`.
+    # Could not figure how to pass it with an argument with spaces by
+    # appending it to `options`, or via the environment.
+    #   CMake Warning: Manually-specified variables were not used by the project: CMAKE_RC_FLAGS
+    options="${options} --no-warn-unused-cli"
+  fi
+
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
     '-DCMAKE_UNITY_BUILD=OFF' \
