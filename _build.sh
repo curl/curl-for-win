@@ -1010,6 +1010,18 @@ build_single_target() {
 URL=${_URL_BASE}
 EOF
       unix2dos --quiet --keepdate "${_fn}"
+    elif [ "${_OS}" = 'mac' ]; then
+      _fn="${_DST}/BUILD-README.webloc"
+      cat <<EOF > "${_fn}"
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>URL</key>
+  <string>${_URL_BASE}</string>
+</dict>
+</plist>
+EOF
     else
       _fn="${_DST}/BUILD-README-URL.txt"
       echo "${_URL_BASE}" > "${_fn}"
