@@ -805,7 +805,7 @@ build_single_target() {
   fi
 
   export _STRIP
-  if [ "${_OS}" = 'mac' ]; then
+  if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
     _STRIP='echo'  # Xcode strip does not support the options we need
   else
     _STRIP="${_BINUTILS_PREFIX}strip${_BINUTILS_SUFFIX}"
