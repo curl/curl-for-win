@@ -41,11 +41,16 @@ _VER="$1"
     LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--output-def,${_DEF_NAME}"
   fi
 
-  if [ "${CW_MAP}" = '1' ] && [ "${_OS}" != 'mac' ]; then
+  if [ "${CW_MAP}" = '1' ]; then
     _MAP_NAME_LIB="libcurl${_CURL_DLL_SUFFIX}.map"
-    LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,-Map,${_MAP_NAME_LIB}"
     _MAP_NAME_BIN='curl.map'
-    LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,-Map,${_MAP_NAME_BIN}"
+    if [ "${_OS}" = 'mac' ]; then
+      LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,-map,${_MAP_NAME_LIB}"
+      LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,-map,${_MAP_NAME_BIN}"
+    else
+      LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,-Map,${_MAP_NAME_LIB}"
+      LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,-Map,${_MAP_NAME_BIN}"
+    fi
   fi
 
   if [ "${_OS}" = 'win' ]; then
@@ -323,7 +328,7 @@ _VER="$1"
     cp -p "${_BLDDIR}/lib/${_DEF_NAME}" "${_PP}"/bin/
   fi
 
-  if [ "${CW_MAP}" = '1' ] && [ "${_OS}" != 'mac' ]; then
+  if [ "${CW_MAP}" = '1' ]; then
     cp -p "${_BLDDIR}/lib/${_MAP_NAME_LIB}" "${_PP}/${DYN_DIR}/"
     cp -p "${_BLDDIR}/src/${_MAP_NAME_BIN}" "${_PP}"/bin/
   fi

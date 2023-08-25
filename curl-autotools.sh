@@ -67,13 +67,17 @@ _VER="$1"
       LDFLAGS="${LDFLAGS} -municode"
     fi
 
-    if [ "${CW_MAP}" = '1' ] && [ "${_OS}" != 'mac' ]; then
+    if [ "${CW_MAP}" = '1' ]; then
       if [ "${pass}" = 'shared' ]; then
         _MAP_NAME="libcurl${_CURL_DLL_SUFFIX}.map"
       else
         _MAP_NAME='curl.map'
       fi
-      LDFLAGS="${LDFLAGS} -Wl,-Map,${_MAP_NAME}"
+      if [ "${_OS}" = 'mac' ]; then
+        LDFLAGS="${LDFLAGS} -Wl,-map,${_MAP_NAME}"
+      else
+        LDFLAGS="${LDFLAGS} -Wl,-Map,${_MAP_NAME}"
+      fi
     fi
 
     if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
@@ -368,7 +372,7 @@ _VER="$1"
       cp -p "${_BLDDIR}-${pass}/lib/${_DEF_NAME}" "${_PP}"/bin/
     fi
 
-    if [ "${CW_MAP}" = '1' ] && [ "${_OS}" != 'mac' ]; then
+    if [ "${CW_MAP}" = '1' ]; then
       if [ "${pass}" = 'shared' ]; then
         cp -p "${_BLDDIR}-${pass}/lib/${_MAP_NAME}" "${_PP}/${DYN_DIR}/"
       else
