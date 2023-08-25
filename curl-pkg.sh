@@ -27,7 +27,7 @@
   touch -c -r "${_ref}" "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"
   touch -c -r "${_ref}" "${_PP}"/lib/*.a
 
-  if [ "${CW_MAP}" = '1' ] && [ "${_OS}" != 'mac' ]; then
+  if [ "${CW_MAP}" = '1' ]; then
     touch -c -r "${_ref}" "${_PP}"/bin/*.map
     touch -c -r "${_ref}" "${_PP}/${DYN_DIR}"/*.map
   fi
@@ -122,7 +122,7 @@
     cp -f -p "${_PP}"/bin/*.def                "${_DST}/bin/"
   fi
 
-  if [ "${CW_MAP}" = '1' ] && [ "${_OS}" != 'mac' ]; then
+  if [ "${CW_MAP}" = '1' ]; then
     cp -f -p "${_PP}"/bin/curl.map             "${_DST}/bin/"
     cp -f -p "${_PP}/${DYN_DIR}"/*.map         "${_DST}/${DYN_DIR}/"
   fi
