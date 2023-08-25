@@ -130,7 +130,7 @@ _VER="$1"
     # FIXME: Use binutils strip instead, directly on objects, to avoid
     #        binutils strip v2.40 error `invalid operation` when run on
     #        the whole lib:
-    ../_libclean.sh --strip "${_STRIP_BINUTILS}" "${_PP}"/lib/libcrypto.a
+    ../_clean-lib.sh --strip "${_STRIP_BINUTILS}" "${_PP}"/lib/libcrypto.a
   else
     # We do not yet use ASM with ARM64 builds,
     # making it safe to use llvm-strip:

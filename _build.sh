@@ -747,7 +747,7 @@ build_single_target() {
     {
       echo '#!/bin/sh -e'
       echo "'${AR}' \"\$@\""
-      echo "'$(pwd)/_libclean.sh' --ar '${AR}' \"\$@\""
+      echo "'$(pwd)/_clean-lib.sh' --ar '${AR}' \"\$@\""
     } > "${AR_NORMALIZE}"
     chmod +x "${AR_NORMALIZE}"
   fi
