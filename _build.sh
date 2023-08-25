@@ -631,6 +631,9 @@ build_single_target() {
 
   if [ "${_OS}" = 'win' ]; then
     _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Windows ${_CMAKE_GLOBAL}"
+  elif [ "${_OS}" = 'linux' ]; then
+    # Override defaults such as: 'lib/aarch64-linux-gnu'
+    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_LIBDIR=lib"
   fi
 
   # Suppress CMake warnings meant for upstream developers
