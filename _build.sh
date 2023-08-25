@@ -131,6 +131,10 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # - Debian packages required:
 #   - cmake
 #   - musl musl-dev musl-tools (for -musl builds)
+#
+# macOS target notes:
+# - Homebrew packages:
+#   - llvm (for default builds. Not required for -gcc builds.)
 
 cd "$(dirname "$0")"
 
@@ -440,7 +444,7 @@ build_single_target() {
   fi
 
   # Toolchain
-  export _TOOLCHAIN
+  export _TOOLCHAIN=''
   if [ "${_OS}" = 'win' ]; then
     if [ "${use_llvm_mingw}" = '1' ]; then
       if [ "${_CC}" != 'llvm' ] || \
@@ -453,8 +457,11 @@ build_single_target() {
     else
       _TOOLCHAIN='mingw-w64'
     fi
-  else
-    _TOOLCHAIN=''
+  elif [ "${_OS}" = 'mac' ]; then
+    if [ "${_CC}" = 'gcc' ] && \
+       "${_CC}" --version | grep -q -a -E '(Apple clang|Apple LLVM|based on LLVM)'; then
+      _TOOLCHAIN='llvm-apple'  # Apple clang
+    fi
   fi
 
   export _TRIPLET=''
@@ -505,6 +512,8 @@ build_single_target() {
     else
       brew_root='/usr/local'
     fi
+
+    _MAC_LLVM_PATH="${brew_root}/opt/llvm/bin"
   fi
 
   if [ "${_OS}" = 'win' ]; then
@@ -524,7 +533,6 @@ build_single_target() {
       if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
         export PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
       elif [ "${_CC}" = 'llvm' ] && [ "${_HOSTOS}" = 'mac' ]; then
-        _MAC_LLVM_PATH="${brew_root}/opt/llvm/bin"
         export PATH="${_MAC_LLVM_PATH}:${_ori_path}"
       fi
       _TRIPLET="${_machine}-w64-mingw32"
@@ -570,6 +578,9 @@ build_single_target() {
       fi
     fi
   else
+    if [ "${_CC}" = 'llvm' ] && [ "${_HOSTOS}" = 'mac' ]; then
+      export PATH="${_MAC_LLVM_PATH}:${_ori_path}"
+    fi
     # TODO: add support for linux and mac cross-builds
     _TRIPLET="${_BUILD_HOST}"
   fi
@@ -761,7 +772,7 @@ build_single_target() {
   # Needed to exclude compiler info from objects, but for our Windows COFF
   # outputs this seems to be a no-op as of llvm/clang 13.x/14.x.
   # Still necessary with GCC 12.1.0 though.
-  if [ "${_CC}" = 'gcc' ] && [ "${_OS}" != 'mac' ]; then
+  if [ "${_CC}" = 'gcc' ] && [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
     _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-ident"
   fi
 
