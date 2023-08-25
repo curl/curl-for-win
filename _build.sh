@@ -743,7 +743,13 @@ build_single_target() {
         _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} -I${_SYSROOT}/${_TRIPLET}/include"
       fi
     fi
-    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-s"  # Omit .buildid segment with the timestamp in it
+    # Avoid warning, as seen on macOS when doing native builds with Homebrew
+    # llvm v16:
+    #   ld64.lld: warning: Option `-s' is obsolete. Please modernize your usage.
+    #   ld: warning: option -s is obsolete and being ignored
+    if [ "${_HOSTOS}" != 'mac' ] || [ "${_OS}" != 'mac' ]; then
+      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-s"  # Omit .buildid segment with the timestamp in it
+    fi
 
     # Avoid warnings when passing C compiler options to the linker.
     # Use it with CMake and OpenSSL's proprietary build system.
