@@ -7,7 +7,7 @@
 #          read its configuration from, making it vulnerable to attacks on
 #          Windows. Do not use this component till there is a fix for these.
 
-# shellcheck disable=SC3040
+# shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 export _NAM _VER _OUT _BAS _DST

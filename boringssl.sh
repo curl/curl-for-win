@@ -32,7 +32,7 @@
 # https://github.com/chromium/chromium/tree/main/third_party/boringssl
 # https://raw.githubusercontent.com/chromium/chromium/main/DEPS
 
-# shellcheck disable=SC3040
+# shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 export _NAM _VER _OUT _BAS _DST

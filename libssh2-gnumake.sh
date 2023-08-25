@@ -5,7 +5,7 @@
 
 # EXPERIMENTAL. DO NOT USE FOR PRODUCTION.
 
-# shellcheck disable=SC3040
+# shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 export _NAM _VER _OUT _BAS _DST
