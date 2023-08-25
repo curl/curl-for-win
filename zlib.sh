@@ -26,6 +26,10 @@ _VER="$1"
   # `BUILD_SHARED_LIBS=OFF` broken as of zlib v1.3.
   # PR: https://github.com/madler/zlib/pull/347
 
+  # As of zlib v1.3 CMake warns about unused `CMAKE_INSTALL_LIBDIR` variable.
+  # This is an upstream bug. zlib is supposed to be obeying this variable.
+  # PR: https://github.com/madler/zlib/pull/148 (opened on 2016-06-04)
+
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
     '-DBUILD_SHARED_LIBS=OFF' \
