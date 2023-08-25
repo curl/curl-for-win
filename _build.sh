@@ -53,6 +53,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        debug      debug build
 #        mac        build macOS target (requires macOS host)
 #        linux      build Linux target (requires Linux host)
+#        musl       build Linux target with musl (default: glibc)
 #
 # CW_JOBS
 #      Number of parallel make jobs. Default: 2
@@ -129,7 +130,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # Linux target notes:
 # - Debian packages required:
 #   - cmake
-#   - musl musl-dev musl-tools
+#   - musl musl-dev musl-tools (for -musl builds)
 
 cd "$(dirname "$0")"
 
@@ -222,8 +223,9 @@ if [ "${_OS}" = 'win' ]; then
   _CRT='ucrt'
   [ ! "${_BRANCH#*msvcrt*}" = "${_BRANCH}" ] && _CRT='msvcrt'
 elif [ "${_OS}" = 'linux' ]; then
-  _CRT='musl'
-  [ ! "${_BRANCH#*glibc*}" = "${_BRANCH}" ] && _CRT='glibc'
+  # TODO: make musl the default (once all issues are cleared)
+  _CRT='glibc'
+  [ ! "${_BRANCH#*musl*}" = "${_BRANCH}" ] && _CRT='musl'
 else
   # macOS: /usr/lib/libSystem.B.dylib
   _CRT='sys'
