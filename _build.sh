@@ -179,10 +179,10 @@ if [ -z "${_URL_BASE}" ]; then
   _URL_BASE="https://github.com/${_SLUG}"
 fi
 if [ -n "${_COMMIT}" ]; then
-  _URL_FULL="${_URL_BASE}/tree/${_COMMIT}"
+# _URL_FULL="${_URL_BASE}/tree/${_COMMIT}"
   _TAR="${_URL_BASE}/archive/${_COMMIT}.tar.gz"
 else
-  _URL_FULL="${_URL_BASE}"
+# _URL_FULL="${_URL_BASE}"
   _TAR="${_URL_BASE}/archive/refs/heads/${_BRANCH}.tar.gz"
 fi
 
