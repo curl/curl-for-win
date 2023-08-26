@@ -500,10 +500,10 @@ build_single_target() {
   else
     ccver="$("${_CCPREFIX}gcc" -dumpversion)"
 
-    # Create specs files that overrides msvcrt with ucrt. We need this
-    # for gcc when building against UCRT.
     if [ "${_CRT}" = 'ucrt' ]; then
-      # https://stackoverflow.com/questions/57528555/how-do-i-build-against-the-ucrt-with-mingw-w64
+      # Create specs files that overrides msvcrt with ucrt. We need this
+      # for gcc when building against UCRT.
+      #   https://stackoverflow.com/questions/57528555/how-do-i-build-against-the-ucrt-with-mingw-w64
       _GCCSPECS="$(realpath gcc-specs-ucrt)"
       "${_CCPREFIX}gcc" -dumpspecs | sed 's/-lmsvcrt/-lucrt/g' > "${_GCCSPECS}"
     fi
