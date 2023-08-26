@@ -114,6 +114,7 @@ _VER="$1"
       no-srp no-nextprotoneg \
       no-bf no-rc4 no-cast \
       no-idea no-cmac no-rc2 no-mdc2 no-whirlpool \
+      no-dsa \
       no-tests \
       no-makedepend \
       "--prefix=${_my_prefix}" \
