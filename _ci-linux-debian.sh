@@ -10,16 +10,16 @@ cat /etc/*-release
 
 export CW_CCSUFFIX='-16'
 
+extra=''
+[[ "${APPVEYOR_REPO_BRANCH:-}" = *'boringssl'* ]] && extra="${extra} golang nasm"
+
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 update
+# shellcheck disable=SC2086
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
   curl git gpg rsync python3-pefile make cmake \
   mingw-w64 \
   "llvm${CW_CCSUFFIX}" "clang${CW_CCSUFFIX}" "lld${CW_CCSUFFIX}" \
   autoconf automake autopoint libtool osslsigncode \
-  zip time jq dos2unix secure-delete wine64
-
-[[ "${APPVEYOR_REPO_BRANCH:-}" = *'boringssl'* ]] && \
-apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
-  golang nasm
+  zip time jq dos2unix secure-delete wine64 ${extra}
 
 ./_build.sh
