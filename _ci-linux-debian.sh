@@ -11,7 +11,7 @@ cat /etc/*-release
 export CW_CCSUFFIX='-16'
 
 extra=''
-[[ "${APPVEYOR_REPO_BRANCH:-}" = *'boringssl'* ]] && extra="${extra} golang nasm"
+[[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} golang nasm"
 
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 update
 # shellcheck disable=SC2086

@@ -7,7 +7,7 @@
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 extra=''
-[[ "${APPVEYOR_REPO_BRANCH:-}" = *'boringssl'* ]] && extra="${extra} go nasm"
+[[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go nasm"
 
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ANALYTICS=1
