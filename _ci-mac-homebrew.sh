@@ -10,9 +10,8 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ANALYTICS=1
 time brew update >/dev/null
 time brew install xz gnu-tar mingw-w64 llvm gettext \
-                  jq dos2unix osslsigncode openssh
+                  jq dos2unix osslsigncode openssh wine-stable
 [[ "${APPVEYOR_REPO_BRANCH:-}" = *'boringssl'* ]] && time brew install go nasm
-time brew install --cask wine-stable
 time wineboot --init
 
 ./_build.sh
