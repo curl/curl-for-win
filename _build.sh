@@ -53,7 +53,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        debug      debug build
 #        mac        build macOS target (requires macOS host)
 #        linux      build Linux target (requires Linux host)
-#        musl       build Linux target with musl (default: glibc)
+#        musl       build Linux target with musl CRT (default: gnu)
 #
 # CW_JOBS
 #      Number of parallel make jobs. Default: 2
@@ -228,7 +228,7 @@ if [ "${_OS}" = 'win' ]; then
   [ ! "${_BRANCH#*msvcrt*}" = "${_BRANCH}" ] && _CRT='msvcrt'
 elif [ "${_OS}" = 'linux' ]; then
   # TODO: make musl the default (once all issues are cleared)
-  _CRT='glibc'
+  _CRT='gnu'
   [ ! "${_BRANCH#*musl*}" = "${_BRANCH}" ] && _CRT='musl'
 else
   # macOS: /usr/lib/libSystem.B.dylib
@@ -583,6 +583,12 @@ build_single_target() {
     fi
     # TODO: add support for linux and mac cross-builds
     _TRIPLET="${_BUILD_HOST}"
+
+    if [ "${_OS}" = 'linux' ]; then
+      # Include CRT type in Linux triplets, to make it visible in
+      # the curl version banner.
+      _TRIPLET="${_TRIPLET}-${_CRT}"
+    fi
   fi
 
   if [ "${_CC}" = 'llvm' ]; then
