@@ -757,6 +757,10 @@ build_single_target() {
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-s"  # Omit .buildid segment with the timestamp in it
     fi
 
+    if [ "${_OS}" = 'linux' ]; then
+      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,--build-id=none"  # Omit build-id
+    fi
+
     # Avoid warnings when passing C compiler options to the linker.
     # Use it with CMake and OpenSSL's proprietary build system.
     _CFLAGS_GLOBAL_CMAKE="${_CFLAGS_GLOBAL_CMAKE} -Wno-unused-command-line-argument"
