@@ -21,6 +21,7 @@ export CW_CONFIG='dev-x64-big-cares'
 
 # Install necessary packages
 if [ ! -f .cw-initialized ]; then
+  extra=''
   case "$(uname)" in
     *_NT*)
       pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
@@ -31,20 +32,18 @@ if [ ! -f .cw-initialized ]; then
         mingw-w64-x86_64-{go,nasm}
       ;;
     Linux*)
+      [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} golang nasm"
+      # shellcheck disable=SC2086
       apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
         curl git gpg python3-pefile make cmake \
         autoconf automake autopoint libtool \
-        zip time jq dos2unix
-      [[ "${CW_CONFIG}" = *'boringssl'* ]] && \
-      apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
-        golang nasm
+        zip time jq dos2unix ${extra}
       ;;
     Darwin*)
+      [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go nasm"
+      # shellcheck disable=SC2086
       brew install \
-        xz gnu-tar gettext jq dos2unix
-      [[ "${CW_CONFIG}" = *'boringssl'* ]] && \
-      brew install \
-        go nasm
+        xz gnu-tar gettext jq dos2unix ${extra}
       ;;
   esac
   touch .cw-initialized
