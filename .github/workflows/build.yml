@@ -1,0 +1,46 @@
+# Copyright (C) Viktor Szakats. See LICENSE.md
+# SPDX-License-Identifier: MIT
+---
+# https://docs.github.com/actions/learn-github-actions
+name: build
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - test
+
+permissions: {}
+
+env:
+  CW_MAP: '1'
+  CW_JOBS: '3'
+  DO_NOT_TRACK: '1'
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'build'
+        run: |
+          export CW_CONFIG='${{ github.ref_name }}-linux'
+          export CW_REVISION='${{ github.sha }}'
+          . ./_versions.sh
+          time docker pull "${DOCKER_IMAGE}"
+          docker images --digests
+          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+            --env-file <(env | grep -a -E \
+              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
+            "${DOCKER_IMAGE}" \
+            sh -c ./_ci-linux-debian.sh
+
+  mac:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'build'
+        run: |
+          export CW_CONFIG='${{ github.ref_name }}-mac'
+          export CW_REVISION='${{ github.sha }}'
+          sh -c ./_ci-mac-homebrew.sh
