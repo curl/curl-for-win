@@ -17,7 +17,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Default: (all)
 #
 # CW_LLVM_MINGW_PATH
-#      Point to LLVM MinGW installation.
+#      Point to LLVM MinGW installation (for win target).
 #
 # CW_CONFIG
 #      Build configuration. Certain keywords select certain configurations. E.g.: 'main-micro'.
@@ -43,17 +43,18 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        micro      build with less features, see README.md
 #        nano       build with less features, see README.md
 #        pico       build with less features, see README.md
-#        a64        build ARM64 target only
-#        x64        build x64 target only
-#        x86        build x86 target only
-#        msvcrt     build against msvcrt instead of UCRT
+#        a64        build arm64 target only
+#        x64        build x86_64 target only
+#        x86        build i686 target only (for win target)
+#        msvcrt     build against msvcrt instead of UCRT (for win target)
 #        gcc        build with GCC (use llvm if not specified)
-#        unicode    build curl in UNICODE mode [EXPERIMENTAL]
+#        unicode    build curl in UNICODE mode (for win target) [EXPERIMENTAL]
 #        werror     turn compiler warnings into errors
 #        debug      debug build
+#        win        build Windows target (default)
 #        mac        build macOS target (requires macOS host)
 #        linux      build Linux target (requires Linux host)
-#        musl       build Linux target with musl CRT (default: gnu)
+#        musl       build Linux target with musl CRT (for linux target) (default: gnu)
 #
 # CW_JOBS
 #      Number of parallel make jobs. Default: 2
@@ -73,11 +74,11 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # TODO:
 #   - Change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
-#   - Linux: use musl.
-#   - Test -DSHARE_LIB_OBJECT=ON on mac and curl 8.3.0.
+#   - linux: use musl.
+#   - mac: Test -DSHARE_LIB_OBJECT=ON with curl 8.3.0.
 #   - Rename _BRANCH to CW_CONFIG internally.
 #   - Replace .zip with .tar.gz for all-packages artifact (in _ul.sh)?
-#   - Drop x86 builds.
+#   - win: Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
 #       https://gs.statcounter.com/windows-version-market-share
 #     A hidden aspect of x86: The Chocolatey package manager installs x86

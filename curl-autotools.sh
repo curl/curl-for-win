@@ -353,7 +353,7 @@ _VER="$1"
     #       reproducibility again. Skip the clean phase to resolve it.
 
     if [ "${pass}" = 'shared' ]; then
-      # Skip building shared version curl.exe. The build itself works, but
+      # Skip building shared version curl tool. The build itself works, but
       # then autotools tries to create its "ltwrapper", and fails. This only
       # seems to happen when building curl against more than one dependency.
       # I have found no way to skip building that component, even though
