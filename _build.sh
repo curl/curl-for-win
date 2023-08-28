@@ -166,7 +166,7 @@ export _BRANCH
 if [ -n "${CW_CONFIG:-}" ]; then
   _BRANCH="${CW_CONFIG}"
 else
-  _BRANCH="${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF:-}"
+  _BRANCH="${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF_NAME:-}"
 fi
 [ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD || true)"
 [ -n "${_BRANCH}" ] || _BRANCH='main'
