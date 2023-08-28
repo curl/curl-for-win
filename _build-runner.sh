@@ -33,6 +33,7 @@ if [ ! -f .cw-initialized ]; then
       ;;
     Linux*)
       [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} golang nasm"
+      [[ "${CW_CONFIG:-}" = *'musl'* ]] && extra="${extra} musl musl-dev musl-tools"
       # shellcheck disable=SC2086
       apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
         curl git gpg rsync python3-pefile make cmake \

@@ -127,15 +127,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   libssh2          autotools, gnumake [windows-only], cmake
 #   curl             gnumake [windows-only], cmake [non-windows default], autotools
 
-# Linux target notes:
-# - Debian packages required:
-#   - cmake
-#   - musl musl-dev musl-tools (for -musl builds)
-#
-# macOS target notes:
-# - Homebrew packages:
-#   - llvm (for default builds. Not required for -gcc builds.)
-
 cd "$(dirname "$0")"
 
 export LC_ALL=C

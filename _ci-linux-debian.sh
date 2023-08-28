@@ -14,6 +14,18 @@ extra=''
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} golang nasm"
 [[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} mingw-w64 osslsigncode wine64"
 
+if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
+  if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
+    extra="${extra} musl musl-dev musl-tools"
+    # for openssl 'secure-memory' feature
+    if [ "$(uname -m)" = 'aarch64' ]; then
+      extra="${extra} linux-headers-arm64"
+    elif [ "$(uname -m)" = 'x86_64' ]; then
+      extra="${extra} linux-headers-amd64"
+    fi
+  fi
+fi
+
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 update
 # shellcheck disable=SC2086
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
