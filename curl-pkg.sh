@@ -27,7 +27,7 @@
   ../_sign-code.sh "${_ref}" '{}' \;
 
   touch -c -r "${_ref}" "${_PP}/bin/curl${BIN_EXT}"
-  touch -c -r "${_ref}" "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"
+  touch -h -r "${_ref}" "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"
   touch -c -r "${_ref}" "${_PP}"/lib/*.a
 
   if [ "${CW_MAP}" = '1' ]; then
