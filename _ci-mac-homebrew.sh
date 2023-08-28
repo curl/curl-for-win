@@ -13,8 +13,8 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ANALYTICS=1
 time brew update >/dev/null
 # shellcheck disable=SC2086
-time brew install xz gnu-tar mingw-w64 llvm gettext \
-                  jq dos2unix osslsigncode openssh wine-stable ${extra}
+time brew install coreutils mingw-w64 llvm \
+                  dos2unix osslsigncode openssh wine-stable ${extra}
 time wineboot --init
 
 ./_build.sh
