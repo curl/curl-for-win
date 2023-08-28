@@ -10,38 +10,29 @@
 
   readonly _ref='CHANGES'
 
-  "${_STRIP}" --enable-deterministic-archives --strip-all   "${_PP}/bin/curl${BIN_EXT}"
-  find "${_PP}/${DYN_DIR}" -type f -name "*${DYN_EXT}*" -a -not -name '*.dll.a' -exec \
-  "${_STRIP}" --enable-deterministic-archives --strip-all   '{}' \;
+  # Show the reference timestamp in UTC.
+  case "${_HOSTOS}" in
+    bsd|mac) TZ=UTC stat -f '%N: %Sm' -t '%Y-%m-%d %H:%M' "${_ref}";;
+    *)       TZ=UTC stat --format='%n: %y' "${_ref}";;
+  esac
+
+  # Process libcurl static library
+
   "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/libcurl.a
   # LLVM strip does not support implibs, but they are deterministic by default:
   #   error: unsupported object file format
   [ "${_LD}" = 'ld' ] && [ "${_OS}" = 'win' ] && "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/libcurl.dll.a
 
-  ../_clean-bin.sh "${_ref}" "${_PP}/bin/curl${BIN_EXT}"
-  find "${_PP}/${DYN_DIR}" -type f -name "*${DYN_EXT}*" -a -not -name '*.dll.a' -exec \
-  ../_clean-bin.sh "${_ref}" '{}' \;
-
-  ../_sign-code.sh "${_ref}" "${_PP}/bin/curl${BIN_EXT}"
-  find "${_PP}/${DYN_DIR}" -type f -name "*${DYN_EXT}*" -a -not -name '*.dll.a' -exec \
-  ../_sign-code.sh "${_ref}" '{}' \;
-
-  touch -c -r "${_ref}" "${_PP}/bin/curl${BIN_EXT}"
-  touch -h -r "${_ref}" "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"*
   touch -c -r "${_ref}" "${_PP}"/lib/*.a
+
+  # Process map files
 
   if [ "${CW_MAP}" = '1' ]; then
     touch -c -r "${_ref}" "${_PP}"/bin/*.map
     touch -c -r "${_ref}" "${_PP}/${DYN_DIR}"/*.map
   fi
 
-  # Tests
-
-  # Show the reference timestamp in UTC.
-  case "${_HOSTOS}" in
-    bsd|mac) TZ=UTC stat -f '%N: %Sm' -t '%Y-%m-%d %H:%M' "${_ref}";;
-    *)       TZ=UTC stat --format='%n: %y' "${_ref}";;
-  esac
+  # Process curl tool and libcurl shared library
 
   for suffix in exe dyn; do
     {
@@ -51,6 +42,18 @@
         find "${_PP}/${DYN_DIR}" -name "*${DYN_EXT}*" -a -not -name '*.dll.a' | sort
       fi
     } | while read -r f; do
+
+      if [ ! -L "${f}" ]; then
+        "${_STRIP}" --enable-deterministic-archives --strip-all "${f}"
+
+        ../_clean-bin.sh "${_ref}" "${f}"
+
+        ../_sign-code.sh "${_ref}" "${f}"
+      fi
+
+      touch -h -r "${_ref}" "${f}"
+
+      # Tests
 
       if [ ! -L "${f}" ]; then
         if [ "${_OS}" = 'win' ]; then
