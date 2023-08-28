@@ -640,6 +640,9 @@ build_single_target() {
   elif [ "${_OS}" = 'linux' ]; then
     # Override defaults such as: 'lib/aarch64-linux-gnu'
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_LIBDIR=lib"
+
+    _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fPIC"
+    _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -fPIC"
   fi
 
   # Suppress CMake warnings meant for upstream developers

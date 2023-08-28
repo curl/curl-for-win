@@ -290,6 +290,11 @@ _VER="$1"
     LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dyn.tar"
   fi
 
+  if [ "${_OS}" = 'linux' ]; then
+    # We build with -fPIC by default, build lib objects once to save build time.
+    options="${options} -DSHARE_LIB_OBJECT=ON"
+  fi
+
   if [ "${_OS}" != 'win' ]; then
     # Workaround to suppress warning about unused `CMAKE_RC_FLAGS`.
     # Could not figure how to pass it with an argument with spaces by
