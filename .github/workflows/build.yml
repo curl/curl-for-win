@@ -35,6 +35,14 @@ jobs:
             "${DOCKER_IMAGE}" \
             sh -c ./_ci-linux-debian.sh
 
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'Linux binaries'
+          retention-days: 5
+          path: |
+            *-*-linux*.*
+            urls.txt
+
   mac:
     runs-on: macos-latest
     steps:
@@ -44,3 +52,11 @@ jobs:
           export CW_CONFIG='${{ github.ref_name }}-mac'
           export CW_REVISION='${{ github.sha }}'
           sh -c ./_ci-mac-homebrew.sh
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'macOS binaries'
+          retention-days: 5
+          path: |
+            *-*-macos*.*
+            urls.txt
