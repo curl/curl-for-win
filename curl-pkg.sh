@@ -11,7 +11,7 @@
   readonly _ref='CHANGES'
 
   "${_STRIP}" --enable-deterministic-archives --strip-all   "${_PP}/bin/curl${BIN_EXT}"
-  find "${_PP}/${DYN_DIR}" -type f -name "*${DYN_EXT}" -exec \
+  find "${_PP}/${DYN_DIR}" -type f -name "*${DYN_EXT}*" -a -not -name '*.dll.a' -exec \
   "${_STRIP}" --enable-deterministic-archives --strip-all   '{}' \;
   "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/libcurl.a
   # LLVM strip does not support implibs, but they are deterministic by default:
@@ -19,15 +19,15 @@
   [ "${_LD}" = 'ld' ] && [ "${_OS}" = 'win' ] && "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/libcurl.dll.a
 
   ../_clean-bin.sh "${_ref}" "${_PP}/bin/curl${BIN_EXT}"
-  find "${_PP}/${DYN_DIR}" -type f -name "*${DYN_EXT}" -exec \
+  find "${_PP}/${DYN_DIR}" -type f -name "*${DYN_EXT}*" -a -not -name '*.dll.a' -exec \
   ../_clean-bin.sh "${_ref}" '{}' \;
 
   ../_sign-code.sh "${_ref}" "${_PP}/bin/curl${BIN_EXT}"
-  find "${_PP}/${DYN_DIR}" -type f -name "*${DYN_EXT}" -exec \
+  find "${_PP}/${DYN_DIR}" -type f -name "*${DYN_EXT}*" -a -not -name '*.dll.a' -exec \
   ../_sign-code.sh "${_ref}" '{}' \;
 
   touch -c -r "${_ref}" "${_PP}/bin/curl${BIN_EXT}"
-  touch -h -r "${_ref}" "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"
+  touch -h -r "${_ref}" "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"*
   touch -c -r "${_ref}" "${_PP}"/lib/*.a
 
   if [ "${CW_MAP}" = '1' ]; then
@@ -48,7 +48,7 @@
       if [ "${suffix}" = 'exe' ]; then
         echo "${_PP}/bin/curl${BIN_EXT}"
       else
-        find "${_PP}/${DYN_DIR}" -name "*${DYN_EXT}" | sort
+        find "${_PP}/${DYN_DIR}" -name "*${DYN_EXT}*" -a -not -name '*.dll.a' | sort
       fi
     } | while read -r f; do
 
