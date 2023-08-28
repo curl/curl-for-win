@@ -106,7 +106,8 @@ _VER="$1"
         options="${options} --enable-ldap --enable-ldaps --with-ldap-lib=wldap32"
       else
         # ldap is auto-detected on mac, but without ldaps. Disable it
-        # rather than offering an insecure-only solution.
+        # rather than offering an insecure-only solution. In certain configs
+        # it also results in 'deprecated in macOS 10.11' compiler output.
         options="${options} --disable-ldap --disable-ldaps"
       fi
     fi
@@ -137,6 +138,10 @@ _VER="$1"
 
     if [ "${_OS}" = 'win' ]; then
       options="${options} --with-schannel"
+    elif [ "${_OS}" = 'mac' ]; then
+      # SecureTransport deprecated in 2019 (macOS 10.15 Catalina, iOS 13.0)
+    # options="${options} --with-secure-transport"
+      :
     fi
     CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
@@ -251,6 +256,11 @@ _VER="$1"
       LDFLAGS="${LDFLAGS} -L${_TOP}/gsasl/${_PP}/lib"
     else
       options="${options} --without-libgsasl"
+      if [ "${_OS}" = 'mac' ]; then
+        # GSS API deprecated in 2012-2013 (OS X 10.8 Mountain Lion / 10.9 Mavericks, iOS 7.0)
+      # options="${options} --with-gssapi"
+        :
+      fi
     fi
 
     if [ -d ../nghttp2 ]; then
