@@ -461,7 +461,7 @@ build_single_target() {
   _CCPREFIX=
   _CCSUFFIX=
   export _MAKE='make'
-  export _WINE=''
+  export _RUN_BIN=''
 
   if [ ! "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
     _CCSUFFIX="${CW_CCSUFFIX}"
@@ -540,31 +540,31 @@ build_single_target() {
         fi
       fi
 
-      _WINE='echo'
+      _RUN_BIN='echo'
       if [ "${_HOSTOS}" = 'linux' ] || \
          [ "${_HOSTOS}" = 'bsd' ]; then
         # Run x64 targets on same CPU:
         if [ "${_CPU}" = 'x64' ] && \
            [ "${unamem}" = 'x86_64' ]; then
           if command -v wine64 >/dev/null 2>&1; then
-            _WINE='wine64'
+            _RUN_BIN='wine64'
           elif command -v wine >/dev/null 2>&1; then
-            _WINE='wine'
+            _RUN_BIN='wine'
           fi
         fi
       elif [ "${_HOSTOS}" = 'mac' ]; then
         # Run x64 targets on Intel and ARM (requires Wine 6.0.1):
         if [ "${_CPU}" = 'x64' ] && \
            command -v wine64 >/dev/null 2>&1; then
-          _WINE='wine64'
+          _RUN_BIN='wine64'
         fi
       elif [ "${_HOSTOS}" = 'win' ]; then
         # Skip ARM64 target on 64-bit Intel, run all targets on ARM64:
         if [ "${unamem}" = 'x86_64' ] && \
            [ "${_CPU}" != 'a64' ]; then
-          _WINE=
+          _RUN_BIN=
         elif [ "${unamem}" = 'aarch64' ]; then
-          _WINE=
+          _RUN_BIN=
         fi
       fi
     fi
