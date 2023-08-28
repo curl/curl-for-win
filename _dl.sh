@@ -211,7 +211,7 @@ my_curl() {
 my_gpg() {
   local opts
   opts=()
-  if [ -z "${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF:-}" ]; then
+  if [ -z "${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF_NAME:-}" ]; then
     # Do not populate user GPG configuration with build-related keys, unless
     # this is an automated CI session, where this is fine. In CI environments,
     # as of gnupg 2.2.27, using --homedir or GNUPGHOME causes frequent
