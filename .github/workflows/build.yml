@@ -49,13 +49,13 @@ jobs:
       - uses: actions/checkout@v3
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-mac'
+          export CW_CONFIG='${{ github.ref_name }}-mac-macuni'
           export CW_REVISION='${{ github.sha }}'
           sh -c ./_ci-mac-homebrew.sh
 
       - uses: actions/upload-artifact@v3
         with:
-          name: 'macOS binaries'
+          name: 'macOS universal binaries'
           retention-days: 5
           path: |
             *-*-macos*.*

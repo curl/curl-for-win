@@ -55,6 +55,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        mac        build macOS target (requires macOS host)
 #        linux      build Linux target (requires Linux host)
 #        musl       build Linux target with musl CRT (for linux target) (default: gnu)
+#        macuni     build macOS universal (arm64 + x86_64) package (for mac target)
 #
 # CW_JOBS
 #      Number of parallel make jobs. Default: 2
@@ -1053,7 +1054,7 @@ EOF
     fi
     touch -c -r "${_ref}" "${_fn}"
 
-    ./_pkg.sh "${_ref}"
+    ./_pkg.sh "${_ref}" 'unified'
   fi
 }
 
@@ -1072,11 +1073,19 @@ if [ "${_OS}" = 'win' ]; then
     build_single_target x86
   fi
 elif [ "${_OS}" = 'mac' ]; then
+  # TODO: This method is suboptimal. We might want to build pure C
+  #       projects in dual mode and only manual-merge libs that have
+  #       ASM components.
   if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ]; then
     build_single_target a64
   fi
   if [ "${_BRANCH#*a64*}" = "${_BRANCH}" ]; then
     build_single_target x64
+  fi
+  if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ] && \
+     [ "${_BRANCH#*a64*}" = "${_BRANCH}" ] && \
+     [ "${_BRANCH#*macuni*}" != "${_BRANCH}" ]; then
+    ./_macuni.sh
   fi
 else
   [ "${unamem}" = 'i686'    ] && cpu='x86'
