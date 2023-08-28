@@ -74,6 +74,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # TODO:
 #   - Change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
 #   - Linux: use musl.
+#   - Test -DSHARE_LIB_OBJECT=ON on mac and curl 8.3.0.
 #   - Rename _BRANCH to CW_CONFIG internally.
 #   - Replace .zip with .tar.gz for all-packages artifact (in _ul.sh)?
 #   - Drop x86 builds.
