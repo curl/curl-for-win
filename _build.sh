@@ -572,13 +572,23 @@ build_single_target() {
     if [ "${_CC}" = 'llvm' ] && [ "${_HOSTOS}" = 'mac' ]; then
       export PATH="${_MAC_LLVM_PATH}:${_ori_path}"
     fi
-    # TODO: add support for linux and mac cross-builds
-    _TRIPLET="${_BUILD_HOST}"
 
     if [ "${_OS}" = 'linux' ]; then
+      # TODO: add support for linux cross-builds
       # Include CRT type in Linux triplets, to make it visible in
       # the curl version banner.
-      _TRIPLET="${_TRIPLET}-${_CRT}"
+      _TRIPLET="${_BUILD_HOST}-${_CRT}"
+    elif [ "${_OS}" = 'mac' ]; then
+      _TRIPLET="${_machine}-apple-darwin"
+
+      _RUN_BIN='echo'
+      if [ "${_HOSTOS}" = 'mac' ]; then
+        # Don't try running arm64 on x86_64
+        if [ "${_CPU}" = 'x64' ] || \
+           [ "${unamem}" = 'aarch64' ]; then
+          _RUN_BIN=''
+        fi
+      fi
     fi
   fi
 
@@ -1058,6 +1068,13 @@ if [ "${_OS}" = 'win' ]; then
   if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ] && \
      [ "${_BRANCH#*a64*}" = "${_BRANCH}" ]; then
     build_single_target x86
+  fi
+elif [ "${_OS}" = 'mac' ]; then
+  if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ]; then
+    build_single_target a64
+  fi
+  if [ "${_BRANCH#*a64*}" = "${_BRANCH}" ]; then
+    build_single_target x64
   fi
 else
   [ "${unamem}" = 'i686'    ] && cpu='x86'
