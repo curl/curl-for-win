@@ -52,25 +52,27 @@
       fi
     } | while read -r f; do
 
-      if [ "${_OS}" = 'win' ]; then
-        TZ=UTC "${_OBJDUMP}" --all-headers "${f}" | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f
-        # Verify exported curl symbols
-        if [ "${suffix}" = 'exe' ]; then
-          "${_OBJDUMP}" --all-headers "${f}" | grep -a -F ' curl_' && false  # should not have any hits for statically linked curl
-        else
-          "${_OBJDUMP}" --all-headers "${f}" | grep -a -F ' curl_' || false  # show public libcurl APIs (in a well-defined order)
+      if [ ! -L "${f}" ]; then
+        if [ "${_OS}" = 'win' ]; then
+          TZ=UTC "${_OBJDUMP}" --all-headers "${f}" | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f
+          # Verify exported curl symbols
+          if [ "${suffix}" = 'exe' ]; then
+            "${_OBJDUMP}" --all-headers "${f}" | grep -a -F ' curl_' && false  # should not have any hits for statically linked curl
+          else
+            "${_OBJDUMP}" --all-headers "${f}" | grep -a -F ' curl_' || false  # show public libcurl APIs (in a well-defined order)
+          fi
+          # Dump 'DllCharacteristics' flags, e.g. HIGH_ENTROPY_VA, DYNAMIC_BASE, NX_COMPAT, GUARD_CF, TERMINAL_SERVICE_AWARE
+          "${_OBJDUMP}" --all-headers "${f}" | grep -a -E -o '^\s+[A-Z_]{4,}$' | sort
+          # Dump cfguard load configuration flags
+          if [ "${_CC}" = 'llvm' ]; then  # binutils readelf (as of v2.40) does not recognize this option
+            # CF_FUNCTION_TABLE_PRESENT, CF_INSTRUMENTED, CF_LONGJUMP_TABLE_PRESENT (optional)
+            "${_READELF}" --coff-load-config "${f}" | grep -a -E 'CF_[A-Z_]' | sort
+          fi
+        elif [ "${_OS}" = 'mac' ]; then
+          otool -L "${f}"
+        elif [ "${_OS}" = 'linux' ]; then
+          "${_READELF}" --file-header --dynamic "${f}"
         fi
-        # Dump 'DllCharacteristics' flags, e.g. HIGH_ENTROPY_VA, DYNAMIC_BASE, NX_COMPAT, GUARD_CF, TERMINAL_SERVICE_AWARE
-        "${_OBJDUMP}" --all-headers "${f}" | grep -a -E -o '^\s+[A-Z_]{4,}$' | sort
-        # Dump cfguard load configuration flags
-        if [ "${_CC}" = 'llvm' ]; then  # binutils readelf (as of v2.40) does not recognize this option
-          # CF_FUNCTION_TABLE_PRESENT, CF_INSTRUMENTED, CF_LONGJUMP_TABLE_PRESENT (optional)
-          "${_READELF}" --coff-load-config "${f}" | grep -a -E 'CF_[A-Z_]' | sort
-        fi
-      elif [ "${_OS}" = 'mac' ]; then
-        otool -L "${f}"
-      elif [ "${_OS}" = 'linux' ]; then
-        "${_READELF}" --file-header --dynamic "${f}"
       fi
     done
   done
