@@ -81,7 +81,7 @@ _VER="$1"
   #   patch it misidentifies all such absolute paths as relative ones and
   #   aborts.
   #   Reported: https://github.com/openssl/openssl/issues/9520
-  # - allow no-apps option to save time building openssl.exe.
+  # - allow no-apps option to save time building openssl command-line tool.
   sed \
     -e 's/die "Directory given with --prefix/print "Directory given with --prefix/g' \
     -e 's/"aria",$/"apps", "aria",/g' \

@@ -15,14 +15,14 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 - [Download](https://curl.se/windows/) our
   `.zip` or `.tar.xz` packages,<br>PGP signed with:
   [`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
-- Standalone `curl.exe` and `libcurl.dll`. Static libraries included.
+- Standalone `curl` tool and `libcurl` DLL. Static libraries included.
 - Vista and
   [Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/)
   required.
 - [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3),
   [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support,
   and [more](#features).
-- ARM64 builds are
+- ARM64 Windows builds are
   [Control Flow Guard](https://learn.microsoft.com/windows/win32/secbp/control-flow-guard)
   enabled [EXPERIMENTAL].
 - Transparent builds, using open source code, run in
@@ -38,6 +38,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   [AppVeyor CI](https://www.appveyor.com/). Using reproducible OS image
   [`debian:testing-slim`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing/slim)
   via [Docker](https://hub.docker.com/_/debian/).
+- Experimental support to build standalone macOS and Linux (glibc) binaries.
 - We verify components using SHA-256, and PGP where provided.
 - We build [reproducible](https://reproducible-builds.org/) binaries,
   producing the same hash given the same input sources and C compiler.
@@ -65,6 +66,10 @@ Features: alt-svc AsynchDNS brotli       HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 K
 <details><summary>Alternate configurations with different footprints:</summary><p>
 
 ```
+linux and mac:
+Protocols: dict file ftp ftps gopher gophers http https imap imaps            mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
+Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6          Largefile libz          NTLM PSL        SSL      threadsafe UnixSockets zstd
+
 "big":
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
 Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM PSL SPNEGO SSL SSPI threadsafe UnixSockets zstd
