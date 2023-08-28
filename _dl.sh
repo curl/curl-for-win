@@ -228,7 +228,9 @@ my_gpg() {
     # do not use a homedir override.
     opts+=(--homedir "${gpgdir}")
   fi
-  gpg "${opts[@]}" --batch --keyserver-options timeout=15 --display-charset utf-8 --keyid-format 0xlong "$@"
+  # Avoid an empty list to workaround bash 3 erroring "unbound variable"
+  opts+=(--batch --keyserver-options timeout=15 --display-charset utf-8 --keyid-format 0xlong)
+  gpg "${opts[@]}" "$@"
 }
 
 gpg_recv_key() {
