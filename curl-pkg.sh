@@ -11,17 +11,20 @@
   readonly _ref='CHANGES'
 
   "${_STRIP}" --enable-deterministic-archives --strip-all   "${_PP}/bin/curl${BIN_EXT}"
-  "${_STRIP}" --enable-deterministic-archives --strip-all   "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"
+  find "${_PP}/${DYN_DIR}" -type f -name "*${DYN_EXT}" -exec \
+  "${_STRIP}" --enable-deterministic-archives --strip-all   '{}' \;
   "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/libcurl.a
   # LLVM strip does not support implibs, but they are deterministic by default:
   #   error: unsupported object file format
   [ "${_LD}" = 'ld' ] && [ "${_OS}" = 'win' ] && "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/libcurl.dll.a
 
   ../_clean-bin.sh "${_ref}" "${_PP}/bin/curl${BIN_EXT}"
-  ../_clean-bin.sh "${_ref}" "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"
+  find "${_PP}/${DYN_DIR}" -type f -name "*${DYN_EXT}" -exec \
+  ../_clean-bin.sh "${_ref}" '{}' \;
 
   ../_sign-code.sh "${_ref}" "${_PP}/bin/curl${BIN_EXT}"
-  ../_sign-code.sh "${_ref}" "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"
+  find "${_PP}/${DYN_DIR}" -type f -name "*${DYN_EXT}" -exec \
+  ../_sign-code.sh "${_ref}" '{}' \;
 
   touch -c -r "${_ref}" "${_PP}/bin/curl${BIN_EXT}"
   touch -c -r "${_ref}" "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"
