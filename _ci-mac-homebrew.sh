@@ -11,10 +11,13 @@ extra=''
 [[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} mingw-w64 osslsigncode wine-stable openssh"
 
 export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
 export HOMEBREW_NO_ANALYTICS=1
 brew update >/dev/null
 # shellcheck disable=SC2086
-brew install coreutils llvm dos2unix ${extra}
+# Using `|| true` to avoid failing due to preinstalled non-Homebrew
+# python3: `Could not symlink bin/2to3`
+brew install coreutils llvm dos2unix ${extra} || true
 
 [[ "${CW_CONFIG:-}" = *'win'* ]] && wineboot --init
 
