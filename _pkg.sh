@@ -8,6 +8,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 cd "$(dirname "$0")"
 
+mode="${2:-}"
+
 if [ "${_HOSTOS}" = 'mac' ]; then
   tar() { gtar "$@"; }
 fi
@@ -113,11 +115,15 @@ if [ "${_NAM}" != "${_UNIPKG}" ]; then
   if ! grep -q -a -F "${namver}" -- "${_BLD}"; then
     echo "${namver}" >> "${_BLD}"
   fi
-else
+elif [ "${mode}" = 'macuni' ] || [ "${_BRANCH#*macuni*}" = "${_BRANCH}" ]; then
   create_pkg "$1" '.tar.xz'
   if [ "${_OS}" = 'win' ]; then
     create_pkg "$1" '.zip'
   fi
 fi
 
-rm -r -f "${_DST:?}"
+if [ "${mode}" = 'unified' ] && [ "${_BRANCH#*macuni*}" != "${_BRANCH}" ]; then
+  touch "${_DST}/__macuni__.txt"
+else
+  rm -r -f "${_DST:?}"
+fi
