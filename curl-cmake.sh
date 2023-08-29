@@ -99,6 +99,10 @@ _VER="$1"
     [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && options="${options} -DCURL_DISABLE_FTP=ON"
     if [ "${_OS}" = 'win' ]; then
       LIBS="${LIBS} -lwldap32"
+    else
+      # ldap is auto-detected on mac, but without ldaps. Disable it
+      # rather than offering an insecure-only solution.
+      options="${options} -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON"
     fi
   fi
 

@@ -104,6 +104,10 @@ _VER="$1"
       options="${options} --enable-imap --enable-pop3 --enable-smtp"
       if [ "${_OS}" = 'win' ]; then
         options="${options} --enable-ldap --enable-ldaps --with-ldap-lib=wldap32"
+      else
+        # ldap is auto-detected on mac, but without ldaps. Disable it
+        # rather than offering an insecure-only solution.
+        options="${options} --disable-ldap --disable-ldaps"
       fi
     fi
 
