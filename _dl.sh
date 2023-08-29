@@ -77,7 +77,9 @@ cat <<EOF
   {
     "name": "libpsl",
     "url": "https://github.com/rockdaboot/libpsl/releases/download/{ver}/libpsl-{ver}.tar.gz",
-    "redir": "redir"
+    "sig": ".sig",
+    "redir": "redir",
+    "keys": "1CB27DBC98614B2D5841646D08302DB6A2670428"
   },
   {
     "name": "wolfssh",
