@@ -377,7 +377,7 @@ EOF
       else
         >&2 echo "! ${name}: Verify: Failed (SSH signature)"
       fi
-    elif grep -a -q -F 'BEGIN PGP SIGNATURE' pkg.sig; then
+    else
       for key in ${keys}; do
         gpg_recv_key "${key}" >/dev/null 2>&1
       done
@@ -388,8 +388,6 @@ EOF
       else
         >&2 echo "! ${name}: Verify: Failed (PGP signature)"
       fi
-    else
-      >&2 echo "! ${name}: Verify: Failed (Unrecognized signature format)"
     fi
 
     if [ "${ok}" = '1' ] && [ -n "${sha}" ]; then
@@ -598,14 +596,11 @@ live_dl() {
 ${key}
 EOF
         ssh-keygen -Y check-novalidate -n 'file' -f /dev/fd/3 -s pkg.sig < pkg.bin || exit 1
-      elif grep -a -q -F 'BEGIN PGP SIGNATURE' pkg.sig; then
+      else
         for key in ${keys}; do
           gpg_recv_key "${key}"
         done
         my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
-      else
-        >&2 echo "! ${name}: Verify: Failed (Unrecognized signature format)"
-        exit 1
       fi
     fi
 
