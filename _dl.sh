@@ -57,6 +57,12 @@ cat <<EOF
     "keys": "https://ftp.gnu.org/gnu/gnu-keyring.gpg"
   },
   {
+    "name": "libidn2",
+    "url": "https://ftp.gnu.org/gnu/libidn/libidn2-{ver}.tar.gz",
+    "sig": ".sig",
+    "keys": "https://ftp.gnu.org/gnu/gnu-keyring.gpg"
+  },
+  {
     "name": "libunistring",
     "url": "https://ftp.gnu.org/gnu/libunistring/libunistring-{ver}.tar.xz",
     "sig": ".sig",
@@ -65,12 +71,6 @@ cat <<EOF
   {
     "name": "libiconv",
     "url": "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-{ver}.tar.gz",
-    "sig": ".sig",
-    "keys": "https://ftp.gnu.org/gnu/gnu-keyring.gpg"
-  },
-  {
-    "name": "libidn2",
-    "url": "https://ftp.gnu.org/gnu/libidn/libidn2-{ver}.tar.gz",
     "sig": ".sig",
     "keys": "https://ftp.gnu.org/gnu/gnu-keyring.gpg"
   },
