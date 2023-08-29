@@ -379,11 +379,7 @@ EOF
       fi
     elif grep -a -q -F 'BEGIN PGP SIGNATURE' pkg.sig; then
       for key in ${keys}; do
-        if [[ "${key}" = 'https://'* ]]; then
-          my_curl --max-time 60 "${key}" | my_gpg --quiet --import >/dev/null 2>&1
-        else
-          gpg_recv_key "${key}" >/dev/null 2>&1
-        fi
+        gpg_recv_key "${key}" >/dev/null 2>&1
       done
 
       if my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin >/dev/null 2>&1; then
@@ -604,13 +600,7 @@ EOF
         ssh-keygen -Y check-novalidate -n 'file' -f /dev/fd/3 -s pkg.sig < pkg.bin || exit 1
       elif grep -a -q -F 'BEGIN PGP SIGNATURE' pkg.sig; then
         for key in ${keys}; do
-          if printf '%s' "${key}" | grep -q -a '^https://'; then
-            # gnu-keyring.gpg can take a long time to import, so allow curl to
-            # run longer.
-            my_curl --max-time 60 "${key}" | my_gpg --quiet --import 2>/dev/null
-          else
-            gpg_recv_key "${key}"
-          fi
+          gpg_recv_key "${key}"
         done
         my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
       else
