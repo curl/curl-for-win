@@ -223,7 +223,7 @@ my_gpg() {
     # do not use a homedir override.
     opts+=(--homedir "${gpgdir}")
   fi
-  gpg "${opts[@]}" --batch --keyserver-options timeout=15 --keyid-format 0xlong "$@"
+  gpg "${opts[@]}" --batch --keyserver-options timeout=15 --display-charset utf-8 --keyid-format 0xlong "$@"
 }
 
 gpg_recv_key() {
