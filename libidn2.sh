@@ -41,6 +41,13 @@ _VER="$1"
       --enable-static \
       --disable-shared \
       --disable-doc --silent
+
+    if [ "${_OS}" = 'linux' ]; then
+      # Workaround for -fPIC static builds failing when linking:
+      #   ld.lld-16: error: ./libidn2/x64-gnu/usr/lib/libidn2.a(puny_encode.o): symbol _idn2_punycode_encode@IDN2_0.0.0 has undefined version IDN2_0.0.0
+      # https://gitlab.com/libidn/libidn2/-/issues/80
+      sed -i.bak 's/#define HAVE_SYMVER_ALIAS_SUPPORT 1//g' config.h
+    fi
   )
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
