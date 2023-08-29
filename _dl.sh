@@ -54,25 +54,25 @@ cat <<EOF
     "name": "gsasl",
     "url": "https://ftp.gnu.org/gnu/gsasl/gsasl-{ver}.tar.gz",
     "sig": ".sig",
-    "keys": "https://ftp.gnu.org/gnu/gnu-keyring.gpg"
+    "keys": "A3CC9C870B9D310ABAD4CF2F51722B08FE4745A2"
   },
   {
     "name": "libidn2",
     "url": "https://ftp.gnu.org/gnu/libidn/libidn2-{ver}.tar.gz",
     "sig": ".sig",
-    "keys": "https://ftp.gnu.org/gnu/gnu-keyring.gpg"
+    "keys": "A3CC9C870B9D310ABAD4CF2F51722B08FE4745A2"
   },
   {
     "name": "libunistring",
     "url": "https://ftp.gnu.org/gnu/libunistring/libunistring-{ver}.tar.xz",
     "sig": ".sig",
-    "keys": "https://ftp.gnu.org/gnu/gnu-keyring.gpg"
+    "keys": "9001B85AF9E1B83DF1BDA942F5BE8B267C6A406D"
   },
   {
     "name": "libiconv",
     "url": "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-{ver}.tar.gz",
     "sig": ".sig",
-    "keys": "https://ftp.gnu.org/gnu/gnu-keyring.gpg"
+    "keys": "9001B85AF9E1B83DF1BDA942F5BE8B267C6A406D"
   },
   {
     "name": "libpsl",
