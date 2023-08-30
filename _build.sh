@@ -658,6 +658,8 @@ build_single_target() {
     # Override defaults such as: 'lib/aarch64-linux-gnu'
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_LIBDIR=lib"
 
+    _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -D_FORTIFY_SOURCE=2"
+
     _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fPIC"
     _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -fPIC"
 
