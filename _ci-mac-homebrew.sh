@@ -11,10 +11,10 @@ extra=''
 
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ANALYTICS=1
-time brew update >/dev/null
+brew update >/dev/null
 # shellcheck disable=SC2086
-time brew install coreutils mingw-w64 llvm \
-                  dos2unix osslsigncode openssh wine-stable ${extra}
-time wineboot --init
+brew install coreutils mingw-w64 llvm \
+             dos2unix osslsigncode openssh wine-stable ${extra}
+wineboot --init
 
 ./_build.sh
