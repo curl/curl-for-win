@@ -660,6 +660,8 @@ build_single_target() {
 
     _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fPIC"
     _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -fPIC"
+
+    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-z,relro,-z,now"
   fi
 
   # Suppress CMake warnings meant for upstream developers
