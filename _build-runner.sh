@@ -37,7 +37,7 @@ if [ ! -f .cw-initialized ]; then
       apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
         curl git gpg rsync python3-pefile make cmake \
         autoconf automake autopoint libtool \
-        zip time jq dos2unix ${extra}
+        zip time jq dos2unix secure-delete ${extra}
       ;;
     Darwin*)
       [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go nasm"
