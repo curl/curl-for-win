@@ -781,7 +781,7 @@ build_single_target() {
       mac)
         mingwver="$(HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_FROM_API=1 brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
       linux)
-        [ -n "${mingwver}" ] || mingwver="$(dpkg   --status       mingw-w64-common)"
+        [ -n "${mingwver}" ] || mingwver="$(dpkg-query --showformat='${Version}' --show 'mingw-w64-common')"
         [ -n "${mingwver}" ] || mingwver="$(rpm    --query        mingw64-crt)"
         [ -n "${mingwver}" ] || mingwver="$(pacman --query --info mingw-w64-crt)"
         [ -n "${mingwver}" ] && mingwver="$(printf '%s' "${mingwver}" | grep -a '^Version' | grep -a -m 1 -o -E '[0-9.-]+')"
