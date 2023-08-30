@@ -15,6 +15,7 @@ extra=''
 [[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} mingw-w64 osslsigncode wine64"
 
 if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
+  extra="${extra} checksec"
   if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
     extra="${extra} musl musl-dev musl-tools"
     # for openssl 'secure-memory' feature
