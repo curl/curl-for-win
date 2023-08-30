@@ -75,6 +75,18 @@
           otool -L "${f}"
         elif [ "${_OS}" = 'linux' ]; then
           "${_READELF}" --file-header --dynamic "${f}"
+          # Show linked GLIBC versions
+          # https://en.wikipedia.org/wiki/Glibc#Version_history
+          if [ "${_CPU}" = 'a64' ]; then
+            filter='@GLIBC_2\.(17|2[0-9])$'  # Exclude: 2.17 (2012-12) and 2.2x (2019-02)
+          else
+            filter='@GLIBC_([0-9]+\.[0-9]+\.[0-9]+|2\.([0-9]|1[0-9]))$'  # Exclude: x.y.z, 2.x, 2.1x (-2014-02)
+          fi
+          "${NM}" --dynamic --undefined-only "${f}" \
+            | grep -E -v "${filter}" \
+            | grep -E -o '@GLIBC_[0-9]+\.[0-9]+$' | sed 's/@GLIBC_//g' | sort -u -V || true
+          "${NM}" --dynamic --undefined-only "${f}" \
+            | grep -F '@GLIBC_' | grep -E -v "${filter}" || true
         fi
       fi
     done
