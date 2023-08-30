@@ -25,9 +25,9 @@ if [ ! -f .cw-initialized ]; then
   case "$(uname)" in
     *_NT*)
       pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
-        mingw-w64-x86_64-{cmake,jq,python-pefile,gettext} \
+        mingw-w64-x86_64-{clang,cmake,jq,python-pefile,rsync,gettext,osslsigncode} \
         zip
-      [[ "${CW_CONFIG}" = *'boringssl'* ]] && \
+      [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && \
       pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
         mingw-w64-x86_64-{go,nasm}
       ;;
@@ -35,7 +35,7 @@ if [ ! -f .cw-initialized ]; then
       [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} golang nasm"
       # shellcheck disable=SC2086
       apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
-        curl git gpg python3-pefile make cmake \
+        curl git gpg rsync python3-pefile make cmake \
         autoconf automake autopoint libtool \
         zip time jq dos2unix ${extra}
       ;;
