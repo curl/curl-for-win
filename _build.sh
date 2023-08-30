@@ -949,6 +949,8 @@ build_single_target() {
 
   mingwver=''
   mingwurl=''
+  libgccver=''
+  versuffix=''
   if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
     mingwver='llvm-mingw'
     [ -f "${mingwver}/__url__.txt" ] && mingwurl=" $(cat "${mingwver}/__url__.txt")"
@@ -967,8 +969,13 @@ build_single_target() {
     esac
     [ -n "${mingwver}" ] && mingwver="mingw-w64 ${mingwver}"
     versuffix="${versuffix_non_llvm_mingw}"
-  else
-    versuffix=''
+  elif [ "${_OS}" = 'linux' ] && [ "${_CC}" = 'llvm' ]; then
+    if [ "${unamem}" = "${_machine}" ]; then
+      libgccver="$(dpkg-query --showformat='${Version}' --show 'libgcc-*-dev')"
+    else
+      libgccver="$(dpkg-query --showformat='${Version}' --show 'libgcc-*-dev-*-cross')"
+    fi
+    [ -n "${libgccver}" ] && libgccver="libgcc ${libgccver}"
   fi
 
   binver=''
@@ -991,6 +998,7 @@ build_single_target() {
     [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT_SHORT}"
     [ -n "${clangver}" ] && echo ".${clangver}${versuffix}"
     [ -n "${gccver}" ]   && echo ".${gccver}${versuffix}"
+    [ -n "${libgccver}" ] && echo ".${libgccver}"
     [ -n "${mingwver}" ] && echo ".${mingwver}${versuffix}"
     [ -n "${binver}" ]   && echo ".${binver}"
     [ -n "${nasmver}" ]  && echo ".${nasmver}"
@@ -1000,6 +1008,7 @@ build_single_target() {
     [ -n "${_COMMIT}" ]  && echo ".${_SELF} ${_COMMIT_SHORT} ${_TAR}"
     [ -n "${clangver}" ] && echo ".${clangver}${versuffix}"
     [ -n "${gccver}" ]   && echo ".${gccver}${versuffix}"
+    [ -n "${libgccver}" ] && echo ".${libgccver}"
     [ -n "${mingwver}" ] && echo ".${mingwver}${mingwurl}${versuffix}"
     [ -n "${binver}" ]   && echo ".${binver}"
     [ -n "${nasmver}" ]  && echo ".${nasmver}"
@@ -1008,6 +1017,7 @@ build_single_target() {
   {
     [ -n "${clangver}" ] && echo ".${clangver}"
     [ -n "${gccver}" ]   && echo ".${gccver}"
+    [ -n "${libgccver}" ] && echo ".${libgccver}"
     [ -n "${mingwver}" ] && echo ".${mingwver}${mingwurl}"
   } >> "${_UNIMFT}"
 
