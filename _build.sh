@@ -652,18 +652,6 @@ build_single_target() {
   export _CMAKE_GLOBAL='-DCMAKE_BUILD_TYPE=Release'
   export _CMAKE_CXX_GLOBAL=''
 
-  if [ "${_OS}" = 'linux' ]; then
-    # Override defaults such as: 'lib/aarch64-linux-gnu'
-    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_LIBDIR=lib"
-
-    _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -D_FORTIFY_SOURCE=2"
-
-    _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fPIC"
-    _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -fPIC"
-
-    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-z,relro,-z,now"
-  fi
-
   # Suppress CMake warnings meant for upstream developers
   _CMAKE_GLOBAL="-Wno-dev ${_CMAKE_GLOBAL}"
 
@@ -692,6 +680,16 @@ build_single_target() {
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -specs=${_GCCSPECS}"
       fi
     fi
+  elif [ "${_OS}" = 'linux' ]; then
+    # Override defaults such as: 'lib/aarch64-linux-gnu'
+    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_LIBDIR=lib"
+
+    _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -D_FORTIFY_SOURCE=2"
+
+    _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fPIC"
+    _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -fPIC"
+
+    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-z,relro,-z,now"
   fi
 
   _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_MESSAGE=NEVER"
