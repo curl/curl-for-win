@@ -37,7 +37,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: 'Linux binaries'
+          name: 'curl-linux'
           retention-days: 5
           path: |
             *-*-linux*.*
@@ -55,7 +55,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: 'macOS universal binaries'
+          name: 'curl-macos-universal'
           retention-days: 5
           path: |
             *-*-macos*.*
