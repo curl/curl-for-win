@@ -45,7 +45,7 @@ jobs:
       # https://github.com/actions/upload-artifact
       - uses: actions/upload-artifact@v3
         with:
-          name: 'Windows binaries'
+          name: 'curl-windows-daily'
           retention-days: 42
           path: |
             *-*-mingw*.*
@@ -71,7 +71,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: 'Linux binaries'
+          name: 'curl-linux-daily'
           retention-days: 5
           path: |
             *-*-linux*.*
@@ -89,7 +89,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: 'macOS universal binaries'
+          name: 'curl-macos-universal-daily'
           retention-days: 5
           path: |
             *-*-macos*.*
