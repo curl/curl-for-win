@@ -10,6 +10,12 @@ on:
 
 permissions: {}
 
+env:
+  CW_MAP: '1'
+  CW_JOBS: '3'
+  DO_NOT_TRACK: '1'
+  DOCKER_CONTENT_TRUST: '1'
+
 jobs:
   win:
     runs-on: ubuntu-latest
@@ -19,16 +25,12 @@ jobs:
           fetch-depth: 8
       - name: 'build'
         env:
-          CW_CONFIG: 'dev-win'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
-          CW_MAP: '1'
-          CW_JOBS: '3'
-          DO_NOT_TRACK: '1'
-          DOCKER_CONTENT_TRUST: '1'
         run: |
-          . ./_versions.sh
+          export CW_CONFIG='dev-win'
           export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
+          . ./_versions.sh
           docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"
           docker images --digests
@@ -47,4 +49,48 @@ jobs:
           retention-days: 42
           path: |
             *-*-mingw*.*
+            urls.txt
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'build'
+        run: |
+          export CW_CONFIG='dev-linux'
+          export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
+          . ./_versions.sh
+          docker trust inspect --pretty "${DOCKER_IMAGE}"
+          time docker pull "${DOCKER_IMAGE}"
+          docker images --digests
+          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+            --env-file <(env | grep -a -E \
+              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
+            "${DOCKER_IMAGE}" \
+            sh -c ./_ci-linux-debian.sh
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'Linux binaries'
+          retention-days: 5
+          path: |
+            *-*-linux*.*
+            urls.txt
+
+  mac:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'build'
+        run: |
+          export CW_CONFIG='dev-mac-macuni'
+          export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
+          sh -c ./_ci-mac-homebrew.sh
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'macOS universal binaries'
+          retention-days: 5
+          path: |
+            *-*-macos*.*
             urls.txt
