@@ -678,24 +678,26 @@ build_single_target() {
     [ "${_CPU}" = 'a64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=${_TRIPLET}"  # llvm-windres supports triplets here. https://github.com/llvm/llvm-project/blob/main/llvm/tools/llvm-rc/llvm-rc.cpp
   fi
 
-  if [ "${_HOSTOS}" = 'win' ] && [ "${_OS}" = 'win' ]; then
-    # '-G MSYS Makefiles' command-line option is problematic due to spaces
-    # and unwanted escaping/splitting. Pass it via envvar instead.
-    export CMAKE_GENERATOR='MSYS Makefiles'
-    # Without this, the value '/usr/local' becomes 'msys64/usr/local'
-    export MSYS2_ARG_CONV_EXCL='-DCMAKE_INSTALL_PREFIX='
+  if [ "${_OS}" = 'win' ]; then
+    if [ "${_HOSTOS}" = 'win' ]; then
+      # '-G MSYS Makefiles' command-line option is problematic due to spaces
+      # and unwanted escaping/splitting. Pass it via envvar instead.
+      export CMAKE_GENERATOR='MSYS Makefiles'
+      # Without this, the value '/usr/local' becomes 'msys64/usr/local'
+      export MSYS2_ARG_CONV_EXCL='-DCMAKE_INSTALL_PREFIX='
+    fi
+
+    if [ "${_CRT}" = 'ucrt' ]; then
+      _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -D_UCRT"
+      _LIBS_GLOBAL="${_LIBS_GLOBAL} -lucrt"
+      if [ "${_CC}" = 'gcc' ]; then
+        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -specs=${_GCCSPECS}"
+      fi
+    fi
   fi
 
   _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_MESSAGE=NEVER"
   _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_PREFIX=${_PREFIX}"
-
-  if [ "${_CRT}" = 'ucrt' ]; then
-    _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -D_UCRT"
-    _LIBS_GLOBAL="${_LIBS_GLOBAL} -lucrt"
-    if [ "${_CC}" = 'gcc' ]; then
-      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -specs=${_GCCSPECS}"
-    fi
-  fi
 
   _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --build=${_BUILD_HOST} --host=${_TRIPLET}"
   [ "${_CPU}" = 'x86' ] && _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-asynchronous-unwind-tables"
