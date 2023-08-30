@@ -686,8 +686,13 @@ build_single_target() {
 
     _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -D_FORTIFY_SOURCE=2"
 
+    # https://en.wikipedia.org/wiki/Position-independent_code#PIE
     _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fPIC"
     _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -fPIC"
+
+    # https://en.wikipedia.org/wiki/Buffer_overflow_protection
+    _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fstack-protector-all"
+    _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -fstack-protector-all"
 
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-z,relro,-z,now"
   fi
