@@ -652,9 +652,7 @@ build_single_target() {
   export _CMAKE_GLOBAL='-DCMAKE_BUILD_TYPE=Release'
   export _CMAKE_CXX_GLOBAL=''
 
-  if [ "${_OS}" = 'win' ]; then
-    _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Windows ${_CMAKE_GLOBAL}"
-  elif [ "${_OS}" = 'linux' ]; then
+  if [ "${_OS}" = 'linux' ]; then
     # Override defaults such as: 'lib/aarch64-linux-gnu'
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_LIBDIR=lib"
 
@@ -673,12 +671,12 @@ build_single_target() {
   unset CC
 
   if [ "${_OS}" = 'win' ]; then
+    _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Windows ${_CMAKE_GLOBAL}"
+
     [ "${_CPU}" = 'x86' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-i386"
     [ "${_CPU}" = 'x64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-x86-64"
     [ "${_CPU}" = 'a64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=${_TRIPLET}"  # llvm-windres supports triplets here. https://github.com/llvm/llvm-project/blob/main/llvm/tools/llvm-rc/llvm-rc.cpp
-  fi
 
-  if [ "${_OS}" = 'win' ]; then
     if [ "${_HOSTOS}" = 'win' ]; then
       # '-G MSYS Makefiles' command-line option is problematic due to spaces
       # and unwanted escaping/splitting. Pass it via envvar instead.
