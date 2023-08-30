@@ -45,8 +45,8 @@ environment:
   DO_NOT_TRACK: '1'
 build_script:
   - sh: |
-      . ./_versions.sh
       export CW_CONFIG="${APPVEYOR_REPO_BRANCH}"
+      . ./_versions.sh
       time docker pull "${DOCKER_IMAGE}"
       docker images --digests
       time docker run --volume="$(pwd):$(pwd)" --workdir="$(pwd)" \
