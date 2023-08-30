@@ -50,6 +50,9 @@ _VER="$1"
   elif [ "${_OS}" = 'mac' ]; then
     [ "${_CPU}" = 'x64' ] && options="${options} darwin64-x86_64"
     [ "${_CPU}" = 'a64' ] && options="${options} darwin64-arm64"
+  elif [ "${_OS}" = 'linux' ]; then
+    [ "${_CPU}" = 'x64' ] && options="${options} linux-x86_64"
+    [ "${_CPU}" = 'a64' ] && options="${options} linux-aarch64"
   fi
 
   options="${options} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"

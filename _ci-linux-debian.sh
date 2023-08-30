@@ -24,6 +24,11 @@ if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
       extra="${extra} linux-headers-amd64"
     fi
   fi
+  if [ "$(uname -m)" = 'aarch64' ]; then
+    extra="${extra} libgcc-13-dev-amd64-cross libstdc++-13-dev-amd64-cross"
+  else
+    extra="${extra} libgcc-13-dev-arm64-cross libstdc++-13-dev-arm64-cross"
+  fi
 fi
 
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 update

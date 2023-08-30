@@ -577,10 +577,23 @@ build_single_target() {
     fi
 
     if [ "${_OS}" = 'linux' ]; then
-      # TODO: add support for linux cross-builds
       # Include CRT type in Linux triplets, to make it visible in
       # the curl version banner.
-      _TRIPLET="${_BUILD_HOST}-${_CRT}"
+      _TRIPLET="${_machine}-pc-linux-${_CRT}"
+
+      if [ "${unamem}" != "${_machine}" ] && [ "${_CC}" = 'gcc' ]; then
+        # TODO: Implement cross-builds with gcc
+        echo "! WARNING: Linux cross-buils require llvm/clang. Skipping."
+        return
+      fi
+
+      _RUN_BIN='echo'
+      if [ "${_HOSTOS}" = 'linux' ]; then
+        # Don't try running non-native builds
+        if [ "${unamem}" = "${_machine}" ]; then
+          _RUN_BIN=''
+        fi
+      fi
     elif [ "${_OS}" = 'mac' ]; then
       _TRIPLET="${_machine}-apple-darwin"
 
@@ -718,6 +731,27 @@ build_single_target() {
         _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/${_TRIPLET}"
         _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/backward"
       fi
+    elif [ "${_HOSTOS}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [ "${unamem}" != "${_machine}" ] && [ "${_CC}" = 'llvm' ]; then
+      _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -isystem /usr/${_machine}-linux-gnu/include"
+      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L/usr/${_machine}-linux-gnu/lib"
+      # https://packages.debian.org/testing/all/libgcc-13-dev-arm64-cross/filelist
+      # /usr/lib/gcc-cross/aarch64-linux-gnu/13/
+      tmp="$(find "/usr/lib/gcc-cross/${_machine}-linux-gnu" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+      if [ -z "${tmp}" ]; then
+        >&2 echo '! Error: Failed to detect gcc-cross env root.'
+        exit 1
+      fi
+      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${tmp}"
+      # https://packages.debian.org/testing/all/libstdc++-13-dev-arm64-cross/filelist
+      # /usr/aarch64-linux-gnu/include/c++/13/
+      tmp="$(find "/usr/${_machine}-linux-gnu/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+      if [ -z "${tmp}" ]; then
+        >&2 echo '! Error: Failed to detect g++-cross env root.'
+        exit 1
+      fi
+      _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++"
+      _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/${_machine}-linux-gnu"
+      _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/backward"
     fi
 
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
@@ -1087,11 +1121,13 @@ elif [ "${_OS}" = 'mac' ]; then
      [ "${_BRANCH#*macuni*}" != "${_BRANCH}" ]; then
     ./_macuni.sh
   fi
-else
-  [ "${unamem}" = 'i686'    ] && cpu='x86'
-  [ "${unamem}" = 'x86_64'  ] && cpu='x64'
-  [ "${unamem}" = 'aarch64' ] && cpu='a64'
-  build_single_target "${cpu}"
+elif [ "${_OS}" = 'linux' ]; then
+  if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ]; then
+    build_single_target a64
+  fi
+  if [ "${_BRANCH#*a64*}" = "${_BRANCH}" ]; then
+    build_single_target x64
+  fi
 fi
 
 case "${_HOSTOS}" in
