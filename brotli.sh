@@ -18,19 +18,11 @@ _VER="$1"
 
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
+    '-DBUILD_SHARED_LIBS=OFF' \
     '-DBROTLI_DISABLE_TESTS=ON' \
     "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
-
-  # Delete '-static' suffixes from static lib names to make these behave
-  # like most other projects do and dependents find it.
-  for fn in "${_PP}"/lib/*-static.a; do
-    mv "${fn}" "$(echo "${fn}" | sed 's/-static//')"
-  done
-
-  # Delete implibs
-  rm -f "${_PP}"/lib/*.dll.a
 
   # libcurl does not need the encoding functionality
   rm -f "${_PP}"/include/encode.h
