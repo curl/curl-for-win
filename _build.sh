@@ -745,11 +745,11 @@ build_single_target() {
         _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/backward"
       fi
     elif [ "${_HOSTOS}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [ "${unamem}" != "${_machine}" ] && [ "${_CC}" = 'llvm' ]; then
-      _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -isystem /usr/${_machine}-linux-gnu/include"
-      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L/usr/${_machine}-linux-gnu/lib"
+      _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -isystem /usr/${_TRIPLETSH}/include"
+      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L/usr/${_TRIPLETSH}/lib"
       # https://packages.debian.org/testing/all/libgcc-13-dev-arm64-cross/filelist
       # /usr/lib/gcc-cross/aarch64-linux-gnu/13/
-      tmp="$(find "/usr/lib/gcc-cross/${_machine}-linux-gnu" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+      tmp="$(find "/usr/lib/gcc-cross/${_TRIPLETSH}" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
       if [ -z "${tmp}" ]; then
         >&2 echo '! Error: Failed to detect gcc-cross env root.'
         exit 1
@@ -757,13 +757,13 @@ build_single_target() {
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${tmp}"
       # https://packages.debian.org/testing/all/libstdc++-13-dev-arm64-cross/filelist
       # /usr/aarch64-linux-gnu/include/c++/13/
-      tmp="$(find "/usr/${_machine}-linux-gnu/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+      tmp="$(find "/usr/${_TRIPLETSH}/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
       if [ -z "${tmp}" ]; then
         >&2 echo '! Error: Failed to detect g++-cross env root.'
         exit 1
       fi
       _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++"
-      _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/${_machine}-linux-gnu"
+      _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/${_TRIPLETSH}"
       _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/backward"
     fi
 
