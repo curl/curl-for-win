@@ -80,6 +80,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - mac: Test -DSHARE_LIB_OBJECT=ON with curl 8.3.0.
 #   - Rename _BRANCH to CW_CONFIG internally.
 #   - Replace .zip with .tar.gz for all-packages artifact (in _ul.sh)?
+#   - cross: linux -> macos? (needs building the toolchain) https://github.com/tpoechtrager/osxcross
+#   - cross: macos -> linux intel / arm64? (needs building the toolchain) https://mac.musl.cc/
 #   - win: Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
 #       https://gs.statcounter.com/windows-version-market-share
