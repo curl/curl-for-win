@@ -132,7 +132,10 @@ _VER="$1"
 
   h3=0
 
+  mainssl=''  # openssl, wolfssl, mbedtls, schannel, secure-transport, gnutls, bearssl, rustls
+
   if [ -n "${_OPENSSL}" ]; then
+    mainssl='openssl'
     options="${options} -DCURL_USE_OPENSSL=ON"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     options="${options} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON"
@@ -152,6 +155,7 @@ _VER="$1"
   fi
 
   if [ -d ../wolfssl ]; then
+    mainssl='wolfssl'
     options="${options} -DCURL_USE_WOLFSSL=ON"
     options="${options} -DWolfSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
     options="${options} -DWolfSSL_LIBRARY=${_TOP}/wolfssl/${_PP}/lib/libwolfssl.a"
@@ -160,6 +164,7 @@ _VER="$1"
   fi
 
   if [ -d ../mbedtls ]; then
+    mainssl='mbedtls'
     options="${options} -DCURL_USE_MBEDTLS=ON"
     options="${options} -DMBEDTLS_INCLUDE_DIRS=${_TOP}/mbedtls/${_PP}/include"
     options="${options} -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedcrypto.a"
@@ -172,6 +177,8 @@ _VER="$1"
   elif [ "${_OS}" = 'mac' ] && [ "${_OSVER}" -lt '1015' ]; then
     # SecureTransport deprecated in 2019 (macOS 10.15 Catalina, iOS 13.0)
     options="${options} -DCURL_USE_SECTRANSP=ON"
+    # Without this, SecureTransport becomes the default TLS backend
+    [ -n "${mainssl}" ] && options="${options} -DCURL_DEFAULT_SSL_BACKEND=${mainssl}"
   fi
   CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
