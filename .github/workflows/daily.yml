@@ -77,6 +77,32 @@ jobs:
             *-*-linux*.*
             urls.txt
 
+  linux-musl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'build'
+        run: |
+          export CW_CONFIG='dev-linux'
+          export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
+          DOCKER_IMAGE='alpine:latest'
+          docker trust inspect --pretty "${DOCKER_IMAGE}"
+          time docker pull "${DOCKER_IMAGE}"
+          docker images --digests
+          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+            --env-file <(env | grep -a -E \
+              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
+            "${DOCKER_IMAGE}" \
+            sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'curl-linux-musl-daily'
+          retention-days: 5
+          path: |
+            *-*-linux*.*
+            urls.txt
+
   mac:
     runs-on: macos-latest
     steps:
