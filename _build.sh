@@ -704,6 +704,10 @@ build_single_target() {
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_LIBDIR=lib"
 
     _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -D_FORTIFY_SOURCE=2"
+    # Requires glibc 2.34, gcc 12 (2022)
+    #   https://developers.redhat.com/articles/2023/02/06/how-improve-application-security-using-fortifysource3
+    #   https://developers.redhat.com/articles/2022/09/17/gccs-new-fortification-level
+  # _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -D_FORTIFY_SOURCE=3"
 
     # https://en.wikipedia.org/wiki/Position-independent_code#PIE
     _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fPIC"
