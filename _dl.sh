@@ -689,6 +689,9 @@ if [ "${_BRANCH#*big*}" != "${_BRANCH}" ]; then
   live_xt libiconv "${LIBICONV_HASH}"
   live_dl libpsl "${LIBPSL_VER_}"
   live_xt libpsl "${LIBPSL_HASH}"
+
+  live_dl gsasl "${GSASL_VER_}"
+  live_xt gsasl "${GSASL_HASH}"
 fi
 
 if [ "${_BRANCH#*wolfssl*}" != "${_BRANCH}" ]; then
@@ -699,13 +702,6 @@ fi
 if [ "${_BRANCH#*mbedtls*}" != "${_BRANCH}" ]; then
   live_dl mbedtls "${MBEDTLS_VER_}"
   live_xt mbedtls "${MBEDTLS_HASH}"
-fi
-
-if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*micro*}" = "${_BRANCH}" ]; then
-  live_dl gsasl "${GSASL_VER_}"
-  live_xt gsasl "${GSASL_HASH}"
 fi
 
 need_cacert=0
