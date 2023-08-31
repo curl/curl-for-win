@@ -639,6 +639,8 @@ build_single_target() {
   _CCVER="$(printf '%02d' \
     "$(printf '%s' "${ccver}" | grep -a -o -E '^[0-9]+')")"
 
+  export _OSVER='0000'
+
   # Setup common toolchain configuration options
 
   export _TOP; _TOP="$(pwd)"  # Must be an absolute path
@@ -695,6 +697,8 @@ build_single_target() {
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_OSX_DEPLOYMENT_TARGET=${macminver}"
     _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -mmacosx-version-min=${macminver}"
     _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -mmacosx-version-min=${macminver}"
+    _OSVER="$(printf '%s00' \
+      "$(printf '%s' "${macminver}" | tr -d '.')" | cut -c -4)"
   elif [ "${_OS}" = 'linux' ]; then
     # Override defaults such as: 'lib/aarch64-linux-gnu'
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_LIBDIR=lib"

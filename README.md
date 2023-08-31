@@ -66,9 +66,13 @@ Features: alt-svc AsynchDNS brotli       HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 K
 <details><summary>Alternate configurations with different footprints:</summary><p>
 
 ```
-linux and mac:
+linux and mac-arm:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps            mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
 Features: alt-svc AsynchDNS brotli       HSTS HTTP2 HTTP3 HTTPS-proxy     IPv6          Largefile libz          NTLM            SSL      threadsafe UnixSockets zstd
+
+mac-intel (with runtime-selectable option SecureTransport):
+Protocols: dict file ftp ftps gopher gophers http https imap imaps            mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
+Features: alt-svc AsynchDNS brotli       HSTS HTTP2 HTTP3 HTTPS-proxy     IPv6          Largefile libz MultiSSL NTLM            SSL      threadsafe UnixSockets zstd
 
 "big":
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss

@@ -138,10 +138,9 @@ _VER="$1"
 
     if [ "${_OS}" = 'win' ]; then
       options="${options} --with-schannel"
-    elif [ "${_OS}" = 'mac' ]; then
+    elif [ "${_OS}" = 'mac' ] && [ "${_OSVER}" -lt '1015' ]; then
       # SecureTransport deprecated in 2019 (macOS 10.15 Catalina, iOS 13.0)
-    # options="${options} --with-secure-transport"
-      :
+      options="${options} --with-secure-transport"
     fi
     CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
