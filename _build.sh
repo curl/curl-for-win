@@ -980,6 +980,7 @@ build_single_target() {
   mingwver=''
   mingwurl=''
   libgccver=''
+  libcver=''
   versuffix=''
   if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
     mingwver='llvm-mingw'
@@ -991,21 +992,48 @@ build_single_target() {
       mac)
         mingwver="$(HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_FROM_API=1 brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
       linux)
-        [ -n "${mingwver}" ] || mingwver="$(dpkg   --status       mingw-w64-common)"
-        [ -n "${mingwver}" ] || mingwver="$(rpm    --query        mingw64-crt)"
-        [ -n "${mingwver}" ] || mingwver="$(pacman --query --info mingw-w64-crt)"
-        [ -n "${mingwver}" ] && mingwver="$(printf '%s' "${mingwver}" | grep -a '^Version' | grep -a -m 1 -o -E '[0-9.-]+')"
+        [ -n "${mingwver}" ] || mingwver="$(dpkg-query --showformat='${Version}' --show mingw-w64-common || true)"
+        [ -n "${mingwver}" ] || mingwver="$(rpm --query --queryformat '.%{VERSION}' mingw64-crt || true)"
+        if [ -z "${mingwver}" ]; then
+          [ -n "${mingwver}" ] || mingwver="$(pacman --query --info mingw-w64-crt || true)"
+          [ -n "${mingwver}" ] || mingwver="$(apk    info --webpage mingw-w64-crt || true)"
+          [ -n "${mingwver}" ] && mingwver="$(printf '%s' "${mingwver}" | grep -a -E '(^Version|webpage:)' | grep -a -m1 -o -E '[0-9][0-9.]*' | head -n 1)"
+        fi
         ;;
     esac
     [ -n "${mingwver}" ] && mingwver="mingw-w64 ${mingwver}"
     versuffix="${versuffix_non_llvm_mingw}"
-  elif [ "${_OS}" = 'linux' ] && [ "${_CC}" = 'llvm' ]; then
-    if [ "${unamem}" = "${_machine}" ]; then
-      libgccver="$(dpkg-query --showformat='${Version}' --show 'libgcc-*-dev')"
-    else
-      libgccver="$(dpkg-query --showformat='${Version}' --show 'libgcc-*-dev-*-cross')"
+  elif [ "${_OS}" = 'linux' ]; then
+    if [ "${_CC}" = 'llvm' ]; then
+      if [ "${unamem}" = "${_machine}" ]; then
+        [ -n "${libgccver}" ] || libgccver="$(dpkg-query --showformat='${Version}' --show 'libgcc-*-dev' || true)"
+        [ -n "${libgccver}" ] || libgccver="$(rpm --query --queryformat '.%{VERSION}' libgcc || true)"
+        if [ -z "${libgccver}" ]; then
+          [ -n "${libgccver}" ] || libgccver="$(pacman --query --info gcc-libs || true)"
+          [ -n "${libgccver}" ] || libgccver="$(apk    info --webpage libgcc || true)"
+          [ -n "${libgccver}" ] && libgccver="$(printf '%s' "${libgccver}" | grep -a -E '(^Version|webpage:)' | grep -a -m1 -o -E '[0-9][0-9.]*' | head -n 1 || true)"
+        fi
+      else
+        [ -n "${libgccver}" ] || libgccver="$(dpkg-query --showformat='${Version}' --show 'libgcc-*-dev-*-cross' || true)"
+      fi
+      [ -n "${libgccver}" ] && libgccver="libgcc ${libgccver}"
     fi
-    [ -n "${libgccver}" ] && libgccver="libgcc ${libgccver}"
+
+    if [ "${_CRT}" = 'musl' ]; then
+      [ -n "${libcver}" ] || libcver="$(dpkg-query --showformat='${Version}' --show musl || true)"
+      [ -n "${libcver}" ] || libcver="$(rpm --query --queryformat '.%{VERSION}' musl-devel || true)"
+      if [ -z "${libcver}" ]; then
+        [ -n "${libcver}" ] || libcver="$(pacman --query --info musl || true)"
+        [ -n "${libcver}" ] || libcver="$(apk    info --webpage musl || true)"
+        [ -n "${libcver}" ] && libcver="$(printf '%s' "${libcver}" | grep -a -E '(^Version|webpage:)' | grep -a -m1 -o -E '[0-9][0-9.]*' | head -n 1)"
+      fi
+      [ -n "${libcver}" ] && libcver="musl ${libcver}"
+    else
+      # FIXME: Debian-specific
+      # There is no installed glibc package. Check for the non-installed source package instead.
+      libcver="$(apt-cache show --no-all-versions 'glibc-source' | grep -a -o -E 'Version: [0-9]+\.[0-9]+' | cut -c 10- || true)"
+      [ -n "${libcver}" ] && libcver="glibc ${libcver}"
+    fi
   fi
 
   binver=''
@@ -1029,6 +1057,7 @@ build_single_target() {
     [ -n "${clangver}" ]  && echo ".${clangver}${versuffix}"
     [ -n "${gccver}" ]    && echo ".${gccver}${versuffix}"
     [ -n "${libgccver}" ] && echo ".${libgccver}"
+    [ -n "${libcver}" ]   && echo ".${libcver}"
     [ -n "${mingwver}" ]  && echo ".${mingwver}${versuffix}"
     [ -n "${binver}" ]    && echo ".${binver}"
     [ -n "${nasmver}" ]   && echo ".${nasmver}"
@@ -1039,6 +1068,7 @@ build_single_target() {
     [ -n "${clangver}" ]  && echo ".${clangver}${versuffix}"
     [ -n "${gccver}" ]    && echo ".${gccver}${versuffix}"
     [ -n "${libgccver}" ] && echo ".${libgccver}"
+    [ -n "${libcver}" ]   && echo ".${libcver}"
     [ -n "${mingwver}" ]  && echo ".${mingwver}${mingwurl}${versuffix}"
     [ -n "${binver}" ]    && echo ".${binver}"
     [ -n "${nasmver}" ]   && echo ".${nasmver}"
@@ -1048,6 +1078,7 @@ build_single_target() {
     [ -n "${clangver}" ]  && echo ".${clangver}"
     [ -n "${gccver}" ]    && echo ".${gccver}"
     [ -n "${libgccver}" ] && echo ".${libgccver}"
+    [ -n "${libcver}" ]   && echo ".${libcver}"
     [ -n "${mingwver}" ]  && echo ".${mingwver}${mingwurl}"
   } >> "${_UNIMFT}"
 
