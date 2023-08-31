@@ -68,7 +68,7 @@ Features: alt-svc AsynchDNS brotli       HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 K
 ```
 linux and mac:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps            mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
-Features: alt-svc AsynchDNS brotli gsasl HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6          Largefile libz          NTLM PSL        SSL      threadsafe UnixSockets zstd
+Features: alt-svc AsynchDNS brotli       HSTS HTTP2 HTTP3 HTTPS-proxy     IPv6          Largefile libz          NTLM            SSL      threadsafe UnixSockets zstd
 
 "big":
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
