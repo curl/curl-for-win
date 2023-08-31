@@ -26,9 +26,17 @@ if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     fi
   fi
   if [ "$(uname -m)" = 'aarch64' ]; then
-    extra="${extra} libgcc-13-dev-amd64-cross libstdc++-13-dev-amd64-cross"
+    if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
+      extra="${extra} gcc-13-x86-64-linux-gnu"
+    else
+      extra="${extra} libgcc-13-dev-amd64-cross libstdc++-13-dev-amd64-cross"
+    fi
   else
-    extra="${extra} libgcc-13-dev-arm64-cross libstdc++-13-dev-arm64-cross"
+    if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
+      extra="${extra} gcc-13-aarch64-linux-gnu"
+    else
+      extra="${extra} libgcc-13-dev-arm64-cross libstdc++-13-dev-arm64-cross"
+    fi
   fi
 fi
 

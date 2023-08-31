@@ -580,11 +580,17 @@ build_single_target() {
       # Include CRT type in Linux triplets, to make it visible in
       # the curl version banner.
       _TRIPLET="${_machine}-pc-linux-${_CRT}"
+      # Short triplet used on the filesystem
+      _TRIPLETSH="${_machine}-linux-gnu"
 
       if [ "${unamem}" != "${_machine}" ] && [ "${_CC}" = 'gcc' ]; then
-        # TODO: Implement cross-builds with gcc
-        echo "! WARNING: Linux cross-buils require llvm/clang. Skipping."
-        return
+        # https://packages.debian.org/testing/arm64/gcc-x86-64-linux-gnu/filelist
+        # https://packages.debian.org/testing/arm64/binutils-x86-64-linux-gnu/filelist
+        # /usr/bin/x86_64-linux-gnu-gcc
+        # https://packages.debian.org/testing/amd64/gcc-aarch64-linux-gnu/filelist
+        # https://packages.debian.org/testing/amd64/binutils-aarch64-linux-gnu/filelist
+        # /usr/bin/aarch64-linux-gnu-gcc
+        _CCPREFIX="${_TRIPLETSH}-"
       fi
 
       _RUN_BIN='echo'
