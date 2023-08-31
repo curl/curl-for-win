@@ -32,16 +32,32 @@ if [ ! -f .cw-initialized ]; then
         mingw-w64-x86_64-{go,nasm}
       ;;
     Linux*)
-      [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} golang nasm"
-      [[ "${CW_CONFIG:-}" = *'musl'* ]] && extra="${extra} musl musl-dev musl-tools"
-      if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
-        extra="${extra} checksec"
+      if [ "${_HOSTOS}" = 'linux' ] && [ -s /etc/os-release ]; then
+        _DIST="$(grep -a '^ID=' /etc/os-release | cut -c 4- | tr -d '"' || true)"
+        _DIST="${_DIST:-unrecognized}"
       fi
-      # shellcheck disable=SC2086
-      apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
-        curl git gpg rsync python3-pefile make cmake \
-        autoconf automake autopoint libtool \
-        zip time jq dos2unix secure-delete ${extra}
+
+      if [ "${_DIST}" = 'debian' ]; then
+        [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} golang nasm"
+        [[ "${CW_CONFIG:-}" = *'musl'* ]] && extra="${extra} musl musl-dev musl-tools"
+        if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
+          extra="${extra} checksec"
+        fi
+        # shellcheck disable=SC2086
+        apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
+          curl git gpg rsync python3-pefile make cmake \
+          autoconf automake autopoint libtool \
+          zip time jq dos2unix secure-delete ${extra}
+      elif [ "${_DIST}" = 'alpine' ]; then
+        [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go nasm"
+        if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
+          apk add --no-cache checksec-rs --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing/
+        fi
+        # shellcheck disable=SC2086
+        apk add --no-cache curl git gpg rsync build-base cmake \
+          autoconf automake libtool \
+          tar xz jq dos2unix openssl ${extra}
+      fi
       ;;
     Darwin*)
       [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go nasm"

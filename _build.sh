@@ -54,7 +54,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        win        build Windows target (default)
 #        mac        build macOS target (requires macOS host)
 #        linux      build Linux target (requires Linux host)
-#        musl       build Linux target with musl CRT (for linux target) (default: gnu)
+#        musl       build Linux target with musl CRT (for linux target) (default for Alpine)
 #        macuni     build macOS universal (arm64 + x86_64) package (for mac target)
 #
 # CW_JOBS
@@ -75,7 +75,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # TODO:
 #   - Change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
-#   - linux: use musl.
+#   - linux: implement musl builds on Debian.
 #   - linux: fix/mitigate missing GLIBC versioned symbols on systems older than the build machine
 #   - mac: Test -DSHARE_LIB_OBJECT=ON with curl 8.3.0.
 #   - Rename _BRANCH to CW_CONFIG internally.
@@ -208,6 +208,12 @@ case "$(uname)" in
   *)       _HOSTOS='unrecognized';;
 esac
 
+export _DIST=''
+if [ "${_HOSTOS}" = 'linux' ] && [ -s /etc/os-release ]; then
+  _DIST="$(grep -a '^ID=' /etc/os-release | cut -c 4- | tr -d '"' || true)"
+  _DIST="${_DIST:-unrecognized}"
+fi
+
 export _OS='win'
 [ ! "${_BRANCH#*mac*}" = "${_BRANCH}" ] && _OS='mac'
 [ ! "${_BRANCH#*linux*}" = "${_BRANCH}" ] && _OS='linux'
@@ -224,9 +230,13 @@ if [ "${_OS}" = 'win' ]; then
   _CRT='ucrt'
   [ ! "${_BRANCH#*msvcrt*}" = "${_BRANCH}" ] && _CRT='msvcrt'
 elif [ "${_OS}" = 'linux' ]; then
-  # TODO: make musl the default (once all issues are cleared)
-  _CRT='gnu'
-  [ ! "${_BRANCH#*musl*}" = "${_BRANCH}" ] && _CRT='musl'
+  if [ "${_DIST}" = 'alpine' ]; then
+    _CRT='musl'
+  else
+    # TODO: make musl the default (once all issues are cleared)
+    _CRT='gnu'
+    [ ! "${_BRANCH#*musl*}" = "${_BRANCH}" ] && _CRT='musl'
+  fi
 else
   # macOS: /usr/lib/libSystem.B.dylib
   _CRT='sys'
@@ -620,7 +630,7 @@ build_single_target() {
   if [ "${_CC}" = 'llvm' ]; then
     ccver="$("clang${_CCSUFFIX}" -dumpversion)"
   else
-    if [ "${_CRT}" = 'musl' ]; then
+    if [ "${_CRT}" = 'musl' ] && [ "${_DIST}" != 'alpine' ]; then
       _CCPREFIX='musl-'
     fi
 
@@ -703,6 +713,7 @@ build_single_target() {
     # Override defaults such as: 'lib/aarch64-linux-gnu'
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_LIBDIR=lib"
 
+    # With musl, this relies on package `fortify-headers` (Alpine)
     _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -D_FORTIFY_SOURCE=2"
     # Requires glibc 2.34, gcc 12 (2022)
     #   https://developers.redhat.com/articles/2023/02/06/how-improve-application-security-using-fortifysource3
@@ -713,11 +724,16 @@ build_single_target() {
     _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fPIC"
     _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -fPIC"
 
+    # With musl, this seems to be a no-op as of Alpine v3.18
     # https://en.wikipedia.org/wiki/Buffer_overflow_protection
     _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fstack-protector-all"
     _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -fstack-protector-all"
 
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-z,relro,-z,now"
+
+    if [ "${_CRT}" = 'musl' ]; then
+      _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static-pie"
+    fi
   fi
 
   _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_MESSAGE=NEVER"
@@ -997,7 +1013,7 @@ build_single_target() {
         if [ -z "${mingwver}" ]; then
           [ -n "${mingwver}" ] || mingwver="$(pacman --query --info mingw-w64-crt || true)"
           [ -n "${mingwver}" ] || mingwver="$(apk    info --webpage mingw-w64-crt || true)"
-          [ -n "${mingwver}" ] && mingwver="$(printf '%s' "${mingwver}" | grep -a -E '(^Version|webpage:)' | grep -a -m1 -o -E '[0-9][0-9.]*' | head -n 1)"
+          [ -n "${mingwver}" ] && mingwver="$(printf '%s' "${mingwver}" | grep -a -E '(^Version|webpage:)' | grep -a -m1 -o -E '[0-9][0-9.]*' | head -n 1 || true)"
         fi
         ;;
     esac
@@ -1025,7 +1041,7 @@ build_single_target() {
       if [ -z "${libcver}" ]; then
         [ -n "${libcver}" ] || libcver="$(pacman --query --info musl || true)"
         [ -n "${libcver}" ] || libcver="$(apk    info --webpage musl || true)"
-        [ -n "${libcver}" ] && libcver="$(printf '%s' "${libcver}" | grep -a -E '(^Version|webpage:)' | grep -a -m1 -o -E '[0-9][0-9.]*' | head -n 1)"
+        [ -n "${libcver}" ] && libcver="$(printf '%s' "${libcver}" | grep -a -E '(^Version|webpage:)' | grep -a -m1 -o -E '[0-9][0-9.]*' | head -n 1 || true)"
       fi
       [ -n "${libcver}" ] && libcver="musl ${libcver}"
     else
@@ -1038,10 +1054,13 @@ build_single_target() {
 
   binver=''
   if [ "${_CC}" = 'gcc' ] && [ "${_STRIP}" != 'echo' ]; then
-    binver="binutils $("${_STRIP}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
+    # '|| true' added to workaround 141 pipe failures on Alpine
+    # after grep successfully parsing the version number.
+    # https://stackoverflow.com/questions/19120263/why-exit-code-141-with-grep-q
+    binver="binutils $("${_STRIP}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?' || true)"
   elif [ -n "${_STRIP_BINUTILS}" ] && \
        [ "${_OPENSSL}" = 'boringssl' ]; then
-    binver="binutils $("${_STRIP_BINUTILS}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
+    binver="binutils $("${_STRIP_BINUTILS}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?' || true)"
   fi
 
   nasmver=''
@@ -1193,11 +1212,20 @@ elif [ "${_OS}" = 'mac' ]; then
     ./_macuni.sh
   fi
 elif [ "${_OS}" = 'linux' ]; then
-  if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ]; then
-    build_single_target a64
-  fi
-  if [ "${_BRANCH#*a64*}" = "${_BRANCH}" ]; then
-    build_single_target x64
+  if [ "${_DIST}" = 'alpine' ]; then
+    # No cross-builds with Alpine
+    if [ "${unamem}" = 'aarch64' ]; then
+      build_single_target a64
+    elif [ "${unamem}" = 'x86_64' ]; then
+      build_single_target x64
+    fi
+  else
+    if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ]; then
+      build_single_target a64
+    fi
+    if [ "${_BRANCH#*a64*}" = "${_BRANCH}" ]; then
+      build_single_target x64
+    fi
   fi
 fi
 
