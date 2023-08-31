@@ -16,10 +16,14 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
+  options=''
   CPPFLAGS='-DNDEBUG'
 
+  # Avoid finding unnecessary Homebrew packages and the log noise with it.
+  [ "${_OS}" = 'mac' ] && options="${options} -DOPENSSL_INCLUDE_DIR= -DLIBCARES_INCLUDE_DIR= -DLIBEV_INCLUDE_DIR="
+
   # shellcheck disable=SC2086
-  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} \
+  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
     '-DENABLE_LIB_ONLY=ON' \
     '-DENABLE_STATIC_LIB=ON' \
     '-DENABLE_SHARED_LIB=OFF' \
