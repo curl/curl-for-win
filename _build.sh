@@ -38,7 +38,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        wolfssl    build with wolfSSL (caveats!)
 #        wolfssh    build with wolfSSH (requires wolfSSL)
 #        libssh     build with libssh
-#        big        build with libidn2, see README.md (default for non-win targets)
+#        big        build with more features, see README.md
 #        mini       build with less features, see README.md
 #        micro      build with less features, see README.md
 #        nano       build with less features, see README.md

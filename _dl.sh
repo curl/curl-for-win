@@ -703,8 +703,7 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
   fi
 fi
 
-if [ "${_OS}" != 'win' ] || \
-   [ "${_BRANCH#*big*}" != "${_BRANCH}" ]; then
+if [ "${_BRANCH#*big*}" != "${_BRANCH}" ]; then
   live_dl libidn2 "${LIBIDN2_VER_}"
   live_xt libidn2 "${LIBIDN2_HASH}"
 
