@@ -23,7 +23,7 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
   export LIBS="${_LIBS_GLOBAL}"
 
-  [ "${LIBRESSL_VER_}" = '3.8.0' ] && options="${options} --disable-asm"
+  [ "${LIBRESSL_VER_}" = '3.8.1' ] && options="${options} --disable-asm"
 
   if [ "${_CC}" = 'llvm' ]; then
     CFLAGS="${CFLAGS} -Wno-inconsistent-dllimport"
