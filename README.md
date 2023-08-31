@@ -12,8 +12,6 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   long-standing OpenSSL
   [vulnerability](https://curl.se/docs/CVE-2019-5443.html). It also makes
   binaries 40% smaller. Major crypto and curl features remain the same.**
-- **Upon the next live build, we disable DSA hostkeys `ssh-dss` in libssh2
-  and exclude DSA algo from quictls.**
 - [Download](https://curl.se/windows/) our
   `.zip` or `.tar.xz` packages,<br>PGP signed with:
   [`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
