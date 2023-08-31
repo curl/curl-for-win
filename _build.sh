@@ -689,6 +689,12 @@ build_single_target() {
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -specs=${_GCCSPECS}"
       fi
     fi
+  elif [ "${_OS}" = 'mac' ]; then
+    macminver='10.13'  # macOS High Sierra 2017-09-25
+    [ "${_CPU}" = 'a64' ] && macminver='11.0'  # macOS Big Sur 2020-11-12
+    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_OSX_DEPLOYMENT_TARGET=${macminver}"
+    _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -mmacosx-version-min=${macminver}"
+    _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -mmacosx-version-min=${macminver}"
   elif [ "${_OS}" = 'linux' ]; then
     # Override defaults such as: 'lib/aarch64-linux-gnu'
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_LIBDIR=lib"
