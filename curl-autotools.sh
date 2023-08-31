@@ -141,12 +141,17 @@ _VER="$1"
     elif [ "${_OS}" = 'mac' ] && [ "${_OSVER}" -lt '1015' ]; then
       # SecureTransport deprecated in 2019 (macOS 10.15 Catalina, iOS 13.0)
       options="${options} --with-secure-transport"
+      # Without this, SecureTransport becomes the default TLS backend
+      [ -n "${mainssl}" ] && options="${options} --with-default-ssl-backend=${mainssl}"
     fi
     CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
     h3=0
 
+    mainssl=''  # openssl, wolfssl, mbedtls, schannel, secure-transport, gnutls, bearssl, rustls
+
     if [ -n "${_OPENSSL}" ]; then
+      mainssl='openssl'
       options="${options} --with-openssl=${_TOP}/${_OPENSSL}/${_PP}"
       options="${options} --disable-openssl-auto-load-config"
       if [ "${_OPENSSL}" = 'boringssl' ]; then
@@ -166,6 +171,7 @@ _VER="$1"
     fi
 
     if [ -d ../wolfssl ]; then
+      mainssl='wolfssl'
       options="${options} --with-wolfssl=${_TOP}/wolfssl/${_PP}"
       # for QUIC auto-detection
       CPPFLAGS="${CPPFLAGS} -DHAVE_UINTPTR_T"
@@ -176,6 +182,7 @@ _VER="$1"
     fi
 
     if [ -d ../mbedtls ]; then
+      mainssl='mbedtls'
       options="${options} --with-mbedtls=${_TOP}/mbedtls/${_PP}"
     else
       options="${options} --without-mbedtls"
