@@ -15,6 +15,7 @@ extra=''
 [[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} mingw-w64-gcc-base wine"
 
 if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
+  apk add --no-cache checksec-rs --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing/
   extra="${extra} linux-headers"  # for openssl 'secure-memory' feature
 fi
 

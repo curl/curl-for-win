@@ -78,8 +78,12 @@
         elif [ "${_OS}" = 'linux' ]; then
           "${_READELF}" --file-header --dynamic "${f}"
           if command -v checksec >/dev/null 2>&1; then
-            checksec --format=json --file="${f}" | jq
-            checksec --format=xml --fortify-file="${f}"  # duplicate keys in json, cannot apply jq
+            if [ "${_DIST}" = 'alpine' ]; then
+              checksec --json --file "${f}" | jq  # checksec-rs
+            else
+              checksec --format=json --file="${f}" | jq
+              checksec --format=xml --fortify-file="${f}"  # duplicate keys in json, cannot apply jq
+            fi
           fi
           # Show linked GLIBC versions
           # https://en.wikipedia.org/wiki/Glibc#Version_history
