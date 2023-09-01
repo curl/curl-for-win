@@ -591,9 +591,15 @@ build_single_target() {
     if [ "${_OS}" = 'linux' ]; then
       # Include CRT type in Linux triplets, to make it visible in
       # the curl version banner.
-      _TRIPLET="${_machine}-pc-linux-${_CRT}"
-      # Short triplet used on the filesystem
-      _TRIPLETSH="${_machine}-linux-gnu"
+      if [ "${_DIST}" = 'alpine' ]; then
+        # E.g. x86_64-alpine-linux-musl
+        _TRIPLET="${_machine}-${_DIST}-linux-${_CRT}"
+        _TRIPLETSH="${_TRIPLET}"
+      else
+        _TRIPLET="${_machine}-pc-linux-${_CRT}"
+        # Short triplet used on the filesystem
+        _TRIPLETSH="${_machine}-linux-gnu"
+      fi
 
       if [ "${unamem}" != "${_machine}" ] && [ "${_CC}" = 'gcc' ]; then
         # https://packages.debian.org/testing/arm64/gcc-x86-64-linux-gnu/filelist
