@@ -365,7 +365,7 @@ EOF
 fi
 
 # decrypt code signing key
-export SIGN_CODE_KEY; SIGN_CODE_KEY="$(realpath '.')/sign-code.p12"
+export SIGN_CODE_KEY; SIGN_CODE_KEY="$(realpath .)/sign-code.p12"
 if [ -s "${SIGN_CODE_KEY}.asc" ] && \
    [ -n "${SIGN_CODE_GPG_PASS:+1}" ]; then
   install -m 600 /dev/null "${SIGN_CODE_KEY}"
@@ -640,7 +640,7 @@ build_single_target() {
       # Create specs files that overrides msvcrt with ucrt. We need this
       # for gcc when building against UCRT.
       #   https://stackoverflow.com/questions/57528555/how-do-i-build-against-the-ucrt-with-mingw-w64
-      _GCCSPECS="$(realpath gcc-specs-ucrt)"
+      _GCCSPECS="$(realpath .)/gcc-specs-ucrt"
       "${_CCPREFIX}gcc" -dumpspecs | sed 's/-lmsvcrt/-lucrt/g' > "${_GCCSPECS}"
     fi
   fi
