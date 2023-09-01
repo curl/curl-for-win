@@ -49,7 +49,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-pico-gcc'
+          export CW_CONFIG='${{ github.ref_name }}-linux'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='alpine:latest'
           time docker pull "${DOCKER_IMAGE}"
