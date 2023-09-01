@@ -81,7 +81,7 @@ Features: alt-svc AsynchDNS brotli       HSTS HTTP2       HTTPS-proxy IDN IPv6 K
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
 Features: alt-svc AsynchDNS              HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz          NTLM     SPNEGO SSL SSPI threadsafe UnixSockets
 
-"micro", without libssh2 and gsasl:
+"micro", without libssh2:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp ws wss
 Features: alt-svc AsynchDNS              HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz          NTLM     SPNEGO SSL SSPI threadsafe UnixSockets
 
