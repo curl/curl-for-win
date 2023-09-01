@@ -631,6 +631,7 @@ build_single_target() {
     ccver="$("clang${_CCSUFFIX}" -dumpversion)"
   else
     if [ "${_CRT}" = 'musl' ] && [ "${_DIST}" != 'alpine' ]; then
+      # method 1
       _CCPREFIX='musl-'
     fi
 
@@ -733,6 +734,19 @@ build_single_target() {
 
     if [ "${_CRT}" = 'musl' ]; then
       _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static-pie"
+
+      if [ "${_DIST}" != 'alpine' ]; then
+        :
+        # method 2
+      # _CC_GLOBAL="${_CC_GLOBAL} -specs=/usr/lib/${_machine}-linux-musl/musl-gcc.specs"
+
+        # method 3
+      # libprefix="/usr/lib/${_machine}-linux-musl"
+      # gccver="$("${_CCPREFIX}gcc" -dumpversion)"
+      # _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -nostdinc -isystem /usr/include/${_machine}-linux-musl"
+      # _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL}             -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/rcrt1.o ${libprefix}/crti.o -lc /usr/lib/gcc/${_machine}-linux-gnu/${gccver}/libgcc.a ${libprefix}/crtn.o"
+      # _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++ -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/rcrt1.o ${libprefix}/crti.o -lc /usr/lib/gcc/${_machine}-linux-gnu/${gccver}/libgcc.a ${libprefix}/crtn.o"
+      fi
     fi
   fi
 
