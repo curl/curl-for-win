@@ -19,7 +19,7 @@
 
   _OUT="${_NAM}-${_VER}${_REVSUFFIX}${_PKGSUFFIX}"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
-  _DST="$(realpath _pkg)"; rm -r -f "${_DST}"
+  _DST="$(realpath .)/_pkg"; rm -r -f "${_DST}"
 
   mkdir -p "${_DST}/docs"
   mkdir -p "${_DST}/include"

@@ -58,7 +58,7 @@ touch -c -r "${_ALL}" "${_ALL}.txt"
 ./_sign-pkg.sh "${_ALL}"
 
 # Official deploy
-DEPLOY_KEY="$(realpath '.')/deploy.key"
+DEPLOY_KEY="$(realpath .)/deploy.key"
 if [ "${PUBLISH_PROD_FROM}" = "${_HOSTOS}" ] && \
    [ "${_BRANCH#*main*}" != "${_BRANCH}" ] && \
    [ -s "${DEPLOY_KEY}.asc" ] && \
