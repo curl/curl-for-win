@@ -93,7 +93,7 @@ create_pkg() {
   # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>
   case "${_HOSTOS}" in
     bsd|mac) TZ=UTC stat -f '%N: %z bytes %Sm' -t '%Y-%m-%d %H:%M' "${_pkg}";;
-    *)       TZ=UTC stat --format='%n: %s bytes %y' "${_pkg}";;
+    *)       TZ=UTC stat -c '%n: %s bytes %y' "${_pkg}";;
   esac
 
   openssl dgst -sha256 "${_pkg}" | sed 's/^SHA256/SHA2-256/g' | tee -a hashes.txt
