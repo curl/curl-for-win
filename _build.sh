@@ -478,7 +478,7 @@ build_single_target() {
   export _MAKE='make'
   export _RUN_BIN=''
 
-  if [ ! "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
+  if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then
     _CCSUFFIX="${CW_CCSUFFIX}"
   fi
 
