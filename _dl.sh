@@ -521,7 +521,7 @@ bump() {
 
 if [ "${1:-}" = 'bump' ]; then
   bump
-  rm -r -f "${gpgdir}"
+  rm -r -f "${gpgdir:?}"
   exit
 fi
 
@@ -551,7 +551,7 @@ live_xt() {
     hash="$(openssl dgst -sha256 pkg.bin)"
     echo "${hash}"
     echo "${hash}" | grep -q -a -F -- "${2:-}" || exit 1
-    rm -r -f "${pkg}"; mkdir "${pkg}"
+    rm -r -f "${pkg:?}"; mkdir "${pkg}"
     if [ "${pkg}" = 'cacert' ]; then
       mv pkg.bin "${pkg}/${_CACERT}"
     else
@@ -808,4 +808,4 @@ else
   live_xt curl "${CURL_HASH}"
 fi
 
-rm -r -f "${gpgdir}"
+rm -r -f "${gpgdir:?}"

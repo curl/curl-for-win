@@ -45,6 +45,6 @@ while [ -n "${1:-}" ]; do
     rm "${f}"
     # shellcheck disable=SC2046
     "${AR}" crD "${f}" $(find "${tmp}" -type f | sort)
-    rm -r -f "${tmp}"
+    rm -r -f "${tmp:?}"
   fi
 done
