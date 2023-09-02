@@ -1027,27 +1027,29 @@ build_single_target() {
   libgccver=''
   libcver=''
   versuffix=''
-  if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-    mingwver='llvm-mingw'
-    [ -f "${mingwver}/__url__.txt" ] && mingwurl=" $(cat "${mingwver}/__url__.txt")"
-    mingwver="${mingwver} ${CW_LLVM_MINGW_VER_:-?}"
-    versuffix="${versuffix_llvm_mingw}"
-  elif [ "${_OS}" = 'win' ]; then
-    case "${_HOSTOS}" in
-      mac)
-        mingwver="$(HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_FROM_API=1 brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
-      linux)
-        [ -n "${mingwver}" ] || mingwver="$(dpkg-query --showformat='${Version}' --show mingw-w64-common || true)"
-        [ -n "${mingwver}" ] || mingwver="$(rpm --query --queryformat '.%{VERSION}' mingw64-crt || true)"
-        if [ -z "${mingwver}" ]; then
-          [ -n "${mingwver}" ] || mingwver="$(pacman --query --info mingw-w64-crt || true)"
-          [ -n "${mingwver}" ] || mingwver="$(apk    info --webpage mingw-w64-crt || true)"
-          [ -n "${mingwver}" ] && mingwver="$(printf '%s' "${mingwver}" | grep -a -E '(^Version|webpage:)' | grep -a -m1 -o -E '[0-9][0-9.]*' | head -n 1 || true)"
-        fi
-        ;;
-    esac
-    [ -n "${mingwver}" ] && mingwver="mingw-w64 ${mingwver}"
-    versuffix="${versuffix_non_llvm_mingw}"
+  if [ "${_OS}" = 'win' ]; then
+    if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
+      mingwver='llvm-mingw'
+      [ -f "${mingwver}/__url__.txt" ] && mingwurl=" $(cat "${mingwver}/__url__.txt")"
+      mingwver="${mingwver} ${CW_LLVM_MINGW_VER_:-?}"
+      versuffix="${versuffix_llvm_mingw}"
+    else
+      case "${_HOSTOS}" in
+        mac)
+          mingwver="$(HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_FROM_API=1 brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
+        linux)
+          [ -n "${mingwver}" ] || mingwver="$(dpkg-query --showformat='${Version}' --show mingw-w64-common || true)"
+          [ -n "${mingwver}" ] || mingwver="$(rpm --query --queryformat '.%{VERSION}' mingw64-crt || true)"
+          if [ -z "${mingwver}" ]; then
+            [ -n "${mingwver}" ] || mingwver="$(pacman --query --info mingw-w64-crt || true)"
+            [ -n "${mingwver}" ] || mingwver="$(apk    info --webpage mingw-w64-crt || true)"
+            [ -n "${mingwver}" ] && mingwver="$(printf '%s' "${mingwver}" | grep -a -E '(^Version|webpage:)' | grep -a -m1 -o -E '[0-9][0-9.]*' | head -n 1 || true)"
+          fi
+          ;;
+      esac
+      [ -n "${mingwver}" ] && mingwver="mingw-w64 ${mingwver}"
+      versuffix="${versuffix_non_llvm_mingw}"
+    fi
   elif [ "${_OS}" = 'linux' ]; then
     if [ "${_CC}" = 'llvm' ]; then
       if [ "${unamem}" = "${_machine}" ]; then
