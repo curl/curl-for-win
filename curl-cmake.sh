@@ -292,14 +292,13 @@ _VER="$1"
       LDFLAGS="${LDFLAGS} -L${_TOP}/libunistring/${_PP}/lib"
       LIBS="${LIBS} -lunistring"
     fi
-  elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
+  else
     options="${options} -DUSE_LIBIDN2=OFF"
     options="${options} -DCURL_USE_LIBPSL=OFF"
-    if [ "${_OS}" = 'win' ]; then
+    if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+       [ "${_OS}" = 'win' ]; then
       options="${options} -DUSE_WIN32_IDN=ON"
     fi
-  else
-    options="${options} -DCURL_USE_LIBPSL=OFF"
   fi
 
   # Official method correctly enables the manual, but with the side-effect
