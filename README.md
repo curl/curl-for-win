@@ -5,20 +5,21 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 [![Build status](https://ci.appveyor.com/api/projects/status/8yf6xjgq7u0cm013/branch/main?svg=true)](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main)
 [![Daily status](https://github.com/curl/curl-for-win/actions/workflows/daily.yml/badge.svg)](https://github.com/curl/curl-for-win/actions/workflows/daily.yml)
 
-# Reproducible curl binaries for Windows
+# Reproducible curl binaries for Linux, macOS and Windows
 
 - **We are switching the default TLS backend to LibreSSL upon the next curl
   release when LibreSSL 3.8.x stable becomes available. This fixes a
   long-standing OpenSSL
-  [vulnerability](https://curl.se/docs/CVE-2019-5443.html). It also makes
-  binaries 40% smaller. Major crypto and curl features remain the same.**
+  [vulnerability](https://curl.se/docs/CVE-2019-5443.html) on Windows. It also
+  makes binaries 40% smaller. Major crypto and curl features remain the same.**
 - [Download](https://curl.se/windows/) our
   `.zip` or `.tar.xz` packages,<br>PGP signed with:
   [`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
 - Standalone `curl` tool and `libcurl` DLL. Static libraries included.
-- Vista and
-  [Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/)
-  required on Windows. macOS High Sierra 64-bit or Apple Silicon.
+- Required: Windows Vista and
+  [Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/),
+  macOS High Sierra 64-bit or Apple Silicon,
+  any Linux arm64 with the [MUSL](https://en.wikipedia.org/wiki/Musl) builds.
 - [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3),
   [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support,
   and [more](#features).
@@ -34,12 +35,12 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   [Homebrew](https://formulae.brew.sh/formula/mingw-w64),
   [MSYS2](https://www.msys2.org/).
   [`llvm-mingw`](https://github.com/mstorsjo/llvm-mingw) for ARM64.
-- Cross-built and published from Linux via
+- Windows cross-built and published from Linux via
   [AppVeyor CI](https://www.appveyor.com/). Using reproducible OS image
   [`debian:testing-slim`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing/slim)
-  via [Docker](https://hub.docker.com/_/debian/).
-- Experimental support to build standalone macOS and Linux (musl and glibc)
-  binaries.
+  via [Docker](https://hub.docker.com/_/debian/). macOS built on native OS.
+  Linux MUSL built on [Alpine](https://hub.docker.com/_/alpine/).
+- Linux and macOS builds are experimental and *not* official curl builds.
 - We verify components using SHA-256, and PGP where provided.
 - We build [reproducible](https://reproducible-builds.org/) binaries,
   producing the same hash given the same input sources and C compiler.
@@ -52,8 +53,8 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   slightly different build options and toolchain builds/versions. Except
   `llvm-mingw` builds, which are reproducible across platforms. ARM64 and
   BoringSSL builds are such by default.
-- We code-sign with a self-signed certificate, and avoid trusted timestamps
-  for reproducibility.
+- We code-sign with a self-signed certificate on Windows, and avoid trusted
+  timestamps for reproducibility.
 
 # Features
 
@@ -64,7 +65,7 @@ with runtime-selectable option
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
 Features: alt-svc AsynchDNS brotli       HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM     SPNEGO SSL SSPI threadsafe UnixSockets zstd
 ```
-<details><summary>Alternate configurations with different footprints:</summary><p>
+<details><summary>Alternate configurations:</summary><p>
 
 ```
 linux and mac-arm:
@@ -107,9 +108,9 @@ Features:         AsynchDNS              HSTS             HTTPS-proxy     IPv6  
 
 # Downloads
 
-* Latest version:
+* Latest version for Windows:
   <br><https://curl.se/windows/>
-* Specific versions, back to 8.2.0:<br>
+* Specific versions for Windows, back to 8.2.0:<br>
   `https://curl.se/windows/dl-<curl-version>_<build-1-to-N>/`
   <br>Example:
   <br><https://curl.se/windows/dl-8.2.0_1/>
