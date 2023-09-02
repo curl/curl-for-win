@@ -21,7 +21,7 @@ _VER="$1"
   find lib -name '*.def' -delete
   find lib -name '*.map' -delete
 
-  rm -r -f "${_PKGDIR}"
+  rm -r -f "${_PKGDIR:?}"
 
   # Build
 

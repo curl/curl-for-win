@@ -27,7 +27,7 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  rm -r -f "${_PKGDIR}" "${_BLDDIR}"
+  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   # configure is broken and does not disable examples when passing option
   # --disable-examples. Also, there is no option to disable tests. Yet they

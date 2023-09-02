@@ -43,7 +43,7 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  rm -r -f "${_PKGDIR}" "${_BLDDIR}"
+  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   CFLAGS="-ffile-prefix-map=$(pwd)="
   LIBS='-lpthread'  # for tests

@@ -14,7 +14,7 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  rm -r -f "${_PKGDIR}" "${_BLDDIR}"
+  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   # We may need this in the future if an "Automake version mismatch" occurs:
 # [ -f 'configure' ] || autoreconf --force --install

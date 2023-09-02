@@ -14,7 +14,7 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  rm -r -f "${_PKGDIR}" "${_BLDDIR}"
+  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   # shellcheck disable=SC2086
   cmake build/cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} \

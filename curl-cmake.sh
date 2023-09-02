@@ -22,7 +22,7 @@ if [ "${CURL_VER_}" = '8.2.1' ]; then
   cache='CMakeCache.txt'
   rm -f "${cache}"
 
-  rm -r -f "${_PKGDIR}" "${_BLDDIR}-shared" "${_BLDDIR}-static"
+  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}-shared" "${_BLDDIR:?}-static"
 
   # Build
 
@@ -344,7 +344,7 @@ if [ "${CURL_VER_}" = '8.2.1' ]; then
 
 else
 
-  rm -r -f "${_PKGDIR}" "${_BLDDIR}"
+  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   # Build
 

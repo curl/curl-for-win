@@ -26,7 +26,7 @@ _VER="$1"
 
   # Build
 
-  rm -r -f "${_PKGDIR}" "${_BLDDIR}"
+  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   options=''
 

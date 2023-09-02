@@ -14,7 +14,7 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  rm -r -f "${_PKGDIR}" "${_BLDDIR}"
+  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   # Fix this bizarre error when executing 'make':
   #   configure.ac:39: error: version mismatch.  This is Automake 1.16.4,

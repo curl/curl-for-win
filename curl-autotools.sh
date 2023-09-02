@@ -17,7 +17,7 @@ _VER="$1"
   cache='configure-cache.txt'
   rm -f "${cache}"
 
-  rm -r -f "${_PKGDIR}" "${_BLDDIR}-shared" "${_BLDDIR}-static"
+  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}-shared" "${_BLDDIR:?}-static"
 
   [ -f 'configure' ] || autoreconf --force --install
 
