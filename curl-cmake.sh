@@ -84,12 +84,14 @@ _VER="$1"
     CPPFLAGS="${CPPFLAGS} -DDEBUGBUILD"
   fi
 
-  if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
+  if [ ! "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] || \
+     [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
      [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
     options="${options} -DCURL_DISABLE_ALTSVC=ON"
   fi
 
-  if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
+  if [ ! "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] || \
+     [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
     options="${options} -DCURL_DISABLE_CRYPTO_AUTH=ON"
     options="${options} -DCURL_DISABLE_DICT=ON -DCURL_DISABLE_FILE=ON -DCURL_DISABLE_GOPHER=ON -DCURL_DISABLE_MQTT=ON -DCURL_DISABLE_RTSP=ON -DCURL_DISABLE_SMB=ON -DCURL_DISABLE_TELNET=ON -DCURL_DISABLE_TFTP=ON"
     options="${options} -DCURL_DISABLE_FTP=ON"

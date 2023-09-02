@@ -667,7 +667,8 @@ else
   live_xt zlib "${ZLIB_HASH}"
 fi
 
-if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+if [ "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*mini*}" = "${_BRANCH}" ]; then
@@ -687,7 +688,8 @@ if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
   live_xt cares "${CARES_HASH}"
 fi
 
-if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+if [ "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
   live_dl nghttp2 "${NGHTTP2_VER_}"
   live_xt nghttp2 "${NGHTTP2_HASH}"
@@ -727,14 +729,16 @@ if [ "${_BRANCH#*mbedtls*}" != "${_BRANCH}" ]; then
 fi
 
 need_openssl=0
-if [ "${_OS}" != 'win' ]; then
-  need_openssl=1
-elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
-     [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
-     [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
-     [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
-     [ "${_BRANCH#*schannel*}" = "${_BRANCH}" ]; then
-  need_openssl=1
+if [ "${_BRANCH#*bldtst*}" = "${_BRANCH}" ]; then
+  if [ "${_OS}" != 'win' ]; then
+    need_openssl=1
+  elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+       [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
+       [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
+       [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
+       [ "${_BRANCH#*schannel*}" = "${_BRANCH}" ]; then
+    need_openssl=1
+  fi
 fi
 
 need_cacert=0
@@ -759,7 +763,8 @@ if [ "${need_openssl}" = '1' ]; then
   need_cacert=1
 fi
 
-if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+if [ "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] && \
+   [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
    [ "${_BRANCH#*micro*}" = "${_BRANCH}" ]; then
   if [ "${_BRANCH#*wolfssh*}" != "${_BRANCH}" ]; then
