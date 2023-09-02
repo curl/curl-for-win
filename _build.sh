@@ -767,6 +767,19 @@ build_single_target() {
   _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --build=${_BUILD_HOST} --host=${_TRIPLET}"
   [ "${_CPU}" = 'x86' ] && _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-asynchronous-unwind-tables"
 
+  _CCRT='libgcc'  # compiler runtime, 'libgcc' (for libgcc and libstdc++) or 'clang-rt' (for compiler-rt and libc++)
+  # Debian does not support clang-rt for cross-builds, but we enable it
+  # on Alpine, where cross-builds are not natively supported anyway.
+  # On Debian it would require package `libclang-rt-16-dev` and `libc++1-16`.
+  if [ "${_CC}" = 'llvm' ] && [ "${_DIST}" = 'alpine' ]; then
+    # Optional
+    _CCRT='clang-rt'
+  elif [ "${_TOOLCHAIN}" = 'llvm-apple' ] || \
+       [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
+    # Not an option
+    _CCRT='clang-rt'
+  fi
+
   export _LD
   if [ "${_CRT}" = 'musl' ]; then
     _BINUTILS_PREFIX=''
@@ -786,7 +799,7 @@ build_single_target() {
       # so we need to pass this via CMAKE_C_FLAGS, though meant for the linker.
       if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${CW_LLVM_MINGW_PATH}/${_TRIPLET}/lib"
-      else
+      elif [ "${_CCRT}" = 'libgcc' ]; then
         # https://packages.debian.org/testing/amd64/gcc-mingw-w64-x86-64-posix/filelist
         # https://packages.debian.org/testing/amd64/gcc-mingw-w64-x86-64-win32/filelist
         # /usr/lib/gcc/x86_64-w64-mingw32/10-posix/
@@ -805,24 +818,26 @@ build_single_target() {
     elif [ "${_HOSTOS}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [ "${unamem}" != "${_machine}" ] && [ "${_CC}" = 'llvm' ]; then
       _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -isystem /usr/${_TRIPLETSH}/include"
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L/usr/${_TRIPLETSH}/lib"
-      # https://packages.debian.org/testing/all/libgcc-13-dev-arm64-cross/filelist
-      # /usr/lib/gcc-cross/aarch64-linux-gnu/13/
-      tmp="$(find "/usr/lib/gcc-cross/${_TRIPLETSH}" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
-      if [ -z "${tmp}" ]; then
-        >&2 echo '! Error: Failed to detect gcc-cross env root.'
-        exit 1
+      if [ "${_CCRT}" = 'libgcc' ]; then
+        # https://packages.debian.org/testing/all/libgcc-13-dev-arm64-cross/filelist
+        # /usr/lib/gcc-cross/aarch64-linux-gnu/13/
+        tmp="$(find "/usr/lib/gcc-cross/${_TRIPLETSH}" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+        if [ -z "${tmp}" ]; then
+          >&2 echo '! Error: Failed to detect gcc-cross env root.'
+          exit 1
+        fi
+        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${tmp}"
+        # https://packages.debian.org/testing/all/libstdc++-13-dev-arm64-cross/filelist
+        # /usr/aarch64-linux-gnu/include/c++/13/
+        tmp="$(find "/usr/${_TRIPLETSH}/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+        if [ -z "${tmp}" ]; then
+          >&2 echo '! Error: Failed to detect g++-cross env root.'
+          exit 1
+        fi
+        _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++"
+        _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/${_TRIPLETSH}"
+        _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/backward"
       fi
-      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${tmp}"
-      # https://packages.debian.org/testing/all/libstdc++-13-dev-arm64-cross/filelist
-      # /usr/aarch64-linux-gnu/include/c++/13/
-      tmp="$(find "/usr/${_TRIPLETSH}/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
-      if [ -z "${tmp}" ]; then
-        >&2 echo '! Error: Failed to detect g++-cross env root.'
-        exit 1
-      fi
-      _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++"
-      _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/${_TRIPLETSH}"
-      _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/backward"
     fi
 
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
@@ -996,13 +1011,15 @@ build_single_target() {
     fi
   fi
 
-  if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt"
-    # `-Wc,...` is necessary for libtool to pass this option to the compiler
-    # at link-time. Otherwise libtool strips it.
-    #   https://www.gnu.org/software/libtool/manual/html_node/Stripped-link-flags.html
-    _LDFLAGS_GLOBAL_AUTOTOOLS="${_LDFLAGS_GLOBAL_AUTOTOOLS} -Wc,-rtlib=compiler-rt"
-    _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -stdlib=libc++"
+  if [ "${_CCRT}" = 'clang-rt' ]; then
+    if [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
+      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt"
+      # `-Wc,...` is necessary for libtool to pass this option to the compiler
+      # at link-time. Otherwise libtool strips it.
+      #   https://www.gnu.org/software/libtool/manual/html_node/Stripped-link-flags.html
+      _LDFLAGS_GLOBAL_AUTOTOOLS="${_LDFLAGS_GLOBAL_AUTOTOOLS} -Wc,-rtlib=compiler-rt"
+      _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -stdlib=libc++"
+    fi
   else
     if [ "${_OS}" = 'win' ]; then
       # Also accepted on linux, but does not seem to make any difference
@@ -1052,7 +1069,7 @@ build_single_target() {
       versuffix="${versuffix_non_llvm_mingw}"
     fi
   elif [ "${_OS}" = 'linux' ]; then
-    if [ "${_CC}" = 'llvm' ]; then
+    if [ "${_CC}" = 'llvm' ] && [ "${_CCRT}" = 'libgcc' ]; then
       if [ "${unamem}" = "${_machine}" ]; then
         [ -n "${libgccver}" ] || libgccver="$(dpkg-query --showformat='${Version}' --show 'libgcc-*-dev' || true)"
         [ -n "${libgccver}" ] || libgccver="$(rpm --query --queryformat '.%{VERSION}' libgcc || true)"
