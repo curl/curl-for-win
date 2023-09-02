@@ -244,9 +244,11 @@ _VER="$1"
         LDFLAGS="${LDFLAGS} -L${_TOP}/libunistring/${_PP}/lib"
         LIBS="${LIBS} -lunistring"
       fi
-    elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
+    else
       options="${options} --without-libidn2"
-      if [ "${_OS}" = 'win' ]; then
+      options="${options} --without-libpsl"
+      if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+         [ "${_OS}" = 'win' ]; then
         options="${options} --with-winidn"
       fi
     fi
