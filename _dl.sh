@@ -766,14 +766,16 @@ if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
     if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
       LIBSSH2_HASH=
       LIBSSH2_REV_="${LIBSSH2_REV_:-master}"
-      rev="$(my_curl --user-agent ' ' "https://api.github.com/repos/libssh2/libssh2/commits/${LIBSSH2_REV_}" \
-        --header 'X-GitHub-Api-Version: 2022-11-28' \
-        | jq --raw-output '.sha')"
-      [ -n "${rev}" ] && LIBSSH2_REV_="${rev}"
-      url="https://github.com/libssh2/libssh2/archive/${LIBSSH2_REV_}.tar.gz"
-      echo "${url}" > '__libssh2.url'
-      my_curl --location --proto-redir =https --output pkg.bin "${url}"
-      live_xt libssh2 "${LIBSSH2_HASH}"
+      if [ -z "${CW_GET:-}" ] || echo " ${CW_GET} " | grep -q -F ' libssh2 '; then
+        rev="$(my_curl --user-agent ' ' "https://api.github.com/repos/libssh2/libssh2/commits/${LIBSSH2_REV_}" \
+          --header 'X-GitHub-Api-Version: 2022-11-28' \
+          | jq --raw-output '.sha')"
+        [ -n "${rev}" ] && LIBSSH2_REV_="${rev}"
+        url="https://github.com/libssh2/libssh2/archive/${LIBSSH2_REV_}.tar.gz"
+        echo "${url}" > '__libssh2.url'
+        my_curl --location --proto-redir =https --output pkg.bin "${url}"
+        live_xt libssh2 "${LIBSSH2_HASH}"
+      fi
       LIBSSH2_VER_="$(grep -a -F 'define LIBSSH2_VERSION ' 'libssh2/include/libssh2.h' | grep -o -E '".+"' | tr -d '"')"
     else
       live_dl libssh2 "${LIBSSH2_VER_}"
@@ -790,14 +792,16 @@ fi
 if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
   CURL_HASH=
   CURL_REV_="${CURL_REV_:-master}"
-  rev="$(my_curl --user-agent ' ' "https://api.github.com/repos/curl/curl/commits/${CURL_REV_}" \
-    --header 'X-GitHub-Api-Version: 2022-11-28' \
-    | jq --raw-output '.sha')"
-  [ -n "${rev}" ] && CURL_REV_="${rev}"
-  url="https://github.com/curl/curl/archive/${CURL_REV_}.tar.gz"
-  echo "${url}" > '__curl.url'
-  my_curl --location --proto-redir =https --output pkg.bin "${url}"
-  live_xt curl "${CURL_HASH}"
+  if [ -z "${CW_GET:-}" ] || echo " ${CW_GET} " | grep -q -F ' curl '; then
+    rev="$(my_curl --user-agent ' ' "https://api.github.com/repos/curl/curl/commits/${CURL_REV_}" \
+      --header 'X-GitHub-Api-Version: 2022-11-28' \
+      | jq --raw-output '.sha')"
+    [ -n "${rev}" ] && CURL_REV_="${rev}"
+    url="https://github.com/curl/curl/archive/${CURL_REV_}.tar.gz"
+    echo "${url}" > '__curl.url'
+    my_curl --location --proto-redir =https --output pkg.bin "${url}"
+    live_xt curl "${CURL_HASH}"
+  fi
   CURL_VER_="$(grep -a -F 'define LIBCURL_VERSION' 'curl/include/curl/curlver.h' | grep -o -E '".+"' | tr -d '"')"
 else
   live_dl curl "${CURL_VER_}"
