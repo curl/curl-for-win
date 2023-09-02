@@ -27,6 +27,8 @@ _VER="$1"
 
   if [ -n "${_ZLIB}" ]; then
     options="${options} --with-libz=${_TOP}/${_ZLIB}/${_PP}"
+  else
+    options="${options} --without-libz"
   fi
 
   # for libssh2

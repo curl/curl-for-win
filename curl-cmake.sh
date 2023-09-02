@@ -110,11 +110,10 @@ _VER="$1"
   fi
 
   if [ -n "${_ZLIB}" ]; then
-    options="${options} -DUSE_ZLIB=ON"
     options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
     options="${options} -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
   else
-    options="${options} -DUSE_ZLIB=OFF"
+    options="${options} -DZLIB_INCLUDE_DIR="
   fi
   if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
     options="${options} -DCURL_BROTLI=ON"

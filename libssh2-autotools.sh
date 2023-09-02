@@ -34,6 +34,8 @@ _VER="$1"
     # These seem to work better than --with-libz-prefix=:
     CPPFLAGS="${CPPFLAGS} -I${_TOP}/${_ZLIB}/${_PP}/include"
     LDFLAGS="${LDFLAGS} -L${_TOP}/${_ZLIB}/${_PP}/lib"
+  else
+    options="${options} --without-libz"
   fi
 
   if [ -n "${_OPENSSL}" ]; then
