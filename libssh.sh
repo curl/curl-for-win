@@ -35,6 +35,8 @@ _VER="$1"
   if [ -n "${_ZLIB}" ]; then
     options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
     options="${options} -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
+  else
+    options="${options} -DWITH_ZLIB=OFF"
   fi
 
   if [ -n "${_OPENSSL}" ]; then

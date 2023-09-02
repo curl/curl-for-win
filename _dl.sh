@@ -659,12 +659,14 @@ if [ "${_OS}" = 'win' ] && \
   fi
 fi
 
-if [ "${_BRANCH#*zlibng*}" != "${_BRANCH}" ]; then
-  live_dl zlibng "${ZLIBNG_VER_}"
-  live_xt zlibng "${ZLIBNG_HASH}"
-else
-  live_dl zlib "${ZLIB_VER_}"
-  live_xt zlib "${ZLIB_HASH}"
+if [ "${_BRANCH#*nozlib*}" = "${_BRANCH}" ]; then
+  if [ "${_BRANCH#*zlibng*}" != "${_BRANCH}" ]; then
+    live_dl zlibng "${ZLIBNG_VER_}"
+    live_xt zlibng "${ZLIBNG_HASH}"
+  else
+    live_dl zlib "${ZLIB_VER_}"
+    live_xt zlib "${ZLIB_HASH}"
+  fi
 fi
 
 if [ "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] && \
