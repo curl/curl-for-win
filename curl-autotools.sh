@@ -80,14 +80,16 @@ _VER="$1"
       fi
     fi
 
-    if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
+    if [ ! "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] || \
+       [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
        [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
       options="${options} --disable-alt-svc"
     else
       options="${options} --enable-alt-svc"
     fi
 
-    if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
+    if [ ! "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] || \
+       [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
       options="${options} --disable-crypto-auth"
       options="${options} --disable-dict --disable-file --disable-gopher --disable-mqtt --disable-rtsp --disable-smb --disable-telnet --disable-tftp"
       options="${options} --disable-ftp"

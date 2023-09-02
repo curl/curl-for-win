@@ -69,12 +69,14 @@ _VER="$1"
 
   # CPPFLAGS added after this point only affect libcurl.
 
-  if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
+  if [ ! "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] || \
+     [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
      [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
     CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_ALTSVC=1"
   fi
 
-  if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
+  if [ ! "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] || \
+     [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
     CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_CRYPTO_AUTH=1"
     CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_DICT=1 -DCURL_DISABLE_FILE=1 -DCURL_DISABLE_GOPHER=1 -DCURL_DISABLE_MQTT=1 -DCURL_DISABLE_RTSP=1 -DCURL_DISABLE_SMB=1 -DCURL_DISABLE_TELNET=1 -DCURL_DISABLE_TFTP=1"
     CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_FTP=1"
@@ -227,7 +229,8 @@ _VER="$1"
       LDFLAGS="${LDFLAGS} -L../../libunistring/${_PP}/lib"
       LIBS="${LIBS} -lunistring"
     fi
-  elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && [ "${_OS}" = 'win' ]; then
+  elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+       [ "${_OS}" = 'win' ]; then
     CFG="${CFG}-winidn"
   fi
 
