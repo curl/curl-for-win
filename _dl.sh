@@ -31,6 +31,7 @@ cat <<EOF
     "name": "cares",
     "descending": true,
     "url": "https://c-ares.org/download/c-ares-{ver}.tar.gz",
+    "mirror": "https://github.com/c-ares/c-ares/releases/download/cares-{veru}/c-ares-{ver}.tar.gz",
     "sig": ".asc",
     "ref_mask": "c-ares-([0-9]+(\\\\.[0-9]+)+)\\\\.tar.gz",
     "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
@@ -99,6 +100,7 @@ cat <<EOF
   {
     "name": "libssh2",
     "url": "https://libssh2.org/download/libssh2-{ver}.tar.xz",
+    "mirror": "https://github.com/libssh2/libssh2/releases/download/libssh2-{ver}/libssh2-{ver}.tar.xz",
     "sig": ".asc",
     "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
   },
@@ -233,11 +235,12 @@ gpg_recv_key() {
   my_curl "https://keyserver.ubuntu.com/${req}" | my_gpg --import --status-fd 1
 }
 
-# replace {ver}/{vermm} macros with the version number
+# replace {ver}/{veru}/{vermm} macros with the version number
 expandver() {
   # >&2 echo "expandver|$*|"
   sed \
     -e "s/{ver}/$1/g" \
+    -e "s/{veru}/$(echo "$1" | tr '.' '_')/g" \
     -e "s/{vermm}/$(echo "$1" | cut -d . -f -2)/g"
 }
 
@@ -560,7 +563,7 @@ live_xt() {
 }
 
 live_dl() {
-  local name ver hash jp url sig redir key keys options
+  local name ver hash jp url mirror sig redir key keys options
 
   name="$1"
 
@@ -573,20 +576,34 @@ live_dl() {
     jp="$(dependencies_json | jq \
       ".[] | select(.name == \"${name}\")")"
 
-    url="$(  printf '%s' "${jp}" | jq --raw-output '.url' | expandver "${ver}")"
-    sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's/^null$//' | expandver "${ver}")"
-    redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"
-    keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
+    url="$(   printf '%s' "${jp}" | jq --raw-output '.url' | expandver "${ver}")"
+    mirror="$(printf '%s' "${jp}" | jq --raw-output '.mirror' | sed 's/^null$//' | expandver "${ver}")"
+    sigraw="$(printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's/^null$//' | expandver "${ver}")"
+    redir="$( printf '%s' "${jp}" | jq --raw-output '.redir')"
+    keys="$(  printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
 
     options=()
     [ "${redir}" = 'redir' ] && options+=(--location --proto-redir '=https')
     options+=(--output pkg.bin "${url}")
+    sig="${sigraw}"
     if [ -n "${sig}" ]; then
       [[ "${sig}" = 'https://'* ]] || sig="${url}${sig}"
       options+=(--output pkg.sig "${sig}")
     fi
     set -x
-    my_curl "${options[@]}"
+    if ! my_curl "${options[@]}" && [ -n "${mirror}" ]; then
+      options=()
+      if [[ "${mirror}" = 'https://github.com/'* ]]; then
+        options+=(--location --proto-redir '=https')
+      fi
+      options+=(--output pkg.bin "${mirror}")
+      sig="${sigraw}"
+      if [ -n "${sig}" ]; then
+        [[ "${sig}" = 'https://'* ]] || sig="${mirror}${sig}"
+        options+=(--output pkg.sig "${sig}")
+      fi
+      my_curl "${options[@]}"
+    fi
 
     if [ -n "${sig}" ]; then
       if [ ! -s pkg.sig ]; then
