@@ -78,7 +78,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # TODO:
 #   - change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
 #   - linux: implement musl builds on Debian.
-#   - mac: test -DSHARE_LIB_OBJECT=ON with curl 8.3.0.
 #   - mac: test with Homebrew gcc.
 #   - rename _BRANCH to CW_CONFIG internally.
 #   - merge _ci-*.sh scripts into one.
