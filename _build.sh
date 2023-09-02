@@ -878,7 +878,11 @@ build_single_target() {
     _CC_GLOBAL="${_CCPREFIX}gcc"
 
     if [ "${_OS}" = 'win' ]; then
+      # Also accepted on linux, but does not seem to make any difference
       _CC_GLOBAL="${_CC_GLOBAL} -static-libgcc"
+    fi
+
+    if [ "${_OS}" = 'win' ]; then
       _LDFLAGS_GLOBAL="${_OPTM} ${_LDFLAGS_GLOBAL}"
       # https://lists.ffmpeg.org/pipermail/ffmpeg-devel/2015-September/179242.html
       if [ "${_CPU}" = 'x86' ]; then
@@ -999,6 +1003,7 @@ build_single_target() {
     _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -stdlib=libc++"
   else
     if [ "${_OS}" = 'win' ]; then
+      # Also accepted on linux, but does not seem to make any difference
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -static-libgcc"
       _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -static-libstdc++"
     fi
