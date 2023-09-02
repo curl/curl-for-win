@@ -40,6 +40,7 @@ cat <<EOF
     "name": "curl",
     "descending": true,
     "url": "https://curl.se/download/curl-{ver}.tar.xz",
+    "mirror": "https://github.com/curl/curl/releases/download/curl-{veru}/curl-{ver}.tar.xz",
     "sig": ".asc",
     "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
   },
