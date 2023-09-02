@@ -173,6 +173,7 @@ cat <<EOF
   {
     "name": "zlib",
     "url": "https://zlib.net/zlib-{ver}.tar.xz",
+    "mirror": "https://github.com/madler/zlib/releases/download/v{ver}/zlib-{ver}.tar.xz",
     "sig": ".asc",
     "keys": "5ED46A6721D365587791E2AA783FCD8E58BCAFBA"
   },
