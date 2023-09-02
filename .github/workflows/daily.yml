@@ -17,40 +17,6 @@ env:
   DOCKER_CONTENT_TRUST: '1'
 
 jobs:
-  win:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 8
-      - name: 'build'
-        env:
-          CW_LLVM_MINGW_DL: '1'
-          CW_LLVM_MINGW_ONLY: '0'
-        run: |
-          export CW_CONFIG='dev-win'
-          export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
-          . ./_versions.sh
-          docker trust inspect --pretty "${DOCKER_IMAGE}"
-          time docker pull "${DOCKER_IMAGE}"
-          docker images --digests
-          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
-            --env-file <(env | grep -a -E \
-              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
-            sh -c ./_ci-linux-debian.sh
-
-      - name: 'list dependencies'
-        run: cat urls.txt
-      # https://github.com/actions/upload-artifact
-      - uses: actions/upload-artifact@v3
-        with:
-          name: 'curl-windows-daily'
-          retention-days: 42
-          path: |
-            *-*-mingw*.*
-            urls.txt
-
   linux:
     runs-on: ubuntu-latest
     steps:
@@ -125,4 +91,38 @@ jobs:
           retention-days: 5
           path: |
             *-*-macos*.*
+            urls.txt
+
+  win:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 8
+      - name: 'build'
+        env:
+          CW_LLVM_MINGW_DL: '1'
+          CW_LLVM_MINGW_ONLY: '0'
+        run: |
+          export CW_CONFIG='dev-win'
+          export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
+          . ./_versions.sh
+          docker trust inspect --pretty "${DOCKER_IMAGE}"
+          time docker pull "${DOCKER_IMAGE}"
+          docker images --digests
+          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+            --env-file <(env | grep -a -E \
+              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
+            "${DOCKER_IMAGE}" \
+            sh -c ./_ci-linux-debian.sh
+
+      - name: 'list dependencies'
+        run: cat urls.txt
+      # https://github.com/actions/upload-artifact
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'curl-windows-daily'
+          retention-days: 42
+          path: |
+            *-*-mingw*.*
             urls.txt
