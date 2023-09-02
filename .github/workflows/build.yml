@@ -35,6 +35,8 @@ jobs:
             "${DOCKER_IMAGE}" \
             sh -c ./_ci-linux-debian.sh
 
+      - name: 'list dependencies'
+        run: cat urls.txt
       - uses: actions/upload-artifact@v3
         with:
           name: 'curl-linux'
@@ -60,6 +62,8 @@ jobs:
             "${DOCKER_IMAGE}" \
             sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
 
+      - name: 'list dependencies'
+        run: cat urls.txt
       - uses: actions/upload-artifact@v3
         with:
           name: 'curl-linux-musl'
@@ -78,6 +82,8 @@ jobs:
           export CW_REVISION='${{ github.sha }}'
           sh -c ./_ci-mac-homebrew.sh
 
+      - name: 'list dependencies'
+        run: cat urls.txt
       - uses: actions/upload-artifact@v3
         with:
           name: 'curl-macos-universal'
