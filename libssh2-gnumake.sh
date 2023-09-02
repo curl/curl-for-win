@@ -3,8 +3,6 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-# EXPERIMENTAL. DO NOT USE FOR PRODUCTION.
-
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
@@ -15,6 +13,10 @@ _VER="$1"
 
 (
   cd "${_NAM}" || exit 0
+
+  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
+
+  # Build
 
   export CC="${_CC_GLOBAL}"
   export CFLAGS="${_CFLAGS_GLOBAL} -O3"
