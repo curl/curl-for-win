@@ -81,6 +81,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - mac: test -DSHARE_LIB_OBJECT=ON with curl 8.3.0.
 #   - mac: test with Homebrew gcc.
 #   - rename _BRANCH to CW_CONFIG internally.
+#   - merge _ci-*.sh scripts into one.
 #   - replace .zip with .tar.gz for all-packages artifact (in _ul.sh)?
 #   - cross: linux -> macos? (needs building the toolchain) https://github.com/tpoechtrager/osxcross
 #   - cross: macos -> linux intel / arm64? (needs building the toolchain) https://mac.musl.cc/
