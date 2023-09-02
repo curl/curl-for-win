@@ -14,7 +14,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_ANALYTICS_MESSAGE_OUTPUT=1
-brew update >/dev/null
+brew update >/dev/null || true
 # shellcheck disable=SC2086
 # Using `|| true` to avoid failing due to preinstalled non-Homebrew
 # python3: `Could not symlink bin/2to3`
