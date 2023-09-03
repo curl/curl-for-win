@@ -769,7 +769,7 @@ build_single_target() {
       elif [ "${_DIST}" = 'alpine' ]; then
         _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static-pie"
       else
-        _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static-pie"
+        _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static"
 
         # method 2
       # _CC_GLOBAL="${_CC_GLOBAL} -specs=/usr/lib/${_machine}-linux-musl/musl-gcc.specs"
@@ -934,12 +934,29 @@ build_single_target() {
     fi
 
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=${_CCPREFIX}gcc"
-    _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++"
+    if [ "${_CCPREFIX}" != 'musl-' ]; then
+      _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++"
+    else
+      _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=g++"
+    fi
 
     if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
       _LD='ld-apple'
     else
       _LD='ld'
+    fi
+  fi
+
+  if [ "${_CRT}" = 'musl' ] && [ "${_DIST}" = 'debian' ]; then
+    if [ "${_OPENSSL}" = 'quictls' ] || \
+       [ "${_OPENSSL}" = 'openssl' ]; then
+      # Workaround for:
+      #   ../crypto/mem_sec.c:60:13: fatal error: linux/mman.h: No such file or directory
+      # Based on: https://github.com/openssl/openssl/issues/7207#issuecomment-880121450
+      # FIXME: We'd need something not touching the system.
+      ln -s "/usr/include/${_machine}-linux-gnu/asm" "/usr/include/${_machine}-linux-musl/asm"
+      ln -s "/usr/include/asm-generic"               "/usr/include/${_machine}-linux-musl/asm-generic"
+      ln -s "/usr/include/linux"                     "/usr/include/${_machine}-linux-musl/linux"
     fi
   fi
 
@@ -1302,8 +1319,8 @@ elif [ "${_OS}" = 'linux' ]; then
        command -v aarch64-linux-musl-gcc >/dev/null 2>&1; then
       build_single_target a64
     fi
-  elif [ "${_DIST}" = 'alpine' ]; then
-    # No cross-builds with Alpine
+  elif [ "${_CRT}" = 'musl' ]; then
+    # No trivial cross-builds with musl
     if [ "${unamem}" = 'aarch64' ]; then
       build_single_target a64
     elif [ "${unamem}" = 'x86_64' ]; then

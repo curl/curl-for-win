@@ -18,6 +18,7 @@ if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   extra="${extra} checksec"
   if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
     extra="${extra} musl musl-dev musl-tools"
+    [[ "${CW_CONFIG:-}" = *'gcc'* ]] && extra="${extra} g++"
     # for openssl 'secure-memory' feature
     if [ "$(uname -m)" = 'aarch64' ]; then
       extra="${extra} linux-headers-arm64"

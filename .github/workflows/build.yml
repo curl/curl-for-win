@@ -45,6 +45,33 @@ jobs:
             *-*-linux*.*
             urls.txt
 
+  linux-musl-debian:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'build'
+        run: |
+          export CW_CONFIG='${{ github.ref_name }}-linux-gcc-musl'
+          export CW_REVISION='${{ github.sha }}'
+          . ./_versions.sh
+          time docker pull "${DOCKER_IMAGE}"
+          docker images --digests
+          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+            --env-file <(env | grep -a -E \
+              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
+            "${DOCKER_IMAGE}" \
+            sh -c ./_ci-linux-debian.sh
+
+      - name: 'list dependencies'
+        run: cat urls.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'curl-linux-musl-debian'
+          retention-days: 5
+          path: |
+            *-*-linux*.*
+            urls.txt
+
   linux-musl:
     runs-on: ubuntu-latest
     steps:
