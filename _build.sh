@@ -693,7 +693,9 @@ build_single_target() {
   unset CC
 
   if [ "${_OS}" = 'win' ]; then
-    _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Windows ${_CMAKE_GLOBAL}"
+    if [ "${_HOSTOS}" != "${_OS}" ]; then
+      _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Windows ${_CMAKE_GLOBAL}"
+    fi
 
     [ "${_CPU}" = 'x86' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-i386"
     [ "${_CPU}" = 'x64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-x86-64"
@@ -715,6 +717,9 @@ build_single_target() {
       fi
     fi
   elif [ "${_OS}" = 'mac' ]; then
+    if [ "${_HOSTOS}" != "${_OS}" ]; then
+      _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Darwin ${_CMAKE_GLOBAL}"
+    fi
     macminver='10.13'  # macOS High Sierra 2017-09-25
     [ "${_CPU}" = 'a64' ] && macminver='11.0'  # macOS Big Sur 2020-11-12
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_OSX_DEPLOYMENT_TARGET=${macminver}"
@@ -723,6 +728,10 @@ build_single_target() {
     _OSVER="$(printf '%s00' \
       "$(printf '%s' "${macminver}" | tr -d '.')" | cut -c -4)"
   elif [ "${_OS}" = 'linux' ]; then
+    if [ "${_HOSTOS}" != "${_OS}" ]; then
+      _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Linux ${_CMAKE_GLOBAL}"
+    fi
+
     # Override defaults such as: 'lib/aarch64-linux-gnu'
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_LIBDIR=lib"
 
