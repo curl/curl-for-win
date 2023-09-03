@@ -84,7 +84,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     collect2: error: ld returned 1 exit status
 #     ```
 #   - linux: implement arm64 cross-builds on alpine. https://musl.cc/aarch64-linux-musl-cross.tgz (gcc)
-#   - mac: test with Homebrew gcc.
 #   - renames: _BRANCH -> CW_CONFIG, _HOSTOS -> _HOST, _BUILD_HOST -> _HOST_TRIPLET
 #   - merge _ci-*.sh scripts into one.
 #   - replace .zip with .tar.gz for all-packages artifact (in _ul.sh)?
