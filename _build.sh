@@ -84,7 +84,10 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - merge _ci-*.sh scripts into one.
 #   - replace .zip with .tar.gz for all-packages artifact (in _ul.sh)?
 #   - cross: linux -> macos? (needs building the toolchain) https://github.com/tpoechtrager/osxcross
-#   - cross: macos -> linux intel / arm64? (needs building the toolchain) https://mac.musl.cc/
+#   - cross: macos -> linux intel / arm64? (needs building the toolchain)
+#     https://mac.musl.cc/
+#     https://github.com/richfelker/musl-cross-make
+#     $ brew install FiloSottile/musl-cross/musl-cross
 #   - win: Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
 #       https://gs.statcounter.com/windows-version-market-share
