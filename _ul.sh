@@ -36,10 +36,6 @@ sed 's/-built-on-[^.]*//g' hashes.txt | sort > hashes.txt.all
 touch -r hashes.txt hashes.txt.all
 mv -f hashes.txt.all hashes.txt
 
-if [ "${_OS}" != 'win' ]; then
-  exit 0
-fi
-
 # Create an artifact that includes all packages
 _ALL="all-${_PKGOS}-${CURL_VER_}${_REVSUFFIX}${_FLAV}.zip"
 {
