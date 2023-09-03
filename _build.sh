@@ -83,7 +83,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - renames: _BRANCH -> CW_CONFIG, _HOSTOS -> _HOST, _BUILD_HOST -> _HOST_TRIPLET
 #   - merge _ci-*.sh scripts into one.
 #   - replace .zip with .tar.gz for all-packages artifact (in _ul.sh)?
-#   - cross: linux -> macos? (needs building the toolchain) https://github.com/tpoechtrager/osxcross
 #   - cross: macos -> linux intel / arm64? (needs building the toolchain)
 #     https://mac.musl.cc/
 #     https://github.com/richfelker/musl-cross-make
