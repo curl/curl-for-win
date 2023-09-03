@@ -61,6 +61,7 @@ if [ ! -f .cw-initialized ]; then
       ;;
     Darwin*)
       [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go nasm"
+      [[ "${CW_CONFIG:-}" = *'linux'* ]] && extra="${extra} FiloSottile/musl-cross/musl-cross"
       # shellcheck disable=SC2086
       brew install \
         xz gnu-tar gettext jq dos2unix ${extra}
