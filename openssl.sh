@@ -69,6 +69,12 @@ _VER="$1"
     options="${options} no-comp"
   fi
 
+  if [ "${_OS}" = 'linux' ] && [ "${_HOSTOS}" != 'linux' ]; then
+    # Workaround for envs missing Linux header (as of OpenSSL v3.1.2):
+    #   ../crypto/mem_sec.c:60:13: fatal error: linux/mman.h: No such file or directory
+    options="${options} no-secure-memory"
+  fi
+
   export CC="${_CC_GLOBAL}"
 
   # OpenSSL's ./Configure dumps build flags into object `crypto/cversion.o`
