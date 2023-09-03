@@ -72,6 +72,26 @@ jobs:
             *-*-linux*.*
             urls.txt
 
+  linux-musl-from-mac:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'build'
+        run: |
+          export CW_CONFIG='${{ github.ref_name }}-linux'
+          export CW_REVISION='${{ github.sha }}'
+          sh -c ./_ci-mac-homebrew.sh
+
+      - name: 'list dependencies'
+        run: cat urls.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'curl-linux-musl-from-mac'
+          retention-days: 5
+          path: |
+            *-*-linux*.*
+            urls.txt
+
   mac:
     runs-on: macos-latest
     steps:
