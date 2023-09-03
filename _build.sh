@@ -83,10 +83,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - renames: _BRANCH -> CW_CONFIG, _HOSTOS -> _HOST, _BUILD_HOST -> _HOST_TRIPLET
 #   - merge _ci-*.sh scripts into one.
 #   - replace .zip with .tar.gz for all-packages artifact (in _ul.sh)?
-#   - cross: macos -> linux intel / arm64? (needs building the toolchain)
-#     https://mac.musl.cc/
-#     https://github.com/richfelker/musl-cross-make
-#     $ brew install FiloSottile/musl-cross/musl-cross
 #   - win: Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
 #       https://gs.statcounter.com/windows-version-market-share
@@ -235,7 +231,14 @@ if [ "${_OS}" = 'win' ]; then
   _CRT='ucrt'
   [ ! "${_BRANCH#*msvcrt*}" = "${_BRANCH}" ] && _CRT='msvcrt'
 elif [ "${_OS}" = 'linux' ]; then
-  if [ "${_DIST}" = 'alpine' ]; then
+  if [ "${_HOSTOS}" = 'mac' ]; then
+    # Assume musl-cross toolchain via Homebrew, based on musl-cross-make
+    # https://github.com/richfelker/musl-cross-make
+    # https://github.com/FiloSottile/homebrew-musl-cross
+    # https://words.filippo.io/easy-windows-and-linux-cross-compilers-for-macos/
+    _CC='gcc'
+    _CRT='musl'
+  elif [ "${_DIST}" = 'alpine' ]; then
     _CRT='musl'
   else
     # TODO: make musl the default (once all issues are cleared)
@@ -598,7 +601,10 @@ build_single_target() {
     if [ "${_OS}" = 'linux' ]; then
       # Include CRT type in Linux triplets, to make it visible in
       # the curl version banner.
-      if [ "${_DIST}" = 'alpine' ]; then
+      if [ "${_HOSTOS}" = 'mac' ]; then
+        _TRIPLET="${_machine}-linux-musl"
+        _CCPREFIX="${_TRIPLET}-"
+      elif [ "${_DIST}" = 'alpine' ]; then
         # E.g. x86_64-alpine-linux-musl
         _TRIPLET="${_machine}-${_DIST}-linux-${_CRT}"
         _TRIPLETSH="${_TRIPLET}"
@@ -619,7 +625,7 @@ build_single_target() {
       fi
 
       _RUN_BIN='echo'
-      if [ "${_HOSTOS}" = 'linux' ]; then
+      if [ "${_HOSTOS}" = 'linux' ] && [ "${_OS}" = 'linux' ]; then
         # Don't try running non-native builds
         if [ "${unamem}" = "${_machine}" ]; then
           _RUN_BIN=''
@@ -642,8 +648,9 @@ build_single_target() {
   if [ "${_CC}" = 'llvm' ]; then
     ccver="$("clang${_CCSUFFIX}" -dumpversion)"
   else
-    if [ "${_CRT}" = 'musl' ] && [ "${_DIST}" != 'alpine' ]; then
+    if [ "${_CRT}" = 'musl' ] && [ "${_HOSTOS}" != 'mac' ] && [ "${_DIST}" != 'alpine' ]; then
       # method 1
+      # Only for CC, not for binutils
       _CCPREFIX='musl-'
     fi
 
@@ -754,10 +761,13 @@ build_single_target() {
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-z,relro,-z,now"
 
     if [ "${_CRT}" = 'musl' ]; then
-      _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static-pie"
+      if [ "${_HOSTOS}" = 'mac' ]; then
+        _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static"
+      elif [ "${_DIST}" = 'alpine' ]; then
+        _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static-pie"
+      else
+        _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static-pie"
 
-      if [ "${_DIST}" != 'alpine' ]; then
-        :
         # method 2
       # _CC_GLOBAL="${_CC_GLOBAL} -specs=/usr/lib/${_machine}-linux-musl/musl-gcc.specs"
 
@@ -791,7 +801,7 @@ build_single_target() {
   fi
 
   export _LD
-  if [ "${_CRT}" = 'musl' ]; then
+  if [ "${_CCPREFIX}" = 'musl-' ]; then  # Do not apply the Debian 'musl-' prefix to binutils
     _BINUTILS_PREFIX=''
   else
     _BINUTILS_PREFIX="${_CCPREFIX}"
@@ -1095,6 +1105,10 @@ build_single_target() {
     fi
 
     if [ "${_CRT}" = 'musl' ]; then
+      if [ "${_HOSTOS}" = 'mac' ]; then
+        # Terrible hack to retrieve musl version
+        libcver="$(grep -a -m1 -o -E '\x00[0-9]+\.[0-9]+\.[0-9]+\x00' "${brew_root}/opt/musl-cross/libexec/${_machine}-linux-musl/lib/libc.so" | head -n 1 || true)"
+      fi
       [ -n "${libcver}" ] || libcver="$(dpkg-query --showformat='${Version}' --show musl || true)"
       [ -n "${libcver}" ] || libcver="$(rpm --query --queryformat '.%{VERSION}' musl-devel || true)"
       if [ -z "${libcver}" ]; then
@@ -1271,7 +1285,17 @@ elif [ "${_OS}" = 'mac' ]; then
     ./_macuni.sh
   fi
 elif [ "${_OS}" = 'linux' ]; then
-  if [ "${_DIST}" = 'alpine' ]; then
+  if [ "${_HOSTOS}" = 'mac' ]; then
+    # Custom installs of musl-cross can support a64 and other targets
+    if [ "${_BRANCH#*a64*}" = "${_BRANCH}" ] && \
+       command -v x86_64-linux-musl-gcc >/dev/null 2>&1; then
+      build_single_target x64
+    fi
+    if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ] && \
+       command -v aarch64-linux-musl-gcc >/dev/null 2>&1; then
+      build_single_target a64
+    fi
+  elif [ "${_DIST}" = 'alpine' ]; then
     # No cross-builds with Alpine
     if [ "${unamem}" = 'aarch64' ]; then
       build_single_target a64
