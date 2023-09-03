@@ -77,7 +77,12 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # TODO:
 #   - change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
-#   - linux: implement musl builds on Debian.
+#   - linux: implement musl builds on Debian. Error on arm (bullseye):
+#     ```
+#     /usr/bin/ld: /usr/lib/gcc/aarch64-linux-gnu/10/libgcc.a(lse-init.o): in function `init_have_lse_atomics':
+#     (.text.startup+0xc): undefined reference to `__getauxval'
+#     collect2: error: ld returned 1 exit status
+#     ```
 #   - linux: implement arm64 cross-builds on alpine. https://musl.cc/aarch64-linux-musl-cross.tgz (gcc)
 #   - mac: test with Homebrew gcc.
 #   - renames: _BRANCH -> CW_CONFIG, _HOSTOS -> _HOST, _BUILD_HOST -> _HOST_TRIPLET
