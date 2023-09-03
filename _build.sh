@@ -49,7 +49,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        x64        build x86_64 target only
 #        x86        build i686 target only (for win target)
 #        msvcrt     build against msvcrt instead of UCRT (for win target)
-#        gcc        build with GCC (use llvm if not specified)
+#        gcc        build with GCC (including Apple clang aliased to gcc) (use llvm if not specified)
 #        unicode    build curl in UNICODE mode (for win target) [EXPERIMENTAL]
 #        werror     turn compiler warnings into errors
 #        debug      debug build
@@ -937,7 +937,11 @@ build_single_target() {
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=${_CCPREFIX}gcc"
     _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++"
 
-    _LD='ld'
+    if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
+      _LD='ld-apple'
+    else
+      _LD='ld'
+    fi
   fi
 
   _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER_TARGET=${_TRIPLET}"
