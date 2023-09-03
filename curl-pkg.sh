@@ -156,7 +156,7 @@
     # To copy these files in addition to `@libcurl.so -> libcurl.so.4`:
     #   @libcurl.so.4 -> libcurl.so.4.8.0
     #    libcurl.so.4.8.0
-    cp -f -a "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"* "${_DST}/${DYN_DIR}/"
+    rsync --archive "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"* "${_DST}/${DYN_DIR}/"
   fi
 
   if [ "${CW_MAP}" = '1' ]; then
