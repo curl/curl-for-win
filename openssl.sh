@@ -69,9 +69,12 @@ _VER="$1"
     options="${options} no-comp"
   fi
 
-  if [ "${_OS}" = 'linux' ] && [ "${_HOSTOS}" != 'linux' ]; then
-    # Workaround for envs missing Linux header (as of OpenSSL v3.1.2):
-    #   ../crypto/mem_sec.c:60:13: fatal error: linux/mman.h: No such file or directory
+  # TODO: consider disabling this option for all musl builds.
+  # Workaround for musl builds missing Linux header (as of OpenSSL v3.1.2):
+  #   ../crypto/mem_sec.c:60:13: fatal error: linux/mman.h: No such file or directory
+  # Linux cross-builds from other systems (e.g. macOS) are unlikely to provide
+  # Linux headers.
+  if [ "${_CRT}" = 'musl' ] && [ "${_HOSTOS}" != 'linux' ]; then
     options="${options} no-secure-memory"
   fi
 

@@ -952,10 +952,11 @@ build_single_target() {
       # Workaround for:
       #   ../crypto/mem_sec.c:60:13: fatal error: linux/mman.h: No such file or directory
       # Based on: https://github.com/openssl/openssl/issues/7207#issuecomment-880121450
-      # FIXME: We'd need something not touching the system.
-      ln -s "/usr/include/${_machine}-linux-gnu/asm" "/usr/include/${_machine}-linux-musl/asm"
-      ln -s "/usr/include/asm-generic"               "/usr/include/${_machine}-linux-musl/asm-generic"
-      ln -s "/usr/include/linux"                     "/usr/include/${_machine}-linux-musl/linux"
+      _my_incdir='_sys_include'; rm -r -f "${_my_incdir}"; mkdir "${_my_incdir}"; _my_incdir="$(pwd)/${_my_incdir}"
+      ln -s "/usr/include/${_TRIPLETSH}/asm" "${_my_incdir}/asm"
+      ln -s "/usr/include/asm-generic"       "${_my_incdir}/asm-generic"
+      ln -s "/usr/include/linux"             "${_my_incdir}/linux"
+      _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -isystem ${_my_incdir}"
     fi
   fi
 
