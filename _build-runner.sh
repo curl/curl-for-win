@@ -56,7 +56,7 @@ if [ ! -f .cw-initialized ]; then
         # shellcheck disable=SC2086
         apk add --no-cache curl git gpg rsync build-base cmake \
           autoconf automake libtool \
-          tar xz jq dos2unix openssl ${extra}
+          zip tar xz jq dos2unix openssl ${extra}
       fi
       ;;
     Darwin*)
