@@ -57,7 +57,7 @@ _VER="$1"
   # of libs and objects, and offering no universal way to (re)insert libs at
   # specific positions. Linker complains about a missing --end-group, then
   # adds it automatically anyway.
-  if [ "${_LD}" = 'ld' ] && [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
+  if [ "${_LD}" = 'ld' ]; then
     LDFLAGS="${LDFLAGS} -Wl,--start-group"
   fi
 
