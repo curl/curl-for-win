@@ -45,7 +45,7 @@ jobs:
             *-*-linux*.*
             urls.txt
 
-  linux-musl:
+  linux-musl-alpine:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -67,7 +67,7 @@ jobs:
         run: cat urls.txt
       - uses: actions/upload-artifact@v3
         with:
-          name: 'curl-linux-musl-daily'
+          name: 'curl-linux-musl-alpine-daily'
           retention-days: 5
           path: |
             *-*-linux*.*
