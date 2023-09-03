@@ -83,7 +83,12 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     (.text.startup+0xc): undefined reference to `__getauxval'
 #     collect2: error: ld returned 1 exit status
 #     ```
-#   - linux: implement arm64 cross-builds on alpine. https://musl.cc/aarch64-linux-musl-cross.tgz (gcc)
+#   - linux: musl llvm builds on debian.
+#   - linux: musl alpine why need -static-pie and not -static?
+#   - linux: musl libcurl.so.4.8.0 tweak to be also portable (possible?)
+#   - linux: musl cross-cpu builds. https://musl.cc/aarch64-linux-musl-cross.tgz (gcc)
+#     $ echo 'aarch64' > /etc/apk/arch; apk add --no-cache musl ?
+#     $ dpkg --add-architecture aarch64; apt-get install musl:aarch64 ?
 #   - renames: _BRANCH -> CW_CONFIG, _HOSTOS -> _HOST, _BUILD_HOST -> _HOST_TRIPLET
 #   - merge _ci-*.sh scripts into one.
 #   - win: Drop x86 builds.
