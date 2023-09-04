@@ -163,7 +163,7 @@ _VER="$1"
       options="${options} --without-mbedtls"
     fi
 
-    options="${options} --without-gnutls --without-bearssl --without-rustls --without-nss --without-hyper"
+    options="${options} --without-gnutls --without-bearssl --without-rustls --without-hyper"
 
     if [ -d ../wolfssh ] && [ -d ../wolfssl ]; then
       options="${options} --with-wolfssh=${_TOP}/wolfssh/${_PP}"
