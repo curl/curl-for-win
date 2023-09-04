@@ -189,6 +189,8 @@ _VER="$1"
       options="${options} --with-secure-transport"
       # Without this, SecureTransport becomes the default TLS backend
       [ -n "${mainssl}" ] && options="${options} --with-default-ssl-backend=${mainssl}"
+    elif [ -z "${mainssl}" ]; then
+      options="${options} --without-ssl"
     fi
     CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
