@@ -51,7 +51,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-gcc-musl'
+          export CW_CONFIG='${{ github.ref_name }}-linux-musl'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
           time docker pull "${DOCKER_IMAGE}"
