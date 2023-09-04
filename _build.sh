@@ -83,7 +83,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - linux: musl cross-cpu builds. https://musl.cc/aarch64-linux-musl-cross.tgz (gcc)
 #     $ echo 'aarch64' > /etc/apk/arch; apk add --no-cache musl ?
 #     $ dpkg --add-architecture aarch64; apt-get install musl:aarch64 ?
-#   - renames: _BRANCH -> CW_CONFIG, _HOSTOS -> _HOST, _BUILD_HOST -> _HOST_TRIPLET
+#   - renames: _BRANCH -> CW_CONFIG, _HOSTOS -> _HOST, _BUILD_HOST -> _HOST_TRIPLET, _DIST -> _DISTRO
 #   - merge _ci-*.sh scripts into one.
 #   - win: Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
