@@ -58,7 +58,7 @@ touch -c -r "${_ALL}" "${_ALL}.txt"
 ./_sign-pkg.sh "${_ALL}"
 
 # Official deploy
-DEPLOY_KEY="$(realpath .)/deploy.key"
+DEPLOY_KEY="$(pwd)/deploy.key"
 if [ "${PUBLISH_PROD_FROM}" = "${_HOSTOS}" ] && \
    [ "${_BRANCH#*main*}" != "${_BRANCH}" ] && \
    [ -s "${DEPLOY_KEY}.asc" ] && \
@@ -89,8 +89,7 @@ EOF
     # Requires: OpenSSH 8.4+ (2020-09-27)
     unset DISPLAY
     export SSH_ASKPASS_REQUIRE='force'
-    export SSH_ASKPASS; SSH_ASKPASS="$(dirname \
-      "$(realpath "$0")")/_ul-askpass.sh"
+    export SSH_ASKPASS; SSH_ASKPASS="$(pwd)/_ul-askpass.sh"
 
     echo "Uploading: '${_ALL}'"
     # Sent command: rsync --server -tce.LsfxCIvu . .
