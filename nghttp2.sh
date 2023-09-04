@@ -19,8 +19,8 @@ _VER="$1"
   options=''
   CPPFLAGS='-DNDEBUG'
 
-  # Avoid finding unnecessary Homebrew packages and the log noise with it.
-  [ "${_OS}" = 'mac' ] && options="${options} -DOPENSSL_INCLUDE_DIR= -DLIBCARES_INCLUDE_DIR= -DLIBEV_INCLUDE_DIR="
+  # Avoid finding unnecessary system (Homebrew, or system for libxml2) packages and the log noise with it.
+  options="${options} -DOPENSSL_INCLUDE_DIR= -DLIBCARES_INCLUDE_DIR= -DLIBEV_INCLUDE_DIR= -DLIBXML2_INCLUDE_DIR="
 
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
