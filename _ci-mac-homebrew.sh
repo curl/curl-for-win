@@ -18,7 +18,7 @@ brew update >/dev/null || true
 # shellcheck disable=SC2086
 # Using `|| true` to avoid failing due to preinstalled non-Homebrew
 # python3: `Could not symlink bin/2to3`
-brew install coreutils llvm dos2unix ${extra} || true
+brew install llvm dos2unix ${extra} || true
 
 [[ "${CW_CONFIG:-}" = *'win'* ]] && wineboot --init
 
