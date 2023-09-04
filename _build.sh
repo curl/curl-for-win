@@ -775,7 +775,7 @@ build_single_target() {
           # More info: https://maskray.me/blog/2021-03-28-compiler-driver-and-cross-compilation
           libprefix="/usr/lib/${_machine}-linux-musl"
           gccver="$("${_CCPREFIX}gcc" -dumpversion)"
-          _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -nostdinc -isystem /usr/include/${_machine}-linux-musl"
+          _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -idirafter /usr/include/${_machine}-linux-musl"
           _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL}             -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -lc /usr/lib/gcc/${_machine}-linux-gnu/${gccver}/libgcc.a ${libprefix}/crtn.o"
           _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++ -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -lc /usr/lib/gcc/${_machine}-linux-gnu/${gccver}/libgcc.a ${libprefix}/crtn.o"
         fi
