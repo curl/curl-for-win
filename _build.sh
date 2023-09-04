@@ -412,7 +412,7 @@ bld() {
 
       bldtool="$(echo "${pkg}" | \
         grep -a -o -E -- "-${bldtools}")"
-      _BLDDIR="${_BLDDIR}${bldtool}-${_CC}-${_CPU}"
+      _BLDDIR="${_BLDDIR}${bldtool}-${_CC}-${_CPU}-${_CRT}"
     fi
 
     ${my_time} "./${pkg}.sh" "$1" "${pkgori}"
