@@ -77,7 +77,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # TODO:
 #   - change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
-#   - linux: musl llvm builds on debian.
 #   - linux: musl alpine why need -static-pie and not -static?
 #   - linux: musl libcurl.so.4.8.0 tweak to be also portable (possible?)
 #   - linux: musl cross-cpu builds. https://musl.cc/aarch64-linux-musl-cross.tgz (gcc)
@@ -770,15 +769,16 @@ build_single_target() {
       else
         _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static"
 
-        # method 2
-      # _CC_GLOBAL="${_CC_GLOBAL} -specs=/usr/lib/${_machine}-linux-musl/musl-gcc.specs"
-
-        # method 3
-      # libprefix="/usr/lib/${_machine}-linux-musl"
-      # gccver="$("${_CCPREFIX}gcc" -dumpversion)"
-      # _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -nostdinc -isystem /usr/include/${_machine}-linux-musl"
-      # _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL}             -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/rcrt1.o ${libprefix}/crti.o -lc /usr/lib/gcc/${_machine}-linux-gnu/${gccver}/libgcc.a ${libprefix}/crtn.o"
-      # _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++ -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/rcrt1.o ${libprefix}/crti.o -lc /usr/lib/gcc/${_machine}-linux-gnu/${gccver}/libgcc.a ${libprefix}/crtn.o"
+        # TODO: We really should be using clang-rt here, not libgcc
+        if [ "${_CC}" = 'llvm' ] && [ "${_DIST}" = 'debian' ]; then
+          # This should also work to replace the 'musl-' prefix method ("method 1") we use with gcc.
+          # More info: https://maskray.me/blog/2021-03-28-compiler-driver-and-cross-compilation
+          libprefix="/usr/lib/${_machine}-linux-musl"
+          gccver="$("${_CCPREFIX}gcc" -dumpversion)"
+          _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -nostdinc -isystem /usr/include/${_machine}-linux-musl"
+          _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL}             -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -lc /usr/lib/gcc/${_machine}-linux-gnu/${gccver}/libgcc.a ${libprefix}/crtn.o"
+          _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++ -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -lc /usr/lib/gcc/${_machine}-linux-gnu/${gccver}/libgcc.a ${libprefix}/crtn.o"
+        fi
       fi
     fi
   fi
