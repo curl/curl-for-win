@@ -77,6 +77,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # TODO:
 #   - change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
+#   - fix linux, mac, musl, etc builds with curl-autotools.sh.
+#   - fix linux, mac, musl, etc builds with libressl.sh.
 #   - linux: musl alpine why need -static-pie and not -static?
 #   - linux: musl libcurl.so.4.8.0 tweak to be also portable (possible?)
 #   - linux: musl cross-cpu builds. https://musl.cc/aarch64-linux-musl-cross.tgz (gcc)
