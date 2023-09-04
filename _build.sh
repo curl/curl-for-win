@@ -96,6 +96,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     winget and scoop both support native ARM64.
 
 # Resources:
+#   - https://clang.llvm.org/docs/Toolchain.html
 #   - https://blog.llvm.org/2019/11/deterministic-builds-with-clang-and-lld.html
 #   - https://github.com/mstorsjo/llvm-mingw
 #   - https://github.com/llvm/llvm-project
@@ -610,7 +611,12 @@ build_single_target() {
         _TRIPLET="${_machine}-${_DIST}-linux-${_CRT}"
         _TRIPLETSH="${_TRIPLET}"
       else
-        _TRIPLET="${_machine}-pc-linux-${_CRT}"
+        if [ "${_CRT}" = 'musl' ]; then
+          # E.g. x86_64-unknown-linux-musl
+          _TRIPLET="${_machine}-unknown-linux-${_CRT}"
+        else
+          _TRIPLET="${_machine}-pc-linux-${_CRT}"
+        fi
         # Short triplet used on the filesystem
         _TRIPLETSH="${_machine}-linux-gnu"
       fi
@@ -768,17 +774,6 @@ build_single_target() {
         _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static-pie"
       else
         _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static"
-
-        # TODO: We really should be using clang-rt here, not libgcc
-        if [ "${_CC}" = 'llvm' ] && [ "${_DIST}" = 'debian' ]; then
-          # This should also work to replace the 'musl-' prefix method ("method 1") we use with gcc.
-          # More info: https://maskray.me/blog/2021-03-28-compiler-driver-and-cross-compilation
-          libprefix="/usr/lib/${_machine}-linux-musl"
-          gccver="$("${_CCPREFIX}gcc" -dumpversion)"
-          _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -idirafter /usr/include/${_machine}-linux-musl"
-          _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL}             -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -lc /usr/lib/gcc/${_machine}-linux-gnu/${gccver}/libgcc.a ${libprefix}/crtn.o"
-          _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++ -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -lc /usr/lib/gcc/${_machine}-linux-gnu/${gccver}/libgcc.a ${libprefix}/crtn.o"
-        fi
       fi
     fi
   fi
@@ -791,9 +786,9 @@ build_single_target() {
 
   _CCRT='libgcc'  # compiler runtime, 'libgcc' (for libgcc and libstdc++) or 'clang-rt' (for compiler-rt and libc++)
   # Debian does not support clang-rt for cross-builds, but we enable it
-  # on Alpine, where cross-builds are not natively supported anyway.
+  # for musl builds, where cross-builds are not natively supported anyway.
   # On Debian it would require package `libclang-rt-16-dev` and `libc++1-16`.
-  if [ "${_CC}" = 'llvm' ] && [ "${_DIST}" = 'alpine' ]; then
+  if [ "${_CC}" = 'llvm' ] && [ "${_CRT}" = 'musl' ]; then
     # Optional
     _CCRT='clang-rt'
   elif [ "${_TOOLCHAIN}" = 'llvm-apple' ] || \
@@ -1057,11 +1052,22 @@ build_single_target() {
 
   if [ "${_CCRT}" = 'clang-rt' ]; then
     if [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
-      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt"
-      # `-Wc,...` is necessary for libtool to pass this option to the compiler
-      # at link-time. Otherwise libtool strips it.
-      #   https://www.gnu.org/software/libtool/manual/html_node/Stripped-link-flags.html
-      _LDFLAGS_GLOBAL_AUTOTOOLS="${_LDFLAGS_GLOBAL_AUTOTOOLS} -Wc,-rtlib=compiler-rt"
+      if [ "${_CRT}" = 'musl' ] && [ "${_DIST}" = 'debian' ]; then
+        # This method should also work to replace the `_CCPREFIX='musl-'` solution we use with gcc.
+        clangrsdir="$("clang${_CCSUFFIX}" -print-resource-dir)"                         # /usr/lib/llvm-13/lib/clang/13.0.1
+      # clangrtdir="$("clang${_CCSUFFIX}" -print-runtime-dir)"                          # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux
+        clangrtlib="$("clang${_CCSUFFIX}" -print-libgcc-file-name -rtlib=compiler-rt)"  # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux/libclang_rt.builtins-aarch64.a
+        libprefix="/usr/lib/${_machine}-linux-musl"
+        _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -nostdinc -isystem ${clangrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
+        _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL}             -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -lc ${clangrtlib} ${libprefix}/crtn.o"
+        _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++ -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -lc ${clangrtlib} ${libprefix}/crtn.o"
+      else
+        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt"
+        # `-Wc,...` is necessary for libtool to pass this option to the compiler
+        # at link-time. Otherwise libtool strips it.
+        #   https://www.gnu.org/software/libtool/manual/html_node/Stripped-link-flags.html
+        _LDFLAGS_GLOBAL_AUTOTOOLS="${_LDFLAGS_GLOBAL_AUTOTOOLS} -Wc,-rtlib=compiler-rt"
+      fi
       _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -stdlib=libc++"
     fi
   else
