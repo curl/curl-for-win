@@ -1097,12 +1097,15 @@ build_single_target() {
       if [ "${_CRT}" = 'musl' ] && [ "${_DIST}" = 'debian' ]; then
         # This method should also work to replace the `_CCPREFIX='musl-'` solution we use with gcc.
         clangrsdir="$("clang${_CCSUFFIX}" -print-resource-dir)"                         # /usr/lib/llvm-13/lib/clang/13.0.1
-      # clangrtdir="$("clang${_CCSUFFIX}" -print-runtime-dir)"                          # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux
+        clangrtdir="$("clang${_CCSUFFIX}" -print-runtime-dir)"                          # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux
         clangrtlib="$("clang${_CCSUFFIX}" -print-libgcc-file-name -rtlib=compiler-rt)"  # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux/libclang_rt.builtins-aarch64.a
+        clangrtlib="$(basename "${clangrtlib}" | cut -c 4-)"
+        clangrtlib="${clangrtlib%.*}"  # clang_rt.builtins-aarch64
         libprefix="/usr/lib/${_machine}-linux-musl"
         _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -nostdinc -isystem ${clangrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
-        _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL}             -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -lc ${clangrtlib} ${libprefix}/crtn.o"
-        _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++ -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -lc ${clangrtlib} ${libprefix}/crtn.o"
+        # FIXME: break out -l options to a LIBS variable for autotools.
+        _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL}             -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -lc -L${clangrtdir} -l${clangrtlib} ${libprefix}/crtn.o"
+        _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++ -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -lc -L${clangrtdir} -l${clangrtlib} ${libprefix}/crtn.o"
       else
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt"
         # `-Wc,...` is necessary for libtool to pass this option to the compiler
