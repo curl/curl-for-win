@@ -47,7 +47,7 @@ if [ ! -f .cw-initialized ]; then
         apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
           curl git gpg rsync python3-pefile make cmake \
           autoconf automake autopoint libtool \
-          zip time jq dos2unix secure-delete ${extra}
+          zip time jq secure-delete ${extra}
       elif [ "${_DIST}" = 'alpine' ]; then
         [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go nasm"
         if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
@@ -56,7 +56,7 @@ if [ ! -f .cw-initialized ]; then
         # shellcheck disable=SC2086
         apk add --no-cache curl git gpg rsync build-base cmake \
           autoconf automake libtool \
-          zip tar xz jq dos2unix openssl ${extra}
+          zip tar xz jq openssl ${extra}
       fi
       ;;
     Darwin*)
@@ -64,7 +64,7 @@ if [ ! -f .cw-initialized ]; then
       [[ "${CW_CONFIG:-}" = *'linux'* ]] && extra="${extra} FiloSottile/musl-cross/musl-cross"
       # shellcheck disable=SC2086
       brew install \
-        xz gnu-tar gettext jq dos2unix ${extra}
+        xz gnu-tar gettext jq ${extra}
       ;;
   esac
   touch .cw-initialized

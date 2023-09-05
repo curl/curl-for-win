@@ -25,6 +25,6 @@ fi
 apk add --no-cache curl git gpg rsync build-base cmake \
   "llvm${LLVM}" "clang${LLVM}" lld \
   autoconf automake libtool \
-  zip tar xz jq dos2unix openssl ${extra}
+  zip tar xz jq openssl ${extra}
 
 ./_build.sh
