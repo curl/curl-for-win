@@ -8,7 +8,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 cat /etc/*-release
 
-export CW_CCSUFFIX='-16'
+[ -n "${CW_CCSUFFIX:-}" ] || export CW_CCSUFFIX='-16'
 
 extra=''
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} golang nasm"
@@ -25,18 +25,20 @@ if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     elif [ "$(uname -m)" = 'x86_64' ]; then
       extra="${extra} linux-headers-amd64"
     fi
-  fi
-  if [ "$(uname -m)" = 'aarch64' ]; then
-    if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
-      extra="${extra} gcc-13-x86-64-linux-gnu"
-    else
-      extra="${extra} libgcc-13-dev-amd64-cross libstdc++-13-dev-amd64-cross"
-    fi
   else
-    if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
-      extra="${extra} gcc-13-aarch64-linux-gnu"
+    GCCSUFF='-13'
+    if [ "$(uname -m)" = 'aarch64' ]; then
+      if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
+        extra="${extra} gcc${GCCSUFF}-x86-64-linux-gnu"
+      else
+        extra="${extra} libgcc${GCCSUFF}-dev-amd64-cross libstdc++${GCCSUFF}-dev-amd64-cross"
+      fi
     else
-      extra="${extra} libgcc-13-dev-arm64-cross libstdc++-13-dev-arm64-cross"
+      if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
+        extra="${extra} gcc${GCCSUFF}-aarch64-linux-gnu"
+      else
+        extra="${extra} libgcc${GCCSUFF}-dev-arm64-cross libstdc++${GCCSUFF}-dev-arm64-cross"
+      fi
     fi
   fi
 fi
