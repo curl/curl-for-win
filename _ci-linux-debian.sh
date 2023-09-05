@@ -47,6 +47,6 @@ apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
   curl git gpg rsync python3-pefile make cmake \
   "llvm${CW_CCSUFFIX}" "clang${CW_CCSUFFIX}" "lld${CW_CCSUFFIX}" \
   autoconf automake autopoint libtool \
-  zip time jq dos2unix secure-delete ${extra}
+  zip time jq secure-delete ${extra}
 
 ./_build.sh
