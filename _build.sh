@@ -745,8 +745,9 @@ build_single_target() {
     if [ "${_HOSTOS}" != "${_OS}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Darwin ${_CMAKE_GLOBAL}"
     fi
-    macminver='10.13'  # macOS High Sierra 2017-09-25
-    [ "${_CPU}" = 'a64' ] && macminver='11.0'  # macOS Big Sur 2020-11-12
+    # macOS 10.13 High Sierra 2017-09-25. Seems to work for arm64 builds,
+    # though arm64 was released in macOS 11.0 Big Sur 2020-11-12.
+    macminver='10.13'
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_OSX_DEPLOYMENT_TARGET=${macminver}"
     _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -mmacosx-version-min=${macminver}"
     _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -mmacosx-version-min=${macminver}"
