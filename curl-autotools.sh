@@ -319,6 +319,13 @@ _VER="$1"
 
     options="${options} --without-quiche --without-msh3"
 
+    options="${options} --enable-threaded-resolver"
+    if [ "${_OS}" = 'win' ]; then
+      options="${options} --disable-pthreads"
+    else
+      options="${options} --enable-pthreads"
+    fi
+
     options="${options} --enable-websockets"
 
     if [ "${pass}" = 'shared' ]; then
@@ -345,10 +352,8 @@ _VER="$1"
       mkdir "${_BLDDIR}-${pass}"; cd "${_BLDDIR}-${pass}"
       # shellcheck disable=SC2086
       ../configure ${options} \
-        --disable-pthreads \
         --disable-tls-srp \
         --enable-warnings \
-        --enable-threaded-resolver \
         --enable-symbol-hiding \
         --enable-http \
         --enable-proxy \
