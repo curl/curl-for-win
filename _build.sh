@@ -77,8 +77,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # TODO:
 #   - change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
-#   - fix linux, mac, musl, etc builds with curl-autotools.sh.
-#   - fix linux, mac, musl, etc builds with libressl.sh.
 #   - linux: musl alpine why need -static-pie and not -static?
 #   - linux: musl libcurl.so.4.8.0 tweak to be also portable (possible?)
 #   - linux: musl cross-cpu builds. https://musl.cc/aarch64-linux-musl-cross.tgz (gcc)
@@ -705,7 +703,7 @@ build_single_target() {
   export _LDFLAGS_GLOBAL=''
   export _LDFLAGS_GLOBAL_AUTOTOOLS=''
   export _LDFLAGS_BIN_GLOBAL=''
-  export _LDFLAGS_CXX_GLOBAL=''
+  export _LDFLAGS_CXX_GLOBAL=''  # CMake uses this
   export _LIBS_GLOBAL=''
   export _CONFIGURE_GLOBAL=''
   export _CMAKE_GLOBAL='-DCMAKE_BUILD_TYPE=Release'
@@ -1103,9 +1101,9 @@ build_single_target() {
         clangrtlib="${clangrtlib%.*}"  # clang_rt.builtins-aarch64
         libprefix="/usr/lib/${_machine}-linux-musl"
         _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -nostdinc -isystem ${clangrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
-        # FIXME: break out -l options to a LIBS variable for autotools.
-        _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL}             -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -lc -L${clangrtdir} -l${clangrtlib} ${libprefix}/crtn.o"
-        _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++ -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -lc -L${clangrtdir} -l${clangrtlib} ${libprefix}/crtn.o"
+        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -L${clangrtdir} ${libprefix}/crtn.o"
+        _LIBS_GLOBAL="${_LIBS_GLOBAL} -lc -l${clangrtlib}"
+        _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++"
       else
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt"
         # `-Wc,...` is necessary for libtool to pass this option to the compiler
