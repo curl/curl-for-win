@@ -41,7 +41,8 @@ while [ -n "${1:-}" ]; do
         -e 's/(\.cc\.obj|\.c\.obj|\.obj)$/.o/g')"
       [ "${o}" != "${n}" ] && mv -n "${o}" "${n}"
     done
-    [ -n "${strip}" ] && "${strip}" --enable-deterministic-archives --strip-debug "${tmp}"/*
+    # shellcheck disable=SC2086
+    [ -n "${strip}" ] && "${strip}" ${_STRIPFLAGS_LIB:-} "${tmp}"/*
     rm "${f}"
     # shellcheck disable=SC2046
     "${AR}" crD "${f}" $(find "${tmp}" -type f | sort)

@@ -29,7 +29,8 @@ _VER="$1"
 
   readonly _ref='ChangeLog'
 
-  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/*.a
+  # shellcheck disable=SC2086
+  "${_STRIP}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/*.a
 
   touch -c -r "${_ref}" "${_PP}"/include/mbedtls/*.h
   touch -c -r "${_ref}" "${_PP}"/include/psa/*.h
