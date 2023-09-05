@@ -45,7 +45,7 @@ jobs:
             *-*-linux*.*
             urls.txt
 
-  linux-musl-debian:
+  linux-musl-debian-testing:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -66,7 +66,63 @@ jobs:
         run: cat urls.txt
       - uses: actions/upload-artifact@v3
         with:
-          name: 'curl-linux-musl-debian'
+          name: 'curl-linux-musl-debian-testing'
+          retention-days: 5
+          path: |
+            *-*-linux*.*
+            urls.txt
+
+  linux-musl-debian-bookworm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'build'
+        run: |
+          export CW_CONFIG='${{ github.ref_name }}-linux-musl-libressl'
+          export CW_REVISION='${{ github.sha }}'
+          DOCKER_IMAGE='debian:bookworm'
+          export CW_CCSUFFIX='-15'
+          time docker pull "${DOCKER_IMAGE}"
+          docker images --digests
+          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+            --env-file <(env | grep -a -E \
+              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
+            "${DOCKER_IMAGE}" \
+            sh -c ./_ci-linux-debian.sh
+
+      - name: 'list dependencies'
+        run: cat urls.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'curl-linux-musl-debian-bookworm'
+          retention-days: 5
+          path: |
+            *-*-linux*.*
+            urls.txt
+
+  linux-musl-debian-bullseye:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'build'
+        run: |
+          export CW_CONFIG='${{ github.ref_name }}-linux-musl-libressl-noh3'
+          export CW_REVISION='${{ github.sha }}'
+          DOCKER_IMAGE='debian:bullseye'
+          export CW_CCSUFFIX='-13'
+          time docker pull "${DOCKER_IMAGE}"
+          docker images --digests
+          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+            --env-file <(env | grep -a -E \
+              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
+            "${DOCKER_IMAGE}" \
+            sh -c ./_ci-linux-debian.sh
+
+      - name: 'list dependencies'
+        run: cat urls.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'curl-linux-musl-debian-bullseye'
           retention-days: 5
           path: |
             *-*-linux*.*
