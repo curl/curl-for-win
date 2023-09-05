@@ -1284,11 +1284,10 @@ build_single_target() {
 
     if [ "${_OS}" = 'win' ]; then
       _fn="${_DST}/BUILD-README.url"
-      cat <<EOF > "${_fn}"
+      cat <<EOF | sed 's/$/\x0d/' > "${_fn}"
 [InternetShortcut]
 URL=${_URL_BASE}
 EOF
-      unix2dos --quiet --keepdate "${_fn}"
     elif [ "${_OS}" = 'mac' ]; then
       _fn="${_DST}/BUILD-README.webloc"
       cat <<EOF > "${_fn}"

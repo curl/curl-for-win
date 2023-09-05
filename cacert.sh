@@ -31,11 +31,10 @@ _VER="$1"
   url='https://www.mozilla.org/media/MPL/2.0/index.txt'
   if [ "${_OS}" = 'win' ]; then
     _fn="${_DST}/LICENSE.url"
-    cat <<EOF > "${_fn}"
+    cat <<EOF | sed 's/$/\x0d/' > "${_fn}"
 [InternetShortcut]
 URL=${url}
 EOF
-    unix2dos --quiet --keepdate "${_fn}"
   elif [ "${_OS}" = 'mac' ]; then
     _fn="${_DST}/LICENSE.webloc"
     cat <<EOF > "${_fn}"
