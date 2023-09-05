@@ -74,6 +74,7 @@
         elif [ "${_OS}" = 'mac' ]; then
           _prefix=''
           [ "${_TOOLCHAIN}" = 'llvm-apple' ] || _prefix='llvm-'
+          TZ=UTC "${_prefix}objdump" --arch=all --private-headers "${f}" | grep -a -i -F 'magic'
           # -dyld_info ignored by llvm-otool as of v16.0.6
           TZ=UTC "${_prefix}otool" -arch all -f -v -L -dyld_info "${f}"
           # Display `LC_BUILD_VERSION` / `LC_VERSION_MIN_MACOSX` info

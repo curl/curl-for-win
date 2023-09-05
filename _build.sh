@@ -816,7 +816,11 @@ build_single_target() {
   fi
   _BINUTILS_SUFFIX=''
   if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
-    _CC_GLOBAL="clang${_CCSUFFIX} --target=${_TRIPLET}"
+    _arch="${_machine}"
+    [ "${_CPU}" = 'a64' ] && _arch='arm64e'
+    _CC_GLOBAL="clang${_CCSUFFIX} -arch ${_arch}"
+    # supports multiple values separated by ';', e.g. 'arm64e;x86_64'
+    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_OSX_ARCHITECTURES=${_arch}"
     _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET}"
 
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=clang${_CCSUFFIX}"
