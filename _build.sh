@@ -1024,10 +1024,19 @@ build_single_target() {
   fi
 
   export _STRIP
+  export _STRIPFLAGS_BIN
+  export _STRIPFLAGS_DYN
+  export _STRIPFLAGS_LIB
   if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
-    _STRIP='echo'  # Xcode strip does not support the options we need
+    _STRIP='strip'  # Xcode strip command-line interface is different than GNU/llvm strip
+    _STRIPFLAGS_BIN='-D -no_uuid'
+    _STRIPFLAGS_DYN='-x -no_uuid'
+    _STRIPFLAGS_LIB="${_STRIPFLAGS_BIN}"
   else
     _STRIP="${_BINUTILS_PREFIX}strip${_BINUTILS_SUFFIX}"
+    _STRIPFLAGS_BIN='--enable-deterministic-archives --strip-all'
+    _STRIPFLAGS_DYN="${_STRIPFLAGS_BIN}"
+    _STRIPFLAGS_LIB='--enable-deterministic-archives --strip-debug'
   fi
   export _OBJDUMP="${_BINUTILS_PREFIX}objdump${_BINUTILS_SUFFIX}"
   export _READELF="${_BINUTILS_PREFIX}readelf${_BINUTILS_SUFFIX}"

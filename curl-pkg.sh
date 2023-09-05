@@ -18,10 +18,14 @@
 
   # Process libcurl static library
 
-  "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/libcurl.a
+  # shellcheck disable=SC2086
+  "${_STRIP}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/libcurl.a
   # LLVM strip does not support implibs, but they are deterministic by default:
   #   error: unsupported object file format
-  [ "${_LD}" = 'ld' ] && [ "${_OS}" = 'win' ] && "${_STRIP}" --enable-deterministic-archives --strip-debug "${_PP}"/lib/libcurl.dll.a
+  if [ "${_LD}" = 'ld' ] && [ "${_OS}" = 'win' ]; then
+    # shellcheck disable=SC2086
+    "${_STRIP}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/libcurl.dll.a
+  fi
 
   touch -c -r "${_ref}" "${_PP}"/lib/*.a
 
@@ -44,7 +48,13 @@
     } | while read -r f; do
 
       if [ ! -L "${f}" ]; then
-        "${_STRIP}" --enable-deterministic-archives --strip-all "${f}"
+        if [ "${suffix}" = 'exe' ]; then
+          # shellcheck disable=SC2086
+          "${_STRIP}" ${_STRIPFLAGS_BIN} "${f}"
+        else
+          # shellcheck disable=SC2086
+          "${_STRIP}" ${_STRIPFLAGS_DYN} "${f}"
+        fi
 
         ../_clean-bin.sh "${_ref}" "${f}"
 
