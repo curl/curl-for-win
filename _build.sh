@@ -49,7 +49,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        x64        build x86_64 target only
 #        x86        build i686 target only (for win target)
 #        msvcrt     build against msvcrt instead of UCRT (for win target)
-#        gcc        build with GCC (including Apple clang aliased to gcc) (use llvm if not specified)
+#        gcc        build with GCC (including Apple clang aliased to gcc) (defaults to llvm, and "gcc" (= Apple clang) for mac target)
 #        unicode    build curl in UNICODE mode (for win target) [EXPERIMENTAL]
 #        werror     turn compiler warnings into errors
 #        debug      debug build
@@ -227,8 +227,13 @@ export _CACERT='cacert.pem'
 
 [ -n "${CW_CCSUFFIX:-}" ] || CW_CCSUFFIX=''
 
-export _CC='llvm'
-[ ! "${_BRANCH#*gcc*}" = "${_BRANCH}" ] && _CC='gcc'
+if [ "${_OS}" = 'mac' ]; then
+  _CONFCC='gcc'  # = Apple clang
+else
+  _CONFCC='llvm'
+fi
+[ ! "${_BRANCH#*gcc*}" = "${_BRANCH}" ] && _CONFCC='gcc'
+[ ! "${_BRANCH#*llvm*}" = "${_BRANCH}" ] && _CONFCC='llvm'
 
 export _CRT
 if [ "${_OS}" = 'win' ]; then
@@ -240,7 +245,7 @@ elif [ "${_OS}" = 'linux' ]; then
     # https://github.com/richfelker/musl-cross-make
     # https://github.com/FiloSottile/homebrew-musl-cross
     # https://words.filippo.io/easy-windows-and-linux-cross-compilers-for-macos/
-    _CC='gcc'
+    _CONFCC='gcc'
     _CRT='musl'
   elif [ "${_DIST}" = 'alpine' ]; then
     _CRT='musl'
@@ -427,6 +432,7 @@ bld() {
 
 build_single_target() {
   export _CPU="$1"
+  export _CC="${_CONFCC}"
 
   # Select and advertise a single copy of components having multiple
   # implementations.
@@ -477,10 +483,13 @@ build_single_target() {
     else
       _TOOLCHAIN='mingw-w64'
     fi
-  elif [ "${_OS}" = 'mac' ]; then
-    if [ "${_CC}" = 'gcc' ] && \
-       "${_CC}" --version | grep -q -a -E '(Apple clang|Apple LLVM|based on LLVM)'; then
+  elif [ "${_OS}" = 'mac' ] && [ "${_CC}" = 'gcc' ]; then
+    if "${_CC}" --version | grep -q -a -E '(Apple clang|Apple LLVM|based on LLVM)'; then
+      _CC='llvm'
       _TOOLCHAIN='llvm-apple'  # Apple clang
+    else
+      echo "! WARNING: '${_BRANCH}/${_CPU}' build requires Apple clang or LLVM/clang. gcc is not supported. Skipping."
+      return
     fi
   fi
 
@@ -598,7 +607,7 @@ build_single_target() {
       fi
     fi
   else
-    if [ "${_CC}" = 'llvm' ] && [ "${_HOSTOS}" = 'mac' ]; then
+    if [ "${_CC}" = 'llvm' ] && [ "${_TOOLCHAIN}" != 'llvm-apple' ] && [ "${_HOSTOS}" = 'mac' ]; then
       export PATH="${_MAC_LLVM_PATH}:${_ori_path}"
     fi
 
@@ -806,7 +815,17 @@ build_single_target() {
     _BINUTILS_PREFIX="${_CCPREFIX}"
   fi
   _BINUTILS_SUFFIX=''
-  if [ "${_CC}" = 'llvm' ]; then
+  if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
+    _CC_GLOBAL="clang${_CCSUFFIX} --target=${_TRIPLET}"
+    _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET}"
+
+    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=clang${_CCSUFFIX}"
+    _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=clang++${_CCSUFFIX}"
+
+    _LD='ld-apple'
+
+    _CFLAGS_GLOBAL_CMAKE="${_CFLAGS_GLOBAL_CMAKE} -Wno-unused-command-line-argument"
+  elif [ "${_CC}" = 'llvm' ]; then
     _CC_GLOBAL="clang${_CCSUFFIX} --target=${_TRIPLET}"
     _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET}"
     if [ -n "${_SYSROOT}" ]; then
@@ -936,11 +955,7 @@ build_single_target() {
       _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=g++"
     fi
 
-    if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
-      _LD='ld-apple'
-    else
-      _LD='ld'
-    fi
+    _LD='ld'
   fi
 
   if [ "${_CRT}" = 'musl' ] && [ "${_DIST}" = 'debian' ]; then
@@ -963,7 +978,7 @@ build_single_target() {
   # Needed to exclude compiler info from objects, but for our Windows COFF
   # outputs this seems to be a no-op as of llvm/clang 13.x/14.x.
   # Still necessary with GCC 12.1.0 though.
-  if [ "${_CC}" = 'gcc' ] && [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
+  if [ "${_CC}" = 'gcc' ]; then
     _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-ident"
   fi
 
@@ -1090,7 +1105,11 @@ build_single_target() {
 
   # Detect versions
   clangver=''
-  [ "${_CC}" = 'llvm' ] && clangver="clang ${ccver}"
+  if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
+    clangver="clang-apple ${ccver}"
+  elif [ "${_CC}" = 'llvm' ]; then
+    clangver="clang ${ccver}"
+  fi
 
   mingwver=''
   mingwurl=''
@@ -1158,12 +1177,13 @@ build_single_target() {
   fi
 
   binver=''
-  if [ "${_CC}" = 'gcc' ] && [ "${_STRIP}" != 'echo' ]; then
+  if [ "${_CC}" = 'gcc' ]; then
     # '|| true' added to workaround 141 pipe failures on Alpine
     # after grep successfully parsing the version number.
     # https://stackoverflow.com/questions/19120263/why-exit-code-141-with-grep-q
     binver="binutils $("${_STRIP}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?' || true)"
-  elif [ -n "${_STRIP_BINUTILS}" ] && \
+  elif [ "${_TOOLCHAIN}" != 'llvm-apple' ] && \
+       [ -n "${_STRIP_BINUTILS}" ] && \
        [ "${_OPENSSL}" = 'boringssl' ]; then
     binver="binutils $("${_STRIP_BINUTILS}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?' || true)"
   fi

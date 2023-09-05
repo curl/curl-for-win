@@ -72,9 +72,12 @@
             "${_READELF}" --coff-load-config "${f}" | grep -a -E 'CF_[A-Z_]' | sort
           fi
         elif [ "${_OS}" = 'mac' ]; then
-          TZ=UTC otool -arch all -f -v -L -dyld_info "${f}"
+          _prefix=''
+          [ "${_TOOLCHAIN}" = 'llvm-apple' ] || _prefix='llvm-'
+          # -dyld_info ignored by llvm-otool as of v16.0.6
+          TZ=UTC "${_prefix}otool" -arch all -f -v -L -dyld_info "${f}"
           # Display `LC_BUILD_VERSION` / `LC_VERSION_MIN_MACOSX` info
-          TZ=UTC otool -arch all -f -l "${f}" | grep -a -w -E '(\(architecture|^ *(minos|version|sdk))'
+          TZ=UTC "${_prefix}otool" -arch all -f -l "${f}" | grep -a -w -E '(\(architecture|^ *(minos|version|sdk))'
         elif [ "${_OS}" = 'linux' ]; then
           "${_READELF}" --file-header --dynamic "${f}"
           if command -v checksec >/dev/null 2>&1; then
