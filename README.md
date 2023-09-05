@@ -66,11 +66,11 @@ Windows with runtime-selectable option
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
 Features: alt-svc AsynchDNS brotli       HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM     SPNEGO SSL SSPI threadsafe UnixSockets zstd
 
-Linux, macOS (ARM64):
+Linux:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps            mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
 Features: alt-svc AsynchDNS brotli       HSTS HTTP2 HTTP3 HTTPS-proxy     IPv6          Largefile libz          NTLM            SSL      threadsafe UnixSockets zstd
 
-macOS (Intel) with runtime-selectable option SecureTransport:
+macOS with runtime-selectable option SecureTransport:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps            mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
 Features: alt-svc AsynchDNS brotli       HSTS HTTP2 HTTP3 HTTPS-proxy     IPv6          Largefile libz MultiSSL NTLM            SSL      threadsafe UnixSockets zstd
 ```
