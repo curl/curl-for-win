@@ -11,7 +11,8 @@ cat /etc/*-release
 [ -n "${CW_CCSUFFIX:-}" ] || export CW_CCSUFFIX='-16'
 
 extra=''
-[[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} golang nasm"
+[[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} golang"
+[[ "${CW_CONFIG:-}" = *'boringssl'* ]] && [[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} nasm"
 [[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} mingw-w64 osslsigncode wine64"
 
 if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then

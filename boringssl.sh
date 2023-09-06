@@ -51,13 +51,15 @@ _VER="$1"
 
   [ "${_CPU}" = 'x86' ] && cpu='x86'
   [ "${_CPU}" = 'x64' ] && cpu='x86_64'
-  if [ "${_CPU}" = 'a64' ]; then
-    # Once we enable ASM for ARM64, we will need to deal with stripping its
-    # non-deterministic `.file` sections. We will need a fix in either
-    # llvm-strip or NASM, or binutils strip getting ARM64 support.
-    cpu='ARM64'; options="${options} -DOPENSSL_NO_ASM=ON"  # FIXME
-  else
-    options="${options} -DCMAKE_ASM_NASM_FLAGS=--reproducible"
+  [ "${_CPU}" = 'a64' ] && cpu='ARM64'
+
+  if [ "${_OS}" = 'win' ]; then
+    if [ "${_CPU}" = 'a64' ]; then
+      # ARM64 does not use NASM
+      options="${options} -DOPENSSL_NO_ASM=ON"  # FIXME
+    else
+      options="${options} -DCMAKE_ASM_NASM_FLAGS=--reproducible"
+    fi
   fi
 
   options="${options} -DOPENSSL_SMALL=OFF"  # ON reduces curl binary sizes by ~300 KB
@@ -134,8 +136,6 @@ _VER="$1"
     #        the whole lib:
     ../_clean-lib.sh --strip "${_STRIP_BINUTILS}" "${_PP}"/lib/libcrypto.a
   else
-    # We do not yet use ASM with ARM64 builds,
-    # making it safe to use llvm-strip:
     # shellcheck disable=SC2086
     "${_STRIP}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/libcrypto.a
   fi
