@@ -96,7 +96,8 @@
               checksec --json --file "${f}" | jq  # checksec-rs
             else
               checksec --format=json --file="${f}" | jq
-              checksec --format=xml --fortify-file="${f}"  # duplicate keys in json, cannot apply jq
+              # We have seen this fail in some cases, so ignore exit code
+              checksec --format=xml --fortify-file="${f}" || true  # duplicate keys in json, cannot apply jq
             fi
           fi
           # Show linked GLIBC versions
