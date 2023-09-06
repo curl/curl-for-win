@@ -11,7 +11,7 @@
 # - Building tests takes 3 minutes per target (on AppVeyor CI, at the time
 #   of this writing) and consumes 9x the disk space for ${_BLDDIR}, that is
 #   32MB -> 283MB (for x64).
-#   Disabling them requires large edits in 3 CMakeList.txt files.
+#   Disabling them requires elaborate edits in ./CMakeList.txt.
 # - A test object named trampoline-x86_64.asm.obj ends up in libcrypto.a.
 # - nasm includes the first 18 bytes of the HOME directory in its output.
 #   e.g. rdrand-x86_64.asm.obj. This only affects libcrypto.a.
@@ -71,25 +71,6 @@ _VER="$1"
   # ARM64, so patch it out in that case.
   # Enable it for all targets for consistency.
   sed -i.bak 's/ -ggdb//g' ./CMakeLists.txt
-
-  # Patch build to omit building tests. This saves 3 minutes for each target on
-  # the CI machine and reduces disk usage 9x. The cost is maintaining these sed
-  # expressions:
-  sed -i.bak \
-    -e '/^add_custom_command[(]$/,/[)]$/d' \
-    -e '/^add_custom_target[(]$/,/[)]$/d' \
-    -e '/add_library[(]boringssl_gtest/d' \
-    -e '/target_include_directories[(]$/,/[)]$/d' \
-    -e '/add_custom_target[(]all_tests[)]/d' \
-    -e '/add_library[(]crypto_test_data/d' \
-    -E -e '/add_subdirectory[(](ssl\/test|tool|util\/fipstools|decrepit)/d' \
-    ./CMakeLists.txt
-  sed -i.bak \
-    -e '/add_subdirectory[(]test[)]/d' \
-    -e '/^add_executable/,/--/d' \
-    ./crypto/CMakeLists.txt
-  sed -i.bak '/^add_executable/,/--/d' \
-    ./ssl/CMakeLists.txt
 
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
