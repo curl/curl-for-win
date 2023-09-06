@@ -33,6 +33,20 @@ _VER="$1"
     CFLAGS="${CFLAGS} -Wno-attributes"
   fi
 
+  if [ "${_OS}" = 'mac' ] && [ "${_OSVER}" -lt '1100' ]; then
+    # Workaround for mis-detecting 'strtonum' successfully despite targeting
+    # older OS version, then using it, and showing these warnings while
+    # possibly breaking when run on older macOS versions:
+    #   ../../crypto/x509/x509_addr.c:1629:17: warning: 'strtonum' is only available on macOS 11.0 or newer [-Wunguarded-availability-new]
+    #   ../../../apps/ocspcheck/ocspcheck.c:169:8: warning: 'strtonum' is only available on macOS 11.0 or newer [-Wunguarded-availability-new]
+    #   [...]
+    # Ref: https://github.com/libressl/portable/issues/910
+    # This setting force-disables this function and makes LibreSSL use its
+    # own internal implementation instead. Notice this makes warnings even
+    # more verbose.
+    export ac_cv_func_strtonum='no'
+  fi
+
   if [ "${_OS}" = 'win' ]; then
     _my_prefix='C:/Windows/libressl'
   else
