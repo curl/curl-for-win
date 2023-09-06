@@ -7,7 +7,8 @@
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 extra=''
-[[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go nasm"
+[[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go"
+[[ "${CW_CONFIG:-}" = *'boringssl'* ]] && [[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} nasm"
 [[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} mingw-w64 osslsigncode wine-stable openssh"
 [[ "${CW_CONFIG:-}" != *'mac'* ]] && extra="${extra} llvm"
 [[ "${CW_CONFIG:-}" = *'linux'* ]] && extra="${extra} FiloSottile/musl-cross/musl-cross"

@@ -11,7 +11,8 @@ cat /etc/*-release
 LLVM='16'
 
 extra=''
-[[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go nasm"
+[[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go"
+[[ "${CW_CONFIG:-}" = *'boringssl'* ]] && [[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} nasm"
 [[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} mingw-w64-gcc-base wine"
 
 if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then

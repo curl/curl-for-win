@@ -1215,7 +1215,7 @@ build_single_target() {
   fi
 
   nasmver=''
-  if [ "${_OPENSSL}" = 'boringssl' ]; then
+  if [ "${_OPENSSL}" = 'boringssl' ] && [ "${_OS}" = 'win' ]; then
     nasmver="nasm $(nasm --version | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
   fi
 
