@@ -1054,6 +1054,7 @@ build_single_target() {
     # It means it does not seem possible to create reproducible static libs
     # with Xcode as of v14 (year 2023).
     _STRIP='strip'  # Xcode strip command-line interface is different than GNU/llvm strip
+    _STRIP='echo'   # FIXME: Re-enable. This is either totally broken or needs a bunch of hacks to make it work for our purpose.
     _STRIPFLAGS_BIN='-D'
     _STRIPFLAGS_DYN='-x'
     _STRIPFLAGS_LIB="${_STRIPFLAGS_BIN}"
