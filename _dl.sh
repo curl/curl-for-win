@@ -649,13 +649,13 @@ if [ "${_OS}" = 'win' ] && \
    [ ! -d 'llvm-mingw' ]; then
   name=''; vers=''; hash=''; arch="$(uname -m)"
   if   [ "${_HOSTOS}-${arch}" = 'linux-x86_64' ]; then
-    name='llvm-mingw-linux-x86-64'; vers="${LLVM_MINGW_LINUX_X86_64_VER_}"; hash="${LLVM_MINGW_LINUX_X86_64_HASH}"
+    name='llvm-mingw-linux-x86-64';  vers="${LLVM_MINGW_LINUX_X86_64_VER_}";  hash="${LLVM_MINGW_LINUX_X86_64_HASH}"
   elif [ "${_HOSTOS}-${arch}" = 'linux-aarch64' ]; then
     name='llvm-mingw-linux-aarch64'; vers="${LLVM_MINGW_LINUX_AARCH64_VER_}"; hash="${LLVM_MINGW_LINUX_AARCH64_HASH}"
   elif [ "${_HOSTOS}" = 'mac' ]; then
-    name='llvm-mingw-mac';   vers="${LLVM_MINGW_MAC_VER_}";   hash="${LLVM_MINGW_MAC_HASH}"
+    name='llvm-mingw-mac';           vers="${LLVM_MINGW_MAC_VER_}";           hash="${LLVM_MINGW_MAC_HASH}"
   elif [ "${_HOSTOS}" = 'win' ]; then
-    name='llvm-mingw-win';   vers="${LLVM_MINGW_WIN_VER_}";   hash="${LLVM_MINGW_WIN_HASH}"
+    name='llvm-mingw-win';           vers="${LLVM_MINGW_WIN_VER_}";           hash="${LLVM_MINGW_WIN_HASH}"
   fi
   if [ -n "${name}" ]; then
     CW_GET='' live_dl "${name}" "${vers}"
