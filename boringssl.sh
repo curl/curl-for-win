@@ -61,7 +61,16 @@ _VER="$1"
     options="${options} -DCMAKE_ASM_NASM_FLAGS=--reproducible"
   fi
 
-  options="${options} -DOPENSSL_SMALL=OFF"  # ON reduces curl binary sizes by ~300 KB
+  # Workaround for Windows x64 llvm 16 breakage as of 85081c6b:
+  # In file included from ./boringssl/crypto/curve25519/curve25519_64_adx.c:17:
+  # ./boringssl/crypto/curve25519/../../third_party/fiat/curve25519_64_adx.h:40:11: error: call to undeclared function '_umul128'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  #   *out1 = _umul128(arg1, arg2, &t);
+  #           ^
+  if [ "${_OS}" = 'win' ] && [ "${_CPU}" = 'x64' ] && [ "${_CC}" = 'llvm' ]; then
+    options="${options} -DOPENSSL_SMALL=ON"
+  else
+    options="${options} -DOPENSSL_SMALL=OFF"  # ON reduces curl binary sizes by ~300 KB
+  fi
 
   # Patch the build to omit debug info. This results in 50% smaller footprint
   # for each ${_BLDDIR}. As of llvm 14.0.6, llvm-strip does an imperfect job
