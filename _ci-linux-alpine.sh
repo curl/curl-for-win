@@ -12,10 +12,13 @@ LLVM='16'
 
 extra=''
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go"
-[[ "${CW_CONFIG:-}" = *'boringssl'* ]] && [[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} nasm"
-[[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} mingw-w64-gcc-base wine"
 
-if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
+if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
+  extra="${extra} mingw-w64-gcc-base wine"
+  if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+    extra="${extra} nasm"
+  fi
+elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   apk add --no-cache checksec-rs --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing/
   extra="${extra} compiler-rt libc++-static"  # for llvm
   extra="${extra} linux-headers"  # for openssl 'secure-memory' feature

@@ -140,8 +140,10 @@ _VER="$1"
     options="${options} -DCURL_USE_OPENSSL=ON"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     options="${options} -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON"
-    if [ "${_OPENSSL}" = 'boringssl' ]; then
-      CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+    if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
+      if [ "${_OPENSSL}" = 'boringssl' ]; then
+        CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+      fi
       if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
         LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
       else

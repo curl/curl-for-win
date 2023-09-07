@@ -28,7 +28,7 @@ _VER="$1"
   if [ -n "${_OPENSSL}" ]; then
     options="${options} -DCRYPTO_BACKEND=OpenSSL"
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-    if [ "${_OPENSSL}" = 'boringssl' ]; then
+    if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
       # for DLL
       if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
         LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"

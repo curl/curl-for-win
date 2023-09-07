@@ -21,7 +21,7 @@ _VER="$1"
   LIBS=''
   options=''
 
-  if [ "${_OPENSSL}" = 'boringssl' ]; then
+  if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
     options="${options} -DENABLE_OPENSSL=OFF"
     options="${options} -DENABLE_BORINGSSL=ON"
     options="${options} -DBORINGSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"

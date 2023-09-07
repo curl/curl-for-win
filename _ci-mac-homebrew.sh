@@ -8,10 +8,16 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 extra=''
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go"
-[[ "${CW_CONFIG:-}" = *'boringssl'* ]] && [[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} nasm"
-[[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} mingw-w64 osslsigncode wine-stable openssh"
 [[ "${CW_CONFIG:-}" != *'mac'* ]] && extra="${extra} llvm"
-[[ "${CW_CONFIG:-}" = *'linux'* ]] && extra="${extra} FiloSottile/musl-cross/musl-cross"
+
+if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
+  extra="${extra} mingw-w64 osslsigncode wine-stable openssh"
+  if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+    extra="${extra} nasm"
+  fi
+elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
+  extra="${extra} FiloSottile/musl-cross/musl-cross"
+fi
 
 if [ -n "${extra}" ]; then
   export HOMEBREW_NO_AUTO_UPDATE=1

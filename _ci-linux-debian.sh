@@ -12,10 +12,13 @@ cat /etc/*-release
 
 extra=''
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} golang"
-[[ "${CW_CONFIG:-}" = *'boringssl'* ]] && [[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} nasm"
-[[ "${CW_CONFIG:-}" = *'win'* ]] && extra="${extra} mingw-w64 osslsigncode wine64"
 
-if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
+if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
+  extra="${extra} mingw-w64 osslsigncode wine64"
+  if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+    extra="${extra} nasm"
+  fi
+elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   extra="${extra} checksec"
   if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
     extra="${extra} musl musl-dev musl-tools"
