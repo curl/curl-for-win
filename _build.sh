@@ -78,6 +78,14 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # TODO:
 #   - change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
+#   - win: switch to curl-cmake.sh (from curl-gnumake.sh) to use the same build
+#     method for all target platforms. This will have a 20% build-performance
+#     hit for curl builds. Consider enabling unity mode to mitigate it.
+#   - switch to libssh2-cmake.sh by default? (both for libssh2.sh and as
+#     non-Windows fallback in libssh2-gnumake.sh). Consider enabling unity mode.
+#     The advantage of autotools here is that it allows to excercise the
+#     autotools codepath for default builds. libssh2 isn't a heavy autotools
+#     user, so this is only catching trivial fallouts.
 #   - linux: musl alpine why need -static-pie and not -static?
 #   - linux: musl libcurl.so.4.8.0 tweak to be also portable (possible?)
 #   - linux: musl cross-cpu builds. https://musl.cc/aarch64-linux-musl-cross.tgz (gcc)
