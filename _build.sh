@@ -1266,8 +1266,8 @@ build_single_target() {
   bld mbedtls           "${MBEDTLS_VER_}"
   bld boringssl       "${BORINGSSL_VER_}"
   bld libressl         "${LIBRESSL_VER_}"
-  bld openssl           "${OPENSSL_VER_}"
   bld quictls           "${QUICTLS_VER_}" openssl
+  bld openssl           "${OPENSSL_VER_}"
   bld gsasl               "${GSASL_VER_}"
   bld ngtcp2             "${NGTCP2_VER_}"
   bld nghttp2           "${NGHTTP2_VER_}"
