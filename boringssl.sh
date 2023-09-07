@@ -53,13 +53,9 @@ _VER="$1"
   [ "${_CPU}" = 'x64' ] && cpu='x86_64'
   [ "${_CPU}" = 'a64' ] && cpu='ARM64'
 
-  if [ "${_OS}" = 'win' ]; then
-    if [ "${_CPU}" = 'a64' ]; then
-      # ARM64 does not use NASM
-      options="${options} -DOPENSSL_NO_ASM=ON"  # FIXME
-    else
-      options="${options} -DCMAKE_ASM_NASM_FLAGS=--reproducible"
-    fi
+  if [ "${_OS}" = 'win' ] && [ "${_CPU}" != 'a64' ]; then
+    # nasm is used for Windows x64 and x86
+    options="${options} -DCMAKE_ASM_NASM_FLAGS=--reproducible"
   fi
 
   options="${options} -DOPENSSL_SMALL=OFF"  # ON reduces curl binary sizes by ~300 KB
