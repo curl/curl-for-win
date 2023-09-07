@@ -1038,8 +1038,8 @@ build_single_target() {
   export _STRIPFLAGS_LIB
   if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
     _STRIP='strip'  # Xcode strip command-line interface is different than GNU/llvm strip
-    _STRIPFLAGS_BIN='-D -no_uuid'
-    _STRIPFLAGS_DYN='-x -no_uuid'
+    _STRIPFLAGS_BIN='-D'
+    _STRIPFLAGS_DYN='-x'
     _STRIPFLAGS_LIB="${_STRIPFLAGS_BIN}"
   else
     _STRIP="${_BINUTILS_PREFIX}strip${_BINUTILS_SUFFIX}"
