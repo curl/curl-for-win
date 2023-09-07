@@ -146,8 +146,10 @@ _VER="$1"
       [ -n "${mainssl}" ] || mainssl='openssl'
       options="${options} --with-openssl=${_TOP}/${_OPENSSL}/${_PP}"
       options="${options} --disable-openssl-auto-load-config"
-      if [ "${_OPENSSL}" = 'boringssl' ]; then
-        CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+      if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
+        if [ "${_OPENSSL}" = 'boringssl' ]; then
+          CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+        fi
         if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
           LDFLAGS="${LDFLAGS} -Wl,-Bdynamic,-lpthread,-Bstatic"
         else
@@ -301,7 +303,7 @@ _VER="$1"
       CPPFLAGS="${CPPFLAGS} -I${_TOP}/ngtcp2/${_PP}/include"
       LDFLAGS="${LDFLAGS} -L${_TOP}/ngtcp2/${_PP}/lib"
       LIBS="${LIBS} -lngtcp2"
-      if [ "${_OPENSSL}" = 'boringssl' ]; then
+      if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
         LIBS="${LIBS} -lngtcp2_crypto_boringssl"
       elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ]; then
         LIBS="${LIBS} -lngtcp2_crypto_quictls"

@@ -111,8 +111,10 @@ _VER="$1"
     CFG="${CFG}-ssl"
     export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
 
-    if [ "${_OPENSSL}" = 'boringssl' ]; then
-      CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+    if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
+      if [ "${_OPENSSL}" = 'boringssl' ]; then
+        CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+      fi
       CPPFLAGS="${CPPFLAGS} -DHAVE_SSL_SET0_WBIO"
       if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
         # Non-production workaround for:

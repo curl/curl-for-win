@@ -41,7 +41,7 @@ _VER="$1"
   if [ -n "${_OPENSSL}" ]; then
     options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
     if [ "${_OS}" = 'win' ]; then
-      if [ "${_OPENSSL}" = 'boringssl' ]; then
+      if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
         # for DLL
         if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
           LDFLAGS="${LDFLAGS} -Wl,-Bdynamic,-lpthread,-Bstatic"

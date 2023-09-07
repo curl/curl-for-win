@@ -32,6 +32,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        nozstd     build without zstd
 #        nozlib     build without zlib
 #        noftp      build without FTP/FTPS support
+#        awslc      build with AWS-LC
 #        boringssl  build with BoringSSL
 #        libressl   build with LibreSSL
 #        schannel   build with Schannel
@@ -129,7 +130,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   wolfssl          autotools
 #   mbedtls          cmake
 #   openssl/quictls  proprietary
-#   boringssl        cmake
+#   boringssl/awslc  cmake
 #   libressl         autotools, cmake
 #   wolfssh          autotools
 #   libssh           cmake
@@ -440,11 +441,13 @@ build_single_target() {
   elif [ -d zlib ]; then
     _ZLIB='zlib'
   fi
-  export _OPENSSL=''
+  export _OPENSSL=''; boringssl=0
   if   [ -d libressl ]; then
     _OPENSSL='libressl'
+  elif [ -d awslc ]; then
+    _OPENSSL='awslc'; boringssl=1
   elif [ -d boringssl ]; then
-    _OPENSSL='boringssl'
+    _OPENSSL='boringssl'; boringssl=1
   elif [ -d quictls ]; then
     _OPENSSL='quictls'
   elif [ -d openssl ]; then
@@ -459,7 +462,7 @@ build_single_target() {
       use_llvm_mingw=1
     # llvm-mingw is required for x64 (to avoid pthread link bug with BoringSSL),
     # but for consistency, use it for all targets when building with BoringSSL.
-    elif [ "${_OPENSSL}" = 'boringssl' ] && [ "${_CRT}" = 'ucrt' ]; then
+    elif [ "${boringssl}" = '1' ] && [ "${_CRT}" = 'ucrt' ]; then
       use_llvm_mingw=1
     elif [ "${_CPU}" = 'a64' ]; then
       use_llvm_mingw=1
@@ -1210,12 +1213,12 @@ build_single_target() {
     binver="binutils $("${_STRIP}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?' || true)"
   elif [ "${_TOOLCHAIN}" != 'llvm-apple' ] && \
        [ -n "${_STRIP_BINUTILS}" ] && \
-       [ "${_OPENSSL}" = 'boringssl' ]; then
+       [ "${boringssl}" = '1' ]; then
     binver="binutils $("${_STRIP_BINUTILS}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?' || true)"
   fi
 
   nasmver=''
-  if [ "${_OPENSSL}" = 'boringssl' ] && [ "${_OS}" = 'win' ]; then
+  if [ "${boringssl}" = '1' ] && [ "${_OS}" = 'win' ]; then
     nasmver="nasm $(nasm --version | grep -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?')"
   fi
 
@@ -1264,6 +1267,7 @@ build_single_target() {
   bld nghttp3           "${NGHTTP3_VER_}"
   bld wolfssl           "${WOLFSSL_VER_}"
   bld mbedtls           "${MBEDTLS_VER_}"
+  bld awslc               "${AWSLC_VER_}" boringssl
   bld boringssl       "${BORINGSSL_VER_}"
   bld libressl         "${LIBRESSL_VER_}"
   bld quictls           "${QUICTLS_VER_}" openssl

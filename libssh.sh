@@ -41,7 +41,7 @@ _VER="$1"
 
   if [ -n "${_OPENSSL}" ]; then
     options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-    if [ "${_OPENSSL}" = 'boringssl' ]; then
+    if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
 
       # FIXME (upstream):
       # - It collides with wincrypt.h macros. Workaround:
