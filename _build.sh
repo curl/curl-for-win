@@ -1037,6 +1037,22 @@ build_single_target() {
   export _STRIPFLAGS_DYN
   export _STRIPFLAGS_LIB
   if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
+    # FIXME:
+    # Apple's own strip tool will choke on arm64 static libs, with error
+    #   strip: error: symbols referenced by relocation entries that can't be stripped in: [...]/usr/lib/liba.a(libcommon-lib-tls_pad.o) (for architecture arm64)
+    # and then tens of thousands of lines of bogus output.
+    # This was only seen on arm64 (only tested cross-builds) and quictls.
+    # Replacing `strip -D` with `strip -S` fixes it, however, this will not
+    # strip timestamps and other info, so we must also call `libtool -D` on
+    # that. Then it turns out that `libtool -D` does a shoddy job and strips
+    # these info from a couple of objects only and leaves it there for most
+    # of the others. This is broken for x86_64 inputs as well, where the
+    # timestamp is stripped, but not the local gid/uid. It means making a
+    # macOS static lib reproducible will need a manual script. Well, no,
+    # that method fails because `ar` always bakes the on-disk timestamp and
+    # gid/uid into the .a output, with no option to disable this.
+    # It means it does not seem possible to create reproducible static libs
+    # with Xcode as of v14 (year 2023).
     _STRIP='strip'  # Xcode strip command-line interface is different than GNU/llvm strip
     _STRIPFLAGS_BIN='-D'
     _STRIPFLAGS_DYN='-x'
