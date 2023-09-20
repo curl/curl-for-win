@@ -5,7 +5,7 @@
 
 # NOTE: Bump nghttp3 and ngtcp2 together with curl.
 
-export DOCKER_IMAGE='debian:testing-20230814-slim'
+export DOCKER_IMAGE='debian:testing-20230919-slim'
 
 export CURL_VER_='8.3.0'
 export CURL_HASH=376d627767d6c4f05105ab6d497b0d9aba7111770dd9d995225478209c37ea63
