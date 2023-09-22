@@ -43,10 +43,12 @@ environment:
   DEPLOY_KEY_PASS:
     secure: 'yqzKOttlHYVNIqJWC/tnmB8Qu+87mOVxJa7h6uD7WLU32XjUhTEDp9ZwpgmQD1RH'
   DO_NOT_TRACK: '1'
+  DOCKER_CONTENT_TRUST: '1'
 build_script:
   - sh: |
       export CW_CONFIG="${APPVEYOR_REPO_BRANCH}"
       . ./_versions.sh
+      docker trust inspect --pretty "${DOCKER_IMAGE}"
       time docker pull "${DOCKER_IMAGE}"
       docker images --digests
       time docker run --volume="$(pwd):$(pwd)" --workdir="$(pwd)" \

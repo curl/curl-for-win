@@ -25,9 +25,11 @@ jobs:
           CW_MAP: '1'
           CW_JOBS: '3'
           DO_NOT_TRACK: '1'
+          DOCKER_CONTENT_TRUST: '1'
         run: |
           . ./_versions.sh
           export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
+          docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"
           docker images --digests
           time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
