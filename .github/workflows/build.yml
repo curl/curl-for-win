@@ -16,6 +16,7 @@ env:
   CW_MAP: '1'
   CW_JOBS: '3'
   DO_NOT_TRACK: '1'
+  DOCKER_CONTENT_TRUST: '1'
 
 jobs:
   linux:
@@ -27,6 +28,7 @@ jobs:
           export CW_CONFIG='${{ github.ref_name }}-linux'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
+          docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"
           docker images --digests
           time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
@@ -54,6 +56,7 @@ jobs:
           export CW_CONFIG='${{ github.ref_name }}-linux-musl'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
+          docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"
           docker images --digests
           time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
@@ -82,6 +85,7 @@ jobs:
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='debian:bookworm'
           export CW_CCSUFFIX='-15'
+          docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"
           docker images --digests
           time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
@@ -110,6 +114,7 @@ jobs:
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='debian:bullseye'
           export CW_CCSUFFIX='-13'
+          docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"
           docker images --digests
           time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
@@ -137,6 +142,7 @@ jobs:
           export CW_CONFIG='${{ github.ref_name }}-linux'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='alpine:latest'
+          docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"
           docker images --digests
           time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
@@ -209,6 +215,7 @@ jobs:
           export CW_CONFIG='${{ github.ref_name }}-win'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
+          docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"
           docker images --digests
           time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
