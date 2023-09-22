@@ -42,6 +42,14 @@
 
   for suffix in exe dll; do
     TZ=UTC "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f
+
+    # Verify exported curl symbols
+    if [ "${suffix}" = 'exe' ]; then
+      TZ=UTC "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -F ' curl_' || true   # should not have any hits
+    else
+      TZ=UTC "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -F ' curl_' || false  # show public libcurl APIs (in a well-defined order)
+    fi
+
     # Dump 'DllCharacteristics' flags, e.g. HIGH_ENTROPY_VA, DYNAMIC_BASE, NX_COMPAT, GUARD_CF, TERMINAL_SERVICE_AWARE
            "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -E -o '^\s+[A-Z_]{4,}$' | sort
     # Dump cfguard load configuration flags
