@@ -45,13 +45,13 @@
 
     # Verify exported curl symbols
     if [ "${suffix}" = 'exe' ]; then
-      TZ=UTC "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -F ' curl_' || true   # should not have any hits
+      "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -F ' curl_' || true   # should not have any hits
     else
-      TZ=UTC "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -F ' curl_' || false  # show public libcurl APIs (in a well-defined order)
+      "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -F ' curl_' || false  # show public libcurl APIs (in a well-defined order)
     fi
 
     # Dump 'DllCharacteristics' flags, e.g. HIGH_ENTROPY_VA, DYNAMIC_BASE, NX_COMPAT, GUARD_CF, TERMINAL_SERVICE_AWARE
-           "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -E -o '^\s+[A-Z_]{4,}$' | sort
+    "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -E -o '^\s+[A-Z_]{4,}$' | sort
     # Dump cfguard load configuration flags
     if [ "${_CC}" = 'llvm' ]; then  # binutils readelf (as of v2.40) does not recognize this option
       # CF_FUNCTION_TABLE_PRESENT, CF_INSTRUMENTED, CF_LONGJUMP_TABLE_PRESENT (optional)
