@@ -280,7 +280,6 @@ _VER="$1"
     if [ "${pass}" = 'shared' ]; then
       _DEF_NAME="libcurl${_CURL_DLL_SUFFIX}.def"
       LDFLAGS="${LDFLAGS} -Wl,--output-def,${_DEF_NAME}"
-      CPPFLAGS="${CPPFLAGS} -DCURL_STATICLIB"
 
       options="${options} --disable-static"
       options="${options} --enable-shared"
