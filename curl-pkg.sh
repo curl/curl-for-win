@@ -45,8 +45,7 @@
 
     # Verify exported curl symbols
     if [ "${suffix}" = 'exe' ]; then
-      # FIXME: fail if finding hits
-      "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -F ' curl_' || true   # should not have any hits for statically linked curl
+      "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -F ' curl_' && false  # should not have any hits for statically linked curl
     else
       "${_OBJDUMP}" --all-headers "${_PP}"/bin/*."${suffix}" | grep -a -F ' curl_' || false  # show public libcurl APIs (in a well-defined order)
     fi
