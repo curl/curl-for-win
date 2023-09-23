@@ -49,11 +49,13 @@ _VER="$1"
   # but required for libcurl, which would link to shared libs by default.
   LIBS="${LIBS} -Wl,-Bstatic"
 
-  # Use -DCURL_STATICLIB when compiling libcurl. This option prevents marking
-  # public libcurl functions as 'exported'. Useful to avoid the chance of
-  # libcurl functions getting exported from final binaries when linked against
-  # the static libcurl lib.
-  CPPFLAGS="${CPPFLAGS} -DCURL_STATICLIB"
+  if [ "${CURL_VER_}" = '8.3.0' ]; then
+    # Use -DCURL_STATICLIB when compiling libcurl. This option prevents marking
+    # public libcurl functions as 'exported'. Useful to avoid the chance of
+    # libcurl functions getting exported from final binaries when linked against
+    # the static libcurl lib.
+    CPPFLAGS="${CPPFLAGS} -DCURL_STATICLIB"
+  fi
 
   # CPPFLAGS added after this point only affect libcurl.
 
