@@ -64,6 +64,9 @@ _VER="$1"
 
   if [ ! "${_BRANCH#*debug*}" = "${_BRANCH}" ]; then
     options="${options} -DENABLE_DEBUG=ON"
+    # curl would only set this automatically for the 'Debug' configuration
+    # Required for certain 'testdeps' build targets to link correctly.
+    CPPFLAGS="${CPPFLAGS} -DDEBUGBUILD"
   fi
 
   if [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
@@ -288,6 +291,7 @@ _VER="$1"
   fi
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
+# make --directory="${_BLDDIR}" --jobs="${_JOBS}" testdeps
 
   # Manual copy to DESTDIR
 
