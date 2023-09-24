@@ -261,6 +261,7 @@ _VER="$1"
 
   # shellcheck disable=SC2086
   cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
+    '-DCMAKE_UNITY_BUILD=OFF' \
     '-DCURL_CA_PATH=none' \
     '-DCURL_CA_BUNDLE=none' \
     '-DBUILD_SHARED_LIBS=ON' \
