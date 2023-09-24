@@ -67,6 +67,11 @@ _VER="$1"
     # curl would only set this automatically for the 'Debug' configuration
     # Required for certain BUILD_TESTING=ON 'testdeps' build targets to link
     # correctly.
+    # Officially we should use `-DCMAKE_BUILD_TYPE=Debug` which also enables
+    # debug info, but it has the side-effect of adding a `-d` suffix to the
+    # DLL and static lib names (`libcurl-d-x64.dll`, `libcurl-d.a`,
+    # `libcurl-d.dll.a` on Windows) which breaks packaging logic. We also
+    # strip debug info when making libs reproducible anyway.
     CPPFLAGS="${CPPFLAGS} -DDEBUGBUILD"
   fi
 
