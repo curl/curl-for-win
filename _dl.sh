@@ -460,7 +460,7 @@ bump() {
           >&2 echo "! ${name}: Version pinned. Skipping."
         else
           # Some projects use part of the version number to form the path.
-          # Caveat: Major/minor upgrades will not be detected in that case.
+          # Caveat: Major/minor upgrades are not detected in that case.
           # (e.g. libssh)
           urlver="$(printf '%s' "${url}" | expandver "${ourver}")"
           newver="$(check_update "${name}" "${ourvern}" "${urlver}" "${desc}" \
