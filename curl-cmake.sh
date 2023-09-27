@@ -154,6 +154,10 @@ _VER="$1"
   options="${options} -DCURL_USE_SCHANNEL=ON"
   CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
+  if [ "${CURL_VER_}" != '8.3.0' ]; then
+    options="${options} -DCURL_DISABLE_SRP=ON"  # PENDING: https://github.com/curl/curl/pull/11967
+  fi
+
   if [ -d ../wolfssh ] && [ -d ../wolfssl ]; then
     # No native support, enable it manually.
     options="${options} -DCURL_USE_WOLFSSH=ON"
