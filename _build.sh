@@ -446,10 +446,18 @@ build_single_target() {
     fi
     _MAKE='mingw32-make'
   else
+    if [ "${_HOSTOS}" = 'mac' ]; then
+      if [ -d '/opt/homebrew' ]; then
+        brew_root='/opt/homebrew'
+      else
+        brew_root='/usr/local'
+      fi
+    fi
+
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       export PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
     elif [ "${_CC}" = 'llvm' ] && [ "${_HOSTOS}" = 'mac' ]; then
-      _MAC_LLVM_PATH='/usr/local/opt/llvm/bin'
+      _MAC_LLVM_PATH="${brew_root}/opt/llvm/bin"
       export PATH="${_MAC_LLVM_PATH}:${_ori_path}"
     fi
     _TRIPLET="${_machine}-w64-mingw32"
@@ -460,7 +468,7 @@ build_single_target() {
     # mingw-w64 sysroots
     if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then
       if [ "${_HOSTOS}" = 'mac' ]; then
-        _SYSROOT="/usr/local/opt/mingw-w64/toolchain-${_machine}"
+        _SYSROOT="${brew_root}/opt/mingw-w64/toolchain-${_machine}"
       elif [ "${_HOSTOS}" = 'linux' ]; then
         _SYSROOT="/usr/${_TRIPLET}"
       fi
