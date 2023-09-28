@@ -17,7 +17,7 @@ _VER="$1"
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   # shellcheck disable=SC2086
-  cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
+  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
     '-DCARES_STATIC=ON' \
     '-DCARES_STATIC_PIC=ON' \
     '-DCARES_SHARED=OFF' \

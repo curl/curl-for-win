@@ -90,7 +90,7 @@ _VER="$1"
   fi
 
   # shellcheck disable=SC2086
-  cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
+  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
     '-DGLOBAL_CLIENT_CONFIG=C:/Windows/System32/ssh/ssh_config' \
     '-DGLOBAL_BIND_CONFIG=C:/Windows/System32/ssh/libssh_server_config' \
     '-DBUILD_SHARED_LIBS=OFF' \

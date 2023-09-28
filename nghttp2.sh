@@ -19,7 +19,7 @@ _VER="$1"
   CPPFLAGS='-DNDEBUG'
 
   # shellcheck disable=SC2086
-  cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} \
+  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} \
     '-DENABLE_LIB_ONLY=ON' \
     '-DENABLE_STATIC_LIB=ON' \
     '-DENABLE_SHARED_LIB=OFF' \

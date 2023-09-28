@@ -23,7 +23,7 @@ _VER="$1"
   [ "${_CPU}" = 'a64' ] && cpu='arm64'
 
   # shellcheck disable=SC2086
-  cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
+  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
     "-DCMAKE_SYSTEM_PROCESSOR=${cpu}" \
     '-DLIBRESSL_APPS=OFF' \
     '-DLIBRESSL_TESTS=OFF' \

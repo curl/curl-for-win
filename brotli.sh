@@ -17,7 +17,7 @@ _VER="$1"
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   # shellcheck disable=SC2086
-  cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
+  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
     '-DBUILD_SHARED_LIBS=OFF' \
     '-DBROTLI_DISABLE_TESTS=ON' \
     "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"

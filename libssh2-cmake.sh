@@ -56,7 +56,7 @@ _VER="$1"
   fi
 
   # shellcheck disable=SC2086
-  cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
+  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
     '-DCMAKE_UNITY_BUILD=ON' \
     '-DBUILD_SHARED_LIBS=OFF' \
     '-DBUILD_EXAMPLES=OFF' \

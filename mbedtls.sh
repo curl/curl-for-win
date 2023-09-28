@@ -17,7 +17,7 @@ _VER="$1"
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   # shellcheck disable=SC2086
-  cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
+  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
     '-DMBEDTLS_FATAL_WARNINGS=OFF' \
     '-DENABLE_PROGRAMS=OFF' \
     '-DENABLE_TESTING=OFF' \

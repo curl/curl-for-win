@@ -27,7 +27,7 @@ _VER="$1"
   # PR: https://github.com/madler/zlib/pull/347
 
   # shellcheck disable=SC2086
-  cmake . -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
+  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
     '-DBUILD_SHARED_LIBS=OFF' \
     "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
