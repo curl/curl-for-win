@@ -433,6 +433,14 @@ build_single_target() {
   # Reset for each target
   PATH="${_ori_path}"
 
+  if [ "${_HOSTOS}" = 'mac' ]; then
+    if [ -d '/opt/homebrew' ]; then
+      brew_root='/opt/homebrew'
+    else
+      brew_root='/usr/local'
+    fi
+  fi
+
   if [ "${_HOSTOS}" = 'win' ]; then
     export PATH
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
@@ -446,14 +454,6 @@ build_single_target() {
     fi
     _MAKE='mingw32-make'
   else
-    if [ "${_HOSTOS}" = 'mac' ]; then
-      if [ -d '/opt/homebrew' ]; then
-        brew_root='/opt/homebrew'
-      else
-        brew_root='/usr/local'
-      fi
-    fi
-
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       export PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
     elif [ "${_CC}" = 'llvm' ] && [ "${_HOSTOS}" = 'mac' ]; then
