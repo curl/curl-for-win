@@ -155,7 +155,7 @@ _VER="$1"
   CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
   if [ "${CURL_VER_}" != '8.3.0' ]; then
-    options="${options} -DCURL_DISABLE_SRP=ON"  # PENDING: https://github.com/curl/curl/pull/11967
+    options="${options} -DCURL_DISABLE_SRP=ON"
   fi
 
   if [ -d ../wolfssh ] && [ -d ../wolfssl ]; then
