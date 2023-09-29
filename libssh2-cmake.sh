@@ -47,13 +47,11 @@ _VER="$1"
   elif [ -d ../mbedtls ]; then
     options="${options} -DCRYPTO_BACKEND=mbedTLS"
     options="${options} -DMBEDTLS_INCLUDE_DIR=${_TOP}/mbedtls/${_PP}/include"
+    options="${options} -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedcrypto.a"
     if [ "${LIBSSH2_VER_}" = '1.11.0' ]; then
-      options="${options} -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedcrypto.a"
       # Necessary for detection only:
       options="${options} -DMBEDTLS_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedtls.a"
       options="${options} -DMBEDX509_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedx509.a"
-    else
-      options="${options} -DMBEDTLS_LIBRARY_DIR=${_TOP}/mbedtls/${_PP}/lib"
     fi
   else
     options="${options} -DCRYPTO_BACKEND=WinCNG"
