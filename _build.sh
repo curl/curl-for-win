@@ -84,7 +84,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - switch to libssh2-cmake.sh by default? (both for libssh2.sh and as
 #     non-Windows fallback in libssh2-gnumake.sh). Consider enabling unity mode.
 #     The advantage of autotools here is that it allows to excercise the
-#     autotools codepath for default builds. libssh2 isn't a heavy autotools
+#     autotools codepath for default builds. libssh2 is not a heavy autotools
 #     user, so this is only catching trivial fallouts.
 #   - linux: musl alpine why need -static-pie and not -static?
 #   - linux: musl libcurl.so.4.8.0 tweak to be also portable (possible?)
@@ -653,7 +653,7 @@ build_single_target() {
 
       _RUN_BIN='echo'
       if [ "${_HOSTOS}" = 'linux' ] && [ "${_OS}" = 'linux' ]; then
-        # Don't try running non-native builds
+        # Skip running non-native builds
         if [ "${unamem}" = "${_machine}" ]; then
           _RUN_BIN=''
         fi
@@ -663,7 +663,7 @@ build_single_target() {
 
       _RUN_BIN='echo'
       if [ "${_HOSTOS}" = 'mac' ]; then
-        # Don't try running arm64 on x86_64
+        # Skip running arm64 on x86_64
         if [ "${_CPU}" = 'x64' ] || \
            [ "${unamem}" = 'aarch64' ]; then
           _RUN_BIN=''
