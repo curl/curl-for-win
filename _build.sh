@@ -754,14 +754,18 @@ build_single_target() {
     if [ "${_HOSTOS}" != "${_OS}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Darwin ${_CMAKE_GLOBAL}"
     fi
-    # macOS 10.13 High Sierra 2017-09-25. Seems to work for arm64 builds,
+    # macOS 10.9 Mavericks 2013-10-22. Seems to work for arm64 builds,
     # though arm64 was released in macOS 11.0 Big Sur 2020-11-12.
-    macminver='10.13'
+    # Bump to macOS 10.13 High Sierra 2017-09-25 if we decide to disable
+    # LDAP/LDAPS for macOS builds.
+    # NOTE: 10.8 (and older) trigger C++ issues with Xcode and CMake.
+    macminver='10.9'
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_OSX_DEPLOYMENT_TARGET=${macminver}"
     _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -mmacosx-version-min=${macminver}"
     _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -mmacosx-version-min=${macminver}"
-    _OSVER="$(printf '%s00' \
-      "$(printf '%s' "${macminver}" | tr -d '.')" | cut -c -4)"
+    _OSVER="$(printf '%02d%02d' \
+      "$(printf '%s' "${macminver}" | cut -d '.' -f 1)" \
+      "$(printf '%s' "${macminver}" | cut -d '.' -f 2)")"
   elif [ "${_OS}" = 'linux' ]; then
     if [ "${_HOSTOS}" != "${_OS}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Linux ${_CMAKE_GLOBAL}"

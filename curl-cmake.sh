@@ -101,10 +101,7 @@ _VER="$1"
     [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && options="${options} -DCURL_DISABLE_FTP=ON"
     if [ "${_OS}" = 'win' ]; then
       LIBS="${LIBS} -lwldap32"
-    else
-      # ldap is auto-detected on mac, but without ldaps. Disable it
-      # rather than offering an insecure-only solution. In certain configs
-      # it also results in 'deprecated in macOS 10.11' compiler output.
+    elif [ "${_OS}" != 'mac' ] || [ "${_OSVER}" -ge '1010' ]; then  # On macOS we use the built-in LDAP lib
       options="${options} -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON"
     fi
   fi
