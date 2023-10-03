@@ -106,10 +106,7 @@ _VER="$1"
       options="${options} --enable-imap --enable-pop3 --enable-smtp"
       if [ "${_OS}" = 'win' ]; then
         options="${options} --enable-ldap --enable-ldaps --with-ldap-lib=wldap32"
-      else
-        # ldap is auto-detected on mac, but without ldaps. Disable it
-        # rather than offering an insecure-only solution. In certain configs
-        # it also results in 'deprecated in macOS 10.11' compiler output.
+      elif [ "${_OS}" != 'mac' ] || [ "${_OSVER}" -ge '1010' ]; then  # On macOS we use the built-in LDAP lib
         options="${options} --disable-ldap --disable-ldaps"
       fi
     fi

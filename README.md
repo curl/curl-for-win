@@ -18,7 +18,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 - Standalone `curl` tool and `libcurl` DLL. Static libraries included.
 - Required: Windows Vista and
   [Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/),
-  macOS High Sierra 64-bit or Apple Silicon,
+  macOS 10.9 Mavericks Intel or Apple Silicon,
   any Linux arm64 with the [MUSL](https://en.wikipedia.org/wiki/Musl) builds.
 - [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3),
   [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support,
@@ -71,7 +71,7 @@ Protocols: dict file ftp ftps gopher gophers http https imap imaps            mq
 Features: alt-svc AsynchDNS brotli       HSTS HTTP2 HTTP3 HTTPS-proxy     IPv6          Largefile libz          NTLM            SSL      threadsafe UnixSockets zstd
 
 macOS with runtime-selectable option SecureTransport:
-Protocols: dict file ftp ftps gopher gophers http https imap imaps            mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
+Protocols: dict file ftp ftps gopher gophers http https imap imaps ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
 Features: alt-svc AsynchDNS brotli       HSTS HTTP2 HTTP3 HTTPS-proxy     IPv6          Largefile libz MultiSSL NTLM            SSL      threadsafe UnixSockets zstd
 ```
 <details><summary>Alternate configurations:</summary><p>
