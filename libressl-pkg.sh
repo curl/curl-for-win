@@ -7,7 +7,7 @@
 # - ASM support exist only for x64 on Windows.
 # - Building broken executables with ASM support enabled (both autotools and CMake).
 #   Regression since 3.7.3.
-# - Still loads config/DLLs from the hardcoded prefix. (improvments coming in 3.8.1)
+# - Still loads config/DLLs from the hardcoded prefix. (improvements coming in 3.8.1)
 # - Collision with wincrypt.h header when using with curl.
 #   Ref: https://ci.appveyor.com/project/curlorg/curl-for-win/builds/47723913?fullLog=true#L24711
 #   ```
