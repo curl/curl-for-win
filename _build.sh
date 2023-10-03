@@ -83,7 +83,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     hit for curl builds. Consider enabling unity mode to mitigate it.
 #   - switch to libssh2-cmake.sh by default? (both for libssh2.sh and as
 #     non-Windows fallback in libssh2-gnumake.sh). Consider enabling unity mode.
-#     The advantage of autotools here is that it allows to excercise the
+#     The advantage of autotools here is that it allows to exercise the
 #     autotools codepath for default builds. libssh2 is not a heavy autotools
 #     user, so this is only catching trivial fallouts.
 #   - linux: musl alpine why need -static-pie and not -static?
