@@ -77,6 +77,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
+#   - publish curl tool as direct downloads:
+#     curl-linux-musl / curl-mac / curl-x64.exe / curl-x86.exe / curl-a64.exe
+#     (or similar)
 #   - change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
 #   - win: switch to curl-cmake.sh (from curl-gnumake.sh) to use the same build
 #     method for all target platforms. This will have a 20% build-performance
