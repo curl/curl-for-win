@@ -133,7 +133,8 @@ cat <<EOF
   {
     "name": "mbedtls",
     "url": "https://github.com/Mbed-TLS/mbedtls/archive/refs/tags/v{ver}.tar.gz",
-    "redir": "redir"
+    "redir": "redir",
+    "tag": "v\\\\d+\\\\.\\\\d+\\\\.\\\\d+$"
   },
   {
     "name": "quictls",
@@ -279,6 +280,7 @@ check_update() {
       else
         heads_or_tags='tags'
       fi
+      # >&2 echo "tag|${tag}|"
       ref="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/git/refs/${heads_or_tags}" \
         --header 'X-GitHub-Api-Version: 2022-11-28' \
         | jq --raw-output '.[].ref' \
