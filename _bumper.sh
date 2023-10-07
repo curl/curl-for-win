@@ -26,6 +26,15 @@ export _BRANCH="${1:-}"
 
 ./_dl.sh bump
 
+# Find out the latest llvm version offered by Debian testing
+
+llvm_latest="$(curl --disable --user-agent '' --silent --fail --show-error \
+  'https://packages.debian.org/search?keywords=llvm&searchon=names&suite=testing&section=all' \
+  | hxclean | hxselect -i -c -s '\n' 'h3' \
+  | grep -a -o -E 'llvm-[0-9]+' | sort -u | tail -1)"
+
+echo; echo "export CW_CCSUFFIX='$(echo "${llvm_latest}" | cut -c 5-)'  # ${llvm_latest}"
+
 # Find out the latest docker image release:
 
 name='debian'
