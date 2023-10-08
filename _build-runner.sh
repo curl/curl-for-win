@@ -32,7 +32,7 @@ if [ ! -f .cw-initialized ]; then
         mingw-w64-x86_64-{go,nasm}
       ;;
     Linux*)
-      if [ "${_HOSTOS}" = 'linux' ] && [ -s /etc/os-release ]; then
+      if [ -s /etc/os-release ]; then
         _DISTRO="$(grep -a '^ID=' /etc/os-release | cut -c 4- | tr -d '"' || true)"
         _DISTRO="${_DISTRO:-unrecognized}"
       fi
