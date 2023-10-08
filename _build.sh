@@ -94,7 +94,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - linux: musl cross-cpu builds. https://musl.cc/aarch64-linux-musl-cross.tgz (gcc)
 #     $ echo 'aarch64' > /etc/apk/arch; apk add --no-cache musl ?
 #     $ dpkg --add-architecture aarch64; apt-get install musl:aarch64 ?
-#   - renames: _BRANCH -> CW_CONFIG, _HOSTOS -> _HOST, _BUILD_HOST -> _HOST_TRIPLET
+#   - renames: _BRANCH -> CW_CONFIG, _HOSTOS -> _HOST
 #   - merge _ci-*.sh scripts into one.
 #   - win: Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
@@ -321,11 +321,11 @@ fi
 # Even with `_CCPREFIX` provided.
 # https://clang.llvm.org/docs/CrossCompilation.html
 case "${_HOSTOS}" in
-  win)   _BUILD_HOST="${unamem}-pc-mingw32";;
-  linux) _BUILD_HOST="${unamem}-pc-linux";;
-  bsd)   _BUILD_HOST="${unamem}-pc-bsd";;
-  mac)   _BUILD_HOST="${unamem}-apple-darwin";;
-  *)     _BUILD_HOST="${unamem}-pc-$(uname -s | tr '[:upper:]' '[:lower:]')";;  # lazy guess
+  win)   _HOST_TRIPLET="${unamem}-pc-mingw32";;
+  linux) _HOST_TRIPLET="${unamem}-pc-linux";;
+  bsd)   _HOST_TRIPLET="${unamem}-pc-bsd";;
+  mac)   _HOST_TRIPLET="${unamem}-apple-darwin";;
+  *)     _HOST_TRIPLET="${unamem}-pc-$(uname -s | tr '[:upper:]' '[:lower:]')";;  # lazy guess
 esac
 
 export _PKGOS
@@ -811,10 +811,10 @@ build_single_target() {
 
   # 'configure' naming conventions:
   # - '--build' is the host we are running the build on.
-  #   We call it '_BUILD_HOST' (and `_HOSTOS` for our short name).
+  #   We call it '_HOST_TRIPLET' (and `_HOSTOS` for our short name).
   # - '--host' is the host we are building the binaries for.
   #   We call it '_TRIPLET' (and '_OS' for our short name).
-  _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --build=${_BUILD_HOST} --host=${_TRIPLET}"
+  _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --build=${_HOST_TRIPLET} --host=${_TRIPLET}"
   [ "${_CPU}" = 'x86' ] && _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-asynchronous-unwind-tables"
 
   _CCRT='libgcc'  # compiler runtime, 'libgcc' (for libgcc and libstdc++) or 'clang-rt' (for compiler-rt and libc++)
