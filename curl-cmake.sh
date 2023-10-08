@@ -140,6 +140,9 @@ _VER="$1"
     if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
       if [ "${_OPENSSL}" = 'boringssl' ]; then
         CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+        options="${options} -DHAVE_BORINGSSL=ON"  # fast-track configuration
+      else
+        options="${options} -DHAVE_AWSLC=ON"  # fast-track configuration
       fi
       if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
         LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
@@ -147,8 +150,11 @@ _VER="$1"
         LIBS="${LIBS} -lpthread"
       fi
       h3=1
-    elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ]; then
-      h3=1
+    else
+      options="${options} -DHAVE_BORINGSSL=OFF -DHAVE_AWSLC=OFF"  # fast-track configuration
+      if [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ]; then
+        h3=1
+      fi
     fi
   else
     options="${options} -DCURL_USE_OPENSSL=OFF"
