@@ -193,6 +193,9 @@ _VER="$1"
     fi
     CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
+  # options="${options} --with-ca-fallback"
+    options="${options} --without-ca-fallback"
+
     if [ -d ../wolfssh ] && [ -d ../wolfssl ]; then
       options="${options} --with-wolfssh=${_TOP}/wolfssh/${_PP}"
       CPPFLAGS="${CPPFLAGS} -I${_TOP}/wolfssh/${_PP}/include"
@@ -372,8 +375,7 @@ _VER="$1"
         --enable-get-easy-options \
         --enable-hsts \
         --without-ca-path \
-        --without-ca-bundle \
-        --without-ca-fallback
+        --without-ca-bundle
     )
 
     # NOTE: 'make clean' deletes src/tool_hugehelp.c and docs/curl.1. Next,

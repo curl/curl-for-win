@@ -179,6 +179,8 @@ _VER="$1"
   fi
   CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
+# CPPFLAGS="${CPPFLAGS} -DCURL_CA_FALLBACK=1"
+
   if [ -d ../wolfssh ] && [ -d ../wolfssl ]; then
     CFG="${CFG}-wolfssh"
     export WOLFSSH_PATH="../../wolfssh/${_PP}"

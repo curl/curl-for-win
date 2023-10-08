@@ -190,6 +190,8 @@ _VER="$1"
   fi
   CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
 
+# options="${options} -DCURL_CA_FALLBACK=ON"
+
   if [ "${CURL_VER_}" != '8.3.0' ]; then
     options="${options} -DCURL_DISABLE_SRP=ON"
   fi
