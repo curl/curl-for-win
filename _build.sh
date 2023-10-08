@@ -144,8 +144,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   libressl         autotools, cmake
 #   wolfssh          autotools
 #   libssh           cmake
-#   libssh2          autotools, gnumake [windows-only], cmake
-#   curl             gnumake [windows-only], cmake [non-windows default], autotools
+#   libssh2          autotools, gnumake [windows-only], cmake-unity
+#   curl             gnumake [windows-only], cmake-unity [non-windows default], autotools
 
 cd "$(dirname "$0")"
 
