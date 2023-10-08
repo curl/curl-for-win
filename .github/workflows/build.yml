@@ -22,7 +22,7 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: 'build'
         run: |
           export CW_CONFIG='${{ github.ref_name }}-linux'
@@ -50,7 +50,7 @@ jobs:
   linux-musl-debian-testing:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: 'build'
         run: |
           export CW_CONFIG='${{ github.ref_name }}-linux-musl'
@@ -78,7 +78,7 @@ jobs:
   linux-musl-debian-bookworm:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: 'build'
         run: |
           export CW_CONFIG='${{ github.ref_name }}-linux-musl-libressl'
@@ -107,7 +107,7 @@ jobs:
   linux-musl-debian-bullseye:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: 'build'
         run: |
           export CW_CONFIG='${{ github.ref_name }}-linux-musl-libressl-noh3'
@@ -136,7 +136,7 @@ jobs:
   linux-musl-alpine:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: 'build'
         run: |
           export CW_CONFIG='${{ github.ref_name }}-linux'
@@ -164,7 +164,7 @@ jobs:
   linux-musl-from-mac:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: 'build'
         run: |
           export CW_CONFIG='${{ github.ref_name }}-linux'
@@ -184,7 +184,7 @@ jobs:
   mac:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: 'build'
         run: |
           export CW_CONFIG='${{ github.ref_name }}-mac-macuni'
@@ -204,7 +204,7 @@ jobs:
   win:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 8
       - name: 'build'
