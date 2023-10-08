@@ -538,7 +538,7 @@ echo "Build: REV(${_REVSUFFIX})"
 # Quit if any of the lines fail
 set -e
 
-if [ "${_HOSTOS}" = 'mac' ]; then
+if [ "${_HOST}" = 'mac' ]; then
   tar() { gtar "$@"; }
 fi
 
@@ -648,13 +648,13 @@ if [ "${_OS}" = 'win' ] && \
    [ "${CW_LLVM_MINGW_DL:-}" = '1' ] && \
    [ ! -d 'llvm-mingw' ]; then
   name=''; vers=''; hash=''; arch="$(uname -m)"
-  if   [ "${_HOSTOS}-${arch}" = 'linux-x86_64' ]; then
+  if   [ "${_HOST}-${arch}" = 'linux-x86_64' ]; then
     name='llvm-mingw-linux-x86-64';  vers="${LLVM_MINGW_LINUX_X86_64_VER_}";  hash="${LLVM_MINGW_LINUX_X86_64_HASH}"
-  elif [ "${_HOSTOS}-${arch}" = 'linux-aarch64' ]; then
+  elif [ "${_HOST}-${arch}" = 'linux-aarch64' ]; then
     name='llvm-mingw-linux-aarch64'; vers="${LLVM_MINGW_LINUX_AARCH64_VER_}"; hash="${LLVM_MINGW_LINUX_AARCH64_HASH}"
-  elif [ "${_HOSTOS}" = 'mac' ]; then
+  elif [ "${_HOST}" = 'mac' ]; then
     name='llvm-mingw-mac';           vers="${LLVM_MINGW_MAC_VER_}";           hash="${LLVM_MINGW_MAC_HASH}"
-  elif [ "${_HOSTOS}" = 'win' ]; then
+  elif [ "${_HOST}" = 'win' ]; then
     name='llvm-mingw-win';           vers="${LLVM_MINGW_WIN_VER_}";           hash="${LLVM_MINGW_WIN_HASH}"
   fi
   if [ -n "${name}" ]; then

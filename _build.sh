@@ -94,7 +94,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - linux: musl cross-cpu builds. https://musl.cc/aarch64-linux-musl-cross.tgz (gcc)
 #     $ echo 'aarch64' > /etc/apk/arch; apk add --no-cache musl ?
 #     $ dpkg --add-architecture aarch64; apt-get install musl:aarch64 ?
-#   - renames: _HOSTOS -> _HOST
 #   - merge _ci-*.sh scripts into one.
 #   - win: Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
@@ -214,17 +213,17 @@ else
 fi
 
 # Detect host OS
-export _HOSTOS
+export _HOST
 case "$(uname)" in
-  *_NT*)   _HOSTOS='win';;
-  Linux*)  _HOSTOS='linux';;
-  Darwin*) _HOSTOS='mac';;
-  *BSD)    _HOSTOS='bsd';;
-  *)       _HOSTOS='unrecognized';;
+  *_NT*)   _HOST='win';;
+  Linux*)  _HOST='linux';;
+  Darwin*) _HOST='mac';;
+  *BSD)    _HOST='bsd';;
+  *)       _HOST='unrecognized';;
 esac
 
 export _DISTRO=''
-if [ "${_HOSTOS}" = 'linux' ] && [ -s /etc/os-release ]; then
+if [ "${_HOST}" = 'linux' ] && [ -s /etc/os-release ]; then
   _DISTRO="$(grep -a '^ID=' /etc/os-release | cut -c 4- | tr -d '"' || true)"
   _DISTRO="${_DISTRO:-unrecognized}"
 fi
@@ -250,7 +249,7 @@ if [ "${_OS}" = 'win' ]; then
   _CRT='ucrt'
   [ ! "${_CONFIG#*msvcrt*}" = "${_CONFIG}" ] && _CRT='msvcrt'
 elif [ "${_OS}" = 'linux' ]; then
-  if [ "${_HOSTOS}" = 'mac' ]; then
+  if [ "${_HOST}" = 'mac' ]; then
     # Assume musl-cross toolchain via Homebrew, based on musl-cross-make
     # https://github.com/richfelker/musl-cross-make
     # https://github.com/FiloSottile/homebrew-musl-cross
@@ -320,7 +319,7 @@ fi
 #    `configure: WARNING: using cross tools not prefixed with host triplet`
 # Even with `_CCPREFIX` provided.
 # https://clang.llvm.org/docs/CrossCompilation.html
-case "${_HOSTOS}" in
+case "${_HOST}" in
   win)   _HOST_TRIPLET="${unamem}-pc-mingw32";;
   linux) _HOST_TRIPLET="${unamem}-pc-linux";;
   bsd)   _HOST_TRIPLET="${unamem}-pc-bsd";;
@@ -362,7 +361,7 @@ export _REVSUFFIX="${_REV}"; [ -z "${_REVSUFFIX}" ] || _REVSUFFIX="_${_REVSUFFIX
 . ./_dl.sh
 
 # Install required component
-if [ "${_OS}" = 'win' ] && [ "${_HOSTOS}" = 'mac' ]; then
+if [ "${_OS}" = 'win' ] && [ "${_HOST}" = 'mac' ]; then
   if [ ! -d .venv ]; then
     python3 -m venv .venv
     PIP_PROGRESS_BAR=off .venv/bin/python3 -m pip --disable-pip-version-check --no-cache-dir --require-virtualenv install pefile
@@ -547,7 +546,7 @@ build_single_target() {
   # Reset for each target
   PATH="${_ori_path}"
 
-  if [ "${_HOSTOS}" = 'mac' ]; then
+  if [ "${_HOST}" = 'mac' ]; then
     if [ -d '/opt/homebrew' ]; then
       brew_root='/opt/homebrew'
     else
@@ -558,7 +557,7 @@ build_single_target() {
   fi
 
   if [ "${_OS}" = 'win' ]; then
-    if [ "${_HOSTOS}" = 'win' ]; then
+    if [ "${_HOST}" = 'win' ]; then
       export PATH
       if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
         PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
@@ -573,7 +572,7 @@ build_single_target() {
     else
       if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
         export PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
-      elif [ "${_CC}" = 'llvm' ] && [ "${_HOSTOS}" = 'mac' ]; then
+      elif [ "${_CC}" = 'llvm' ] && [ "${_HOST}" = 'mac' ]; then
         export PATH="${_MAC_LLVM_PATH}:${_ori_path}"
       fi
       _TRIPLET="${_machine}-w64-mingw32"
@@ -583,16 +582,16 @@ build_single_target() {
       _CCPREFIX="${_TRIPLET}-"
       # mingw-w64 sysroots
       if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then
-        if [ "${_HOSTOS}" = 'mac' ]; then
+        if [ "${_HOST}" = 'mac' ]; then
           _SYSROOT="${brew_root}/opt/mingw-w64/toolchain-${_machine}"
-        elif [ "${_HOSTOS}" = 'linux' ]; then
+        elif [ "${_HOST}" = 'linux' ]; then
           _SYSROOT="/usr/${_TRIPLET}"
         fi
       fi
 
       _RUN_BIN='echo'
-      if [ "${_HOSTOS}" = 'linux' ] || \
-         [ "${_HOSTOS}" = 'bsd' ]; then
+      if [ "${_HOST}" = 'linux' ] || \
+         [ "${_HOST}" = 'bsd' ]; then
         # Run x64 targets on same CPU:
         if [ "${_CPU}" = 'x64' ] && \
            [ "${unamem}" = 'x86_64' ]; then
@@ -602,13 +601,13 @@ build_single_target() {
             _RUN_BIN='wine'
           fi
         fi
-      elif [ "${_HOSTOS}" = 'mac' ]; then
+      elif [ "${_HOST}" = 'mac' ]; then
         # Run x64 targets on Intel and ARM (requires Wine 6.0.1):
         if [ "${_CPU}" = 'x64' ] && \
            command -v wine64 >/dev/null 2>&1; then
           _RUN_BIN='wine64'
         fi
-      elif [ "${_HOSTOS}" = 'win' ]; then
+      elif [ "${_HOST}" = 'win' ]; then
         # Skip ARM64 target on 64-bit Intel, run all targets on ARM64:
         if [ "${unamem}" = 'x86_64' ] && \
            [ "${_CPU}" != 'a64' ]; then
@@ -619,14 +618,14 @@ build_single_target() {
       fi
     fi
   else
-    if [ "${_CC}" = 'llvm' ] && [ "${_TOOLCHAIN}" != 'llvm-apple' ] && [ "${_HOSTOS}" = 'mac' ]; then
+    if [ "${_CC}" = 'llvm' ] && [ "${_TOOLCHAIN}" != 'llvm-apple' ] && [ "${_HOST}" = 'mac' ]; then
       export PATH="${_MAC_LLVM_PATH}:${_ori_path}"
     fi
 
     if [ "${_OS}" = 'linux' ]; then
       # Include CRT type in Linux triplets, to make it visible in
       # the curl version banner.
-      if [ "${_HOSTOS}" = 'mac' ]; then
+      if [ "${_HOST}" = 'mac' ]; then
         _TRIPLET="${_machine}-linux-musl"
         _CCPREFIX="${_TRIPLET}-"
       elif [ "${_DISTRO}" = 'alpine' ]; then
@@ -655,7 +654,7 @@ build_single_target() {
       fi
 
       _RUN_BIN='echo'
-      if [ "${_HOSTOS}" = 'linux' ] && [ "${_OS}" = 'linux' ]; then
+      if [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ]; then
         # Skip running non-native builds
         if [ "${unamem}" = "${_machine}" ]; then
           _RUN_BIN=''
@@ -665,7 +664,7 @@ build_single_target() {
       _TRIPLET="${_machine}-apple-darwin"
 
       _RUN_BIN='echo'
-      if [ "${_HOSTOS}" = 'mac' ]; then
+      if [ "${_HOST}" = 'mac' ]; then
         # Skip running arm64 on x86_64
         if [ "${_CPU}" = 'x64' ] || \
            [ "${unamem}" = 'aarch64' ]; then
@@ -678,7 +677,7 @@ build_single_target() {
   if [ "${_CC}" = 'llvm' ]; then
     ccver="$("clang${_CCSUFFIX}" -dumpversion)"
   else
-    if [ "${_CRT}" = 'musl' ] && [ "${_HOSTOS}" != 'mac' ] && [ "${_DISTRO}" != 'alpine' ]; then
+    if [ "${_CRT}" = 'musl' ] && [ "${_HOST}" != 'mac' ] && [ "${_DISTRO}" != 'alpine' ]; then
       # method 1
       # Only for CC, not for binutils
       _CCPREFIX='musl-'
@@ -730,7 +729,7 @@ build_single_target() {
   unset CC
 
   if [ "${_OS}" = 'win' ]; then
-    if [ "${_HOSTOS}" != "${_OS}" ]; then
+    if [ "${_HOST}" != "${_OS}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Windows ${_CMAKE_GLOBAL}"
     fi
 
@@ -738,7 +737,7 @@ build_single_target() {
     [ "${_CPU}" = 'x64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-x86-64"
     [ "${_CPU}" = 'a64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=${_TRIPLET}"  # llvm-windres supports triplets here. https://github.com/llvm/llvm-project/blob/main/llvm/tools/llvm-rc/llvm-rc.cpp
 
-    if [ "${_HOSTOS}" = 'win' ]; then
+    if [ "${_HOST}" = 'win' ]; then
       # '-G MSYS Makefiles' command-line option is problematic due to spaces
       # and unwanted escaping/splitting. Pass it via envvar instead.
       export CMAKE_GENERATOR='MSYS Makefiles'
@@ -754,7 +753,7 @@ build_single_target() {
       fi
     fi
   elif [ "${_OS}" = 'mac' ]; then
-    if [ "${_HOSTOS}" != "${_OS}" ]; then
+    if [ "${_HOST}" != "${_OS}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Darwin ${_CMAKE_GLOBAL}"
     fi
     # macOS 10.9 Mavericks 2013-10-22. Seems to work for arm64 builds,
@@ -770,7 +769,7 @@ build_single_target() {
       "$(printf '%s' "${macminver}" | cut -d '.' -f 1)" \
       "$(printf '%s' "${macminver}" | cut -d '.' -f 2)")"
   elif [ "${_OS}" = 'linux' ]; then
-    if [ "${_HOSTOS}" != "${_OS}" ]; then
+    if [ "${_HOST}" != "${_OS}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Linux ${_CMAKE_GLOBAL}"
     fi
 
@@ -796,7 +795,7 @@ build_single_target() {
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-z,relro,-z,now"
 
     if [ "${_CRT}" = 'musl' ]; then
-      if [ "${_HOSTOS}" = 'mac' ]; then
+      if [ "${_HOST}" = 'mac' ]; then
         _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static"
       elif [ "${_DISTRO}" = 'alpine' ]; then
         _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static-pie"
@@ -811,7 +810,7 @@ build_single_target() {
 
   # 'configure' naming conventions:
   # - '--build' is the host we are running the build on.
-  #   We call it '_HOST_TRIPLET' (and `_HOSTOS` for our short name).
+  #   We call it '_HOST_TRIPLET' (and `_HOST` for our short name).
   # - '--host' is the host we are building the binaries for.
   #   We call it '_TRIPLET' (and '_OS' for our short name).
   _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --build=${_HOST_TRIPLET} --host=${_TRIPLET}"
@@ -869,7 +868,7 @@ build_single_target() {
       _CC_GLOBAL="${_CC_GLOBAL} --sysroot=${_SYSROOT}"
       _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --with-sysroot=${_SYSROOT}"
     fi
-    if [ "${_HOSTOS}" = 'linux' ] && [ "${_OS}" = 'win' ]; then
+    if [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'win' ]; then
       # We used to pass this via CFLAGS for CMake to make it detect llvm/clang,
       # so we need to pass this via CMAKE_C_FLAGS, though meant for the linker.
       if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
@@ -890,7 +889,7 @@ build_single_target() {
         _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/${_TRIPLET}"
         _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/backward"
       fi
-    elif [ "${_HOSTOS}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [ "${unamem}" != "${_machine}" ] && [ "${_CC}" = 'llvm' ]; then
+    elif [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [ "${unamem}" != "${_machine}" ] && [ "${_CC}" = 'llvm' ]; then
       _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -isystem /usr/${_TRIPLETSH}/include"
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L/usr/${_TRIPLETSH}/lib"
       if [ "${_CCRT}" = 'libgcc' ]; then
@@ -947,7 +946,7 @@ build_single_target() {
       _BINUTILS_PREFIX='llvm-'
       _BINUTILS_SUFFIX="${_CCSUFFIX}"
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -fuse-ld=lld${_CCSUFFIX}"
-      if [ "${_HOSTOS}" = 'mac' ] && [ "${_OS}" = 'win' ]; then
+      if [ "${_HOST}" = 'mac' ] && [ "${_OS}" = 'win' ]; then
         _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} -I${_SYSROOT}/${_TRIPLET}/include"
       fi
     fi
@@ -955,7 +954,7 @@ build_single_target() {
     # llvm v16:
     #   ld64.lld: warning: Option `-s' is obsolete. Please modernize your usage.
     #   ld: warning: option -s is obsolete and being ignored
-    if [ "${_HOSTOS}" != 'mac' ] || [ "${_OS}" != 'mac' ]; then
+    if [ "${_HOST}" != 'mac' ] || [ "${_OS}" != 'mac' ]; then
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-s"  # Omit .buildid segment with the timestamp in it
     fi
 
@@ -1084,7 +1083,7 @@ build_single_target() {
   if [ "${_OS}" = 'win' ] && \
      [ "${_CC}" = 'llvm' ] && \
      [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && \
-     [ "${_HOSTOS}" = 'linux' ] && \
+     [ "${_HOST}" = 'linux' ] && \
      [ -n "${_BINUTILS_SUFFIX}" ]; then
     # FIXME: llvm-windres present, but unable to find its clang counterpart
     #        when suffixed:
@@ -1120,7 +1119,7 @@ build_single_target() {
     chmod +x "${AR_NORMALIZE}"
   fi
 
-  if [ "${_OS}" = 'win' ] && [ "${_HOSTOS}" = 'mac' ]; then
+  if [ "${_OS}" = 'win' ] && [ "${_HOST}" = 'mac' ]; then
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${CW_LLVM_MINGW_PATH}/bin/${AR}"
     elif [ "${_CC}" = 'llvm' ]; then
@@ -1189,7 +1188,7 @@ build_single_target() {
       mingwver="${mingwver} ${CW_LLVM_MINGW_VER_:-?}"
       versuffix="${versuffix_llvm_mingw}"
     else
-      case "${_HOSTOS}" in
+      case "${_HOST}" in
         mac)
           mingwver="$(HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_FROM_API=1 brew info --json=v2 --formula mingw-w64 | jq --raw-output '.formulae[] | select(.name == "mingw-w64") | .versions.stable')";;
         linux)
@@ -1222,7 +1221,7 @@ build_single_target() {
     fi
 
     if [ "${_CRT}" = 'musl' ]; then
-      if [ "${_HOSTOS}" = 'mac' ]; then
+      if [ "${_HOST}" = 'mac' ]; then
         # Terrible hack to retrieve musl version
         libcver="$(grep -a -m1 -o -E '\x00[0-9]+\.[0-9]+\.[0-9]+\x00' "${brew_root}/opt/musl-cross/libexec/${_machine}-linux-musl/lib/libc.so" | head -n 1 || true)"
       fi
@@ -1403,7 +1402,7 @@ elif [ "${_OS}" = 'mac' ]; then
     ./_macuni.sh
   fi
 elif [ "${_OS}" = 'linux' ]; then
-  if [ "${_HOSTOS}" = 'mac' ]; then
+  if [ "${_HOST}" = 'mac' ]; then
     # Custom installs of musl-cross can support a64 and other targets
     if [ "${_CONFIG#*a64*}" = "${_CONFIG}" ] && \
        command -v x86_64-linux-musl-gcc >/dev/null 2>&1; then
@@ -1430,7 +1429,7 @@ elif [ "${_OS}" = 'linux' ]; then
   fi
 fi
 
-case "${_HOSTOS}" in
+case "${_HOST}" in
   mac)   rm -f -P "${SIGN_CODE_KEY}";;
   linux) [ -w "${SIGN_CODE_KEY}" ] && srm "${SIGN_CODE_KEY}";;
 esac

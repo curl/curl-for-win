@@ -15,11 +15,11 @@ _VER="$1"
   cd "${_NAM}" || exit 0
 
   # Required on MSYS2 for pod2man and pod2html in 'make install' phase
-  [ "${_HOSTOS}" = 'win' ] && export PATH="${PATH}:/usr/bin/core_perl"
+  [ "${_HOST}" = 'win' ] && export PATH="${PATH}:/usr/bin/core_perl"
 
   readonly _ref='CHANGES.md'
 
-  case "${_HOSTOS}" in
+  case "${_HOST}" in
     bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${_ref}")";;
     *)       unixts="$(TZ=UTC stat -c '%Y' "${_ref}")";;
   esac
@@ -74,7 +74,7 @@ _VER="$1"
   #   ../crypto/mem_sec.c:60:13: fatal error: linux/mman.h: No such file or directory
   # Linux cross-builds from other systems (e.g. macOS) are unlikely to provide
   # Linux headers.
-  if [ "${_CRT}" = 'musl' ] && [ "${_HOSTOS}" != 'linux' ]; then
+  if [ "${_CRT}" = 'musl' ] && [ "${_HOST}" != 'linux' ]; then
     options="${options} no-secure-memory"
   fi
 

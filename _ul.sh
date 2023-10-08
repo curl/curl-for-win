@@ -55,7 +55,7 @@ touch -c -r "${_ALL}" "${_ALL}.txt"
 
 # Official deploy
 DEPLOY_KEY="$(pwd)/deploy.key"
-if [ "${PUBLISH_PROD_FROM}" = "${_HOSTOS}" ] && \
+if [ "${PUBLISH_PROD_FROM}" = "${_HOST}" ] && \
    [ "${_CONFIG#*main*}" != "${_CONFIG}" ] && \
    [ -s "${DEPLOY_KEY}.asc" ] && \
    [ -n "${DEPLOY_GPG_PASS:+1}" ]; then
@@ -106,7 +106,7 @@ EOF
       'curl-for-win@silly.haxx.se:.'
   fi
 
-  case "${_HOSTOS}" in
+  case "${_HOST}" in
     mac)   rm -f -P "${DEPLOY_KEY}";;
     linux) [ -w "${DEPLOY_KEY}" ] && srm "${DEPLOY_KEY}";;
   esac

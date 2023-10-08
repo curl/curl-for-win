@@ -11,7 +11,7 @@
   readonly _ref='CHANGES'
 
   # Show the reference timestamp in UTC.
-  case "${_HOSTOS}" in
+  case "${_HOST}" in
     bsd|mac) TZ=UTC stat -f '%N: %Sm' -t '%Y-%m-%d %H:%M' "${_ref}";;
     *)       TZ=UTC stat -c '%n: %y' "${_ref}";;
   esac

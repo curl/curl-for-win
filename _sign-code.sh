@@ -16,7 +16,7 @@ if [ "${_OS}" = 'win' ] && \
   _ref="$1"
   shift
 
-  case "${_HOSTOS}" in
+  case "${_HOST}" in
     bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${_ref}")";;
     *)       unixts="$(TZ=UTC stat -c '%Y' "${_ref}")";;
   esac
