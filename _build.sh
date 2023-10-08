@@ -809,6 +809,11 @@ build_single_target() {
   _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_MESSAGE=NEVER"
   _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_PREFIX=${_PREFIX}"
 
+  # 'configure' naming conventions:
+  # - '--build' is the host we are running the build on.
+  #   We call it '_BUILD_HOST' (and `_HOSTOS` for our short name).
+  # - '--host' is the host we are building the binaries for.
+  #   We call it '_TRIPLET' (and '_OS' for our short name).
   _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --build=${_BUILD_HOST} --host=${_TRIPLET}"
   [ "${_CPU}" = 'x86' ] && _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-asynchronous-unwind-tables"
 
