@@ -33,11 +33,11 @@ if [ ! -f .cw-initialized ]; then
       ;;
     Linux*)
       if [ "${_HOSTOS}" = 'linux' ] && [ -s /etc/os-release ]; then
-        _DIST="$(grep -a '^ID=' /etc/os-release | cut -c 4- | tr -d '"' || true)"
-        _DIST="${_DIST:-unrecognized}"
+        _DISTRO="$(grep -a '^ID=' /etc/os-release | cut -c 4- | tr -d '"' || true)"
+        _DISTRO="${_DISTRO:-unrecognized}"
       fi
 
-      if [ "${_DIST}" = 'debian' ]; then
+      if [ "${_DISTRO}" = 'debian' ]; then
         [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} golang nasm"
         [[ "${CW_CONFIG:-}" = *'musl'* ]] && extra="${extra} musl musl-dev musl-tools"
         if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
@@ -48,7 +48,7 @@ if [ ! -f .cw-initialized ]; then
           curl git gpg rsync python3-pefile make cmake \
           autoconf automake autopoint libtool \
           zip time jq secure-delete ${extra}
-      elif [ "${_DIST}" = 'alpine' ]; then
+      elif [ "${_DISTRO}" = 'alpine' ]; then
         [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go nasm"
         if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
           apk add --no-cache checksec-rs --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing/

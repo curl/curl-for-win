@@ -92,7 +92,7 @@
         elif [ "${_OS}" = 'linux' ]; then
           "${_READELF}" --file-header --dynamic "${f}"
           if command -v checksec >/dev/null 2>&1; then
-            if [ "${_DIST}" = 'alpine' ]; then
+            if [ "${_DISTRO}" = 'alpine' ]; then
               checksec --json --file "${f}" | jq  # checksec-rs
             else
               checksec --format=json --file="${f}" | jq

@@ -94,7 +94,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - linux: musl cross-cpu builds. https://musl.cc/aarch64-linux-musl-cross.tgz (gcc)
 #     $ echo 'aarch64' > /etc/apk/arch; apk add --no-cache musl ?
 #     $ dpkg --add-architecture aarch64; apt-get install musl:aarch64 ?
-#   - renames: _BRANCH -> CW_CONFIG, _HOSTOS -> _HOST, _BUILD_HOST -> _HOST_TRIPLET, _DIST -> _DISTRO
+#   - renames: _BRANCH -> CW_CONFIG, _HOSTOS -> _HOST, _BUILD_HOST -> _HOST_TRIPLET
 #   - merge _ci-*.sh scripts into one.
 #   - win: Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
@@ -223,10 +223,10 @@ case "$(uname)" in
   *)       _HOSTOS='unrecognized';;
 esac
 
-export _DIST=''
+export _DISTRO=''
 if [ "${_HOSTOS}" = 'linux' ] && [ -s /etc/os-release ]; then
-  _DIST="$(grep -a '^ID=' /etc/os-release | cut -c 4- | tr -d '"' || true)"
-  _DIST="${_DIST:-unrecognized}"
+  _DISTRO="$(grep -a '^ID=' /etc/os-release | cut -c 4- | tr -d '"' || true)"
+  _DISTRO="${_DISTRO:-unrecognized}"
 fi
 
 export _OS='win'
@@ -257,7 +257,7 @@ elif [ "${_OS}" = 'linux' ]; then
     # https://words.filippo.io/easy-windows-and-linux-cross-compilers-for-macos/
     _CONFCC='gcc'
     _CRT='musl'
-  elif [ "${_DIST}" = 'alpine' ]; then
+  elif [ "${_DISTRO}" = 'alpine' ]; then
     _CRT='musl'
   else
     # TODO: make musl the default (once all issues are cleared)
@@ -629,9 +629,9 @@ build_single_target() {
       if [ "${_HOSTOS}" = 'mac' ]; then
         _TRIPLET="${_machine}-linux-musl"
         _CCPREFIX="${_TRIPLET}-"
-      elif [ "${_DIST}" = 'alpine' ]; then
+      elif [ "${_DISTRO}" = 'alpine' ]; then
         # E.g. x86_64-alpine-linux-musl
-        _TRIPLET="${_machine}-${_DIST}-linux-${_CRT}"
+        _TRIPLET="${_machine}-${_DISTRO}-linux-${_CRT}"
         _TRIPLETSH="${_TRIPLET}"
       else
         if [ "${_CRT}" = 'musl' ]; then
@@ -678,7 +678,7 @@ build_single_target() {
   if [ "${_CC}" = 'llvm' ]; then
     ccver="$("clang${_CCSUFFIX}" -dumpversion)"
   else
-    if [ "${_CRT}" = 'musl' ] && [ "${_HOSTOS}" != 'mac' ] && [ "${_DIST}" != 'alpine' ]; then
+    if [ "${_CRT}" = 'musl' ] && [ "${_HOSTOS}" != 'mac' ] && [ "${_DISTRO}" != 'alpine' ]; then
       # method 1
       # Only for CC, not for binutils
       _CCPREFIX='musl-'
@@ -798,7 +798,7 @@ build_single_target() {
     if [ "${_CRT}" = 'musl' ]; then
       if [ "${_HOSTOS}" = 'mac' ]; then
         _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static"
-      elif [ "${_DIST}" = 'alpine' ]; then
+      elif [ "${_DISTRO}" = 'alpine' ]; then
         _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static-pie"
       else
         _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static"
@@ -990,7 +990,7 @@ build_single_target() {
     _LD='ld'
   fi
 
-  if [ "${_CRT}" = 'musl' ] && [ "${_DIST}" = 'debian' ]; then
+  if [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
     if [ "${_OPENSSL}" = 'quictls' ] || \
        [ "${_OPENSSL}" = 'openssl' ]; then
       # Workaround for:
@@ -1127,7 +1127,7 @@ build_single_target() {
 
   if [ "${_CCRT}" = 'clang-rt' ]; then
     if [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
-      if [ "${_CRT}" = 'musl' ] && [ "${_DIST}" = 'debian' ]; then
+      if [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
         # This method should also work to replace the `_CCPREFIX='musl-'` solution we use with gcc.
         clangrsdir="$("clang${_CCSUFFIX}" -print-resource-dir)"                         # /usr/lib/llvm-13/lib/clang/13.0.1
         clangrtdir="$("clang${_CCSUFFIX}" -print-runtime-dir)"                          # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux
