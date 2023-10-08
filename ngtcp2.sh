@@ -21,7 +21,7 @@ _VER="$1"
   LIBS=''
   options=''
 
-  # Avoid finding unnecessary system (Homebrew) package. This avoid log noise, and
+  # Avoid finding unnecessary system (Homebrew) package. This avoids log noise and
   # prevents building examples, which may fail for reasons or just take extra time.
   options="${options} -DLIBEV_INCLUDE_DIR="
 
