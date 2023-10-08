@@ -31,7 +31,7 @@ _VER="$1"
   LDFLAGS_BIN="${_LDFLAGS_BIN_GLOBAL}"
   LDFLAGS_LIB=''
 
-  if [ "${_OS}" = 'win' ] && [ "${_BRANCH#*unicode*}" != "${_BRANCH}" ]; then
+  if [ "${_OS}" = 'win' ] && [ "${_CONFIG#*unicode*}" != "${_CONFIG}" ]; then
     options="${options} -DENABLE_UNICODE=ON"
   fi
 
@@ -67,11 +67,11 @@ _VER="$1"
     LDFLAGS="${LDFLAGS} -Wl,-Bstatic"
   fi
 
-  if [ ! "${_BRANCH#*werror*}" = "${_BRANCH}" ]; then
+  if [ ! "${_CONFIG#*werror*}" = "${_CONFIG}" ]; then
     options="${options} -DCURL_WERROR=ON"
   fi
 
-  if [ ! "${_BRANCH#*debug*}" = "${_BRANCH}" ]; then
+  if [ ! "${_CONFIG#*debug*}" = "${_CONFIG}" ]; then
     options="${options} -DENABLE_DEBUG=ON"
     # curl would only set this automatically for the 'Debug' configuration
     # Required for certain BUILD_TESTING=ON 'testdeps' build targets to link
@@ -84,21 +84,21 @@ _VER="$1"
     CPPFLAGS="${CPPFLAGS} -DDEBUGBUILD"
   fi
 
-  if [ ! "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] || \
-     [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
-     [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
+  if [ ! "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] || \
+     [ ! "${_CONFIG#*pico*}" = "${_CONFIG}" ] || \
+     [ ! "${_CONFIG#*nano*}" = "${_CONFIG}" ]; then
     options="${options} -DCURL_DISABLE_ALTSVC=ON"
   fi
 
-  if [ ! "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] || \
-     [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
+  if [ ! "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] || \
+     [ ! "${_CONFIG#*pico*}" = "${_CONFIG}" ]; then
     options="${options} -DCURL_DISABLE_CRYPTO_AUTH=ON"
     options="${options} -DCURL_DISABLE_DICT=ON -DCURL_DISABLE_FILE=ON -DCURL_DISABLE_GOPHER=ON -DCURL_DISABLE_MQTT=ON -DCURL_DISABLE_RTSP=ON -DCURL_DISABLE_SMB=ON -DCURL_DISABLE_TELNET=ON -DCURL_DISABLE_TFTP=ON"
     options="${options} -DCURL_DISABLE_FTP=ON"
     options="${options} -DCURL_DISABLE_IMAP=ON -DCURL_DISABLE_POP3=ON -DCURL_DISABLE_SMTP=ON"
     options="${options} -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON"
   else
-    [ "${_BRANCH#*noftp*}" != "${_BRANCH}" ] && options="${options} -DCURL_DISABLE_FTP=ON"
+    [ "${_CONFIG#*noftp*}" != "${_CONFIG}" ] && options="${options} -DCURL_DISABLE_FTP=ON"
     if [ "${_OS}" = 'win' ]; then
       LIBS="${LIBS} -lwldap32"
     elif [ "${_OS}" != 'mac' ] || [ "${_OSVER}" -ge '1010' ]; then  # On macOS we use the built-in LDAP lib
@@ -112,7 +112,7 @@ _VER="$1"
   else
     options="${options} -DZLIB_INCLUDE_DIR="
   fi
-  if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
+  if [ -d ../brotli ] && [ "${_CONFIG#*nobrotli*}" = "${_CONFIG}" ]; then
     options="${options} -DCURL_BROTLI=ON"
     options="${options} -DBROTLI_INCLUDE_DIR=${_TOP}/brotli/${_PP}/include"
     options="${options} -DBROTLIDEC_LIBRARY=${_TOP}/brotli/${_PP}/lib/libbrotlidec.a"
@@ -120,7 +120,7 @@ _VER="$1"
   else
     options="${options} -DCURL_BROTLI=OFF"
   fi
-  if [ -d ../zstd ] && [ "${_BRANCH#*nozstd*}" = "${_BRANCH}" ]; then
+  if [ -d ../zstd ] && [ "${_CONFIG#*nozstd*}" = "${_CONFIG}" ]; then
     options="${options} -DCURL_ZSTD=ON"
     options="${options} -DZstd_INCLUDE_DIR=${_TOP}/zstd/${_PP}/include"
     options="${options} -DZstd_LIBRARY=${_TOP}/zstd/${_PP}/lib/libzstd.a"
@@ -243,7 +243,7 @@ _VER="$1"
     options="${options} -DUSE_NGHTTP2=OFF"
   fi
 
-  [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ] || h3=0
+  [ "${_CONFIG#*noh3*}" = "${_CONFIG}" ] || h3=0
 
   if [ "${h3}" = '1' ] && [ -d ../nghttp3 ] && [ -d ../ngtcp2 ]; then
     options="${options} -DUSE_NGHTTP3=ON"
@@ -299,7 +299,7 @@ _VER="$1"
   else
     options="${options} -DUSE_LIBIDN2=OFF"
     options="${options} -DCURL_USE_LIBPSL=OFF"
-    if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+    if [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
        [ "${_OS}" = 'win' ]; then
       options="${options} -DUSE_WIN32_IDN=ON"
     fi

@@ -298,7 +298,7 @@ check_update() {
         newver=''
       fi
     else
-      if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
+      if [ "${_CONFIG#*dev*}" != "${_CONFIG}" ]; then
         newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases" \
           --header 'X-GitHub-Api-Version: 2022-11-28' \
           | jq --raw-output 'map(select(.prerelease)) | first | .tag_name' | sed 's/^v//')"
@@ -544,9 +544,9 @@ fi
 
 my_gpg --version | grep -a -F gpg
 
-if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
+if [ "${_CONFIG#*dev*}" != "${_CONFIG}" ]; then
   _patsuf='.dev'
-elif [ "${_BRANCH#*main*}" = "${_BRANCH}" ]; then
+elif [ "${_CONFIG#*main*}" = "${_CONFIG}" ]; then
   _patsuf='.test'
 else
   _patsuf=''
@@ -665,8 +665,8 @@ if [ "${_OS}" = 'win' ] && \
   fi
 fi
 
-if [ "${_BRANCH#*nozlib*}" = "${_BRANCH}" ]; then
-  if [ "${_BRANCH#*zlibng*}" != "${_BRANCH}" ]; then
+if [ "${_CONFIG#*nozlib*}" = "${_CONFIG}" ]; then
+  if [ "${_CONFIG#*zlibng*}" != "${_CONFIG}" ]; then
     live_dl zlibng "${ZLIBNG_VER_}"
     live_xt zlibng "${ZLIBNG_HASH}"
   else
@@ -675,34 +675,34 @@ if [ "${_BRANCH#*nozlib*}" = "${_BRANCH}" ]; then
   fi
 fi
 
-if [ "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*mini*}" = "${_BRANCH}" ]; then
+if [ "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] && \
+   [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
+   [ "${_CONFIG#*nano*}" = "${_CONFIG}" ] && \
+   [ "${_CONFIG#*micro*}" = "${_CONFIG}" ] && \
+   [ "${_CONFIG#*mini*}" = "${_CONFIG}" ]; then
 
-  if [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
+  if [ "${_CONFIG#*nobrotli*}" = "${_CONFIG}" ]; then
     live_dl brotli "${BROTLI_VER_}"
     live_xt brotli "${BROTLI_HASH}"
   fi
-  if [ "${_BRANCH#*nozstd*}" = "${_BRANCH}" ]; then
+  if [ "${_CONFIG#*nozstd*}" = "${_CONFIG}" ]; then
     live_dl zstd "${ZSTD_VER_}"
     live_xt zstd "${ZSTD_HASH}"
   fi
 fi
 
-if [ "${_BRANCH#*cares*}" != "${_BRANCH}" ]; then
+if [ "${_CONFIG#*cares*}" != "${_CONFIG}" ]; then
   live_dl cares "${CARES_VER_}"
   live_xt cares "${CARES_HASH}"
 fi
 
-if [ "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
+if [ "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] && \
+   [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
+   [ "${_CONFIG#*nano*}" = "${_CONFIG}" ]; then
   live_dl nghttp2 "${NGHTTP2_VER_}"
   live_xt nghttp2 "${NGHTTP2_HASH}"
 
-  if [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ]; then
+  if [ "${_CONFIG#*noh3*}" = "${_CONFIG}" ]; then
     live_dl nghttp3 "${NGHTTP3_VER_}"
     live_xt nghttp3 "${NGHTTP3_HASH}"
 
@@ -711,7 +711,7 @@ if [ "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] && \
   fi
 fi
 
-if [ "${_BRANCH#*big*}" != "${_BRANCH}" ]; then
+if [ "${_CONFIG#*big*}" != "${_CONFIG}" ]; then
   live_dl libidn2 "${LIBIDN2_VER_}"
   live_xt libidn2 "${LIBIDN2_HASH}"
 
@@ -726,42 +726,42 @@ if [ "${_BRANCH#*big*}" != "${_BRANCH}" ]; then
   live_xt gsasl "${GSASL_HASH}"
 fi
 
-if [ "${_BRANCH#*wolfssl*}" != "${_BRANCH}" ]; then
+if [ "${_CONFIG#*wolfssl*}" != "${_CONFIG}" ]; then
   live_dl wolfssl "${WOLFSSL_VER_}"
   live_xt wolfssl "${WOLFSSL_HASH}"
 fi
 
-if [ "${_BRANCH#*mbedtls*}" != "${_BRANCH}" ]; then
+if [ "${_CONFIG#*mbedtls*}" != "${_CONFIG}" ]; then
   live_dl mbedtls "${MBEDTLS_VER_}"
   live_xt mbedtls "${MBEDTLS_HASH}"
 fi
 
 need_openssl=0
-if [ "${_BRANCH#*bldtst*}" = "${_BRANCH}" ]; then
+if [ "${_CONFIG#*bldtst*}" = "${_CONFIG}" ]; then
   if [ "${_OS}" != 'win' ]; then
     need_openssl=1
-  elif [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
-       [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
-       [ "${_BRANCH#*micro*}" = "${_BRANCH}" ] && \
-       [ "${_BRANCH#*mini*}" = "${_BRANCH}" ] && \
-       [ "${_BRANCH#*schannel*}" = "${_BRANCH}" ]; then
+  elif [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
+       [ "${_CONFIG#*nano*}" = "${_CONFIG}" ] && \
+       [ "${_CONFIG#*micro*}" = "${_CONFIG}" ] && \
+       [ "${_CONFIG#*mini*}" = "${_CONFIG}" ] && \
+       [ "${_CONFIG#*schannel*}" = "${_CONFIG}" ]; then
     need_openssl=1
   fi
 fi
 
 need_cacert=0
 if [ "${need_openssl}" = '1' ]; then
-  if [ "${_BRANCH#*libressl*}" != "${_BRANCH}" ]; then
+  if [ "${_CONFIG#*libressl*}" != "${_CONFIG}" ]; then
     live_dl libressl "${LIBRESSL_VER_}"
     live_xt libressl "${LIBRESSL_HASH}"
-  elif [ "${_BRANCH#*awslc*}" != "${_BRANCH}" ]; then
+  elif [ "${_CONFIG#*awslc*}" != "${_CONFIG}" ]; then
     live_dl awslc "${AWSLC_VER_}"
     live_xt awslc "${AWSLC_HASH}"
-  elif [ "${_BRANCH#*boringssl*}" != "${_BRANCH}" ]; then
+  elif [ "${_CONFIG#*boringssl*}" != "${_CONFIG}" ]; then
     live_dl boringssl "${BORINGSSL_VER_}"
     live_xt boringssl "${BORINGSSL_HASH}"
-  elif [ "${_BRANCH#*noh3*}" != "${_BRANCH}" ]; then
-    if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
+  elif [ "${_CONFIG#*noh3*}" != "${_CONFIG}" ]; then
+    if [ "${_CONFIG#*dev*}" != "${_CONFIG}" ]; then
       OPENSSL_VER_='3.1.0-beta1'
       OPENSSL_HASH=
     fi
@@ -774,21 +774,21 @@ if [ "${need_openssl}" = '1' ]; then
   need_cacert=1
 fi
 
-if [ "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*nano*}" = "${_BRANCH}" ] && \
-   [ "${_BRANCH#*micro*}" = "${_BRANCH}" ]; then
-  if [ "${_BRANCH#*wolfssh*}" != "${_BRANCH}" ]; then
+if [ "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] && \
+   [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
+   [ "${_CONFIG#*nano*}" = "${_CONFIG}" ] && \
+   [ "${_CONFIG#*micro*}" = "${_CONFIG}" ]; then
+  if [ "${_CONFIG#*wolfssh*}" != "${_CONFIG}" ]; then
     live_dl wolfssh "${WOLFSSH_VER_}"
     live_xt wolfssh "${WOLFSSH_HASH}"
     need_cacert=1
-  elif [ "${_BRANCH#*libssh*}" != "${_BRANCH}" ]; then
+  elif [ "${_CONFIG#*libssh*}" != "${_CONFIG}" ]; then
     # shellcheck disable=SC2153
     live_dl libssh "${LIBSSH_VER_}"
     # shellcheck disable=SC2153
     live_xt libssh "${LIBSSH_HASH}"
   else
-    if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
+    if [ "${_CONFIG#*dev*}" != "${_CONFIG}" ]; then
       LIBSSH2_HASH=
       LIBSSH2_REV_="${LIBSSH2_REV_:-master}"
       if [ -z "${CW_GET:-}" ] || echo " ${CW_GET} " | grep -q -F ' libssh2 '; then
@@ -814,7 +814,7 @@ if [ "${need_cacert}" = '1' ]; then
   live_xt cacert "${CACERT_HASH}"
 fi
 
-if [ "${_BRANCH#*dev*}" != "${_BRANCH}" ]; then
+if [ "${_CONFIG#*dev*}" != "${_CONFIG}" ]; then
   CURL_HASH=
   CURL_REV_="${CURL_REV_:-master}"
   if [ -z "${CW_GET:-}" ] || echo " ${CW_GET} " | grep -q -F ' curl '; then

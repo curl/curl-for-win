@@ -56,7 +56,7 @@ touch -c -r "${_ALL}" "${_ALL}.txt"
 # Official deploy
 DEPLOY_KEY="$(pwd)/deploy.key"
 if [ "${PUBLISH_PROD_FROM}" = "${_HOSTOS}" ] && \
-   [ "${_BRANCH#*main*}" != "${_BRANCH}" ] && \
+   [ "${_CONFIG#*main*}" != "${_CONFIG}" ] && \
    [ -s "${DEPLOY_KEY}.asc" ] && \
    [ -n "${DEPLOY_GPG_PASS:+1}" ]; then
 

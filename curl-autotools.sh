@@ -38,11 +38,11 @@ _VER="$1"
 
     options="${options} --enable-unix-sockets"
 
-    if [ ! "${_BRANCH#*werror*}" = "${_BRANCH}" ]; then
+    if [ ! "${_CONFIG#*werror*}" = "${_CONFIG}" ]; then
       options="${options} --enable-werror"
     fi
 
-    if [ ! "${_BRANCH#*debug*}" = "${_BRANCH}" ]; then
+    if [ ! "${_CONFIG#*debug*}" = "${_CONFIG}" ]; then
       options="${options} --enable-debug"
     else
       options="${options} --disable-debug"
@@ -61,7 +61,7 @@ _VER="$1"
       LDFLAGS="${LDFLAGS} ${_LDFLAGS_BIN_GLOBAL}"
     fi
 
-    if [ "${_OS}" = 'win' ] && [ "${_BRANCH#*unicode*}" != "${_BRANCH}" ]; then
+    if [ "${_OS}" = 'win' ] && [ "${_CONFIG#*unicode*}" != "${_CONFIG}" ]; then
       CPPFLAGS="${CPPFLAGS} -Dmain=wmain"  # FIXME: upstream. https://github.com/curl/curl/issues/7229
       CPPFLAGS="${CPPFLAGS} -DUNICODE -D_UNICODE"
       LDFLAGS="${LDFLAGS} -municode"
@@ -80,16 +80,16 @@ _VER="$1"
       fi
     fi
 
-    if [ ! "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] || \
-       [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ] || \
-       [ ! "${_BRANCH#*nano*}" = "${_BRANCH}" ]; then
+    if [ ! "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] || \
+       [ ! "${_CONFIG#*pico*}" = "${_CONFIG}" ] || \
+       [ ! "${_CONFIG#*nano*}" = "${_CONFIG}" ]; then
       options="${options} --disable-alt-svc"
     else
       options="${options} --enable-alt-svc"
     fi
 
-    if [ ! "${_BRANCH#*bldtst*}" = "${_BRANCH}" ] || \
-       [ ! "${_BRANCH#*pico*}" = "${_BRANCH}" ]; then
+    if [ ! "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] || \
+       [ ! "${_CONFIG#*pico*}" = "${_CONFIG}" ]; then
       options="${options} --disable-crypto-auth"
       options="${options} --disable-dict --disable-file --disable-gopher --disable-mqtt --disable-rtsp --disable-smb --disable-telnet --disable-tftp"
       options="${options} --disable-ftp"
@@ -98,7 +98,7 @@ _VER="$1"
     else
       options="${options} --enable-crypto-auth"
       options="${options} --enable-dict --enable-file --enable-gopher --enable-mqtt --enable-rtsp --enable-smb --enable-telnet --enable-tftp"
-      if [ "${_BRANCH#*noftp*}" = "${_BRANCH}" ]; then
+      if [ "${_CONFIG#*noftp*}" = "${_CONFIG}" ]; then
         options="${options} --enable-ftp"
       else
         options="${options} --disable-ftp"
@@ -120,14 +120,14 @@ _VER="$1"
       options="${options} --without-zlib"
     fi
 
-    if [ -d ../brotli ] && [ "${_BRANCH#*nobrotli*}" = "${_BRANCH}" ]; then
+    if [ -d ../brotli ] && [ "${_CONFIG#*nobrotli*}" = "${_CONFIG}" ]; then
       options="${options} --with-brotli=${_TOP}/brotli/${_PP}"
       LDFLAGS="${LDFLAGS} -L${_TOP}/brotli/${_PP}/lib"
       LIBS="${LIBS} -lbrotlicommon"
     else
       options="${options} --without-brotli"
     fi
-    if [ -d ../zstd ] && [ "${_BRANCH#*nozstd*}" = "${_BRANCH}" ]; then
+    if [ -d ../zstd ] && [ "${_CONFIG#*nozstd*}" = "${_CONFIG}" ]; then
       options="${options} --with-zstd=${_TOP}/zstd/${_PP}"
       LDFLAGS="${LDFLAGS} -L${_TOP}/zstd/${_PP}/lib"
       LIBS="${LIBS} -lzstd"
@@ -248,7 +248,7 @@ _VER="$1"
     else
       options="${options} --without-libidn2"
       options="${options} --without-libpsl"
-      if [ "${_BRANCH#*pico*}" = "${_BRANCH}" ] && \
+      if [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
          [ "${_OS}" = 'win' ]; then
         options="${options} --with-winidn"
       fi
@@ -281,7 +281,7 @@ _VER="$1"
       options="${options} --without-nghttp2"
     fi
 
-    [ "${_BRANCH#*noh3*}" = "${_BRANCH}" ] || h3=0
+    [ "${_CONFIG#*noh3*}" = "${_CONFIG}" ] || h3=0
 
     # We enable HTTP/3 manually, so it shows up "disabled" in 'configure summary'.
     if [ "${h3}" = '1' ] && [ -d ../nghttp3 ] && [ -d ../ngtcp2 ]; then

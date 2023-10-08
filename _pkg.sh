@@ -56,7 +56,7 @@ create_pkg() {
     _suf=''  # _FLAV already added, do not add it a second time
   fi
   # Alter filename for non-release packages
-  if [ "${_BRANCH#*main*}" != "${_BRANCH}" ]; then
+  if [ "${_CONFIG#*main*}" != "${_CONFIG}" ]; then
     if [ "${PUBLISH_PROD_FROM}" != "${_HOSTOS}" ]; then
       _suf="${_suf}-built-on-${_HOSTOS}"
     fi
@@ -115,14 +115,14 @@ if [ "${_NAM}" != "${_UNIPKG}" ]; then
   if ! grep -q -a -F "${namver}" -- "${_BLD}"; then
     echo "${namver}" >> "${_BLD}"
   fi
-elif [ "${mode}" = 'macuni' ] || [ "${_BRANCH#*macuni*}" = "${_BRANCH}" ]; then
+elif [ "${mode}" = 'macuni' ] || [ "${_CONFIG#*macuni*}" = "${_CONFIG}" ]; then
   create_pkg "$1" '.tar.xz'
   if [ "${_OS}" = 'win' ]; then
     create_pkg "$1" '.zip'
   fi
 fi
 
-if [ "${mode}" = 'unified' ] && [ "${_BRANCH#*macuni*}" != "${_BRANCH}" ]; then
+if [ "${mode}" = 'unified' ] && [ "${_CONFIG#*macuni*}" != "${_CONFIG}" ]; then
   touch "${_DST}/__macuni__.txt"
 else
   rm -r -f "${_DST:?}"

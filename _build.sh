@@ -94,7 +94,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - linux: musl cross-cpu builds. https://musl.cc/aarch64-linux-musl-cross.tgz (gcc)
 #     $ echo 'aarch64' > /etc/apk/arch; apk add --no-cache musl ?
 #     $ dpkg --add-architecture aarch64; apt-get install musl:aarch64 ?
-#   - renames: _BRANCH -> CW_CONFIG, _HOSTOS -> _HOST
+#   - renames: _HOSTOS -> _HOST
 #   - merge _ci-*.sh scripts into one.
 #   - win: Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
@@ -189,14 +189,14 @@ else
 fi
 echo "${_LOGURL}" | tee "${_LOG}"
 
-export _BRANCH
+export _CONFIG
 if [ -n "${CW_CONFIG:-}" ]; then
-  _BRANCH="${CW_CONFIG}"
+  _CONFIG="${CW_CONFIG}"
 else
-  _BRANCH="${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF_NAME:-}"
+  _CONFIG="${APPVEYOR_REPO_BRANCH:-}${CI_COMMIT_REF_NAME:-}${GITHUB_REF_NAME:-}"
 fi
-[ -n "${_BRANCH}" ] || _BRANCH="$(git symbolic-ref --short --quiet HEAD || true)"
-[ -n "${_BRANCH}" ] || _BRANCH='main'
+[ -n "${_CONFIG}" ] || _CONFIG="$(git symbolic-ref --short --quiet HEAD || true)"
+[ -n "${_CONFIG}" ] || _CONFIG='main'
 if command -v git >/dev/null 2>&1; then
   # Broken on AppVeyor CI since around 2023-02:
   #   fatal: No remote configured to list refs from.
@@ -210,7 +210,7 @@ if [ -n "${_COMMIT}" ]; then
   _TAR="${_URL_BASE}/archive/${_COMMIT}.tar.gz"
 else
 # _URL_FULL="${_URL_BASE}"
-  _TAR="${_URL_BASE}/archive/refs/heads/${_BRANCH}.tar.gz"
+  _TAR="${_URL_BASE}/archive/refs/heads/${_CONFIG}.tar.gz"
 fi
 
 # Detect host OS
@@ -230,8 +230,8 @@ if [ "${_HOSTOS}" = 'linux' ] && [ -s /etc/os-release ]; then
 fi
 
 export _OS='win'
-[ ! "${_BRANCH#*mac*}" = "${_BRANCH}" ] && _OS='mac'
-[ ! "${_BRANCH#*linux*}" = "${_BRANCH}" ] && _OS='linux'
+[ ! "${_CONFIG#*mac*}" = "${_CONFIG}" ] && _OS='mac'
+[ ! "${_CONFIG#*linux*}" = "${_CONFIG}" ] && _OS='linux'
 
 export _CACERT='cacert.pem'
 
@@ -242,13 +242,13 @@ if [ "${_OS}" = 'mac' ]; then
 else
   _CONFCC='llvm'
 fi
-[ ! "${_BRANCH#*gcc*}" = "${_BRANCH}" ] && _CONFCC='gcc'
-[ ! "${_BRANCH#*llvm*}" = "${_BRANCH}" ] && _CONFCC='llvm'
+[ ! "${_CONFIG#*gcc*}" = "${_CONFIG}" ] && _CONFCC='gcc'
+[ ! "${_CONFIG#*llvm*}" = "${_CONFIG}" ] && _CONFCC='llvm'
 
 export _CRT
 if [ "${_OS}" = 'win' ]; then
   _CRT='ucrt'
-  [ ! "${_BRANCH#*msvcrt*}" = "${_BRANCH}" ] && _CRT='msvcrt'
+  [ ! "${_CONFIG#*msvcrt*}" = "${_CONFIG}" ] && _CRT='msvcrt'
 elif [ "${_OS}" = 'linux' ]; then
   if [ "${_HOSTOS}" = 'mac' ]; then
     # Assume musl-cross toolchain via Homebrew, based on musl-cross-make
@@ -262,7 +262,7 @@ elif [ "${_OS}" = 'linux' ]; then
   else
     # TODO: make musl the default (once all issues are cleared)
     _CRT='gnu'
-    [ ! "${_BRANCH#*musl*}" = "${_BRANCH}" ] && _CRT='musl'
+    [ ! "${_CONFIG#*musl*}" = "${_CONFIG}" ] && _CRT='musl'
   fi
 else
   # macOS: /usr/lib/libSystem.B.dylib
@@ -288,7 +288,7 @@ fi
 
 if [ -z "${CW_MAP:-}" ]; then
   export CW_MAP='0'
-  [ "${_BRANCH#*main*}" = "${_BRANCH}" ] && CW_MAP='1'
+  [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && CW_MAP='1'
 fi
 
 export _JOBS=2
@@ -299,19 +299,19 @@ my_time='time'
 
 # Form suffix for alternate builds
 export _FLAV=''
-if [ "${_BRANCH#*bldtst*}" != "${_BRANCH}" ]; then
+if [ "${_CONFIG#*bldtst*}" != "${_CONFIG}" ]; then
   _FLAV='-bldtst'
-elif [ "${_BRANCH#*pico*}" != "${_BRANCH}" ]; then
+elif [ "${_CONFIG#*pico*}" != "${_CONFIG}" ]; then
   _FLAV='-pico'
-elif [ "${_BRANCH#*nano*}" != "${_BRANCH}" ]; then
+elif [ "${_CONFIG#*nano*}" != "${_CONFIG}" ]; then
   _FLAV='-nano'
-elif [ "${_BRANCH#*micro*}" != "${_BRANCH}" ]; then
+elif [ "${_CONFIG#*micro*}" != "${_CONFIG}" ]; then
   _FLAV='-micro'
-elif [ "${_BRANCH#*mini*}" != "${_BRANCH}" ]; then
+elif [ "${_CONFIG#*mini*}" != "${_CONFIG}" ]; then
   _FLAV='-mini'
-elif [ "${_BRANCH#*noh3*}" != "${_BRANCH}" ]; then
+elif [ "${_CONFIG#*noh3*}" != "${_CONFIG}" ]; then
   _FLAV='-noh3'
-elif [ "${_BRANCH#*big*}" != "${_BRANCH}" ]; then
+elif [ "${_CONFIG#*big*}" != "${_CONFIG}" ]; then
   _FLAV='-big'
 fi
 
@@ -488,7 +488,7 @@ build_single_target() {
       if [ "${_CC}" != 'llvm' ] || \
          [ "${_CRT}" != 'ucrt' ] || \
          [ -z "${CW_LLVM_MINGW_PATH:-}" ]; then
-        echo "! WARNING: '${_BRANCH}/${_CPU}' builds require llvm/clang, UCRT and CW_LLVM_MINGW_PATH. Skipping."
+        echo "! WARNING: '${_CONFIG}/${_CPU}' builds require llvm/clang, UCRT and CW_LLVM_MINGW_PATH. Skipping."
         return
       fi
       _TOOLCHAIN='llvm-mingw'
@@ -500,7 +500,7 @@ build_single_target() {
       _CC='llvm'
       _TOOLCHAIN='llvm-apple'  # Apple clang
     else
-      echo "! WARNING: '${_BRANCH}/${_CPU}' build requires Apple clang or LLVM/clang. gcc is not supported. Skipping."
+      echo "! WARNING: '${_CONFIG}/${_CPU}' build requires Apple clang or LLVM/clang. gcc is not supported. Skipping."
       return
     fi
   fi
@@ -1375,41 +1375,41 @@ EOF
 
 # Build binaries
 if [ "${_OS}" = 'win' ]; then
-  if [ "${_BRANCH#*a64*}" = "${_BRANCH}" ] && \
-     [ "${_BRANCH#*x86*}" = "${_BRANCH}" ]; then
+  if [ "${_CONFIG#*a64*}" = "${_CONFIG}" ] && \
+     [ "${_CONFIG#*x86*}" = "${_CONFIG}" ]; then
     build_single_target x64
   fi
-  if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ] && \
-     [ "${_BRANCH#*x86*}" = "${_BRANCH}" ]; then
+  if [ "${_CONFIG#*x64*}" = "${_CONFIG}" ] && \
+     [ "${_CONFIG#*x86*}" = "${_CONFIG}" ]; then
     build_single_target a64
   fi
-  if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ] && \
-     [ "${_BRANCH#*a64*}" = "${_BRANCH}" ]; then
+  if [ "${_CONFIG#*x64*}" = "${_CONFIG}" ] && \
+     [ "${_CONFIG#*a64*}" = "${_CONFIG}" ]; then
     build_single_target x86
   fi
 elif [ "${_OS}" = 'mac' ]; then
   # TODO: This method is suboptimal. We might want to build pure C
   #       projects in dual mode and only manual-merge libs that have
   #       ASM components.
-  if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ]; then
+  if [ "${_CONFIG#*x64*}" = "${_CONFIG}" ]; then
     build_single_target a64
   fi
-  if [ "${_BRANCH#*a64*}" = "${_BRANCH}" ]; then
+  if [ "${_CONFIG#*a64*}" = "${_CONFIG}" ]; then
     build_single_target x64
   fi
-  if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ] && \
-     [ "${_BRANCH#*a64*}" = "${_BRANCH}" ] && \
-     [ "${_BRANCH#*macuni*}" != "${_BRANCH}" ]; then
+  if [ "${_CONFIG#*x64*}" = "${_CONFIG}" ] && \
+     [ "${_CONFIG#*a64*}" = "${_CONFIG}" ] && \
+     [ "${_CONFIG#*macuni*}" != "${_CONFIG}" ]; then
     ./_macuni.sh
   fi
 elif [ "${_OS}" = 'linux' ]; then
   if [ "${_HOSTOS}" = 'mac' ]; then
     # Custom installs of musl-cross can support a64 and other targets
-    if [ "${_BRANCH#*a64*}" = "${_BRANCH}" ] && \
+    if [ "${_CONFIG#*a64*}" = "${_CONFIG}" ] && \
        command -v x86_64-linux-musl-gcc >/dev/null 2>&1; then
       build_single_target x64
     fi
-    if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ] && \
+    if [ "${_CONFIG#*x64*}" = "${_CONFIG}" ] && \
        command -v aarch64-linux-musl-gcc >/dev/null 2>&1; then
       build_single_target a64
     fi
@@ -1421,10 +1421,10 @@ elif [ "${_OS}" = 'linux' ]; then
       build_single_target x64
     fi
   else
-    if [ "${_BRANCH#*x64*}" = "${_BRANCH}" ]; then
+    if [ "${_CONFIG#*x64*}" = "${_CONFIG}" ]; then
       build_single_target a64
     fi
-    if [ "${_BRANCH#*a64*}" = "${_BRANCH}" ]; then
+    if [ "${_CONFIG#*a64*}" = "${_CONFIG}" ]; then
       build_single_target x64
     fi
   fi
