@@ -16,6 +16,7 @@
 #    ^
 #   ../../libressl/x64-ucrt/usr/include/openssl/ossl_typ.h:90:2: warning: overriding WinCrypt defines [-W#warnings]
 #   ```
+#   Ref: https://github.com/libressl/portable/issues/910#issuecomment-1736486009
 # - Extensive warnings about colliding function declaration attributes.
 #   Ref: https://ci.appveyor.com/project/curlorg/curl-for-win/builds/47723913?fullLog=true#L4802
 #   ```
@@ -25,6 +26,7 @@
 #       ^
 #   /usr/x86_64-w64-mingw32/include/string.h:119:21: note: expanded from macro 'strncasecmp'
 #   ```
+#   Ref: https://github.com/libressl/portable/issues/910#issuecomment-1755199834
 # - Unexpected warnings when building with ASM _enabled_ and CMake:
 #   ```
 #   In file included from ./libressl/crypto/bn/bn_mul.c:65:
@@ -35,6 +37,7 @@
 #   #define OPENSSL_NO_ASM 1
 #           ^
 #   ```
+#   Ref: https://github.com/libressl/portable/issues/910#issuecomment-1754180366
 # - `-Wattributes` warnings with gcc. Need to be silenced with `-Wno-attributes`:
 #   ```
 #   ../../crypto/chacha/chacha-merged.c:26:5: warning: 'bounded' attribute directive ignored [-Wattributes]
@@ -48,6 +51,7 @@
 #      34 |     __attribute__((__bounded__(__buffer__, 3, 4)));
 #         |     ^~~~~~~~~~~~~
 #   ```
+#   Ref: https://github.com/libressl/portable/issues/910#issuecomment-1755219504
 
 {
   # Tests
