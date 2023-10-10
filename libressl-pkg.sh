@@ -17,16 +17,6 @@
 #   ../../libressl/x64-ucrt/usr/include/openssl/ossl_typ.h:90:2: warning: overriding WinCrypt defines [-W#warnings]
 #   ```
 #   Ref: https://github.com/libressl/portable/issues/910#issuecomment-1736486009
-# - Extensive warnings about colliding function declaration attributes.
-#   Ref: https://ci.appveyor.com/project/curlorg/curl-for-win/builds/47723913?fullLog=true#L4802
-#   ```
-#   In file included from ../../crypto/malloc-wrapper.c:19:
-#   ../../include/compat/string.h:31:5: warning: '_strnicmp' redeclared without 'dllimport' attribute: previous 'dllimport' ignored [-Winconsistent-dllimport]
-#   int strncasecmp(const char *s1, const char *s2, size_t len);
-#       ^
-#   /usr/x86_64-w64-mingw32/include/string.h:119:21: note: expanded from macro 'strncasecmp'
-#   ```
-#   Ref: https://github.com/libressl/portable/issues/910#issuecomment-1755199834
 # - Unexpected warnings when building with ASM _enabled_ and CMake:
 #   ```
 #   In file included from ./libressl/crypto/bn/bn_mul.c:65:

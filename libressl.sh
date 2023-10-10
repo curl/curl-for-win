@@ -25,11 +25,7 @@ _VER="$1"
 
   [ "${LIBRESSL_VER_}" = '3.8.1' ] && options="${options} --disable-asm"
 
-  if [ "${_CC}" = 'llvm' ]; then
-    if [ "${_OS}" = 'win' ]; then
-      CFLAGS="${CFLAGS} -Wno-inconsistent-dllimport"
-    fi
-  else
+  if [ "${_CC}" = 'gcc' ]; then
     CFLAGS="${CFLAGS} -Wno-attributes"
   fi
 
