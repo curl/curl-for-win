@@ -38,16 +38,14 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
       extra="${extra} gcc${CW_GCCSUFFIX} g++${CW_GCCSUFFIX}"
       export CW_CCSUFFIX="${CW_GCCSUFFIX}"
-    fi
-    if [ "$(uname -m)" = 'aarch64' ]; then
-      if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
+      if [ "$(uname -m)" = 'aarch64' ]; then
         extra="${extra} gcc${CW_GCCSUFFIX}-x86-64-linux-gnu g++${CW_GCCSUFFIX}-x86-64-linux-gnu"
       else
-        extra="${extra} libgcc${CW_GCCSUFFIX}-dev-amd64-cross libstdc++${CW_GCCSUFFIX}-dev-amd64-cross"
+        extra="${extra} gcc${CW_GCCSUFFIX}-aarch64-linux-gnu g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
       fi
     else
-      if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
-        extra="${extra} gcc${CW_GCCSUFFIX}-aarch64-linux-gnu g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
+      if [ "$(uname -m)" = 'aarch64' ]; then
+        extra="${extra} libgcc${CW_GCCSUFFIX}-dev-amd64-cross libstdc++${CW_GCCSUFFIX}-dev-amd64-cross"
       else
         extra="${extra} libgcc${CW_GCCSUFFIX}-dev-arm64-cross libstdc++${CW_GCCSUFFIX}-dev-arm64-cross"
       fi
