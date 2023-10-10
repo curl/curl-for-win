@@ -64,7 +64,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Number of parallel make jobs. Default: 2
 #
 # CW_CCSUFFIX
-#      llvm/clang suffix. E.g. '-8' for clang-8.
+#      llvm/clang and gcc suffix. E.g. '-8' for clang-8.
 #      Optional. Default: (empty)
 #
 # CW_REVISION
@@ -679,18 +679,21 @@ build_single_target() {
   else
     if [ "${_CRT}" = 'musl' ] && [ "${_HOST}" != 'mac' ] && [ "${_DISTRO}" != 'alpine' ]; then
       # method 1
+      # FIXME: Downside: supports suffix- and prefix-less gcc only.
+      #        Migrate to the manual method for better control over this.
       # Only for CC, not for binutils
       _CCPREFIX='musl-'
+      _CCSUFFIX=''
     fi
 
-    ccver="$("${_CCPREFIX}gcc" -dumpversion)"
+    ccver="$("${_CCPREFIX}gcc${_CCSUFFIX}" -dumpversion)"
 
     if [ "${_CRT}" = 'ucrt' ]; then
       # Create specs files that overrides msvcrt with ucrt. We need this
       # for gcc when building against UCRT.
       #   https://stackoverflow.com/questions/57528555/how-do-i-build-against-the-ucrt-with-mingw-w64
       _GCCSPECS="$(pwd)/gcc-specs-ucrt"
-      "${_CCPREFIX}gcc" -dumpspecs | sed 's/-lmsvcrt/-lucrt/g' > "${_GCCSPECS}"
+      "${_CCPREFIX}gcc${_CCSUFFIX}" -dumpspecs | sed 's/-lmsvcrt/-lucrt/g' > "${_GCCSPECS}"
     fi
   fi
 
@@ -966,7 +969,7 @@ build_single_target() {
     # Use it with CMake and OpenSSL's proprietary build system.
     _CFLAGS_GLOBAL_CMAKE="${_CFLAGS_GLOBAL_CMAKE} -Wno-unused-command-line-argument"
   else
-    _CC_GLOBAL="${_CCPREFIX}gcc"
+    _CC_GLOBAL="${_CCPREFIX}gcc${_CCSUFFIX}"
 
     if [ "${_OS}" = 'win' ]; then
       # Also accepted on linux, but does not seem to make any difference
@@ -984,14 +987,16 @@ build_single_target() {
       _CFLAGS_GLOBAL="${_OPTM} ${_CFLAGS_GLOBAL}"
     fi
 
-    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=${_CCPREFIX}gcc"
+    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=${_CCPREFIX}gcc${_CCSUFFIX}"
     if [ "${_CCPREFIX}" != 'musl-' ]; then
-      _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++"
+      _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++${_CCSUFFIX}"
     else
       _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=g++"
     fi
 
     _LD='ld'
+
+    _BINUTILS_SUFFIX="${_CCSUFFIX}"
   fi
 
   if [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
@@ -1041,6 +1046,15 @@ build_single_target() {
         echo "! Warning: binutils strip tool '${tmp}' not found. BoringSSL libs may not be reproducible."
       fi
     fi
+  fi
+
+  # Used for ar, nm, runlib
+  _BINCORE_PREFIX="${_BINUTILS_PREFIX}"
+  _BINCORE_SUFFIX="${_BINUTILS_SUFFIX}"
+
+  if [ "${_CC}" = 'gcc' ] && [ -n "${_BINUTILS_SUFFIX}" ]; then
+    _BINCORE_PREFIX="${_BINCORE_PREFIX}gcc-"
+    _BINUTILS_SUFFIX=''
   fi
 
   export _STRIP
@@ -1103,9 +1117,9 @@ build_single_target() {
     # or clang-cl). Workaround: create an alias for it:
     ln -s -f "/usr/bin/clang${_CCSUFFIX}" "$(pwd)/clang"
   fi
-  export AR="${_BINUTILS_PREFIX}ar${_BINUTILS_SUFFIX}"
-  export NM="${_BINUTILS_PREFIX}nm${_BINUTILS_SUFFIX}"
-  export RANLIB="${_BINUTILS_PREFIX}ranlib${_BINUTILS_SUFFIX}"
+  export AR="${_BINCORE_PREFIX}ar${_BINCORE_SUFFIX}"
+  export NM="${_BINCORE_PREFIX}nm${_BINCORE_SUFFIX}"
+  export RANLIB="${_BINCORE_PREFIX}ranlib${_BINCORE_SUFFIX}"
 
   # ar wrapper to normalize created libs
   if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then

@@ -22,12 +22,18 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   apk add --no-cache checksec-rs --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing/
   extra="${extra} compiler-rt libc++-static"  # for llvm
   extra="${extra} linux-headers"  # for openssl 'secure-memory' feature
+  if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
+    extra="${extra} gcc"
+  fi
+fi
+
+if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
+  extra="llvm${LLVM} clang${LLVM} lld"
 fi
 
 # https://pkgs.alpinelinux.org/packages
 # shellcheck disable=SC2086
 apk add --no-cache curl git gpg rsync build-base cmake \
-  "llvm${LLVM}" "clang${LLVM}" lld \
   autoconf automake libtool \
   zip tar xz jq openssl ${extra}
 

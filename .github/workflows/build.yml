@@ -85,6 +85,7 @@ jobs:
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='debian:bookworm'
           export CW_CCSUFFIX='-15'
+          export CW_GCCSUFFIX='-12'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"
           docker images --digests
@@ -114,6 +115,7 @@ jobs:
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='debian:bullseye'
           export CW_CCSUFFIX='-13'
+          export CW_GCCSUFFIX='-10'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"
           docker images --digests
