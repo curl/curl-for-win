@@ -35,6 +35,19 @@
 #   #define OPENSSL_NO_ASM 1
 #           ^
 #   ```
+# - `-Wattributes` warnings with gcc. Need to be silenced with `-Wno-attributes`:
+#   ```
+#   ../../crypto/chacha/chacha-merged.c:26:5: warning: 'bounded' attribute directive ignored [-Wattributes]
+#      26 |     __attribute__((__bounded__(__minbytes__, 2, CHACHA_MINKEYLEN)));
+#         |     ^~~~~~~~~~~~~
+#   ../../crypto/chacha/chacha-merged.c:30:5: warning: 'bounded' attribute directive ignored [-Wattributes]
+#      30 |     __attribute__((__bounded__(__minbytes__, 3, CHACHA_CTRLEN)));
+#         |     ^~~~~~~~~~~~~
+#   ../../crypto/chacha/chacha-merged.c:30:5: warning: 'bounded' attribute directive ignored [-Wattributes]
+#   ../../crypto/chacha/chacha-merged.c:34:5: warning: 'bounded' attribute directive ignored [-Wattributes]
+#      34 |     __attribute__((__bounded__(__buffer__, 3, 4)));
+#         |     ^~~~~~~~~~~~~
+#   ```
 
 {
   # Tests
