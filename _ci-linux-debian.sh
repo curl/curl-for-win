@@ -23,10 +23,17 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
     extra="${extra} nasm"
   fi
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
+  [ -n "${CW_GCCSUFFIX:-}" ] || CW_GCCSUFFIX='-13'
   extra="${extra} checksec"
+  if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
+    extra="${extra} gcc${CW_GCCSUFFIX} g++${CW_GCCSUFFIX}"
+    export CW_CCSUFFIX="${CW_GCCSUFFIX}"
+  fi
   if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
-    extra="${extra} musl musl-dev musl-tools"
-    [[ "${CW_CONFIG:-}" = *'gcc'* ]] && extra="${extra} g++"
+    extra="${extra} musl musl-dev"
+    if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
+      extra="${extra} libgcc${CW_GCCSUFFIX}-dev"
+    fi
     # for openssl 'secure-memory' feature
     if [ "$(uname -m)" = 'aarch64' ]; then
       extra="${extra} linux-headers-arm64"
@@ -34,10 +41,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
       extra="${extra} linux-headers-amd64"
     fi
   else
-    [ -n "${CW_GCCSUFFIX:-}" ] || CW_GCCSUFFIX='-13'
     if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
-      extra="${extra} gcc${CW_GCCSUFFIX} g++${CW_GCCSUFFIX}"
-      export CW_CCSUFFIX="${CW_GCCSUFFIX}"
       if [ "$(uname -m)" = 'aarch64' ]; then
         extra="${extra} gcc${CW_GCCSUFFIX}-x86-64-linux-gnu g++${CW_GCCSUFFIX}-x86-64-linux-gnu"
       else

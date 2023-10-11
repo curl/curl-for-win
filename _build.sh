@@ -677,15 +677,6 @@ build_single_target() {
   if [ "${_CC}" = 'llvm' ]; then
     ccver="$("clang${_CCSUFFIX}" -dumpversion)"
   else
-    if [ "${_CRT}" = 'musl' ] && [ "${_HOST}" != 'mac' ] && [ "${_DISTRO}" != 'alpine' ]; then
-      # method 1
-      # FIXME: Downside: supports suffix- and prefix-less gcc only.
-      #        Migrate to the manual method for better control over this.
-      # Only for CC, not for binutils
-      _CCPREFIX='musl-'
-      _CCSUFFIX=''
-    fi
-
     ccver="$("${_CCPREFIX}gcc${_CCSUFFIX}" -dumpversion)"
 
     if [ "${_CRT}" = 'ucrt' ]; then
@@ -833,11 +824,7 @@ build_single_target() {
   fi
 
   export _LD
-  if [ "${_CCPREFIX}" = 'musl-' ]; then  # Do not apply the Debian 'musl-' prefix to binutils
-    _BINUTILS_PREFIX=''
-  else
-    _BINUTILS_PREFIX="${_CCPREFIX}"
-  fi
+  _BINUTILS_PREFIX="${_CCPREFIX}"
   _BINUTILS_SUFFIX=''
   if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
     _arch="${_machine}"
@@ -988,11 +975,7 @@ build_single_target() {
     fi
 
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=${_CCPREFIX}gcc${_CCSUFFIX}"
-    if [ "${_CCPREFIX}" != 'musl-' ]; then
-      _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++${_CCSUFFIX}"
-    else
-      _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=g++"
-    fi
+    _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++${_CCSUFFIX}"
 
     _LD='ld'
 
@@ -1143,6 +1126,17 @@ build_single_target() {
     fi
   fi
 
+  if [ "${_CC}" = 'gcc' ] && [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
+    clangrtlib="$("${_CCPREFIX}gcc${_CCSUFFIX}" -print-libgcc-file-name)"           # /usr/lib/gcc/aarch64-linux-gnu/10/libgcc.a
+    clangrsdir="$(dirname "${clangrtlib}")"                                         # /usr/lib/gcc/aarch64-linux-gnu/10
+    clangrtlib="$(basename "${clangrtlib}" | cut -c 4-)"  # delete 'lib' prefix
+    clangrtlib="${clangrtlib%.*}"  # 'gcc'
+    libprefix="/usr/lib/${_machine}-linux-musl"
+    _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -static -nostdinc -isystem ${clangrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
+    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nostartfiles -L${libprefix} -Wl,${libprefix}/Scrt1.o -Wl,${libprefix}/crti.o -L${clangrsdir} -Wl,${libprefix}/crtn.o"
+    _LIBS_GLOBAL="${_LIBS_GLOBAL} -lc -l${clangrtlib}"
+  fi
+
   if [ "${_CCRT}" = 'clang-rt' ]; then
     if [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
       if [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
@@ -1150,7 +1144,7 @@ build_single_target() {
         clangrsdir="$("clang${_CCSUFFIX}" -print-resource-dir)"                         # /usr/lib/llvm-13/lib/clang/13.0.1
         clangrtdir="$("clang${_CCSUFFIX}" -print-runtime-dir)"                          # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux
         clangrtlib="$("clang${_CCSUFFIX}" -print-libgcc-file-name -rtlib=compiler-rt)"  # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux/libclang_rt.builtins-aarch64.a
-        clangrtlib="$(basename "${clangrtlib}" | cut -c 4-)"
+        clangrtlib="$(basename "${clangrtlib}" | cut -c 4-)"  # delete 'lib' prefix
         clangrtlib="${clangrtlib%.*}"  # clang_rt.builtins-aarch64
         libprefix="/usr/lib/${_machine}-linux-musl"
         _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -nostdinc -isystem ${clangrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
