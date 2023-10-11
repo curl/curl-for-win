@@ -434,7 +434,7 @@ bld() {
 
       bldtool="$(echo "${pkg}" | \
         grep -a -o -E -- "-${bldtools}")"
-      _BLDDIR="${_BLDDIR}${bldtool}-${_CC}-${_CPU}-${_CRT}"
+      _BLDDIR="${_BLDDIR}${bldtool}-${_CC}-${_CPU}-${_OS}-${_CRT}"
     fi
 
     ${my_time} "./${pkg}.sh" "$1" "${pkgori}"
@@ -715,7 +715,7 @@ build_single_target() {
 
   export _TOP; _TOP="$(pwd)"  # Must be an absolute path
   _BLDDIR_BASE='bld'
-  export _PKGDIR="${_CPU}-${_CRT}"
+  export _PKGDIR="${_CPU}-${_OS}-${_CRT}"
   _PREFIX='/usr'
   export _PP="${_PKGDIR}${_PREFIX}"
   export _CC_GLOBAL=''
