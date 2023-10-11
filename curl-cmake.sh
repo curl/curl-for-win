@@ -192,9 +192,7 @@ _VER="$1"
 
 # options="${options} -DCURL_CA_FALLBACK=ON"
 
-  if [ "${CURL_VER_}" != '8.3.0' ]; then
-    options="${options} -DCURL_DISABLE_SRP=ON"
-  fi
+  options="${options} -DCURL_DISABLE_SRP=ON"
 
   if [ -d ../wolfssh ] && [ -d ../wolfssl ]; then
     # No native support, enable it manually.
