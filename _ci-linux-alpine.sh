@@ -28,7 +28,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
 fi
 
 if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
-  extra="llvm${LLVM} clang${LLVM} lld"
+  extra="${extra} llvm${LLVM} clang${LLVM} lld"
 fi
 
 # https://pkgs.alpinelinux.org/packages
