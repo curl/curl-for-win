@@ -1127,29 +1127,29 @@ build_single_target() {
   fi
 
   if [ "${_CC}" = 'gcc' ] && [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
-    clangrtlib="$("${_CCPREFIX}gcc${_CCSUFFIX}" -print-libgcc-file-name)"           # /usr/lib/gcc/aarch64-linux-gnu/10/libgcc.a
-    clangrsdir="$(dirname "${clangrtlib}")"                                         # /usr/lib/gcc/aarch64-linux-gnu/10
-    clangrtlib="$(basename "${clangrtlib}" | cut -c 4-)"  # delete 'lib' prefix
-    clangrtlib="${clangrtlib%.*}"  # 'gcc'
+    ccrtlib="$("${_CCPREFIX}gcc${_CCSUFFIX}" -print-libgcc-file-name)"               # /usr/lib/gcc/aarch64-linux-gnu/10/libgcc.a
+    ccrsdir="$(dirname "${ccrtlib}")"                                                # /usr/lib/gcc/aarch64-linux-gnu/10
+    ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
+    ccrtlib="${ccrtlib%.*}"  # 'gcc'
     libprefix="/usr/lib/${_machine}-linux-musl"
-    _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -static -nostdinc -isystem ${clangrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
-    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nostartfiles -L${libprefix} -Wl,${libprefix}/Scrt1.o -Wl,${libprefix}/crti.o -L${clangrsdir} -Wl,${libprefix}/crtn.o"
-    _LIBS_GLOBAL="${_LIBS_GLOBAL} -lc -l${clangrtlib}"
+    _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -static -nostdinc -isystem ${ccrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
+    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nostartfiles -L${libprefix} -Wl,${libprefix}/Scrt1.o -Wl,${libprefix}/crti.o -L${ccrsdir} -Wl,${libprefix}/crtn.o"
+    _LIBS_GLOBAL="${_LIBS_GLOBAL} -lc -l${ccrtlib}"
   fi
 
   if [ "${_CCRT}" = 'clang-rt' ]; then
     if [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
       if [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
         # This method should also work to replace the `_CCPREFIX='musl-'` solution we use with gcc.
-        clangrsdir="$("clang${_CCSUFFIX}" -print-resource-dir)"                         # /usr/lib/llvm-13/lib/clang/13.0.1
-        clangrtdir="$("clang${_CCSUFFIX}" -print-runtime-dir)"                          # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux
-        clangrtlib="$("clang${_CCSUFFIX}" -print-libgcc-file-name -rtlib=compiler-rt)"  # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux/libclang_rt.builtins-aarch64.a
-        clangrtlib="$(basename "${clangrtlib}" | cut -c 4-)"  # delete 'lib' prefix
-        clangrtlib="${clangrtlib%.*}"  # clang_rt.builtins-aarch64
+        ccrsdir="$("clang${_CCSUFFIX}" -print-resource-dir)"                         # /usr/lib/llvm-13/lib/clang/13.0.1
+        ccrtdir="$("clang${_CCSUFFIX}" -print-runtime-dir)"                          # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux
+        ccrtlib="$("clang${_CCSUFFIX}" -print-libgcc-file-name -rtlib=compiler-rt)"  # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux/libclang_rt.builtins-aarch64.a
+        ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
+        ccrtlib="${ccrtlib%.*}"  # clang_rt.builtins-aarch64
         libprefix="/usr/lib/${_machine}-linux-musl"
-        _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -nostdinc -isystem ${clangrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
-        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -L${clangrtdir} ${libprefix}/crtn.o"
-        _LIBS_GLOBAL="${_LIBS_GLOBAL} -lc -l${clangrtlib}"
+        _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -nostdinc -isystem ${ccrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
+        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -L${ccrtdir} ${libprefix}/crtn.o"
+        _LIBS_GLOBAL="${_LIBS_GLOBAL} -lc -l${ccrtlib}"
         _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++"
       else
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt"
