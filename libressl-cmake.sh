@@ -16,7 +16,11 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
-  CFLAGS="-ffile-prefix-map=$(pwd)= -Wa,--noexecstack"
+  CFLAGS="-ffile-prefix-map=$(pwd)="
+
+  if [ "${_CC}" = 'llvm' ]; then
+    CFLAGS="${CFLAGS} -Wa,--noexecstack"
+  fi
 
   [ "${_CPU}" = 'x86' ] && cpu='x86'
   [ "${_CPU}" = 'x64' ] && cpu='x86_64'

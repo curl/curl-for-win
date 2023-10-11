@@ -18,14 +18,16 @@ _VER="$1"
 
   options="${_CONFIGURE_GLOBAL}"
   export CC="${_CC_GLOBAL}"
-  export CFLAGS="${_CFLAGS_GLOBAL} -O3 -Wa,--noexecstack"
+  export CFLAGS="${_CFLAGS_GLOBAL} -O3"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
   export LIBS="${_LIBS_GLOBAL}"
 
   [ "${LIBRESSL_VER_}" = '3.8.1' ] && options="${options} --disable-asm"
 
-  if [ "${_CC}" = 'gcc' ]; then
+  if [ "${_CC}" = 'llvm' ]; then
+    CFLAGS="${CFLAGS} -Wa,--noexecstack"
+  else
     CFLAGS="${CFLAGS} -Wno-attributes"
   fi
 
