@@ -12,7 +12,7 @@ export CURL_HASH=16c62a9c4af0f703d28bda6d7bbf37ba47055ad3414d70dec63e2e6336f2a82
 # Create revision string
 # NOTE: Set _REV to 1 after bumping CURL_VER_, then increment for each
 #       CI rebuild via `main` branch push (e.g. after bumping a dependency).
-export _REV="${CW_REVISION:-1}"
+export _REV="${CW_REVISION:-2}"
 
 export CACERT_VER_='2023-08-22'
 export CACERT_HASH=23c2469e2a568362a62eecf1b49ed90a15621e6fa30e29947ded3436422de9b9
@@ -47,8 +47,8 @@ export WOLFSSL_VER_='5.6.3'
 export WOLFSSL_HASH=2e74a397fa797c2902d7467d500de904907666afb4ff80f6464f6efd5afb114a
 export MBEDTLS_VER_='3.5.0'
 export MBEDTLS_HASH=bdee0e3e45bbf360541306cac0cc27e00402c7a46b9bdf2d24787d5107f008f2
-export QUICTLS_VER_='3.1.2'
-export QUICTLS_HASH=d3e07211e6b76ac835f1ff5787d42af663fbc62e4e42ec14777deec0f53d1627
+export QUICTLS_VER_='3.1.3'
+export QUICTLS_HASH=6f253de0971deeac65d7e7c3020f562fc59b59ccb538168bbdf409c8f69793bc
 export OPENSSL_VER_='3.1.3'
 export OPENSSL_HASH=f0316a2ebd89e7f2352976445458689f80302093788c466692fb2a188b2eacf6
 export BORINGSSL_VER_='6d3db84c47643271cb553593ee67362be3820874'
