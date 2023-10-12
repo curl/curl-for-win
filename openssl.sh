@@ -34,11 +34,16 @@ _VER="$1"
     [ "${_CPU}" = 'x86' ] && options="${options} mingw"
     [ "${_CPU}" = 'x64' ] && options="${options} mingw64"
     if [ "${_CPU}" = 'a64' ]; then
-      # Source: https://github.com/openssl/openssl/issues/10533
+      # Sources:
+      # - https://github.com/openssl/openssl/issues/10533
+      # - https://github.com/msys2/MINGW-packages/blob/62d5a14c6847bc6c61d7a030c791affc5316842b/mingw-w64-openssl/001-support-aarch64.patch via
+      #   https://github.com/msys2/MINGW-packages/commit/f146b20066ff1a357d82866dc0fc2f4b1f4c1648 via
+      #   https://github.com/openssl/openssl/commit/b863e1e4c69068e4166bdfbbf9f04bb07991dd40
       echo '## -*- mode: perl; -*-
         my %targets = (
           "mingw-arm64" => {
             inherit_from     => [ "mingw-common" ],
+            bn_ops           => add("SIXTY_FOUR_BIT"),
             asm_arch         => "aarch64",
             perlasm_scheme   => "win64",
             multilib         => "64",
