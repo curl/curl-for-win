@@ -495,12 +495,9 @@ build_single_target() {
       _TOOLCHAIN='mingw-w64'
     fi
   elif [ "${_OS}" = 'mac' ] && [ "${_CC}" = 'gcc' ]; then
-    if "${_CC}" --version | grep -q -a -E '(Apple clang|Apple LLVM|based on LLVM)'; then
+    if "${_CC}${CW_CCSUFFIX}" --version | grep -q -a -E '(Apple clang|Apple LLVM|based on LLVM)'; then
       _CC='llvm'
       _TOOLCHAIN='llvm-apple'  # Apple clang
-    else
-      echo "! WARNING: '${_CONFIG}/${_CPU}' build requires Apple clang or LLVM/clang. gcc is not supported. Skipping."
-      return
     fi
   fi
 
@@ -977,7 +974,11 @@ build_single_target() {
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=${_CCPREFIX}gcc${_CCSUFFIX}"
     _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++${_CCSUFFIX}"
 
-    _LD='ld'
+    if [ "${_OS}" = 'mac' ]; then
+      _LD='ld-apple'
+    else
+      _LD='ld'
+    fi
 
     _BINUTILS_SUFFIX="${_CCSUFFIX}"
   fi
@@ -1044,7 +1045,10 @@ build_single_target() {
   export _STRIPFLAGS_BIN
   export _STRIPFLAGS_DYN
   export _STRIPFLAGS_LIB
-  if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
+  # All mac except standard llvm which uses a standard strip tool.
+  # It means _CC + _TOOLCHAIN must be 'llvm' + 'llvm-apple' or 'gcc' + 'llvm-apple' or 'gcc' + '',
+  # but not 'llvm' + ''.
+  if [ "${_OS}" = 'mac' ] && [ "${_CC}${_TOOLCHAIN}" != 'llvm' ]; then
     # FIXME:
     # Apple's own strip tool will choke on arm64 static libs, with error
     #   strip: error: symbols referenced by relocation entries that can't be stripped in: [...]/usr/lib/liba.a(libcommon-lib-tls_pad.o) (for architecture arm64)
