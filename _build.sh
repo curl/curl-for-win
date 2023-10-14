@@ -972,7 +972,7 @@ build_single_target() {
     _BINUTILS_SUFFIX="${_CCSUFFIX}"
   fi
 
-  if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
+  if [ "${_OS}" = 'mac' ]; then
     # Explicitly set the SDK root. This forces clang to drop /usr/local
     # from the list of default header search paths. This is necessary
     # to avoid ./configure picking up e.g. installed Homebrew package
