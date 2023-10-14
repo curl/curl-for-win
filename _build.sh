@@ -979,7 +979,7 @@ build_single_target() {
     # headers instead of the explicitly specified custom package headers,
     # e.g. with OpenSSL.
     # We set it for all build tools for macOS to gain control over this.
-    _SYSROOT="$(xcrun --show-sdk-path)"  # E.g. /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+    _SYSROOT="$(xcrun -sdk macosx --show-sdk-path)"  # E.g. /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
     if [ -n "${_SYSROOT}" ]; then
       _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_OSX_SYSROOT=${_SYSROOT}"
       _CC_GLOBAL="${_CC_GLOBAL} --sysroot=${_SYSROOT}"
