@@ -831,17 +831,6 @@ build_single_target() {
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_OSX_ARCHITECTURES=${_arch}"
     _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET}"
 
-    # Explicitly set the SDK root. This forces clang to drop /usr/local
-    # from the list of default header search paths. This is necessary
-    # to avoid picking up e.g. installed Homebrew package headers instead
-    # of the explicitly specified custom package headers, e.g. with
-    # OpenSSL.
-    _SYSROOT="$(xcrun --show-sdk-path)"  # E.g. /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
-    if [ -n "${_SYSROOT}" ]; then
-      _CC_GLOBAL="${_CC_GLOBAL} --sysroot=${_SYSROOT}"
-      _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --with-sysroot=${_SYSROOT}"
-    fi
-
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=clang${_CCSUFFIX}"
     _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=clang++${_CCSUFFIX}"
 
@@ -981,6 +970,19 @@ build_single_target() {
     fi
 
     _BINUTILS_SUFFIX="${_CCSUFFIX}"
+  fi
+
+  if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
+    # Explicitly set the SDK root. This forces clang to drop /usr/local
+    # from the list of default header search paths. This is necessary
+    # to avoid ./configure picking up e.g. installed Homebrew package
+    # headers instead of the explicitly specified custom package headers,
+    # e.g. with OpenSSL.
+    _SYSROOT="$(xcrun --show-sdk-path)"  # E.g. /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+    if [ -n "${_SYSROOT}" ]; then
+      _CC_GLOBAL="${_CC_GLOBAL} --sysroot=${_SYSROOT}"
+      _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --with-sysroot=${_SYSROOT}"
+    fi
   fi
 
   if [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
