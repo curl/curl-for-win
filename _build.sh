@@ -980,6 +980,17 @@ build_single_target() {
     # e.g. with OpenSSL.
     # We set it for all build tools for macOS to gain control over this.
     _SYSROOT="$(xcrun -sdk macosx --show-sdk-path)"  # E.g. /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+
+    # Standard gcc (as of v13.2.0) fails to compile some headers in macOS SDK 13.x.
+    # Issue: https://github.com/curl/curl/issues/10356
+    # Revert to SDK 12.x as a workaround, e.g. /Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk
+    if [ "${_CC}" = 'gcc' ]; then
+      tmp="${_SYSROOT//.sdk/12.sdk}"
+      if [ -d "${tmp}" ]; then
+        _SYSROOT="${tmp}"
+      fi
+    fi
+
     if [ -n "${_SYSROOT}" ]; then
       _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_OSX_SYSROOT=${_SYSROOT}"
       _CC_GLOBAL="${_CC_GLOBAL} --sysroot=${_SYSROOT}"
