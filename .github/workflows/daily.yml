@@ -67,7 +67,7 @@ jobs:
         run: cat urls.txt
       - uses: actions/upload-artifact@v3
         with:
-          name: 'curl-linux-musl-alpine-daily'
+          name: 'curl-linux-musl-alpine-x86_64-daily'
           retention-days: 5
           path: |
             *-*-linux*.*
