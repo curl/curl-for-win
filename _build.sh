@@ -922,7 +922,8 @@ build_single_target() {
       _LD='lld'
     fi
 
-    if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then  # llvm-mingw uses these tools by default
+    if [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && \
+       [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
       _BINUTILS_PREFIX='llvm-'
       _BINUTILS_SUFFIX="${_CCSUFFIX}"
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -fuse-ld=lld${_CCSUFFIX}"
