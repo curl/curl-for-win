@@ -526,6 +526,9 @@ build_single_target() {
     _machine='arm64e'
   fi
 
+  # llvm-apple supports multiple archs separated by ';', e.g. 'arm64e;x86_64'
+  _machines="${_machine}"
+
   export _CURL_DLL_SUFFIX=''
   export _CURL_DLL_SUFFIX_NODASH=''
   if [ "${_OS}" = 'win' ]; then
@@ -763,6 +766,7 @@ build_single_target() {
     _OSVER="$(printf '%02d%02d' \
       "$(printf '%s' "${macminver}" | cut -d '.' -f 1)" \
       "$(printf '%s' "${macminver}" | cut -d '.' -f 2)")"
+    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_OSX_ARCHITECTURES=${_machines}"
   elif [ "${_OS}" = 'linux' ]; then
     if [ "${_HOST}" != "${_OS}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Linux ${_CMAKE_GLOBAL}"
@@ -827,21 +831,13 @@ build_single_target() {
   export _LD
   _BINUTILS_PREFIX="${_CCPREFIX}"
   _BINUTILS_SUFFIX=''
-  if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
-    _arch="${_machine}"
-    _CC_GLOBAL="clang${_CCSUFFIX} -arch ${_arch}"
-    # supports multiple values separated by ';', e.g. 'arm64e;x86_64'
-    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_OSX_ARCHITECTURES=${_arch}"
-    _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET}"
-
-    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=clang${_CCSUFFIX}"
-    _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=clang++${_CCSUFFIX}"
-
-    _LD='ld-apple'
-
-    _CFLAGS_GLOBAL_CMAKE="${_CFLAGS_GLOBAL_CMAKE} -Wno-unused-command-line-argument"
-  elif [ "${_CC}" = 'llvm' ]; then
-    _CC_GLOBAL="clang${_CCSUFFIX} --target=${_TRIPLET}"
+  if [ "${_CC}" = 'llvm' ]; then
+    if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
+      # --target= works too, but prefer -arch for its multi-arch support (we are not using it yet)
+      _CC_GLOBAL="clang${_CCSUFFIX} -arch ${_machines}"
+    else
+      _CC_GLOBAL="clang${_CCSUFFIX} --target=${_TRIPLET}"
+    fi
     _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET}"
     if [ -n "${_SYSROOT}" ]; then
       _CC_GLOBAL="${_CC_GLOBAL} --sysroot=${_SYSROOT}"
@@ -920,7 +916,12 @@ build_single_target() {
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=clang${_CCSUFFIX}"
     _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=clang++${_CCSUFFIX}"
 
-    _LD='lld'
+    if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
+      _LD='ld-apple'
+    else
+      _LD='lld'
+    fi
+
     if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then  # llvm-mingw uses these tools by default
       _BINUTILS_PREFIX='llvm-'
       _BINUTILS_SUFFIX="${_CCSUFFIX}"
