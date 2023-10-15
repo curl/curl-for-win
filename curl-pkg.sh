@@ -82,8 +82,11 @@
             "${_READELF}" --coff-load-config "${f}" | grep -a -E 'CF_[A-Z_]' | sort
           fi
         elif [ "${_OS}" = 'mac' ]; then
-          _prefix=''
-          [ "${_TOOLCHAIN}" = 'llvm-apple' ] || _prefix='llvm-'
+          if [ "${_CC}" = 'gcc' ] || [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
+            _prefix=''
+          else
+            _prefix='llvm-'  # standard llvm
+          fi
           TZ=UTC "${_prefix}objdump" --arch=all --private-headers "${f}" | grep -a -i -F 'magic'
           # -dyld_info ignored by llvm-otool as of v16.0.6
           TZ=UTC "${_prefix}otool" -arch all -f -v -L -dyld_info "${f}"
