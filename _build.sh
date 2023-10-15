@@ -522,6 +522,10 @@ build_single_target() {
   [ "${_CPU}" = 'x64' ] && _machine='x86_64'
   [ "${_CPU}" = 'a64' ] && _machine='aarch64'
 
+  if [ "${_OS}" = 'mac' ] && [ "${_machine}" = 'aarch64' ] && [ "${_CC}" = 'llvm' ]; then
+    _machine='arm64e'
+  fi
+
   export _CURL_DLL_SUFFIX=''
   export _CURL_DLL_SUFFIX_NODASH=''
   if [ "${_OS}" = 'win' ]; then
@@ -825,7 +829,6 @@ build_single_target() {
   _BINUTILS_SUFFIX=''
   if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
     _arch="${_machine}"
-    [ "${_CPU}" = 'a64' ] && _arch='arm64e'
     _CC_GLOBAL="clang${_CCSUFFIX} -arch ${_arch}"
     # supports multiple values separated by ';', e.g. 'arm64e;x86_64'
     _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_OSX_ARCHITECTURES=${_arch}"
