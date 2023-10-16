@@ -523,11 +523,12 @@ build_single_target() {
   [ "${_CPU}" = 'a64' ] && _machine='aarch64'
 
   if [ "${_OS}" = 'mac' ] && [ "${_machine}" = 'aarch64' ] && [ "${_CC}" = 'llvm' ]; then
-    _machine='arm64e'
+    # llvm-apple supports multiple archs separated by ';', e.g. 'arm64e;x86_64'
+    # It also understands arm64e (vs arm64)
+    _machines='arm64e'
+  else
+    _machines="${_machine}"
   fi
-
-  # llvm-apple supports multiple archs separated by ';', e.g. 'arm64e;x86_64'
-  _machines="${_machine}"
 
   export _CURL_DLL_SUFFIX=''
   export _CURL_DLL_SUFFIX_NODASH=''
