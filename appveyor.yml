@@ -21,7 +21,8 @@ branches:
     - 'test-awslc'
     - 'test-mini'
 # https://www.appveyor.com/docs/build-environment/#build-worker-images
-image: 'Ubuntu2004'
+# https://www.appveyor.com/docs/linux-images-software/
+image: 'Ubuntu2204'
 services:
   - 'docker'
 clone_depth: 8

@@ -56,9 +56,10 @@ EOF
 echo; echo "export DOCKER_IMAGE='${name}:${tag}'"
 
 # Find out the latest AppVeyor CI Ubuntu worker image
+if false; then
+  image="$(curl --disable --user-agent '' --silent --fail --show-error \
+    'https://www.appveyor.com/docs/build-environment/' \
+    | grep -a -o -E 'Ubuntu[0-9]{4}' | sort | tail -1)"
 
-image="$(curl --disable --user-agent '' --silent --fail --show-error \
-  'https://www.appveyor.com/docs/build-environment/' \
-  | grep -a -o -E 'Ubuntu[0-9]{4}' | sort | tail -1)"
-
-echo; echo "image: ${image}"
+  echo; echo "image: ${image}"
+fi
