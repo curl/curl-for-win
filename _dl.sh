@@ -153,6 +153,7 @@ cat <<EOF
   {
     "name": "libressl",
     "url": "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-{ver}.tar.gz",
+    "curlopt": "--ipv4",
     "sig": ".asc",
     "keys": "A1EB079B8D3EB92B4EBD3139663AF51BD5E4D8D5"
   },
@@ -265,11 +266,14 @@ to8digit() {
 }
 
 check_update() {
-  local pkg url ourvern newver newvern slug mask urldir res
+  local pkg url ourvern newver newvern slug mask urldir res curlopt
   pkg="$1"
   ourvern="${2:-000000}"
   url="$3"
   newver=''
+  curlopt="${10}"
+  options=()
+  [ -n "${curlopt}" ] && options+=("${curlopt}")
   if [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
     slug="${BASH_REMATCH[1]}"
     if [ -n "$7" ]; then
@@ -325,7 +329,7 @@ check_update() {
     # a separate subdirectory.
     if [ "${pkg}" = 'libssh' ]; then
       # ugly hack: repurpose 'ref_url' for this case:
-      res="$(my_curl "$7" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
+      res="$(my_curl "${options[@]}" "$7" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
         | grep -a -o -E -- '[0-9.]+' | "${latest}" -1)"
       url="$7${res}"
       urldir="${url}/"
@@ -338,7 +342,7 @@ check_update() {
     mask="${pkg}[._-]v?([0-9]+(\.[0-9]+)+)\.t"
     [ -n "$9" ] && mask="$9"
     # >&2 echo "mask|${mask}|"
-    res="$(my_curl "${urldir}" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
+    res="$(my_curl "${options[@]}" "${urldir}" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
       | grep -a -o -E -- "${mask}" | "${latest}" -1)"
     # >&2 echo "res|${res}|"
     if [[ "${res}" =~ ${mask} ]]; then
@@ -360,13 +364,15 @@ check_update() {
 }
 
 check_dl() {
-  local name url keys sig sha options key ok hash_calc hash_got
+  local name url keys sig sha options key ok hash_calc hash_got curlopt
   name="$1"
   url="$2"
   sig="$3"
   sha="$4"
   keys="$6"
+  curlopt="$7"
   options=()
+  [ -n "${curlopt}" ] && options+=("${curlopt}")
   [ "$5" = 'redir' ] && options+=(--location --proto-redir '=https')
   options+=(--output pkg.bin "${url}")
   if [ -n "${sig}" ]; then
@@ -463,6 +469,7 @@ bump() {
         ref_url="$( printf '%s' "${jp}" | jq --raw-output '.ref_url' | sed 's/^null$//')"
         ref_expr="$(printf '%s' "${jp}" | jq --raw-output '.ref_expr' | sed 's/^null$//')"
         ref_mask="$(printf '%s' "${jp}" | jq --raw-output '.ref_mask' | sed 's/^null$//')"
+        curlopt="$( printf '%s' "${jp}" | jq --raw-output '.curlopt' | sed 's/^null$//')"
 
         if [ "${pin}" = 'true' ]; then
           >&2 echo "! ${name}: Version pinned. Skipping."
@@ -474,7 +481,7 @@ bump() {
           newver="$(check_update "${name}" "${ourvern}" "${urlver}" "${desc}" \
             "${tag}" \
             "${hasfile}" \
-            "${ref_url}" "${ref_expr}" "${ref_mask}")"
+            "${ref_url}" "${ref_expr}" "${ref_mask}" "${curlopt}")"
           if [ -n "${newver}" ]; then
             >&2 echo "! ${name}: New version found: |${newver}|"
 
@@ -486,7 +493,7 @@ bump() {
 
               urlver="$(printf '%s' "${url}" | expandver "${newver}")"
               sigver="$(printf '%s' "${sig}" | expandver "${newver}")"
-              newhash="$(check_dl "${name}" "${urlver}" "${sigver}" "${sha}" "${redir}" "${keys}")"
+              newhash="$(check_dl "${name}" "${urlver}" "${sigver}" "${sha}" "${redir}" "${keys}" "${curlopt}")"
             else
               newhash='-'
             fi
@@ -586,13 +593,15 @@ live_dl() {
     jp="$(dependencies_json | jq \
       ".[] | select(.name == \"${name}\")")"
 
-    url="$(   printf '%s' "${jp}" | jq --raw-output '.url' | expandver "${ver}")"
-    mirror="$(printf '%s' "${jp}" | jq --raw-output '.mirror' | sed 's/^null$//' | expandver "${ver}")"
-    sigraw="$(printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's/^null$//' | expandver "${ver}")"
-    redir="$( printf '%s' "${jp}" | jq --raw-output '.redir')"
-    keys="$(  printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
+    url="$(    printf '%s' "${jp}" | jq --raw-output '.url' | expandver "${ver}")"
+    mirror="$( printf '%s' "${jp}" | jq --raw-output '.mirror' | sed 's/^null$//' | expandver "${ver}")"
+    sigraw="$( printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's/^null$//' | expandver "${ver}")"
+    redir="$(  printf '%s' "${jp}" | jq --raw-output '.redir')"
+    keys="$(   printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
+    curlopt="$(printf '%s' "${jp}" | jq --raw-output '.curlopt' | sed 's/^null$//')"
 
     options=()
+    [ -n "${curlopt}" ] && options+=("${curlopt}")
     [ "${redir}" = 'redir' ] && options+=(--location --proto-redir '=https')
     options+=(--output pkg.bin "${url}")
     sig="${sigraw}"
