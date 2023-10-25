@@ -81,6 +81,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     curl-linux-musl / curl-mac / curl-x64.exe / curl-x86.exe / curl-a64.exe
 #     (or similar)
 #   - change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
+#   - prepare for Xcode 15 with new ld_prime (-Wl,-ld_new) linker (vs. -Wl,-ld_classic).
+#     https://developer.apple.com/forums/thread/715385
 #   - switch to libssh2-cmake.sh by default? (both for libssh2.sh and as
 #     non-Windows fallback in libssh2-gnumake.sh). Consider enabling unity mode.
 #     The advantage of autotools here is that it allows to exercise the
