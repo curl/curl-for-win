@@ -8,7 +8,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # Unixy platforms require the configure phase, thus cannot build with pure GNU Make.
 if [ "${_OS}" != 'win' ]; then
-  ./libssh2-autotools.sh "$@"
+  ./libssh2-cmake.sh "$@"
   exit
 fi
 

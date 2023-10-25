@@ -1,1 +1,1 @@
-libssh2-autotools.sh
+libssh2-cmake.sh

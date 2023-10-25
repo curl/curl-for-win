@@ -83,11 +83,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
 #   - prepare for Xcode 15 with new ld_prime (-Wl,-ld_new) linker (vs. -Wl,-ld_classic).
 #     https://developer.apple.com/forums/thread/715385
-#   - switch to libssh2-cmake.sh by default? (both for libssh2.sh and as
-#     non-Windows fallback in libssh2-gnumake.sh). Consider enabling unity mode.
-#     The advantage of autotools here is that it allows to exercise the
-#     autotools codepath for default builds. libssh2 is not a heavy autotools
-#     user, so this is only catching trivial fallouts.
 #   - linux: musl alpine why need -static-pie and not -static?
 #   - linux: musl libcurl.so.4.8.0 tweak to be also portable (possible?)
 #   - linux: musl cross-cpu builds. https://musl.cc/aarch64-linux-musl-cross.tgz (gcc)
@@ -143,7 +138,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   libressl         autotools, cmake
 #   wolfssh          autotools
 #   libssh           cmake
-#   libssh2          autotools, gnumake [windows-only], cmake-unity
+#   libssh2          cmake-unity, autotools, gnumake [windows-only]
 #   curl             cmake-unity, autotools, gnumake [windows-only]
 
 cd "$(dirname "$0")"
