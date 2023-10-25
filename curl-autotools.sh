@@ -90,13 +90,12 @@ _VER="$1"
 
     if [ ! "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] || \
        [ ! "${_CONFIG#*pico*}" = "${_CONFIG}" ]; then
-      options="${options} --disable-crypto-auth"
+      options="${options} --disable-basic-auth --disable-bearer-auth --disable-digest-auth --disable-kerberos-auth --disable-negotiate-auth --disable-aws"
       options="${options} --disable-dict --disable-file --disable-gopher --disable-mqtt --disable-rtsp --disable-smb --disable-telnet --disable-tftp"
       options="${options} --disable-ftp"
       options="${options} --disable-imap --disable-pop3 --disable-smtp"
       options="${options} --disable-ldap --disable-ldaps"
     else
-      options="${options} --enable-crypto-auth"
       options="${options} --enable-dict --enable-file --enable-gopher --enable-mqtt --enable-rtsp --enable-smb --enable-telnet --enable-tftp"
       if [ "${_CONFIG#*noftp*}" = "${_CONFIG}" ]; then
         options="${options} --enable-ftp"
