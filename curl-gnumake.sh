@@ -7,7 +7,7 @@
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 # Unixy platforms require the configure phase, thus cannot build with pure GNU Make.
-if [ "${_OS}" != 'win' ]; then
+if [ "${_OS}" != 'win' ] || [ "${CURL_VER_}" != '8.4.0' ]; then
   ./curl-cmake.sh "$@"
   exit
 fi

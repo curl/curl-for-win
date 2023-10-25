@@ -81,9 +81,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     curl-linux-musl / curl-mac / curl-x64.exe / curl-x86.exe / curl-a64.exe
 #     (or similar)
 #   - change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
-#   - win: switch to curl-cmake.sh (from curl-gnumake.sh) to use the same build
-#     method for all target platforms. This will have a 20% build-performance
-#     hit for curl builds.
 #   - switch to libssh2-cmake.sh by default? (both for libssh2.sh and as
 #     non-Windows fallback in libssh2-gnumake.sh). Consider enabling unity mode.
 #     The advantage of autotools here is that it allows to exercise the
@@ -117,10 +114,10 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - https://sourceware.org/git/binutils-gdb.git
 #   - https://github.com/netwide-assembler/nasm
 
-# Build times (2023-07-29):
-#   - gnumake:                   33 min 18 sec   1998s   100%
-#   - cmake with dual patch:     39 min 12 sec   2352s   118%   100%
-#   - autotools:                 41 min 40 sec   2500s   125%   106%
+# Build times for windows (2023-10-25):
+#   - cmake-unity:  27 min 22 sec   1642s   100%
+#   - gnumake:      29 min 11 sec   1751s   107%   100%
+#   - autotools:    41 min 40 sec   2500s   152%   143%
 
 # Supported build tools:
 #
@@ -145,7 +142,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   wolfssh          autotools
 #   libssh           cmake
 #   libssh2          autotools, gnumake [windows-only], cmake-unity
-#   curl             gnumake [windows-only], cmake-unity [non-windows default], autotools
+#   curl             cmake-unity [non-windows default], autotools, gnumake [windows-only]
 
 cd "$(dirname "$0")"
 
