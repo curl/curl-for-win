@@ -160,7 +160,8 @@ cat <<EOF
   {
     "name": "awslc",
     "url": "https://github.com/aws/aws-lc/archive/refs/tags/v{ver}.tar.gz",
-    "redir": "redir"
+    "redir": "redir",
+    "tag": "v\\\\d+\\\\.\\\\d+\\\\.\\\\d+$"
   },
   {
     "name": "boringssl",
