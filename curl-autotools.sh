@@ -33,7 +33,7 @@ _VER="$1"
     export CFLAGS="${_CFLAGS_GLOBAL} -O3"
     export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
     export RCFLAGS="${_RCFLAGS_GLOBAL}"
-    export LDFLAGS="${_LDFLAGS_GLOBAL}"
+    export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
     export LIBS="${_LIBS_GLOBAL}"
 
     options="${options} --enable-unix-sockets"
