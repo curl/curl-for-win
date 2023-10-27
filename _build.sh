@@ -89,6 +89,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     $ echo 'aarch64' > /etc/apk/arch; apk add --no-cache musl ?
 #     $ dpkg --add-architecture aarch64; apt-get install musl:aarch64 ?
 #   - merge _ci-*.sh scripts into one.
+#   - FIXME: curl-autotools: .map file support and clang builds broken.
 #   - win: Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
 #       https://gs.statcounter.com/windows-version-market-share
