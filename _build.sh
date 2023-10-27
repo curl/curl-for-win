@@ -723,6 +723,9 @@ build_single_target() {
   unset CC
 
   if [ "${_OS}" = 'win' ]; then
+
+    _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -D_WIN32_WINNT=0x0600"  # Windows Vista
+
     if [ "${_HOST}" != "${_OS}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Windows ${_CMAKE_GLOBAL}"
     fi
