@@ -85,6 +85,12 @@
             # CF_FUNCTION_TABLE_PRESENT, CF_INSTRUMENTED, CF_LONGJUMP_TABLE_PRESENT (optional)
             "${_READELF}" --coff-load-config "${f}" | grep -a -E 'CF_[A-Z_]' | sort
           fi
+          if [ "${suffix}" = 'exe' ]; then  # should be the same output for the DLL
+            # regexp compatible with llvm and binutils output
+            "${_OBJDUMP}" --all-headers "${f}" \
+              | grep -a -E ' [0-9]{1,5} +[a-zA-Z_][a-zA-Z0-9_]*$' \
+              | grep -a -E -o '\S+$' | sort || true
+          fi
         elif [ "${_OS}" = 'mac' ]; then
           if [ "${_CC}" = 'gcc' ] || [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
             _prefix=''
