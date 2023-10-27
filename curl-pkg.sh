@@ -29,6 +29,10 @@
 
   touch -c -r "${_ref}" "${_PP}"/lib/*.a
 
+  if [ "${_OS}" = 'win' ]; then
+    touch -c -r "${_ref}" "${_PP}"/bin/*.def
+  fi
+
   # Process map files
 
   if [ "${CW_MAP}" = '1' ]; then
