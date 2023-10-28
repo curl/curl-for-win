@@ -17,7 +17,7 @@ _VER="$1"
 (
   cd "${_NAM}"  # mandatory component
 
-  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
+  [ "${CW_DEV_INCREMENTAL:-}" != '1' ] && rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   # Build
 
@@ -347,23 +347,25 @@ _VER="$1"
 
   [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] || options="${options} -DCMAKE_UNITY_BUILD=ON"
 
-  # shellcheck disable=SC2086
-  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
-    '-DCURL_CA_PATH=none' \
-    '-DCURL_CA_BUNDLE=none' \
-    '-DBUILD_SHARED_LIBS=ON' \
-    '-DBUILD_STATIC_LIBS=ON' \
-    '-DBUILD_CURL_EXE=ON' \
-    '-DBUILD_STATIC_CURL=ON' \
-    '-DENABLE_THREADED_RESOLVER=ON' \
-    '-DBUILD_TESTING=OFF' \
-    '-DCURL_HIDDEN_SYMBOLS=ON' \
-    '-DENABLE_WEBSOCKETS=ON' \
-    "-DCMAKE_RC_FLAGS=${_RCFLAGS_GLOBAL}" \
-    "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}" \
-    "-DCMAKE_C_STANDARD_LIBRARIES=${LIBS}" \
-    "-DCMAKE_EXE_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_BIN} ${LIBS}" \
-    "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}"  # --debug-find --debug-trycompile
+  if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
+    # shellcheck disable=SC2086
+    cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
+      '-DCURL_CA_PATH=none' \
+      '-DCURL_CA_BUNDLE=none' \
+      '-DBUILD_SHARED_LIBS=ON' \
+      '-DBUILD_STATIC_LIBS=ON' \
+      '-DBUILD_CURL_EXE=ON' \
+      '-DBUILD_STATIC_CURL=ON' \
+      '-DENABLE_THREADED_RESOLVER=ON' \
+      '-DBUILD_TESTING=OFF' \
+      '-DCURL_HIDDEN_SYMBOLS=ON' \
+      '-DENABLE_WEBSOCKETS=ON' \
+      "-DCMAKE_RC_FLAGS=${_RCFLAGS_GLOBAL}" \
+      "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}" \
+      "-DCMAKE_C_STANDARD_LIBRARIES=${LIBS}" \
+      "-DCMAKE_EXE_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_BIN} ${LIBS}" \
+      "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}"  # --debug-find --debug-trycompile
+  fi
 
   # When doing an out of tree build, this is necessary to avoid make
   # re-generating the embedded manual with blank content.

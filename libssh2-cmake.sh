@@ -14,7 +14,7 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
+  [ "${CW_DEV_INCREMENTAL:-}" != '1' ] && rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   LIBS=''
   options=''
@@ -59,14 +59,16 @@ _VER="$1"
     options="${options} -DCRYPTO_BACKEND=WinCNG"
   fi
 
-  # shellcheck disable=SC2086
-  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
-    '-DCMAKE_UNITY_BUILD=ON' \
-    '-DBUILD_SHARED_LIBS=OFF' \
-    '-DBUILD_EXAMPLES=OFF' \
-    '-DBUILD_TESTING=OFF' \
-    '-DENABLE_DEBUG_LOGGING=OFF' \
-    "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${LIBSSH2_CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LIBS}"  # --debug-trycompile
+  if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
+    # shellcheck disable=SC2086
+    cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
+      '-DCMAKE_UNITY_BUILD=ON' \
+      '-DBUILD_SHARED_LIBS=OFF' \
+      '-DBUILD_EXAMPLES=OFF' \
+      '-DBUILD_TESTING=OFF' \
+      '-DENABLE_DEBUG_LOGGING=OFF' \
+      "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${LIBSSH2_CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LIBS}"  # --debug-trycompile
+  fi
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
