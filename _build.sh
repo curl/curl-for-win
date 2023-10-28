@@ -77,6 +77,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
+#   - delete curl-gnumake.sh and libssh2-gnumake.sh.
 #   - publish curl tool as direct downloads:
 #     curl-linux-musl / curl-mac / curl-x64.exe / curl-x86.exe / curl-a64.exe
 #     (or similar)
