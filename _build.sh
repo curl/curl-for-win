@@ -86,7 +86,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     https://developer.apple.com/forums/thread/715385
 #   - linux: musl alpine why need -static-pie and not -static?
 #   - linux: musl libcurl.so.4.8.0 tweak to be also portable (possible?)
-#   - linux: cross builds (musl and non-musl) to use libclang_rt (instead of libgcc).
+#   - linux: cross non-musl builds to use libclang_rt (instead of libgcc).
 #   - merge _ci-*.sh scripts into one.
 #   - FIXME: curl-autotools: .map file support and clang builds broken.
 #   - win: Drop x86 builds.
@@ -829,16 +829,9 @@ build_single_target() {
 
   _CCRT='libgcc'  # compiler runtime, 'libgcc' (for libgcc and libstdc++) or 'clang-rt' (for compiler-rt and libc++)
   # Debian does not support clang-rt for cross-builds easily,
-  # it would require package `libclang-rt-16-dev` or `libclang-common-15-dev` and `libc++1-16`.
+  # it requires manually installing package `libclang-rt-16-dev` or `libclang-common-15-dev`.
   if [ "${_CC}" = 'llvm' ] && [ "${_CRT}" = 'musl' ]; then
-    if [ "${_DISTRO}" = 'alpine' ]; then
-      _CCRT='clang-rt'
-    else
-      # This works for native CPU (musl and not-musl) but not for a cross-CPU (musl and not-musl).
-      # Do not enable for now for symmetry.
-    # _CCRT='clang-rt'
-      :
-    fi
+    _CCRT='clang-rt'
   elif [ "${_TOOLCHAIN}" = 'llvm-apple' ] || \
        [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
     # Not an option
@@ -1204,6 +1197,18 @@ build_single_target() {
         if [ "${unamem}" = "${_machine}" ]; then
           ccrtdir="$("clang${_CCSUFFIX}" -print-runtime-dir)"                          # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux
           ccrtlib="$("clang${_CCSUFFIX}" -print-libgcc-file-name -rtlib=compiler-rt)"  # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux/libclang_rt.builtins-aarch64.a
+          ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
+          ccrtlib="-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
+        elif [ -d 'my-pkg/usr/lib/clang' ]; then  # cross
+          # If we have the target CPU's clang-rt package installed, use it:
+          ccrtdir="$(find -L \
+            "$(pwd)/my-pkg/usr/lib/clang" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)"  # ../my-pkg/usr/lib/clang/15/lib/linux
+          if [ -z "${ccrtdir}" ]; then
+            >&2 echo '! Error: Failed to detect cross-clang-rt env root.'
+            exit 1
+          fi
+          ccrtdir="${ccrtdir}/lib/linux"
+          ccrtlib="${ccrtdir}/libclang_rt.builtins-${_machine}.a"
           ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
           ccrtlib="-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
         else  # cross
