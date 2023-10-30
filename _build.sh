@@ -1173,6 +1173,7 @@ build_single_target() {
       ccrsdir="$(dirname "${ccrtlib}")"                                                # /usr/lib/gcc/aarch64-linux-gnu/12
       ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
       ccrtlib="-l${ccrtlib%.*}"  # 'gcc'
+      ccridir="${ccrsdir}"
     else
       if [ "${unamem}" = "${_machine}" ]; then
         gccroot="/usr/lib/gcc/${_TRIPLETSH}"        # /usr/lib/gcc/aarch64-linux-gnu/12
@@ -1187,9 +1188,10 @@ build_single_target() {
       ccrsdir="${ccrtdir}"
       ccrtlib="-lgcc -lgcc_eh"
       _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++"
+      ccridir="$("clang${_CCSUFFIX}" -print-resource-dir)"                             # /usr/lib/llvm-13/lib/clang/13.0.1
     fi
     libprefix="/usr/lib/${_machine}-linux-musl"
-    _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -static -nostdinc -isystem ${ccrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
+    _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -static -nostdinc -isystem ${ccridir}/include -isystem /usr/include/${_machine}-linux-musl"
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nostartfiles -L${libprefix} -Wl,${libprefix}/Scrt1.o -Wl,${libprefix}/crti.o -L${ccrsdir} -Wl,${libprefix}/crtn.o"
     _LIBS_GLOBAL="${_LIBS_GLOBAL} -lc ${ccrtlib}"
   fi
