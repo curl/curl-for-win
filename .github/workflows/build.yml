@@ -69,7 +69,7 @@ jobs:
         run: cat urls.txt
       - uses: actions/upload-artifact@v3
         with:
-          name: 'curl-linux-musl-debian-testing-x86_64'
+          name: 'curl-linux-musl-debian-testing'
           retention-days: 5
           path: |
             *-*-linux*.*
@@ -99,7 +99,7 @@ jobs:
         run: cat urls.txt
       - uses: actions/upload-artifact@v3
         with:
-          name: 'curl-linux-musl-debian-bookworm-x86_64'
+          name: 'curl-linux-musl-debian-bookworm'
           retention-days: 5
           path: |
             *-*-linux*.*

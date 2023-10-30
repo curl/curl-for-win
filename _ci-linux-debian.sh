@@ -31,8 +31,20 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   fi
   if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
     extra="${extra} musl musl-dev"
+    if [ "$(uname -m)" = 'aarch64' ]; then
+      dpkg --add-architecture amd64
+      extra="${extra} musl:amd64 musl-dev:amd64"
+    else
+      dpkg --add-architecture arm64
+      extra="${extra} musl:arm64 musl-dev:arm64"
+    fi
     if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
       extra="${extra} libgcc${CW_GCCSUFFIX}-dev"
+      if [ "$(uname -m)" = 'aarch64' ]; then
+        extra="${extra} g++${CW_GCCSUFFIX}-x86-64-linux-gnu"
+      else
+        extra="${extra} g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
+      fi
     fi
     # for openssl 'secure-memory' feature
     if [ "$(uname -m)" = 'aarch64' ]; then

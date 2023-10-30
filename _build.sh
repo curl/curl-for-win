@@ -86,9 +86,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     https://developer.apple.com/forums/thread/715385
 #   - linux: musl alpine why need -static-pie and not -static?
 #   - linux: musl libcurl.so.4.8.0 tweak to be also portable (possible?)
-#   - linux: musl cross-cpu builds. https://musl.cc/aarch64-linux-musl-cross.tgz (gcc)
-#     $ echo 'aarch64' > /etc/apk/arch; apk add --no-cache musl ?
-#     $ dpkg --add-architecture aarch64; apt-get install musl:aarch64 ?
+#   - linux: cross builds (musl and non-musl) to use libclang_rt (instead of libgcc).
 #   - merge _ci-*.sh scripts into one.
 #   - FIXME: curl-autotools: .map file support and clang builds broken.
 #   - win: Drop x86 builds.
@@ -322,6 +320,13 @@ case "${_HOST}" in
   mac)   _HOST_TRIPLET="${unamem}-apple-darwin";;
   *)     _HOST_TRIPLET="${unamem}-pc-$(uname -s | tr '[:upper:]' '[:lower:]')";;  # lazy guess
 esac
+
+if [ "${_HOST}" = 'linux' ]; then
+  # Short triplet used on the filesystem
+  _HOST_TRIPLETSH="${unamem}-linux-gnu"
+else
+  _HOST_TRIPLETSH="${_HOST_TRIPLET}"
+fi
 
 export _PKGOS
 if [ "${_OS}" = 'win' ]; then
@@ -644,6 +649,13 @@ build_single_target() {
         _TRIPLETSH="${_machine}-linux-gnu"
       fi
 
+      if [ "${_DISTRO}" = 'debian' ] && \
+         [ "${unamem}" != "${_machine}" ] && \
+         [ ! -d "/usr/lib/gcc-cross/${_TRIPLETSH}" ]; then
+        echo "! WARNING: '${_CONFIG}/${_CPU}' build requires gcc-cross package. Skipping."
+        return
+      fi
+
       if [ "${unamem}" != "${_machine}" ] && [ "${_CC}" = 'gcc' ]; then
         # https://packages.debian.org/testing/arm64/gcc-x86-64-linux-gnu/filelist
         # https://packages.debian.org/testing/arm64/binutils-x86-64-linux-gnu/filelist
@@ -816,12 +828,17 @@ build_single_target() {
   [ "${_CPU}" = 'x86' ] && _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-asynchronous-unwind-tables"
 
   _CCRT='libgcc'  # compiler runtime, 'libgcc' (for libgcc and libstdc++) or 'clang-rt' (for compiler-rt and libc++)
-  # Debian does not support clang-rt for cross-builds, but we enable it
-  # for musl builds, where cross-builds are not natively supported anyway.
-  # On Debian it would require package `libclang-rt-16-dev` and `libc++1-16`.
+  # Debian does not support clang-rt for cross-builds easily,
+  # it would require package `libclang-rt-16-dev` or `libclang-common-15-dev` and `libc++1-16`.
   if [ "${_CC}" = 'llvm' ] && [ "${_CRT}" = 'musl' ]; then
-    # Optional
-    _CCRT='clang-rt'
+    if [ "${_DISTRO}" = 'alpine' ]; then
+      _CCRT='clang-rt'
+    else
+      # This works for native CPU (musl and not-musl) but not for a cross-CPU (musl and not-musl).
+      # Do not enable for now for symmetry.
+    # _CCRT='clang-rt'
+      :
+    fi
   elif [ "${_TOOLCHAIN}" = 'llvm-apple' ] || \
        [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
     # Not an option
@@ -864,7 +881,7 @@ build_single_target() {
         _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/${_TRIPLET}"
         _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/backward"
       fi
-    elif [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [ "${unamem}" != "${_machine}" ] && [ "${_CC}" = 'llvm' ]; then
+    elif [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [ "${unamem}" != "${_machine}" ] && [ "${_CC}" = 'llvm' ] && [ "${_CRT}" != 'musl' ]; then
       _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -isystem /usr/${_TRIPLETSH}/include"
       _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L/usr/${_TRIPLETSH}/lib"
       if [ "${_CCRT}" = 'libgcc' ]; then
@@ -1010,9 +1027,9 @@ build_single_target() {
       #   ../crypto/mem_sec.c:60:13: fatal error: linux/mman.h: No such file or directory
       # Based on: https://github.com/openssl/openssl/issues/7207#issuecomment-880121450
       _my_incdir='_sys_include'; rm -r -f "${_my_incdir}"; mkdir "${_my_incdir}"; _my_incdir="$(pwd)/${_my_incdir}"
-      ln -s "/usr/include/${_TRIPLETSH}/asm" "${_my_incdir}/asm"
-      ln -s "/usr/include/asm-generic"       "${_my_incdir}/asm-generic"
-      ln -s "/usr/include/linux"             "${_my_incdir}/linux"
+      ln -s -f "/usr/include/${_HOST_TRIPLETSH}/asm" "${_my_incdir}/asm"
+      ln -s -f '/usr/include/asm-generic'            "${_my_incdir}/asm-generic"
+      ln -s -f '/usr/include/linux'                  "${_my_incdir}/linux"
       _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -isystem ${_my_incdir}"
     fi
   fi
@@ -1150,30 +1167,59 @@ build_single_target() {
     fi
   fi
 
-  if [ "${_CC}" = 'gcc' ] && [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
-    ccrtlib="$("${_CCPREFIX}gcc${_CCSUFFIX}" -print-libgcc-file-name)"               # /usr/lib/gcc/aarch64-linux-gnu/10/libgcc.a
-    ccrsdir="$(dirname "${ccrtlib}")"                                                # /usr/lib/gcc/aarch64-linux-gnu/10
-    ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
-    ccrtlib="${ccrtlib%.*}"  # 'gcc'
+  if [ "${_CCRT}" = 'libgcc' ] && [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
+    if [ "${_CC}" = 'gcc' ]; then
+      ccrtlib="$("${_CCPREFIX}gcc${_CCSUFFIX}" -print-libgcc-file-name)"               # /usr/lib/gcc/aarch64-linux-gnu/12/libgcc.a
+      ccrsdir="$(dirname "${ccrtlib}")"                                                # /usr/lib/gcc/aarch64-linux-gnu/12
+      ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
+      ccrtlib="-l${ccrtlib%.*}"  # 'gcc'
+    else
+      if [ "${unamem}" = "${_machine}" ]; then
+        gccroot="/usr/lib/gcc/${_TRIPLETSH}"        # /usr/lib/gcc/aarch64-linux-gnu/12
+      else  # cross
+        gccroot="/usr/lib/gcc-cross/${_TRIPLETSH}"  # /usr/lib/gcc-cross/x86_64-linux-gnu/12
+      fi
+      ccrtdir="$(find "${gccroot}" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)"
+      if [ -z "${ccrtdir}" ]; then
+        >&2 echo '! Error: Failed to detect gcc env root.'
+        exit 1
+      fi
+      ccrsdir="${ccrtdir}"
+      ccrtlib="-lgcc -lgcc_eh"
+    fi
     libprefix="/usr/lib/${_machine}-linux-musl"
     _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -static -nostdinc -isystem ${ccrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
     _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nostartfiles -L${libprefix} -Wl,${libprefix}/Scrt1.o -Wl,${libprefix}/crti.o -L${ccrsdir} -Wl,${libprefix}/crtn.o"
-    _LIBS_GLOBAL="${_LIBS_GLOBAL} -lc -l${ccrtlib}"
+    _LIBS_GLOBAL="${_LIBS_GLOBAL} -lc ${ccrtlib}"
   fi
 
   if [ "${_CCRT}" = 'clang-rt' ]; then
     if [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
       if [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
         # This method should also work to replace the `_CCPREFIX='musl-'` solution we use with gcc.
-        ccrsdir="$("clang${_CCSUFFIX}" -print-resource-dir)"                         # /usr/lib/llvm-13/lib/clang/13.0.1
-        ccrtdir="$("clang${_CCSUFFIX}" -print-runtime-dir)"                          # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux
-        ccrtlib="$("clang${_CCSUFFIX}" -print-libgcc-file-name -rtlib=compiler-rt)"  # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux/libclang_rt.builtins-aarch64.a
-        ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
-        ccrtlib="${ccrtlib%.*}"  # clang_rt.builtins-aarch64
+        ccrsdir="$("clang${_CCSUFFIX}" -print-resource-dir)"                           # /usr/lib/llvm-13/lib/clang/13.0.1
+        if [ "${unamem}" = "${_machine}" ]; then
+          ccrtdir="$("clang${_CCSUFFIX}" -print-runtime-dir)"                          # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux
+          ccrtlib="$("clang${_CCSUFFIX}" -print-libgcc-file-name -rtlib=compiler-rt)"  # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux/libclang_rt.builtins-aarch64.a
+          ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
+          ccrtlib="-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
+        else  # cross
+          # Fall back to libgcc because I could not figure out how to install the
+          # cross-clangrt package on Debian (providing `libclang_rt.builtins-x86_64.a`)
+          # with `apt install libclang-common-15-dev:amd64`.
+          # The error is:
+          #   "The following packages have unmet dependencies"
+          ccrtdir="$(find "/usr/lib/gcc-cross/${_TRIPLETSH}" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)"  # /usr/lib/gcc-cross/x86_64-linux-gnu/12
+          if [ -z "${ccrtdir}" ]; then
+            >&2 echo '! Error: Failed to detect gcc-cross env root.'
+            exit 1
+          fi
+          ccrtlib="-lgcc -lgcc_eh"
+        fi
         libprefix="/usr/lib/${_machine}-linux-musl"
         _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -nostdinc -isystem ${ccrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -L${ccrtdir} ${libprefix}/crtn.o"
-        _LIBS_GLOBAL="${_LIBS_GLOBAL} -lc -l${ccrtlib}"
+        _LIBS_GLOBAL="${_LIBS_GLOBAL} -lc ${ccrtlib}"
         _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++"
       else
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt"
@@ -1444,8 +1490,8 @@ elif [ "${_OS}" = 'linux' ]; then
        command -v aarch64-linux-musl-gcc >/dev/null 2>&1; then
       build_single_target a64
     fi
-  elif [ "${_CRT}" = 'musl' ]; then
-    # No trivial cross-builds with musl
+  elif [ "${_DISTRO}" = 'alpine' ]; then
+    # No trivial cross-builds with alpine-musl
     if [ "${unamem}" = 'aarch64' ]; then
       build_single_target a64
     elif [ "${unamem}" = 'x86_64' ]; then
