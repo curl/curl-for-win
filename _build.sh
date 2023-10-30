@@ -1186,6 +1186,7 @@ build_single_target() {
       fi
       ccrsdir="${ccrtdir}"
       ccrtlib="-lgcc -lgcc_eh"
+      _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++"
     fi
     libprefix="/usr/lib/${_machine}-linux-musl"
     _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -static -nostdinc -isystem ${ccrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
