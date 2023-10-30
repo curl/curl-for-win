@@ -146,6 +146,7 @@
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(pwd)/_pkg"; rm -r -f "${_DST}"
 
+  mkdir -p "${_DST}/docs/examples"
   mkdir -p "${_DST}/docs/libcurl/opts"
   mkdir -p "${_DST}/include/curl"
   mkdir -p "${_DST}/lib"
@@ -164,6 +165,12 @@
       if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -E '(\.|/Makefile$)'; then
         cp -f -p "${file}" "${_DST}/${file}.txt"
       fi
+    done
+    # Copy simple examples
+    tr -d '\r' < docs/examples/Makefile.inc | tr '\n' '^' | sed 's/\\^//g' | tr '^' '\n' \
+      | grep 'check_PROGRAMS' | grep -a -o -E '=.+$' | cut -c 2- \
+      | sed -E 's/ +/ /g' | tr ' ' '\n' | while read -r f; do
+      [ -n "${f}" ] && cp -f -p "docs/examples/${f}.c" "${_DST}/docs/examples/"
     done
   )
   cp -f -p "${_PP}"/include/curl/*.h          "${_DST}/include/curl/"
