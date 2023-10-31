@@ -1246,7 +1246,12 @@ build_single_target() {
           ccrtlib="${ccrtdir}/libclang_rt.builtins-${_machine}.a"
           ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
           ccrtlib="-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
-          _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nodefaultlibs -L${ccrtdir}"
+          libprefix="/usr/${_TRIPLETSH}/lib"
+          _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nodefaultlibs -L${libprefix} -L${ccrtdir}"
+          # lld by default wants to load startfiles from:
+          #   /usr/bin/../lib/gcc-cross/x86_64-linux-gnu/12/../../../../x86_64-linux-gnu/lib/
+          # or similar. Manually specify the ones belonging to glibc.
+          _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nostartfiles ${libprefix}/Scrt1.o ${libprefix}/crti.o ${libprefix}/crtn.o"
           _LIBS_GLOBAL="${_LIBS_GLOBAL} -lc ${ccrtlib}"
         fi
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt"

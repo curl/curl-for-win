@@ -77,6 +77,12 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     elif [ "$(uname -m)" = 'x86_64' ]; then
       extra="${extra} linux-headers-amd64"
     fi
+  else
+    if [ "$(uname -m)" = 'aarch64' ]; then
+      extra="${extra} libc6-dev-amd64-cross"
+    else
+      extra="${extra} libc6-dev-arm64-cross"
+    fi
   fi
 fi
 
