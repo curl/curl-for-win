@@ -1229,7 +1229,6 @@ build_single_target() {
         _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -nostdinc -isystem ${ccrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -L${ccrtdir} ${libprefix}/crtn.o"
         _LIBS_GLOBAL="${_LIBS_GLOBAL} -lc ${ccrtlib}"
-        _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++"
       else
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt"
         # `-Wc,...` is necessary for libtool to pass this option to the compiler
@@ -1237,7 +1236,7 @@ build_single_target() {
         #   https://www.gnu.org/software/libtool/manual/html_node/Stripped-link-flags.html
         _LDFLAGS_GLOBAL_AUTOTOOLS="${_LDFLAGS_GLOBAL_AUTOTOOLS} -Wc,-rtlib=compiler-rt"
       fi
-      _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -stdlib=libc++"
+      _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++"
     fi
   else
     if [ "${_OS}" = 'win' ]; then
