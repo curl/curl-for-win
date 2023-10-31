@@ -1203,7 +1203,7 @@ build_single_target() {
         elif [ -d 'my-pkg/usr/lib/clang' ]; then  # cross
           # If we have the target CPU's clang-rt package installed, use it:
           ccrtdir="$(find -L \
-            "$(pwd)/my-pkg/usr/lib/clang" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1 || true)"  # ../my-pkg/usr/lib/clang/15/lib/linux
+            "$(pwd)/my-pkg/usr/lib/clang" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1 || true)"  # ./my-pkg/usr/lib/clang/15/lib/linux
           if [ -z "${ccrtdir}" ]; then
             >&2 echo '! Error: Failed to detect cross-clang-rt env root.'
             exit 1
