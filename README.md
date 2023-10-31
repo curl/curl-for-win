@@ -13,13 +13,14 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   [vulnerability](https://curl.se/docs/CVE-2019-5443.html) on Windows. It also
   makes binaries 40% smaller. Major crypto and curl features remain the same.**
 - [Download](https://curl.se/windows/) our
-  `.zip` or `.tar.xz` packages,<br>PGP signed with:
+  `.tar.xz` or `.zip` packages,<br>PGP signed with:
   [`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
 - Standalone `curl` tool and `libcurl` DLL. Static libraries included.
 - Required: Windows Vista and
   [Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/),
   macOS 10.9 Mavericks Intel or Apple Silicon,
-  any Linux arm64 with the [MUSL](https://en.wikipedia.org/wiki/Musl) builds.
+  any Linux arm64 or amd64 with [MUSL](https://en.wikipedia.org/wiki/Musl)
+  builds.
 - [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3),
   [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support,
   and [more](#features).
@@ -35,11 +36,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   [Homebrew](https://formulae.brew.sh/formula/mingw-w64),
   [MSYS2](https://www.msys2.org/).
   [`llvm-mingw`](https://github.com/mstorsjo/llvm-mingw) for ARM64.
-- Windows cross-built and published from Linux via
-  [AppVeyor CI](https://www.appveyor.com/). Using reproducible OS image
+- Windows cross-built and published via
+  [AppVeyor CI](https://www.appveyor.com/). Linux built via GHA.
+  Using reproducible OS image
   [`debian:testing-slim`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing/slim)
   via [Docker](https://hub.docker.com/_/debian/). macOS built on native OS.
-  Linux MUSL built on [Alpine](https://hub.docker.com/_/alpine/).
 - Linux and macOS builds are experimental and *not* official curl builds.
 - We verify components using SHA-256, and PGP where provided.
 - We build [reproducible](https://reproducible-builds.org/) binaries,
