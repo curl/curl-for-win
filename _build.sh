@@ -650,6 +650,7 @@ build_single_target() {
       fi
 
       if [ "${_DISTRO}" = 'debian' ] && \
+         [ "${_CC}" = 'gcc' ] && \
          [ "${unamem}" != "${_machine}" ] && \
          [ ! -d "/usr/lib/gcc-cross/${_TRIPLETSH}" ]; then
         echo "! WARNING: '${_CONFIG}/${_CPU}' build requires gcc-cross package. Skipping."
