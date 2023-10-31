@@ -8,7 +8,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 extra='automake'
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go"
-[[ "${CW_CONFIG:-}" != *'mac'* ]] && extra="${extra} llvm"
+if [[ "${CW_CONFIG:-}" != *'mac'* ]] || [[ "${CW_CONFIG:-}" = *'llvm'* ]]; then
+  extra="${extra} llvm"
+fi
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   extra="${extra} mingw-w64 osslsigncode wine-stable openssh"
@@ -17,6 +19,8 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   fi
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   extra="${extra} FiloSottile/musl-cross/musl-cross"
+elif [[ "${CW_CONFIG:-}" = *'mac'* ]] && [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
+  extra="${extra} gcc"
 fi
 
 if [ -n "${extra}" ]; then
