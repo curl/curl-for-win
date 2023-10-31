@@ -36,6 +36,11 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
     extra="${extra} gcc${CW_GCCSUFFIX} g++${CW_GCCSUFFIX}"
     export CW_CCSUFFIX="${CW_GCCSUFFIX}"
+    if [ "$(uname -m)" = 'aarch64' ]; then
+      extra="${extra} gcc${CW_GCCSUFFIX}-x86-64-linux-gnu g++${CW_GCCSUFFIX}-x86-64-linux-gnu"
+    else
+      extra="${extra} gcc${CW_GCCSUFFIX}-aarch64-linux-gnu g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
+    fi
   else
     # These packages do not install due to dependency requirements.
     # We download unpack them manually as a workaround.
@@ -65,31 +70,12 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     fi
     if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
       extra="${extra} libgcc${CW_GCCSUFFIX}-dev"
-      if [ "$(uname -m)" = 'aarch64' ]; then
-        extra="${extra} g++${CW_GCCSUFFIX}-x86-64-linux-gnu"
-      else
-        extra="${extra} g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
-      fi
     fi
     # for openssl 'secure-memory' feature
     if [ "$(uname -m)" = 'aarch64' ]; then
       extra="${extra} linux-headers-arm64"
     elif [ "$(uname -m)" = 'x86_64' ]; then
       extra="${extra} linux-headers-amd64"
-    fi
-  else
-    if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
-      if [ "$(uname -m)" = 'aarch64' ]; then
-        extra="${extra} gcc${CW_GCCSUFFIX}-x86-64-linux-gnu g++${CW_GCCSUFFIX}-x86-64-linux-gnu"
-      else
-        extra="${extra} gcc${CW_GCCSUFFIX}-aarch64-linux-gnu g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
-      fi
-    else
-      if [ "$(uname -m)" = 'aarch64' ]; then
-        extra="${extra} libgcc${CW_GCCSUFFIX}-dev-amd64-cross libstdc++${CW_GCCSUFFIX}-dev-amd64-cross"
-      else
-        extra="${extra} libgcc${CW_GCCSUFFIX}-dev-arm64-cross libstdc++${CW_GCCSUFFIX}-dev-arm64-cross"
-      fi
     fi
   fi
 fi
