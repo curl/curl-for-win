@@ -1004,7 +1004,7 @@ build_single_target() {
     # Issue: https://github.com/curl/curl/issues/10356
     # Revert to SDK 12.x as a workaround, e.g. /Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk
     if [ "${_CC}" = 'gcc' ]; then
-      tmp="${_SYSROOT//.sdk/12.sdk}"
+      tmp="$(echo "${_SYSROOT}" | sed -E 's/[0-9\.]+\.sdk$/12.sdk/g')"
       if [ -d "${tmp}" ]; then
         _SYSROOT="${tmp}"
       fi
