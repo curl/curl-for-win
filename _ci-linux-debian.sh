@@ -26,17 +26,41 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   [ -n "${CW_GCCSUFFIX:-}" ] || CW_GCCSUFFIX='-13'
   extra="${extra} checksec"
+  if [[ "${CW_CONFIG:-}" != *'gcc'* ]] || [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
+    if [ "$(uname -m)" = 'aarch64' ]; then
+      dpkg --add-architecture amd64
+    else
+      dpkg --add-architecture arm64
+    fi
+  fi
   if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
     extra="${extra} gcc${CW_GCCSUFFIX} g++${CW_GCCSUFFIX}"
     export CW_CCSUFFIX="${CW_GCCSUFFIX}"
+  else
+    # These packages do not install due to dependency requirements.
+    # We download unpack them manually as a workaround.
+    if [ "${CW_CCSUFFIX}" = '-15' ]; then
+      # ./my-pkg/usr/lib/clang/15/lib
+      # ./my-pkg/usr/lib/llvm-15/lib/clang/15.0.6/lib/linux/libclang_rt.builtins-aarch64.a
+      if [ "$(uname -m)" = 'aarch64' ]; then
+        dl="${dl} libclang-common${CW_CCSUFFIX}-dev:amd64"
+      else
+        dl="${dl} libclang-common${CW_CCSUFFIX}-dev:arm64"
+      fi
+    else
+      # ./my-pkg/usr/lib/llvm-16/lib/clang/16/lib/linux/libclang_rt.builtins-aarch64.a
+      if [ "$(uname -m)" = 'aarch64' ]; then
+        dl="${dl} libclang-rt${CW_CCSUFFIX}-dev:amd64"
+      else
+        dl="${dl} libclang-rt${CW_CCSUFFIX}-dev:arm64"
+      fi
+    fi
   fi
   if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
     extra="${extra} musl musl-dev"
     if [ "$(uname -m)" = 'aarch64' ]; then
-      dpkg --add-architecture amd64
       extra="${extra} musl:amd64 musl-dev:amd64"
     else
-      dpkg --add-architecture arm64
       extra="${extra} musl:arm64 musl-dev:arm64"
     fi
     if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
@@ -45,25 +69,6 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
         extra="${extra} g++${CW_GCCSUFFIX}-x86-64-linux-gnu"
       else
         extra="${extra} g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
-      fi
-    else
-      # These packages do not install due to dependency requirements.
-      # We download unpack them manually as a workaround.
-      if [ "${CW_CCSUFFIX}" = '-15' ]; then
-        # ./my-pkg/usr/lib/clang/15/lib
-        # ./my-pkg/usr/lib/llvm-15/lib/clang/15.0.6/lib/linux/libclang_rt.builtins-aarch64.a
-        if [ "$(uname -m)" = 'aarch64' ]; then
-          dl="${dl} libclang-common${CW_CCSUFFIX}-dev:amd64"
-        else
-          dl="${dl} libclang-common${CW_CCSUFFIX}-dev:arm64"
-        fi
-      else
-        # ./my-pkg/usr/lib/llvm-16/lib/clang/16/lib/linux/libclang_rt.builtins-aarch64.a
-        if [ "$(uname -m)" = 'aarch64' ]; then
-          dl="${dl} libclang-rt${CW_CCSUFFIX}-dev:amd64"
-        else
-          dl="${dl} libclang-rt${CW_CCSUFFIX}-dev:arm64"
-        fi
       fi
     fi
     # for openssl 'secure-memory' feature
