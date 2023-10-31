@@ -865,7 +865,7 @@ build_single_target() {
         # /usr/lib/gcc/x86_64-w64-mingw32/10-posix/
         # /usr/lib/gcc/x86_64-w64-mingw32/10-win32/
         # /usr/lib/gcc/x86_64-w64-mingw32/12/
-        tmp="$(find "/usr/lib/gcc/${_TRIPLET}" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+        tmp="$(find "/usr/lib/gcc/${_TRIPLET}" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
         if [ -z "${tmp}" ]; then
           >&2 echo '! Error: Failed to detect mingw-w64 dev env root.'
           exit 1
@@ -881,7 +881,7 @@ build_single_target() {
       if [ "${_CCRT}" = 'libgcc' ]; then
         # https://packages.debian.org/testing/all/libgcc-13-dev-arm64-cross/filelist
         # /usr/lib/gcc-cross/aarch64-linux-gnu/13/
-        tmp="$(find "/usr/lib/gcc-cross/${_TRIPLETSH}" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+        tmp="$(find "/usr/lib/gcc-cross/${_TRIPLETSH}" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
         if [ -z "${tmp}" ]; then
           >&2 echo '! Error: Failed to detect gcc-cross env root.'
           exit 1
@@ -889,7 +889,7 @@ build_single_target() {
         _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${tmp}"
         # https://packages.debian.org/testing/all/libstdc++-13-dev-arm64-cross/filelist
         # /usr/aarch64-linux-gnu/include/c++/13/
-        tmp="$(find "/usr/${_TRIPLETSH}/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+        tmp="$(find "/usr/${_TRIPLETSH}/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
         if [ -z "${tmp}" ]; then
           >&2 echo '! Error: Failed to detect g++-cross env root.'
           exit 1
@@ -1174,7 +1174,7 @@ build_single_target() {
       else  # cross
         gccroot="/usr/lib/gcc-cross/${_TRIPLETSH}"  # /usr/lib/gcc-cross/x86_64-linux-gnu/12
       fi
-      ccrtdir="$(find "${gccroot}" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)"
+      ccrtdir="$(find "${gccroot}" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1 || true)"
       if [ -z "${ccrtdir}" ]; then
         >&2 echo '! Error: Failed to detect gcc env root.'
         exit 1
@@ -1203,7 +1203,7 @@ build_single_target() {
         elif [ -d 'my-pkg/usr/lib/clang' ]; then  # cross
           # If we have the target CPU's clang-rt package installed, use it:
           ccrtdir="$(find -L \
-            "$(pwd)/my-pkg/usr/lib/clang" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)"  # ../my-pkg/usr/lib/clang/15/lib/linux
+            "$(pwd)/my-pkg/usr/lib/clang" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1 || true)"  # ../my-pkg/usr/lib/clang/15/lib/linux
           if [ -z "${ccrtdir}" ]; then
             >&2 echo '! Error: Failed to detect cross-clang-rt env root.'
             exit 1
@@ -1218,7 +1218,7 @@ build_single_target() {
           # with `apt install libclang-common-15-dev:amd64`.
           # The error is:
           #   "The following packages have unmet dependencies"
-          ccrtdir="$(find "/usr/lib/gcc-cross/${_TRIPLETSH}" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)"  # /usr/lib/gcc-cross/x86_64-linux-gnu/12
+          ccrtdir="$(find "/usr/lib/gcc-cross/${_TRIPLETSH}" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1 || true)"  # /usr/lib/gcc-cross/x86_64-linux-gnu/12
           if [ -z "${ccrtdir}" ]; then
             >&2 echo '! Error: Failed to detect gcc-cross env root.'
             exit 1
