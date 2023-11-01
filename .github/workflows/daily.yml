@@ -25,7 +25,7 @@ jobs:
         run: |
           export CW_CONFIG='dev-linux'
           export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
-          DOCKER_IMAGE='debian:bookworm'
+          DOCKER_IMAGE='debian:bookworm-slim'
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
           docker trust inspect --pretty "${DOCKER_IMAGE}"

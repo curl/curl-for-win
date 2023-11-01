@@ -55,7 +55,7 @@ jobs:
         run: |
           export CW_CONFIG='${{ github.ref_name }}-linux'
           export CW_REVISION='${{ github.sha }}'
-          DOCKER_IMAGE='debian:bookworm'
+          DOCKER_IMAGE='debian:bookworm-slim'
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -113,7 +113,7 @@ jobs:
         run: |
           export CW_CONFIG='${{ github.ref_name }}-linux-musl'
           export CW_REVISION='${{ github.sha }}'
-          DOCKER_IMAGE='debian:bookworm'
+          DOCKER_IMAGE='debian:bookworm-slim'
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -273,7 +273,7 @@ jobs:
         run: |
           export CW_CONFIG='${{ github.ref_name }}-linux-gcc'
           export CW_REVISION='${{ github.sha }}'
-          DOCKER_IMAGE='debian:bookworm'
+          DOCKER_IMAGE='debian:bookworm-slim'
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -331,7 +331,7 @@ jobs:
         run: |
           export CW_CONFIG='${{ github.ref_name }}-linux-musl-gcc'
           export CW_REVISION='${{ github.sha }}'
-          DOCKER_IMAGE='debian:bookworm'
+          DOCKER_IMAGE='debian:bookworm-slim'
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
