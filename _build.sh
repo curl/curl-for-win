@@ -46,6 +46,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        nano       build with less features, see README.md
 #        pico       build with less features, see README.md
 #        bldtst     build without 3rd-party dependencies (except zlib) (for testing)
+#        r64        build riscv64 target only (early experimental)
 #        a64        build arm64 target only
 #        x64        build x86_64 target only
 #        x86        build i686 target only (for win target)
@@ -526,6 +527,7 @@ build_single_target() {
   [ "${_CPU}" = 'x86' ] && _machine='i686'
   [ "${_CPU}" = 'x64' ] && _machine='x86_64'
   [ "${_CPU}" = 'a64' ] && _machine='aarch64'
+  [ "${_CPU}" = 'r64' ] && _machine='riscv64'
 
   if [ "${_OS}" = 'mac' ] && [ "${_machine}" = 'aarch64' ] && [ "${_CC}" = 'llvm' ]; then
     # llvm-apple supports multiple archs separated by ';', e.g. 'arm64e;x86_64'
@@ -1535,10 +1537,15 @@ elif [ "${_OS}" = 'linux' ]; then
       build_single_target x64
     fi
   else
-    if [ "${_CONFIG#*x64*}" = "${_CONFIG}" ]; then
+    if [ "${_CONFIG#*r64*}" != "${_CONFIG}" ]; then
+      build_single_target r64  # Experimental
+    fi
+    if [ "${_CONFIG#*x64*}" = "${_CONFIG}" ] && \
+       [ "${_CONFIG#*r64*}" = "${_CONFIG}" ]; then
       build_single_target a64
     fi
-    if [ "${_CONFIG#*a64*}" = "${_CONFIG}" ]; then
+    if [ "${_CONFIG#*a64*}" = "${_CONFIG}" ] && \
+       [ "${_CONFIG#*r64*}" = "${_CONFIG}" ]; then
       build_single_target x64
     fi
   fi

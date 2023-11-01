@@ -25,6 +25,7 @@ _VER="$1"
   [ "${_CPU}" = 'x86' ] && cpu='x86'
   [ "${_CPU}" = 'x64' ] && cpu='x86_64'
   [ "${_CPU}" = 'a64' ] && cpu='arm64'
+  [ "${_CPU}" = 'r64' ] && cpu='riscv64'
 
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \

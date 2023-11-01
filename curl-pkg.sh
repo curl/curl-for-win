@@ -115,7 +115,8 @@
           fi
           # Show linked GLIBC versions
           # https://en.wikipedia.org/wiki/Glibc#Version_history
-          if [ "${_CPU}" = 'a64' ]; then
+          if [ "${_CPU}" = 'a64' ] || \
+             [ "${_CPU}" = 'r64' ]; then
             filter='@GLIBC_2\.(17|2[0-9])$'  # Exclude: 2.17 (2012-12) and 2.2x (2019-02)
           else
             filter='@GLIBC_([0-9]+\.[0-9]+\.[0-9]+|2\.([0-9]|1[0-9]))$'  # Exclude: x.y.z, 2.x, 2.1x (-2014-02)

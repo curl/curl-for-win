@@ -32,6 +32,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     else
       dpkg --add-architecture arm64
     fi
+    [[ "${CW_CONFIG:-}" = *'r64'* ]] && dpkg --add-architecture riscv64
   fi
   if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
     extra="${extra} gcc${CW_GCCSUFFIX} g++${CW_GCCSUFFIX}"
@@ -41,6 +42,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     else
       extra="${extra} gcc${CW_GCCSUFFIX}-aarch64-linux-gnu g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
     fi
+    [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra="${extra} gcc${CW_GCCSUFFIX}-riscv64-linux-gnu g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
   else
     # These packages do not install due to dependency requirements.
     # We download unpack them manually as a workaround.
@@ -52,6 +54,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
       else
         dl="${dl} libclang-common${CW_CCSUFFIX}-dev:arm64"
       fi
+      [[ "${CW_CONFIG:-}" = *'r64'* ]] && dl="${dl} libclang-common${CW_CCSUFFIX}-dev:riscv64"
     else
       # ./my-pkg/usr/lib/llvm-16/lib/clang/16/lib/linux/libclang_rt.builtins-aarch64.a
       if [ "$(uname -m)" = 'aarch64' ]; then
@@ -59,6 +62,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
       else
         dl="${dl} libclang-rt${CW_CCSUFFIX}-dev:arm64"
       fi
+      [[ "${CW_CONFIG:-}" = *'r64'* ]] && dl="${dl} libclang-rt${CW_CCSUFFIX}-dev:riscv64"
     fi
   fi
   if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
@@ -68,6 +72,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     else
       extra="${extra} musl:arm64 musl-dev:arm64"
     fi
+    [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra="${extra} musl:riscv64 musl-dev:riscv64"
     if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
       extra="${extra} libgcc${CW_GCCSUFFIX}-dev"
     fi
@@ -83,6 +88,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     else
       extra="${extra} libc6-dev-arm64-cross"
     fi
+    [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra="${extra} libc6-dev-riscv64-cross"
   fi
 fi
 

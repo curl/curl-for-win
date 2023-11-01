@@ -55,6 +55,7 @@ _VER="$1"
   [ "${_CPU}" = 'x86' ] && cpu='x86'
   [ "${_CPU}" = 'x64' ] && cpu='x86_64'
   [ "${_CPU}" = 'a64' ] && cpu='ARM64'
+  [ "${_CPU}" = 'r64' ] && exit 1  # No support as of 2023-10
 
   if [ "${_OS}" = 'win' ] && [ "${_CPU}" != 'a64' ]; then
     # nasm is used for Windows x64 and x86
