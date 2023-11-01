@@ -30,7 +30,7 @@ _VER="$1"
   CPPFLAGS="${CPPFLAGS} -I../curl/${_PP}/include"
   if [ "${_OS}" = 'mac' ]; then
     LDFLAGS="${LDFLAGS} -dynamic"
-  elif [ "${_CRT}" != 'musl' ]; then
+  else
     LDFLAGS="${LDFLAGS} -Wl,-Bdynamic"
   fi
   LDFLAGS="${LDFLAGS} -L../curl/${_PP}/lib -lcurl"
