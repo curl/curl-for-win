@@ -87,6 +87,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     https://developer.apple.com/forums/thread/715385
 #   - linux: musl alpine why need -static-pie and not -static?
 #   - linux: musl libcurl.so.4.8.0 tweak to be also portable (possible?)
+#     fix apps linked against musl libcurl.so. Or stop making/distributing it?
+#     they require '/lib/ld-musl-x86_64.so.1' / '/lib/ld-musl-aarch64.so.1' now.
+#     meaning e.g.: `apt install musl; LD_LIBRARY_PATH=. ./trurl`
 #   - merge _ci-*.sh scripts into one.
 #   - FIXME: curl-autotools: .map file support and clang builds broken.
 #   - win: Drop x86 builds.
@@ -140,6 +143,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   libssh           cmake
 #   libssh2          cmake-unity, autotools, gnumake [windows-only]
 #   curl             cmake-unity, autotools, gnumake [windows-only]
+#   trurl            gnumake
 
 cd "$(dirname "$0")"
 
@@ -1426,6 +1430,7 @@ build_single_target() {
   bld libssh2           "${LIBSSH2_VER_}"
   bld cacert             "${CACERT_VER_}"
   bld curl                 "${CURL_VER_}"
+  bld trurl               "${TRURL_VER_}"
 
   # Unified, per-target package: Build
   export _NAM="${_UNIPKG}"

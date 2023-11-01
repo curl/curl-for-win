@@ -1,0 +1,90 @@
+#!/bin/sh
+
+# Copyright (C) Viktor Szakats. See LICENSE.md
+# SPDX-License-Identifier: MIT
+
+# shellcheck disable=SC3040,SC2039
+set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
+
+export _NAM _VER _OUT _BAS _DST
+
+_NAM="$(basename "$0" | cut -f 1 -d '.')"
+_VER="$1"
+
+(
+  cd "${_NAM}" || exit 0
+
+  # Always delete targets, including ones made for a different CPU.
+  find . -name '*.o' -delete
+  find . -name "trurl${BIN_EXT}" -delete
+
+  rm -r -f "${_PKGDIR:?}"
+
+  # Build
+
+  export CC="${_CC_GLOBAL}"
+  export CFLAGS="${_CFLAGS_GLOBAL} -O3"
+  export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
+  export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
+
+  CPPFLAGS="${CPPFLAGS} -I../curl/${_PP}/include"
+  if [ "${_OS}" = 'mac' ]; then
+    LDFLAGS="${LDFLAGS} -dynamic"
+  elif [ "${_CRT}" != 'musl' ]; then
+    LDFLAGS="${LDFLAGS} -Wl,-Bdynamic"
+  fi
+  LDFLAGS="${LDFLAGS} -L../curl/${_PP}/lib -lcurl"
+
+  # Add dummy curl-config to avoid picking up any system default and
+  # linking to it instead of using our build.
+  echo '#!/bin/sh' > ./curl-config
+  chmod +x ./curl-config
+  export PATH; PATH="$(pwd):${PATH}"
+
+  "${_MAKE}" clean
+  "${_MAKE}"
+
+  if [ "${_OS}" = 'mac' ]; then
+    install_name_tool -change '@rpath/libcurl.4.dylib' '@executable_path/../lib/libcurl.4.dylib' "./trurl${BIN_EXT}"
+  fi
+
+  # Install manually
+
+  mkdir -p "${_PP}/bin"
+
+  cp -f -p "./trurl${BIN_EXT}" "${_PP}/bin/"
+
+  # Make steps for determinism
+
+  readonly _ref='RELEASE-NOTES'
+
+  # shellcheck disable=SC2086
+  "${_STRIP}" ${_STRIPFLAGS_BIN} "${_PP}/bin/trurl${BIN_EXT}"
+
+  ../_clean-bin.sh "${_ref}" "${_PP}/bin/trurl${BIN_EXT}"
+
+  ../_sign-code.sh "${_ref}" "${_PP}/bin/trurl${BIN_EXT}"
+
+  touch -c -r "${_ref}" "${_PP}/bin/trurl${BIN_EXT}"
+
+  # Execute curl and compiled-in dependency code. This is not secure.
+  [ "${_OS}" = 'win' ] && cp -p "../curl/${_PP}/bin/"*"${DYN_EXT}" .
+  # On macOS this picks up a system libcurl. Ours is picked up
+  # when running it from the unpacked release tarball.
+  LD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" ${_RUN_BIN} "${_PP}/bin/trurl${BIN_EXT}" --version | tee "trurl-${_CPU}.txt"
+
+  # Create package
+
+  _OUT="${_NAM}-${_VER}${_REVSUFFIX}${_PKGSUFFIX}"
+  _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
+  _DST="$(pwd)/_pkg"; rm -r -f "${_DST}"
+
+  mkdir -p "${_DST}/bin"
+
+  cp -f -p "${_PP}/bin/trurl${BIN_EXT}"  "${_DST}/bin/"
+  cp -f -p COPYING                       "${_DST}/COPYING.txt"
+  cp -f -p README.md                     "${_DST}/README.md"
+  cp -f -p RELEASE-NOTES                 "${_DST}/RELEASE-NOTES.txt"
+
+  ../_pkg.sh "$(pwd)/${_ref}"
+)

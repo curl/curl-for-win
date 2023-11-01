@@ -44,6 +44,12 @@ cat <<EOF
     "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
   },
   {
+    "name": "trurl",
+    "url": "https://github.com/curl/trurl/archive/refs/tags/trurl-{ver}.tar.gz",
+    "redir": "redir",
+    "ref_mask": "([0-9]+\\\\.[0-9]+)"
+  },
+  {
     "name": "cacert",
     "descending": true,
     "url": "https://curl.se/ca/cacert-{ver}.pem",
@@ -315,8 +321,9 @@ check_update() {
           --header 'X-GitHub-Api-Version: 2022-11-28' \
           | jq --raw-output '.tag_name' | sed 's/^v//')"
       fi
-      [ -n "$9" ] && newver="$(printf '%s' "${newver}" | grep -a -o -E "$9")"
-      if [[ "${newver}" =~ ^[0-9]+\.[0-9]+$ ]]; then
+      if [ -n "$9" ]; then
+        newver="$(printf '%s' "${newver}" | grep -a -o -E "$9")"
+      elif [[ "${newver}" =~ ^[0-9]+\.[0-9]+$ ]]; then
         newver="${newver}.0"
       fi
     fi
@@ -841,6 +848,13 @@ if [ "${_CONFIG#*dev*}" != "${_CONFIG}" ]; then
 else
   live_dl curl "${CURL_VER_}"
   live_xt curl "${CURL_HASH}"
+fi
+
+# Experimental
+if [ "${_CONFIG#*dev*}" != "${_CONFIG}" ] || \
+   [ "${_CONFIG#*test*}" != "${_CONFIG}" ]; then
+  live_dl trurl "${TRURL_VER_}"
+  live_xt trurl "${TRURL_HASH}"
 fi
 
 rm -r -f "${gpgdir:?}"
