@@ -429,7 +429,7 @@ jobs:
       # https://github.com/actions/upload-artifact
       - uses: actions/upload-artifact@v3
         with:
-          name: 'curl-windows-gcc'
+          name: 'curl-windows-gcc-noarm64'
           retention-days: 5
           path: |
             *-*-mingw*.*
