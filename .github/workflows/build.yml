@@ -19,7 +19,7 @@ env:
   DOCKER_CONTENT_TRUST: '1'
 
 jobs:
-  linux-glibc-debian-testing:
+  linux-glibc-debian-testing-llvm:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -41,13 +41,13 @@ jobs:
         run: cat urls.txt
       - uses: actions/upload-artifact@v3
         with:
-          name: 'curl-linux-glibc-debian-testing'
+          name: 'curl-linux-glibc-debian-testing-llvm'
           retention-days: 5
           path: |
             *-*-linux*.*
             urls.txt
 
-  linux-glibc-debian-bookworm:
+  linux-glibc-debian-bookworm-llvm:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -71,13 +71,13 @@ jobs:
         run: cat urls.txt
       - uses: actions/upload-artifact@v3
         with:
-          name: 'curl-linux-glibc-debian-bookworm'
+          name: 'curl-linux-glibc-debian-bookworm-llvm'
           retention-days: 5
           path: |
             *-*-linux*.*
             urls.txt
 
-  linux-musl-debian-testing:
+  linux-musl-debian-testing-llvm:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -99,13 +99,13 @@ jobs:
         run: cat urls.txt
       - uses: actions/upload-artifact@v3
         with:
-          name: 'curl-linux-musl-debian-testing'
+          name: 'curl-linux-musl-debian-testing-llvm'
           retention-days: 5
           path: |
             *-*-linux*.*
             urls.txt
 
-  linux-musl-debian-bookworm:
+  linux-musl-debian-bookworm-llvm:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -129,13 +129,13 @@ jobs:
         run: cat urls.txt
       - uses: actions/upload-artifact@v3
         with:
-          name: 'curl-linux-musl-debian-bookworm'
+          name: 'curl-linux-musl-debian-bookworm-llvm'
           retention-days: 5
           path: |
             *-*-linux*.*
             urls.txt
 
-  linux-musl-alpine:
+  linux-musl-alpine-llvm:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -157,7 +157,7 @@ jobs:
         run: cat urls.txt
       - uses: actions/upload-artifact@v3
         with:
-          name: 'curl-linux-musl-alpine-x86_64'
+          name: 'curl-linux-musl-alpine-llvm-x86_64'
           retention-days: 5
           path: |
             *-*-linux*.*
@@ -183,7 +183,7 @@ jobs:
             *-*-linux*.*
             urls.txt
 
-  mac:
+  mac-clang:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -197,13 +197,13 @@ jobs:
         run: cat urls.txt
       - uses: actions/upload-artifact@v3
         with:
-          name: 'curl-macos-universal'
+          name: 'curl-macos-universal-clang'
           retention-days: 5
           path: |
             *-*-macos*.*
             urls.txt
 
-  win:
+  win-llvm:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -231,7 +231,7 @@ jobs:
       # https://github.com/actions/upload-artifact
       - uses: actions/upload-artifact@v3
         with:
-          name: 'curl-windows'
+          name: 'curl-windows-llvm'
           retention-days: 5
           path: |
             *-*-mingw*.*
