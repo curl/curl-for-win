@@ -47,6 +47,34 @@ jobs:
             *-*-linux*.*
             urls.txt
 
+  linux-glibc-debian-testing-gcc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 'build'
+        run: |
+          export CW_CONFIG='${{ github.ref_name }}-linux-gcc'
+          export CW_REVISION='${{ github.sha }}'
+          . ./_versions.sh
+          docker trust inspect --pretty "${DOCKER_IMAGE}"
+          time docker pull "${DOCKER_IMAGE}"
+          docker images --digests
+          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+            --env-file <(env | grep -a -E \
+              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
+            "${DOCKER_IMAGE}" \
+            sh -c ./_ci-linux-debian.sh
+
+      - name: 'list dependencies'
+        run: cat urls.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'curl-linux-glibc-debian-testing-gcc'
+          retention-days: 5
+          path: |
+            *-*-linux*.*
+            urls.txt
+
   linux-glibc-debian-bookworm-llvm:
     runs-on: ubuntu-latest
     steps:
@@ -77,6 +105,36 @@ jobs:
             *-*-linux*.*
             urls.txt
 
+  linux-glibc-debian-bookworm-gcc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 'build'
+        run: |
+          export CW_CONFIG='${{ github.ref_name }}-linux-gcc'
+          export CW_REVISION='${{ github.sha }}'
+          DOCKER_IMAGE='debian:bookworm-slim'
+          export CW_CCSUFFIX='-15'
+          export CW_GCCSUFFIX='-12'
+          docker trust inspect --pretty "${DOCKER_IMAGE}"
+          time docker pull "${DOCKER_IMAGE}"
+          docker images --digests
+          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+            --env-file <(env | grep -a -E \
+              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
+            "${DOCKER_IMAGE}" \
+            sh -c ./_ci-linux-debian.sh
+
+      - name: 'list dependencies'
+        run: cat urls.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'curl-linux-glibc-debian-bookworm-gcc'
+          retention-days: 5
+          path: |
+            *-*-linux*.*
+            urls.txt
+
   linux-musl-debian-testing-llvm:
     runs-on: ubuntu-latest
     steps:
@@ -100,6 +158,34 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: 'curl-linux-musl-debian-testing-llvm'
+          retention-days: 5
+          path: |
+            *-*-linux*.*
+            urls.txt
+
+  linux-musl-debian-testing-gcc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 'build'
+        run: |
+          export CW_CONFIG='${{ github.ref_name }}-linux-musl-gcc'
+          export CW_REVISION='${{ github.sha }}'
+          . ./_versions.sh
+          docker trust inspect --pretty "${DOCKER_IMAGE}"
+          time docker pull "${DOCKER_IMAGE}"
+          docker images --digests
+          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+            --env-file <(env | grep -a -E \
+              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
+            "${DOCKER_IMAGE}" \
+            sh -c ./_ci-linux-debian.sh
+
+      - name: 'list dependencies'
+        run: cat urls.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'curl-linux-musl-debian-testing-gcc'
           retention-days: 5
           path: |
             *-*-linux*.*
@@ -135,6 +221,36 @@ jobs:
             *-*-linux*.*
             urls.txt
 
+  linux-musl-debian-bookworm-gcc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 'build'
+        run: |
+          export CW_CONFIG='${{ github.ref_name }}-linux-musl-gcc'
+          export CW_REVISION='${{ github.sha }}'
+          DOCKER_IMAGE='debian:bookworm-slim'
+          export CW_CCSUFFIX='-15'
+          export CW_GCCSUFFIX='-12'
+          docker trust inspect --pretty "${DOCKER_IMAGE}"
+          time docker pull "${DOCKER_IMAGE}"
+          docker images --digests
+          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+            --env-file <(env | grep -a -E \
+              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
+            "${DOCKER_IMAGE}" \
+            sh -c ./_ci-linux-debian.sh
+
+      - name: 'list dependencies'
+        run: cat urls.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'curl-linux-musl-debian-bookworm-gcc'
+          retention-days: 5
+          path: |
+            *-*-linux*.*
+            urls.txt
+
   linux-musl-alpine-llvm:
     runs-on: ubuntu-latest
     steps:
@@ -158,6 +274,34 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: 'curl-linux-musl-alpine-llvm-x86_64'
+          retention-days: 5
+          path: |
+            *-*-linux*.*
+            urls.txt
+
+  linux-musl-alpine-gcc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 'build'
+        run: |
+          export CW_CONFIG='${{ github.ref_name }}-linux-gcc'
+          export CW_REVISION='${{ github.sha }}'
+          DOCKER_IMAGE='alpine:latest'
+          docker trust inspect --pretty "${DOCKER_IMAGE}"
+          time docker pull "${DOCKER_IMAGE}"
+          docker images --digests
+          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+            --env-file <(env | grep -a -E \
+              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
+            "${DOCKER_IMAGE}" \
+            sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
+
+      - name: 'list dependencies'
+        run: cat urls.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'curl-linux-musl-alpine-gcc-x86_64'
           retention-days: 5
           path: |
             *-*-linux*.*
@@ -203,6 +347,26 @@ jobs:
             *-*-macos*.*
             urls.txt
 
+  mac-llvm:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 'build'
+        run: |
+          export CW_CONFIG='${{ github.ref_name }}-mac-macuni-llvm'
+          export CW_REVISION='${{ github.sha }}'
+          sh -c ./_ci-mac-homebrew.sh
+
+      - name: 'list dependencies'
+        run: cat urls.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'curl-macos-universal-llvm'
+          retention-days: 5
+          path: |
+            *-*-macos*.*
+            urls.txt
+
   win-llvm:
     runs-on: ubuntu-latest
     steps:
@@ -235,170 +399,6 @@ jobs:
           retention-days: 5
           path: |
             *-*-mingw*.*
-            urls.txt
-
-  linux-glibc-debian-testing-gcc:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: 'build'
-        run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-gcc'
-          export CW_REVISION='${{ github.sha }}'
-          . ./_versions.sh
-          docker trust inspect --pretty "${DOCKER_IMAGE}"
-          time docker pull "${DOCKER_IMAGE}"
-          docker images --digests
-          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
-            --env-file <(env | grep -a -E \
-              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
-            sh -c ./_ci-linux-debian.sh
-
-      - name: 'list dependencies'
-        run: cat urls.txt
-      - uses: actions/upload-artifact@v3
-        with:
-          name: 'curl-linux-glibc-debian-testing-gcc'
-          retention-days: 5
-          path: |
-            *-*-linux*.*
-            urls.txt
-
-  linux-glibc-debian-bookworm-gcc:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: 'build'
-        run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-gcc'
-          export CW_REVISION='${{ github.sha }}'
-          DOCKER_IMAGE='debian:bookworm-slim'
-          export CW_CCSUFFIX='-15'
-          export CW_GCCSUFFIX='-12'
-          docker trust inspect --pretty "${DOCKER_IMAGE}"
-          time docker pull "${DOCKER_IMAGE}"
-          docker images --digests
-          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
-            --env-file <(env | grep -a -E \
-              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
-            sh -c ./_ci-linux-debian.sh
-
-      - name: 'list dependencies'
-        run: cat urls.txt
-      - uses: actions/upload-artifact@v3
-        with:
-          name: 'curl-linux-glibc-debian-bookworm-gcc'
-          retention-days: 5
-          path: |
-            *-*-linux*.*
-            urls.txt
-
-  linux-musl-debian-testing-gcc:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: 'build'
-        run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-musl-gcc'
-          export CW_REVISION='${{ github.sha }}'
-          . ./_versions.sh
-          docker trust inspect --pretty "${DOCKER_IMAGE}"
-          time docker pull "${DOCKER_IMAGE}"
-          docker images --digests
-          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
-            --env-file <(env | grep -a -E \
-              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
-            sh -c ./_ci-linux-debian.sh
-
-      - name: 'list dependencies'
-        run: cat urls.txt
-      - uses: actions/upload-artifact@v3
-        with:
-          name: 'curl-linux-musl-debian-testing-gcc'
-          retention-days: 5
-          path: |
-            *-*-linux*.*
-            urls.txt
-
-  linux-musl-debian-bookworm-gcc:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: 'build'
-        run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-musl-gcc'
-          export CW_REVISION='${{ github.sha }}'
-          DOCKER_IMAGE='debian:bookworm-slim'
-          export CW_CCSUFFIX='-15'
-          export CW_GCCSUFFIX='-12'
-          docker trust inspect --pretty "${DOCKER_IMAGE}"
-          time docker pull "${DOCKER_IMAGE}"
-          docker images --digests
-          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
-            --env-file <(env | grep -a -E \
-              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
-            sh -c ./_ci-linux-debian.sh
-
-      - name: 'list dependencies'
-        run: cat urls.txt
-      - uses: actions/upload-artifact@v3
-        with:
-          name: 'curl-linux-musl-debian-bookworm-gcc'
-          retention-days: 5
-          path: |
-            *-*-linux*.*
-            urls.txt
-
-  linux-musl-alpine-gcc:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: 'build'
-        run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-gcc'
-          export CW_REVISION='${{ github.sha }}'
-          DOCKER_IMAGE='alpine:latest'
-          docker trust inspect --pretty "${DOCKER_IMAGE}"
-          time docker pull "${DOCKER_IMAGE}"
-          docker images --digests
-          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
-            --env-file <(env | grep -a -E \
-              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
-            sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
-
-      - name: 'list dependencies'
-        run: cat urls.txt
-      - uses: actions/upload-artifact@v3
-        with:
-          name: 'curl-linux-musl-alpine-gcc-x86_64'
-          retention-days: 5
-          path: |
-            *-*-linux*.*
-            urls.txt
-
-  mac-llvm:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: 'build'
-        run: |
-          export CW_CONFIG='${{ github.ref_name }}-mac-macuni-llvm'
-          export CW_REVISION='${{ github.sha }}'
-          sh -c ./_ci-mac-homebrew.sh
-
-      - name: 'list dependencies'
-        run: cat urls.txt
-      - uses: actions/upload-artifact@v3
-        with:
-          name: 'curl-macos-universal-llvm'
-          retention-days: 5
-          path: |
-            *-*-macos*.*
             urls.txt
 
   win-gcc:
