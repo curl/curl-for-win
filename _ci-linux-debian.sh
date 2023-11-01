@@ -98,8 +98,10 @@ if [ -n "${dl}" ]; then
   apt-get --quiet 2 --option Dpkg::Use-Pty=0 download ${dl}
   # https://deb.debian.org/debian/pool/main/l/llvm-toolchain-16/libclang-rt-16-dev_16.0.6-16_arm64.deb -> libclang-rt-16-dev_1%3a16.0.6-16_arm64.deb
   # libclang-common-15-dev_1%3a15.0.6-4+b1_amd64.deb
-  dpkg-deb --contents ./*.deb
-  dpkg-deb --extract --verbose ./*.deb my-pkg
+  for f in ./*.deb; do
+    dpkg-deb --contents "${f}"
+    dpkg-deb --extract --verbose "${f}" my-pkg
+  done
   if [ ! -d 'my-pkg/usr/lib/clang' ]; then
     ln -s -f "llvm${CW_CCSUFFIX}/lib/clang" 'my-pkg/usr/lib/clang'
   fi
