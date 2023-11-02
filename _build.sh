@@ -1100,6 +1100,12 @@ build_single_target() {
   # It means _CC + _TOOLCHAIN must be 'llvm' + 'llvm-apple' or 'gcc' + 'llvm-apple' or 'gcc' + '',
   # but not 'llvm' + ''.
   if [ "${_OS}" = 'mac' ] && [ "${_CC}${_TOOLCHAIN}" != 'llvm' ]; then
+    # Xcode strip command-line interface is different than GNU/llvm strip.
+    # Binaries are by default reproducible. After strip, they lose some
+    # debug data and remain reproducible.
+    _STRIP_BIN='strip'
+    _STRIPFLAGS_BIN='-D'
+    _STRIPFLAGS_DYN='-x'
     # FIXME:
     # Apple's own strip tool chokes on arm64 static libs, with error
     #   strip: error: symbols referenced by relocation entries that can't be stripped in: [...]/usr/lib/liba.a(libcommon-lib-tls_pad.o) (for architecture arm64)
@@ -1116,11 +1122,7 @@ build_single_target() {
     # gid/uid into the .a output, with no option to disable this.
     # It means it does not seem possible to create reproducible static libs
     # with Xcode as of v14 (year 2023).
-    _STRIP_BIN='strip'  # Xcode strip command-line interface is different than GNU/llvm strip
-    _STRIP_BIN='echo'   # FIXME: Re-enable. This is either totally broken or needs a bunch of hacks to make it work for our purpose.
-    _STRIPFLAGS_BIN='-D'
-    _STRIPFLAGS_DYN='-x'
-    _STRIP_LIB="${_STRIP_BIN}"
+    _STRIP_LIB='echo'   # FIXME: Re-enable. This is either totally broken or needs a bunch of hacks to make it work for our purpose.
     _STRIPFLAGS_LIB="${_STRIPFLAGS_BIN}"
   else
     _STRIP_BIN="${_BINUTILS_PREFIX}strip${_BINUTILS_SUFFIX}"
