@@ -559,13 +559,8 @@ build_single_target() {
   PATH="${_ori_path}"
 
   if [ "${_HOST}" = 'mac' ]; then
-    if [ -d '/opt/homebrew' ]; then
-      brew_root='/opt/homebrew'
-    else
-      brew_root='/usr/local'
-    fi
-
-    _MAC_LLVM_PATH="${brew_root}/opt/llvm/bin"
+    brew_root="$(brew --prefix)"
+    _MAC_LLVM_PATH="${brew_root}/opt/llvm/bin"  # or "$(brew --prefix llvm)/bin"
   fi
 
   if [ "${_OS}" = 'win' ]; then
