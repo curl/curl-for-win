@@ -42,9 +42,9 @@
 
   # Process curl tool and libcurl shared library
 
-  for suffix in exe dyn; do
+  for filetype in 'exe' 'dyn'; do
     {
-      if [ "${suffix}" = 'exe' ]; then
+      if [ "${filetype}" = 'exe' ]; then
         echo "${_PP}/bin/curl${BIN_EXT}"
       else
         find "${_PP}/${DYN_DIR}" -name "*${DYN_EXT}*" -a -not -name '*.dll.a' | sort
@@ -52,7 +52,7 @@
     } | while read -r f; do
 
       if [ ! -L "${f}" ]; then
-        if [ "${suffix}" = 'exe' ]; then
+        if [ "${filetype}" = 'exe' ]; then
           # shellcheck disable=SC2086
           "${_STRIP}" ${_STRIPFLAGS_BIN} "${f}"
         else
@@ -73,7 +73,7 @@
         if [ "${_OS}" = 'win' ]; then
           TZ=UTC "${_OBJDUMP}" --all-headers "${f}" | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f
           # Verify exported curl symbols
-          if [ "${suffix}" = 'exe' ]; then
+          if [ "${filetype}" = 'exe' ]; then
             "${_OBJDUMP}" --all-headers "${f}" | grep -a -F ' curl_' && false  # should not have any hits for statically linked curl
           else
             "${_OBJDUMP}" --all-headers "${f}" | grep -a -F ' curl_' || false  # show public libcurl APIs (in a well-defined order)
@@ -85,7 +85,7 @@
             # CF_FUNCTION_TABLE_PRESENT, CF_INSTRUMENTED, CF_LONGJUMP_TABLE_PRESENT (optional)
             "${_READELF}" --coff-load-config "${f}" | grep -a -E 'CF_[A-Z_]' | sort
           fi
-          if [ "${suffix}" = 'exe' ]; then  # should be the same output for the DLL
+          if [ "${filetype}" = 'exe' ]; then  # should be the same output for the DLL
             # regexp compatible with llvm and binutils output
             "${_OBJDUMP}" --all-headers "${f}" \
               | grep -a -E ' [0-9]{1,5} +[a-zA-Z_][a-zA-Z0-9_]*$' \
