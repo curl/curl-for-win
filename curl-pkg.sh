@@ -42,10 +42,12 @@
 
   # Process curl tool and libcurl shared library
 
+  bin="${_PP}/bin/curl${BIN_EXT}"
+
   for filetype in 'exe' 'dyn'; do
     {
       if [ "${filetype}" = 'exe' ]; then
-        echo "${_PP}/bin/curl${BIN_EXT}"
+        echo "${bin}"
       else
         find "${_PP}/${DYN_DIR}" -name "*${DYN_EXT}*" -a -not -name '*.dll.a' | sort
       fi
@@ -139,7 +141,7 @@
   # `--version` output directly from the binary as strings, but curl creates
   # most of these strings dynamically at runtime, so this is not possible
   # (as of curl 7.83.1).
-  ${_RUN_BIN} "${_PP}/bin/curl${BIN_EXT}" --version | tee "curl-${_CPU}.txt"
+  ${_RUN_BIN} "${bin}" --version | tee "curl-${_CPU}.txt"
 
   # Create package
 
@@ -175,7 +177,7 @@
     done
   )
   cp -f -p "${_PP}"/include/curl/*.h          "${_DST}/include/curl/"
-  cp -f -p "${_PP}/bin/curl${BIN_EXT}"        "${_DST}/bin/"
+  cp -f -p "${bin}"                           "${_DST}/bin/"
   cp -f -a "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"  "${_DST}/${DYN_DIR}/"  # we must not pick up *.dll.a here
   cp -f -p "${_PP}"/lib/*.a                   "${_DST}/lib/"
   cp -f -p docs/*.md                          "${_DST}/docs/"

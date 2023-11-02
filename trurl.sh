@@ -58,20 +58,22 @@ _VER="$1"
 
   readonly _ref='RELEASE-NOTES'
 
+  bin="${_PP}/bin/trurl${BIN_EXT}"
+
   # shellcheck disable=SC2086
-  "${_STRIP}" ${_STRIPFLAGS_BIN} "${_PP}/bin/trurl${BIN_EXT}"
+  "${_STRIP}" ${_STRIPFLAGS_BIN} "${bin}"
 
-  ../_clean-bin.sh "${_ref}" "${_PP}/bin/trurl${BIN_EXT}"
+  ../_clean-bin.sh "${_ref}" "${bin}"
 
-  ../_sign-code.sh "${_ref}" "${_PP}/bin/trurl${BIN_EXT}"
+  ../_sign-code.sh "${_ref}" "${bin}"
 
-  touch -c -r "${_ref}" "${_PP}/bin/trurl${BIN_EXT}"
+  touch -c -r "${_ref}" "${bin}"
 
   # Execute curl and compiled-in dependency code. This is not secure.
   [ "${_OS}" = 'win' ] && cp -p "../curl/${_PP}/bin/"*"${DYN_EXT}" .
   # On macOS this picks up a system libcurl. Ours is picked up
   # when running it from the unpacked release tarball.
-  LD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" ${_RUN_BIN} "${_PP}/bin/trurl${BIN_EXT}" --version | tee "trurl-${_CPU}.txt"
+  LD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" ${_RUN_BIN} "${bin}" --version | tee "trurl-${_CPU}.txt"
 
   # Create package
 
@@ -81,10 +83,10 @@ _VER="$1"
 
   mkdir -p "${_DST}/bin"
 
-  cp -f -p "${_PP}/bin/trurl${BIN_EXT}"  "${_DST}/bin/"
-  cp -f -p COPYING                       "${_DST}/COPYING.txt"
-  cp -f -p README.md                     "${_DST}/README.md"
-  cp -f -p RELEASE-NOTES                 "${_DST}/RELEASE-NOTES.txt"
+  cp -f -p "${bin}"       "${_DST}/bin/"
+  cp -f -p COPYING        "${_DST}/COPYING.txt"
+  cp -f -p README.md      "${_DST}/README.md"
+  cp -f -p RELEASE-NOTES  "${_DST}/RELEASE-NOTES.txt"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )
