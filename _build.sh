@@ -1082,7 +1082,7 @@ build_single_target() {
     fi
   fi
 
-  # Used for ar, nm, runlib
+  # Used for ar, nm, ranlib
   _BINCORE_PREFIX="${_BINUTILS_PREFIX}"
   _BINCORE_SUFFIX="${_BINUTILS_SUFFIX}"
 
