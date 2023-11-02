@@ -87,6 +87,13 @@
   # (as of curl 7.83.1).
   ${_RUN_BIN} "${bin}" --version | tee "curl-${_CPU}.txt"
 
+  # Extra checks
+
+  if strings "${bin}" | grep -a -F 'curl-for-win'; then
+    echo "! Error: Our project root path is leaking into the binary: '${bin}'"
+    exit 1
+  fi
+
   # Create package
 
   _OUT="${_NAM}-${_VER}${_REVSUFFIX}${_PKGSUFFIX}"
