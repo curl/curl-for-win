@@ -1106,24 +1106,43 @@ build_single_target() {
     _STRIP_BIN='strip'
     _STRIPFLAGS_BIN='-D'
     _STRIPFLAGS_DYN='-x'
-    # FIXME:
-    # Apple's own strip tool chokes on arm64 static libs, with error
-    #   strip: error: symbols referenced by relocation entries that can't be stripped in: [...]/usr/lib/liba.a(libcommon-lib-tls_pad.o) (for architecture arm64)
-    # and then tens of thousands of lines of bogus output.
-    # This was only seen on arm64 (only tested cross-builds) and quictls.
-    # Replacing `strip -D` with `strip -S` fixes it, however, this does not
-    # strip timestamps and other info, so we must also call `libtool -D` on
-    # that. Then it turns out that `libtool -D` does a shoddy job and strips
-    # these info from a couple of objects only and leaves it there for most
-    # of the others. This is broken for x86_64 inputs as well, where the
-    # timestamp is stripped, but not the local gid/uid. It means making a
-    # macOS static lib reproducible likely needs a manual script. Well, no,
-    # that method fails because `ar` always bakes the on-disk timestamp and
-    # gid/uid into the .a output, with no option to disable this.
-    # It means it does not seem possible to create reproducible static libs
-    # with Xcode as of v14 (year 2023).
-    _STRIP_LIB='echo'   # FIXME: Re-enable. This is either totally broken or needs a bunch of hacks to make it work for our purpose.
-    _STRIPFLAGS_LIB="${_STRIPFLAGS_BIN}"
+    if [ -d "${brew_root}/opt/llvm/bin" ]; then  # check for Homebrew package
+      _STRIP_LIB="${brew_root}/opt/llvm/bin/llvm-strip"
+      # GNU binutils `--strip-debug` ends up outputting a static lib that is
+      # unlinkable, with this error:
+      #   ld: in ./libcurl.a(unity_0_c.c.o), section __DATA/__bss address out of range file './libcurl.a' for architecture x86_64
+      # To prevent `strip` actually stripping anything and breaking the library,
+      # I tried `--strip-dwo` instead. This strips DWARF objects, which these
+      # libraries do not have. This in turn aborted with arm64 (tested with
+      # arm64e) input files with this error:
+      #   /usr/local/opt/binutils/bin/strip: unity_0_c.c.o: invalid operation
+      # `llvm-strip` seems to work with both x86_64 and arm64e inputs. Its
+      # option `--no-strip-all` results in the same output as `--strip-debug`
+      # (tested with `libcurl.a`):
+      _STRIPFLAGS_LIB='--enable-deterministic-archives --strip-debug'
+    else
+      # FIXME (upstream):
+      # Apple's own strip tool chokes on arm64 static libs, with error
+      #   strip: error: symbols referenced by relocation entries that can't be stripped in: [...]/usr/lib/liba.a(libcommon-lib-tls_pad.o) (for architecture arm64)
+      # and then tens of thousands of lines of bogus output.
+      # This was only seen on arm64 (only tested cross-builds) and quictls.
+      # Replacing `strip -D` with `strip -S` fixes it, however, this does not
+      # strip timestamps and other info, so we must also call `libtool -D` on
+      # that. Then it turns out that `libtool -D` does a shoddy job and strips
+      # these info from a couple of objects only and leaves it there for most
+      # of the others. This is broken for x86_64 inputs as well, where the
+      # timestamp is stripped, but not the local gid/uid. It means making a
+      # macOS static lib reproducible likely needs a manual script. Well, no,
+      # that method fails because `ar` always bakes the on-disk timestamp and
+      # gid/uid into the .a output, with no option to disable this.
+      # It means it does not seem possible to create reproducible static libs
+      # with Xcode as of v14 (year 2023).
+      _STRIP_LIB='echo'
+      _STRIPFLAGS_LIB="${_STRIPFLAGS_BIN}"
+      # Apple strip cannot create reproducible static libs due to a series of
+      # bugs. Do not use.
+      echo 'WARNING: Using Xcode strip. Static libraries CANNOT be made reproducible.'
+    fi
   else
     _STRIP_BIN="${_BINUTILS_PREFIX}strip${_BINUTILS_SUFFIX}"
     _STRIPFLAGS_BIN='--enable-deterministic-archives --strip-all'
@@ -1390,6 +1409,11 @@ build_single_target() {
        [ -n "${_STRIP_BINUTILS}" ] && \
        [ "${boringssl}" = '1' ]; then
     binver="binutils $("${_STRIP_BINUTILS}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?' || true)"
+  elif [ "${_TOOLCHAIN}" = 'llvm-apple' ] && \
+       [ "${_STRIP_LIB}" != "${_STRIP_BIN}" ] && \
+       [ "${_STRIP_LIB}" != 'echo' ]; then
+    # `llvm-strip` used on static libs as a replacement for Xcode strip
+    binver="llvm-strip $("${_STRIP_LIB}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?' || true)"
   fi
 
   nasmver=''
