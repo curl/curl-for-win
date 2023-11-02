@@ -1091,9 +1091,10 @@ build_single_target() {
     _BINUTILS_SUFFIX=''
   fi
 
-  export _STRIP_LIB
+  export _STRIP_BIN
   export _STRIPFLAGS_BIN
   export _STRIPFLAGS_DYN
+  export _STRIP_LIB
   export _STRIPFLAGS_LIB
   # All mac except standard llvm which uses a standard strip tool.
   # It means _CC + _TOOLCHAIN must be 'llvm' + 'llvm-apple' or 'gcc' + 'llvm-apple' or 'gcc' + '',
@@ -1115,15 +1116,17 @@ build_single_target() {
     # gid/uid into the .a output, with no option to disable this.
     # It means it does not seem possible to create reproducible static libs
     # with Xcode as of v14 (year 2023).
-    _STRIP_LIB='strip'  # Xcode strip command-line interface is different than GNU/llvm strip
-    _STRIP_LIB='echo'   # FIXME: Re-enable. This is either totally broken or needs a bunch of hacks to make it work for our purpose.
+    _STRIP_BIN='strip'  # Xcode strip command-line interface is different than GNU/llvm strip
+    _STRIP_BIN='echo'   # FIXME: Re-enable. This is either totally broken or needs a bunch of hacks to make it work for our purpose.
     _STRIPFLAGS_BIN='-D'
     _STRIPFLAGS_DYN='-x'
+    _STRIP_LIB="${_STRIP_BIN}"
     _STRIPFLAGS_LIB="${_STRIPFLAGS_BIN}"
   else
-    _STRIP_LIB="${_BINUTILS_PREFIX}strip${_BINUTILS_SUFFIX}"
+    _STRIP_BIN="${_BINUTILS_PREFIX}strip${_BINUTILS_SUFFIX}"
     _STRIPFLAGS_BIN='--enable-deterministic-archives --strip-all'
     _STRIPFLAGS_DYN="${_STRIPFLAGS_BIN}"
+    _STRIP_LIB="${_STRIP_BIN}"
     _STRIPFLAGS_LIB='--enable-deterministic-archives --strip-debug'
   fi
   export _OBJDUMP="${_BINUTILS_PREFIX}objdump${_BINUTILS_SUFFIX}"
@@ -1380,7 +1383,7 @@ build_single_target() {
     # '|| true' added to workaround 141 pipe failures on Alpine
     # after grep successfully parsing the version number.
     # https://stackoverflow.com/questions/19120263/why-exit-code-141-with-grep-q
-    binver="binutils $("${_STRIP_LIB}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?' || true)"
+    binver="binutils $("${_STRIP_BIN}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?' || true)"
   elif [ "${_TOOLCHAIN}" != 'llvm-apple' ] && \
        [ -n "${_STRIP_BINUTILS}" ] && \
        [ "${boringssl}" = '1' ]; then

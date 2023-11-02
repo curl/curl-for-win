@@ -56,10 +56,10 @@
       if [ ! -L "${f}" ]; then
         if [ "${filetype}" = 'exe' ]; then
           # shellcheck disable=SC2086
-          "${_STRIP_LIB}" ${_STRIPFLAGS_BIN} "${f}"
+          "${_STRIP_BIN}" ${_STRIPFLAGS_BIN} "${f}"
         else
           # shellcheck disable=SC2086
-          "${_STRIP_LIB}" ${_STRIPFLAGS_DYN} "${f}"
+          "${_STRIP_BIN}" ${_STRIPFLAGS_DYN} "${f}"
         fi
 
         ../_clean-bin.sh "${_ref}" "${f}"
