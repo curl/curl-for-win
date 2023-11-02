@@ -19,12 +19,12 @@
   # Process libcurl static library
 
   # shellcheck disable=SC2086
-  "${_STRIP}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/libcurl.a
+  "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/libcurl.a
   # LLVM strip does not support implibs, but they are deterministic by default:
   #   error: unsupported object file format
   if [ "${_LD}" = 'ld' ] && [ "${_OS}" = 'win' ]; then
     # shellcheck disable=SC2086
-    "${_STRIP}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/libcurl.dll.a
+    "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/libcurl.dll.a
   fi
 
   touch -c -r "${_ref}" "${_PP}"/lib/*.a
@@ -56,10 +56,10 @@
       if [ ! -L "${f}" ]; then
         if [ "${filetype}" = 'exe' ]; then
           # shellcheck disable=SC2086
-          "${_STRIP}" ${_STRIPFLAGS_BIN} "${f}"
+          "${_STRIP_LIB}" ${_STRIPFLAGS_BIN} "${f}"
         else
           # shellcheck disable=SC2086
-          "${_STRIP}" ${_STRIPFLAGS_DYN} "${f}"
+          "${_STRIP_LIB}" ${_STRIPFLAGS_DYN} "${f}"
         fi
 
         ../_clean-bin.sh "${_ref}" "${f}"

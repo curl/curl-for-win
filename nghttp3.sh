@@ -36,7 +36,7 @@ _VER="$1"
   readonly _ref='ChangeLog'
 
   # shellcheck disable=SC2086
-  "${_STRIP}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/*.a
+  "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/*.a
 
   touch -c -r "${_ref}" "${_PP}"/include/nghttp3/*.h
   touch -c -r "${_ref}" "${_PP}"/lib/*.a

@@ -61,7 +61,7 @@ _VER="$1"
   bin="${_PP}/bin/trurl${BIN_EXT}"
 
   # shellcheck disable=SC2086
-  "${_STRIP}" ${_STRIPFLAGS_BIN} "${bin}"
+  "${_STRIP_LIB}" ${_STRIPFLAGS_BIN} "${bin}"
 
   ../_clean-bin.sh "${_ref}" "${bin}"
 

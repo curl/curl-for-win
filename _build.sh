@@ -1091,7 +1091,7 @@ build_single_target() {
     _BINUTILS_SUFFIX=''
   fi
 
-  export _STRIP
+  export _STRIP_LIB
   export _STRIPFLAGS_BIN
   export _STRIPFLAGS_DYN
   export _STRIPFLAGS_LIB
@@ -1115,13 +1115,13 @@ build_single_target() {
     # gid/uid into the .a output, with no option to disable this.
     # It means it does not seem possible to create reproducible static libs
     # with Xcode as of v14 (year 2023).
-    _STRIP='strip'  # Xcode strip command-line interface is different than GNU/llvm strip
-    _STRIP='echo'   # FIXME: Re-enable. This is either totally broken or needs a bunch of hacks to make it work for our purpose.
+    _STRIP_LIB='strip'  # Xcode strip command-line interface is different than GNU/llvm strip
+    _STRIP_LIB='echo'   # FIXME: Re-enable. This is either totally broken or needs a bunch of hacks to make it work for our purpose.
     _STRIPFLAGS_BIN='-D'
     _STRIPFLAGS_DYN='-x'
     _STRIPFLAGS_LIB="${_STRIPFLAGS_BIN}"
   else
-    _STRIP="${_BINUTILS_PREFIX}strip${_BINUTILS_SUFFIX}"
+    _STRIP_LIB="${_BINUTILS_PREFIX}strip${_BINUTILS_SUFFIX}"
     _STRIPFLAGS_BIN='--enable-deterministic-archives --strip-all'
     _STRIPFLAGS_DYN="${_STRIPFLAGS_BIN}"
     _STRIPFLAGS_LIB='--enable-deterministic-archives --strip-debug'
@@ -1380,7 +1380,7 @@ build_single_target() {
     # '|| true' added to workaround 141 pipe failures on Alpine
     # after grep successfully parsing the version number.
     # https://stackoverflow.com/questions/19120263/why-exit-code-141-with-grep-q
-    binver="binutils $("${_STRIP}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?' || true)"
+    binver="binutils $("${_STRIP_LIB}" --version | grep -m1 -o -a -E '[0-9]+\.[0-9]+(\.[0-9]+)?' || true)"
   elif [ "${_TOOLCHAIN}" != 'llvm-apple' ] && \
        [ -n "${_STRIP_BINUTILS}" ] && \
        [ "${boringssl}" = '1' ]; then

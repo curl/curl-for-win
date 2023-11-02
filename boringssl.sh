@@ -139,12 +139,12 @@ _VER="$1"
   # libcrypto-ggdb-binutils-llvm-binutils.a         2488066
 
   # shellcheck disable=SC2086
-  "${_STRIP}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/libssl.a
+  "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/libssl.a
 
   if [ -n "${_STRIP_BINUTILS}" ]; then
     # FIXME: llvm-strip corrupts nasm objects as of LLVM v16.0.0
     # shellcheck disable=SC2086
-  # "${_STRIP}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/libcrypto.a
+  # "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/libcrypto.a
 
     # FIXME: Use binutils strip instead, directly on objects, to avoid
     #        binutils strip v2.40 error `invalid operation` when run on
@@ -152,7 +152,7 @@ _VER="$1"
     ../_clean-lib.sh --strip "${_STRIP_BINUTILS}" "${_PP}"/lib/libcrypto.a
   else
     # shellcheck disable=SC2086
-    "${_STRIP}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/libcrypto.a
+    "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/libcrypto.a
   fi
 
   touch -c -r "${_ref}" "${_PP}"/include/openssl/*.h
