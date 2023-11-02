@@ -83,6 +83,8 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
       extra="${extra} linux-headers-amd64"
     fi
   else
+    # FIXME: workaround for glibc-llvm-riscv64 builds:
+    [[ "${CW_CONFIG:-}" != *'gcc'* ]] && [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra="${extra} gcc${CW_GCCSUFFIX}-riscv64-linux-gnu g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
     if [ "$(uname -m)" = 'aarch64' ]; then
       extra="${extra} libc6-dev-amd64-cross"
     else

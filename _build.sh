@@ -83,6 +83,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - publish curl tool as direct downloads:
 #     curl-linux-musl / curl-mac / curl-x64.exe / curl-x86.exe / curl-a64.exe
 #     (or similar)
+#   - riscv64: musl libcurl.so links to -ldl. Probably because of this it
+#     depends on the glibc dynamic loader and glibc itself.
 #   - change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
 #   - prepare for Xcode 15 with new ld_prime (-Wl,-ld_new) linker (vs. -Wl,-ld_classic).
 #     https://developer.apple.com/forums/thread/715385
@@ -847,7 +849,16 @@ build_single_target() {
     # Debian does not support clang-rt for cross-builds easily,
     # it requires manually installing package `libclang-rt-16-dev` or `libclang-common-15-dev`.
     elif [ "${_DISTRO}" = 'debian' ] && [ -d 'my-pkg/usr/lib/clang' ]; then
-      _CCRT='clang-rt'
+      # FIXME: This combination fails to link with clang-rt, due to:
+      #        ld.lld-16: error: relocation R_RISCV_PCREL_HI20 cannot be used against symbol '__global_pointer$'; recompile with -fPIC
+      #        >>> defined in /usr/riscv64-linux-gnu/lib/Scrt1.o
+      #        >>> referenced by /usr/riscv64-linux-gnu/lib/Scrt1.o:(.text+0x2C)
+      #        Our workaround is to fall back to gcc parts for this.
+      if [ "${_CRT}" = 'gnu' ] && [ "${_CPU}" = 'r64' ]; then
+        :
+      else
+        _CCRT='clang-rt'
+      fi
     fi
   fi
 
