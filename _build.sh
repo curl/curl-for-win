@@ -46,7 +46,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        nano       build with less features, see README.md
 #        pico       build with less features, see README.md
 #        bldtst     build without 3rd-party dependencies (except zlib) (for testing)
-#        r64        build riscv64 target only (early experimental)
+#        r64        build riscv64 target only (experimental)
 #        a64        build arm64 target only
 #        x64        build x86_64 target only
 #        x86        build i686 target only (for win target)
@@ -83,8 +83,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - publish curl tool as direct downloads:
 #     curl-linux-musl / curl-mac / curl-x64.exe / curl-x86.exe / curl-a64.exe
 #     (or similar)
-#   - riscv64: musl libcurl.so links to -ldl. Probably because of this it
-#     depends on the glibc dynamic loader and glibc itself.
 #   - change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
 #   - prepare for Xcode 15 with new ld_prime (-Wl,-ld_new) linker (vs. -Wl,-ld_classic).
 #     https://developer.apple.com/forums/thread/715385
@@ -1182,6 +1180,13 @@ build_single_target() {
     else
       _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${_SYSROOT}/bin/${AR}"
     fi
+  fi
+
+  # Workaround for gcc 13 mis-selecting its own dynamic linker, instead
+  # of using the musl one:
+  #   `-dynamic-linker /lib/ld-linux-riscv64-lp64d.so.1`
+  if [ "${_CC}" = 'gcc' ] && [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ] && [ "${_CPU}" = 'r64' ]; then
+    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,--dynamic-linker=/lib/ld-musl-${_machine}.so.1"
   fi
 
   if [ "${_CCRT}" = 'libgcc' ] && [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
