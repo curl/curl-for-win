@@ -69,6 +69,8 @@ _VER="$1"
 
   touch -c -r "${_ref}" "${bin}"
 
+  ../_info-bin.sh --filetype 'exe' "${bin}"
+
   # Execute curl and compiled-in dependency code. This is not secure.
   [ "${_OS}" = 'win' ] && cp -p "../curl/${_PP}/bin/"*"${DYN_EXT}" .
   # On macOS this picks up a system libcurl. Ours is picked up
