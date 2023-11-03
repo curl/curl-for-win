@@ -3,9 +3,9 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-# Caveats (as of 3.8.1):
+# Caveats (as of 3.8.2):
 # - ASM support exist only for x64 on Windows.
-# - Still loads config/DLLs from the hardcoded prefix. (improvements coming in 3.8.1)
+# - Still loads config from hardcoded prefix.
 # - `-Wattributes` warnings with gcc. Need to be silenced with `-Wno-attributes`:
 #   ```
 #   ../../crypto/chacha/chacha-merged.c:26:5: warning: 'bounded' attribute directive ignored [-Wattributes]
