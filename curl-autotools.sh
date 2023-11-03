@@ -36,6 +36,8 @@ _VER="$1"
     export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
     export LIBS="${_LIBS_GLOBAL}"
 
+    [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && LDFLAGS="${LDFLAGS} -v"
+
     options="${options} --enable-unix-sockets"
 
     if [ ! "${_CONFIG#*werror*}" = "${_CONFIG}" ]; then

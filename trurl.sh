@@ -27,6 +27,8 @@ _VER="$1"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
+  [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && LDFLAGS="${LDFLAGS} -v"
+
   CPPFLAGS="${CPPFLAGS} -I../curl/${_PP}/include"
   if [ "${_OS}" = 'mac' ]; then
     LDFLAGS="${LDFLAGS} -dynamic"

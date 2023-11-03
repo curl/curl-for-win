@@ -1313,8 +1313,6 @@ build_single_target() {
     fi
   fi
 
-  [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -v"
-
   _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --prefix=${_PREFIX} --disable-dependency-tracking --disable-silent-rules"
 
   # Unified, per-target package: Initialize
