@@ -6,17 +6,6 @@
 # Caveats (as of 3.8.1):
 # - ASM support exist only for x64 on Windows.
 # - Still loads config/DLLs from the hardcoded prefix. (improvements coming in 3.8.1)
-# - Unexpected warnings when building with ASM _enabled_ and CMake:
-#   ```
-#   In file included from ./libressl/crypto/bn/bn_mul.c:65:
-#   ./libressl/crypto/bn/arch/amd64/bn_arch.h:24:9: warning: 'OPENSSL_NO_ASM' macro redefined [-Wmacro-redefined]
-#   #define OPENSSL_NO_ASM
-#           ^
-#   <command line>:10:9: note: previous definition is here
-#   #define OPENSSL_NO_ASM 1
-#           ^
-#   ```
-#   Ref: https://github.com/libressl/portable/issues/910#issuecomment-1754180366
 # - `-Wattributes` warnings with gcc. Need to be silenced with `-Wno-attributes`:
 #   ```
 #   ../../crypto/chacha/chacha-merged.c:26:5: warning: 'bounded' attribute directive ignored [-Wattributes]
