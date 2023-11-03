@@ -8,13 +8,13 @@
 
   readonly _ref='NEWS'
 
-  rm -f "${_PP}"/lib/*.dll.a
+  rm -f "${_PPS}"/lib/*.dll.a
 
   # shellcheck disable=SC2086
-  "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/*.a
+  "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PPS}"/lib/*.a
 
-  touch -c -r "${_ref}" "${_PP}"/include/*.h
-  touch -c -r "${_ref}" "${_PP}"/lib/*.a
+  touch -c -r "${_ref}" "${_PPS}"/include/*.h
+  touch -c -r "${_ref}" "${_PPS}"/lib/*.a
 
   # Create package
 
@@ -34,12 +34,12 @@
       fi
     done
   )
-  cp -f -p "${_PP}"/include/*.h "${_DST}/include/"
-  cp -f -p "${_PP}"/lib/*.a     "${_DST}/lib/"
-  cp -f -p NEWS                 "${_DST}/NEWS.txt"
-  cp -f -p COPYING              "${_DST}/COPYING.txt"
-  cp -f -p README               "${_DST}/README.txt"
-  cp -f -p RELEASE-NOTES        "${_DST}/RELEASE-NOTES.txt"
+  cp -f -p "${_PPS}"/include/*.h "${_DST}/include/"
+  cp -f -p "${_PPS}"/lib/*.a     "${_DST}/lib/"
+  cp -f -p NEWS                  "${_DST}/NEWS.txt"
+  cp -f -p COPYING               "${_DST}/COPYING.txt"
+  cp -f -p README                "${_DST}/README.txt"
+  cp -f -p RELEASE-NOTES         "${_DST}/RELEASE-NOTES.txt"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 }

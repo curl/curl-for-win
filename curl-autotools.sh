@@ -210,7 +210,7 @@ _VER="$1"
       options="${options} --without-libssh2"
       CPPFLAGS="${CPPFLAGS} -DLIBSSH_STATIC"
     elif [ -d ../libssh2 ]; then
-      options="${options} --with-libssh2=${_TOP}/libssh2/${_PP}"
+      options="${options} --with-libssh2=${_TOP}/libssh2/${_PPS}"
       options="${options} --without-wolfssh"
       options="${options} --without-libssh"
       if [ "${_OS}" = 'win' ]; then

@@ -20,7 +20,7 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
+  rm -r -f "${_PKGDIRS:?}" "${_BLDDIR:?}"
 
   # Build
 
@@ -60,11 +60,11 @@ _VER="$1"
 
   # Install manually
 
-  mkdir -p "${_PP}/include"
-  mkdir -p "${_PP}/lib"
+  mkdir -p "${_PPS}/include"
+  mkdir -p "${_PPS}/lib"
 
-  cp -f -p include/*.h       "${_PP}/include/"
-  cp -f -p "${BLD_DIR}"/*.a  "${_PP}/lib/"
+  cp -f -p include/*.h       "${_PPS}/include/"
+  cp -f -p "${BLD_DIR}"/*.a  "${_PPS}/lib/"
 
   . ../libssh2-pkg.sh
 )

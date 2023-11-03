@@ -269,8 +269,8 @@ _VER="$1"
   elif [ -d ../libssh2 ]; then
     options="${options} -DCURL_USE_LIBSSH2=ON"
     options="${options} -DCURL_USE_LIBSSH=OFF"
-    options="${options} -DLIBSSH2_INCLUDE_DIR=${_TOP}/libssh2/${_PP}/include"
-    options="${options} -DLIBSSH2_LIBRARY=${_TOP}/libssh2/${_PP}/lib/libssh2.a"
+    options="${options} -DLIBSSH2_INCLUDE_DIR=${_TOP}/libssh2/${_PPS}/include"
+    options="${options} -DLIBSSH2_LIBRARY=${_TOP}/libssh2/${_PPS}/lib/libssh2.a"
 
     if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
       # By passing -lssh2 _before_ -lcrypto (of openssl/libressl) to the
@@ -281,7 +281,7 @@ _VER="$1"
       # It would be useful to have a linker option to sort object/lib inputs
       # to make output deterministic (these builds do not rely on ordering
       # side-effects.)
-      LDFLAGS="${LDFLAGS} -L${_TOP}/libssh2/${_PP}/lib"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/libssh2/${_PPS}/lib"
       LIBS="${LIBS} -lssh2"
     fi
   else

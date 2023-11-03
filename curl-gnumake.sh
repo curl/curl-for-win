@@ -151,7 +151,7 @@ _VER="$1"
     CPPFLAGS="${CPPFLAGS} -DLIBSSH_STATIC"
   elif [ -d ../libssh2 ]; then
     CFG="${CFG}-ssh2"
-    export LIBSSH2_PATH="../../libssh2/${_PP}"
+    export LIBSSH2_PATH="../../libssh2/${_PPS}"
   fi
   if [ -d ../nghttp2 ]; then
     CFG="${CFG}-nghttp2"

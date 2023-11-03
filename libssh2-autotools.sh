@@ -14,7 +14,7 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
+  rm -r -f "${_PKGDIRS:?}" "${_BLDDIR:?}"
 
   [ -f 'configure' ] || autoreconf --force --install
 
@@ -75,11 +75,11 @@ _VER="$1"
       --disable-tests
   )
 
-  make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
+  make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIRS}" # >/dev/null # V=1
 
   # Delete .pc and .la files
-  rm -r -f "${_PP}"/lib/pkgconfig
-  rm -f    "${_PP}"/lib/*.la
+  rm -r -f "${_PPS}"/lib/pkgconfig
+  rm -f    "${_PPS}"/lib/*.la
 
   . ../libssh2-pkg.sh
 )
