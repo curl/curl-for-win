@@ -733,9 +733,6 @@ build_single_target() {
   export _CMAKE_GLOBAL='-DCMAKE_BUILD_TYPE=Release'
   export _CMAKE_CXX_GLOBAL=''
 
-  # Extend to _CFLAGS_GLOBAL if this issue pops up with other build tools
-  _CFLAGS_GLOBAL_CMAKE="${_CFLAGS_GLOBAL_CMAKE} -ffile-prefix-map=$(pwd)="
-
   # Suppress CMake warnings meant for upstream developers
   _CMAKE_GLOBAL="-Wno-dev ${_CMAKE_GLOBAL}"
 

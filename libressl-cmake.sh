@@ -16,6 +16,8 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
+  CFLAGS="-ffile-prefix-map=$(pwd)="
+
   if [ "${_CC}" = 'llvm' ]; then
     CFLAGS="${CFLAGS} -Wa,--noexecstack"
   fi
