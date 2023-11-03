@@ -302,8 +302,8 @@ _VER="$1"
       # We enable this lib manually, so it shows up "disabled" in 'configure summary'.
       options="${options} --with-ngtcp2=yes"
       CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB -DUSE_NGTCP2"
-      CPPFLAGS="${CPPFLAGS} -I${_TOP}/ngtcp2/${_PP}/include"
-      LDFLAGS="${LDFLAGS} -L${_TOP}/ngtcp2/${_PP}/lib"
+      CPPFLAGS="${CPPFLAGS} -I${_TOP}/ngtcp2/${_PPS}/include"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/ngtcp2/${_PPS}/lib"
       LIBS="${LIBS} -lngtcp2"
       if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
         LIBS="${LIBS} -lngtcp2_crypto_boringssl"

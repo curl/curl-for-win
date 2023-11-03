@@ -14,7 +14,7 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
+  rm -r -f "${_PKGDIRS:?}" "${_BLDDIR:?}"
 
   CFLAGS=''
   CPPFLAGS='-DNDEBUG'
@@ -70,20 +70,20 @@ _VER="$1"
     "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LDFLAGS} ${_LIBS_GLOBAL} ${LIBS}" \
     "-DCMAKE_CXX_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LDFLAGS} ${_LIBS_GLOBAL} ${LIBS} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
 
-  make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
+  make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIRS}"
 
   # Delete .pc files
-  rm -r -f "${_PP}"/lib/pkgconfig
+  rm -r -f "${_PPS}"/lib/pkgconfig
 
   # Make steps for determinism
 
   readonly _ref='ChangeLog'
 
   # shellcheck disable=SC2086
-  "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/*.a
+  "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PPS}"/lib/*.a
 
-  touch -c -r "${_ref}" "${_PP}"/include/ngtcp2/*.h
-  touch -c -r "${_ref}" "${_PP}"/lib/*.a
+  touch -c -r "${_ref}" "${_PPS}"/include/ngtcp2/*.h
+  touch -c -r "${_ref}" "${_PPS}"/lib/*.a
 
   # Create package
 
@@ -94,12 +94,12 @@ _VER="$1"
   mkdir -p "${_DST}/include/ngtcp2"
   mkdir -p "${_DST}/lib"
 
-  cp -f -p "${_PP}"/include/ngtcp2/*.h "${_DST}/include/ngtcp2/"
-  cp -f -p "${_PP}"/lib/*.a            "${_DST}/lib/"
-  cp -f -p ChangeLog                   "${_DST}/ChangeLog.txt"
-  cp -f -p AUTHORS                     "${_DST}/AUTHORS.txt"
-  cp -f -p COPYING                     "${_DST}/COPYING.txt"
-  cp -f -p README.rst                  "${_DST}/"
+  cp -f -p "${_PPS}"/include/ngtcp2/*.h "${_DST}/include/ngtcp2/"
+  cp -f -p "${_PPS}"/lib/*.a            "${_DST}/lib/"
+  cp -f -p ChangeLog                    "${_DST}/ChangeLog.txt"
+  cp -f -p AUTHORS                      "${_DST}/AUTHORS.txt"
+  cp -f -p COPYING                      "${_DST}/COPYING.txt"
+  cp -f -p README.rst                   "${_DST}/"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

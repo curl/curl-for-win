@@ -165,7 +165,7 @@ _VER="$1"
     CFG="${CFG}-nghttp3-ngtcp2"
     export NGHTTP3_PATH="../../nghttp3/${_PP}"
     CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB"
-    export NGTCP2_PATH="../../ngtcp2/${_PP}"
+    export NGTCP2_PATH="../../ngtcp2/${_PPS}"
     CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB"
   fi
   if [ -d ../cares ]; then

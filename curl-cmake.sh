@@ -307,9 +307,9 @@ _VER="$1"
     CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB"
 
     options="${options} -DUSE_NGTCP2=ON"
-    options="${options} -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PP}/include"
-    options="${options} -DNGTCP2_LIBRARY=${_TOP}/ngtcp2/${_PP}/lib/libngtcp2.a"
-    options="${options} -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/${_PP}/lib"
+    options="${options} -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PPS}/include"
+    options="${options} -DNGTCP2_LIBRARY=${_TOP}/ngtcp2/${_PPS}/lib/libngtcp2.a"
+    options="${options} -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/${_PPS}/lib"
     CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB"
   else
     options="${options} -DUSE_NGHTTP3=OFF"
