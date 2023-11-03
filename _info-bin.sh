@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: MIT
 
 # shellcheck disable=SC3040,SC2039
-set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
+set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 filetype=''
 is_curl='0'
@@ -36,7 +36,7 @@ while [ -n "${1:-}" ]; do
     # Dump cfguard load configuration flags
     if [ "${_CC}" = 'llvm' ]; then  # binutils readelf (as of v2.40) does not recognize this option
       # CF_FUNCTION_TABLE_PRESENT, CF_INSTRUMENTED, CF_LONGJUMP_TABLE_PRESENT (optional)
-      "${_READELF}" --coff-load-config "${f}" | grep -a -E 'CF_[A-Z_]' | sort
+      "${_READELF}" --coff-load-config "${f}" | grep -a -E 'CF_[A-Z_]' | sort || true
     fi
     if [ "${filetype}" = 'exe' ] && [ "${is_curl}" = '1' ]; then  # should be the same output for the DLL
       # regexp compatible with llvm and binutils output
