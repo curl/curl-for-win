@@ -323,8 +323,8 @@ _VER="$1"
   fi
   if [ -d ../gsasl ]; then
     CPPFLAGS="${CPPFLAGS} -DUSE_GSASL"
-    CPPFLAGS="${CPPFLAGS} -I${_TOP}/gsasl/${_PP}/include"
-    LDFLAGS="${LDFLAGS} -L${_TOP}/gsasl/${_PP}/lib"
+    CPPFLAGS="${CPPFLAGS} -I${_TOP}/gsasl/${_PPS}/include"
+    LDFLAGS="${LDFLAGS} -L${_TOP}/gsasl/${_PPS}/lib"
     LIBS="${LIBS} -lgsasl"
   elif [ "${_OS}" = 'mac' ]; then
     # GSS API deprecated in 2012-2013 (OS X 10.8 Mountain Lion / 10.9 Mavericks, iOS 7.0)

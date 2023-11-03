@@ -267,9 +267,9 @@ _VER="$1"
     fi
 
     if [ -d ../gsasl ]; then
-      options="${options} --with-libgsasl=${_TOP}/gsasl/${_PP}"
-      CPPFLAGS="${CPPFLAGS} -I${_TOP}/gsasl/${_PP}/include"
-      LDFLAGS="${LDFLAGS} -L${_TOP}/gsasl/${_PP}/lib"
+      options="${options} --with-libgsasl=${_TOP}/gsasl/${_PPS}"
+      CPPFLAGS="${CPPFLAGS} -I${_TOP}/gsasl/${_PPS}/include"
+      LDFLAGS="${LDFLAGS} -L${_TOP}/gsasl/${_PPS}/lib"
     else
       options="${options} --without-libgsasl"
       if [ "${_OS}" = 'mac' ]; then

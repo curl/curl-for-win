@@ -175,7 +175,7 @@ _VER="$1"
   fi
   if [ -d ../gsasl ]; then
     CFG="${CFG}-gsasl"
-    export LIBGSASL_PATH="../../gsasl/${_PP}"
+    export LIBGSASL_PATH="../../gsasl/${_PPS}"
   fi
   if [ -d ../libidn2 ]; then
     CFG="${CFG}-idn2"
