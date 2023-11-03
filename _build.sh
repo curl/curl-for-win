@@ -422,7 +422,7 @@ bld() {
   if [ -z "${CW_BLD:-}" ] || echo " ${CW_BLD} " | grep -q -E -- " ${pkg}(-${bldtools})? "; then
     shift
 
-    export _BLDDIR="${_BLDDIR_BASE}"
+    export _BLDDIR="${_PKGDIR}"
 
     pkgori="${pkg}"
     [ -n "${2:-}" ] && pkg="$2"
@@ -434,8 +434,10 @@ bld() {
 
       bldtool="$(echo "${pkg}" | \
         grep -a -o -E -- "-${bldtools}")"
-      _BLDDIR="${_BLDDIR}${bldtool}-${_CC}-${_CPU}-${_OS}-${_CRT}"
+      _BLDDIR="${_BLDDIR}${bldtool}-${_CC}"
     fi
+
+    _BLDDIR="${_BLDDIR}-bld"
 
     ${my_time} "./${pkg}.sh" "$1" "${pkgori}"
 
@@ -714,7 +716,6 @@ build_single_target() {
   # Setup common toolchain configuration options
 
   export _TOP; _TOP="$(pwd)"  # Must be an absolute path
-  _BLDDIR_BASE='_bld'
   export _PKGDIR="_${_CPU}-${_OS}-${_CRT}"
   export _PKGDIRS="${_PKGDIR}"
   [ -n "${_OPENSSL}" ] && _PKGDIRS="${_PKGDIRS}-${_OPENSSL}"
