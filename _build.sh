@@ -716,8 +716,10 @@ build_single_target() {
   export _TOP; _TOP="$(pwd)"  # Must be an absolute path
   _BLDDIR_BASE='_bld'
   export _PKGDIR="_${_CPU}-${_OS}-${_CRT}"
+  export _PKGDIRS="${_PKGDIR}-${_OPENSSL}"
   _PREFIX='/usr'
   export _PP="${_PKGDIR}${_PREFIX}"
+  export _PPS="${_PKGDIRS}${_PREFIX}"
   export _CC_GLOBAL=''
   export _CFLAGS_GLOBAL=''
   export _CFLAGS_GLOBAL_CMAKE=''
