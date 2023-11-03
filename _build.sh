@@ -714,8 +714,8 @@ build_single_target() {
   # Setup common toolchain configuration options
 
   export _TOP; _TOP="$(pwd)"  # Must be an absolute path
-  _BLDDIR_BASE='bld'
-  export _PKGDIR="${_CPU}-${_OS}-${_CRT}"
+  _BLDDIR_BASE='_bld'
+  export _PKGDIR="_${_CPU}-${_OS}-${_CRT}"
   _PREFIX='/usr'
   export _PP="${_PKGDIR}${_PREFIX}"
   export _CC_GLOBAL=''
