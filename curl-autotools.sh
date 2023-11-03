@@ -205,7 +205,7 @@ _VER="$1"
       options="${options} --without-libssh"
       options="${options} --without-libssh2"
     elif [ -d ../libssh ]; then
-      options="${options} --with-libssh=${_TOP}/libssh/${_PP}"
+      options="${options} --with-libssh=${_TOP}/libssh/${_PPS}"
       options="${options} --without-wolfssh"
       options="${options} --without-libssh2"
       CPPFLAGS="${CPPFLAGS} -DLIBSSH_STATIC"

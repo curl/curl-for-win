@@ -18,7 +18,7 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
+  rm -r -f "${_PKGDIRS:?}" "${_BLDDIR:?}"
 
   CPPFLAGS=''
   LIBS=''
@@ -115,17 +115,17 @@ _VER="$1"
     '-DUNIT_TESTING=OFF' \
     "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${LIBS}"
 
-  make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
+  make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIRS}"
 
   # Make steps for determinism
 
   readonly _ref='ChangeLog'
 
   # shellcheck disable=SC2086
-  "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/*.a
+  "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PPS}"/lib/*.a
 
-  touch -c -r "${_ref}" "${_PP}"/include/libssh/*.h
-  touch -c -r "${_ref}" "${_PP}"/lib/*.a
+  touch -c -r "${_ref}" "${_PPS}"/include/libssh/*.h
+  touch -c -r "${_ref}" "${_PPS}"/lib/*.a
 
   # Create package
 
@@ -136,12 +136,12 @@ _VER="$1"
   mkdir -p "${_DST}/include/libssh"
   mkdir -p "${_DST}/lib"
 
-  cp -f -p "${_PP}"/include/libssh/*.h "${_DST}/include/libssh/"
-  cp -f -p "${_PP}"/lib/*.a            "${_DST}/lib/"
-  cp -f -p ChangeLog                   "${_DST}/ChangeLog.txt"
-  cp -f -p AUTHORS                     "${_DST}/AUTHORS.txt"
-  cp -f -p COPYING                     "${_DST}/COPYING.txt"
-  cp -f -p README                      "${_DST}/README.txt"
+  cp -f -p "${_PPS}"/include/libssh/*.h "${_DST}/include/libssh/"
+  cp -f -p "${_PPS}"/lib/*.a            "${_DST}/lib/"
+  cp -f -p ChangeLog                    "${_DST}/ChangeLog.txt"
+  cp -f -p AUTHORS                      "${_DST}/AUTHORS.txt"
+  cp -f -p COPYING                      "${_DST}/COPYING.txt"
+  cp -f -p README                       "${_DST}/README.txt"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

@@ -147,7 +147,7 @@ _VER="$1"
     export WOLFSSH_PATH="../../wolfssh/${_PP}"
   elif [ -d ../libssh ]; then
     CFG="${CFG}-libssh"
-    export LIBSSH_PATH="../../libssh/${_PP}"
+    export LIBSSH_PATH="../../libssh/${_PPS}"
     CPPFLAGS="${CPPFLAGS} -DLIBSSH_STATIC"
   elif [ -d ../libssh2 ]; then
     CFG="${CFG}-ssh2"
