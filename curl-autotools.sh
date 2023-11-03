@@ -154,6 +154,7 @@ _VER="$1"
         h3=1
       elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ] || [ "${_OPENSSL}" = 'openssl' ]; then
         if [ "${_OS}" = 'win' ]; then
+          [ "${_OPENSSL}" = 'libressl' ] && CPPFLAGS="${CPPFLAGS} -DLIBRESSL_DISABLE_OVERRIDE_WINCRYPT_DEFINES_WARNING"
           LIBS="${LIBS} -lbcrypt"  # for auto-detection
         fi
         [ "${_OPENSSL}" = 'openssl' ] || h3=1

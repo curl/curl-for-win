@@ -115,6 +115,7 @@ _VER="$1"
       fi
       h3=1
     elif [ "${_OPENSSL}" = 'libressl' ]; then
+      [ "${_OS}" = 'win' ] && CPPFLAGS="${CPPFLAGS} -DLIBRESSL_DISABLE_OVERRIDE_WINCRYPT_DEFINES_WARNING"
       h3=1
     elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
       CPPFLAGS="${CPPFLAGS} -DHAVE_SSL_SET0_WBIO"

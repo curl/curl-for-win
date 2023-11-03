@@ -8,15 +8,6 @@
 # - Building broken executables with ASM support enabled (both autotools and CMake).
 #   Regression since 3.7.3.
 # - Still loads config/DLLs from the hardcoded prefix. (improvements coming in 3.8.1)
-# - Collision with wincrypt.h header when using with curl.
-#   Ref: https://ci.appveyor.com/project/curlorg/curl-for-win/builds/47723913?fullLog=true#L24711
-#   ```
-#   ../../libressl/x64-ucrt/usr/include/openssl/ossl_typ.h:90:2: warning: #warning is a C2x extension [-Wpedantic]
-#   #warning overriding WinCrypt defines
-#    ^
-#   ../../libressl/x64-ucrt/usr/include/openssl/ossl_typ.h:90:2: warning: overriding WinCrypt defines [-W#warnings]
-#   ```
-#   Ref: https://github.com/libressl/portable/issues/910#issuecomment-1736486009
 # - Unexpected warnings when building with ASM _enabled_ and CMake:
 #   ```
 #   In file included from ./libressl/crypto/bn/bn_mul.c:65:
