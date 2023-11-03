@@ -5,8 +5,6 @@
 
 # Caveats (as of 3.8.1):
 # - ASM support exist only for x64 on Windows.
-# - Building broken executables with ASM support enabled (both autotools and CMake).
-#   Regression since 3.7.3.
 # - Still loads config/DLLs from the hardcoded prefix. (improvements coming in 3.8.1)
 # - Unexpected warnings when building with ASM _enabled_ and CMake:
 #   ```
