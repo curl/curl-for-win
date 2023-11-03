@@ -20,6 +20,8 @@ _VER="$1"
 
   if [ "${_CC}" = 'llvm' ]; then
     CFLAGS="${CFLAGS} -Wa,--noexecstack"
+  else
+    CFLAGS="${CFLAGS} -Wno-attributes"
   fi
 
   [ "${_CPU}" = 'x86' ] && cpu='x86'
