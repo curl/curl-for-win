@@ -16,6 +16,15 @@
     *)       TZ=UTC stat -c '%n: %y' "${_ref}";;
   esac
 
+  bin="${_PP}/bin/curl${BIN_EXT}"
+
+  # Extra checks (do this before code signing)
+
+  if strings "${bin}" | grep -a -F 'curl-for-win'; then
+    echo "! Error: Our project root path is leaking into the binary: '${bin}'"
+    exit 1
+  fi
+
   # Process libcurl static library
 
   # shellcheck disable=SC2086
@@ -41,8 +50,6 @@
   fi
 
   # Process curl tool and libcurl shared library
-
-  bin="${_PP}/bin/curl${BIN_EXT}"
 
   for filetype in 'exe' 'dyn'; do
     {
@@ -86,13 +93,6 @@
   # most of these strings dynamically at runtime, so this is not possible
   # (as of curl 7.83.1).
   ${_RUN_BIN} "${bin}" --version | tee "curl-${_CPU}.txt"
-
-  # Extra checks
-
-  if strings "${bin}" | grep -a -F 'curl-for-win'; then
-    echo "! Error: Our project root path is leaking into the binary: '${bin}'"
-    exit 1
-  fi
 
   # Create package
 
