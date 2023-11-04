@@ -20,20 +20,20 @@ _VER="$1"
   options=''
 
   if [ -n "${_ZLIB}" ]; then
-    options="${options} -DENABLE_ZLIB_COMPRESSION=ON"
-    options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
-    options="${options} -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
+    options+=' -DENABLE_ZLIB_COMPRESSION=ON'
+    options+=" -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
+    options+=" -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
   fi
 
   if [ -n "${_OPENSSL}" ]; then
-    options="${options} -DCRYPTO_BACKEND=OpenSSL"
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
+    options+=' -DCRYPTO_BACKEND=OpenSSL'
+    options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
       # for DLL
       if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
-        LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
+        LIBS+=' -Wl,-Bdynamic -lpthread -Wl,-Bstatic'
       else
-        LIBS="${LIBS} -lpthread"
+        LIBS+=' -lpthread'
       fi
     fi
     if [ "${_OS}" = 'win' ]; then
@@ -43,20 +43,20 @@ _VER="$1"
         "${_TOP}/${_OPENSSL}/${_PP}/ssl.dll"
     fi
   elif [ -d ../wolfssl ]; then
-    options="${options} -DCRYPTO_BACKEND=wolfSSL"
-    options="${options} -DWOLFSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
-    options="${options} -DWOLFSSL_LIBRARY=${_TOP}/wolfssl/${_PP}/lib/libwolfssl.a"
+    options+=' -DCRYPTO_BACKEND=wolfSSL'
+    options+=" -DWOLFSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
+    options+=" -DWOLFSSL_LIBRARY=${_TOP}/wolfssl/${_PP}/lib/libwolfssl.a"
   elif [ -d ../mbedtls ]; then
-    options="${options} -DCRYPTO_BACKEND=mbedTLS"
-    options="${options} -DMBEDTLS_INCLUDE_DIR=${_TOP}/mbedtls/${_PP}/include"
-    options="${options} -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedcrypto.a"
+    options+=' -DCRYPTO_BACKEND=mbedTLS'
+    options+=" -DMBEDTLS_INCLUDE_DIR=${_TOP}/mbedtls/${_PP}/include"
+    options+=" -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedcrypto.a"
     if [ "${LIBSSH2_VER_}" = '1.11.0' ]; then
       # Necessary for detection only:
-      options="${options} -DMBEDTLS_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedtls.a"
-      options="${options} -DMBEDX509_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedx509.a"
+      options+=" -DMBEDTLS_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedtls.a"
+      options+=" -DMBEDX509_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedx509.a"
     fi
   elif [ "${_OS}" = 'win' ]; then
-    options="${options} -DCRYPTO_BACKEND=WinCNG"
+    options+=' -DCRYPTO_BACKEND=WinCNG'
   fi
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then

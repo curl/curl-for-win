@@ -59,7 +59,7 @@ _VER="$1"
 
   if [ "${_OS}" = 'win' ] && [ "${_CPU}" != 'a64' ]; then
     # nasm is used for Windows x64 and x86
-    options="${options} -DCMAKE_ASM_NASM_FLAGS=--reproducible"
+    options+=' -DCMAKE_ASM_NASM_FLAGS=--reproducible'
   fi
 
   # Workaround for Windows x64 llvm 16 breakage as of 85081c6b:
@@ -68,9 +68,9 @@ _VER="$1"
   #   *out1 = _umul128(arg1, arg2, &t);
   #           ^
   if [ "${_OS}" = 'win' ] && [ "${_CPU}" = 'x64' ] && [ "${_CC}" = 'llvm' ]; then
-    options="${options} -DOPENSSL_SMALL=ON"
+    options+=' -DOPENSSL_SMALL=ON'
   else
-    options="${options} -DOPENSSL_SMALL=OFF"  # ON reduces curl binary sizes by ~300 KB
+    options+=' -DOPENSSL_SMALL=OFF'  # ON reduces curl binary sizes by ~300 KB
   fi
 
   # Patch the build to omit debug info. This results in 50% smaller footprint
@@ -84,9 +84,9 @@ _VER="$1"
   sed -i.bak 's/ -ggdb//g' ./CMakeLists.txt
 
   if [ "${_NAM}" = 'awslc' ]; then
-    options="${options} -DBUILD_TESTING=OFF"
-    options="${options} -DBUILD_TOOL=OFF"
-    options="${options} -DDISABLE_GO=ON"
+    options+=' -DBUILD_TESTING=OFF'
+    options+=' -DBUILD_TOOL=OFF'
+    options+=' -DDISABLE_GO=ON'
   fi
 
   # shellcheck disable=SC2086

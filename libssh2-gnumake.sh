@@ -41,9 +41,9 @@ _VER="$1"
     if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
       # for DLL
       if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
-        LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
+        LIBS+=' -Wl,-Bdynamic -lpthread -Wl,-Bstatic'
       else
-        LIBS="${LIBS} -lpthread"
+        LIBS+=' -lpthread'
       fi
     fi
   elif [ -d ../wolfssl ]; then

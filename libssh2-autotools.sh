@@ -30,36 +30,36 @@ _VER="$1"
   #       autotools breaks on spaces anyway, so we leave it like that.
 
   if [ -n "${_ZLIB}" ]; then
-    options="${options} --with-libz"
+    options+=' --with-libz'
     # These seem to work better than --with-libz-prefix=:
-    CPPFLAGS="${CPPFLAGS} -I${_TOP}/${_ZLIB}/${_PP}/include"
-    LDFLAGS="${LDFLAGS} -L${_TOP}/${_ZLIB}/${_PP}/lib"
+    CPPFLAGS+=" -I${_TOP}/${_ZLIB}/${_PP}/include"
+    LDFLAGS+=" -L${_TOP}/${_ZLIB}/${_PP}/lib"
   else
-    options="${options} --without-libz"
+    options+=' --without-libz'
   fi
 
   if [ -n "${_OPENSSL}" ]; then
-    options="${options} --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
+    options+=" --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
     if [ "${_OS}" = 'win' ]; then
       if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
         # for DLL
         if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
-          LDFLAGS="${LDFLAGS} -Wl,-Bdynamic,-lpthread,-Bstatic"
+          LDFLAGS+=' -Wl,-Bdynamic,-lpthread,-Bstatic'
         else
-          LDFLAGS="${LDFLAGS} -Wl,-Bstatic,-lpthread,-Bdynamic"
+          LDFLAGS+=' -Wl,-Bstatic,-lpthread,-Bdynamic'
         fi
       elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-        LIBS="${LIBS} -lbcrypt"
+        LIBS+=' -lbcrypt'
       fi
     fi
   elif [ -d ../wolfssl ]; then
-    options="${options} --with-crypto=wolfssl --with-libwolfssl-prefix=${_TOP}/wolfssl/${_PP}"
-    LDFLAGS="${LDFLAGS} -L${_TOP}/wolfssl/${_PP}/lib"
+    options+=" --with-crypto=wolfssl --with-libwolfssl-prefix=${_TOP}/wolfssl/${_PP}"
+    LDFLAGS+=" -L${_TOP}/wolfssl/${_PP}/lib"
   elif [ -d ../mbedtls ]; then
-    options="${options} --with-crypto=mbedtls --with-libmbedcrypto-prefix=${_TOP}/mbedtls/${_PP}"
-    LDFLAGS="${LDFLAGS} -L${_TOP}/mbedtls/${_PP}/lib"
+    options+=" --with-crypto=mbedtls --with-libmbedcrypto-prefix=${_TOP}/mbedtls/${_PP}"
+    LDFLAGS+=" -L${_TOP}/mbedtls/${_PP}/lib"
   elif [ "${_OS}" = 'win' ]; then
-    options="${options} --with-crypto=wincng"
+    options+=' --with-crypto=wincng'
   fi
 
   (

@@ -24,9 +24,9 @@ _VER="$1"
   export LIBS="${_LIBS_GLOBAL}"
 
   if [ "${_CC}" = 'llvm' ]; then
-    CFLAGS="${CFLAGS} -Wa,--noexecstack"
+    CFLAGS+=' -Wa,--noexecstack'
   else
-    CFLAGS="${CFLAGS} -Wno-attributes"
+    CFLAGS+=' -Wno-attributes'
   fi
 
   if [ "${_OS}" = 'mac' ] && [ "${_OSVER}" -lt '1100' ]; then

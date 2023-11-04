@@ -23,44 +23,44 @@ _VER="$1"
   options=''
 
   if [ "${NGTCP2_VER_}" = '1.0.1' ]; then
-    CFLAGS="${CFLAGS} -ffile-prefix-map=$(pwd)="
+    CFLAGS+=" -ffile-prefix-map=$(pwd)="
   fi
 
   # Avoid finding unnecessary system (Homebrew) package. This avoids log noise and
   # prevents building examples, which may fail for reasons or just take extra time.
-  options="${options} -DLIBEV_INCLUDE_DIR="
+  options+=' -DLIBEV_INCLUDE_DIR='
 
   if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
-    options="${options} -DENABLE_OPENSSL=OFF"
-    options="${options} -DENABLE_BORINGSSL=ON"
-    options="${options} -DBORINGSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
-    options="${options} -DBORINGSSL_LIBRARIES=${_TOP}/${_OPENSSL}/${_PP}/lib/libcrypto.a;${_TOP}/${_OPENSSL}/${_PP}/lib/libssl.a;-lpthread"; [ "${_OS}" = 'win' ] && options="${options};-lws2_32"
-    CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
+    options+=' -DENABLE_OPENSSL=OFF'
+    options+=' -DENABLE_BORINGSSL=ON'
+    options+=" -DBORINGSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
+    options+=" -DBORINGSSL_LIBRARIES=${_TOP}/${_OPENSSL}/${_PP}/lib/libcrypto.a;${_TOP}/${_OPENSSL}/${_PP}/lib/libssl.a;-lpthread"; [ "${_OS}" = 'win' ] && options="${options};-lws2_32"
+    CPPFLAGS+=' -DNOCRYPT'
   elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ]; then
-    options="${options} -DENABLE_OPENSSL=ON"
-    options="${options} -DOPENSSL_ROOT_DIR=../${_OPENSSL}/${_PP}"
+    options+=' -DENABLE_OPENSSL=ON'
+    options+=" -DOPENSSL_ROOT_DIR=../${_OPENSSL}/${_PP}"
     # FIXME: This is not enough for picky ld linker (with gcc)
     if [ -n "${_ZLIB}" ]; then  # required by OpenSSL built with zlib
-      LDFLAGS="${LDFLAGS} -L${_TOP}/${_ZLIB}/${_PP}/lib"
-      LIBS="${LIBS} -lz"
+      LDFLAGS+=" -L${_TOP}/${_ZLIB}/${_PP}/lib"
+      LIBS+=' -lz'
     fi
   elif [ -d ../wolfssl ]; then
-    options="${options} -DENABLE_WOLFSSL=ON"
-    options="${options} -DWOLFSSL_INCLUDE_DIR=../wolfssl/${_PP}/include"
-    options="${options} -DWOLFSSL_LIBRARY=../wolfssl/${_PP}/lib/libwolfssl.a"
+    options+=' -DENABLE_WOLFSSL=ON'
+    options+=" -DWOLFSSL_INCLUDE_DIR=../wolfssl/${_PP}/include"
+    options+=" -DWOLFSSL_LIBRARY=../wolfssl/${_PP}/lib/libwolfssl.a"
     if [ "${_OS}" = 'win' ]; then
-      LIBS="${LIBS} -lws2_32"
+      LIBS+=' -lws2_32'
     fi
     if [ -n "${_ZLIB}" ]; then  # required by wolfSSL
-      CPPFLAGS="${CPPFLAGS} -I${_TOP}/${_ZLIB}/${_PP}/include"
-      LDFLAGS="${LDFLAGS} -L${_TOP}/${_ZLIB}/${_PP}/lib"
-      LIBS="${LIBS} -lz"
+      CPPFLAGS+=" -I${_TOP}/${_ZLIB}/${_PP}/include"
+      LDFLAGS+=" -L${_TOP}/${_ZLIB}/${_PP}/lib"
+      LIBS+=' -lz'
     fi
   fi
 
   if [ -d ../nghttp3 ]; then
-    options="${options} -DLIBNGHTTP3_INCLUDE_DIR=../nghttp3/${_PP}/include"
-    options="${options} -DLIBNGHTTP3_LIBRARY=../nghttp3/${_PP}/lib"
+    options+=" -DLIBNGHTTP3_INCLUDE_DIR=../nghttp3/${_PP}/include"
+    options+=" -DLIBNGHTTP3_LIBRARY=../nghttp3/${_PP}/lib"
   fi
 
   # shellcheck disable=SC2086

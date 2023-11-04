@@ -33,11 +33,11 @@ _VER="$1"
   export LIBS="${_LIBS_GLOBAL}"
 
   if [ -n "${_OPENSSL}" ]; then
-    options="${options} --with-openssl=yes"
-    CPPFLAGS="${CPPFLAGS} -I${_TOP}/${_OPENSSL}/${_PP}/include"
-    LDFLAGS="${LDFLAGS} -L${_TOP}/${_OPENSSL}/${_PP}/lib"
+    options+=' --with-openssl=yes'
+    CPPFLAGS+=" -I${_TOP}/${_OPENSSL}/${_PP}/include"
+    LDFLAGS+=" -L${_TOP}/${_OPENSSL}/${_PP}/lib"
     if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
-      LIBS="${LIBS} -lpthread"
+      LIBS+=' -lpthread'
     fi
   fi
 

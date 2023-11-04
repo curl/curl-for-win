@@ -36,37 +36,37 @@ _VER="$1"
     export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
     export LIBS="${_LIBS_GLOBAL}"
 
-    [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && LDFLAGS="${LDFLAGS} -v"
+    [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && LDFLAGS+=' -v'
 
-    options="${options} --enable-unix-sockets"
+    options+=' --enable-unix-sockets'
 
     if [ ! "${_CONFIG#*werror*}" = "${_CONFIG}" ]; then
-      options="${options} --enable-werror"
+      options+=' --enable-werror'
     fi
 
     if [ ! "${_CONFIG#*debug*}" = "${_CONFIG}" ]; then
-      options="${options} --enable-debug"
+      options+=' --enable-debug'
     else
-      options="${options} --disable-debug"
-      CPPFLAGS="${CPPFLAGS} -DNDEBUG"
+      options+=' --disable-debug'
+      CPPFLAGS+=' -DNDEBUG'
     fi
 
     if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
       if [ "${pass}" = 'shared' ]; then
-        LDFLAGS="${LDFLAGS} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dyn.tar"
+        LDFLAGS+=" -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dyn.tar"
       else
-        LDFLAGS="${LDFLAGS} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-bin.tar"
+        LDFLAGS+=" -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-bin.tar"
       fi
     fi
 
     if [ "${pass}" = 'static' ]; then
-      LDFLAGS="${LDFLAGS} ${_LDFLAGS_BIN_GLOBAL}"
+      LDFLAGS+=" ${_LDFLAGS_BIN_GLOBAL}"
     fi
 
     if [ "${_OS}" = 'win' ] && [ "${_CONFIG#*unicode*}" != "${_CONFIG}" ]; then
-      CPPFLAGS="${CPPFLAGS} -Dmain=wmain"  # FIXME: upstream. https://github.com/curl/curl/issues/7229
-      CPPFLAGS="${CPPFLAGS} -DUNICODE -D_UNICODE"
-      LDFLAGS="${LDFLAGS} -municode"
+      CPPFLAGS+=' -Dmain=wmain'  # FIXME: upstream. https://github.com/curl/curl/issues/7229
+      CPPFLAGS+=' -DUNICODE -D_UNICODE'
+      LDFLAGS+=' -municode'
     fi
 
     if [ "${CW_MAP}" = '1' ]; then
@@ -76,39 +76,39 @@ _VER="$1"
         _MAP_NAME='curl.map'
       fi
       if [ "${_OS}" = 'mac' ]; then
-        LDFLAGS="${LDFLAGS} -Wl,-map,${_MAP_NAME}"
+        LDFLAGS+=" -Wl,-map,${_MAP_NAME}"
       else
-        LDFLAGS="${LDFLAGS} -Wl,-Map,${_MAP_NAME}"
+        LDFLAGS+=" -Wl,-Map,${_MAP_NAME}"
       fi
     fi
 
     if [ ! "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] || \
        [ ! "${_CONFIG#*pico*}" = "${_CONFIG}" ] || \
        [ ! "${_CONFIG#*nano*}" = "${_CONFIG}" ]; then
-      options="${options} --disable-alt-svc"
+      options+=' --disable-alt-svc'
     else
-      options="${options} --enable-alt-svc"
+      options+=' --enable-alt-svc'
     fi
 
     if [ ! "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] || \
        [ ! "${_CONFIG#*pico*}" = "${_CONFIG}" ]; then
-      options="${options} --disable-basic-auth --disable-bearer-auth --disable-digest-auth --disable-kerberos-auth --disable-negotiate-auth --disable-aws"
-      options="${options} --disable-dict --disable-file --disable-gopher --disable-mqtt --disable-rtsp --disable-smb --disable-telnet --disable-tftp"
-      options="${options} --disable-ftp"
-      options="${options} --disable-imap --disable-pop3 --disable-smtp"
-      options="${options} --disable-ldap --disable-ldaps"
+      options+=' --disable-basic-auth --disable-bearer-auth --disable-digest-auth --disable-kerberos-auth --disable-negotiate-auth --disable-aws'
+      options+=' --disable-dict --disable-file --disable-gopher --disable-mqtt --disable-rtsp --disable-smb --disable-telnet --disable-tftp'
+      options+=' --disable-ftp'
+      options+=' --disable-imap --disable-pop3 --disable-smtp'
+      options+=' --disable-ldap --disable-ldaps'
     else
-      options="${options} --enable-dict --enable-file --enable-gopher --enable-mqtt --enable-rtsp --enable-smb --enable-telnet --enable-tftp"
+      options+=' --enable-dict --enable-file --enable-gopher --enable-mqtt --enable-rtsp --enable-smb --enable-telnet --enable-tftp'
       if [ "${_CONFIG#*noftp*}" = "${_CONFIG}" ]; then
-        options="${options} --enable-ftp"
+        options+=' --enable-ftp'
       else
-        options="${options} --disable-ftp"
+        options+=' --disable-ftp'
       fi
-      options="${options} --enable-imap --enable-pop3 --enable-smtp"
+      options+=' --enable-imap --enable-pop3 --enable-smtp'
       if [ "${_OS}" = 'win' ]; then
-        options="${options} --enable-ldap --enable-ldaps --with-ldap-lib=wldap32"
+        options+=' --enable-ldap --enable-ldaps --with-ldap-lib=wldap32'
       elif [ "${_OS}" != 'mac' ] || [ "${_OSVER}" -ge '1010' ]; then  # On macOS we use the built-in LDAP lib
-        options="${options} --disable-ldap --disable-ldaps"
+        options+=' --disable-ldap --disable-ldaps'
       fi
     fi
 
@@ -116,24 +116,24 @@ _VER="$1"
     #       autotools breaks on spaces anyway, so we leave it like that.
 
     if [ -n "${_ZLIB}" ]; then
-      options="${options} --with-zlib=${_TOP}/${_ZLIB}/${_PP}"
+      options+=" --with-zlib=${_TOP}/${_ZLIB}/${_PP}"
     else
-      options="${options} --without-zlib"
+      options+=' --without-zlib'
     fi
 
     if [ -d ../brotli ] && [ "${_CONFIG#*nobrotli*}" = "${_CONFIG}" ]; then
-      options="${options} --with-brotli=${_TOP}/brotli/${_PP}"
-      LDFLAGS="${LDFLAGS} -L${_TOP}/brotli/${_PP}/lib"
-      LIBS="${LIBS} -lbrotlicommon"
+      options+=" --with-brotli=${_TOP}/brotli/${_PP}"
+      LDFLAGS+=" -L${_TOP}/brotli/${_PP}/lib"
+      LIBS+=' -lbrotlicommon'
     else
-      options="${options} --without-brotli"
+      options+=' --without-brotli'
     fi
     if [ -d ../zstd ] && [ "${_CONFIG#*nozstd*}" = "${_CONFIG}" ]; then
-      options="${options} --with-zstd=${_TOP}/zstd/${_PP}"
-      LDFLAGS="${LDFLAGS} -L${_TOP}/zstd/${_PP}/lib"
-      LIBS="${LIBS} -lzstd"
+      options+=" --with-zstd=${_TOP}/zstd/${_PP}"
+      LDFLAGS+=" -L${_TOP}/zstd/${_PP}/lib"
+      LIBS+=' -lzstd'
     else
-      options="${options} --without-zstd"
+      options+=' --without-zstd'
     fi
 
     h3=0
@@ -142,22 +142,22 @@ _VER="$1"
 
     if [ -n "${_OPENSSL}" ]; then
       [ -n "${mainssl}" ] || mainssl='openssl'
-      options="${options} --with-openssl=${_TOP}/${_OPENSSL}/${_PP}"
-      options="${options} --disable-openssl-auto-load-config"
+      options+=" --with-openssl=${_TOP}/${_OPENSSL}/${_PP}"
+      options+=' --disable-openssl-auto-load-config'
       if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
         if [ "${_OPENSSL}" = 'boringssl' ]; then
-          CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+          CPPFLAGS+=" -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
         fi
         if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
-          LDFLAGS="${LDFLAGS} -Wl,-Bdynamic,-lpthread,-Bstatic"
+          LDFLAGS+=' -Wl,-Bdynamic,-lpthread,-Bstatic'
         else
-          LDFLAGS="${LDFLAGS} -Wl,-Bstatic,-lpthread,-Bdynamic"
+          LDFLAGS+=' -Wl,-Bstatic,-lpthread,-Bdynamic'
         fi
         h3=1
       elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ] || [ "${_OPENSSL}" = 'openssl' ]; then
         if [ "${_OS}" = 'win' ]; then
           if [ "${_OPENSSL}" = 'libressl' ]; then
-            CPPFLAGS="${CPPFLAGS} -DLIBRESSL_DISABLE_OVERRIDE_WINCRYPT_DEFINES_WARNING"
+            CPPFLAGS+=' -DLIBRESSL_DISABLE_OVERRIDE_WINCRYPT_DEFINES_WARNING'
             if [ "${CURL_VER_}" = '8.4.0' ]; then
               # Workaround for accidentally detecting 'arc4random' inside LibreSSL (as of
               # v3.8.2) then failing to use it due to missing the necessary LibreSSL header,
@@ -168,7 +168,7 @@ _VER="$1"
               export ac_cv_func_arc4random='no'
             fi
           fi
-          LIBS="${LIBS} -lbcrypt"  # for auto-detection
+          LIBS+=' -lbcrypt'  # for auto-detection
         fi
         [ "${_OPENSSL}" = 'openssl' ] || h3=1
       fi
@@ -176,125 +176,125 @@ _VER="$1"
 
     if [ -d ../wolfssl ]; then
       [ -n "${mainssl}" ] || mainssl='wolfssl'
-      options="${options} --with-wolfssl=${_TOP}/wolfssl/${_PP}"
+      options+=" --with-wolfssl=${_TOP}/wolfssl/${_PP}"
       # for QUIC auto-detection
-      CPPFLAGS="${CPPFLAGS} -DHAVE_UINTPTR_T"
-      LIBS="${LIBS} -lcrypt32"
+      CPPFLAGS+=' -DHAVE_UINTPTR_T'
+      LIBS+=' -lcrypt32'
       h3=1
     else
-      options="${options} --without-wolfssl"
+      options+=' --without-wolfssl'
     fi
 
     if [ -d ../mbedtls ]; then
       [ -n "${mainssl}" ] || mainssl='mbedtls'
-      options="${options} --with-mbedtls=${_TOP}/mbedtls/${_PP}"
+      options+=" --with-mbedtls=${_TOP}/mbedtls/${_PP}"
     else
-      options="${options} --without-mbedtls"
+      options+=' --without-mbedtls'
     fi
 
-    options="${options} --without-gnutls --without-bearssl --without-rustls --without-hyper"
+    options+=' --without-gnutls --without-bearssl --without-rustls --without-hyper'
 
     if [ "${_OS}" = 'win' ]; then
-      options="${options} --with-schannel"
+      options+=' --with-schannel'
     elif [ "${_OS}" = 'mac' ] && [ "${_OSVER}" -lt '1015' ]; then
       # SecureTransport deprecated in 2019 (macOS 10.15 Catalina, iOS 13.0)
-      options="${options} --with-secure-transport"
+      options+=' --with-secure-transport'
       # Without this, SecureTransport becomes the default TLS backend
-      [ -n "${mainssl}" ] && options="${options} --with-default-ssl-backend=${mainssl}"
+      [ -n "${mainssl}" ] && options+=" --with-default-ssl-backend=${mainssl}"
     elif [ -z "${mainssl}" ]; then
-      options="${options} --without-ssl"
+      options+=' --without-ssl'
     fi
-    CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
+    CPPFLAGS+=' -DHAS_ALPN'
 
-  # options="${options} --with-ca-fallback"
-    options="${options} --without-ca-fallback"
+  # options+=' --with-ca-fallback'
+    options+=' --without-ca-fallback'
 
     if [ -d ../wolfssh ] && [ -d ../wolfssl ]; then
-      options="${options} --with-wolfssh=${_TOP}/wolfssh/${_PP}"
-      CPPFLAGS="${CPPFLAGS} -I${_TOP}/wolfssh/${_PP}/include"
-      LDFLAGS="${LDFLAGS} -L${_TOP}/wolfssh/${_PP}/lib"
-      options="${options} --without-libssh"
-      options="${options} --without-libssh2"
+      options+=" --with-wolfssh=${_TOP}/wolfssh/${_PP}"
+      CPPFLAGS+=" -I${_TOP}/wolfssh/${_PP}/include"
+      LDFLAGS+=" -L${_TOP}/wolfssh/${_PP}/lib"
+      options+=' --without-libssh'
+      options+=' --without-libssh2'
     elif [ -d ../libssh ]; then
-      options="${options} --with-libssh=${_TOP}/libssh/${_PPS}"
-      options="${options} --without-wolfssh"
-      options="${options} --without-libssh2"
-      CPPFLAGS="${CPPFLAGS} -DLIBSSH_STATIC"
+      options+=" --with-libssh=${_TOP}/libssh/${_PPS}"
+      options+=' --without-wolfssh'
+      options+=' --without-libssh2'
+      CPPFLAGS+=' -DLIBSSH_STATIC'
     elif [ -d ../libssh2 ]; then
-      options="${options} --with-libssh2=${_TOP}/libssh2/${_PPS}"
-      options="${options} --without-wolfssh"
-      options="${options} --without-libssh"
+      options+=" --with-libssh2=${_TOP}/libssh2/${_PPS}"
+      options+=' --without-wolfssh'
+      options+=' --without-libssh'
       if [ "${_OS}" = 'win' ]; then
-        LIBS="${LIBS} -lbcrypt"  # for auto-detection
+        LIBS+=' -lbcrypt'  # for auto-detection
 
         # Workaround for libssh2 1.11.0 regression:
         # Omit __declspec(dllimport) with libssh2 1.11.0 to link statically
-        [ "${LIBSSH2_VER_}" = '1.11.0' ] && CPPFLAGS="${CPPFLAGS} -DLIBSSH2_API="
+        [ "${LIBSSH2_VER_}" = '1.11.0' ] && CPPFLAGS+=' -DLIBSSH2_API='
       fi
     else
-      options="${options} --without-wolfssh"
-      options="${options} --without-libssh"
-      options="${options} --without-libssh2"
+      options+=' --without-wolfssh'
+      options+=' --without-libssh'
+      options+=' --without-libssh2'
     fi
 
-    options="${options} --without-librtmp"
+    options+=' --without-librtmp'
 
     if [ -d ../libidn2 ]; then
-      options="${options} --with-libidn2=${_TOP}/libidn2/${_PP}"
-      LDFLAGS="${LDFLAGS} -L${_TOP}/libidn2/${_PP}/lib"
-      LIBS="${LIBS} -lidn2"
+      options+=" --with-libidn2=${_TOP}/libidn2/${_PP}"
+      LDFLAGS+=" -L${_TOP}/libidn2/${_PP}/lib"
+      LIBS+=' -lidn2'
 
       if [ -d ../libpsl ]; then
-        options="${options} --with-libpsl=${_TOP}/libpsl/${_PP}"
-        CPPFLAGS="${CPPFLAGS} -I${_TOP}/libpsl/${_PP}/include"
-        LDFLAGS="${LDFLAGS} -L${_TOP}/libpsl/${_PP}/lib"
-        LIBS="${LIBS} -lpsl"
+        options+=" --with-libpsl=${_TOP}/libpsl/${_PP}"
+        CPPFLAGS+=" -I${_TOP}/libpsl/${_PP}/include"
+        LDFLAGS+=" -L${_TOP}/libpsl/${_PP}/lib"
+        LIBS+=' -lpsl'
       else
-        options="${options} --without-libpsl"
+        options+=' --without-libpsl'
       fi
 
       if [ -d ../libiconv ]; then
-        LDFLAGS="${LDFLAGS} -L${_TOP}/libiconv/${_PP}/lib"
-        LIBS="${LIBS} -liconv"
+        LDFLAGS+=" -L${_TOP}/libiconv/${_PP}/lib"
+        LIBS+=' -liconv'
       fi
       if [ -d ../libunistring ]; then
-        LDFLAGS="${LDFLAGS} -L${_TOP}/libunistring/${_PP}/lib"
-        LIBS="${LIBS} -lunistring"
+        LDFLAGS+=" -L${_TOP}/libunistring/${_PP}/lib"
+        LIBS+=' -lunistring'
       fi
     else
-      options="${options} --without-libidn2"
-      options="${options} --without-libpsl"
+      options+=' --without-libidn2'
+      options+=' --without-libpsl'
       if [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
          [ "${_OS}" = 'win' ]; then
-        options="${options} --with-winidn"
+        options+=' --with-winidn'
       fi
     fi
 
     if [ -d ../cares ]; then
-      options="${options} --enable-ares=${_TOP}/cares/${_PP}"
-      CPPFLAGS="${CPPFLAGS} -DCARES_STATICLIB"
+      options+=" --enable-ares=${_TOP}/cares/${_PP}"
+      CPPFLAGS+=' -DCARES_STATICLIB'
     else
-      options="${options} --disable-ares"
+      options+=' --disable-ares'
     fi
 
     if [ -d ../gsasl ]; then
-      options="${options} --with-libgsasl=${_TOP}/gsasl/${_PPS}"
-      CPPFLAGS="${CPPFLAGS} -I${_TOP}/gsasl/${_PPS}/include"
-      LDFLAGS="${LDFLAGS} -L${_TOP}/gsasl/${_PPS}/lib"
+      options+=" --with-libgsasl=${_TOP}/gsasl/${_PPS}"
+      CPPFLAGS+=" -I${_TOP}/gsasl/${_PPS}/include"
+      LDFLAGS+=" -L${_TOP}/gsasl/${_PPS}/lib"
     else
-      options="${options} --without-libgsasl"
+      options+=' --without-libgsasl'
       if [ "${_OS}" = 'mac' ]; then
         # GSS API deprecated in 2012-2013 (OS X 10.8 Mountain Lion / 10.9 Mavericks, iOS 7.0)
-      # options="${options} --with-gssapi"
+      # options+=' --with-gssapi'
         :
       fi
     fi
 
     if [ -d ../nghttp2 ]; then
-      options="${options} --with-nghttp2=${_TOP}/nghttp2/${_PP}"
-      CPPFLAGS="${CPPFLAGS} -DNGHTTP2_STATICLIB"
+      options+=" --with-nghttp2=${_TOP}/nghttp2/${_PP}"
+      CPPFLAGS+=' -DNGHTTP2_STATICLIB'
     else
-      options="${options} --without-nghttp2"
+      options+=' --without-nghttp2'
     fi
 
     [ "${_CONFIG#*noh3*}" = "${_CONFIG}" ] || h3=0
@@ -303,57 +303,57 @@ _VER="$1"
     if [ "${h3}" = '1' ] && [ -d ../nghttp3 ] && [ -d ../ngtcp2 ]; then
       # Detection insists on having a pkg-config, so force feed everything manually.
       # We enable this lib manually, so it shows up "disabled" in 'configure summary'.
-      options="${options} --with-nghttp3=yes"
-      CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB -DUSE_NGHTTP3"
-      CPPFLAGS="${CPPFLAGS} -I${_TOP}/nghttp3/${_PP}/include"
-      LDFLAGS="${LDFLAGS} -L${_TOP}/nghttp3/${_PP}/lib"
-      LIBS="${LIBS} -lnghttp3"
+      options+=' --with-nghttp3=yes'
+      CPPFLAGS+=' -DNGHTTP3_STATICLIB -DUSE_NGHTTP3'
+      CPPFLAGS+=" -I${_TOP}/nghttp3/${_PP}/include"
+      LDFLAGS+=" -L${_TOP}/nghttp3/${_PP}/lib"
+      LIBS+=' -lnghttp3'
 
       # Detection insists on having a pkg-config, so force feed everything manually.
       # We enable this lib manually, so it shows up "disabled" in 'configure summary'.
-      options="${options} --with-ngtcp2=yes"
-      CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB -DUSE_NGTCP2"
-      CPPFLAGS="${CPPFLAGS} -I${_TOP}/ngtcp2/${_PPS}/include"
-      LDFLAGS="${LDFLAGS} -L${_TOP}/ngtcp2/${_PPS}/lib"
-      LIBS="${LIBS} -lngtcp2"
+      options+=' --with-ngtcp2=yes'
+      CPPFLAGS+=' -DNGTCP2_STATICLIB -DUSE_NGTCP2'
+      CPPFLAGS+=" -I${_TOP}/ngtcp2/${_PPS}/include"
+      LDFLAGS+=" -L${_TOP}/ngtcp2/${_PPS}/lib"
+      LIBS+=' -lngtcp2'
       if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
-        LIBS="${LIBS} -lngtcp2_crypto_boringssl"
+        LIBS+=' -lngtcp2_crypto_boringssl'
       elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ]; then
-        LIBS="${LIBS} -lngtcp2_crypto_quictls"
+        LIBS+=' -lngtcp2_crypto_quictls'
       elif [ -d ../wolfssl ]; then
-        LIBS="${LIBS} -lngtcp2_crypto_wolfssl"
+        LIBS+=' -lngtcp2_crypto_wolfssl'
       fi
     else
-      options="${options} --without-nghttp3"
-      options="${options} --without-ngtcp2"
+      options+=' --without-nghttp3'
+      options+=' --without-ngtcp2'
     fi
 
     if [ "${_OS}" = 'win' ]; then
-      options="${options} --enable-sspi"
+      options+=' --enable-sspi'
     fi
 
-    options="${options} --without-quiche --without-msh3"
+    options+=' --without-quiche --without-msh3'
 
-    options="${options} --enable-threaded-resolver"
+    options+=' --enable-threaded-resolver'
     if [ "${_OS}" = 'win' ]; then
-      options="${options} --disable-pthreads"
+      options+=' --disable-pthreads'
     else
-      options="${options} --enable-pthreads"
+      options+=' --enable-pthreads'
     fi
 
-    options="${options} --enable-websockets"
+    options+=' --enable-websockets'
 
     if [ "${pass}" = 'shared' ]; then
       if [ "${_OS}" = 'win' ]; then
         _DEF_NAME="libcurl${_CURL_DLL_SUFFIX}.def"
-        LDFLAGS="${LDFLAGS} -Wl,--output-def,${_DEF_NAME}"
+        LDFLAGS+=" -Wl,--output-def,${_DEF_NAME}"
       fi
 
-      options="${options} --disable-static"
-      options="${options} --enable-shared"
+      options+=' --disable-static'
+      options+=' --enable-shared'
     else
-      options="${options} --enable-static"
-      options="${options} --disable-shared"
+      options+=' --enable-static'
+      options+=' --disable-shared'
     fi
 
     if [ -f "${cache}" ]; then
@@ -361,7 +361,7 @@ _VER="$1"
       mv "${cache}.new" "${cache}"
     fi
 
-    options="${options} --cache-file=../${cache}"
+    options+=" --cache-file=../${cache}"
 
     (
       mkdir "${_BLDDIR}-${pass}"; cd "${_BLDDIR}-${pass}"

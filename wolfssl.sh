@@ -26,23 +26,23 @@ _VER="$1"
   export LIBS="${_LIBS_GLOBAL}"
 
   if [ -n "${_ZLIB}" ]; then
-    options="${options} --with-libz=${_TOP}/${_ZLIB}/${_PP}"
+    options+=" --with-libz=${_TOP}/${_ZLIB}/${_PP}"
   else
-    options="${options} --without-libz"
+    options+=' --without-libz'
   fi
 
   # for libssh2
-  options="${options} --enable-keygen"
-  options="${options} --enable-aesctr"
-  options="${options} --enable-aesgcm-stream"
+  options+=' --enable-keygen'
+  options+=' --enable-aesctr'
+  options+=' --enable-aesgcm-stream'
 
   # Smaller wolfSSL for curl?
   #   https://www.wolfssl.com/how-to-build-a-smaller-wolfssl-library-when-used-with-curl/
-  # options="${options} –-enable-opensslextra=x509small"
-  # CPPFLAGS="${CPPFLAGS} -DHAVE_CURL"
+  # options+=' –-enable-opensslextra=x509small'
+  # CPPFLAGS+=' -DHAVE_CURL'
 
   # Required for curl
-  options="${options} --enable-curl"
+  options+=' --enable-curl'
 
   (
     mkdir "${_BLDDIR}"; cd "${_BLDDIR}"

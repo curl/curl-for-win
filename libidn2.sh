@@ -27,10 +27,10 @@ _VER="$1"
   export LIBS="${_LIBS_GLOBAL}"
 
   if [ -d ../libiconv ]; then
-    options="${options} --with-libiconv-prefix=${_TOP}/libiconv/${_PP}"
+    options+=" --with-libiconv-prefix=${_TOP}/libiconv/${_PP}"
   fi
   if [ -d ../libunistring ]; then
-    options="${options} --with-libunistring-prefix=${_TOP}/libunistring/${_PP}"
+    options+=" --with-libunistring-prefix=${_TOP}/libunistring/${_PP}"
   fi
 
   (

@@ -20,7 +20,7 @@ _VER="$1"
   CPPFLAGS='-DNDEBUG'
 
   # Avoid finding unnecessary system (Homebrew, or system for libxml2) packages and the log noise with it.
-  options="${options} -DOPENSSL_INCLUDE_DIR= -DLIBCARES_INCLUDE_DIR= -DLIBEV_INCLUDE_DIR= -DLIBXML2_INCLUDE_DIR="
+  options+=' -DOPENSSL_INCLUDE_DIR= -DLIBCARES_INCLUDE_DIR= -DLIBEV_INCLUDE_DIR= -DLIBXML2_INCLUDE_DIR='
 
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \

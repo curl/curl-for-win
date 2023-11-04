@@ -19,9 +19,9 @@ _VER="$1"
   CFLAGS="-ffile-prefix-map=$(pwd)="
 
   if [ "${_CC}" = 'llvm' ]; then
-    CFLAGS="${CFLAGS} -Wa,--noexecstack"
+    CFLAGS+=' -Wa,--noexecstack'
   else
-    CFLAGS="${CFLAGS} -Wno-attributes"
+    CFLAGS+=' -Wno-attributes'
   fi
 
   [ "${_CPU}" = 'x86' ] && cpu='x86'

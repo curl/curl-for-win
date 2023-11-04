@@ -40,7 +40,7 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LIBS="${_LIBS_GLOBAL}"
 
-  [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && LDFLAGS="${LDFLAGS} -v"
+  [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && LDFLAGS+=' -v'
 
   LDFLAGS_BIN="${_LDFLAGS_BIN_GLOBAL}"
   LDFLAGS_LIB=''
@@ -50,7 +50,7 @@ _VER="$1"
   fi
 
   if [ ! "${_CONFIG#*werror*}" = "${_CONFIG}" ]; then
-    CFLAGS="${CFLAGS} -Werror"
+    CFLAGS+=' -Werror'
   fi
 
   if [ ! "${_CONFIG#*debug*}" = "${_CONFIG}" ]; then
@@ -59,23 +59,23 @@ _VER="$1"
 
   # Link lib dependencies in static mode. Implied by `-static` for curl,
   # but required for libcurl, which would link to shared libs by default.
-  LIBS="${LIBS} -Wl,-Bstatic"
+  LIBS+=' -Wl,-Bstatic'
 
   # CPPFLAGS added after this point only affect libcurl.
 
   if [ ! "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] || \
      [ ! "${_CONFIG#*pico*}" = "${_CONFIG}" ] || \
      [ ! "${_CONFIG#*nano*}" = "${_CONFIG}" ]; then
-    CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_ALTSVC=1"
+    CPPFLAGS+=' -DCURL_DISABLE_ALTSVC=1'
   fi
 
   if [ ! "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] || \
      [ ! "${_CONFIG#*pico*}" = "${_CONFIG}" ]; then
-    CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_CRYPTO_AUTH=1"
-    CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_DICT=1 -DCURL_DISABLE_FILE=1 -DCURL_DISABLE_GOPHER=1 -DCURL_DISABLE_MQTT=1 -DCURL_DISABLE_RTSP=1 -DCURL_DISABLE_SMB=1 -DCURL_DISABLE_TELNET=1 -DCURL_DISABLE_TFTP=1"
-    CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_FTP=1"
-    CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_IMAP=1 -DCURL_DISABLE_POP3=1 -DCURL_DISABLE_SMTP=1"
-    CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_LDAP=1 -DCURL_DISABLE_LDAPS=1"
+    CPPFLAGS+=' -DCURL_DISABLE_CRYPTO_AUTH=1'
+    CPPFLAGS+=' -DCURL_DISABLE_DICT=1 -DCURL_DISABLE_FILE=1 -DCURL_DISABLE_GOPHER=1 -DCURL_DISABLE_MQTT=1 -DCURL_DISABLE_RTSP=1 -DCURL_DISABLE_SMB=1 -DCURL_DISABLE_TELNET=1 -DCURL_DISABLE_TFTP=1'
+    CPPFLAGS+=' -DCURL_DISABLE_FTP=1'
+    CPPFLAGS+=' -DCURL_DISABLE_IMAP=1 -DCURL_DISABLE_POP3=1 -DCURL_DISABLE_SMTP=1'
+    CPPFLAGS+=' -DCURL_DISABLE_LDAP=1 -DCURL_DISABLE_LDAPS=1'
   fi
 
   if [ "${_OS}" = 'win' ] && [ "${_CONFIG#*unicode*}" != "${_CONFIG}" ]; then
@@ -107,20 +107,20 @@ _VER="$1"
 
     if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
       if [ "${_OPENSSL}" = 'boringssl' ]; then
-        CPPFLAGS="${CPPFLAGS} -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+        CPPFLAGS+=" -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
       fi
-      CPPFLAGS="${CPPFLAGS} -DHAVE_SSL_SET0_WBIO"
+      CPPFLAGS+=' -DHAVE_SSL_SET0_WBIO'
       if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
-        LIBS="${LIBS} -Wl,-Bdynamic -lpthread -Wl,-Bstatic"
+        LIBS+=' -Wl,-Bdynamic -lpthread -Wl,-Bstatic'
       else
-        LIBS="${LIBS} -lpthread"
+        LIBS+=' -lpthread'
       fi
       h3=1
     elif [ "${_OPENSSL}" = 'libressl' ]; then
-      [ "${_OS}" = 'win' ] && CPPFLAGS="${CPPFLAGS} -DLIBRESSL_DISABLE_OVERRIDE_WINCRYPT_DEFINES_WARNING"
+      [ "${_OS}" = 'win' ] && CPPFLAGS+=' -DLIBRESSL_DISABLE_OVERRIDE_WINCRYPT_DEFINES_WARNING'
       h3=1
     elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-      CPPFLAGS="${CPPFLAGS} -DHAVE_SSL_SET0_WBIO"
+      CPPFLAGS+=' -DHAVE_SSL_SET0_WBIO'
       [ "${_OPENSSL}" = 'quictls' ] && h3=1
     fi
   fi
@@ -138,9 +138,9 @@ _VER="$1"
   if [ "${_OS}" = 'win' ]; then
     CFG="${CFG}-schannel"
   fi
-  CPPFLAGS="${CPPFLAGS} -DHAS_ALPN"
+  CPPFLAGS+=' -DHAS_ALPN'
 
-# CPPFLAGS="${CPPFLAGS} -DCURL_CA_FALLBACK=1"
+# CPPFLAGS+=' -DCURL_CA_FALLBACK=1'
 
   if [ -d ../wolfssh ] && [ -d ../wolfssl ]; then
     CFG="${CFG}-wolfssh"
@@ -148,7 +148,7 @@ _VER="$1"
   elif [ -d ../libssh ]; then
     CFG="${CFG}-libssh"
     export LIBSSH_PATH="../../libssh/${_PPS}"
-    CPPFLAGS="${CPPFLAGS} -DLIBSSH_STATIC"
+    CPPFLAGS+=' -DLIBSSH_STATIC'
   elif [ -d ../libssh2 ]; then
     CFG="${CFG}-ssh2"
     export LIBSSH2_PATH="../../libssh2/${_PPS}"
@@ -156,7 +156,7 @@ _VER="$1"
   if [ -d ../nghttp2 ]; then
     CFG="${CFG}-nghttp2"
     export NGHTTP2_PATH="../../nghttp2/${_PP}"
-    CPPFLAGS="${CPPFLAGS} -DNGHTTP2_STATICLIB"
+    CPPFLAGS+=' -DNGHTTP2_STATICLIB'
   fi
 
   [ "${_CONFIG#*noh3*}" = "${_CONFIG}" ] || h3=0
@@ -164,14 +164,14 @@ _VER="$1"
   if [ "${h3}" = '1' ] && [ -d ../nghttp3 ] && [ -d ../ngtcp2 ]; then
     CFG="${CFG}-nghttp3-ngtcp2"
     export NGHTTP3_PATH="../../nghttp3/${_PP}"
-    CPPFLAGS="${CPPFLAGS} -DNGHTTP3_STATICLIB"
+    CPPFLAGS+=' -DNGHTTP3_STATICLIB'
     export NGTCP2_PATH="../../ngtcp2/${_PPS}"
-    CPPFLAGS="${CPPFLAGS} -DNGTCP2_STATICLIB"
+    CPPFLAGS+=' -DNGTCP2_STATICLIB'
   fi
   if [ -d ../cares ]; then
     CFG="${CFG}-ares"
     export LIBCARES_PATH="../../cares/${_PP}"
-    CPPFLAGS="${CPPFLAGS} -DCARES_STATICLIB"
+    CPPFLAGS+=' -DCARES_STATICLIB'
   fi
   if [ -d ../gsasl ]; then
     CFG="${CFG}-gsasl"
@@ -187,25 +187,25 @@ _VER="$1"
     fi
 
     if [ -d ../libiconv ]; then
-      LDFLAGS="${LDFLAGS} -L../../libiconv/${_PP}/lib"
-      LIBS="${LIBS} -liconv"
+      LDFLAGS+=" -L../../libiconv/${_PP}/lib"
+      LIBS+=' -liconv'
     fi
     if [ -d ../libunistring ]; then
-      LDFLAGS="${LDFLAGS} -L../../libunistring/${_PP}/lib"
-      LIBS="${LIBS} -lunistring"
+      LDFLAGS+=" -L../../libunistring/${_PP}/lib"
+      LIBS+=' -lunistring'
     fi
   elif [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
        [ "${_OS}" = 'win' ]; then
     CFG="${CFG}-winidn"
   fi
 
-  [ "${_CONFIG#*noftp*}" != "${_CONFIG}" ] && CPPFLAGS="${CPPFLAGS} -DCURL_DISABLE_FTP=1"
+  [ "${_CONFIG#*noftp*}" != "${_CONFIG}" ] && CPPFLAGS+=' -DCURL_DISABLE_FTP=1'
 
-  CPPFLAGS="${CPPFLAGS} -DUSE_WEBSOCKETS"
+  CPPFLAGS+=' -DUSE_WEBSOCKETS'
 
   if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
-    LDFLAGS_LIB="${LDFLAGS_LIB} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dyn.tar"
-    LDFLAGS_BIN="${LDFLAGS_BIN} -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-bin.tar"
+    LDFLAGS_LIB+=" -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dyn.tar"
+    LDFLAGS_BIN+=" -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-bin.tar"
   fi
 
   [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && export AR="${AR_NORMALIZE}"

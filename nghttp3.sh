@@ -20,7 +20,7 @@ _VER="$1"
   CPPFLAGS='-DNDEBUG'
 
   if [ "${NGHTTP3_VER_}" = '1.0.0' ]; then
-    CFLAGS="${CFLAGS} -ffile-prefix-map=$(pwd)="
+    CFLAGS+=" -ffile-prefix-map=$(pwd)="
   fi
 
   # shellcheck disable=SC2086

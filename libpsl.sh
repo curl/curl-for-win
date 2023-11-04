@@ -26,20 +26,20 @@ _VER="$1"
   export PKG_CONFIG_LIBDIR=''  # Avoid picking up non-cross copies
 
   if [ -d ../libidn2 ] && [ -d ../libiconv ] && [ -d ../libunistring ]; then
-    CPPFLAGS="${CPPFLAGS} -I${_TOP}/libidn2/${_PP}/include"
-    LDFLAGS="${LDFLAGS} -L${_TOP}/libidn2/${_PP}/lib"
+    CPPFLAGS+=" -I${_TOP}/libidn2/${_PP}/include"
+    LDFLAGS+=" -L${_TOP}/libidn2/${_PP}/lib"
     if [ "${_OS}" = 'win' ]; then
-      LIBS="${LIBS} -lws2_32"
+      LIBS+=' -lws2_32'
     fi
-    CPPFLAGS="${CPPFLAGS} -I${_TOP}/libiconv/${_PP}/include"
-    LDFLAGS="${LDFLAGS} -L${_TOP}/libiconv/${_PP}/lib"
-    LIBS="${LIBS} -liconv -lcharset"
-    CPPFLAGS="${CPPFLAGS} -I${_TOP}/libunistring/${_PP}/include"
-    LDFLAGS="${LDFLAGS} -L${_TOP}/libunistring/${_PP}/lib"
-    LIBS="${LIBS} -lunistring"
-    options="${options} --enable-runtime=libidn2"
+    CPPFLAGS+=" -I${_TOP}/libiconv/${_PP}/include"
+    LDFLAGS+=" -L${_TOP}/libiconv/${_PP}/lib"
+    LIBS+=' -liconv -lcharset'
+    CPPFLAGS+=" -I${_TOP}/libunistring/${_PP}/include"
+    LDFLAGS+=" -L${_TOP}/libunistring/${_PP}/lib"
+    LIBS+=' -lunistring'
+    options+=' --enable-runtime=libidn2'
   else
-    options="${options} --disable-runtime --disable-builtin"
+    options+=' --disable-runtime --disable-builtin'
   fi
 
   (

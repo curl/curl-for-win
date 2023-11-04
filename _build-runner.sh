@@ -38,10 +38,10 @@ if [ ! -f .cw-initialized ]; then
       fi
 
       if [ "${_DISTRO}" = 'debian' ]; then
-        [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} golang nasm"
-        [[ "${CW_CONFIG:-}" = *'musl'* ]] && extra="${extra} musl musl-dev musl-tools"
+        [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' golang nasm'
+        [[ "${CW_CONFIG:-}" = *'musl'* ]] && extra+=' musl musl-dev musl-tools'
         if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
-          extra="${extra} checksec"
+          extra+=' checksec'
         fi
         # shellcheck disable=SC2086
         apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
@@ -49,7 +49,7 @@ if [ ! -f .cw-initialized ]; then
           autoconf automake autopoint libtool \
           zip time jq secure-delete ${extra}
       elif [ "${_DISTRO}" = 'alpine' ]; then
-        [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go nasm"
+        [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go nasm'
         if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
           apk add --no-cache checksec-rs --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing/
         fi
@@ -60,8 +60,8 @@ if [ ! -f .cw-initialized ]; then
       fi
       ;;
     Darwin*)
-      [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go nasm"
-      [[ "${CW_CONFIG:-}" = *'linux'* ]] && extra="${extra} FiloSottile/musl-cross/musl-cross"
+      [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go nasm'
+      [[ "${CW_CONFIG:-}" = *'linux'* ]] && extra+=' FiloSottile/musl-cross/musl-cross'
       # shellcheck disable=SC2086
       brew install \
         xz gnu-tar gettext jq ${extra}

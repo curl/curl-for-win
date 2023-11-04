@@ -745,15 +745,15 @@ build_single_target() {
 
   if [ "${_OS}" = 'win' ]; then
 
-    _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -D_WIN32_WINNT=0x0600"  # Windows Vista
+    _CPPFLAGS_GLOBAL+=' -D_WIN32_WINNT=0x0600'  # Windows Vista
 
     if [ "${_HOST}" != "${_OS}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Windows ${_CMAKE_GLOBAL}"
     fi
 
-    [ "${_CPU}" = 'x86' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-i386"
-    [ "${_CPU}" = 'x64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=pe-x86-64"
-    [ "${_CPU}" = 'a64' ] && _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} --target=${_TRIPLET}"  # llvm-windres supports triplets here. https://github.com/llvm/llvm-project/blob/main/llvm/tools/llvm-rc/llvm-rc.cpp
+    [ "${_CPU}" = 'x86' ] && _RCFLAGS_GLOBAL+=' --target=pe-i386'
+    [ "${_CPU}" = 'x64' ] && _RCFLAGS_GLOBAL+=' --target=pe-x86-64'
+    [ "${_CPU}" = 'a64' ] && _RCFLAGS_GLOBAL+=" --target=${_TRIPLET}"  # llvm-windres supports triplets here. https://github.com/llvm/llvm-project/blob/main/llvm/tools/llvm-rc/llvm-rc.cpp
 
     if [ "${_HOST}" = 'win' ]; then
       # '-G MSYS Makefiles' command-line option is problematic due to spaces
@@ -764,10 +764,10 @@ build_single_target() {
     fi
 
     if [ "${_CRT}" = 'ucrt' ]; then
-      _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -D_UCRT"
-      _LIBS_GLOBAL="${_LIBS_GLOBAL} -lucrt"
+      _CPPFLAGS_GLOBAL+=' -D_UCRT'
+      _LIBS_GLOBAL+=' -lucrt'
       if [ "${_CC}" = 'gcc' ]; then
-        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -specs=${_GCCSPECS}"
+        _LDFLAGS_GLOBAL+=" -specs=${_GCCSPECS}"
       fi
     fi
   elif [ "${_OS}" = 'mac' ]; then
@@ -780,60 +780,60 @@ build_single_target() {
     # LDAP/LDAPS for macOS builds.
     # NOTE: 10.8 (and older) trigger C++ issues with Xcode and CMake.
     macminver='10.9'
-    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_OSX_DEPLOYMENT_TARGET=${macminver}"
-    _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -mmacosx-version-min=${macminver}"
-    _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -mmacosx-version-min=${macminver}"
+    _CMAKE_GLOBAL+=" -DCMAKE_OSX_DEPLOYMENT_TARGET=${macminver}"
+    _CFLAGS_GLOBAL+=" -mmacosx-version-min=${macminver}"
+    _CXXFLAGS_GLOBAL+=" -mmacosx-version-min=${macminver}"
     _OSVER="$(printf '%02d%02d' \
       "$(printf '%s' "${macminver}" | cut -d '.' -f 1)" \
       "$(printf '%s' "${macminver}" | cut -d '.' -f 2)")"
-    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_OSX_ARCHITECTURES=${_machines}"
+    _CMAKE_GLOBAL+=" -DCMAKE_OSX_ARCHITECTURES=${_machines}"
   elif [ "${_OS}" = 'linux' ]; then
     if [ "${_HOST}" != "${_OS}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Linux ${_CMAKE_GLOBAL}"
     fi
 
     # Override defaults such as: 'lib/aarch64-linux-gnu'
-    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_LIBDIR=lib"
+    _CMAKE_GLOBAL+=' -DCMAKE_INSTALL_LIBDIR=lib'
 
     # With musl, this relies on package `fortify-headers` (Alpine)
-    _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -D_FORTIFY_SOURCE=2"
+    _CPPFLAGS_GLOBAL+=' -D_FORTIFY_SOURCE=2'
     # Requires glibc 2.34, gcc 12 (2022)
     #   https://developers.redhat.com/articles/2023/02/06/how-improve-application-security-using-fortifysource3
     #   https://developers.redhat.com/articles/2022/09/17/gccs-new-fortification-level
-  # _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -D_FORTIFY_SOURCE=3"
+  # _CPPFLAGS_GLOBAL+=' -D_FORTIFY_SOURCE=3'
 
     # https://en.wikipedia.org/wiki/Position-independent_code#PIE
-    _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fPIC"
-    _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -fPIC"
+    _CFLAGS_GLOBAL+=' -fPIC'
+    _CXXFLAGS_GLOBAL+=' -fPIC'
 
     # With musl, this seems to be a no-op as of Alpine v3.18
     # https://en.wikipedia.org/wiki/Buffer_overflow_protection
-    _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fstack-protector-all"
-    _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -fstack-protector-all"
+    _CFLAGS_GLOBAL+=' -fstack-protector-all'
+    _CXXFLAGS_GLOBAL+=' -fstack-protector-all'
 
-    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-z,relro,-z,now"
+    _LDFLAGS_GLOBAL+=' -Wl,-z,relro,-z,now'
 
     if [ "${_CRT}" = 'musl' ]; then
       if [ "${_HOST}" = 'mac' ]; then
-        _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static"
+        _LDFLAGS_BIN_GLOBAL+=' -static'
       elif [ "${_DISTRO}" = 'alpine' ]; then
-        _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static-pie"
+        _LDFLAGS_BIN_GLOBAL+=' -static-pie'
       else
-        _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -static"
+        _LDFLAGS_BIN_GLOBAL+=' -static'
       fi
     fi
   fi
 
-  _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_MESSAGE=NEVER"
-  _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_INSTALL_PREFIX=${_PREFIX}"
+  _CMAKE_GLOBAL+=' -DCMAKE_INSTALL_MESSAGE=NEVER'
+  _CMAKE_GLOBAL+=" -DCMAKE_INSTALL_PREFIX=${_PREFIX}"
 
   # 'configure' naming conventions:
   # - '--build' is the host we are running the build on.
   #   We call it '_HOST_TRIPLET' (and `_HOST` for our short name).
   # - '--host' is the host we are building the binaries for.
   #   We call it '_TRIPLET' (and '_OS' for our short name).
-  _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --build=${_HOST_TRIPLET} --host=${_TRIPLET}"
-  [ "${_CPU}" = 'x86' ] && _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-asynchronous-unwind-tables"
+  _CONFIGURE_GLOBAL+=" --build=${_HOST_TRIPLET} --host=${_TRIPLET}"
+  [ "${_CPU}" = 'x86' ] && _CFLAGS_GLOBAL+=' -fno-asynchronous-unwind-tables'
 
   _CCRT='libgcc'  # compiler runtime, 'libgcc' (for libgcc and libstdc++) or 'clang-rt' (for compiler-rt and libc++)
   if [ "${_TOOLCHAIN}" = 'llvm-apple' ] || \
@@ -869,16 +869,16 @@ build_single_target() {
     else
       _CC_GLOBAL="clang${_CCSUFFIX} --target=${_TRIPLET}"
     fi
-    _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --target=${_TRIPLET}"
+    _CONFIGURE_GLOBAL+=" --target=${_TRIPLET}"
     if [ -n "${_SYSROOT}" ]; then
-      _CC_GLOBAL="${_CC_GLOBAL} --sysroot=${_SYSROOT}"
-      _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --with-sysroot=${_SYSROOT}"
+      _CC_GLOBAL+=" --sysroot=${_SYSROOT}"
+      _CONFIGURE_GLOBAL+=" --with-sysroot=${_SYSROOT}"
     fi
     if [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'win' ]; then
       # We used to pass this via CFLAGS for CMake to make it detect llvm/clang,
       # so we need to pass this via CMAKE_C_FLAGS, though meant for the linker.
       if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${CW_LLVM_MINGW_PATH}/${_TRIPLET}/lib"
+        _LDFLAGS_GLOBAL+=" -L${CW_LLVM_MINGW_PATH}/${_TRIPLET}/lib"
       elif [ "${_CCRT}" = 'libgcc' ]; then
         # https://packages.debian.org/testing/amd64/gcc-mingw-w64-x86-64-posix/filelist
         # https://packages.debian.org/testing/amd64/gcc-mingw-w64-x86-64-win32/filelist
@@ -890,14 +890,14 @@ build_single_target() {
           >&2 echo '! Error: Failed to detect mingw-w64 dev env root.'
           exit 1
         fi
-        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${tmp}"
-        _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++"
-        _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/${_TRIPLET}"
-        _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/backward"
+        _LDFLAGS_GLOBAL+=" -L${tmp}"
+        _CXXFLAGS_GLOBAL+=" -I${tmp}/include/c++"
+        _CXXFLAGS_GLOBAL+=" -I${tmp}/include/c++/${_TRIPLET}"
+        _CXXFLAGS_GLOBAL+=" -I${tmp}/include/c++/backward"
       fi
     elif [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [ "${unamem}" != "${_machine}" ] && [ "${_CC}" = 'llvm' ] && [ "${_CRT}" != 'musl' ]; then
-      _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -isystem /usr/${_TRIPLETSH}/include"
-      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L/usr/${_TRIPLETSH}/lib"
+      _CFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include"
+      _LDFLAGS_GLOBAL+=" -L/usr/${_TRIPLETSH}/lib"
       if [ "${_CCRT}" = 'libgcc' ]; then
         # https://packages.debian.org/testing/all/libgcc-13-dev-arm64-cross/filelist
         # /usr/lib/gcc-cross/aarch64-linux-gnu/13/
@@ -906,7 +906,7 @@ build_single_target() {
           >&2 echo '! Error: Failed to detect gcc-cross env root.'
           exit 1
         fi
-        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -L${tmp}"
+        _LDFLAGS_GLOBAL+=" -L${tmp}"
         # https://packages.debian.org/testing/all/libstdc++-13-dev-arm64-cross/filelist
         # /usr/aarch64-linux-gnu/include/c++/13/
         tmp="$(find "/usr/${_TRIPLETSH}/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
@@ -914,9 +914,9 @@ build_single_target() {
           >&2 echo '! Error: Failed to detect g++-cross env root.'
           exit 1
         fi
-        _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++"
-        _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/${_TRIPLETSH}"
-        _CXXFLAGS_GLOBAL="${_CXXFLAGS_GLOBAL} -I${tmp}/include/c++/backward"
+        _CXXFLAGS_GLOBAL+=" -I${tmp}/include/c++"
+        _CXXFLAGS_GLOBAL+=" -I${tmp}/include/c++/${_TRIPLETSH}"
+        _CXXFLAGS_GLOBAL+=" -I${tmp}/include/c++/backward"
       fi
     fi
 
@@ -937,15 +937,15 @@ build_single_target() {
       # the executables fail to run anyway. It means that cfguard needs
       # llvm-mingw with all objects compiled with cfguard, and cfguard enabled
       # at link time to end up with a runnable exe.
-      _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -mguard=cf"
-      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -mguard=cf"
+      _CFLAGS_GLOBAL+=' -mguard=cf'
+      _LDFLAGS_GLOBAL+=' -mguard=cf'
     fi
 
     if [ -n "${_SYSROOT}" ]; then
-      _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_SYSROOT=${_SYSROOT}"
+      _CMAKE_GLOBAL+=" -DCMAKE_SYSROOT=${_SYSROOT}"
     fi
-    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=clang${_CCSUFFIX}"
-    _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=clang++${_CCSUFFIX}"
+    _CMAKE_GLOBAL+=" -DCMAKE_C_COMPILER=clang${_CCSUFFIX}"
+    _CMAKE_CXX_GLOBAL+=" -DCMAKE_CXX_COMPILER=clang++${_CCSUFFIX}"
 
     if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
       _LD='ld-apple'
@@ -957,9 +957,9 @@ build_single_target() {
        [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
       _BINUTILS_PREFIX='llvm-'
       _BINUTILS_SUFFIX="${_CCSUFFIX}"
-      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -fuse-ld=lld${_CCSUFFIX}"
+      _LDFLAGS_GLOBAL+=" -fuse-ld=lld${_CCSUFFIX}"
       if [ "${_HOST}" = 'mac' ] && [ "${_OS}" = 'win' ]; then
-        _RCFLAGS_GLOBAL="${_RCFLAGS_GLOBAL} -I${_SYSROOT}/${_TRIPLET}/include"
+        _RCFLAGS_GLOBAL+=" -I${_SYSROOT}/${_TRIPLET}/include"
       fi
     fi
     # Avoid warning, as seen on macOS when doing native builds with Homebrew
@@ -967,37 +967,37 @@ build_single_target() {
     #   ld64.lld: warning: Option `-s' is obsolete. Please modernize your usage.
     #   ld: warning: option -s is obsolete and being ignored
     if [ "${_HOST}" != 'mac' ] || [ "${_OS}" != 'mac' ]; then
-      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,-s"  # Omit .buildid segment with the timestamp in it
+      _LDFLAGS_GLOBAL+=' -Wl,-s'  # Omit .buildid segment with the timestamp in it
     fi
 
     if [ "${_OS}" = 'linux' ]; then
-      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,--build-id=none"  # Omit build-id
+      _LDFLAGS_GLOBAL+=' -Wl,--build-id=none'  # Omit build-id
     fi
 
     # Avoid warnings when passing C compiler options to the linker.
     # Use it with CMake and OpenSSL's proprietary build system.
-    _CFLAGS_GLOBAL_CMAKE="${_CFLAGS_GLOBAL_CMAKE} -Wno-unused-command-line-argument"
+    _CFLAGS_GLOBAL_CMAKE+=' -Wno-unused-command-line-argument'
   else
     _CC_GLOBAL="${_CCPREFIX}gcc${_CCSUFFIX}"
 
     if [ "${_OS}" = 'win' ]; then
       # Also accepted on linux, but does not seem to make any difference
-      _CC_GLOBAL="${_CC_GLOBAL} -static-libgcc"
+      _CC_GLOBAL+=' -static-libgcc'
     fi
 
     if [ "${_OS}" = 'win' ]; then
       _LDFLAGS_GLOBAL="${_OPTM} ${_LDFLAGS_GLOBAL}"
       # https://lists.ffmpeg.org/pipermail/ffmpeg-devel/2015-September/179242.html
       if [ "${_CPU}" = 'x86' ]; then
-        _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -Wl,--pic-executable,-e,_mainCRTStartup"
+        _LDFLAGS_BIN_GLOBAL+=' -Wl,--pic-executable,-e,_mainCRTStartup'
       else
-        _LDFLAGS_BIN_GLOBAL="${_LDFLAGS_BIN_GLOBAL} -Wl,--pic-executable,-e,mainCRTStartup"
+        _LDFLAGS_BIN_GLOBAL+=' -Wl,--pic-executable,-e,mainCRTStartup'
       fi
       _CFLAGS_GLOBAL="${_OPTM} ${_CFLAGS_GLOBAL}"
     fi
 
-    _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER=${_CCPREFIX}gcc${_CCSUFFIX}"
-    _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++${_CCSUFFIX}"
+    _CMAKE_GLOBAL+=" -DCMAKE_C_COMPILER=${_CCPREFIX}gcc${_CCSUFFIX}"
+    _CMAKE_CXX_GLOBAL+=" -DCMAKE_CXX_COMPILER=${_CCPREFIX}g++${_CCSUFFIX}"
 
     if [ "${_OS}" = 'mac' ]; then
       _LD='ld-apple'
@@ -1028,9 +1028,9 @@ build_single_target() {
     fi
 
     if [ -n "${_SYSROOT}" ]; then
-      _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_OSX_SYSROOT=${_SYSROOT}"
-      _CC_GLOBAL="${_CC_GLOBAL} --sysroot=${_SYSROOT}"
-      _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --with-sysroot=${_SYSROOT}"
+      _CMAKE_GLOBAL+=" -DCMAKE_OSX_SYSROOT=${_SYSROOT}"
+      _CC_GLOBAL+=" --sysroot=${_SYSROOT}"
+      _CONFIGURE_GLOBAL+=" --with-sysroot=${_SYSROOT}"
     fi
   fi
 
@@ -1044,18 +1044,18 @@ build_single_target() {
       ln -s -f "/usr/include/${_HOST_TRIPLETSH}/asm" "${_my_incdir}/asm"
       ln -s -f '/usr/include/asm-generic'            "${_my_incdir}/asm-generic"
       ln -s -f '/usr/include/linux'                  "${_my_incdir}/linux"
-      _CPPFLAGS_GLOBAL="${_CPPFLAGS_GLOBAL} -isystem ${_my_incdir}"
+      _CPPFLAGS_GLOBAL+=" -isystem ${_my_incdir}"
     fi
   fi
 
-  _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_C_COMPILER_TARGET=${_TRIPLET}"
-  _CMAKE_CXX_GLOBAL="${_CMAKE_CXX_GLOBAL} -DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}"
+  _CMAKE_GLOBAL+=" -DCMAKE_C_COMPILER_TARGET=${_TRIPLET}"
+  _CMAKE_CXX_GLOBAL+=" -DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}"
 
   # Needed to exclude compiler info from objects, but for our Windows COFF
   # outputs this seems to be a no-op as of llvm/clang 13.x/14.x.
   # Still necessary with GCC 12.1.0 though.
   if [ "${_CC}" = 'gcc' ]; then
-    _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -fno-ident"
+    _CFLAGS_GLOBAL+=' -fno-ident'
   fi
 
   export _CFLAGS_GLOBAL_WPICKY
@@ -1064,8 +1064,8 @@ build_single_target() {
   #   https://clang.llvm.org/docs/DiagnosticsReference.html
   #   https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
   _CFLAGS_GLOBAL_WPICKY='-pedantic -Wcast-align -Wconversion -Wdeclaration-after-statement -Wdouble-promotion -Wempty-body -Wendif-labels -Wenum-conversion -Wfloat-equal -Wignored-qualifiers -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-format-nonliteral -Wno-long-long -Wno-multichar -Wno-sign-conversion -Wno-system-headers -Wpointer-arith -Wshadow -Wsign-compare -Wstrict-prototypes -Wtype-limits -Wundef -Wunused -Wunused-const-variable -Wvla -Wwrite-strings'
-  [ "${_CC}" = 'llvm' ] && _CFLAGS_GLOBAL_WPICKY="${_CFLAGS_GLOBAL_WPICKY} -Wassign-enum -Wcomma -Wextra-semi-stmt -Wshift-sign-overflow -Wshorten-64-to-32"
-  [ "${_CC}" = 'gcc'  ] && _CFLAGS_GLOBAL_WPICKY="${_CFLAGS_GLOBAL_WPICKY} -Walloc-zero -Warith-conversion -Warray-bounds=2 -Wduplicated-branches -Wduplicated-cond -Wformat-overflow=2 -Wformat-truncation=1 -Wformat=2 -Wmissing-parameter-type -Wno-pedantic-ms-format -Wnull-dereference -Wold-style-declaration -Wrestrict -Wshift-negative-value -Wshift-overflow=2 -Wstrict-aliasing=3 -fdelete-null-pointer-checks -ftree-vrp"
+  [ "${_CC}" = 'llvm' ] && _CFLAGS_GLOBAL_WPICKY+=' -Wassign-enum -Wcomma -Wextra-semi-stmt -Wshift-sign-overflow -Wshorten-64-to-32'
+  [ "${_CC}" = 'gcc'  ] && _CFLAGS_GLOBAL_WPICKY+=' -Walloc-zero -Warith-conversion -Warray-bounds=2 -Wduplicated-branches -Wduplicated-cond -Wformat-overflow=2 -Wformat-truncation=1 -Wformat=2 -Wmissing-parameter-type -Wno-pedantic-ms-format -Wnull-dereference -Wold-style-declaration -Wrestrict -Wshift-negative-value -Wshift-overflow=2 -Wstrict-aliasing=3 -fdelete-null-pointer-checks -ftree-vrp'
 
   # for boringssl
   export _STRIP_BINUTILS=''
@@ -1197,11 +1197,11 @@ build_single_target() {
 
   if [ "${_OS}" = 'win' ] && [ "${_HOST}" = 'mac' ]; then
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-      _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${CW_LLVM_MINGW_PATH}/bin/${AR}"
+      _CMAKE_GLOBAL+=" -DCMAKE_AR=${CW_LLVM_MINGW_PATH}/bin/${AR}"
     elif [ "${_CC}" = 'llvm' ]; then
-      _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${_MAC_LLVM_PATH}/${AR}"
+      _CMAKE_GLOBAL+=" -DCMAKE_AR=${_MAC_LLVM_PATH}/${AR}"
     else
-      _CMAKE_GLOBAL="${_CMAKE_GLOBAL} -DCMAKE_AR=${_SYSROOT}/bin/${AR}"
+      _CMAKE_GLOBAL+=" -DCMAKE_AR=${_SYSROOT}/bin/${AR}"
     fi
   fi
 
@@ -1209,7 +1209,7 @@ build_single_target() {
   # of using the musl one:
   #   `-dynamic-linker /lib/ld-linux-riscv64-lp64d.so.1`
   if [ "${_CC}" = 'gcc' ] && [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ] && [ "${_CPU}" = 'r64' ]; then
-    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -Wl,--dynamic-linker=/lib/ld-musl-${_machine}.so.1"
+    _LDFLAGS_GLOBAL+=" -Wl,--dynamic-linker=/lib/ld-musl-${_machine}.so.1"
   fi
 
   if [ "${_CCRT}" = 'libgcc' ] && [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
@@ -1232,13 +1232,13 @@ build_single_target() {
       fi
       ccrsdir="${ccrtdir}"
       ccrtlib="-lgcc -lgcc_eh"
-      _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++"
+      _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
       ccridir="$("clang${_CCSUFFIX}" -print-resource-dir)"                             # /usr/lib/llvm-13/lib/clang/13.0.1
     fi
     libprefix="/usr/lib/${_machine}-linux-musl"
-    _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -static -nostdinc -isystem ${ccridir}/include -isystem /usr/include/${_machine}-linux-musl"
-    _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nostartfiles -L${libprefix} -Wl,${libprefix}/Scrt1.o -Wl,${libprefix}/crti.o -L${ccrsdir} -Wl,${libprefix}/crtn.o"
-    _LIBS_GLOBAL="${_LIBS_GLOBAL} -lc ${ccrtlib}"
+    _CFLAGS_GLOBAL+=" -static -nostdinc -isystem ${ccridir}/include -isystem /usr/include/${_machine}-linux-musl"
+    _LDFLAGS_GLOBAL+=" -nostartfiles -L${libprefix} -Wl,${libprefix}/Scrt1.o -Wl,${libprefix}/crti.o -L${ccrsdir} -Wl,${libprefix}/crtn.o"
+    _LIBS_GLOBAL+=" -lc ${ccrtlib}"
   fi
 
   if [ "${_CCRT}" = 'clang-rt' ]; then
@@ -1277,9 +1277,9 @@ build_single_target() {
           ccrtlib="-lgcc -lgcc_eh"
         fi
         libprefix="/usr/lib/${_machine}-linux-musl"
-        _CFLAGS_GLOBAL="${_CFLAGS_GLOBAL} -nostdinc -isystem ${ccrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
-        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -L${ccrtdir} ${libprefix}/crtn.o"
-        _LIBS_GLOBAL="${_LIBS_GLOBAL} -lc ${ccrtlib}"
+        _CFLAGS_GLOBAL+=" -nostdinc -isystem ${ccrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
+        _LDFLAGS_GLOBAL+=" -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -L${ccrtdir} ${libprefix}/crtn.o"
+        _LIBS_GLOBAL+=" -lc ${ccrtlib}"
       else
         if [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" != "${_machine}" ] && [ -d 'my-pkg/usr/lib/clang' ]; then
           # If we have the target CPU's clang-rt package installed, use it:
@@ -1294,30 +1294,30 @@ build_single_target() {
           ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
           ccrtlib="-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
           libprefix="/usr/${_TRIPLETSH}/lib"
-          _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nodefaultlibs -L${libprefix} -L${ccrtdir}"
+          _LDFLAGS_GLOBAL+=" -nodefaultlibs -L${libprefix} -L${ccrtdir}"
           # lld by default wants to load startfiles from:
           #   /usr/bin/../lib/gcc-cross/x86_64-linux-gnu/12/../../../../x86_64-linux-gnu/lib/
           # or similar. Manually specify the ones belonging to glibc.
-          _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -nostartfiles ${libprefix}/Scrt1.o ${libprefix}/crti.o ${libprefix}/crtn.o"
-          _LIBS_GLOBAL="${_LIBS_GLOBAL} -lc ${ccrtlib}"
+          _LDFLAGS_GLOBAL+=" -nostartfiles ${libprefix}/Scrt1.o ${libprefix}/crti.o ${libprefix}/crtn.o"
+          _LIBS_GLOBAL+=" -lc ${ccrtlib}"
         fi
-        _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -rtlib=compiler-rt"
+        _LDFLAGS_GLOBAL+=' -rtlib=compiler-rt'
         # `-Wc,...` is necessary for libtool to pass this option to the compiler
         # at link-time. Otherwise libtool strips it.
         #   https://www.gnu.org/software/libtool/manual/html_node/Stripped-link-flags.html
-        _LDFLAGS_GLOBAL_AUTOTOOLS="${_LDFLAGS_GLOBAL_AUTOTOOLS} -Wc,-rtlib=compiler-rt"
+        _LDFLAGS_GLOBAL_AUTOTOOLS+=' -Wc,-rtlib=compiler-rt'
       fi
-      _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -nostdlib++"
+      _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
     fi
   else
     if [ "${_OS}" = 'win' ]; then
       # Also accepted on linux, but does not seem to make any difference
-      _LDFLAGS_GLOBAL="${_LDFLAGS_GLOBAL} -static-libgcc"
-      _LDFLAGS_CXX_GLOBAL="${_LDFLAGS_CXX_GLOBAL} -static-libstdc++"
+      _LDFLAGS_GLOBAL+=' -static-libgcc'
+      _LDFLAGS_CXX_GLOBAL+=' -static-libstdc++'
     fi
   fi
 
-  _CONFIGURE_GLOBAL="${_CONFIGURE_GLOBAL} --prefix=${_PREFIX} --disable-dependency-tracking --disable-silent-rules"
+  _CONFIGURE_GLOBAL+=" --prefix=${_PREFIX} --disable-dependency-tracking --disable-silent-rules"
 
   # Unified, per-target package: Initialize
   export _UNIPKG="curl-${CURL_VER_}${_REVSUFFIX}${_PKGSUFFIX}${_FLAV}"
@@ -1342,7 +1342,7 @@ build_single_target() {
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       mingwver='llvm-mingw'
       [ -f "${mingwver}/__url__.txt" ] && mingwurl=" $(cat "${mingwver}/__url__.txt")"
-      mingwver="${mingwver} ${CW_LLVM_MINGW_VER_:-?}"
+      mingwver+=" ${CW_LLVM_MINGW_VER_:-?}"
       versuffix="${versuffix_llvm_mingw}"
     else
       case "${_HOST}" in

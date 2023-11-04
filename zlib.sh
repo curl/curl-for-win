@@ -19,8 +19,8 @@ _VER="$1"
   options=''
 
   if [ "${_NAM}" = 'zlibng' ]; then
-    options="${options} -DZLIB_COMPAT=ON"
-    options="${options} -DZLIB_ENABLE_TESTS=OFF"
+    options+=' -DZLIB_COMPAT=ON'
+    options+=' -DZLIB_ENABLE_TESTS=OFF'
   fi
 
   # `BUILD_SHARED_LIBS=OFF` broken as of zlib v1.3.

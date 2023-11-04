@@ -30,22 +30,22 @@ _VER="$1"
   #   -DCMAKE_THREAD_PREFER_PTHREADS=OFF
   #   -DTHREADS_PREFER_PTHREAD_FLAG=OFF
   #   -DCMAKE_USE_WIN32_THREADS_INIT=ON
-  CPPFLAGS="${CPPFLAGS} -Dpthread_create=func_not_existing"
+  CPPFLAGS+=' -Dpthread_create=func_not_existing'
 
   if [ -n "${_ZLIB}" ]; then
-    options="${options} -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
-    options="${options} -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
+    options+=" -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
+    options+=" -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
   else
-    options="${options} -DWITH_ZLIB=OFF"
+    options+=' -DWITH_ZLIB=OFF'
   fi
 
   if [ -n "${_OPENSSL}" ]; then
-    options="${options} -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
+    options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
 
       # FIXME (upstream):
       # - It collides with wincrypt.h macros. Workaround:
-      CPPFLAGS="${CPPFLAGS} -DNOCRYPT -D__WINCRYPT_H__"
+      CPPFLAGS+=' -DNOCRYPT -D__WINCRYPT_H__'
       # - Wants to compile libcrypto_compat.c and assumes pre-OpenSSL 1.1
       #   non-opaque structures. Workaround:
       echo > src/libcrypto-compat.c
@@ -69,31 +69,31 @@ _VER="$1"
       fi
 
       if [ "${_OS}" = 'win' ]; then
-        CPPFLAGS="${CPPFLAGS} -DWIN32_LEAN_AND_MEAN"
+        CPPFLAGS+=' -DWIN32_LEAN_AND_MEAN'
       fi
-      LIBS="${LIBS} -lpthread"  # to detect EVP_aes_128_*
+      LIBS+=' -lpthread'  # to detect EVP_aes_128_*
     elif [ "${_OPENSSL}" = 'libressl' ]; then
       # FIXME (upstream):
       # - Public function explicit_bzero() clashes with libressl.
       #   Workaround: put -lssh before -lcrypto.
-      CPPFLAGS="${CPPFLAGS} -DNOCRYPT"
+      CPPFLAGS+=' -DNOCRYPT'
       if [ "${_OS}" = 'win' ]; then
-        LIBS="${LIBS} -lbcrypt"
-        LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
+        LIBS+=' -lbcrypt'
+        LIBS+=' -lws2_32'  # to detect EVP_aes_128_*
       fi
     elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
-      CPPFLAGS="${CPPFLAGS} -DOPENSSL_SUPPRESS_DEPRECATED"
+      CPPFLAGS+=' -DOPENSSL_SUPPRESS_DEPRECATED'
       if [ "${_OS}" = 'win' ]; then
-        LIBS="${LIBS} -lbcrypt"
-        LIBS="${LIBS} -lws2_32"  # to detect EVP_aes_128_*
+        LIBS+=' -lbcrypt'
+        LIBS+=' -lws2_32'  # to detect EVP_aes_128_*
       fi
     fi
   elif [ -d ../mbedtls ]; then
     if false; then
       # Compile errors as of mbedTLS 3.2.1 + libssh 0.9.6
-      options="${options} -DWITH_MBEDTLS=ON"
-      options="${options} -DMBEDTLS_ROOT_DIR=${_TOP}/mbedtls/${_PP}"
-      options="${options} -DMBEDTLS_INCLUDE_DIR=${_TOP}/mbedtls/${_PP}/include"
+      options+=' -DWITH_MBEDTLS=ON'
+      options+=" -DMBEDTLS_ROOT_DIR=${_TOP}/mbedtls/${_PP}"
+      options+=" -DMBEDTLS_INCLUDE_DIR=${_TOP}/mbedtls/${_PP}/include"
     fi
   fi
 

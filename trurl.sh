@@ -27,15 +27,15 @@ _VER="$1"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
 
-  [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && LDFLAGS="${LDFLAGS} -v"
+  [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && LDFLAGS+=' -v'
 
-  CPPFLAGS="${CPPFLAGS} -I../curl/${_PP}/include"
+  CPPFLAGS+=" -I../curl/${_PP}/include"
   if [ "${_OS}" = 'mac' ]; then
-    LDFLAGS="${LDFLAGS} -dynamic"
+    LDFLAGS+=' -dynamic'
   else
-    LDFLAGS="${LDFLAGS} -Wl,-Bdynamic"
+    LDFLAGS+=' -Wl,-Bdynamic'
   fi
-  LDFLAGS="${LDFLAGS} -L../curl/${_PP}/lib -lcurl"
+  LDFLAGS+=" -L../curl/${_PP}/lib -lcurl"
 
   # Add dummy curl-config to avoid picking up any system default and
   # linking to it instead of using our build.

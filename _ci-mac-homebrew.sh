@@ -7,20 +7,20 @@
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 extra='automake'
-[[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra="${extra} go"
+[[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go'
 if [[ "${CW_CONFIG:-}" != *'mac'* ]] || [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
-  extra="${extra} llvm"
+  extra+=' llvm'
 fi
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
-  extra="${extra} mingw-w64 osslsigncode wine-stable openssh"
+  extra+=' mingw-w64 osslsigncode wine-stable openssh'
   if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
-    extra="${extra} nasm"
+    extra+=' nasm'
   fi
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
-  extra="${extra} FiloSottile/musl-cross/musl-cross"
+  extra+=' FiloSottile/musl-cross/musl-cross'
 elif [[ "${CW_CONFIG:-}" = *'mac'* ]] && [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
-  extra="${extra} gcc"
+  extra+=' gcc'
 fi
 
 if [ -n "${extra}" ]; then

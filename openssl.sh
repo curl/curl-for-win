@@ -31,8 +31,8 @@ _VER="$1"
   options=''
 
   if [ "${_OS}" = 'win' ]; then
-    [ "${_CPU}" = 'x86' ] && options="${options} mingw"
-    [ "${_CPU}" = 'x64' ] && options="${options} mingw64"
+    [ "${_CPU}" = 'x86' ] && options+=' mingw'
+    [ "${_CPU}" = 'x64' ] && options+=' mingw64'
     if [ "${_CPU}" = 'a64' ]; then
       # Sources:
       # - https://github.com/openssl/openssl/issues/10533
@@ -50,29 +50,29 @@ _VER="$1"
           }
         );' > Configurations/11-curl-for-win-mingw-arm64.conf
 
-      options="${options} mingw-arm64"
+      options+=' mingw-arm64'
     fi
   elif [ "${_OS}" = 'mac' ]; then
-    [ "${_CPU}" = 'x64' ] && options="${options} darwin64-x86_64"
-    [ "${_CPU}" = 'a64' ] && options="${options} darwin64-arm64"
+    [ "${_CPU}" = 'x64' ] && options+=' darwin64-x86_64'
+    [ "${_CPU}" = 'a64' ] && options+=' darwin64-arm64'
   elif [ "${_OS}" = 'linux' ]; then
-    [ "${_CPU}" = 'x64' ] && options="${options} linux-x86_64"
-    [ "${_CPU}" = 'a64' ] && options="${options} linux-aarch64"
-    [ "${_CPU}" = 'r64' ] && options="${options} linux64-riscv64 no-asm"  # FIXME: disabled ASM to avoid 'AES_set_encrypt_key' relocation errors at link time
+    [ "${_CPU}" = 'x64' ] && options+=' linux-x86_64'
+    [ "${_CPU}" = 'a64' ] && options+=' linux-aarch64'
+    [ "${_CPU}" = 'r64' ] && options+=' linux64-riscv64 no-asm'  # FIXME: disabled ASM to avoid 'AES_set_encrypt_key' relocation errors at link time
   fi
 
-  options="${options} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
+  options+=" ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
   if [ "${_OS}" = 'win' ]; then
-    options="${options} -DUSE_BCRYPTGENRANDOM -lbcrypt"
+    options+=' -DUSE_BCRYPTGENRANDOM -lbcrypt'
   fi
-  [ "${_CPU}" = 'x86' ] || options="${options} enable-ec_nistp_64_gcc_128"
+  [ "${_CPU}" = 'x86' ] || options+=' enable-ec_nistp_64_gcc_128'
 
   if false && [ -n "${_ZLIB}" ]; then
-    options="${options} --with-zlib-lib=${_TOP}/${_ZLIB}/${_PP}/lib"
-    options="${options} --with-zlib-include=${_TOP}/${_ZLIB}/${_PP}/include"
-    options="${options} zlib"
+    options+=" --with-zlib-lib=${_TOP}/${_ZLIB}/${_PP}/lib"
+    options+=" --with-zlib-include=${_TOP}/${_ZLIB}/${_PP}/include"
+    options+=' zlib'
   else
-    options="${options} no-comp"
+    options+=' no-comp'
   fi
 
   # TODO: consider disabling this option for all musl builds.
@@ -81,7 +81,7 @@ _VER="$1"
   # Linux cross-builds from other systems (e.g. macOS) are unlikely to provide
   # Linux headers.
   if [ "${_CRT}" = 'musl' ] && [ "${_HOST}" != 'linux' ]; then
-    options="${options} no-secure-memory"
+    options+=' no-secure-memory'
   fi
 
   export CC="${_CC_GLOBAL}"
