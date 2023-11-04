@@ -39,16 +39,6 @@ _VER="$1"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
-  # Build fixups for CMake
-
-  # CMake creates static libs with version numbers in them,
-  # e.g. libcrypto-49.a. Strangely the .pc files do not have
-  # them.
-  # Strip those to make them findable by other projects.
-  for l in libcrypto libssl libtls; do
-    mv "${_PP}/lib/${l}"*.a "${_PP}/lib/${l}.a"
-  done
-
   # Delete .pc files
   rm -r -f "${_PP}"/lib/pkgconfig
 
