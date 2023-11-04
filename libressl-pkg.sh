@@ -39,6 +39,13 @@
   # List files created
   find "${_PP}" | grep -a -v -F '/share/' | sort
 
+  # Build fixups
+
+  # We want to keep this package as interchangeable with other openssl forks
+  # as possible. Do not distribute the libressl-specific libtls at this time.
+  # libtls also has pending issue when built with CMake, as of v3.8.2.
+  rm -f "${_PP}/lib/libtls.a"
+
   # Make steps for determinism
 
   readonly _ref='ChangeLog'
@@ -60,7 +67,6 @@
   mkdir -p "${_DST}/lib"
 
   cp -f -p "${_PP}"/include/openssl/*.h "${_DST}/include/openssl/"
-  cp -f -p "${_PP}"/include/*.h         "${_DST}/include/"
   cp -f -p "${_PP}"/lib/*.a             "${_DST}/lib"
   cp -f -p ChangeLog                    "${_DST}/ChangeLog.txt"
   cp -f -p COPYING                      "${_DST}/COPYING.txt"
