@@ -156,7 +156,17 @@ _VER="$1"
         h3=1
       elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ] || [ "${_OPENSSL}" = 'openssl' ]; then
         if [ "${_OS}" = 'win' ]; then
-          [ "${_OPENSSL}" = 'libressl' ] && CPPFLAGS="${CPPFLAGS} -DLIBRESSL_DISABLE_OVERRIDE_WINCRYPT_DEFINES_WARNING"
+          if [ "${_OPENSSL}" = 'libressl' ]; then
+            CPPFLAGS="${CPPFLAGS} -DLIBRESSL_DISABLE_OVERRIDE_WINCRYPT_DEFINES_WARNING"
+            # Workaround for accidentally detecting 'arc4random' inside LibreSSL (as of
+            # v3.8.2) then failing to use it due to missing the necessary LibreSSL header,
+            # then using a non-C89 type in curl's local replacement declaration:
+            #   ../../lib/rand.c:37:1: error: unknown type name 'uint32_t'
+            #      37 | uint32_t arc4random(void);
+            #         | ^
+            # Issue: https://github.com/curl/curl/issues/12257
+            export ac_cv_func_arc4random='no'
+          fi
           LIBS="${LIBS} -lbcrypt"  # for auto-detection
         fi
         [ "${_OPENSSL}" = 'openssl' ] || h3=1
