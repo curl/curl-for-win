@@ -14,7 +14,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   makes binaries 40% smaller. Major crypto and curl features remain the same.**
 - [Download](https://curl.se/windows/) our
   `.tar.xz` or `.zip` packages,<br>PGP signed with:
-  [`002C 1689 65BA C220 2118  408B 4ED8 5DF9 BB3D 0DE8`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
+  [`9948 0C09 BC89 B68A 0764 3F30 8C8F 5B14 19BD CAB8`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
 - Standalone `curl` tool and `libcurl` DLL. Static libraries included.
 - Required: Windows Vista and
   [Universal CRT](https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/),
