@@ -46,7 +46,7 @@ _VER="$1"
   LDFLAGS_LIB=''
 
   if [ "${_OS}" = 'win' ]; then
-    CFG="${CFG}-sspi"
+    CFG+='-sspi'
   fi
 
   if [ ! "${_CONFIG#*werror*}" = "${_CONFIG}" ]; then
@@ -54,7 +54,7 @@ _VER="$1"
   fi
 
   if [ ! "${_CONFIG#*debug*}" = "${_CONFIG}" ]; then
-    CFG="${CFG}-debug-trackmem"
+    CFG+='-debug-trackmem'
   fi
 
   # Link lib dependencies in static mode. Implied by `-static` for curl,
@@ -79,30 +79,30 @@ _VER="$1"
   fi
 
   if [ "${_OS}" = 'win' ] && [ "${_CONFIG#*unicode*}" != "${_CONFIG}" ]; then
-    CFG="${CFG}-unicode"
+    CFG+='-unicode'
   fi
 
   if [ "${CW_MAP}" = '1' ]; then
-    CFG="${CFG}-map"
+    CFG+='-map'
   fi
 
   if [ -n "${_ZLIB}" ]; then
-    CFG="${CFG}-zlib"
+    CFG+='-zlib'
     export ZLIB_PATH="../../${_ZLIB}/${_PP}"
   fi
   if [ -d ../brotli ] && [ "${_CONFIG#*nobrotli*}" = "${_CONFIG}" ]; then
-    CFG="${CFG}-brotli"
+    CFG+='-brotli'
     export BROTLI_PATH="../../brotli/${_PP}"
   fi
   if [ -d ../zstd ] && [ "${_CONFIG#*nozstd*}" = "${_CONFIG}" ]; then
-    CFG="${CFG}-zstd"
+    CFG+='-zstd'
     export ZSTD_PATH="../../zstd/${_PP}"
   fi
 
   h3=0
 
   if [ -n "${_OPENSSL}" ]; then
-    CFG="${CFG}-ssl"
+    CFG+='-ssl'
     export OPENSSL_PATH="../../${_OPENSSL}/${_PP}"
 
     if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
@@ -126,35 +126,35 @@ _VER="$1"
   fi
 
   if [ -d ../wolfssl ]; then
-    CFG="${CFG}-wolfssl"
+    CFG+='-wolfssl'
     export WOLFSSL_PATH="../../wolfssl/${_PP}"
     h3=1
   fi
   if [ -d ../mbedtls ]; then
-    CFG="${CFG}-mbedtls"
+    CFG+='-mbedtls'
     export MBEDTLS_PATH="../../mbedtls/${_PP}"
   fi
 
   if [ "${_OS}" = 'win' ]; then
-    CFG="${CFG}-schannel"
+    CFG+='-schannel'
   fi
   CPPFLAGS+=' -DHAS_ALPN'
 
 # CPPFLAGS+=' -DCURL_CA_FALLBACK=1'
 
   if [ -d ../wolfssh ] && [ -d ../wolfssl ]; then
-    CFG="${CFG}-wolfssh"
+    CFG+='-wolfssh'
     export WOLFSSH_PATH="../../wolfssh/${_PP}"
   elif [ -d ../libssh ]; then
-    CFG="${CFG}-libssh"
+    CFG+='-libssh'
     export LIBSSH_PATH="../../libssh/${_PPS}"
     CPPFLAGS+=' -DLIBSSH_STATIC'
   elif [ -d ../libssh2 ]; then
-    CFG="${CFG}-ssh2"
+    CFG+='-ssh2'
     export LIBSSH2_PATH="../../libssh2/${_PPS}"
   fi
   if [ -d ../nghttp2 ]; then
-    CFG="${CFG}-nghttp2"
+    CFG+='-nghttp2'
     export NGHTTP2_PATH="../../nghttp2/${_PP}"
     CPPFLAGS+=' -DNGHTTP2_STATICLIB'
   fi
@@ -162,27 +162,27 @@ _VER="$1"
   [ "${_CONFIG#*noh3*}" = "${_CONFIG}" ] || h3=0
 
   if [ "${h3}" = '1' ] && [ -d ../nghttp3 ] && [ -d ../ngtcp2 ]; then
-    CFG="${CFG}-nghttp3-ngtcp2"
+    CFG+='-nghttp3-ngtcp2'
     export NGHTTP3_PATH="../../nghttp3/${_PP}"
     CPPFLAGS+=' -DNGHTTP3_STATICLIB'
     export NGTCP2_PATH="../../ngtcp2/${_PPS}"
     CPPFLAGS+=' -DNGTCP2_STATICLIB'
   fi
   if [ -d ../cares ]; then
-    CFG="${CFG}-ares"
+    CFG+='-ares'
     export LIBCARES_PATH="../../cares/${_PP}"
     CPPFLAGS+=' -DCARES_STATICLIB'
   fi
   if [ -d ../gsasl ]; then
-    CFG="${CFG}-gsasl"
+    CFG+='-gsasl'
     export LIBGSASL_PATH="../../gsasl/${_PPS}"
   fi
   if [ -d ../libidn2 ]; then
-    CFG="${CFG}-idn2"
+    CFG+='-idn2'
     export LIBIDN2_PATH="../../libidn2/${_PP}"
 
     if [ -d ../libpsl ]; then
-      CFG="${CFG}-psl"
+      CFG+='-psl'
       export LIBPSL_PATH="../../libpsl/${_PP}"
     fi
 
@@ -196,7 +196,7 @@ _VER="$1"
     fi
   elif [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
        [ "${_OS}" = 'win' ]; then
-    CFG="${CFG}-winidn"
+    CFG+='-winidn'
   fi
 
   [ "${_CONFIG#*noftp*}" != "${_CONFIG}" ] && CPPFLAGS+=' -DCURL_DISABLE_FTP=1'

@@ -434,10 +434,10 @@ bld() {
 
       bldtool="$(echo "${pkg}" | \
         grep -a -o -E -- "-${bldtools}")"
-      _BLDDIR="${_BLDDIR}${bldtool}-${_CC}"
+      _BLDDIR+="${bldtool}-${_CC}"
     fi
 
-    _BLDDIR="${_BLDDIR}-bld"
+    _BLDDIR+="-bld"
 
     ${my_time} "./${pkg}.sh" "$1" "${pkgori}"
 
@@ -718,7 +718,7 @@ build_single_target() {
   export _TOP; _TOP="$(pwd)"  # Must be an absolute path
   export _PKGDIR="_${_CPU}-${_OS}-${_CRT}"
   export _PKGDIRS="${_PKGDIR}"
-  [ -n "${_OPENSSL}" ] && _PKGDIRS="${_PKGDIRS}-${_OPENSSL}"
+  [ -n "${_OPENSSL}" ] && _PKGDIRS+="-${_OPENSSL}"
   _PREFIX='/usr'
   export _PP="${_PKGDIR}${_PREFIX}"
   export _PPS="${_PKGDIRS}${_PREFIX}"
@@ -1088,7 +1088,7 @@ build_single_target() {
   _BINCORE_SUFFIX="${_BINUTILS_SUFFIX}"
 
   if [ "${_CC}" = 'gcc' ] && [ -n "${_BINUTILS_SUFFIX}" ]; then
-    _BINCORE_PREFIX="${_BINCORE_PREFIX}gcc-"
+    _BINCORE_PREFIX+='gcc-'
     _BINUTILS_SUFFIX=''
   fi
 
@@ -1259,7 +1259,7 @@ build_single_target() {
             >&2 echo '! Error: Failed to detect cross-clang-rt env root.'
             exit 1
           fi
-          ccrtdir="${ccrtdir}/lib/linux"
+          ccrtdir+='/lib/linux'
           ccrtlib="${ccrtdir}/libclang_rt.builtins-${_machine}.a"
           ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
           ccrtlib="-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
@@ -1289,7 +1289,7 @@ build_single_target() {
             >&2 echo '! Error: Failed to detect cross-clang-rt env root.'
             exit 1
           fi
-          ccrtdir="${ccrtdir}/lib/linux"
+          ccrtdir+='/lib/linux'
           ccrtlib="${ccrtdir}/libclang_rt.builtins-${_machine}.a"
           ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
           ccrtlib="-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc

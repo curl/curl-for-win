@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
@@ -58,10 +58,10 @@ create_pkg() {
   # Alter filename for non-release packages
   if [ "${_CONFIG#*main*}" != "${_CONFIG}" ]; then
     if [ "${PUBLISH_PROD_FROM}" != "${_HOST}" ]; then
-      _suf="${_suf}-built-on-${_HOST}"
+      _suf+="-built-on-${_HOST}"
     fi
   else
-    _suf="${_suf}-test-built-on-${_HOST}"
+    _suf+="-test-built-on-${_HOST}"
   fi
 
   _pkg="${_OUT}${_suf}${arch_ext}"
