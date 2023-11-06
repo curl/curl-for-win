@@ -151,7 +151,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   mbedtls          cmake
 #   openssl/quictls  proprietary
 #   boringssl/awslc  cmake
-#   libressl         autotools, cmake
+#   libressl         cmake, autotools
 #   wolfssh          autotools
 #   libssh           cmake
 #   libssh2          cmake-unity, autotools

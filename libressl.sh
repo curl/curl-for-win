@@ -1,1 +1,1 @@
-libressl-autotools.sh
+libressl-cmake.sh
