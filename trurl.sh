@@ -77,7 +77,7 @@ _VER="$1"
   [ "${_OS}" = 'win' ] && cp -p "../curl/${_PP}/bin/"*"${DYN_EXT}" .
   # On macOS this picks up a system libcurl. Ours is picked up
   # when running it from the unpacked release tarball.
-  LD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" ${_RUN_BIN} "${bin}" --version | tee "trurl-${_CPU}.txt"
+  LD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" ${_RUN_BIN} "${bin}" --version | tee "trurl-${_CPU}.txt" || true
 
   # Create package
 

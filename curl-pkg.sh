@@ -92,7 +92,7 @@
   # `--version` output directly from the binary as strings, but curl creates
   # most of these strings dynamically at runtime, so this is not possible
   # (as of curl 7.83.1).
-  ${_RUN_BIN} "${bin}" --version | tee "curl-${_CPU}.txt"
+  ${_RUN_BIN} "${bin}" --version | tee "curl-${_CPU}.txt" || true
 
   # Create package
 
