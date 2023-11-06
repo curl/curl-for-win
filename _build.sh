@@ -142,7 +142,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   libressl         autotools, cmake
 #   wolfssh          autotools
 #   libssh           cmake
-#   libssh2          cmake-unity, autotools, gnumake [windows-only]
+#   libssh2          cmake-unity, autotools
 #   curl             cmake-unity, autotools, gnumake [windows-only]
 #   trurl            gnumake
 
