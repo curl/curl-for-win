@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: MIT
 
 # Caveats (as of 3.8.2):
-# - ASM support only for x64 on Windows.
+# - ASM support only for x64.
 # - Still loads config from hardcoded prefix.
 # - No obvious way to selectively disable obsolete protocols/APIs/features.
 # - `-Wattributes` warnings with gcc. Need to be silenced with `-Wno-attributes`:
