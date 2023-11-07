@@ -32,7 +32,7 @@ _VER="$1"
   [ "${_CPU}" = 'r64' ] && cpu='riscv64'
 
   options=''
-  if [ "${CW_DEV_CMAKE_PREFILL}" = '1' ] && [ "${_OS}" = 'win' ]; then
+  if [ "${CW_DEV_CMAKE_PREFILL:-}" = '1' ] && [ "${_OS}" = 'win' ]; then
     # fast-track configuration
     options+=' -DHAVE_ASPRINTF=1 -DHAVE_GETOPT=1 -DHAVE_REALLOCARRAY=0'
     options+=' -DHAVE_STRCASECMP=1 -DHAVE_STRLCAT=0 -DHAVE_STRLCPY=0 -DHAVE_STRNDUP=0 -DHAVE_STRSEP=0'
