@@ -104,6 +104,11 @@ create_pkg() {
   fi
 }
 
+if [ "${CW_NOPKG:-}" = '1' ]; then
+  rm -r -f "${_DST:?}"
+  exit
+fi
+
 if [ "${_NAM}" != "${_UNIPKG}" ]; then
   ver="${_VER}"
   url=''

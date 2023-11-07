@@ -80,6 +80,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # CW_NOTIME
 #      Do not measure built times. Default: 0
 #
+# CW_NOPKG
+#      Skip packaging steps.
+#
 # SIGN_CODE_GPG_PASS, SIGN_CODE_KEY_PASS: for code signing
 # SIGN_PKG_KEY_ID, SIGN_PKG_GPG_PASS, SIGN_PKG_KEY_PASS: for package signing
 # DEPLOY_GPG_PASS, DEPLOY_KEY_PASS: for publishing results
