@@ -24,13 +24,6 @@ _VER="$1"
     CFLAGS+=' -Wno-attributes'
   fi
 
-  # We might prefer passing the triplet as-is, but as of LibreSSL v3.8.2,
-  # a triplet does not work in all cases due to the use of `STREQUAL`.
-  [ "${_CPU}" = 'x86' ] && cpu='x86'
-  [ "${_CPU}" = 'x64' ] && cpu='x86_64'
-  [ "${_CPU}" = 'a64' ] && cpu='aarch64'
-  [ "${_CPU}" = 'r64' ] && cpu='riscv64'
-
   options=''
   if [ "${CW_DEV_CMAKE_PREFILL:-}" = '1' ] && [ "${_OS}" = 'win' ]; then
     # fast-track configuration
@@ -43,6 +36,13 @@ _VER="$1"
     options+=' -DHAVE_MEMMEM=0 -DHAVE_ENDIAN_H=0 -DHAVE_MACHINE_ENDIAN_H=0 -DHAVE_ERR_H=0 -DHAVE_NETINET_IP_H=0 -DHAVE_CLOCK_GETTIME=0'
     options+=' -DHAVE_SYS_TYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_STDDEF_H=1'
   fi
+
+  # We might prefer passing the triplet as-is, but as of LibreSSL v3.8.2,
+  # a triplet does not work in all cases due to the use of `STREQUAL`.
+  [ "${_CPU}" = 'x86' ] && cpu='x86'
+  [ "${_CPU}" = 'x64' ] && cpu='x86_64'
+  [ "${_CPU}" = 'a64' ] && cpu='aarch64'
+  [ "${_CPU}" = 'r64' ] && cpu='riscv64'
 
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
