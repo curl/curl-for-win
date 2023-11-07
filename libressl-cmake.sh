@@ -24,9 +24,11 @@ _VER="$1"
     CFLAGS+=' -Wno-attributes'
   fi
 
+  # We might prefer passing the triplet as-is, but as of LibreSSL v3.8.2,
+  # a triplet does not work in all cases due to the use of `STREQUAL`.
   [ "${_CPU}" = 'x86' ] && cpu='x86'
   [ "${_CPU}" = 'x64' ] && cpu='x86_64'
-  [ "${_CPU}" = 'a64' ] && cpu='arm64'
+  [ "${_CPU}" = 'a64' ] && cpu='aarch64'
   [ "${_CPU}" = 'r64' ] && cpu='riscv64'
 
   options=''

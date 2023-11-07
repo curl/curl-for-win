@@ -759,7 +759,8 @@ build_single_target() {
 
     _CPPFLAGS_GLOBAL+=' -D_WIN32_WINNT=0x0600'  # Windows Vista
 
-    if [ "${_HOST}" != "${_OS}" ]; then
+    if [ "${_HOST}" != "${_OS}" ] || \
+       [ "${unamem}" != "${_machine}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Windows ${_CMAKE_GLOBAL}"
     fi
 
@@ -800,7 +801,8 @@ build_single_target() {
       "$(printf '%s' "${macminver}" | cut -d '.' -f 2)")"
     _CMAKE_GLOBAL+=" -DCMAKE_OSX_ARCHITECTURES=${_machines}"
   elif [ "${_OS}" = 'linux' ]; then
-    if [ "${_HOST}" != "${_OS}" ]; then
+    if [ "${_HOST}" != "${_OS}" ] || \
+       [ "${unamem}" != "${_machine}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Linux ${_CMAKE_GLOBAL}"
     fi
 
