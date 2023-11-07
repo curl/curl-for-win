@@ -19,7 +19,7 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
     extra+=' nasm'
   fi
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
-  apk add --no-cache checksec-rs --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing/
+  apk add --no-cache checksec-rs --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community/
   extra+=' compiler-rt libc++-static'  # for llvm
   extra+=' linux-headers'  # for openssl 'secure-memory' feature
   if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
