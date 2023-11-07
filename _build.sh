@@ -19,6 +19,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # CW_LLVM_MINGW_PATH
 #      Point to LLVM MinGW installation (for win target).
 #
+# CW_LLVM_MINGW_ONLY
+#      Use llvm-mingw for all Windows builds. Default: 0
+#
 # CW_CONFIG
 #      Build configuration. Certain keywords select certain configurations. E.g.: 'main-micro'.
 #      Optional. Default: 'main' (inherited from the active repo branch name)
@@ -70,6 +73,12 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #
 # CW_REVISION
 #      Override the stable build revision number.
+#
+# CW_MAP
+#      Build or not .map files. Default: 0 for release config
+#
+# CW_NOTIME
+#      Do not measure built times. Default: 0
 #
 # SIGN_CODE_GPG_PASS, SIGN_CODE_KEY_PASS: for code signing
 # SIGN_PKG_KEY_ID, SIGN_PKG_GPG_PASS, SIGN_PKG_KEY_PASS: for package signing
