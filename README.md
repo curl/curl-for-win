@@ -17,7 +17,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   [`9948 0C09 BC89 B68A 0764 3F30 8C8F 5B14 19BD CAB8`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
 - Standalone `curl` tool and `libcurl` DLL. Static libraries included.
 - Required: Windows Vista with
-  [Universal CRT](https://support.microsoft.com/topic/update-for-universal-c-runtime-in-windows-c0514201-7fe6-95a3-b0a5-287930f3560c),
+  [Universal CRT](https://support.microsoft.com/topic/update-for-universal-c-runtime-in-windows-322bf30f-4735-bb94-3949-49f5c49f4732),
   macOS 10.9 Mavericks Intel or Apple Silicon,
   any Linux arm64 or amd64 with [MUSL](https://en.wikipedia.org/wiki/Musl)
   builds.
