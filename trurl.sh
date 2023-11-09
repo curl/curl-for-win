@@ -25,7 +25,8 @@ _VER="$1"
   export CC="${_CC_GLOBAL}"
   export CFLAGS="${_CFLAGS_GLOBAL} -O3"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
-  export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
+  export LDFLAGS="${_LDFLAGS_GLOBAL}"
+  export LDLIBS="${_LIBS_GLOBAL}"
 
   [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && LDFLAGS+=' -v'
 
@@ -35,16 +36,20 @@ _VER="$1"
   else
     LDFLAGS+=' -Wl,-Bdynamic'
   fi
-  LDFLAGS+=" -L../curl/${_PP}/lib -lcurl"
+  LDFLAGS+=" -L../curl/${_PP}/lib"
+  LDLIBS+=' -lcurl'
 
-  # Add dummy curl-config to avoid picking up any system default and
-  # linking to it instead of using our build.
-  echo '#!/bin/sh' > ./curl-config
-  chmod +x ./curl-config
-  export PATH; PATH="$(pwd):${PATH}"
+  if [ "${TRURL_VER_}" = '0.9' ]; then
+    LDFLAGS+=" ${LDLIBS}"
+    # Add dummy curl-config to avoid picking up any system default and
+    # linking to it instead of using our build.
+    echo '#!/bin/sh' > ./curl-config
+    chmod +x ./curl-config
+    export PATH; PATH="$(pwd):${PATH}"
+  fi
 
   "${_MAKE}" clean
-  "${_MAKE}"
+  "${_MAKE}" NDEBUG=1 TRURL_IGNORE_CURL_CONFIG=1
 
   if [ "${_OS}" = 'mac' ]; then
     install_name_tool -change '@rpath/libcurl.4.dylib' '@executable_path/../lib/libcurl.4.dylib' "./trurl${BIN_EXT}"
