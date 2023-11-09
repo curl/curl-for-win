@@ -130,5 +130,11 @@ fi
 if [ "${mode}" = 'unified' ] && [ "${_CONFIG#*macuni*}" != "${_CONFIG}" ]; then
   touch "${_DST}/__macuni__.txt"
 else
+  # If this is a unified (containing all packages) release tree and we have
+  # been asked to not delete them (e.g. for manual post-processing or
+  # packaging), leave them on the disk.
+  if [ "${_NAM}" = "${_UNIPKG}" ] && [ "${CW_PKG_NODELETE}" = '1' ]; then
+    exit
+  fi
   rm -r -f "${_DST:?}"
 fi
