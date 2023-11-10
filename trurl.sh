@@ -52,7 +52,9 @@ _VER="$1"
   "${_MAKE}" NDEBUG=1 TRURL_IGNORE_CURL_CONFIG=1
 
   if [ "${_OS}" = 'mac' ]; then
-    install_name_tool -change '@rpath/libcurl.4.dylib' '@executable_path/../lib/libcurl.4.dylib' "./trurl${BIN_EXT}"
+    install_name_tool -change \
+      '@rpath/libcurl.4.dylib' \
+      '@executable_path/../lib/libcurl.4.dylib' "./trurl${BIN_EXT}"
   fi
 
   # Install manually
