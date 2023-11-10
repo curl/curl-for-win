@@ -134,7 +134,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # Build times for windows (2023-10-25):
 #   - cmake-unity:  27 min 22 sec   1642s   100%
 #   - gnumake:      29 min 11 sec   1751s   107%   100%
-#   - autotools:    35 min 20 sec   2120s   129%   121%
+#   - autotools:    33 min 40 sec   2020s   123%   115%
 
 # Supported build tools:
 #
