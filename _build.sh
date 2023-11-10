@@ -98,7 +98,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - delete curl-gnumake.sh and libssh2-gnumake.sh.
 #   - publish curl tool as direct downloads:
 #     curl-linux-musl / curl-mac / curl-x64.exe / curl-x86.exe / curl-a64.exe
-#     (or similar)
+#     (or similar) [not possible in GHA, the max we can do is flatten the
+#     package possibly by offering a 'tool-only' artifact.]
 #   - change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
 #   - prepare for Xcode 15 with new ld_prime (-Wl,-ld_new) linker (vs. -Wl,-ld_classic).
 #     https://developer.apple.com/forums/thread/715385
