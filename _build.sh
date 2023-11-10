@@ -87,6 +87,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # CW_PKG_NODELETE
 #      Leave the unified package tree on the disk. Default: 0
 #
+# CW_PKG_FLATTEN
+#      Flatten unified package dir layout for executables. Default: 0
+#
 # SIGN_CODE_GPG_PASS, SIGN_CODE_KEY_PASS: for code signing
 # SIGN_PKG_KEY_ID, SIGN_PKG_GPG_PASS, SIGN_PKG_KEY_PASS: for package signing
 # DEPLOY_GPG_PASS, DEPLOY_KEY_PASS: for publishing results
@@ -1626,3 +1629,24 @@ rm -f "${SIGN_CODE_KEY}"
 
 # Upload/deploy binaries
 . ./_ul.sh
+
+# Leave "flat" layout for curl tool if requested
+if [ "${CW_PKG_FLATTEN:-}" = '1' ]; then
+  find \
+    curl-*-*-*/bin \
+    curl-*-*-*/lib -type f \( \
+    -name 'curl*'          -o \
+    -name 'trurl*'         -o \
+    -name 'libcurl*.dll'   -o \
+    -name 'libcurl*.dylib' -o \
+    -name 'libcurl.so*'    \) \
+    | sort | while read -r f; do
+    mv "${f}" "$(dirname "${f}")/.."
+  done
+  find .
+  if [ "${_OS}" = 'mac' ]; then
+    find curl-*-*-* -name 'trurl' -exec install_name_tool -change \
+      '@executable_path/../lib/libcurl.4.dylib' \
+      '@executable_path/libcurl.4.dylib' '{}' \;
+  fi
+fi
