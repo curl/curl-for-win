@@ -682,7 +682,8 @@ if [ "${_OS}" = 'win' ] && \
   fi
 fi
 
-if [ "${_CONFIG#*nozlib*}" = "${_CONFIG}" ]; then
+if [ "${_CONFIG#*zero*}" = "${_CONFIG}" ] && \
+   [ "${_CONFIG#*nozlib*}" = "${_CONFIG}" ]; then
   if [ "${_CONFIG#*zlibng*}" != "${_CONFIG}" ]; then
     live_dl zlibng "${ZLIBNG_VER_}"
     live_xt zlibng "${ZLIBNG_HASH}"
@@ -692,7 +693,8 @@ if [ "${_CONFIG#*nozlib*}" = "${_CONFIG}" ]; then
   fi
 fi
 
-if [ "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] && \
+if [ "${_CONFIG#*zero*}" = "${_CONFIG}" ] && \
+   [ "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] && \
    [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
    [ "${_CONFIG#*nano*}" = "${_CONFIG}" ] && \
    [ "${_CONFIG#*micro*}" = "${_CONFIG}" ] && \
@@ -713,7 +715,8 @@ if [ "${_CONFIG#*cares*}" != "${_CONFIG}" ]; then
   live_xt cares "${CARES_HASH}"
 fi
 
-if [ "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] && \
+if [ "${_CONFIG#*zero*}" = "${_CONFIG}" ] && \
+   [ "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] && \
    [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
    [ "${_CONFIG#*nano*}" = "${_CONFIG}" ]; then
   live_dl nghttp2 "${NGHTTP2_VER_}"
@@ -754,7 +757,8 @@ if [ "${_CONFIG#*mbedtls*}" != "${_CONFIG}" ]; then
 fi
 
 need_openssl=0
-if [ "${_CONFIG#*bldtst*}" = "${_CONFIG}" ]; then
+if [ "${_CONFIG#*zero*}" = "${_CONFIG}" ] && \
+   [ "${_CONFIG#*bldtst*}" = "${_CONFIG}" ]; then
   if [ "${_OS}" != 'win' ]; then
     need_openssl=1
   elif [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
@@ -791,7 +795,8 @@ if [ "${need_openssl}" = '1' ]; then
   need_cacert=1
 fi
 
-if [ "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] && \
+if [ "${_CONFIG#*zero*}" = "${_CONFIG}" ] && \
+   [ "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] && \
    [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
    [ "${_CONFIG#*nano*}" = "${_CONFIG}" ] && \
    [ "${_CONFIG#*micro*}" = "${_CONFIG}" ]; then

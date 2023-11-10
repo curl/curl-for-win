@@ -49,6 +49,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        nano       build with less features, see README.md
 #        pico       build with less features, see README.md
 #        bldtst     build without 3rd-party dependencies (except zlib) (for testing)
+#        zero       build without 3rd-party dependencies (for testing)
 #        r64        build riscv64 target only (experimental)
 #        a64        build arm64 target only
 #        x64        build x86_64 target only
@@ -312,7 +313,9 @@ my_time='time'
 
 # Form suffix for alternate builds
 export _FLAV=''
-if [ "${_CONFIG#*bldtst*}" != "${_CONFIG}" ]; then
+if [ "${_CONFIG#*zero*}" != "${_CONFIG}" ]; then
+  _FLAV='-zero'
+elif [ "${_CONFIG#*bldtst*}" != "${_CONFIG}" ]; then
   _FLAV='-bldtst'
 elif [ "${_CONFIG#*pico*}" != "${_CONFIG}" ]; then
   _FLAV='-pico'
