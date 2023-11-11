@@ -36,11 +36,8 @@ _VER="$1"
     if [ "${_OS}" = 'mac' ]; then
       LDFLAGS+=' -static'
     else
-      if [ "${TRURL_VER_}" = '0.9' ]; then
-        LDFLAGS+=' -Wl,-Bstatic'
-      else
-        LDLIBS+=' -Wl,-Bstatic'
-      fi
+      LDFLAGS+=' -Wl,-Bstatic'
+      LDLIBS+=' -Wl,-Bstatic'
     fi
     if [ "${_OS}" = 'win' ]; then
       LDLIBS+=' -lws2_32 -lcrypt32 -lbcrypt'
@@ -49,11 +46,8 @@ _VER="$1"
     if [ "${_OS}" = 'mac' ]; then
       LDFLAGS+=' -dynamic'
     else
-      if [ "${TRURL_VER_}" = '0.9' ]; then
-        LDFLAGS+=' -Wl,-Bdynamic'
-      else
-        LDLIBS+=' -Wl,-Bdynamic'
-      fi
+      LDFLAGS+=' -Wl,-Bdynamic'
+      LDLIBS+=' -Wl,-Bdynamic'
     fi
   fi
   LDFLAGS+=" -L../curl/${_PP}/lib"
