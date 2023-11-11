@@ -1209,6 +1209,8 @@ build_single_target() {
     AR_NORMALIZE="$(pwd)/ar-wrapper-normalize"
     if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
       _opt_binutils='--binutils apple'
+    elif [ "${_OS}" = 'linux' ] && [ "${_HOST}" = 'mac' ]; then
+      _opt_binutils='--binutils old'
     else
       _opt_binutils=''
     fi

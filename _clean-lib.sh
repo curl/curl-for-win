@@ -43,7 +43,8 @@ while [ -n "${1:-}" ]; do
      [ "${f#*.dll.a}" = "${f}" ]; then
     echo "! Normalizing library: '${f}'"
     tmp="$(mktemp -d)"
-    if [ "${binutils}" = 'apple' ]; then
+    if [ "${binutils}" = 'apple' ] || \
+       [ "${binutils}" = 'old' ]; then
       ff="$(readlink -f "${f}")"  # requires macOS Monterey
       (
         cd "${tmp}"
