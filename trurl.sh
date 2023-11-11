@@ -14,10 +14,6 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  # Always delete targets, including ones made for a different CPU.
-  find . -name '*.o' -delete
-  find . -name "trurl${BIN_EXT}" -delete
-
   rm -r -f "${_PKGDIR:?}"
 
   # Build
