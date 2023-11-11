@@ -1207,10 +1207,15 @@ build_single_target() {
   if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
     export AR_NORMALIZE
     AR_NORMALIZE="$(pwd)/ar-wrapper-normalize"
+    if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
+      _opt_binutils='--binutils apple'
+    else
+      _opt_binutils=''
+    fi
     {
       echo '#!/bin/sh -e'
       echo "'${AR}' \"\$@\""
-      echo "'$(pwd)/_clean-lib.sh' --ar '${AR}' \"\$@\""
+      echo "'$(pwd)/_clean-lib.sh' ${_opt_binutils} --ar '${AR}' \"\$@\""
     } > "${AR_NORMALIZE}"
     chmod +x "${AR_NORMALIZE}"
   fi

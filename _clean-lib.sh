@@ -16,16 +16,25 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 # NOTE: This script does not support spaces in filenames.
 
 strip=''
+binutils=''
 
 while [ "${1#--*}" != "${1:-}" ]; do
   if [ "$1" = '--ar' ]; then
     shift; AR="$1"; shift
   elif [ "$1" = '--strip' ]; then
     shift; strip="$1"; shift
+  elif [ "$1" = '--binutils' ]; then
+    shift; binutils="$1"; shift  # accepted value: apple
   fi
 done
 
 [ -z "${AR:-}" ] && exit 1
+
+if [ "${binutils}" = 'apple' ]; then
+  _ar_opt='cr'
+else
+  _ar_opt='crD'
+fi
 
 while [ -n "${1:-}" ]; do
   f="$1"; shift
@@ -34,7 +43,15 @@ while [ -n "${1:-}" ]; do
      [ "${f#*.dll.a}" = "${f}" ]; then
     echo "! Normalizing library: '${f}'"
     tmp="$(mktemp -d)"
-    "${AR}" x --output="${tmp}" "${f}"  # --output= option requires llvm-ar v15.0.0 or binutils
+    if [ "${binutils}" = 'apple' ]; then
+      ff="$(readlink -f "${f}")"  # requires macOS Monterey
+      (
+        cd "${tmp}"
+        "${AR}" x "${ff}"
+      )
+    else
+      "${AR}" x --output="${tmp}" "${f}"  # --output= option requires llvm-ar v15.0.0 or binutils
+    fi
     for o in "${tmp}"/*; do
       n="$(printf '%s' "${o}" | sed -E \
         -e 's/lib[a-z0-9]+_la-//g' \
@@ -44,8 +61,7 @@ while [ -n "${1:-}" ]; do
     # shellcheck disable=SC2086
     [ -n "${strip}" ] && "${strip}" ${_STRIPFLAGS_LIB:-} "${tmp}"/*
     rm "${f}"
-    # shellcheck disable=SC2046
-    "${AR}" crD "${f}" $(find "${tmp}" -type f | sort)
+    find "${tmp}" -type f | sort | tr '\n' '\0' | xargs -0 "${AR}" "${_ar_opt}" "${f}"
     rm -r -f "${tmp:?}"
   fi
 done
