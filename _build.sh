@@ -1639,7 +1639,6 @@ if [ "${CW_PKG_FLATTEN:-}" = '1' ]; then
     | sort | while read -r f; do
     mv "${f}" "$(dirname "${f}")/.."
   done
-  find .
   if [ "${_OS}" = 'mac' ]; then
     find curl-*-*-* -name 'trurl' -exec install_name_tool -change \
       '@executable_path/../lib/libcurl.4.dylib' \
