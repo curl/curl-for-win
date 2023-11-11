@@ -31,10 +31,22 @@ _VER="$1"
   [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && LDFLAGS+=' -v'
 
   CPPFLAGS+=" -I../curl/${_PP}/include"
-  if [ "${_OS}" = 'mac' ]; then
-    LDFLAGS+=' -dynamic'
+  if [ "${_CONFIG#*zero*}" != "${_CONFIG}" ]; then
+    CPPFLAGS+=" -DCURL_STATICLIB"
+    if [ "${_OS}" = 'mac' ]; then
+      LDFLAGS+=' -static'
+    else
+      LDFLAGS+=' -Wl,-Bstatic'
+    fi
+    if [ "${_OS}" = 'win' ]; then
+      LDLIBS+=' -lws2_32 -lcrypt32 -lbcrypt'
+    fi
   else
-    LDFLAGS+=' -Wl,-Bdynamic'
+    if [ "${_OS}" = 'mac' ]; then
+      LDFLAGS+=' -dynamic'
+    else
+      LDFLAGS+=' -Wl,-Bdynamic'
+    fi
   fi
   LDFLAGS+=" -L../curl/${_PP}/lib"
   LDLIBS+=' -lcurl'
