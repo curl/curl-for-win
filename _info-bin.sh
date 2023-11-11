@@ -62,7 +62,8 @@ while [ -n "${1:-}" ]; do
       if [ "${_DISTRO}" = 'alpine' ]; then
         checksec --json --file "${f}" | jq  # checksec-rs
       else
-        checksec --format=json --file="${f}" | jq
+        # May fail e.g. in cross-builds when `ldd` is not present
+        checksec --format=json --file="${f}" | jq || true
         # We have seen this fail in some cases, so ignore exit code
         checksec --format=xml --fortify-file="${f}" || true  # duplicate keys in json, cannot apply jq
       fi
