@@ -29,25 +29,16 @@ _VER="$1"
   CPPFLAGS+=" -I../curl/${_PP}/include"
   if [ "${_CONFIG#*zero*}" != "${_CONFIG}" ]; then
     CPPFLAGS+=" -DCURL_STATICLIB"
-    if [ "${_OS}" = 'mac' ]; then
-      LDFLAGS+=' -static'
-    else
-      LDFLAGS+=' -Wl,-Bstatic'
-      LDLIBS+=' -Wl,-Bstatic'
-    fi
+    LDLIBS+=' ../curl/${_PP}/lib/libcurl.a'
     if [ "${_OS}" = 'win' ]; then
       LDLIBS+=' -lws2_32 -lcrypt32 -lbcrypt'
+    elif [ "${_OS}" = 'mac' ]; then
+      LDLIBS+=' -framework Security -framework SystemConfiguration'
     fi
   else
-    if [ "${_OS}" = 'mac' ]; then
-      LDFLAGS+=' -dynamic'
-    else
-      LDFLAGS+=' -Wl,-Bdynamic'
-      LDLIBS+=' -Wl,-Bdynamic'
-    fi
+    LDFLAGS+=" -L../curl/${_PP}/lib"
+    LDLIBS+=' -lcurl'
   fi
-  LDFLAGS+=" -L../curl/${_PP}/lib"
-  LDLIBS+=' -lcurl'
 
   if [ "${TRURL_VER_}" = '0.9' ]; then
     LDFLAGS+=" ${LDLIBS}"
