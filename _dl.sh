@@ -855,9 +855,9 @@ else
   live_xt curl "${CURL_HASH}"
 fi
 
-# Experimental
 if [[ "${_CONFIG}" = *'dev'* ]] || \
-   [[ "${_CONFIG}" = *'test'* ]]; then
+   [[ "${_CONFIG}" = *'test'* ]] || \
+   [[ "${_CONFIG}" = *'trurl'* ]]; then
   live_dl trurl "${TRURL_VER_}"
   live_xt trurl "${TRURL_HASH}"
 fi

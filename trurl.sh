@@ -28,6 +28,7 @@ _VER="$1"
 
   CPPFLAGS+=" -I../curl/${_PP}/include"
   if [[ "${_CONFIG}" = *'zero'* ]]; then
+    # link statically in 'zero' (no external dependencies) config
     LDLIBS+=' ../curl/${_PP}/lib/libcurl.a'
     if [ "${_OS}" = 'win' ]; then
       CPPFLAGS+=" -DCURL_STATICLIB"

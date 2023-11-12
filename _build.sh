@@ -50,7 +50,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        pico       build with less features, see README.md
 #        bldtst     build without 3rd-party dependencies (except zlib) (for testing)
 #        zero       build without 3rd-party dependencies (for testing)
-#        r64        build riscv64 target only (experimental)
+#        trurl      build trurl (default for 'dev' and 'test' configs)
+#        r64        build riscv64 target only [EXPERIMENTAL]
 #        a64        build arm64 target only
 #        x64        build x86_64 target only
 #        x86        build i686 target only (for win target)
@@ -1611,7 +1612,7 @@ elif [ "${_OS}" = 'linux' ]; then
     fi
   else
     if [[ "${_CONFIG}" = *'r64'* ]]; then
-      build_single_target r64  # Experimental
+      build_single_target r64  # [EXPERIMENTAL]
     fi
     if [[ "${_CONFIG}" != *'x64'* ]] && \
        [[ "${_CONFIG}" != *'r64'* ]]; then
