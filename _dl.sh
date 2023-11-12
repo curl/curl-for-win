@@ -755,7 +755,7 @@ if [ "${need_openssl}" = '1' ]; then
     _DEPS+=' awslc'
   elif [[ "${_CONFIG}" = *'boringssl'* ]]; then
     _DEPS+=' boringssl'
-  elif [[ "${_CONFIG}" = *'noh3'* ]]; then
+  elif [[ "${_CONFIG}" = *'openssl'* ]]; then
     _DEPS+=' openssl'
   else
     _DEPS+=' quictls'
