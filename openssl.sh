@@ -61,7 +61,7 @@ _VER="$1"
     [ "${_CPU}" = 'r64' ] && options+=' linux64-riscv64 no-asm'  # FIXME: disabled ASM to avoid 'AES_set_encrypt_key' relocation errors at link time
   fi
 
-  options+=" ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL} ${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
+  options+=" ${_LDFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
   if [ "${_OS}" = 'win' ]; then
     options+=' -DUSE_BCRYPTGENRANDOM -lbcrypt'
   fi

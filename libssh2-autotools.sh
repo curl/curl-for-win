@@ -24,7 +24,7 @@ _VER="$1"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL} ${LIBSSH2_CPPFLAGS}"
   export RCFLAGS="${_RCFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
-  export LIBS="${_LIBS_GLOBAL}"
+  export LIBS=''
 
   # NOTE: root path with spaces breaks all values with '${_TOP}'. But,
   #       autotools breaks on spaces anyway, so we leave it like that.

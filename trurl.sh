@@ -22,7 +22,7 @@ _VER="$1"
   export CFLAGS="${_CFLAGS_GLOBAL} -O3"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
-  export LDLIBS="${_LIBS_GLOBAL}"
+  export LDLIBS=''
 
   [[ "${_CONFIG}" != *'main'* ]] && LDFLAGS+=' -v'
 

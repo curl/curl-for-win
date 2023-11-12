@@ -33,7 +33,7 @@ _VER="$1"
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
     '-DBUILD_SHARED_LIBS=OFF' \
-    "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL} ${_LIBS_GLOBAL}"
+    "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL}"
 
   if [ "${_NAM}" = 'zlib' ]; then
     # zlib's RC compilation is broken as of v1.3 (2023-08-18) with broken CMake

@@ -751,7 +751,6 @@ build_single_target() {
   export _LDFLAGS_GLOBAL_AUTOTOOLS=''
   export _LDFLAGS_BIN_GLOBAL=''
   export _LDFLAGS_CXX_GLOBAL=''  # CMake uses this
-  export _LIBS_GLOBAL=''
   export _CONFIGURE_GLOBAL=''
   export _CMAKE_GLOBAL='-DCMAKE_BUILD_TYPE=Release'
   export _CMAKE_CXX_GLOBAL=''

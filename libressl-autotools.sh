@@ -21,7 +21,7 @@ _VER="$1"
   export CFLAGS="${_CFLAGS_GLOBAL} -O3"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
-  export LIBS="${_LIBS_GLOBAL}"
+  export LIBS=''
 
   if [ "${_CC}" = 'llvm' ]; then
     CFLAGS+=' -Wa,--noexecstack'

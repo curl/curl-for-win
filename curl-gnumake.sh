@@ -38,7 +38,7 @@ _VER="$1"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL} -DOS=\\\"${_TRIPLET}\\\""
   export RCFLAGS="${_RCFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
-  export LIBS="${_LIBS_GLOBAL}"
+  export LIBS=''
 
   [[ "${_CONFIG}" != *'main'* ]] && LDFLAGS+=' -v'
 

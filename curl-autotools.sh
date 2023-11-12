@@ -31,7 +31,7 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
   LDFLAGS_LIB=''
   LDFLAGS_BIN=''
-  export LIBS="${_LIBS_GLOBAL}"
+  export LIBS=''
 
   [[ "${_CONFIG}" != *'main'* ]] && LDFLAGS+=' -v'
 
