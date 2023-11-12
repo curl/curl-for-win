@@ -874,10 +874,12 @@ if [[ "${_DEPS}" = *'libssh2'* ]]; then
       my_curl --location --proto-redir =https --output pkg.bin "${url}"
       live_xt libssh2 "${LIBSSH2_HASH}"
     fi
-    LIBSSH2_VER_="$(grep -a -F 'define LIBSSH2_VERSION ' 'libssh2/include/libssh2.h' | grep -o -E '".+"' | tr -d '"')"
   else
     live_dl libssh2 "${LIBSSH2_VER_}"
     live_xt libssh2 "${LIBSSH2_HASH}"
+  fi
+  if [[ "${_CONFIG}" = *'dev'* ]] || [ -d 'libssh2/.git' ]; then
+    LIBSSH2_VER_="$(grep -a -F 'define LIBSSH2_VERSION ' 'libssh2/include/libssh2.h' | grep -o -E '".+"' | tr -d '"')"
   fi
 fi
 if [[ "${_DEPS}" = *'cacert'* ]]; then
@@ -898,10 +900,12 @@ if [[ "${_DEPS}" = *'curl'* ]]; then
       my_curl --location --proto-redir =https --output pkg.bin "${url}"
       live_xt curl "${CURL_HASH}"
     fi
-    CURL_VER_="$(grep -a -F 'define LIBCURL_VERSION' 'curl/include/curl/curlver.h' | grep -o -E '".+"' | tr -d '"')"
   else
     live_dl curl "${CURL_VER_}"
     live_xt curl "${CURL_HASH}"
+  fi
+  if [[ "${_CONFIG}" = *'dev'* ]] || [ -d 'curl/.git' ]; then
+    CURL_VER_="$(grep -a -F 'define LIBCURL_VERSION' 'curl/include/curl/curlver.h' | grep -o -E '".+"' | tr -d '"')"
   fi
 fi
 if [[ "${_DEPS}" = *'trurl'* ]]; then
