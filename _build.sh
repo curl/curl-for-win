@@ -785,7 +785,7 @@ build_single_target() {
 
     if [ "${_CRT}" = 'ucrt' ]; then
       _CPPFLAGS_GLOBAL+=' -D_UCRT'
-      _LIBS_GLOBAL+=' -lucrt'
+      _LDFLAGS_GLOBAL+=' -lucrt'
       if [ "${_CC}" = 'gcc' ]; then
         _LDFLAGS_GLOBAL+=" -specs=${_GCCSPECS}"
       fi
@@ -1266,7 +1266,7 @@ build_single_target() {
     libprefix="/usr/lib/${_machine}-linux-musl"
     _CFLAGS_GLOBAL+=" -static -nostdinc -isystem ${ccridir}/include -isystem /usr/include/${_machine}-linux-musl"
     _LDFLAGS_GLOBAL+=" -nostartfiles -L${libprefix} -Wl,${libprefix}/Scrt1.o -Wl,${libprefix}/crti.o -L${ccrsdir} -Wl,${libprefix}/crtn.o"
-    _LIBS_GLOBAL+=" -lc ${ccrtlib}"
+    _LDFLAGS_GLOBAL+=" -lc ${ccrtlib}"
   fi
 
   if [ "${_CCRT}" = 'clang-rt' ]; then
@@ -1307,7 +1307,7 @@ build_single_target() {
         libprefix="/usr/lib/${_machine}-linux-musl"
         _CFLAGS_GLOBAL+=" -nostdinc -isystem ${ccrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
         _LDFLAGS_GLOBAL+=" -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -L${ccrtdir} ${libprefix}/crtn.o"
-        _LIBS_GLOBAL+=" -lc ${ccrtlib}"
+        _LDFLAGS_GLOBAL+=" -lc ${ccrtlib}"
       else
         if [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" != "${_machine}" ] && [ -d 'my-pkg/usr/lib/clang' ]; then
           # If we have the target CPU's clang-rt package installed, use it:
@@ -1327,7 +1327,7 @@ build_single_target() {
           #   /usr/bin/../lib/gcc-cross/x86_64-linux-gnu/12/../../../../x86_64-linux-gnu/lib/
           # or similar. Manually specify the ones belonging to glibc.
           _LDFLAGS_GLOBAL+=" -nostartfiles ${libprefix}/Scrt1.o ${libprefix}/crti.o ${libprefix}/crtn.o"
-          _LIBS_GLOBAL+=" -lc ${ccrtlib}"
+          _LDFLAGS_GLOBAL+=" -lc ${ccrtlib}"
         fi
         _LDFLAGS_GLOBAL+=' -rtlib=compiler-rt'
         # `-Wc,...` is necessary for libtool to pass this option to the compiler
