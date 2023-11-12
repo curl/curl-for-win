@@ -784,7 +784,7 @@ build_single_target() {
 
     if [ "${_CRT}" = 'ucrt' ]; then
       _CPPFLAGS_GLOBAL+=' -D_UCRT'
-      _LDFLAGS_GLOBAL+=' -lucrt'
+      _LDFLAGS_GLOBAL+=' -Wl,-lucrt'
       if [ "${_CC}" = 'gcc' ]; then
         _LDFLAGS_GLOBAL+=" -specs=${_GCCSPECS}"
       fi
@@ -1244,7 +1244,7 @@ build_single_target() {
       ccrtlib="$("${_CCPREFIX}gcc${_CCSUFFIX}" -print-libgcc-file-name)"               # /usr/lib/gcc/aarch64-linux-gnu/12/libgcc.a
       ccrsdir="$(dirname "${ccrtlib}")"                                                # /usr/lib/gcc/aarch64-linux-gnu/12
       ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
-      ccrtlib="-l${ccrtlib%.*}"  # 'gcc'
+      ccrtlib="-Wl,-l${ccrtlib%.*}"  # 'gcc'
       ccridir="${ccrsdir}"
     else
       if [ "${unamem}" = "${_machine}" ]; then
@@ -1258,14 +1258,14 @@ build_single_target() {
         exit 1
       fi
       ccrsdir="${ccrtdir}"
-      ccrtlib="-lgcc -lgcc_eh"
+      ccrtlib="-Wl,-lgcc -Wl,-lgcc_eh"
       _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
       ccridir="$("clang${_CCSUFFIX}" -print-resource-dir)"                             # /usr/lib/llvm-13/lib/clang/13.0.1
     fi
     libprefix="/usr/lib/${_machine}-linux-musl"
     _CFLAGS_GLOBAL+=" -static -nostdinc -isystem ${ccridir}/include -isystem /usr/include/${_machine}-linux-musl"
     _LDFLAGS_GLOBAL+=" -nostartfiles -Wl,${libprefix}/Scrt1.o -Wl,${libprefix}/crti.o -Wl,${libprefix}/crtn.o"
-    _LDFLAGS_GLOBAL+=" -L${libprefix} -L${ccrsdir} -lc ${ccrtlib}"
+    _LDFLAGS_GLOBAL+=" -L${libprefix} -L${ccrsdir} -Wl,-lc ${ccrtlib}"
   fi
 
   if [ "${_CCRT}" = 'clang-rt' ]; then
@@ -1277,7 +1277,7 @@ build_single_target() {
           ccrtdir="$("clang${_CCSUFFIX}" -print-runtime-dir)"                          # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux
           ccrtlib="$("clang${_CCSUFFIX}" -print-libgcc-file-name -rtlib=compiler-rt)"  # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux/libclang_rt.builtins-aarch64.a
           ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
-          ccrtlib="-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
+          ccrtlib="-Wl,-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
         elif [ -d 'my-pkg/usr/lib/clang' ]; then  # cross
           # If we have the target CPU's clang-rt package installed, use it:
           ccrtdir="$(find -L \
@@ -1289,7 +1289,7 @@ build_single_target() {
           ccrtdir+='/lib/linux'
           ccrtlib="${ccrtdir}/libclang_rt.builtins-${_machine}.a"
           ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
-          ccrtlib="-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
+          ccrtlib="-Wl,-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
         else  # cross
           # Fall back to libgcc because I could not figure out how to install the
           # cross-clangrt package on Debian (providing `libclang_rt.builtins-x86_64.a`)
@@ -1301,12 +1301,12 @@ build_single_target() {
             >&2 echo '! Error: Failed to detect gcc-cross env root.'
             exit 1
           fi
-          ccrtlib="-lgcc -lgcc_eh"
+          ccrtlib="-Wl,-lgcc -Wl,-lgcc_eh"
         fi
         libprefix="/usr/lib/${_machine}-linux-musl"
         _CFLAGS_GLOBAL+=" -nostdinc -isystem ${ccrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
         _LDFLAGS_GLOBAL+=" -nostdlib -nodefaultlibs -nostartfiles ${libprefix}/crt1.o ${libprefix}/crti.o ${libprefix}/crtn.o"
-        _LDFLAGS_GLOBAL+=" -L${libprefix} -L${ccrtdir} -lc ${ccrtlib}"
+        _LDFLAGS_GLOBAL+=" -L${libprefix} -L${ccrtdir} -Wl,-lc ${ccrtlib}"
       else
         if [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" != "${_machine}" ] && [ -d 'my-pkg/usr/lib/clang' ]; then
           # If we have the target CPU's clang-rt package installed, use it:
@@ -1319,14 +1319,14 @@ build_single_target() {
           ccrtdir+='/lib/linux'
           ccrtlib="${ccrtdir}/libclang_rt.builtins-${_machine}.a"
           ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
-          ccrtlib="-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
+          ccrtlib="-Wl,-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
           libprefix="/usr/${_TRIPLETSH}/lib"
           _LDFLAGS_GLOBAL+=' -nodefaultlibs'
           # lld by default wants to load startfiles from:
           #   /usr/bin/../lib/gcc-cross/x86_64-linux-gnu/12/../../../../x86_64-linux-gnu/lib/
           # or similar. Manually specify the ones belonging to glibc.
           _LDFLAGS_GLOBAL+=" -nostartfiles ${libprefix}/Scrt1.o ${libprefix}/crti.o ${libprefix}/crtn.o"
-          _LDFLAGS_GLOBAL+=" -L${libprefix} -L${ccrtdir} -lc ${ccrtlib}"
+          _LDFLAGS_GLOBAL+=" -L${libprefix} -L${ccrtdir} -Wl,-lc ${ccrtlib}"
         fi
         _LDFLAGS_GLOBAL+=' -rtlib=compiler-rt'
         # `-Wc,...` is necessary for libtool to pass this option to the compiler
