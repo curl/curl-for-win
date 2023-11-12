@@ -686,8 +686,7 @@ fi
 
 export _DEPS='curl'
 
-if [[ "${_CONFIG}" != *'zero'* ]] && \
-   [[ "${_CONFIG}" != *'nozlib'* ]]; then
+if [[ ! "${_CONFIG}" =~ (zero|nozlib) ]]; then
   if [[ "${_CONFIG}" = *'zlibng'* ]]; then
     _DEPS+=' zlibng'
   else
@@ -695,12 +694,7 @@ if [[ "${_CONFIG}" != *'zero'* ]] && \
   fi
 fi
 
-if [[ "${_CONFIG}" != *'zero'* ]] && \
-   [[ "${_CONFIG}" != *'bldtst'* ]] && \
-   [[ "${_CONFIG}" != *'pico'* ]] && \
-   [[ "${_CONFIG}" != *'nano'* ]] && \
-   [[ "${_CONFIG}" != *'micro'* ]] && \
-   [[ "${_CONFIG}" != *'mini'* ]]; then
+if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro|mini) ]]; then
   if [[ "${_CONFIG}" != *'nobrotli'* ]]; then
     _DEPS+=' brotli'
   fi
@@ -713,10 +707,7 @@ if [[ "${_CONFIG}" = *'cares'* ]]; then
   _DEPS+=' cares'
 fi
 
-if [[ "${_CONFIG}" != *'zero'* ]] && \
-   [[ "${_CONFIG}" != *'bldtst'* ]] && \
-   [[ "${_CONFIG}" != *'pico'* ]] && \
-   [[ "${_CONFIG}" != *'nano'* ]]; then
+if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
   _DEPS+=' nghttp2'
   if [[ "${_CONFIG}" != *'noh3'* ]]; then
     _DEPS+=' nghttp3 ngtcp2'
@@ -734,15 +725,9 @@ if [[ "${_CONFIG}" = *'mbedtls'* ]]; then
 fi
 
 need_openssl=0
-if [[ "${_CONFIG}" != *'zero'* ]] && \
-   [[ "${_CONFIG}" != *'bldtst'* ]]; then
-  if [ "${_OS}" != 'win' ]; then
-    need_openssl=1
-  elif [[ "${_CONFIG}" != *'pico'* ]] && \
-       [[ "${_CONFIG}" != *'nano'* ]] && \
-       [[ "${_CONFIG}" != *'micro'* ]] && \
-       [[ "${_CONFIG}" != *'mini'* ]] && \
-       [[ "${_CONFIG}" != *'schannel'* ]]; then
+if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
+  if [ "${_OS}" != 'win' ] || \
+     [[ ! "${_CONFIG}" =~ (pico|nano|micro|mini|schannel) ]]; then
     need_openssl=1
   fi
 fi
@@ -763,11 +748,7 @@ if [ "${need_openssl}" = '1' ]; then
   need_cacert=1
 fi
 
-if [[ "${_CONFIG}" != *'zero'* ]] && \
-   [[ "${_CONFIG}" != *'bldtst'* ]] && \
-   [[ "${_CONFIG}" != *'pico'* ]] && \
-   [[ "${_CONFIG}" != *'nano'* ]] && \
-   [[ "${_CONFIG}" != *'micro'* ]]; then
+if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro) ]]; then
   if [[ "${_CONFIG}" = *'wolfssh'* ]]; then
     _DEPS+=' wolfssh'
     need_cacert=1
@@ -782,9 +763,7 @@ if [ "${need_cacert}" = '1' ]; then
   _DEPS+=' cacert'
 fi
 
-if [[ "${_CONFIG}" = *'dev'* ]] || \
-   [[ "${_CONFIG}" = *'test'* ]] || \
-   [[ "${_CONFIG}" = *'trurl'* ]]; then
+if [[ "${_CONFIG}" =~ (dev|test|trurl) ]]; then
   _DEPS+=' trurl'
 fi
 
