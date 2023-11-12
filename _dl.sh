@@ -858,7 +858,9 @@ fi
 if [[ "${_CONFIG}" = *'dev'* ]] || \
    [[ "${_CONFIG}" = *'test'* ]] || \
    [[ "${_CONFIG}" = *'trurl'* ]]; then
+  # shellcheck disable=SC2153
   live_dl trurl "${TRURL_VER_}"
+  # shellcheck disable=SC2153
   live_xt trurl "${TRURL_HASH}"
 fi
 
