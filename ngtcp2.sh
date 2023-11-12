@@ -44,7 +44,7 @@ _VER="$1"
       LDFLAGS+=" -L${_TOP}/${_ZLIB}/${_PP}/lib"
       LIBS+=' -lz'
     fi
-  elif [ -d ../wolfssl ]; then
+  elif [[ "${_DEPS}" = *'wolfssl'* ]]; then
     options+=' -DENABLE_WOLFSSL=ON'
     options+=" -DWOLFSSL_INCLUDE_DIR=../wolfssl/${_PP}/include"
     options+=" -DWOLFSSL_LIBRARY=../wolfssl/${_PP}/lib/libwolfssl.a"
@@ -58,7 +58,7 @@ _VER="$1"
     fi
   fi
 
-  if [ -d ../nghttp3 ]; then
+  if [[ "${_DEPS}" = *'nghttp3'* ]]; then
     options+=" -DLIBNGHTTP3_INCLUDE_DIR=../nghttp3/${_PP}/include"
     options+=" -DLIBNGHTTP3_LIBRARY=../nghttp3/${_PP}/lib"
   fi

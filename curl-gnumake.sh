@@ -92,11 +92,11 @@ _VER="$1"
     CFG+='-zlib'
     export ZLIB_PATH="../../${_ZLIB}/${_PP}"
   fi
-  if [ -d ../brotli ] && [[ "${_CONFIG}" != *'nobrotli'* ]]; then
+  if [[ "${_DEPS}" = *'brotli'* ]]; then
     CFG+='-brotli'
     export BROTLI_PATH="../../brotli/${_PP}"
   fi
-  if [ -d ../zstd ] && [[ "${_CONFIG}" != *'nozstd'* ]]; then
+  if [[ "${_DEPS}" = *'zstd'* ]]; then
     CFG+='-zstd'
     export ZSTD_PATH="../../zstd/${_PP}"
   fi
@@ -127,12 +127,12 @@ _VER="$1"
     fi
   fi
 
-  if [ -d ../wolfssl ]; then
+  if [[ "${_DEPS}" = *'wolfssl'* ]]; then
     CFG+='-wolfssl'
     export WOLFSSL_PATH="../../wolfssl/${_PP}"
     h3=1
   fi
-  if [ -d ../mbedtls ]; then
+  if [[ "${_DEPS}" = *'mbedtls'* ]]; then
     CFG+='-mbedtls'
     export MBEDTLS_PATH="../../mbedtls/${_PP}"
   fi
@@ -144,18 +144,19 @@ _VER="$1"
 
 # CPPFLAGS+=' -DCURL_CA_FALLBACK=1'
 
-  if [ -d ../wolfssh ] && [ -d ../wolfssl ]; then
+  if [[ "${_DEPS}" = *'wolfssh'* ]] && \
+     [[ "${_DEPS}" = *'wolfssl'* ]]; then
     CFG+='-wolfssh'
     export WOLFSSH_PATH="../../wolfssh/${_PP}"
-  elif [ -d ../libssh ]; then
+  elif [[ "${_DEPS}" = *'libssh1'* ]]; then
     CFG+='-libssh'
     export LIBSSH_PATH="../../libssh/${_PPS}"
     CPPFLAGS+=' -DLIBSSH_STATIC'
-  elif [ -d ../libssh2 ]; then
+  elif [[ "${_DEPS}" = *'libssh2'* ]]; then
     CFG+='-ssh2'
     export LIBSSH2_PATH="../../libssh2/${_PPS}"
   fi
-  if [ -d ../nghttp2 ]; then
+  if [[ "${_DEPS}" = *'nghttp2'* ]]; then
     CFG+='-nghttp2'
     export NGHTTP2_PATH="../../nghttp2/${_PP}"
     CPPFLAGS+=' -DNGHTTP2_STATICLIB'
@@ -163,36 +164,36 @@ _VER="$1"
 
   [[ "${_CONFIG}" != *'noh3'* ]] || h3=0
 
-  if [ "${h3}" = '1' ] && [ -d ../nghttp3 ] && [ -d ../ngtcp2 ]; then
+  if [ "${h3}" = '1' ] && [[ "${_DEPS}" = *'nghttp3'* ]] && [[ "${_DEPS}" = *'ngtcp2'* ]]; then
     CFG+='-nghttp3-ngtcp2'
     export NGHTTP3_PATH="../../nghttp3/${_PP}"
     CPPFLAGS+=' -DNGHTTP3_STATICLIB'
     export NGTCP2_PATH="../../ngtcp2/${_PPS}"
     CPPFLAGS+=' -DNGTCP2_STATICLIB'
   fi
-  if [ -d ../cares ]; then
+  if [[ "${_DEPS}" = *'cares'* ]]; then
     CFG+='-ares'
     export LIBCARES_PATH="../../cares/${_PP}"
     CPPFLAGS+=' -DCARES_STATICLIB'
   fi
-  if [ -d ../gsasl ]; then
+  if [[ "${_DEPS}" = *'gsasl'* ]]; then
     CFG+='-gsasl'
     export LIBGSASL_PATH="../../gsasl/${_PPS}"
   fi
-  if [ -d ../libidn2 ]; then
+  if [[ "${_DEPS}" = *'libidn2'* ]]; then
     CFG+='-idn2'
     export LIBIDN2_PATH="../../libidn2/${_PP}"
 
-    if [ -d ../libpsl ]; then
+    if [[ "${_DEPS}" = *'libpsl'* ]]; then
       CFG+='-psl'
       export LIBPSL_PATH="../../libpsl/${_PP}"
     fi
 
-    if [ -d ../libiconv ]; then
+    if [[ "${_DEPS}" = *'libiconv'* ]]; then
       LDFLAGS+=" -L../../libiconv/${_PP}/lib"
       LIBS+=' -liconv'
     fi
-    if [ -d ../libunistring ]; then
+    if [[ "${_DEPS}" = *'libunistring'* ]]; then
       LDFLAGS+=" -L../../libunistring/${_PP}/lib"
       LIBS+=' -lunistring'
     fi

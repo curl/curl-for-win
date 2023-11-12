@@ -473,21 +473,21 @@ build_single_target() {
   # Select and advertise a single copy of components having multiple
   # implementations.
   export _ZLIB=''
-  if   [ -d zlibng ]; then
+  if   [[ "${_DEPS}" = *'zlibng'* ]]; then
     _ZLIB='zlibng'
-  elif [ -d zlib ]; then
+  elif [[ "${_DEPS}" = *'zlibold'* ]]; then
     _ZLIB='zlib'
   fi
   export _OPENSSL=''; boringssl=0
-  if   [ -d libressl ]; then
+  if   [[ "${_DEPS}" = *'libressl'* ]]; then
     _OPENSSL='libressl'
-  elif [ -d awslc ]; then
+  elif [[ "${_DEPS}" = *'awslc'* ]]; then
     _OPENSSL='awslc'; boringssl=1
-  elif [ -d boringssl ]; then
+  elif [[ "${_DEPS}" = *'boringssl'* ]]; then
     _OPENSSL='boringssl'; boringssl=1
-  elif [ -d quictls ]; then
+  elif [[ "${_DEPS}" = *'quictls'* ]]; then
     _OPENSSL='quictls'
-  elif [ -d openssl ]; then
+  elif [[ "${_DEPS}" = *'openssl'* ]]; then
     _OPENSSL='openssl'
   fi
 

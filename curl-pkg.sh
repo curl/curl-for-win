@@ -153,7 +153,7 @@
     cp -f -p "${_PP}/${DYN_DIR}"/*.map          "${_DST}/${DYN_DIR}/"
   fi
 
-  if [ -d ../cacert ]; then
+  if [[ "${_DEPS}" = *'cacert'* ]]; then
     cp -f -p scripts/mk-ca-bundle.pl            "${_DST}/"
   fi
 
