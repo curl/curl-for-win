@@ -734,7 +734,7 @@ fi
 
 need_cacert=0
 if [ "${need_openssl}" = '1' ]; then
-  if [[ "${_CONFIG}" = *'libressl'* ]]; then
+  if   [[ "${_CONFIG}" = *'libressl'* ]]; then
     _DEPS+=' libressl'
   elif [[ "${_CONFIG}" = *'awslc'* ]]; then
     _DEPS+=' awslc'
@@ -749,7 +749,7 @@ if [ "${need_openssl}" = '1' ]; then
 fi
 
 if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro) ]]; then
-  if [[ "${_CONFIG}" = *'wolfssh'* ]]; then
+  if   [[ "${_CONFIG}" = *'wolfssh'* ]]; then
     _DEPS+=' wolfssh'
     need_cacert=1
   elif [[ "${_CONFIG}" = *'libssh'* ]]; then
