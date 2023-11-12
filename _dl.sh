@@ -864,7 +864,7 @@ if [[ "${_DEPS}" = *'boringssl'* ]]; then
 fi
 if [[ "${_DEPS}" = *'openssl'* ]]; then
   if [[ "${_CONFIG}" = *'dev'* ]]; then
-    OPENSSL_VER_='3.1.0-beta1'
+    OPENSSL_VER_='3.2.0-beta1'
     OPENSSL_HASH=
   fi
   live_dl openssl "${OPENSSL_VER_}"
