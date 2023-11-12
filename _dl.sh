@@ -724,28 +724,25 @@ if [[ "${_CONFIG}" = *'mbedtls'* ]]; then
   _DEPS+=' mbedtls'
 fi
 
-need_openssl=0
+need_cacert=0
+
 if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
   if [ "${_OS}" != 'win' ] || \
      [[ ! "${_CONFIG}" =~ (pico|nano|micro|mini|schannel) ]]; then
-    need_openssl=1
-  fi
-fi
 
-need_cacert=0
-if [ "${need_openssl}" = '1' ]; then
-  if   [[ "${_CONFIG}" = *'libressl'* ]]; then
-    _DEPS+=' libressl'
-  elif [[ "${_CONFIG}" = *'awslc'* ]]; then
-    _DEPS+=' awslc'
-  elif [[ "${_CONFIG}" = *'boringssl'* ]]; then
-    _DEPS+=' boringssl'
-  elif [[ "${_CONFIG}" = *'openssl'* ]]; then
-    _DEPS+=' openssl'
-  else
-    _DEPS+=' quictls'
+    if   [[ "${_CONFIG}" = *'libressl'* ]]; then
+      _DEPS+=' libressl'
+    elif [[ "${_CONFIG}" = *'awslc'* ]]; then
+      _DEPS+=' awslc'
+    elif [[ "${_CONFIG}" = *'boringssl'* ]]; then
+      _DEPS+=' boringssl'
+    elif [[ "${_CONFIG}" = *'openssl'* ]]; then
+      _DEPS+=' openssl'
+    else
+      _DEPS+=' quictls'
+    fi
+    need_cacert=1
   fi
-  need_cacert=1
 fi
 
 if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro) ]]; then
