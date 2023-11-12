@@ -309,7 +309,7 @@ check_update() {
         newver=''
       fi
     else
-      if [ "${_CONFIG#*dev*}" != "${_CONFIG}" ]; then
+      if [[ "${_CONFIG}" = *'dev'* ]]; then
         newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases" \
           --header 'X-GitHub-Api-Version: 2022-11-28' \
           | jq --raw-output 'map(select(.prerelease)) | first | .tag_name' | sed 's/^v//')"
@@ -559,7 +559,7 @@ fi
 
 my_gpg --version | grep -a -F gpg
 
-if [ "${_CONFIG#*dev*}" != "${_CONFIG}" ]; then
+if [[ "${_CONFIG}" = *'dev'* ]]; then
   _patsuf='.dev'
 elif [ "${_CONFIG#*main*}" = "${_CONFIG}" ]; then
   _patsuf='.test'
@@ -684,7 +684,7 @@ fi
 
 if [ "${_CONFIG#*zero*}" = "${_CONFIG}" ] && \
    [ "${_CONFIG#*nozlib*}" = "${_CONFIG}" ]; then
-  if [ "${_CONFIG#*zlibng*}" != "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" = *'zlibng'* ]]; then
     live_dl zlibng "${ZLIBNG_VER_}"
     live_xt zlibng "${ZLIBNG_HASH}"
   else
@@ -710,7 +710,7 @@ if [ "${_CONFIG#*zero*}" = "${_CONFIG}" ] && \
   fi
 fi
 
-if [ "${_CONFIG#*cares*}" != "${_CONFIG}" ]; then
+if [[ "${_CONFIG}" = *'cares'* ]]; then
   live_dl cares "${CARES_VER_}"
   live_xt cares "${CARES_HASH}"
 fi
@@ -731,7 +731,7 @@ if [ "${_CONFIG#*zero*}" = "${_CONFIG}" ] && \
   fi
 fi
 
-if [ "${_CONFIG#*big*}" != "${_CONFIG}" ]; then
+if [[ "${_CONFIG}" = *'big'* ]]; then
   live_dl libidn2 "${LIBIDN2_VER_}"
   live_xt libidn2 "${LIBIDN2_HASH}"
 
@@ -746,12 +746,12 @@ if [ "${_CONFIG#*big*}" != "${_CONFIG}" ]; then
   live_xt gsasl "${GSASL_HASH}"
 fi
 
-if [ "${_CONFIG#*wolfssl*}" != "${_CONFIG}" ]; then
+if [[ "${_CONFIG}" = *'wolfssl'* ]]; then
   live_dl wolfssl "${WOLFSSL_VER_}"
   live_xt wolfssl "${WOLFSSL_HASH}"
 fi
 
-if [ "${_CONFIG#*mbedtls*}" != "${_CONFIG}" ]; then
+if [[ "${_CONFIG}" = *'mbedtls'* ]]; then
   live_dl mbedtls "${MBEDTLS_VER_}"
   live_xt mbedtls "${MBEDTLS_HASH}"
 fi
@@ -772,17 +772,17 @@ fi
 
 need_cacert=0
 if [ "${need_openssl}" = '1' ]; then
-  if [ "${_CONFIG#*libressl*}" != "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" = *'libressl'* ]]; then
     live_dl libressl "${LIBRESSL_VER_}"
     live_xt libressl "${LIBRESSL_HASH}"
-  elif [ "${_CONFIG#*awslc*}" != "${_CONFIG}" ]; then
+  elif [[ "${_CONFIG}" = *'awslc'* ]]; then
     live_dl awslc "${AWSLC_VER_}"
     live_xt awslc "${AWSLC_HASH}"
-  elif [ "${_CONFIG#*boringssl*}" != "${_CONFIG}" ]; then
+  elif [[ "${_CONFIG}" = *'boringssl'* ]]; then
     live_dl boringssl "${BORINGSSL_VER_}"
     live_xt boringssl "${BORINGSSL_HASH}"
-  elif [ "${_CONFIG#*noh3*}" != "${_CONFIG}" ]; then
-    if [ "${_CONFIG#*dev*}" != "${_CONFIG}" ]; then
+  elif [[ "${_CONFIG}" = *'noh3'* ]]; then
+    if [[ "${_CONFIG}" = *'dev'* ]]; then
       OPENSSL_VER_='3.1.0-beta1'
       OPENSSL_HASH=
     fi
@@ -800,17 +800,17 @@ if [ "${_CONFIG#*zero*}" = "${_CONFIG}" ] && \
    [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
    [ "${_CONFIG#*nano*}" = "${_CONFIG}" ] && \
    [ "${_CONFIG#*micro*}" = "${_CONFIG}" ]; then
-  if [ "${_CONFIG#*wolfssh*}" != "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" = *'wolfssh'* ]]; then
     live_dl wolfssh "${WOLFSSH_VER_}"
     live_xt wolfssh "${WOLFSSH_HASH}"
     need_cacert=1
-  elif [ "${_CONFIG#*libssh*}" != "${_CONFIG}" ]; then
+  elif [[ "${_CONFIG}" = *'libssh'* ]]; then
     # shellcheck disable=SC2153
     live_dl libssh "${LIBSSH_VER_}"
     # shellcheck disable=SC2153
     live_xt libssh "${LIBSSH_HASH}"
   else
-    if [ "${_CONFIG#*dev*}" != "${_CONFIG}" ]; then
+    if [[ "${_CONFIG}" = *'dev'* ]]; then
       LIBSSH2_HASH=
       LIBSSH2_REV_="${LIBSSH2_REV_:-master}"
       if [ -z "${CW_GET:-}" ] || echo " ${CW_GET} " | grep -q -F ' libssh2 '; then
@@ -836,7 +836,7 @@ if [ "${need_cacert}" = '1' ]; then
   live_xt cacert "${CACERT_HASH}"
 fi
 
-if [ "${_CONFIG#*dev*}" != "${_CONFIG}" ]; then
+if [[ "${_CONFIG}" = *'dev'* ]]; then
   CURL_HASH=
   CURL_REV_="${CURL_REV_:-master}"
   if [ -z "${CW_GET:-}" ] || echo " ${CW_GET} " | grep -q -F ' curl '; then
@@ -856,8 +856,8 @@ else
 fi
 
 # Experimental
-if [ "${_CONFIG#*dev*}" != "${_CONFIG}" ] || \
-   [ "${_CONFIG#*test*}" != "${_CONFIG}" ]; then
+if [[ "${_CONFIG}" = *'dev'* ]] || \
+   [[ "${_CONFIG}" = *'test'* ]]; then
   live_dl trurl "${TRURL_VER_}"
   live_xt trurl "${TRURL_HASH}"
 fi

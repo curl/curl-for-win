@@ -244,8 +244,8 @@ if [ "${_HOST}" = 'linux' ] && [ -s /etc/os-release ]; then
 fi
 
 export _OS='win'
-[ "${_CONFIG#*mac*}" != "${_CONFIG}" ] && _OS='mac'
-[ "${_CONFIG#*linux*}" != "${_CONFIG}" ] && _OS='linux'
+[[ "${_CONFIG}" = *'mac'* ]] && _OS='mac'
+[[ "${_CONFIG}" = *'linux'* ]] && _OS='linux'
 
 export _CACERT='cacert.pem'
 
@@ -256,13 +256,13 @@ if [ "${_OS}" = 'mac' ]; then
 else
   _CONFCC='llvm'
 fi
-[ "${_CONFIG#*gcc*}" != "${_CONFIG}" ] && _CONFCC='gcc'
-[ "${_CONFIG#*llvm*}" != "${_CONFIG}" ] && _CONFCC='llvm'
+[[ "${_CONFIG}" = *'gcc'* ]] && _CONFCC='gcc'
+[[ "${_CONFIG}" = *'llvm'* ]] && _CONFCC='llvm'
 
 export _CRT
 if [ "${_OS}" = 'win' ]; then
   _CRT='ucrt'
-  [ "${_CONFIG#*msvcrt*}" != "${_CONFIG}" ] && _CRT='msvcrt'
+  [[ "${_CONFIG}" = *'msvcrt'* ]] && _CRT='msvcrt'
 elif [ "${_OS}" = 'linux' ]; then
   if [ "${_HOST}" = 'mac' ]; then
     # Assume musl-cross toolchain via Homebrew, based on musl-cross-make
@@ -276,7 +276,7 @@ elif [ "${_OS}" = 'linux' ]; then
   else
     # TODO: make musl the default (once all issues are cleared)
     _CRT='gnu'
-    [ "${_CONFIG#*musl*}" != "${_CONFIG}" ] && _CRT='musl'
+    [[ "${_CONFIG}" = *'musl'* ]] && _CRT='musl'
   fi
 else
   # macOS: /usr/lib/libSystem.B.dylib
@@ -313,21 +313,21 @@ my_time='time'
 
 # Form suffix for alternate builds
 export _FLAV=''
-if [ "${_CONFIG#*zero*}" != "${_CONFIG}" ]; then
+if [[ "${_CONFIG}" = *'zero'* ]]; then
   _FLAV='-zero'
-elif [ "${_CONFIG#*bldtst*}" != "${_CONFIG}" ]; then
+elif [[ "${_CONFIG}" = *'bldtst'* ]]; then
   _FLAV='-bldtst'
-elif [ "${_CONFIG#*pico*}" != "${_CONFIG}" ]; then
+elif [[ "${_CONFIG}" = *'pico'* ]]; then
   _FLAV='-pico'
-elif [ "${_CONFIG#*nano*}" != "${_CONFIG}" ]; then
+elif [[ "${_CONFIG}" = *'nano'* ]]; then
   _FLAV='-nano'
-elif [ "${_CONFIG#*micro*}" != "${_CONFIG}" ]; then
+elif [[ "${_CONFIG}" = *'micro'* ]]; then
   _FLAV='-micro'
-elif [ "${_CONFIG#*mini*}" != "${_CONFIG}" ]; then
+elif [[ "${_CONFIG}" = *'mini'* ]]; then
   _FLAV='-mini'
-elif [ "${_CONFIG#*noh3*}" != "${_CONFIG}" ]; then
+elif [[ "${_CONFIG}" = *'noh3'* ]]; then
   _FLAV='-noh3'
-elif [ "${_CONFIG#*big*}" != "${_CONFIG}" ]; then
+elif [[ "${_CONFIG}" = *'big'* ]]; then
   _FLAV='-big'
 fi
 
@@ -1588,7 +1588,7 @@ elif [ "${_OS}" = 'mac' ]; then
   fi
   if [ "${_CONFIG#*x64*}" = "${_CONFIG}" ] && \
      [ "${_CONFIG#*a64*}" = "${_CONFIG}" ] && \
-     [ "${_CONFIG#*macuni*}" != "${_CONFIG}" ]; then
+     [[ "${_CONFIG}" = *'macuni'* ]]; then
     ./_macuni.sh
   fi
 elif [ "${_OS}" = 'linux' ]; then
@@ -1610,7 +1610,7 @@ elif [ "${_OS}" = 'linux' ]; then
       build_single_target x64
     fi
   else
-    if [ "${_CONFIG#*r64*}" != "${_CONFIG}" ]; then
+    if [[ "${_CONFIG}" = *'r64'* ]]; then
       build_single_target r64  # Experimental
     fi
     if [ "${_CONFIG#*x64*}" = "${_CONFIG}" ] && \

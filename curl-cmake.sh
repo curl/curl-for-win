@@ -33,7 +33,7 @@ _VER="$1"
 
   [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && LDFLAGS+=' -v'
 
-  if [ "${_OS}" = 'win' ] && [ "${_CONFIG#*unicode*}" != "${_CONFIG}" ]; then
+  if [ "${_OS}" = 'win' ] && [[ "${_CONFIG}" = *'unicode'* ]]; then
     options+=' -DENABLE_UNICODE=ON'
   fi
 
@@ -69,11 +69,11 @@ _VER="$1"
     LDFLAGS+=' -Wl,-Bstatic'
   fi
 
-  if [ "${_CONFIG#*werror*}" != "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" = *'werror'* ]]; then
     options+=' -DCURL_WERROR=ON'
   fi
 
-  if [ "${_CONFIG#*debug*}" != "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" = *'debug'* ]]; then
     options+=' -DENABLE_DEBUG=ON'
     # curl would only set this automatically for the 'Debug' configuration
     # Required for certain BUILD_TESTING=ON 'testdeps' build targets to link
@@ -86,23 +86,23 @@ _VER="$1"
     CPPFLAGS+=' -DDEBUGBUILD'
   fi
 
-  if [ "${_CONFIG#*zero*}" != "${_CONFIG}" ] || \
-     [ "${_CONFIG#*bldtst*}" != "${_CONFIG}" ] || \
-     [ "${_CONFIG#*pico*}" != "${_CONFIG}" ] || \
-     [ "${_CONFIG#*nano*}" != "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" = *'zero'* ]] || \
+     [[ "${_CONFIG}" = *'bldtst'* ]] || \
+     [[ "${_CONFIG}" = *'pico'* ]] || \
+     [[ "${_CONFIG}" = *'nano'* ]]; then
     options+=' -DCURL_DISABLE_ALTSVC=ON'
   fi
 
-  if [ "${_CONFIG#*zero*}" != "${_CONFIG}" ] || \
-     [ "${_CONFIG#*bldtst*}" != "${_CONFIG}" ] || \
-     [ "${_CONFIG#*pico*}" != "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" = *'zero'* ]] || \
+     [[ "${_CONFIG}" = *'bldtst'* ]] || \
+     [[ "${_CONFIG}" = *'pico'* ]]; then
     options+=' -DCURL_DISABLE_BASIC_AUTH=ON -DCURL_DISABLE_BEARER_AUTH=ON -DCURL_DISABLE_DIGEST_AUTH=ON -DCURL_DISABLE_KERBEROS_AUTH=ON -DCURL_DISABLE_NEGOTIATE_AUTH=ON -DCURL_DISABLE_AWS=ON'
     options+=' -DCURL_DISABLE_DICT=ON -DCURL_DISABLE_FILE=ON -DCURL_DISABLE_GOPHER=ON -DCURL_DISABLE_MQTT=ON -DCURL_DISABLE_RTSP=ON -DCURL_DISABLE_SMB=ON -DCURL_DISABLE_TELNET=ON -DCURL_DISABLE_TFTP=ON'
     options+=' -DCURL_DISABLE_FTP=ON'
     options+=' -DCURL_DISABLE_IMAP=ON -DCURL_DISABLE_POP3=ON -DCURL_DISABLE_SMTP=ON'
     options+=' -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON'
   else
-    [ "${_CONFIG#*noftp*}" != "${_CONFIG}" ] && options+=' -DCURL_DISABLE_FTP=ON'
+    [[ "${_CONFIG}" = *'noftp'* ]] && options+=' -DCURL_DISABLE_FTP=ON'
     if [ "${_OS}" = 'win' ]; then
       LIBS+=' -lwldap32'
     elif [ "${_OS}" != 'mac' ] || [ "${_OSVER}" -ge '1010' ]; then  # On macOS we use the built-in LDAP lib

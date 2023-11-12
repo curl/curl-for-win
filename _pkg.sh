@@ -56,7 +56,7 @@ create_pkg() {
     _suf=''  # _FLAV already added, do not add it a second time
   fi
   # Alter filename for non-release packages
-  if [ "${_CONFIG#*main*}" != "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" = *'main'* ]]; then
     if [ "${PUBLISH_PROD_FROM}" != "${_HOST}" ]; then
       _suf+="-built-on-${_HOST}"
     fi
@@ -127,7 +127,7 @@ elif [ "${mode}" = 'macuni' ] || [ "${_CONFIG#*macuni*}" = "${_CONFIG}" ]; then
   fi
 fi
 
-if [ "${mode}" = 'unified' ] && [ "${_CONFIG#*macuni*}" != "${_CONFIG}" ]; then
+if [ "${mode}" = 'unified' ] && [[ "${_CONFIG}" = *'macuni'* ]]; then
   touch "${_DST}/__macuni__.txt"
 else
   # If this is a unified (containing all packages) release tree and we have

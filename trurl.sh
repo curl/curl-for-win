@@ -27,7 +27,7 @@ _VER="$1"
   [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && LDFLAGS+=' -v'
 
   CPPFLAGS+=" -I../curl/${_PP}/include"
-  if [ "${_CONFIG#*zero*}" != "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" = *'zero'* ]]; then
     LDLIBS+=' ../curl/${_PP}/lib/libcurl.a'
     if [ "${_OS}" = 'win' ]; then
       CPPFLAGS+=" -DCURL_STATICLIB"
