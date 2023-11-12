@@ -1567,16 +1567,13 @@ EOF
 
 # Build binaries
 if [ "${_OS}" = 'win' ]; then
-  if [[ "${_CONFIG}" != *'a64'* ]] && \
-     [[ "${_CONFIG}" != *'x86'* ]]; then
+  if [[ ! "${_CONFIG}" =~ (a64|x86) ]]; then
     build_single_target x64
   fi
-  if [[ "${_CONFIG}" != *'x64'* ]] && \
-     [[ "${_CONFIG}" != *'x86'* ]]; then
+  if [[ ! "${_CONFIG}" =~ (x64|x86) ]]; then
     build_single_target a64
   fi
-  if [[ "${_CONFIG}" != *'x64'* ]] && \
-     [[ "${_CONFIG}" != *'a64'* ]]; then
+  if [[ ! "${_CONFIG}" =~ (x64|a64) ]]; then
     build_single_target x86
   fi
 elif [ "${_OS}" = 'mac' ]; then
@@ -1589,8 +1586,7 @@ elif [ "${_OS}" = 'mac' ]; then
   if [[ "${_CONFIG}" != *'a64'* ]]; then
     build_single_target x64
   fi
-  if [[ "${_CONFIG}" != *'x64'* ]] && \
-     [[ "${_CONFIG}" != *'a64'* ]] && \
+  if [[ ! "${_CONFIG}" =~ (x64|a64) ]] && \
      [[ "${_CONFIG}" = *'macuni'* ]]; then
     ./_macuni.sh
   fi
@@ -1616,12 +1612,10 @@ elif [ "${_OS}" = 'linux' ]; then
     if [[ "${_CONFIG}" = *'r64'* ]]; then
       build_single_target r64  # [EXPERIMENTAL]
     fi
-    if [[ "${_CONFIG}" != *'x64'* ]] && \
-       [[ "${_CONFIG}" != *'r64'* ]]; then
+    if [[ ! "${_CONFIG}" =~ (x64|r64) ]]; then
       build_single_target a64
     fi
-    if [[ "${_CONFIG}" != *'a64'* ]] && \
-       [[ "${_CONFIG}" != *'r64'* ]]; then
+    if [[ ! "${_CONFIG}" =~ (a64|r64) ]]; then
       build_single_target x64
     fi
   fi
