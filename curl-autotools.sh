@@ -33,7 +33,7 @@ _VER="$1"
   LDFLAGS_BIN=''
   export LIBS="${_LIBS_GLOBAL}"
 
-  [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && LDFLAGS+=' -v'
+  [[ "${_CONFIG}" != *'main'* ]] && LDFLAGS+=' -v'
 
   options+=' --enable-unix-sockets'
 
@@ -98,7 +98,7 @@ _VER="$1"
     options+=' --disable-ldap --disable-ldaps'
   else
     options+=' --enable-dict --enable-file --enable-gopher --enable-mqtt --enable-rtsp --enable-smb --enable-telnet --enable-tftp'
-    if [ "${_CONFIG#*noftp*}" = "${_CONFIG}" ]; then
+    if [[ "${_CONFIG}" != *'noftp'* ]]; then
       options+=' --enable-ftp'
     else
       options+=' --disable-ftp'
@@ -120,14 +120,14 @@ _VER="$1"
     options+=' --without-zlib'
   fi
 
-  if [ -d ../brotli ] && [ "${_CONFIG#*nobrotli*}" = "${_CONFIG}" ]; then
+  if [ -d ../brotli ] && [[ "${_CONFIG}" != *'nobrotli'* ]]; then
     options+=" --with-brotli=${_TOP}/brotli/${_PP}"
     LDFLAGS+=" -L${_TOP}/brotli/${_PP}/lib"
     LIBS+=' -lbrotlicommon'
   else
     options+=' --without-brotli'
   fi
-  if [ -d ../zstd ] && [ "${_CONFIG#*nozstd*}" = "${_CONFIG}" ]; then
+  if [ -d ../zstd ] && [[ "${_CONFIG}" != *'nozstd'* ]]; then
     options+=" --with-zstd=${_TOP}/zstd/${_PP}"
     LDFLAGS+=" -L${_TOP}/zstd/${_PP}/lib"
     LIBS+=' -lzstd'
@@ -263,7 +263,7 @@ _VER="$1"
   else
     options+=' --without-libidn2'
     options+=' --without-libpsl'
-    if [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
+    if [[ "${_CONFIG}" != *'pico'* ]] && \
        [ "${_OS}" = 'win' ]; then
       options+=' --with-winidn'
     fi
@@ -296,7 +296,7 @@ _VER="$1"
     options+=' --without-nghttp2'
   fi
 
-  [ "${_CONFIG#*noh3*}" = "${_CONFIG}" ] || h3=0
+  [[ "${_CONFIG}" != *'noh3'* ]] || h3=0
 
   # We enable HTTP/3 manually, so it shows up "disabled" in 'configure summary'.
   if [ "${h3}" = '1' ] && [ -d ../nghttp3 ] && [ -d ../ngtcp2 ]; then

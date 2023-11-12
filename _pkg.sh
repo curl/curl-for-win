@@ -120,7 +120,7 @@ if [ "${_NAM}" != "${_UNIPKG}" ]; then
   if ! grep -q -a -F "${namver}" -- "${_BLD}"; then
     echo "${namver}" >> "${_BLD}"
   fi
-elif [ "${mode}" = 'macuni' ] || [ "${_CONFIG#*macuni*}" = "${_CONFIG}" ]; then
+elif [ "${mode}" = 'macuni' ] || [[ "${_CONFIG}" != *'macuni'* ]]; then
   create_pkg "$1" '.tar.xz'
   if [ "${_OS}" = 'win' ]; then
     create_pkg "$1" '.zip'

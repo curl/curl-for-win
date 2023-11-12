@@ -40,7 +40,7 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LIBS="${_LIBS_GLOBAL}"
 
-  [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && LDFLAGS+=' -v'
+  [[ "${_CONFIG}" != *'main'* ]] && LDFLAGS+=' -v'
 
   LDFLAGS_BIN="${_LDFLAGS_BIN_GLOBAL}"
   LDFLAGS_LIB=''
@@ -92,11 +92,11 @@ _VER="$1"
     CFG+='-zlib'
     export ZLIB_PATH="../../${_ZLIB}/${_PP}"
   fi
-  if [ -d ../brotli ] && [ "${_CONFIG#*nobrotli*}" = "${_CONFIG}" ]; then
+  if [ -d ../brotli ] && [[ "${_CONFIG}" != *'nobrotli'* ]]; then
     CFG+='-brotli'
     export BROTLI_PATH="../../brotli/${_PP}"
   fi
-  if [ -d ../zstd ] && [ "${_CONFIG#*nozstd*}" = "${_CONFIG}" ]; then
+  if [ -d ../zstd ] && [[ "${_CONFIG}" != *'nozstd'* ]]; then
     CFG+='-zstd'
     export ZSTD_PATH="../../zstd/${_PP}"
   fi
@@ -161,7 +161,7 @@ _VER="$1"
     CPPFLAGS+=' -DNGHTTP2_STATICLIB'
   fi
 
-  [ "${_CONFIG#*noh3*}" = "${_CONFIG}" ] || h3=0
+  [[ "${_CONFIG}" != *'noh3'* ]] || h3=0
 
   if [ "${h3}" = '1' ] && [ -d ../nghttp3 ] && [ -d ../ngtcp2 ]; then
     CFG+='-nghttp3-ngtcp2'
@@ -196,7 +196,7 @@ _VER="$1"
       LDFLAGS+=" -L../../libunistring/${_PP}/lib"
       LIBS+=' -lunistring'
     fi
-  elif [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
+  elif [[ "${_CONFIG}" != *'pico'* ]] && \
        [ "${_OS}" = 'win' ]; then
     CFG+='-winidn'
   fi

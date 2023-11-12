@@ -302,7 +302,7 @@ fi
 
 if [ -z "${CW_MAP:-}" ]; then
   export CW_MAP='0'
-  [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && CW_MAP='1'
+  [[ "${_CONFIG}" != *'main'* ]] && CW_MAP='1'
 fi
 
 export _JOBS=2
@@ -1564,41 +1564,41 @@ EOF
 
 # Build binaries
 if [ "${_OS}" = 'win' ]; then
-  if [ "${_CONFIG#*a64*}" = "${_CONFIG}" ] && \
-     [ "${_CONFIG#*x86*}" = "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" != *'a64'* ]] && \
+     [[ "${_CONFIG}" != *'x86'* ]]; then
     build_single_target x64
   fi
-  if [ "${_CONFIG#*x64*}" = "${_CONFIG}" ] && \
-     [ "${_CONFIG#*x86*}" = "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" != *'x64'* ]] && \
+     [[ "${_CONFIG}" != *'x86'* ]]; then
     build_single_target a64
   fi
-  if [ "${_CONFIG#*x64*}" = "${_CONFIG}" ] && \
-     [ "${_CONFIG#*a64*}" = "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" != *'x64'* ]] && \
+     [[ "${_CONFIG}" != *'a64'* ]]; then
     build_single_target x86
   fi
 elif [ "${_OS}" = 'mac' ]; then
   # TODO: This method is suboptimal. We might want to build pure C
   #       projects in dual mode and only manual-merge libs that have
   #       ASM components.
-  if [ "${_CONFIG#*x64*}" = "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" != *'x64'* ]]; then
     build_single_target a64
   fi
-  if [ "${_CONFIG#*a64*}" = "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" != *'a64'* ]]; then
     build_single_target x64
   fi
-  if [ "${_CONFIG#*x64*}" = "${_CONFIG}" ] && \
-     [ "${_CONFIG#*a64*}" = "${_CONFIG}" ] && \
+  if [[ "${_CONFIG}" != *'x64'* ]] && \
+     [[ "${_CONFIG}" != *'a64'* ]] && \
      [[ "${_CONFIG}" = *'macuni'* ]]; then
     ./_macuni.sh
   fi
 elif [ "${_OS}" = 'linux' ]; then
   if [ "${_HOST}" = 'mac' ]; then
     # Custom installs of musl-cross can support a64 and other targets
-    if [ "${_CONFIG#*a64*}" = "${_CONFIG}" ] && \
+    if [[ "${_CONFIG}" != *'a64'* ]] && \
        command -v x86_64-linux-musl-gcc >/dev/null 2>&1; then
       build_single_target x64
     fi
-    if [ "${_CONFIG#*x64*}" = "${_CONFIG}" ] && \
+    if [[ "${_CONFIG}" != *'x64'* ]] && \
        command -v aarch64-linux-musl-gcc >/dev/null 2>&1; then
       build_single_target a64
     fi
@@ -1613,12 +1613,12 @@ elif [ "${_OS}" = 'linux' ]; then
     if [[ "${_CONFIG}" = *'r64'* ]]; then
       build_single_target r64  # Experimental
     fi
-    if [ "${_CONFIG#*x64*}" = "${_CONFIG}" ] && \
-       [ "${_CONFIG#*r64*}" = "${_CONFIG}" ]; then
+    if [[ "${_CONFIG}" != *'x64'* ]] && \
+       [[ "${_CONFIG}" != *'r64'* ]]; then
       build_single_target a64
     fi
-    if [ "${_CONFIG#*a64*}" = "${_CONFIG}" ] && \
-       [ "${_CONFIG#*r64*}" = "${_CONFIG}" ]; then
+    if [[ "${_CONFIG}" != *'a64'* ]] && \
+       [[ "${_CONFIG}" != *'r64'* ]]; then
       build_single_target x64
     fi
   fi

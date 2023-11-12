@@ -561,7 +561,7 @@ my_gpg --version | grep -a -F gpg
 
 if [[ "${_CONFIG}" = *'dev'* ]]; then
   _patsuf='.dev'
-elif [ "${_CONFIG#*main*}" = "${_CONFIG}" ]; then
+elif [[ "${_CONFIG}" != *'main'* ]]; then
   _patsuf='.test'
 else
   _patsuf=''
@@ -682,8 +682,8 @@ if [ "${_OS}" = 'win' ] && \
   fi
 fi
 
-if [ "${_CONFIG#*zero*}" = "${_CONFIG}" ] && \
-   [ "${_CONFIG#*nozlib*}" = "${_CONFIG}" ]; then
+if [[ "${_CONFIG}" != *'zero'* ]] && \
+   [[ "${_CONFIG}" != *'nozlib'* ]]; then
   if [[ "${_CONFIG}" = *'zlibng'* ]]; then
     live_dl zlibng "${ZLIBNG_VER_}"
     live_xt zlibng "${ZLIBNG_HASH}"
@@ -693,18 +693,18 @@ if [ "${_CONFIG#*zero*}" = "${_CONFIG}" ] && \
   fi
 fi
 
-if [ "${_CONFIG#*zero*}" = "${_CONFIG}" ] && \
-   [ "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] && \
-   [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
-   [ "${_CONFIG#*nano*}" = "${_CONFIG}" ] && \
-   [ "${_CONFIG#*micro*}" = "${_CONFIG}" ] && \
-   [ "${_CONFIG#*mini*}" = "${_CONFIG}" ]; then
+if [[ "${_CONFIG}" != *'zero'* ]] && \
+   [[ "${_CONFIG}" != *'bldtst'* ]] && \
+   [[ "${_CONFIG}" != *'pico'* ]] && \
+   [[ "${_CONFIG}" != *'nano'* ]] && \
+   [[ "${_CONFIG}" != *'micro'* ]] && \
+   [[ "${_CONFIG}" != *'mini'* ]]; then
 
-  if [ "${_CONFIG#*nobrotli*}" = "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" != *'nobrotli'* ]]; then
     live_dl brotli "${BROTLI_VER_}"
     live_xt brotli "${BROTLI_HASH}"
   fi
-  if [ "${_CONFIG#*nozstd*}" = "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" != *'nozstd'* ]]; then
     live_dl zstd "${ZSTD_VER_}"
     live_xt zstd "${ZSTD_HASH}"
   fi
@@ -715,14 +715,14 @@ if [[ "${_CONFIG}" = *'cares'* ]]; then
   live_xt cares "${CARES_HASH}"
 fi
 
-if [ "${_CONFIG#*zero*}" = "${_CONFIG}" ] && \
-   [ "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] && \
-   [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
-   [ "${_CONFIG#*nano*}" = "${_CONFIG}" ]; then
+if [[ "${_CONFIG}" != *'zero'* ]] && \
+   [[ "${_CONFIG}" != *'bldtst'* ]] && \
+   [[ "${_CONFIG}" != *'pico'* ]] && \
+   [[ "${_CONFIG}" != *'nano'* ]]; then
   live_dl nghttp2 "${NGHTTP2_VER_}"
   live_xt nghttp2 "${NGHTTP2_HASH}"
 
-  if [ "${_CONFIG#*noh3*}" = "${_CONFIG}" ]; then
+  if [[ "${_CONFIG}" != *'noh3'* ]]; then
     live_dl nghttp3 "${NGHTTP3_VER_}"
     live_xt nghttp3 "${NGHTTP3_HASH}"
 
@@ -757,15 +757,15 @@ if [[ "${_CONFIG}" = *'mbedtls'* ]]; then
 fi
 
 need_openssl=0
-if [ "${_CONFIG#*zero*}" = "${_CONFIG}" ] && \
-   [ "${_CONFIG#*bldtst*}" = "${_CONFIG}" ]; then
+if [[ "${_CONFIG}" != *'zero'* ]] && \
+   [[ "${_CONFIG}" != *'bldtst'* ]]; then
   if [ "${_OS}" != 'win' ]; then
     need_openssl=1
-  elif [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
-       [ "${_CONFIG#*nano*}" = "${_CONFIG}" ] && \
-       [ "${_CONFIG#*micro*}" = "${_CONFIG}" ] && \
-       [ "${_CONFIG#*mini*}" = "${_CONFIG}" ] && \
-       [ "${_CONFIG#*schannel*}" = "${_CONFIG}" ]; then
+  elif [[ "${_CONFIG}" != *'pico'* ]] && \
+       [[ "${_CONFIG}" != *'nano'* ]] && \
+       [[ "${_CONFIG}" != *'micro'* ]] && \
+       [[ "${_CONFIG}" != *'mini'* ]] && \
+       [[ "${_CONFIG}" != *'schannel'* ]]; then
     need_openssl=1
   fi
 fi
@@ -795,11 +795,11 @@ if [ "${need_openssl}" = '1' ]; then
   need_cacert=1
 fi
 
-if [ "${_CONFIG#*zero*}" = "${_CONFIG}" ] && \
-   [ "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] && \
-   [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
-   [ "${_CONFIG#*nano*}" = "${_CONFIG}" ] && \
-   [ "${_CONFIG#*micro*}" = "${_CONFIG}" ]; then
+if [[ "${_CONFIG}" != *'zero'* ]] && \
+   [[ "${_CONFIG}" != *'bldtst'* ]] && \
+   [[ "${_CONFIG}" != *'pico'* ]] && \
+   [[ "${_CONFIG}" != *'nano'* ]] && \
+   [[ "${_CONFIG}" != *'micro'* ]]; then
   if [[ "${_CONFIG}" = *'wolfssh'* ]]; then
     live_dl wolfssh "${WOLFSSH_VER_}"
     live_xt wolfssh "${WOLFSSH_HASH}"

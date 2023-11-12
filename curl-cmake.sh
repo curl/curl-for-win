@@ -31,7 +31,7 @@ _VER="$1"
   LDFLAGS_BIN="${_LDFLAGS_BIN_GLOBAL}"
   LDFLAGS_LIB=''
 
-  [ "${_CONFIG#*main*}" = "${_CONFIG}" ] && LDFLAGS+=' -v'
+  [[ "${_CONFIG}" != *'main'* ]] && LDFLAGS+=' -v'
 
   if [ "${_OS}" = 'win' ] && [[ "${_CONFIG}" = *'unicode'* ]]; then
     options+=' -DENABLE_UNICODE=ON'
@@ -116,7 +116,7 @@ _VER="$1"
   else
     options+=' -DZLIB_INCLUDE_DIR='
   fi
-  if [ -d ../brotli ] && [ "${_CONFIG#*nobrotli*}" = "${_CONFIG}" ]; then
+  if [ -d ../brotli ] && [[ "${_CONFIG}" != *'nobrotli'* ]]; then
     options+=' -DCURL_BROTLI=ON'
     options+=" -DBROTLI_INCLUDE_DIR=${_TOP}/brotli/${_PP}/include"
     options+=" -DBROTLIDEC_LIBRARY=${_TOP}/brotli/${_PP}/lib/libbrotlidec.a"
@@ -124,7 +124,7 @@ _VER="$1"
   else
     options+=' -DCURL_BROTLI=OFF'
   fi
-  if [ -d ../zstd ] && [ "${_CONFIG#*nozstd*}" = "${_CONFIG}" ]; then
+  if [ -d ../zstd ] && [[ "${_CONFIG}" != *'nozstd'* ]]; then
     options+=' -DCURL_ZSTD=ON'
     options+=" -DZstd_INCLUDE_DIR=${_TOP}/zstd/${_PP}/include"
     options+=" -DZstd_LIBRARY=${_TOP}/zstd/${_PP}/lib/libzstd.a"
@@ -300,7 +300,7 @@ _VER="$1"
     options+=' -DUSE_NGHTTP2=OFF'
   fi
 
-  [ "${_CONFIG#*noh3*}" = "${_CONFIG}" ] || h3=0
+  [[ "${_CONFIG}" != *'noh3'* ]] || h3=0
 
   if [ "${h3}" = '1' ] && [ -d ../nghttp3 ] && [ -d ../ngtcp2 ]; then
     options+=' -DUSE_NGHTTP3=ON'
@@ -356,7 +356,7 @@ _VER="$1"
   else
     options+=' -DUSE_LIBIDN2=OFF'
     options+=' -DCURL_USE_LIBPSL=OFF'
-    if [ "${_CONFIG#*pico*}" = "${_CONFIG}" ] && \
+    if [[ "${_CONFIG}" != *'pico'* ]] && \
        [ "${_OS}" = 'win' ]; then
       options+=' -DUSE_WIN32_IDN=ON'
     fi
