@@ -301,8 +301,6 @@ _VER="$1"
     options+=' -DUSE_NGHTTP2=OFF'
   fi
 
-  [[ "${_CONFIG}" != *'noh3'* ]] || h3=0
-
   if [ "${h3}" = '1' ] && [[ "${_DEPS}" = *'nghttp3'* ]] && [[ "${_DEPS}" = *'ngtcp2'* ]]; then
     options+=' -DUSE_NGHTTP3=ON'
     options+=" -DNGHTTP3_INCLUDE_DIR=${_TOP}/nghttp3/${_PP}/include"

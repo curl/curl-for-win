@@ -162,8 +162,6 @@ _VER="$1"
     CPPFLAGS+=' -DNGHTTP2_STATICLIB'
   fi
 
-  [[ "${_CONFIG}" != *'noh3'* ]] || h3=0
-
   if [ "${h3}" = '1' ] && [[ "${_DEPS}" = *'nghttp3'* ]] && [[ "${_DEPS}" = *'ngtcp2'* ]]; then
     CFG+='-nghttp3-ngtcp2'
     export NGHTTP3_PATH="../../nghttp3/${_PP}"

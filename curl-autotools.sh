@@ -297,8 +297,6 @@ _VER="$1"
     options+=' --without-nghttp2'
   fi
 
-  [[ "${_CONFIG}" != *'noh3'* ]] || h3=0
-
   # We enable HTTP/3 manually, so it shows up "disabled" in 'configure summary'.
   if [ "${h3}" = '1' ] && [[ "${_DEPS}" = *'nghttp3'* ]] && [[ "${_DEPS}" = *'ngtcp2'* ]]; then
     # Detection insists on having a pkg-config, so force feed everything manually.
