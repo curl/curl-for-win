@@ -28,9 +28,9 @@ _VER="$1"
 
   CPPFLAGS+=" -I../curl/${_PP}/include"
   if [ "${_CONFIG#*zero*}" != "${_CONFIG}" ]; then
-    CPPFLAGS+=" -DCURL_STATICLIB"
     LDLIBS+=' ../curl/${_PP}/lib/libcurl.a'
     if [ "${_OS}" = 'win' ]; then
+      CPPFLAGS+=" -DCURL_STATICLIB"
       LDLIBS+=' -lws2_32 -lcrypt32 -lbcrypt'
     elif [ "${_OS}" = 'mac' ]; then
       LDLIBS+=' -framework Security -framework SystemConfiguration'

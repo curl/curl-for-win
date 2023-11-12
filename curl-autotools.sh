@@ -26,7 +26,7 @@ _VER="$1"
   options="${_CONFIGURE_GLOBAL}"
   export CC="${_CC_GLOBAL}"
   export CFLAGS="${_CFLAGS_GLOBAL} -O3"
-  export CPPFLAGS="${_CPPFLAGS_GLOBAL} -DCURL_STATICLIB"
+  export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
   export RCFLAGS="${_RCFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
   LDFLAGS_LIB=''
@@ -58,10 +58,13 @@ _VER="$1"
   # libtool option to force building curl binary against static libs
   LDFLAGS_BIN+=' -static-libtool-libs'
 
-  if [ "${_OS}" = 'win' ] && [ "${_CONFIG#*unicode*}" != "${_CONFIG}" ]; then
-    CPPFLAGS+=' -Dmain=wmain'  # FIXME: upstream. https://github.com/curl/curl/issues/7229
-    CPPFLAGS+=' -DUNICODE -D_UNICODE'
-    LDFLAGS+=' -municode'
+  if [ "${_OS}" = 'win' ]; then
+    CPPFLAGS+=' -DCURL_STATICLIB'
+    if [ "${_CONFIG#*unicode*}" != "${_CONFIG}" ]; then
+      CPPFLAGS+=' -Dmain=wmain'  # FIXME: upstream. https://github.com/curl/curl/issues/7229
+      CPPFLAGS+=' -DUNICODE -D_UNICODE'
+      LDFLAGS+=' -municode'
+    fi
   fi
 
   if [ "${CW_MAP}" = '1' ]; then
