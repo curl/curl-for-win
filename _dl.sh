@@ -714,17 +714,18 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
   fi
 fi
 
+need_cacert=0
+
 if [[ "${_CONFIG}" = *'big'* ]]; then
   _DEPS+=' libidn2 libunistring libiconv libpsl gsasl'
 fi
 if [[ "${_CONFIG}" = *'wolfssl'* ]]; then
   _DEPS+=' wolfssl'
+  need_cacert=1
 fi
 if [[ "${_CONFIG}" = *'mbedtls'* ]]; then
   _DEPS+=' mbedtls'
 fi
-
-need_cacert=0
 
 if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
   if [ "${_OS}" != 'win' ] || \
@@ -748,7 +749,6 @@ fi
 if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro) ]]; then
   if   [[ "${_CONFIG}" = *'wolfssh'* ]]; then
     _DEPS+=' wolfssh'
-    need_cacert=1
   elif [[ "${_CONFIG}" = *'libssh'* ]]; then
     _DEPS+=' libssh1'
   else
