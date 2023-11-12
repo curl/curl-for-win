@@ -682,14 +682,16 @@ if [ "${_OS}" = 'win' ] && \
   fi
 fi
 
+# Translate config to a list of dependencies
+
+export _DEPS='curl'
+
 if [[ "${_CONFIG}" != *'zero'* ]] && \
    [[ "${_CONFIG}" != *'nozlib'* ]]; then
   if [[ "${_CONFIG}" = *'zlibng'* ]]; then
-    live_dl zlibng "${ZLIBNG_VER_}"
-    live_xt zlibng "${ZLIBNG_HASH}"
+    _DEPS+=' zlibng'
   else
-    live_dl zlib "${ZLIB_VER_}"
-    live_xt zlib "${ZLIB_HASH}"
+    _DEPS+=' zlibold'
   fi
 fi
 
@@ -699,61 +701,36 @@ if [[ "${_CONFIG}" != *'zero'* ]] && \
    [[ "${_CONFIG}" != *'nano'* ]] && \
    [[ "${_CONFIG}" != *'micro'* ]] && \
    [[ "${_CONFIG}" != *'mini'* ]]; then
-
   if [[ "${_CONFIG}" != *'nobrotli'* ]]; then
-    live_dl brotli "${BROTLI_VER_}"
-    live_xt brotli "${BROTLI_HASH}"
+    _DEPS+=' brotli'
   fi
   if [[ "${_CONFIG}" != *'nozstd'* ]]; then
-    live_dl zstd "${ZSTD_VER_}"
-    live_xt zstd "${ZSTD_HASH}"
+    _DEPS+=' zstd'
   fi
 fi
 
 if [[ "${_CONFIG}" = *'cares'* ]]; then
-  live_dl cares "${CARES_VER_}"
-  live_xt cares "${CARES_HASH}"
+  _DEPS+=' cares'
 fi
 
 if [[ "${_CONFIG}" != *'zero'* ]] && \
    [[ "${_CONFIG}" != *'bldtst'* ]] && \
    [[ "${_CONFIG}" != *'pico'* ]] && \
    [[ "${_CONFIG}" != *'nano'* ]]; then
-  live_dl nghttp2 "${NGHTTP2_VER_}"
-  live_xt nghttp2 "${NGHTTP2_HASH}"
-
+  _DEPS+=' nghttp2'
   if [[ "${_CONFIG}" != *'noh3'* ]]; then
-    live_dl nghttp3 "${NGHTTP3_VER_}"
-    live_xt nghttp3 "${NGHTTP3_HASH}"
-
-    live_dl ngtcp2 "${NGTCP2_VER_}"
-    live_xt ngtcp2 "${NGTCP2_HASH}"
+    _DEPS+=' nghttp3 ngtcp2'
   fi
 fi
 
 if [[ "${_CONFIG}" = *'big'* ]]; then
-  live_dl libidn2 "${LIBIDN2_VER_}"
-  live_xt libidn2 "${LIBIDN2_HASH}"
-
-  live_dl libunistring "${LIBUNISTRING_VER_}"
-  live_xt libunistring "${LIBUNISTRING_HASH}"
-  live_dl libiconv "${LIBICONV_VER_}"
-  live_xt libiconv "${LIBICONV_HASH}"
-  live_dl libpsl "${LIBPSL_VER_}"
-  live_xt libpsl "${LIBPSL_HASH}"
-
-  live_dl gsasl "${GSASL_VER_}"
-  live_xt gsasl "${GSASL_HASH}"
+  _DEPS+=' libidn2 libunistring libiconv libpsl gsasl'
 fi
-
 if [[ "${_CONFIG}" = *'wolfssl'* ]]; then
-  live_dl wolfssl "${WOLFSSL_VER_}"
-  live_xt wolfssl "${WOLFSSL_HASH}"
+  _DEPS+=' wolfssl'
 fi
-
 if [[ "${_CONFIG}" = *'mbedtls'* ]]; then
-  live_dl mbedtls "${MBEDTLS_VER_}"
-  live_xt mbedtls "${MBEDTLS_HASH}"
+  _DEPS+=' mbedtls'
 fi
 
 need_openssl=0
@@ -773,24 +750,15 @@ fi
 need_cacert=0
 if [ "${need_openssl}" = '1' ]; then
   if [[ "${_CONFIG}" = *'libressl'* ]]; then
-    live_dl libressl "${LIBRESSL_VER_}"
-    live_xt libressl "${LIBRESSL_HASH}"
+    _DEPS+=' libressl'
   elif [[ "${_CONFIG}" = *'awslc'* ]]; then
-    live_dl awslc "${AWSLC_VER_}"
-    live_xt awslc "${AWSLC_HASH}"
+    _DEPS+=' awslc'
   elif [[ "${_CONFIG}" = *'boringssl'* ]]; then
-    live_dl boringssl "${BORINGSSL_VER_}"
-    live_xt boringssl "${BORINGSSL_HASH}"
+    _DEPS+=' boringssl'
   elif [[ "${_CONFIG}" = *'noh3'* ]]; then
-    if [[ "${_CONFIG}" = *'dev'* ]]; then
-      OPENSSL_VER_='3.1.0-beta1'
-      OPENSSL_HASH=
-    fi
-    live_dl openssl "${OPENSSL_VER_}"
-    live_xt openssl "${OPENSSL_HASH}"
+    _DEPS+=' openssl'
   else
-    live_dl quictls "${QUICTLS_VER_}"
-    live_xt quictls "${QUICTLS_HASH}"
+    _DEPS+=' quictls'
   fi
   need_cacert=1
 fi
@@ -801,63 +769,166 @@ if [[ "${_CONFIG}" != *'zero'* ]] && \
    [[ "${_CONFIG}" != *'nano'* ]] && \
    [[ "${_CONFIG}" != *'micro'* ]]; then
   if [[ "${_CONFIG}" = *'wolfssh'* ]]; then
-    live_dl wolfssh "${WOLFSSH_VER_}"
-    live_xt wolfssh "${WOLFSSH_HASH}"
+    _DEPS+=' wolfssh'
     need_cacert=1
   elif [[ "${_CONFIG}" = *'libssh'* ]]; then
-    # shellcheck disable=SC2153
-    live_dl libssh "${LIBSSH_VER_}"
-    # shellcheck disable=SC2153
-    live_xt libssh "${LIBSSH_HASH}"
+    _DEPS+=' libssh1'
   else
-    if [[ "${_CONFIG}" = *'dev'* ]]; then
-      LIBSSH2_HASH=
-      LIBSSH2_REV_="${LIBSSH2_REV_:-master}"
-      if [ -z "${CW_GET:-}" ] || echo " ${CW_GET} " | grep -q -F ' libssh2 '; then
-        rev="$(my_curl --user-agent ' ' "https://api.github.com/repos/libssh2/libssh2/commits/${LIBSSH2_REV_}" \
-          --header 'X-GitHub-Api-Version: 2022-11-28' \
-          | jq --raw-output '.sha')"
-        [ -n "${rev}" ] && LIBSSH2_REV_="${rev}"
-        url="https://github.com/libssh2/libssh2/archive/${LIBSSH2_REV_}.tar.gz"
-        echo "${url}" > '__libssh2.url'
-        my_curl --location --proto-redir =https --output pkg.bin "${url}"
-        live_xt libssh2 "${LIBSSH2_HASH}"
-      fi
-      LIBSSH2_VER_="$(grep -a -F 'define LIBSSH2_VERSION ' 'libssh2/include/libssh2.h' | grep -o -E '".+"' | tr -d '"')"
-    else
-      live_dl libssh2 "${LIBSSH2_VER_}"
-      live_xt libssh2 "${LIBSSH2_HASH}"
-    fi
+    _DEPS+=' libssh2'
   fi
 fi
 
 if [ "${need_cacert}" = '1' ]; then
-  live_dl cacert "${CACERT_VER_}"
-  live_xt cacert "${CACERT_HASH}"
-fi
-
-if [[ "${_CONFIG}" = *'dev'* ]]; then
-  CURL_HASH=
-  CURL_REV_="${CURL_REV_:-master}"
-  if [ -z "${CW_GET:-}" ] || echo " ${CW_GET} " | grep -q -F ' curl '; then
-    rev="$(my_curl --user-agent ' ' "https://api.github.com/repos/curl/curl/commits/${CURL_REV_}" \
-      --header 'X-GitHub-Api-Version: 2022-11-28' \
-      | jq --raw-output '.sha')"
-    [ -n "${rev}" ] && CURL_REV_="${rev}"
-    url="https://github.com/curl/curl/archive/${CURL_REV_}.tar.gz"
-    echo "${url}" > '__curl.url'
-    my_curl --location --proto-redir =https --output pkg.bin "${url}"
-    live_xt curl "${CURL_HASH}"
-  fi
-  CURL_VER_="$(grep -a -F 'define LIBCURL_VERSION' 'curl/include/curl/curlver.h' | grep -o -E '".+"' | tr -d '"')"
-else
-  live_dl curl "${CURL_VER_}"
-  live_xt curl "${CURL_HASH}"
+  _DEPS+=' cacert'
 fi
 
 if [[ "${_CONFIG}" = *'dev'* ]] || \
    [[ "${_CONFIG}" = *'test'* ]] || \
    [[ "${_CONFIG}" = *'trurl'* ]]; then
+  _DEPS+=' trurl'
+fi
+
+# Download dependencies
+
+if [[ "${_DEPS}" = *'zlibng'* ]]; then
+  live_dl zlibng "${ZLIBNG_VER_}"
+  live_xt zlibng "${ZLIBNG_HASH}"
+fi
+if [[ "${_DEPS}" = *'zlibold'* ]]; then
+  live_dl zlib "${ZLIB_VER_}"
+  live_xt zlib "${ZLIB_HASH}"
+fi
+if [[ "${_DEPS}" = *'brotli'* ]]; then
+  live_dl brotli "${BROTLI_VER_}"
+  live_xt brotli "${BROTLI_HASH}"
+fi
+if [[ "${_DEPS}" = *'zstd'* ]]; then
+  live_dl zstd "${ZSTD_VER_}"
+  live_xt zstd "${ZSTD_HASH}"
+fi
+if [[ "${_DEPS}" = *'cares'* ]]; then
+  live_dl cares "${CARES_VER_}"
+  live_xt cares "${CARES_HASH}"
+fi
+if [[ "${_DEPS}" = *'nghttp2'* ]]; then
+  live_dl nghttp2 "${NGHTTP2_VER_}"
+  live_xt nghttp2 "${NGHTTP2_HASH}"
+fi
+if [[ "${_DEPS}" = *'nghttp3'* ]]; then
+  live_dl nghttp3 "${NGHTTP3_VER_}"
+  live_xt nghttp3 "${NGHTTP3_HASH}"
+fi
+if [[ "${_DEPS}" = *'ngtcp2'* ]]; then
+  live_dl ngtcp2 "${NGTCP2_VER_}"
+  live_xt ngtcp2 "${NGTCP2_HASH}"
+fi
+if [[ "${_DEPS}" = *'libidn2'* ]]; then
+  live_dl libidn2 "${LIBIDN2_VER_}"
+  live_xt libidn2 "${LIBIDN2_HASH}"
+fi
+if [[ "${_DEPS}" = *'libunistring'* ]]; then
+  live_dl libunistring "${LIBUNISTRING_VER_}"
+  live_xt libunistring "${LIBUNISTRING_HASH}"
+fi
+if [[ "${_DEPS}" = *'libiconv'* ]]; then
+  live_dl libiconv "${LIBICONV_VER_}"
+  live_xt libiconv "${LIBICONV_HASH}"
+fi
+if [[ "${_DEPS}" = *'libpsl'* ]]; then
+  live_dl libpsl "${LIBPSL_VER_}"
+  live_xt libpsl "${LIBPSL_HASH}"
+fi
+if [[ "${_DEPS}" = *'gsasl'* ]]; then
+  live_dl gsasl "${GSASL_VER_}"
+  live_xt gsasl "${GSASL_HASH}"
+fi
+if [[ "${_DEPS}" = *'wolfssl'* ]]; then
+  live_dl wolfssl "${WOLFSSL_VER_}"
+  live_xt wolfssl "${WOLFSSL_HASH}"
+fi
+if [[ "${_DEPS}" = *'mbedtls'* ]]; then
+  live_dl mbedtls "${MBEDTLS_VER_}"
+  live_xt mbedtls "${MBEDTLS_HASH}"
+fi
+if [[ "${_DEPS}" = *'libressl'* ]]; then
+  live_dl libressl "${LIBRESSL_VER_}"
+  live_xt libressl "${LIBRESSL_HASH}"
+fi
+if [[ "${_DEPS}" = *'awslc'* ]]; then
+  live_dl awslc "${AWSLC_VER_}"
+  live_xt awslc "${AWSLC_HASH}"
+fi
+if [[ "${_DEPS}" = *'boringssl'* ]]; then
+  live_dl boringssl "${BORINGSSL_VER_}"
+  live_xt boringssl "${BORINGSSL_HASH}"
+fi
+if [[ "${_DEPS}" = *'openssl'* ]]; then
+  if [[ "${_CONFIG}" = *'dev'* ]]; then
+    OPENSSL_VER_='3.1.0-beta1'
+    OPENSSL_HASH=
+  fi
+  live_dl openssl "${OPENSSL_VER_}"
+  live_xt openssl "${OPENSSL_HASH}"
+fi
+if [[ "${_DEPS}" = *'quictls'* ]]; then
+  live_dl quictls "${QUICTLS_VER_}"
+  live_xt quictls "${QUICTLS_HASH}"
+fi
+if [[ "${_DEPS}" = *'wolfssh'* ]]; then
+  live_dl wolfssh "${WOLFSSH_VER_}"
+  live_xt wolfssh "${WOLFSSH_HASH}"
+fi
+if [[ "${_DEPS}" = *'libssh1'* ]]; then
+  # shellcheck disable=SC2153
+  live_dl libssh "${LIBSSH_VER_}"
+  # shellcheck disable=SC2153
+  live_xt libssh "${LIBSSH_HASH}"
+fi
+if [[ "${_DEPS}" = *'libssh2'* ]]; then
+  if [[ "${_CONFIG}" = *'dev'* ]]; then
+    LIBSSH2_HASH=
+    LIBSSH2_REV_="${LIBSSH2_REV_:-master}"
+    if [ -z "${CW_GET:-}" ] || echo " ${CW_GET} " | grep -q -F ' libssh2 '; then
+      rev="$(my_curl --user-agent ' ' "https://api.github.com/repos/libssh2/libssh2/commits/${LIBSSH2_REV_}" \
+        --header 'X-GitHub-Api-Version: 2022-11-28' \
+        | jq --raw-output '.sha')"
+      [ -n "${rev}" ] && LIBSSH2_REV_="${rev}"
+      url="https://github.com/libssh2/libssh2/archive/${LIBSSH2_REV_}.tar.gz"
+      echo "${url}" > '__libssh2.url'
+      my_curl --location --proto-redir =https --output pkg.bin "${url}"
+      live_xt libssh2 "${LIBSSH2_HASH}"
+    fi
+    LIBSSH2_VER_="$(grep -a -F 'define LIBSSH2_VERSION ' 'libssh2/include/libssh2.h' | grep -o -E '".+"' | tr -d '"')"
+  else
+    live_dl libssh2 "${LIBSSH2_VER_}"
+    live_xt libssh2 "${LIBSSH2_HASH}"
+  fi
+fi
+if [[ "${_DEPS}" = *'cacert'* ]]; then
+  live_dl cacert "${CACERT_VER_}"
+  live_xt cacert "${CACERT_HASH}"
+fi
+if [[ "${_DEPS}" = *'curl'* ]]; then
+  if [[ "${_CONFIG}" = *'dev'* ]]; then
+    CURL_HASH=
+    CURL_REV_="${CURL_REV_:-master}"
+    if [ -z "${CW_GET:-}" ] || echo " ${CW_GET} " | grep -q -F ' curl '; then
+      rev="$(my_curl --user-agent ' ' "https://api.github.com/repos/curl/curl/commits/${CURL_REV_}" \
+        --header 'X-GitHub-Api-Version: 2022-11-28' \
+        | jq --raw-output '.sha')"
+      [ -n "${rev}" ] && CURL_REV_="${rev}"
+      url="https://github.com/curl/curl/archive/${CURL_REV_}.tar.gz"
+      echo "${url}" > '__curl.url'
+      my_curl --location --proto-redir =https --output pkg.bin "${url}"
+      live_xt curl "${CURL_HASH}"
+    fi
+    CURL_VER_="$(grep -a -F 'define LIBCURL_VERSION' 'curl/include/curl/curlver.h' | grep -o -E '".+"' | tr -d '"')"
+  else
+    live_dl curl "${CURL_VER_}"
+    live_xt curl "${CURL_HASH}"
+  fi
+fi
+if [[ "${_DEPS}" = *'trurl'* ]]; then
   # shellcheck disable=SC2153
   live_dl trurl "${TRURL_VER_}"
   # shellcheck disable=SC2153
