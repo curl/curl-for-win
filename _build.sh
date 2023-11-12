@@ -110,7 +110,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     they require '/lib/ld-musl-x86_64.so.1' / '/lib/ld-musl-aarch64.so.1' now.
 #     meaning e.g.: `apt install musl; LD_LIBRARY_PATH=. ./trurl`
 #   - merge _ci-*.sh scripts into one.
-#   - FIXME: curl-autotools: .map file support and clang builds broken.
+#   - FIXME: curl-autotools: Linux MUSL builds broken. We pass custom crt*.o
+#            files, autotools duplicates them on the final libtool command-line,
+#            causing duplicate symbols.
 #   - win: Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
 #       https://gs.statcounter.com/windows-version-market-share
