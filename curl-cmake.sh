@@ -69,11 +69,11 @@ _VER="$1"
     LDFLAGS+=' -Wl,-Bstatic'
   fi
 
-  if [ ! "${_CONFIG#*werror*}" = "${_CONFIG}" ]; then
+  if [ "${_CONFIG#*werror*}" != "${_CONFIG}" ]; then
     options+=' -DCURL_WERROR=ON'
   fi
 
-  if [ ! "${_CONFIG#*debug*}" = "${_CONFIG}" ]; then
+  if [ "${_CONFIG#*debug*}" != "${_CONFIG}" ]; then
     options+=' -DENABLE_DEBUG=ON'
     # curl would only set this automatically for the 'Debug' configuration
     # Required for certain BUILD_TESTING=ON 'testdeps' build targets to link
@@ -86,16 +86,16 @@ _VER="$1"
     CPPFLAGS+=' -DDEBUGBUILD'
   fi
 
-  if [ ! "${_CONFIG#*zero*}" = "${_CONFIG}" ] || \
-     [ ! "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] || \
-     [ ! "${_CONFIG#*pico*}" = "${_CONFIG}" ] || \
-     [ ! "${_CONFIG#*nano*}" = "${_CONFIG}" ]; then
+  if [ "${_CONFIG#*zero*}" != "${_CONFIG}" ] || \
+     [ "${_CONFIG#*bldtst*}" != "${_CONFIG}" ] || \
+     [ "${_CONFIG#*pico*}" != "${_CONFIG}" ] || \
+     [ "${_CONFIG#*nano*}" != "${_CONFIG}" ]; then
     options+=' -DCURL_DISABLE_ALTSVC=ON'
   fi
 
-  if [ ! "${_CONFIG#*zero*}" = "${_CONFIG}" ] || \
-     [ ! "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] || \
-     [ ! "${_CONFIG#*pico*}" = "${_CONFIG}" ]; then
+  if [ "${_CONFIG#*zero*}" != "${_CONFIG}" ] || \
+     [ "${_CONFIG#*bldtst*}" != "${_CONFIG}" ] || \
+     [ "${_CONFIG#*pico*}" != "${_CONFIG}" ]; then
     options+=' -DCURL_DISABLE_BASIC_AUTH=ON -DCURL_DISABLE_BEARER_AUTH=ON -DCURL_DISABLE_DIGEST_AUTH=ON -DCURL_DISABLE_KERBEROS_AUTH=ON -DCURL_DISABLE_NEGOTIATE_AUTH=ON -DCURL_DISABLE_AWS=ON'
     options+=' -DCURL_DISABLE_DICT=ON -DCURL_DISABLE_FILE=ON -DCURL_DISABLE_GOPHER=ON -DCURL_DISABLE_MQTT=ON -DCURL_DISABLE_RTSP=ON -DCURL_DISABLE_SMB=ON -DCURL_DISABLE_TELNET=ON -DCURL_DISABLE_TFTP=ON'
     options+=' -DCURL_DISABLE_FTP=ON'

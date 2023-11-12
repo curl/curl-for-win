@@ -244,8 +244,8 @@ if [ "${_HOST}" = 'linux' ] && [ -s /etc/os-release ]; then
 fi
 
 export _OS='win'
-[ ! "${_CONFIG#*mac*}" = "${_CONFIG}" ] && _OS='mac'
-[ ! "${_CONFIG#*linux*}" = "${_CONFIG}" ] && _OS='linux'
+[ "${_CONFIG#*mac*}" != "${_CONFIG}" ] && _OS='mac'
+[ "${_CONFIG#*linux*}" != "${_CONFIG}" ] && _OS='linux'
 
 export _CACERT='cacert.pem'
 
@@ -256,13 +256,13 @@ if [ "${_OS}" = 'mac' ]; then
 else
   _CONFCC='llvm'
 fi
-[ ! "${_CONFIG#*gcc*}" = "${_CONFIG}" ] && _CONFCC='gcc'
-[ ! "${_CONFIG#*llvm*}" = "${_CONFIG}" ] && _CONFCC='llvm'
+[ "${_CONFIG#*gcc*}" != "${_CONFIG}" ] && _CONFCC='gcc'
+[ "${_CONFIG#*llvm*}" != "${_CONFIG}" ] && _CONFCC='llvm'
 
 export _CRT
 if [ "${_OS}" = 'win' ]; then
   _CRT='ucrt'
-  [ ! "${_CONFIG#*msvcrt*}" = "${_CONFIG}" ] && _CRT='msvcrt'
+  [ "${_CONFIG#*msvcrt*}" != "${_CONFIG}" ] && _CRT='msvcrt'
 elif [ "${_OS}" = 'linux' ]; then
   if [ "${_HOST}" = 'mac' ]; then
     # Assume musl-cross toolchain via Homebrew, based on musl-cross-make
@@ -276,7 +276,7 @@ elif [ "${_OS}" = 'linux' ]; then
   else
     # TODO: make musl the default (once all issues are cleared)
     _CRT='gnu'
-    [ ! "${_CONFIG#*musl*}" = "${_CONFIG}" ] && _CRT='musl'
+    [ "${_CONFIG#*musl*}" != "${_CONFIG}" ] && _CRT='musl'
   fi
 else
   # macOS: /usr/lib/libSystem.B.dylib

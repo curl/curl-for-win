@@ -37,11 +37,11 @@ _VER="$1"
 
   options+=' --enable-unix-sockets'
 
-  if [ ! "${_CONFIG#*werror*}" = "${_CONFIG}" ]; then
+  if [ "${_CONFIG#*werror*}" != "${_CONFIG}" ]; then
     options+=' --enable-werror'
   fi
 
-  if [ ! "${_CONFIG#*debug*}" = "${_CONFIG}" ]; then
+  if [ "${_CONFIG#*debug*}" != "${_CONFIG}" ]; then
     options+=' --enable-debug'
   else
     options+=' --disable-debug'
@@ -79,18 +79,18 @@ _VER="$1"
     fi
   fi
 
-  if [ ! "${_CONFIG#*zero*}" = "${_CONFIG}" ] || \
-     [ ! "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] || \
-     [ ! "${_CONFIG#*pico*}" = "${_CONFIG}" ] || \
-     [ ! "${_CONFIG#*nano*}" = "${_CONFIG}" ]; then
+  if [ "${_CONFIG#*zero*}" != "${_CONFIG}" ] || \
+     [ "${_CONFIG#*bldtst*}" != "${_CONFIG}" ] || \
+     [ "${_CONFIG#*pico*}" != "${_CONFIG}" ] || \
+     [ "${_CONFIG#*nano*}" != "${_CONFIG}" ]; then
     options+=' --disable-alt-svc'
   else
     options+=' --enable-alt-svc'
   fi
 
-  if [ ! "${_CONFIG#*zero*}" = "${_CONFIG}" ] || \
-     [ ! "${_CONFIG#*bldtst*}" = "${_CONFIG}" ] || \
-     [ ! "${_CONFIG#*pico*}" = "${_CONFIG}" ]; then
+  if [ "${_CONFIG#*zero*}" != "${_CONFIG}" ] || \
+     [ "${_CONFIG#*bldtst*}" != "${_CONFIG}" ] || \
+     [ "${_CONFIG#*pico*}" != "${_CONFIG}" ]; then
     options+=' --disable-basic-auth --disable-bearer-auth --disable-digest-auth --disable-kerberos-auth --disable-negotiate-auth --disable-aws'
     options+=' --disable-dict --disable-file --disable-gopher --disable-mqtt --disable-rtsp --disable-smb --disable-telnet --disable-tftp'
     options+=' --disable-ftp'
