@@ -1264,8 +1264,8 @@ build_single_target() {
     fi
     libprefix="/usr/lib/${_machine}-linux-musl"
     _CFLAGS_GLOBAL+=" -static -nostdinc -isystem ${ccridir}/include -isystem /usr/include/${_machine}-linux-musl"
-    _LDFLAGS_GLOBAL+=" -nostartfiles -L${libprefix} -Wl,${libprefix}/Scrt1.o -Wl,${libprefix}/crti.o -L${ccrsdir} -Wl,${libprefix}/crtn.o"
-    _LDFLAGS_GLOBAL+=" -lc ${ccrtlib}"
+    _LDFLAGS_GLOBAL+=" -nostartfiles -Wl,${libprefix}/Scrt1.o -Wl,${libprefix}/crti.o -Wl,${libprefix}/crtn.o"
+    _LDFLAGS_GLOBAL+=" -L${libprefix} -L${ccrsdir} -lc ${ccrtlib}"
   fi
 
   if [ "${_CCRT}" = 'clang-rt' ]; then
@@ -1305,8 +1305,8 @@ build_single_target() {
         fi
         libprefix="/usr/lib/${_machine}-linux-musl"
         _CFLAGS_GLOBAL+=" -nostdinc -isystem ${ccrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
-        _LDFLAGS_GLOBAL+=" -nostdlib -nodefaultlibs -nostartfiles -L${libprefix} ${libprefix}/crt1.o ${libprefix}/crti.o -L${ccrtdir} ${libprefix}/crtn.o"
-        _LDFLAGS_GLOBAL+=" -lc ${ccrtlib}"
+        _LDFLAGS_GLOBAL+=" -nostdlib -nodefaultlibs -nostartfiles ${libprefix}/crt1.o ${libprefix}/crti.o ${libprefix}/crtn.o"
+        _LDFLAGS_GLOBAL+=" -L${libprefix} -L${ccrtdir} -lc ${ccrtlib}"
       else
         if [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" != "${_machine}" ] && [ -d 'my-pkg/usr/lib/clang' ]; then
           # If we have the target CPU's clang-rt package installed, use it:
@@ -1321,12 +1321,12 @@ build_single_target() {
           ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
           ccrtlib="-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
           libprefix="/usr/${_TRIPLETSH}/lib"
-          _LDFLAGS_GLOBAL+=" -nodefaultlibs -L${libprefix} -L${ccrtdir}"
+          _LDFLAGS_GLOBAL+=' -nodefaultlibs'
           # lld by default wants to load startfiles from:
           #   /usr/bin/../lib/gcc-cross/x86_64-linux-gnu/12/../../../../x86_64-linux-gnu/lib/
           # or similar. Manually specify the ones belonging to glibc.
           _LDFLAGS_GLOBAL+=" -nostartfiles ${libprefix}/Scrt1.o ${libprefix}/crti.o ${libprefix}/crtn.o"
-          _LDFLAGS_GLOBAL+=" -lc ${ccrtlib}"
+          _LDFLAGS_GLOBAL+=" -L${libprefix} -L${ccrtdir} -lc ${ccrtlib}"
         fi
         _LDFLAGS_GLOBAL+=' -rtlib=compiler-rt'
         # `-Wc,...` is necessary for libtool to pass this option to the compiler
