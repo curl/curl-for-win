@@ -381,13 +381,21 @@ _VER="$1"
 
   VERSIONINFO='-avoid-version'
   [ -n "${_CURL_DLL_SUFFIX_NODASH}" ] && VERSIONINFO="-release '${_CURL_DLL_SUFFIX_NODASH}' ${VERSIONINFO}"
-  make "AM_LDFLAGS=${LDFLAGS_LIB}" "VERSIONINFO=${VERSIONINFO}" \
-    --directory="${_BLDDIR}/lib" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
+  if true || [ "${CURL_VER_}" = '8.4.0' ]; then
+    make "AM_LDFLAGS=${LDFLAGS_LIB}" "VERSIONINFO=${VERSIONINFO}" \
+      --directory="${_BLDDIR}/lib" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
-  make "AM_LDFLAGS=${LDFLAGS_BIN}" \
-    --directory="${_BLDDIR}/src" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
+    make "AM_LDFLAGS=${LDFLAGS_BIN}" \
+      --directory="${_BLDDIR}/src" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
-  make --directory="${_BLDDIR}/include" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
+    make --directory="${_BLDDIR}/include" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
+  else
+    # Pending: https://github.com/curl/curl/pull/12312
+    export CURL_LDFLAGS_LIB="${LDFLAGS_LIB}"
+    export CURL_LDFLAGS_BIN="${LDFLAGS_BIN}"
+    make "VERSIONINFO=${VERSIONINFO}" \
+      --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
+  fi
 
   # Manual copy to DESTDIR
 
