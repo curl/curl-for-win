@@ -132,8 +132,10 @@ _VER="$1"
     export MBEDTLS_PATH="../../mbedtls/${_PP}"
   fi
 
-  if [ "${_OS}" = 'win' ]; then
-    CFG+='-schannel'
+  if [[ "${_CONFIG}" != *'osnotls'* ]]; then
+    if [ "${_OS}" = 'win' ]; then
+      CFG+='-schannel'
+    fi
   fi
   CPPFLAGS+=' -DHAS_ALPN'
 

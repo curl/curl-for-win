@@ -188,15 +188,26 @@ _VER="$1"
 
   options+=' --without-gnutls --without-bearssl --without-rustls --without-hyper'
 
-  if [ "${_OS}" = 'win' ]; then
-    options+=' --with-schannel'
-  elif [ "${_OS}" = 'mac' ] && [ "${_OSVER}" -lt '1015' ]; then
-    # SecureTransport deprecated in 2019 (macOS 10.15 Catalina, iOS 13.0)
-    options+=' --with-secure-transport'
-    # Without this, SecureTransport becomes the default TLS backend
-    [ -n "${mainssl}" ] && options+=" --with-default-ssl-backend=${mainssl}"
-  elif [ -z "${mainssl}" ]; then
-    options+=' --without-ssl'
+  if [[ "${_CONFIG}" != *'osnotls'* ]]; then
+    if [ "${_OS}" = 'win' ]; then
+      options+=' --with-schannel'
+    elif [ "${_OS}" = 'mac' ] && [ "${_OSVER}" -lt '1015' ]; then
+      # SecureTransport deprecated in 2019 (macOS 10.15 Catalina, iOS 13.0)
+      options+=' --with-secure-transport'
+      # Without this, SecureTransport becomes the default TLS backend
+      [ -n "${mainssl}" ] && options+=" --with-default-ssl-backend=${mainssl}"
+    elif [ -z "${mainssl}" ]; then
+      options+=' --without-ssl'
+    fi
+  else
+    if [ "${_OS}" = 'win' ]; then
+      options+=' --without-schannel'
+    elif [ "${_OS}" = 'mac' ]; then
+      options+=' --without-secure-transport'
+    fi
+    if [ -z "${mainssl}" ]; then
+      options+=' --without-ssl'
+    fi
   fi
   CPPFLAGS+=' -DHAS_ALPN'
 

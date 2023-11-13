@@ -40,6 +40,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        libressl   build with LibreSSL
 #        openssl    build with OpenSSL (mainline)
 #        ostls      build with OS-supplied TLS backend-only (Schannel or SecureTransport)
+#        osnotls    build without OS-supplied TLS backends
 #        mbedtls    build with mbedTLS
 #        wolfssl    build with wolfSSL (caveats!)
 #        wolfssh    build with wolfSSH (requires wolfSSL)

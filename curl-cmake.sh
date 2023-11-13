@@ -230,15 +230,23 @@ _VER="$1"
     options+=" -DMBEDX509_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedx509.a"
   fi
 
-  if [ "${_OS}" = 'win' ]; then
-    options+=' -DCURL_USE_SCHANNEL=ON'
-  elif [ "${_OS}" = 'mac' ] && [ "${_OSVER}" -lt '1015' ]; then
-    # SecureTransport deprecated in 2019 (macOS 10.15 Catalina, iOS 13.0)
-    # Another known deprecation issue:
-    #   curl/lib/vtls/sectransp.c:1206:7: warning: 'CFURLCreateDataAndPropertiesFromResource' is deprecated: first deprecated in macOS 10.9 - For resource data, use the CFReadStream API. For file resource properties, use CFURLCopyResourcePropertiesForKeys. [-Wdeprecated-declarations]
-    options+=' -DCURL_USE_SECTRANSP=ON'
-    # Without this, SecureTransport becomes the default TLS backend
-    [ -n "${mainssl}" ] && options+=" -DCURL_DEFAULT_SSL_BACKEND=${mainssl}"
+  if [[ "${_CONFIG}" != *'osnotls'* ]]; then
+    if [ "${_OS}" = 'win' ]; then
+      options+=' -DCURL_USE_SCHANNEL=ON'
+    elif [ "${_OS}" = 'mac' ] && [ "${_OSVER}" -lt '1015' ]; then
+      # SecureTransport deprecated in 2019 (macOS 10.15 Catalina, iOS 13.0)
+      # Another known deprecation issue:
+      #   curl/lib/vtls/sectransp.c:1206:7: warning: 'CFURLCreateDataAndPropertiesFromResource' is deprecated: first deprecated in macOS 10.9 - For resource data, use the CFReadStream API. For file resource properties, use CFURLCopyResourcePropertiesForKeys. [-Wdeprecated-declarations]
+      options+=' -DCURL_USE_SECTRANSP=ON'
+      # Without this, SecureTransport becomes the default TLS backend
+      [ -n "${mainssl}" ] && options+=" -DCURL_DEFAULT_SSL_BACKEND=${mainssl}"
+    fi
+  else
+    if [ "${_OS}" = 'win' ]; then
+      options+=' -DCURL_USE_SCHANNEL=OFF'
+    elif [ "${_OS}" = 'mac' ]; then
+      options+=' -DCURL_USE_SECTRANSP=OFF'
+    fi
   fi
   CPPFLAGS+=' -DHAS_ALPN'
 
