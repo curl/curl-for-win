@@ -63,16 +63,11 @@ _VER="$1"
 
   # CPPFLAGS added after this point only affect libcurl.
 
-  if [[ "${_CONFIG}" = *'zero'* ]] || \
-     [[ "${_CONFIG}" = *'bldtst'* ]] || \
-     [[ "${_CONFIG}" = *'pico'* ]] || \
-     [[ "${_CONFIG}" = *'nano'* ]]; then
+  if [[ "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
     CPPFLAGS+=' -DCURL_DISABLE_ALTSVC=1'
   fi
 
-  if [[ "${_CONFIG}" = *'zero'* ]] || \
-     [[ "${_CONFIG}" = *'bldtst'* ]] || \
-     [[ "${_CONFIG}" = *'pico'* ]]; then
+  if [[ "${_CONFIG}" =~ (zero|bldtst|pico) ]]; then
     CPPFLAGS+=' -DCURL_DISABLE_CRYPTO_AUTH=1'
     CPPFLAGS+=' -DCURL_DISABLE_DICT=1 -DCURL_DISABLE_FILE=1 -DCURL_DISABLE_GOPHER=1 -DCURL_DISABLE_MQTT=1 -DCURL_DISABLE_RTSP=1 -DCURL_DISABLE_SMB=1 -DCURL_DISABLE_TELNET=1 -DCURL_DISABLE_TFTP=1'
     CPPFLAGS+=' -DCURL_DISABLE_FTP=1'

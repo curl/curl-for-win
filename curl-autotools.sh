@@ -79,18 +79,13 @@ _VER="$1"
     fi
   fi
 
-  if [[ "${_CONFIG}" = *'zero'* ]] || \
-     [[ "${_CONFIG}" = *'bldtst'* ]] || \
-     [[ "${_CONFIG}" = *'pico'* ]] || \
-     [[ "${_CONFIG}" = *'nano'* ]]; then
+  if [[ "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
     options+=' --disable-alt-svc'
   else
     options+=' --enable-alt-svc'
   fi
 
-  if [[ "${_CONFIG}" = *'zero'* ]] || \
-     [[ "${_CONFIG}" = *'bldtst'* ]] || \
-     [[ "${_CONFIG}" = *'pico'* ]]; then
+  if [[ "${_CONFIG}" =~ (zero|bldtst|pico) ]]; then
     options+=' --disable-basic-auth --disable-bearer-auth --disable-digest-auth --disable-kerberos-auth --disable-negotiate-auth --disable-aws'
     options+=' --disable-dict --disable-file --disable-gopher --disable-mqtt --disable-rtsp --disable-smb --disable-telnet --disable-tftp'
     options+=' --disable-ftp'

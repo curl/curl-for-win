@@ -86,16 +86,11 @@ _VER="$1"
     CPPFLAGS+=' -DDEBUGBUILD'
   fi
 
-  if [[ "${_CONFIG}" = *'zero'* ]] || \
-     [[ "${_CONFIG}" = *'bldtst'* ]] || \
-     [[ "${_CONFIG}" = *'pico'* ]] || \
-     [[ "${_CONFIG}" = *'nano'* ]]; then
+  if [[ "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
     options+=' -DCURL_DISABLE_ALTSVC=ON'
   fi
 
-  if [[ "${_CONFIG}" = *'zero'* ]] || \
-     [[ "${_CONFIG}" = *'bldtst'* ]] || \
-     [[ "${_CONFIG}" = *'pico'* ]]; then
+  if [[ "${_CONFIG}" =~ (zero|bldtst|pico) ]]; then
     options+=' -DCURL_DISABLE_BASIC_AUTH=ON -DCURL_DISABLE_BEARER_AUTH=ON -DCURL_DISABLE_DIGEST_AUTH=ON -DCURL_DISABLE_KERBEROS_AUTH=ON -DCURL_DISABLE_NEGOTIATE_AUTH=ON -DCURL_DISABLE_AWS=ON'
     options+=' -DCURL_DISABLE_DICT=ON -DCURL_DISABLE_FILE=ON -DCURL_DISABLE_GOPHER=ON -DCURL_DISABLE_MQTT=ON -DCURL_DISABLE_RTSP=ON -DCURL_DISABLE_SMB=ON -DCURL_DISABLE_TELNET=ON -DCURL_DISABLE_TFTP=ON'
     options+=' -DCURL_DISABLE_FTP=ON'
