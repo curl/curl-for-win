@@ -25,9 +25,9 @@ _VER="$1"
 
   export PKG_CONFIG_LIBDIR=''  # Avoid picking up non-cross copies
 
-  if [[ "${_DEPS}" = *'libidn2'* ]] && \
-     [[ "${_DEPS}" = *'libiconv'* ]] && \
-     [[ "${_DEPS}" = *'libunistring'* ]]; then
+  if [[ "${_DEPS}" = *'libidn2'* ]] && [ -d '../libidn2' ] && \
+     [[ "${_DEPS}" = *'libiconv'* ]] && [ -d '../libiconv' ] && \
+     [[ "${_DEPS}" = *'libunistring'* ]] && [ -d '../libunistring' ]; then
     CPPFLAGS+=" -I${_TOP}/libidn2/${_PP}/include"
     LDFLAGS+=" -L${_TOP}/libidn2/${_PP}/lib"
     if [ "${_OS}" = 'win' ]; then

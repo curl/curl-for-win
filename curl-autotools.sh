@@ -115,14 +115,14 @@ _VER="$1"
     options+=' --without-zlib'
   fi
 
-  if [[ "${_DEPS}" = *'brotli'* ]]; then
+  if [[ "${_DEPS}" = *'brotli'* ]] && [ -d '../brotli' ]; then
     options+=" --with-brotli=${_TOP}/brotli/${_PP}"
     LDFLAGS+=" -L${_TOP}/brotli/${_PP}/lib"
     LIBS+=' -lbrotlicommon'
   else
     options+=' --without-brotli'
   fi
-  if [[ "${_DEPS}" = *'zstd'* ]]; then
+  if [[ "${_DEPS}" = *'zstd'* ]] && [ -d '../zstd' ]; then
     options+=" --with-zstd=${_TOP}/zstd/${_PP}"
     LDFLAGS+=" -L${_TOP}/zstd/${_PP}/lib"
     LIBS+=' -lzstd'
@@ -168,7 +168,7 @@ _VER="$1"
     fi
   fi
 
-  if [[ "${_DEPS}" = *'wolfssl'* ]]; then
+  if [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d '../wolfssl' ]; then
     [ -n "${mainssl}" ] || mainssl='wolfssl'
     options+=" --with-wolfssl=${_TOP}/wolfssl/${_PP}"
     # for QUIC auto-detection
@@ -179,7 +179,7 @@ _VER="$1"
     options+=' --without-wolfssl'
   fi
 
-  if [[ "${_DEPS}" = *'mbedtls'* ]]; then
+  if [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d '../mbedtls' ]; then
     [ -n "${mainssl}" ] || mainssl='mbedtls'
     options+=" --with-mbedtls=${_TOP}/mbedtls/${_PP}"
   else
@@ -203,19 +203,19 @@ _VER="$1"
 # options+=' --with-ca-fallback'
   options+=' --without-ca-fallback'
 
-  if [[ "${_DEPS}" = *'wolfssh'* ]] && \
-     [[ "${_DEPS}" = *'wolfssl'* ]]; then
+  if [[ "${_DEPS}" = *'wolfssh'* ]] && [ -d '../wolfssh' ] && \
+     [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d '../wolfssl' ]; then
     options+=" --with-wolfssh=${_TOP}/wolfssh/${_PP}"
     CPPFLAGS+=" -I${_TOP}/wolfssh/${_PP}/include"
     LDFLAGS+=" -L${_TOP}/wolfssh/${_PP}/lib"
     options+=' --without-libssh'
     options+=' --without-libssh2'
-  elif [[ "${_DEPS}" = *'libssh1'* ]]; then
+  elif [[ "${_DEPS}" = *'libssh1'* ]] && [ -d '../libssh' ]; then
     options+=" --with-libssh=${_TOP}/libssh/${_PPS}"
     options+=' --without-wolfssh'
     options+=' --without-libssh2'
     CPPFLAGS+=' -DLIBSSH_STATIC'
-  elif [[ "${_DEPS}" = *'libssh2'* ]]; then
+  elif [[ "${_DEPS}" = *'libssh2'* ]] && [ -d '../libssh2' ]; then
     options+=" --with-libssh2=${_TOP}/libssh2/${_PPS}"
     options+=' --without-wolfssh'
     options+=' --without-libssh'
@@ -234,12 +234,12 @@ _VER="$1"
 
   options+=' --without-librtmp'
 
-  if [[ "${_DEPS}" = *'libidn2'* ]]; then
+  if [[ "${_DEPS}" = *'libidn2'* ]] && [ -d '../libidn2' ]; then
     options+=" --with-libidn2=${_TOP}/libidn2/${_PP}"
     LDFLAGS+=" -L${_TOP}/libidn2/${_PP}/lib"
     LIBS+=' -lidn2'
 
-    if [[ "${_DEPS}" = *'libpsl'* ]]; then
+    if [[ "${_DEPS}" = *'libpsl'* ]] && [ -d '../libpsl' ]; then
       options+=" --with-libpsl=${_TOP}/libpsl/${_PP}"
       CPPFLAGS+=" -I${_TOP}/libpsl/${_PP}/include"
       LDFLAGS+=" -L${_TOP}/libpsl/${_PP}/lib"
@@ -248,11 +248,11 @@ _VER="$1"
       options+=' --without-libpsl'
     fi
 
-    if [[ "${_DEPS}" = *'libiconv'* ]]; then
+    if [[ "${_DEPS}" = *'libiconv'* ]] && [ -d '../libiconv' ]; then
       LDFLAGS+=" -L${_TOP}/libiconv/${_PP}/lib"
       LIBS+=' -liconv'
     fi
-    if [[ "${_DEPS}" = *'libunistring'* ]]; then
+    if [[ "${_DEPS}" = *'libunistring'* ]] && [ -d '../libunistring' ]; then
       LDFLAGS+=" -L${_TOP}/libunistring/${_PP}/lib"
       LIBS+=' -lunistring'
     fi
@@ -265,14 +265,14 @@ _VER="$1"
     fi
   fi
 
-  if [[ "${_DEPS}" = *'cares'* ]]; then
+  if [[ "${_DEPS}" = *'cares'* ]] && [ -d '../cares' ]; then
     options+=" --enable-ares=${_TOP}/cares/${_PP}"
     CPPFLAGS+=' -DCARES_STATICLIB'
   else
     options+=' --disable-ares'
   fi
 
-  if [[ "${_DEPS}" = *'gsasl'* ]]; then
+  if [[ "${_DEPS}" = *'gsasl'* ]] && [ -d '../gsasl' ]; then
     options+=" --with-libgsasl=${_TOP}/gsasl/${_PPS}"
     CPPFLAGS+=" -I${_TOP}/gsasl/${_PPS}/include"
     LDFLAGS+=" -L${_TOP}/gsasl/${_PPS}/lib"
@@ -285,7 +285,7 @@ _VER="$1"
     fi
   fi
 
-  if [[ "${_DEPS}" = *'nghttp2'* ]]; then
+  if [[ "${_DEPS}" = *'nghttp2'* ]] && [ -d '../nghttp2' ]; then
     options+=" --with-nghttp2=${_TOP}/nghttp2/${_PP}"
     CPPFLAGS+=' -DNGHTTP2_STATICLIB'
   else
@@ -294,8 +294,8 @@ _VER="$1"
 
   # We enable HTTP/3 manually, so it shows up "disabled" in 'configure summary'.
   if [ "${h3}" = '1' ] && \
-     [[ "${_DEPS}" = *'nghttp3'* ]] && \
-     [[ "${_DEPS}" = *'ngtcp2'* ]]; then
+     [[ "${_DEPS}" = *'nghttp3'* ]] && [ -d '../nghttp3' ] && \
+     [[ "${_DEPS}" = *'ngtcp2'* ]] && [ -d '../ngtcp2' ]; then
     # Detection insists on having a pkg-config, so force feed everything manually.
     # We enable this lib manually, so it shows up "disabled" in 'configure summary'.
     options+=' --with-nghttp3=yes'

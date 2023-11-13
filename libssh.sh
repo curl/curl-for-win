@@ -88,7 +88,7 @@ _VER="$1"
         LIBS+=' -lws2_32'  # to detect EVP_aes_128_*
       fi
     fi
-  elif [[ "${_DEPS}" = *'mbedtls'* ]]; then
+  elif [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d '../mbedtls' ]; then
     if false; then
       # Compile errors as of mbedTLS 3.2.1 + libssh 0.9.6
       options+=' -DWITH_MBEDTLS=ON'

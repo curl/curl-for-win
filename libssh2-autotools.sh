@@ -52,10 +52,10 @@ _VER="$1"
         LIBS+=' -lbcrypt'
       fi
     fi
-  elif [[ "${_DEPS}" = *'wolfssl'* ]]; then
+  elif [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d '../wolfssl' ]; then
     options+=" --with-crypto=wolfssl --with-libwolfssl-prefix=${_TOP}/wolfssl/${_PP}"
     LDFLAGS+=" -L${_TOP}/wolfssl/${_PP}/lib"
-  elif [[ "${_DEPS}" = *'mbedtls'* ]]; then
+  elif [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d '../mbedtls' ]; then
     options+=" --with-crypto=mbedtls --with-libmbedcrypto-prefix=${_TOP}/mbedtls/${_PP}"
     LDFLAGS+=" -L${_TOP}/mbedtls/${_PP}/lib"
   elif [ "${_OS}" = 'win' ]; then

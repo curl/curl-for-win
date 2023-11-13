@@ -42,11 +42,11 @@ _VER="$1"
         "${_TOP}/${_OPENSSL}/${_PP}/crypto.dll" \
         "${_TOP}/${_OPENSSL}/${_PP}/ssl.dll"
     fi
-  elif [[ "${_DEPS}" = *'wolfssl'* ]]; then
+  elif [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d '../wolfssl' ]; then
     options+=' -DCRYPTO_BACKEND=wolfSSL'
     options+=" -DWOLFSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
     options+=" -DWOLFSSL_LIBRARY=${_TOP}/wolfssl/${_PP}/lib/libwolfssl.a"
-  elif [[ "${_DEPS}" = *'mbedtls'* ]]; then
+  elif [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d '../mbedtls' ]; then
     options+=' -DCRYPTO_BACKEND=mbedTLS'
     options+=" -DMBEDTLS_INCLUDE_DIR=${_TOP}/mbedtls/${_PP}/include"
     options+=" -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedcrypto.a"

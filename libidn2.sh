@@ -26,10 +26,10 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
   export LIBS=''
 
-  if [[ "${_DEPS}" = *'libiconv'* ]]; then
+  if [[ "${_DEPS}" = *'libiconv'* ]] && [ -d '../libiconv' ]; then
     options+=" --with-libiconv-prefix=${_TOP}/libiconv/${_PP}"
   fi
-  if [[ "${_DEPS}" = *'libunistring'* ]]; then
+  if [[ "${_DEPS}" = *'libunistring'* ]] && [ -d '../libunistring' ]; then
     options+=" --with-libunistring-prefix=${_TOP}/libunistring/${_PP}"
   fi
 

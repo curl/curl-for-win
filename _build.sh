@@ -475,12 +475,15 @@ build_single_target() {
 
   # Select and advertise a single copy of components having multiple
   # implementations.
+
   export _ZLIB=''
   if   [[ "${_DEPS}" = *'zlibng'* ]]; then
     _ZLIB='zlibng'
   elif [[ "${_DEPS}" = *'zlibold'* ]]; then
     _ZLIB='zlib'
   fi
+  [ -d "${_ZLIB}" ] || _ZLIB=''
+
   export _OPENSSL=''; boringssl=0
   if   [[ "${_DEPS}" = *'libressl'* ]]; then
     _OPENSSL='libressl'
@@ -493,6 +496,7 @@ build_single_target() {
   elif [[ "${_DEPS}" = *'openssl'* ]]; then
     _OPENSSL='openssl'
   fi
+  [ -d "${_OPENSSL}" ] || _OPENSSL=''
 
   use_llvm_mingw=0
   versuffix_llvm_mingw=''
