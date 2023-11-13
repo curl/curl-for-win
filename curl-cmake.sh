@@ -384,7 +384,10 @@ _VER="$1"
     options+=' --no-warn-unused-cli'
   fi
 
-  [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] || options+=' -DCMAKE_UNITY_BUILD=ON'
+  if [ "${CW_DEV_CROSSMAKE_REPRO:-}" != '1' ] && \
+     [[ "${_CONFIG}" != *'nounity'* ]]; then
+    options+=' -DCMAKE_UNITY_BUILD=ON'
+  fi
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
     # shellcheck disable=SC2086

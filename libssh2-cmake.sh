@@ -59,10 +59,14 @@ _VER="$1"
     options+=' -DCRYPTO_BACKEND=WinCNG'
   fi
 
+  if [ "${CW_DEV_CROSSMAKE_REPRO:-}" != '1' ] && \
+     [[ "${_CONFIG}" != *'nounity'* ]]; then
+    options+=' -DCMAKE_UNITY_BUILD=ON'
+  fi
+
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
     # shellcheck disable=SC2086
     cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
-      '-DCMAKE_UNITY_BUILD=ON' \
       '-DBUILD_SHARED_LIBS=OFF' \
       '-DBUILD_EXAMPLES=OFF' \
       '-DBUILD_TESTING=OFF' \
