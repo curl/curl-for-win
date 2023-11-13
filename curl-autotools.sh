@@ -109,20 +109,20 @@ _VER="$1"
   # NOTE: root path with spaces breaks all values with '${_TOP}'. But,
   #       autotools breaks on spaces anyway, so we leave it like that.
 
-  if [ -n "${_ZLIB}" ]; then
+  if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
     options+=" --with-zlib=${_TOP}/${_ZLIB}/${_PP}"
   else
     options+=' --without-zlib'
   fi
 
-  if [[ "${_DEPS}" = *'brotli'* ]] && [ -d '../brotli' ]; then
+  if [[ "${_DEPS}" = *'brotli'* ]] && [ -d "../brotli/${_PP}" ]; then
     options+=" --with-brotli=${_TOP}/brotli/${_PP}"
     LDFLAGS+=" -L${_TOP}/brotli/${_PP}/lib"
     LIBS+=' -lbrotlicommon'
   else
     options+=' --without-brotli'
   fi
-  if [[ "${_DEPS}" = *'zstd'* ]] && [ -d '../zstd' ]; then
+  if [[ "${_DEPS}" = *'zstd'* ]] && [ -d "../zstd/${_PP}" ]; then
     options+=" --with-zstd=${_TOP}/zstd/${_PP}"
     LDFLAGS+=" -L${_TOP}/zstd/${_PP}/lib"
     LIBS+=' -lzstd'
@@ -134,7 +134,7 @@ _VER="$1"
 
   mainssl=''  # openssl, wolfssl, mbedtls, schannel, secure-transport, gnutls, bearssl, rustls
 
-  if [ -n "${_OPENSSL}" ]; then
+  if [ -n "${_OPENSSL}" ] && [ -d "../${_OPENSSL}/${_PP}" ]; then
     [ -n "${mainssl}" ] || mainssl='openssl'
     options+=" --with-openssl=${_TOP}/${_OPENSSL}/${_PP}"
     options+=' --disable-openssl-auto-load-config'
@@ -168,7 +168,7 @@ _VER="$1"
     fi
   fi
 
-  if [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d '../wolfssl' ]; then
+  if [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d "../wolfssl/${_PP}" ]; then
     [ -n "${mainssl}" ] || mainssl='wolfssl'
     options+=" --with-wolfssl=${_TOP}/wolfssl/${_PP}"
     # for QUIC auto-detection
@@ -179,7 +179,7 @@ _VER="$1"
     options+=' --without-wolfssl'
   fi
 
-  if [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d '../mbedtls' ]; then
+  if [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d "../mbedtls/${_PP}" ]; then
     [ -n "${mainssl}" ] || mainssl='mbedtls'
     options+=" --with-mbedtls=${_TOP}/mbedtls/${_PP}"
   else
@@ -203,19 +203,19 @@ _VER="$1"
 # options+=' --with-ca-fallback'
   options+=' --without-ca-fallback'
 
-  if [[ "${_DEPS}" = *'wolfssh'* ]] && [ -d '../wolfssh' ] && \
-     [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d '../wolfssl' ]; then
+  if [[ "${_DEPS}" = *'wolfssh'* ]] && [ -d "../wolfssh/${_PP}" ] && \
+     [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d "../wolfssl/${_PP}" ]; then
     options+=" --with-wolfssh=${_TOP}/wolfssh/${_PP}"
     CPPFLAGS+=" -I${_TOP}/wolfssh/${_PP}/include"
     LDFLAGS+=" -L${_TOP}/wolfssh/${_PP}/lib"
     options+=' --without-libssh'
     options+=' --without-libssh2'
-  elif [[ "${_DEPS}" = *'libssh1'* ]] && [ -d '../libssh' ]; then
+  elif [[ "${_DEPS}" = *'libssh1'* ]] && [ -d "../libssh/${_PPS}" ]; then
     options+=" --with-libssh=${_TOP}/libssh/${_PPS}"
     options+=' --without-wolfssh'
     options+=' --without-libssh2'
     CPPFLAGS+=' -DLIBSSH_STATIC'
-  elif [[ "${_DEPS}" = *'libssh2'* ]] && [ -d '../libssh2' ]; then
+  elif [[ "${_DEPS}" = *'libssh2'* ]] && [ -d "../libssh2/${_PPS}" ]; then
     options+=" --with-libssh2=${_TOP}/libssh2/${_PPS}"
     options+=' --without-wolfssh'
     options+=' --without-libssh'
@@ -234,12 +234,12 @@ _VER="$1"
 
   options+=' --without-librtmp'
 
-  if [[ "${_DEPS}" = *'libidn2'* ]] && [ -d '../libidn2' ]; then
+  if [[ "${_DEPS}" = *'libidn2'* ]] && [ -d "../libidn2/${_PP}" ]; then
     options+=" --with-libidn2=${_TOP}/libidn2/${_PP}"
     LDFLAGS+=" -L${_TOP}/libidn2/${_PP}/lib"
     LIBS+=' -lidn2'
 
-    if [[ "${_DEPS}" = *'libpsl'* ]] && [ -d '../libpsl' ]; then
+    if [[ "${_DEPS}" = *'libpsl'* ]] && [ -d "../libpsl/${_PP}" ]; then
       options+=" --with-libpsl=${_TOP}/libpsl/${_PP}"
       CPPFLAGS+=" -I${_TOP}/libpsl/${_PP}/include"
       LDFLAGS+=" -L${_TOP}/libpsl/${_PP}/lib"
@@ -248,11 +248,11 @@ _VER="$1"
       options+=' --without-libpsl'
     fi
 
-    if [[ "${_DEPS}" = *'libiconv'* ]] && [ -d '../libiconv' ]; then
+    if [[ "${_DEPS}" = *'libiconv'* ]] && [ -d "../libiconv/${_PP}" ]; then
       LDFLAGS+=" -L${_TOP}/libiconv/${_PP}/lib"
       LIBS+=' -liconv'
     fi
-    if [[ "${_DEPS}" = *'libunistring'* ]] && [ -d '../libunistring' ]; then
+    if [[ "${_DEPS}" = *'libunistring'* ]] && [ -d "../libunistring/${_PP}" ]; then
       LDFLAGS+=" -L${_TOP}/libunistring/${_PP}/lib"
       LIBS+=' -lunistring'
     fi
@@ -265,14 +265,14 @@ _VER="$1"
     fi
   fi
 
-  if [[ "${_DEPS}" = *'cares'* ]] && [ -d '../cares' ]; then
+  if [[ "${_DEPS}" = *'cares'* ]] && [ -d "../cares/${_PP}" ]; then
     options+=" --enable-ares=${_TOP}/cares/${_PP}"
     CPPFLAGS+=' -DCARES_STATICLIB'
   else
     options+=' --disable-ares'
   fi
 
-  if [[ "${_DEPS}" = *'gsasl'* ]] && [ -d '../gsasl' ]; then
+  if [[ "${_DEPS}" = *'gsasl'* ]] && [ -d "../gsasl/${_PPS}" ]; then
     options+=" --with-libgsasl=${_TOP}/gsasl/${_PPS}"
     CPPFLAGS+=" -I${_TOP}/gsasl/${_PPS}/include"
     LDFLAGS+=" -L${_TOP}/gsasl/${_PPS}/lib"
@@ -285,7 +285,7 @@ _VER="$1"
     fi
   fi
 
-  if [[ "${_DEPS}" = *'nghttp2'* ]] && [ -d '../nghttp2' ]; then
+  if [[ "${_DEPS}" = *'nghttp2'* ]] && [ -d "../nghttp2/${_PP}" ]; then
     options+=" --with-nghttp2=${_TOP}/nghttp2/${_PP}"
     CPPFLAGS+=' -DNGHTTP2_STATICLIB'
   else
@@ -294,8 +294,8 @@ _VER="$1"
 
   # We enable HTTP/3 manually, so it shows up "disabled" in 'configure summary'.
   if [ "${h3}" = '1' ] && \
-     [[ "${_DEPS}" = *'nghttp3'* ]] && [ -d '../nghttp3' ] && \
-     [[ "${_DEPS}" = *'ngtcp2'* ]] && [ -d '../ngtcp2' ]; then
+     [[ "${_DEPS}" = *'nghttp3'* ]] && [ -d "../nghttp3/${_PP}" ] && \
+     [[ "${_DEPS}" = *'ngtcp2'* ]] && [ -d "../ngtcp2/${_PPS}" ]; then
     # Detection insists on having a pkg-config, so force feed everything manually.
     # We enable this lib manually, so it shows up "disabled" in 'configure summary'.
     options+=' --with-nghttp3=yes'

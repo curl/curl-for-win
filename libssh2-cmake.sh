@@ -19,13 +19,13 @@ _VER="$1"
   LIBS=''
   options=''
 
-  if [ -n "${_ZLIB}" ]; then
+  if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
     options+=' -DENABLE_ZLIB_COMPRESSION=ON'
     options+=" -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
     options+=" -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
   fi
 
-  if [ -n "${_OPENSSL}" ]; then
+  if [ -n "${_OPENSSL}" ] && [ -d "../${_OPENSSL}/${_PP}" ]; then
     options+=' -DCRYPTO_BACKEND=OpenSSL'
     options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
@@ -42,11 +42,11 @@ _VER="$1"
         "${_TOP}/${_OPENSSL}/${_PP}/crypto.dll" \
         "${_TOP}/${_OPENSSL}/${_PP}/ssl.dll"
     fi
-  elif [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d '../wolfssl' ]; then
+  elif [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d "../wolfssl/${_PP}" ]; then
     options+=' -DCRYPTO_BACKEND=wolfSSL'
     options+=" -DWOLFSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
     options+=" -DWOLFSSL_LIBRARY=${_TOP}/wolfssl/${_PP}/lib/libwolfssl.a"
-  elif [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d '../mbedtls' ]; then
+  elif [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d "../mbedtls/${_PP}" ]; then
     options+=' -DCRYPTO_BACKEND=mbedTLS'
     options+=" -DMBEDTLS_INCLUDE_DIR=${_TOP}/mbedtls/${_PP}/include"
     options+=" -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedcrypto.a"

@@ -44,12 +44,12 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
   export LIBS=''
 
-  if [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d '../wolfssl' ]; then
+  if [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d "../wolfssl/${_PP}" ]; then
     options+=" --with-wolfssl=${_TOP}/wolfssl/${_PP}"
     if [ "${_OS}" = 'win' ]; then
       LIBS+=' -lws2_32'
     fi
-    if [ -n "${_ZLIB}" ]; then
+    if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
       LDFLAGS+=" -L${_TOP}/${_ZLIB}/${_PP}/lib"
       LIBS+=' -lz'
     fi

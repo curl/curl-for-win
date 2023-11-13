@@ -67,7 +67,7 @@ _VER="$1"
   fi
   [ "${_CPU}" = 'x86' ] || options+=' enable-ec_nistp_64_gcc_128'
 
-  if false && [ -n "${_ZLIB}" ]; then
+  if false && [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
     options+=" --with-zlib-lib=${_TOP}/${_ZLIB}/${_PP}/lib"
     options+=" --with-zlib-include=${_TOP}/${_ZLIB}/${_PP}/include"
     options+=' zlib'

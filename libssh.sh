@@ -32,14 +32,14 @@ _VER="$1"
   #   -DCMAKE_USE_WIN32_THREADS_INIT=ON
   CPPFLAGS+=' -Dpthread_create=func_not_existing'
 
-  if [ -n "${_ZLIB}" ]; then
+  if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
     options+=" -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
     options+=" -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
   else
     options+=' -DWITH_ZLIB=OFF'
   fi
 
-  if [ -n "${_OPENSSL}" ]; then
+  if [ -n "${_OPENSSL}" ] && [ -d "../${_OPENSSL}/${_PP}" ]; then
     options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
 
@@ -88,7 +88,7 @@ _VER="$1"
         LIBS+=' -lws2_32'  # to detect EVP_aes_128_*
       fi
     fi
-  elif [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d '../mbedtls' ]; then
+  elif [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d "../mbedtls/${_PP}" ]; then
     if false; then
       # Compile errors as of mbedTLS 3.2.1 + libssh 0.9.6
       options+=' -DWITH_MBEDTLS=ON'

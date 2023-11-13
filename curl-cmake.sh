@@ -105,13 +105,13 @@ _VER="$1"
     fi
   fi
 
-  if [ -n "${_ZLIB}" ]; then
+  if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
     options+=" -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
     options+=" -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
   else
     options+=' -DZLIB_INCLUDE_DIR='
   fi
-  if [[ "${_DEPS}" = *'brotli'* ]] && [ -d '../brotli' ]; then
+  if [[ "${_DEPS}" = *'brotli'* ]] && [ -d "../brotli/${_PP}" ]; then
     options+=' -DCURL_BROTLI=ON'
     options+=" -DBROTLI_INCLUDE_DIR=${_TOP}/brotli/${_PP}/include"
     options+=" -DBROTLIDEC_LIBRARY=${_TOP}/brotli/${_PP}/lib/libbrotlidec.a"
@@ -119,7 +119,7 @@ _VER="$1"
   else
     options+=' -DCURL_BROTLI=OFF'
   fi
-  if [[ "${_DEPS}" = *'zstd'* ]] && [ -d '../zstd' ]; then
+  if [[ "${_DEPS}" = *'zstd'* ]] && [ -d "../zstd/${_PP}" ]; then
     options+=' -DCURL_ZSTD=ON'
     options+=" -DZstd_INCLUDE_DIR=${_TOP}/zstd/${_PP}/include"
     options+=" -DZstd_LIBRARY=${_TOP}/zstd/${_PP}/lib/libzstd.a"
@@ -134,7 +134,7 @@ _VER="$1"
 
   mainssl=''  # openssl, wolfssl, mbedtls, schannel, secure-transport, gnutls, bearssl, rustls
 
-  if [ -n "${_OPENSSL}" ]; then
+  if [ -n "${_OPENSSL}" ] && [ -d "../${_OPENSSL}/${_PP}" ]; then
     [ -n "${mainssl}" ] || mainssl='openssl'
     options+=' -DCURL_USE_OPENSSL=ON'
     options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
@@ -212,7 +212,7 @@ _VER="$1"
     options+=' -DHAVE_STDATOMIC_H=1 -DHAVE_ATOMIC=1 -DHAVE_STRTOK_R=1 -DHAVE_FILE_OFFSET_BITS=1'
   fi
 
-  if [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d '../wolfssl' ]; then
+  if [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d "../wolfssl/${_PP}" ]; then
     [ -n "${mainssl}" ] || mainssl='wolfssl'
     options+=' -DCURL_USE_WOLFSSL=ON'
     options+=" -DWolfSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
@@ -221,7 +221,7 @@ _VER="$1"
     h3=1
   fi
 
-  if [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d '../mbedtls' ]; then
+  if [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d "../mbedtls/${_PP}" ]; then
     [ -n "${mainssl}" ] || mainssl='mbedtls'
     options+=' -DCURL_USE_MBEDTLS=ON'
     options+=" -DMBEDTLS_INCLUDE_DIRS=${_TOP}/mbedtls/${_PP}/include"
@@ -246,15 +246,15 @@ _VER="$1"
 
   options+=' -DCURL_DISABLE_SRP=ON'
 
-  if [[ "${_DEPS}" = *'wolfssh'* ]] && [ -d '../wolfssh' ] && \
-     [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d '../wolfssl' ]; then
+  if [[ "${_DEPS}" = *'wolfssh'* ]] && [ -d "../wolfssh/${_PP}" ] && \
+     [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d "../wolfssl/${_PP}" ]; then
     # No native support, enable it manually.
     options+=' -DCURL_USE_WOLFSSH=ON'
     CPPFLAGS+=' -DUSE_WOLFSSH'
     CPPFLAGS+=" -I${_TOP}/wolfssh/${_PP}/include"
     LDFLAGS+=" -L${_TOP}/wolfssh/${_PP}/lib"
     LIBS+=' -lwolfssh'
-  elif [[ "${_DEPS}" = *'libssh1'* ]] && [ -d '../libssh' ]; then
+  elif [[ "${_DEPS}" = *'libssh1'* ]] && [ -d "../libssh/${_PPS}" ]; then
     # Detection picks OS-native copy. Only a manual configuration worked
     # to defeat CMake's wisdom.
     options+=' -DCURL_USE_LIBSSH=OFF'
@@ -264,7 +264,7 @@ _VER="$1"
     CPPFLAGS+=" -I${_TOP}/libssh/${_PPS}/include"
     LDFLAGS+=" -L${_TOP}/libssh/${_PPS}/lib"
     LIBS+=' -lssh'
-  elif [[ "${_DEPS}" = *'libssh2'* ]] && [ -d '../libssh2' ]; then
+  elif [[ "${_DEPS}" = *'libssh2'* ]] && [ -d "../libssh2/${_PPS}" ]; then
     options+=' -DCURL_USE_LIBSSH2=ON'
     options+=' -DCURL_USE_LIBSSH=OFF'
     options+=" -DLIBSSH2_INCLUDE_DIR=${_TOP}/libssh2/${_PPS}/include"
@@ -287,7 +287,7 @@ _VER="$1"
     options+=' -DCURL_USE_LIBSSH2=OFF'
   fi
 
-  if [[ "${_DEPS}" = *'nghttp2'* ]] && [ -d '../nghttp2' ]; then
+  if [[ "${_DEPS}" = *'nghttp2'* ]] && [ -d "../nghttp2/${_PP}" ]; then
     options+=' -DUSE_NGHTTP2=ON'
     options+=" -DNGHTTP2_INCLUDE_DIR=${_TOP}/nghttp2/${_PP}/include"
     options+=" -DNGHTTP2_LIBRARY=${_TOP}/nghttp2/${_PP}/lib/libnghttp2.a"
@@ -297,8 +297,8 @@ _VER="$1"
   fi
 
   if [ "${h3}" = '1' ] && \
-     [[ "${_DEPS}" = *'nghttp3'* ]] && [ -d '../nghttp3' ] && \
-     [[ "${_DEPS}" = *'ngtcp2'* ]] && [ -d '../ngtcp2' ]; then
+     [[ "${_DEPS}" = *'nghttp3'* ]] && [ -d "../nghttp3/${_PP}" ] && \
+     [[ "${_DEPS}" = *'ngtcp2'* ]] && [ -d "../ngtcp2/${_PPS}" ]; then
     options+=' -DUSE_NGHTTP3=ON'
     options+=" -DNGHTTP3_INCLUDE_DIR=${_TOP}/nghttp3/${_PP}/include"
     options+=" -DNGHTTP3_LIBRARY=${_TOP}/nghttp3/${_PP}/lib/libnghttp3.a"
@@ -313,13 +313,13 @@ _VER="$1"
     options+=' -DUSE_NGHTTP3=OFF'
     options+=' -DUSE_NGTCP2=OFF'
   fi
-  if [[ "${_DEPS}" = *'cares'* ]] && [ -d '../cares' ]; then
+  if [[ "${_DEPS}" = *'cares'* ]] && [ -d "../cares/${_PP}" ]; then
     options+=' -DENABLE_ARES=ON'
     options+=" -DCARES_INCLUDE_DIR=${_TOP}/cares/${_PP}/include"
     options+=" -DCARES_LIBRARY=${_TOP}/cares/${_PP}/lib/libcares.a"
     CPPFLAGS+=' -DCARES_STATICLIB'
   fi
-  if [[ "${_DEPS}" = *'gsasl'* ]] && [ -d '../gsasl' ]; then
+  if [[ "${_DEPS}" = *'gsasl'* ]] && [ -d "../gsasl/${_PPS}" ]; then
     CPPFLAGS+=' -DUSE_GSASL'
     CPPFLAGS+=" -I${_TOP}/gsasl/${_PPS}/include"
     LDFLAGS+=" -L${_TOP}/gsasl/${_PPS}/lib"
@@ -329,25 +329,25 @@ _VER="$1"
   # options+=' -DCURL_USE_GSSAPI=ON'
     :
   fi
-  if [[ "${_DEPS}" = *'libidn2'* ]] && [ -d '../libidn2' ]; then
+  if [[ "${_DEPS}" = *'libidn2'* ]] && [ -d "../libidn2/${_PP}" ]; then
     options+=' -DUSE_LIBIDN2=ON'
     CPPFLAGS+=" -I${_TOP}/libidn2/${_PP}/include"
     LDFLAGS+=" -L${_TOP}/libidn2/${_PP}/lib"
     LIBS+=' -lidn2'
 
-    if [[ "${_DEPS}" = *'libpsl'* ]] && [ -d '../libpsl' ] && \
-       [[ "${_DEPS}" = *'libiconv'* ]] && [ -d '../libiconv' ] && \
-       [[ "${_DEPS}" = *'libunistring'* ]] && [ -d '../libunistring' ]; then
+    if [[ "${_DEPS}" = *'libpsl'* ]] && [ -d "../libpsl/${_PP}" ] && \
+       [[ "${_DEPS}" = *'libiconv'* ]] && [ -d "../libiconv/${_PP}" ] && \
+       [[ "${_DEPS}" = *'libunistring'* ]] && [ -d "../libunistring/${_PP}" ]; then
       options+=' -DUSE_LIBPSL=ON'
       options+=" -DLIBPSL_INCLUDE_DIR=${_TOP}/libpsl/${_PP}/include"
       options+=" -DLIBPSL_LIBRARY=${_TOP}/libpsl/${_PP}/lib/libpsl.a;${_TOP}/libiconv/${_PP}/lib/libiconv.a;${_TOP}/libunistring/${_PP}/lib/libunistring.a"
     fi
 
-    if [[ "${_DEPS}" = *'libiconv'* ]] && [ -d '../libiconv' ]; then
+    if [[ "${_DEPS}" = *'libiconv'* ]] && [ -d "../libiconv/${_PP}" ]; then
       LDFLAGS+=" -L${_TOP}/libiconv/${_PP}/lib"
       LIBS+=' -liconv'
     fi
-    if [[ "${_DEPS}" = *'libunistring'* ]] && [ -d '../libunistring' ]; then
+    if [[ "${_DEPS}" = *'libunistring'* ]] && [ -d "../libunistring/${_PP}" ]; then
       LDFLAGS+=" -L${_TOP}/libunistring/${_PP}/lib"
       LIBS+=' -lunistring'
     fi

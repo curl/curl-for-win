@@ -25,7 +25,7 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
   export LIBS=''
 
-  if [ -n "${_ZLIB}" ]; then
+  if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
     options+=" --with-libz=${_TOP}/${_ZLIB}/${_PP}"
   else
     options+=' --without-libz'

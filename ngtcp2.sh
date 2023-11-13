@@ -40,25 +40,25 @@ _VER="$1"
     options+=' -DENABLE_OPENSSL=ON'
     options+=" -DOPENSSL_ROOT_DIR=../${_OPENSSL}/${_PP}"
     # FIXME: This is not enough for picky ld linker (with gcc)
-    if [ -n "${_ZLIB}" ]; then  # required by OpenSSL built with zlib
+    if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then  # required by OpenSSL built with zlib
       LDFLAGS+=" -L${_TOP}/${_ZLIB}/${_PP}/lib"
       LIBS+=' -lz'
     fi
-  elif [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d '../wolfssl' ]; then
+  elif [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d "../wolfssl/${_PP}" ]; then
     options+=' -DENABLE_WOLFSSL=ON'
     options+=" -DWOLFSSL_INCLUDE_DIR=../wolfssl/${_PP}/include"
     options+=" -DWOLFSSL_LIBRARY=../wolfssl/${_PP}/lib/libwolfssl.a"
     if [ "${_OS}" = 'win' ]; then
       LIBS+=' -lws2_32'
     fi
-    if [ -n "${_ZLIB}" ]; then  # required by wolfSSL
+    if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then  # required by wolfSSL
       CPPFLAGS+=" -I${_TOP}/${_ZLIB}/${_PP}/include"
       LDFLAGS+=" -L${_TOP}/${_ZLIB}/${_PP}/lib"
       LIBS+=' -lz'
     fi
   fi
 
-  if [[ "${_DEPS}" = *'nghttp3'* ]] && [ -d '../nghttp3' ]; then
+  if [[ "${_DEPS}" = *'nghttp3'* ]] && [ -d "../nghttp3/${_PP}" ]; then
     options+=" -DLIBNGHTTP3_INCLUDE_DIR=../nghttp3/${_PP}/include"
     options+=" -DLIBNGHTTP3_LIBRARY=../nghttp3/${_PP}/lib"
   fi

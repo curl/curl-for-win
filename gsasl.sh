@@ -32,7 +32,7 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
   export LIBS=''
 
-  if [ -n "${_OPENSSL}" ]; then
+  if [ -n "${_OPENSSL}" ] && [ -d "../${_OPENSSL}/${_PP}" ]; then
     options+=' --with-openssl=yes'
     CPPFLAGS+=" -I${_TOP}/${_OPENSSL}/${_PP}/include"
     LDFLAGS+=" -L${_TOP}/${_OPENSSL}/${_PP}/lib"

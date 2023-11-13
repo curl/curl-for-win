@@ -29,7 +29,7 @@ _VER="$1"
   # NOTE: root path with spaces breaks all values with '${_TOP}'. But,
   #       autotools breaks on spaces anyway, so we leave it like that.
 
-  if [ -n "${_ZLIB}" ]; then
+  if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
     options+=' --with-libz'
     # These seem to work better than --with-libz-prefix=:
     CPPFLAGS+=" -I${_TOP}/${_ZLIB}/${_PP}/include"
@@ -38,7 +38,7 @@ _VER="$1"
     options+=' --without-libz'
   fi
 
-  if [ -n "${_OPENSSL}" ]; then
+  if [ -n "${_OPENSSL}" ] && [ -d "../${_OPENSSL}/${_PP}" ]; then
     options+=" --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
     if [ "${_OS}" = 'win' ]; then
       if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
@@ -52,10 +52,10 @@ _VER="$1"
         LIBS+=' -lbcrypt'
       fi
     fi
-  elif [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d '../wolfssl' ]; then
+  elif [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d "../wolfssl/${_PP}" ]; then
     options+=" --with-crypto=wolfssl --with-libwolfssl-prefix=${_TOP}/wolfssl/${_PP}"
     LDFLAGS+=" -L${_TOP}/wolfssl/${_PP}/lib"
-  elif [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d '../mbedtls' ]; then
+  elif [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d "../mbedtls/${_PP}" ]; then
     options+=" --with-crypto=mbedtls --with-libmbedcrypto-prefix=${_TOP}/mbedtls/${_PP}"
     LDFLAGS+=" -L${_TOP}/mbedtls/${_PP}/lib"
   elif [ "${_OS}" = 'win' ]; then
