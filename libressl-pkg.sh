@@ -6,6 +6,8 @@
 # Caveats (as of 3.8.2):
 # - ASM support only for x64.
 # - Still loads config from hardcoded prefix.
+# - Missing `SSL_set0_wbio()` function.
+#   https://github.com/libressl/portable/issues/838
 # - No obvious way to selectively disable obsolete protocols/APIs/features.
 # - `-Wattributes` warnings with gcc. Need to be silenced with `-Wno-attributes`:
 #   ```
