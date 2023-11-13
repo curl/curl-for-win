@@ -389,6 +389,13 @@ _VER="$1"
     options+=' -DCMAKE_UNITY_BUILD=ON'
   fi
 
+  if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
+    options+=' -DBUILD_CURL_EXE=ON'
+    options+=' -DBUILD_STATIC_CURL=ON'
+  else
+    options+=' -DBUILD_CURL_EXE=OFF'
+  fi
+
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
     # shellcheck disable=SC2086
     cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
@@ -396,8 +403,6 @@ _VER="$1"
       '-DCURL_CA_BUNDLE=none' \
       '-DBUILD_SHARED_LIBS=ON' \
       '-DBUILD_STATIC_LIBS=ON' \
-      '-DBUILD_CURL_EXE=ON' \
-      '-DBUILD_STATIC_CURL=ON' \
       '-DENABLE_THREADED_RESOLVER=ON' \
       '-DBUILD_TESTING=OFF' \
       '-DCURL_HIDDEN_SYMBOLS=ON' \
@@ -408,13 +413,15 @@ _VER="$1"
       "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}"  # --debug-find --debug-trycompile
   fi
 
-  # When doing an out of tree build, this is necessary to avoid make
-  # re-generating the embedded manual with blank content.
-  if [ -f src/tool_hugehelp.c ]; then
-    cp -p src/tool_hugehelp.c "${_BLDDIR}/src/"
-  elif [ -f src/tool_hugehelp.c.cvs ]; then
-    # Copy the dummy replacement when building from a raw source tree.
-    cp -p src/tool_hugehelp.c.cvs "${_BLDDIR}/src/tool_hugehelp.c"
+  if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
+    # When doing an out of tree build, this is necessary to avoid make
+    # re-generating the embedded manual with blank content.
+    if [ -f src/tool_hugehelp.c ]; then
+      cp -p src/tool_hugehelp.c "${_BLDDIR}/src/"
+    elif [ -f src/tool_hugehelp.c.cvs ]; then
+      # Copy the dummy replacement when building from a raw source tree.
+      cp -p src/tool_hugehelp.c.cvs "${_BLDDIR}/src/tool_hugehelp.c"
+    fi
   fi
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
@@ -429,7 +436,9 @@ _VER="$1"
 
   if [ "${CW_MAP}" = '1' ]; then
     cp -p "${_BLDDIR}/lib/${_MAP_NAME_LIB}" "${_PP}/${DYN_DIR}/"
-    cp -p "${_BLDDIR}/src/${_MAP_NAME_BIN}" "${_PP}"/bin/
+    if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
+      cp -p "${_BLDDIR}/src/${_MAP_NAME_BIN}" "${_PP}"/bin/
+    fi
   fi
 
   . ../curl-pkg.sh

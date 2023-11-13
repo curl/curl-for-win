@@ -216,11 +216,15 @@ _VER="$1"
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ]; then
     "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.mk distclean
-    "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.mk distclean
+    if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
+      "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.mk distclean
+    fi
   fi
 
   "${_MAKE}" --jobs="${_JOBS}" --directory=lib --makefile=Makefile.mk
-  "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.mk
+  if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
+    "${_MAKE}" --jobs="${_JOBS}" --directory=src --makefile=Makefile.mk
+  fi
 
   # Install manually
 
@@ -229,13 +233,18 @@ _VER="$1"
   mkdir -p "${_PP}/bin"
 
   cp -f -p ./include/curl/*.h "${_PP}/include/curl/"
-  cp -f -p ./src/*.exe        "${_PP}/bin/"
   cp -f -p ./lib/*.dll        "${_PP}/bin/"
   cp -f -p ./lib/*.def        "${_PP}/bin/"
   cp -f -p ./lib/*.a          "${_PP}/lib/"
 
+  if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
+    cp -f -p ./src/*.exe        "${_PP}/bin/"
+  fi
+
   if [ "${CW_MAP}" = '1' ]; then
-    cp -f -p ./src/*.map "${_PP}/bin/"
+    if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
+      cp -f -p ./src/*.map "${_PP}/bin/"
+    fi
     cp -f -p ./lib/*.map "${_PP}/${DYN_DIR}/"
   fi
 

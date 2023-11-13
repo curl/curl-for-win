@@ -16,11 +16,16 @@
     *)       TZ=UTC stat -c '%n: %y' "${_ref}";;
   esac
 
-  bin="${_PP}/bin/curl${BIN_EXT}"
+  if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
+    bin="${_PP}/bin/curl${BIN_EXT}"
+  else
+    bin=''
+  fi
 
   # Extra checks (do this before code signing)
 
-  if strings "${bin}" | grep -a -F 'curl-for-win'; then
+  if [[ "${_CONFIG}" != *'nocurltool'* ]] && \
+     strings "${bin}" | grep -a -F 'curl-for-win'; then
     echo "! Error: Our project root path is leaking into the binary: '${bin}'"
     exit 1
   fi
@@ -45,13 +50,16 @@
   # Process map files
 
   if [ "${CW_MAP}" = '1' ]; then
-    touch -c -r "${_ref}" "${_PP}"/bin/*.map
+    if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
+      touch -c -r "${_ref}" "${_PP}"/bin/curl.map
+    fi
     touch -c -r "${_ref}" "${_PP}/${DYN_DIR}"/*.map
   fi
 
   # Process curl tool and libcurl shared library
 
   for filetype in 'exe' 'dyn'; do
+    [ "${filetype}" = 'exe' ] && [[ "${_CONFIG}" = *'nocurltool'* ]] && continue
     {
       if [ "${filetype}" = 'exe' ]; then
         echo "${bin}"
@@ -84,15 +92,17 @@
     done
   done
 
-  # Execute curl and compiled-in dependency code. This is not secure, but
-  # the build process already requires executing external code
-  # (e.g. configure scripts) on the build machine, so this does not make
-  # it worse, except that it requires installing WINE on a compatible CPU
-  # (and a QEMU setup on non-compatible ones). It would be best to extract
-  # `--version` output directly from the binary as strings, but curl creates
-  # most of these strings dynamically at runtime, so this is not possible
-  # (as of curl 7.83.1).
-  ${_RUN_BIN} "${bin}" --version | tee "curl-${_CPU}.txt" || true
+  if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
+    # Execute curl and compiled-in dependency code. This is not secure, but
+    # the build process already requires executing external code
+    # (e.g. configure scripts) on the build machine, so this does not make
+    # it worse, except that it requires installing WINE on a compatible CPU
+    # (and a QEMU setup on non-compatible ones). It would be best to extract
+    # `--version` output directly from the binary as strings, but curl creates
+    # most of these strings dynamically at runtime, so this is not possible
+    # (as of curl 7.83.1).
+    ${_RUN_BIN} "${bin}" --version | tee "curl-${_CPU}.txt" || true
+  fi
 
   # Create package
 
@@ -128,7 +138,6 @@
     done
   )
   cp -f -p "${_PP}"/include/curl/*.h          "${_DST}/include/curl/"
-  cp -f -p "${bin}"                           "${_DST}/bin/"
   cp -f -a "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"  "${_DST}/${DYN_DIR}/"  # we must not pick up *.dll.a here
   cp -f -p "${_PP}"/lib/*.a                   "${_DST}/lib/"
   cp -f -p docs/*.md                          "${_DST}/docs/"
@@ -136,6 +145,10 @@
   cp -f -p COPYING                            "${_DST}/COPYING.txt"
   cp -f -p README                             "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES                      "${_DST}/RELEASE-NOTES.txt"
+
+  if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
+    cp -f -p "${bin}"                           "${_DST}/bin/"
+  fi
 
   if [ "${_OS}" = 'win' ]; then
     cp -f -p "${_PP}"/bin/*.def                 "${_DST}/bin/"
@@ -149,7 +162,9 @@
   fi
 
   if [ "${CW_MAP}" = '1' ]; then
-    cp -f -p "${_PP}"/bin/curl.map              "${_DST}/bin/"
+    if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
+      cp -f -p "${_PP}"/bin/curl.map              "${_DST}/bin/"
+    fi
     cp -f -p "${_PP}/${DYN_DIR}"/*.map          "${_DST}/${DYN_DIR}/"
   fi
 
