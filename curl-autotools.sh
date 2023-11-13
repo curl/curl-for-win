@@ -298,7 +298,9 @@ _VER="$1"
   fi
 
   # We enable HTTP/3 manually, so it shows up "disabled" in 'configure summary'.
-  if [ "${h3}" = '1' ] && [[ "${_DEPS}" = *'nghttp3'* ]] && [[ "${_DEPS}" = *'ngtcp2'* ]]; then
+  if [ "${h3}" = '1' ] && \
+     [[ "${_DEPS}" = *'nghttp3'* ]] && \
+     [[ "${_DEPS}" = *'ngtcp2'* ]]; then
     # Detection insists on having a pkg-config, so force feed everything manually.
     # We enable this lib manually, so it shows up "disabled" in 'configure summary'.
     options+=' --with-nghttp3=yes'
