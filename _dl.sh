@@ -728,8 +728,8 @@ if [[ "${_CONFIG}" = *'mbedtls'* ]]; then
 fi
 
 if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
-  if [ "${_OS}" != 'win' ] || \
-     [[ ! "${_CONFIG}" =~ (pico|nano|micro|mini|schannel) ]]; then
+  if [ "${_OS}" = 'linux' ] || \
+     [[ ! "${_CONFIG}" =~ (pico|nano|micro|mini|ostls) ]]; then
 
     if   [[ "${_CONFIG}" = *'libressl'* ]]; then
       _DEPS+=' libressl'
