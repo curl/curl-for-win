@@ -38,6 +38,8 @@ _VER="$1"
         LDLIBS+=' -framework Security'
       fi
       LDLIBS+=' -framework SystemConfiguration'
+    elif [ "${_OS}" = 'linux' ]; then
+      LDFLAGS+=' -static'
     fi
   else
     LDFLAGS+=" -L../curl/${_PP}/lib"
