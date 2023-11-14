@@ -98,6 +98,7 @@ _VER="$1"
     options+=' -DCURL_DISABLE_FTP=ON'
     options+=' -DCURL_DISABLE_POP3=ON -DCURL_DISABLE_SMTP=ON'
     [[ "${_CONFIG}" != *'imap'* ]] && options+=' -DCURL_DISABLE_IMAP=ON'
+    options+=' -DENABLE_UNIX_SOCKETS=OFF'
     options+=' -DENABLE_WEBSOCKETS=OFF'
     options+=' -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON'
   else

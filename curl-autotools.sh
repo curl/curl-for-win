@@ -35,8 +35,6 @@ _VER="$1"
 
   [[ "${_CONFIG}" != *'main'* ]] && LDFLAGS+=' -v'
 
-  options+=' --enable-unix-sockets'
-
   if [[ "${_CONFIG}" = *'werror'* ]]; then
     options+=' --enable-werror'
   fi
@@ -97,6 +95,7 @@ _VER="$1"
     else
       options+=' --disable-imap'
     fi
+    options+=' --disable-unix-sockets'
     options+=' --disable-websockets'
     options+=' --disable-ldap --disable-ldaps'
   else
@@ -108,6 +107,7 @@ _VER="$1"
       options+=' --disable-ftp'
     fi
     options+=' --enable-imap --enable-pop3 --enable-smtp'
+    options+=' --enable-unix-sockets'
     options+=' --enable-websockets'
     if [ "${_OS}" = 'win' ]; then
       options+=' --enable-ldap --enable-ldaps --with-ldap-lib=wldap32'
