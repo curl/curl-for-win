@@ -270,7 +270,7 @@ _VER="$1"
   else
     options+=' --without-libidn2'
     options+=' --without-libpsl'
-    if [[ "${_CONFIG}" != *'pico'* ]] && \
+    if [[ ! "${_CONFIG}" =~ (pico|osnoidn) ]] && \
        [ "${_OS}" = 'win' ]; then
       options+=' --with-winidn'
     fi

@@ -362,7 +362,7 @@ _VER="$1"
   else
     options+=' -DUSE_LIBIDN2=OFF'
     options+=' -DCURL_USE_LIBPSL=OFF'
-    if [[ "${_CONFIG}" != *'pico'* ]] && \
+    if [[ ! "${_CONFIG}" =~ (pico|osnoidn) ]] && \
        [ "${_OS}" = 'win' ]; then
       options+=' -DUSE_WIN32_IDN=ON'
     fi

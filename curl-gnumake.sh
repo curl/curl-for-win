@@ -194,7 +194,7 @@ _VER="$1"
       LDFLAGS+=" -L../../libunistring/${_PP}/lib"
       LIBS+=' -lunistring'
     fi
-  elif [[ "${_CONFIG}" != *'pico'* ]] && \
+  elif [[ ! "${_CONFIG}" =~ (pico|osnoidn) ]] && \
        [ "${_OS}" = 'win' ]; then
     CFG+='-winidn'
   fi

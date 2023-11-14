@@ -62,6 +62,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        msvcrt     build against msvcrt instead of UCRT (for win target)
 #        gcc        build with GCC (including Apple clang aliased to gcc) (defaults to llvm, and "gcc" (= Apple clang) for mac target)
 #        unicode    build curl in UNICODE mode (for win target) [EXPERIMENTAL]
+#        osnoidn    build curl without OS-supplied IDN support
 #        werror     turn compiler warnings into errors
 #        debug      debug build
 #        win        build Windows target (default)
