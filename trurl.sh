@@ -91,6 +91,11 @@ _VER="$1"
   # when running it from the unpacked release tarball.
   LD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" ${_RUN_BIN} "${bin}" --version | tee "trurl-${_CPU}.txt" || true
 
+  if [ "${CW_TURL_TEST:-}" = '1' ] && \
+     [ "${_RUN_BIN}" != 'echo' ]; then
+    python3 ./test.py "--runner=${_RUN_BIN}" "--trurl=${bin}"
+  fi
+
   # Create package
 
   _OUT="${_NAM}-${_VER}${_REVSUFFIX}${_PKGSUFFIX}"
