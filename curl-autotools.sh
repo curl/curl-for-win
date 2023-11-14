@@ -88,6 +88,7 @@ _VER="$1"
 
   if [[ "${_CONFIG}" =~ (zero|bldtst|pico) ]]; then
     options+=' --disable-basic-auth --disable-bearer-auth --disable-digest-auth --disable-kerberos-auth --disable-negotiate-auth --disable-aws'
+    options+=' --disable-ntlm'
     options+=' --disable-dict --disable-file --disable-gopher --disable-mqtt --disable-rtsp --disable-smb --disable-telnet --disable-tftp'
     options+=' --disable-ftp'
     options+=' --disable-pop3 --disable-smtp'
@@ -99,6 +100,7 @@ _VER="$1"
     options+=' --disable-websockets'
     options+=' --disable-ldap --disable-ldaps'
   else
+    options+=' --enable-ntlm'
     options+=' --enable-dict --enable-file --enable-gopher --enable-mqtt --enable-rtsp --enable-smb --enable-telnet --enable-tftp'
     if [[ "${_CONFIG}" != *'noftp'* ]]; then
       options+=' --enable-ftp'
@@ -375,7 +377,6 @@ _VER="$1"
       --enable-libcurl-option \
       --enable-ipv6 \
       --enable-verbose \
-      --enable-ntlm \
       --enable-cookies \
       --enable-http-auth \
       --enable-doh \
