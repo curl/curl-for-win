@@ -79,6 +79,7 @@ _VER="$1"
     fi
   fi
 
+  # for H2/H3
   if [[ "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
     options+=' --disable-alt-svc'
   else
@@ -214,7 +215,7 @@ _VER="$1"
       options+=' --without-ssl'
     fi
   fi
-  CPPFLAGS+=' -DHAS_ALPN'
+  CPPFLAGS+=' -DHAS_ALPN'  # for mbedTLS, OpenSSL, Schannel when enabled
 
 # options+=' --with-ca-fallback'
   options+=' --without-ca-fallback'

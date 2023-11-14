@@ -63,6 +63,7 @@ _VER="$1"
 
   # CPPFLAGS added after this point only affect libcurl.
 
+  # for H2/H3
   if [[ "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
     CPPFLAGS+=' -DCURL_DISABLE_ALTSVC=1'
   fi
@@ -138,7 +139,7 @@ _VER="$1"
       CFG+='-schannel'
     fi
   fi
-  CPPFLAGS+=' -DHAS_ALPN'
+  CPPFLAGS+=' -DHAS_ALPN'  # for mbedTLS, OpenSSL, Schannel when enabled
 
 # CPPFLAGS+=' -DCURL_CA_FALLBACK=1'
 

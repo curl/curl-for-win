@@ -86,6 +86,7 @@ _VER="$1"
     CPPFLAGS+=' -DDEBUGBUILD'
   fi
 
+  # for H2/H3
   if [[ "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
     options+=' -DCURL_DISABLE_ALTSVC=ON'
   fi
@@ -249,7 +250,8 @@ _VER="$1"
       options+=' -DCURL_USE_SECTRANSP=OFF'
     fi
   fi
-  CPPFLAGS+=' -DHAS_ALPN'
+
+  CPPFLAGS+=' -DHAS_ALPN'  # for mbedTLS, OpenSSL, Schannel when enabled
 
 # options+=' -DCURL_CA_FALLBACK=ON'
 
