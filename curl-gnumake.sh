@@ -75,6 +75,8 @@ _VER="$1"
     CPPFLAGS+=' -DCURL_DISABLE_POP3=1 -DCURL_DISABLE_SMTP=1'
     [[ "${_CONFIG}" != *'imap'* ]] && CPPFLAGS+=' -DCURL_DISABLE_IMAP=1'
     CPPFLAGS+=' -DCURL_DISABLE_LDAP=1 -DCURL_DISABLE_LDAPS=1'
+  else
+    CPPFLAGS+=' -DUSE_WEBSOCKETS=1'
   fi
 
   if [ "${_OS}" = 'win' ] && [[ "${_CONFIG}" = *'unicode'* ]]; then
@@ -202,8 +204,6 @@ _VER="$1"
   fi
 
   [[ "${_CONFIG}" = *'noftp'* ]] && CPPFLAGS+=' -DCURL_DISABLE_FTP=1'
-
-  CPPFLAGS+=' -DUSE_WEBSOCKETS'
 
   if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
     LDFLAGS_LIB+=" -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dyn.tar"

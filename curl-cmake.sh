@@ -97,9 +97,11 @@ _VER="$1"
     options+=' -DCURL_DISABLE_FTP=ON'
     options+=' -DCURL_DISABLE_POP3=ON -DCURL_DISABLE_SMTP=ON'
     [[ "${_CONFIG}" != *'imap'* ]] && options+=' -DCURL_DISABLE_IMAP=ON'
+    options+=' -DENABLE_WEBSOCKETS=OFF'
     options+=' -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON'
   else
     [[ "${_CONFIG}" = *'noftp'* ]] && options+=' -DCURL_DISABLE_FTP=ON'
+    options+=' -DENABLE_WEBSOCKETS=ON'
     if [ "${_OS}" = 'win' ]; then
       LIBS+=' -lwldap32'
     elif [ "${_OS}" != 'mac' ] || [ "${_OSVER}" -ge '1010' ]; then  # On macOS we use the built-in LDAP lib
@@ -417,7 +419,6 @@ _VER="$1"
       '-DENABLE_THREADED_RESOLVER=ON' \
       '-DBUILD_TESTING=OFF' \
       '-DCURL_HIDDEN_SYMBOLS=ON' \
-      '-DENABLE_WEBSOCKETS=ON' \
       "-DCMAKE_RC_FLAGS=${_RCFLAGS_GLOBAL}" \
       "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}" \
       "-DCMAKE_EXE_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_BIN} ${LIBS}" \

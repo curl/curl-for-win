@@ -96,6 +96,7 @@ _VER="$1"
     else
       options+=' --disable-imap'
     fi
+    options+=' --disable-websockets'
     options+=' --disable-ldap --disable-ldaps'
   else
     options+=' --enable-dict --enable-file --enable-gopher --enable-mqtt --enable-rtsp --enable-smb --enable-telnet --enable-tftp'
@@ -105,6 +106,7 @@ _VER="$1"
       options+=' --disable-ftp'
     fi
     options+=' --enable-imap --enable-pop3 --enable-smtp'
+    options+=' --enable-websockets'
     if [ "${_OS}" = 'win' ]; then
       options+=' --enable-ldap --enable-ldaps --with-ldap-lib=wldap32'
     elif [ "${_OS}" != 'mac' ] || [ "${_OSVER}" -ge '1010' ]; then  # On macOS we use the built-in LDAP lib
@@ -352,8 +354,6 @@ _VER="$1"
   else
     options+=' --enable-pthreads'
   fi
-
-  options+=' --enable-websockets'
 
   if [ "${_OS}" = 'win' ]; then
     _DEF_NAME="libcurl${_CURL_DLL_SUFFIX}.def"
