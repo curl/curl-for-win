@@ -84,6 +84,13 @@ _VER="$1"
     options+=' --enable-alt-svc'
   fi
 
+  if [[ "${_CONFIG}" =~ (zero|bldtst) ]] && \
+     [[ "${_CONFIG}" = *'osnotls'* ]]; then
+    options+=' --disable-hsts'
+  else
+    options+=' --enable-hsts'
+  fi
+
   if [[ "${_CONFIG}" =~ (zero|bldtst|pico) ]]; then
     options+=' --disable-basic-auth --disable-bearer-auth --disable-digest-auth --disable-kerberos-auth --disable-negotiate-auth --disable-aws'
     options+=' --disable-ntlm'
@@ -386,7 +393,6 @@ _VER="$1"
       --enable-progress-meter \
       --enable-dnsshuffle \
       --enable-get-easy-options \
-      --enable-hsts \
       --without-ca-path \
       --without-ca-bundle
   )

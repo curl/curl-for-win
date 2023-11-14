@@ -68,6 +68,11 @@ _VER="$1"
     CPPFLAGS+=' -DCURL_DISABLE_ALTSVC=1'
   fi
 
+  if [[ "${_CONFIG}" =~ (zero|bldtst) ]] && \
+     [[ "${_CONFIG}" = *'osnotls'* ]]; then
+    CPPFLAGS+=' -DCURL_DISABLE_HSTS=1'
+  fi
+
   if [[ "${_CONFIG}" =~ (zero|bldtst|pico) ]]; then
     CPPFLAGS+=' -DCURL_DISABLE_BASIC_AUTH=1 -DCURL_DISABLE_BEARER_AUTH=1 -DCURL_DISABLE_DIGEST_AUTH=1 -DCURL_DISABLE_KERBEROS_AUTH=1 -DCURL_DISABLE_NEGOTIATE_AUTH=1 -DCURL_DISABLE_AWS=1'
     CPPFLAGS+=' -DCURL_DISABLE_NTLM=1'

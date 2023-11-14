@@ -91,6 +91,11 @@ _VER="$1"
     options+=' -DCURL_DISABLE_ALTSVC=ON'
   fi
 
+  if [[ "${_CONFIG}" =~ (zero|bldtst) ]] && \
+     [[ "${_CONFIG}" = *'osnotls'* ]]; then
+    options+=' -DCURL_DISABLE_HSTS=ON'
+  fi
+
   if [[ "${_CONFIG}" =~ (zero|bldtst|pico) ]]; then
     options+=' -DCURL_DISABLE_BASIC_AUTH=ON -DCURL_DISABLE_BEARER_AUTH=ON -DCURL_DISABLE_DIGEST_AUTH=ON -DCURL_DISABLE_KERBEROS_AUTH=ON -DCURL_DISABLE_NEGOTIATE_AUTH=ON -DCURL_DISABLE_AWS=ON'
     options+=' -DCURL_DISABLE_NTLM=ON'
