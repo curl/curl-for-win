@@ -34,7 +34,10 @@ _VER="$1"
       CPPFLAGS+=" -DCURL_STATICLIB"
       LDLIBS+=' -lws2_32 -lcrypt32 -lbcrypt'
     elif [ "${_OS}" = 'mac' ]; then
-      LDLIBS+=' -framework Security -framework SystemConfiguration'
+      if [[ "${_CONFIG}" != *'osnotls'* ]]; then
+        LDLIBS+=' -framework Security'
+      fi
+      LDLIBS+=' -framework SystemConfiguration'
     fi
   else
     LDFLAGS+=" -L../curl/${_PP}/lib"
