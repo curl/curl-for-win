@@ -89,7 +89,12 @@ _VER="$1"
     options+=' --disable-basic-auth --disable-bearer-auth --disable-digest-auth --disable-kerberos-auth --disable-negotiate-auth --disable-aws'
     options+=' --disable-dict --disable-file --disable-gopher --disable-mqtt --disable-rtsp --disable-smb --disable-telnet --disable-tftp'
     options+=' --disable-ftp'
-    options+=' --disable-imap --disable-pop3 --disable-smtp'
+    options+=' --disable-pop3 --disable-smtp'
+    if [[ "${_CONFIG}" = *'imap'* ]]; then
+      options+=' --enable-imap'
+    else
+      options+=' --disable-imap'
+    fi
     options+=' --disable-ldap --disable-ldaps'
   else
     options+=' --enable-dict --enable-file --enable-gopher --enable-mqtt --enable-rtsp --enable-smb --enable-telnet --enable-tftp'
