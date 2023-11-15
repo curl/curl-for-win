@@ -127,7 +127,6 @@ _VER="$1"
 
   # 'no-dso' implies 'no-dynamic-engine' which in turn compiles in these
   # engines non-dynamically. To avoid them, also set `no-engine`.
-
   (
     mkdir "${_BLDDIR}"; cd "${_BLDDIR}"
     # shellcheck disable=SC2086
@@ -163,6 +162,8 @@ _VER="$1"
   mv "${_PKGDIR}/${_my_prefix}"/* "${_PP}"
 
   # Rename 'lib64' to 'lib'. This is what most packages expect.
+  # Not using '--libdir=lib' because that also changes the paths hardwired
+  # into the binaries, making them different from default builds at runtime.
   if [ -d "${_PP}/lib64" ]; then
     mv "${_PP}/lib64" "${_PP}/lib"
   fi
