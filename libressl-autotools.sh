@@ -48,7 +48,7 @@ _VER="$1"
   else
     _my_prefix='/etc'
   fi
-  _ssldir="ssl"
+  _ssldir='ssl'
 
   (
     mkdir "${_BLDDIR}"; cd "${_BLDDIR}"

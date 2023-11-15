@@ -464,7 +464,7 @@ bld() {
       _BLDDIR+="${bldtool}-${_CC}"
     fi
 
-    _BLDDIR+="-bld"
+    _BLDDIR+='-bld'
 
     ${my_time} "./${pkg}.sh" "$1" "${pkgori}"
 

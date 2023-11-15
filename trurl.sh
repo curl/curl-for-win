@@ -31,7 +31,7 @@ _VER="$1"
     # link statically in 'zero' (no external dependencies) config
     LDLIBS+=' ../curl/${_PP}/lib/libcurl.a'
     if [ "${_OS}" = 'win' ]; then
-      CPPFLAGS+=" -DCURL_STATICLIB"
+      CPPFLAGS+=' -DCURL_STATICLIB'
       LDLIBS+=' -lws2_32 -lcrypt32 -lbcrypt'
     elif [ "${_OS}" = 'mac' ]; then
       if [[ "${_CONFIG}" != *'osnotls'* ]]; then

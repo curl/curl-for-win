@@ -123,7 +123,7 @@ _VER="$1"
   else
     _my_prefix='/etc'
   fi
-  _ssldir="ssl"
+  _ssldir='ssl'
 
   # 'no-dso' implies 'no-dynamic-engine' which in turn compiles in these
   # engines non-dynamically. To avoid them, also set `no-engine`.
