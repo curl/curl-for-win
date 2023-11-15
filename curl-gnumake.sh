@@ -34,11 +34,19 @@ _VER="$1"
   export CFG='-ipv6'
 
   export CC="${_CC_GLOBAL}"
-  export CFLAGS="${_CFLAGS_GLOBAL} -O3 ${_CFLAGS_GLOBAL_WPICKY}"
+  export CFLAGS="${_CFLAGS_GLOBAL} -O3"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL} -DOS=\\\"${_TRIPLET}\\\""
   export RCFLAGS="${_RCFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LIBS=''
+
+  # Picky compiler warnings as seen in curl CMake/autotools.
+  # builds with llvm/clang 15 and gcc 12.2:
+  #   https://clang.llvm.org/docs/DiagnosticsReference.html
+  #   https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
+  CFLAGS+='-pedantic -Wbad-function-cast -Wcast-align -Wconversion -Wdeclaration-after-statement -Wdouble-promotion -Wempty-body -Wendif-labels -Wenum-conversion -Wfloat-equal -Wignored-qualifiers -Winline -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-format-nonliteral -Wno-long-long -Wno-multichar -Wno-sign-conversion -Wno-system-headers -Wold-style-definition -Wpointer-arith -Wshadow -Wsign-compare -Wstrict-prototypes -Wtype-limits -Wundef -Wunused -Wunused-const-variable -Wvla -Wwrite-strings'
+  [ "${_CC}" = 'llvm' ] && CFLAGS+=' -Wassign-enum -Wcomma -Wextra-semi-stmt -Wmissing-variable-declarations -Wshift-sign-overflow -Wshorten-64-to-32'
+  [ "${_CC}" = 'gcc'  ] && CFLAGS+=' -Walloc-zero -Warith-conversion -Warray-bounds=2 -Wclobbered -Wduplicated-branches -Wduplicated-cond -Wformat-overflow=2 -Wformat-truncation=2 -Wformat=2 -Wmissing-parameter-type -Wno-pedantic-ms-format -Wnull-dereference -Wold-style-declaration -Wrestrict -Wshift-negative-value -Wshift-overflow=2 -Wstrict-aliasing=3 -fdelete-null-pointer-checks -ftree-vrp'
 
   [[ "${_CONFIG}" != *'main'* ]] && LDFLAGS+=' -v'
 
