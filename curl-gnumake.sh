@@ -40,6 +40,13 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LIBS=''
 
+  CFLAGS+=' -fvisibility=hidden'
+
+  if [ "${CURL_VER_}" = '8.4.0' ]; then
+    CPPFLAGS+=' -DHAVE_VARIADIC_MACROS_C99=1 -DHAVE_VARIADIC_MACROS_GCC=1'
+    CPPFLAGS+=' -DHAVE_SNPRINTF=1'
+  fi
+
   # Picky compiler warnings as seen in curl CMake/autotools.
   # builds with llvm/clang 15 and gcc 12.2:
   #   https://clang.llvm.org/docs/DiagnosticsReference.html
