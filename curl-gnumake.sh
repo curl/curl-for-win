@@ -109,6 +109,12 @@ _VER="$1"
     CPPFLAGS+=' -DCURL_DISABLE_PROXY=1'
   fi
 
+  if [[ "${_CONFIG}" =~ (zero|bldtst|pico) ]] && \
+     [[ "${_CONFIG}" != *'imap'* ]] && \
+     [[ "${_CONFIG}" = *'nohttp'* ]]; then
+    CFG+='-sync'
+  fi
+
   if [ "${_OS}" = 'win' ] && [[ "${_CONFIG}" = *'unicode'* ]]; then
     CFG+='-unicode'
   fi

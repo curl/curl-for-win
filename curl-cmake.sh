@@ -124,7 +124,13 @@ _VER="$1"
     options+=' -DCURL_DISABLE_PROXY=ON'
   fi
 
-  options+=' -DENABLE_THREADED_RESOLVER=ON'
+  if [[ "${_CONFIG}" =~ (zero|bldtst|pico) ]] && \
+     [[ "${_CONFIG}" != *'imap'* ]] && \
+     [[ "${_CONFIG}" = *'nohttp'* ]]; then
+    options+=' -DENABLE_THREADED_RESOLVER=OFF'
+  else
+    options+=' -DENABLE_THREADED_RESOLVER=ON'
+  fi
 
   if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
     options+=" -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"

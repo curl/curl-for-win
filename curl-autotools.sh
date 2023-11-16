@@ -134,7 +134,13 @@ _VER="$1"
     options+=' --enable-proxy'
   fi
 
-  options+=' --enable-threaded-resolver'
+  if [[ "${_CONFIG}" =~ (zero|bldtst|pico) ]] && \
+     [[ "${_CONFIG}" != *'imap'* ]] && \
+     [[ "${_CONFIG}" = *'nohttp'* ]]; then
+    options+=' --disable-threaded-resolver'
+  else
+    options+=' --enable-threaded-resolver'
+  fi
   if [ "${_OS}" = 'win' ]; then
     options+=' --disable-pthreads'
   else
