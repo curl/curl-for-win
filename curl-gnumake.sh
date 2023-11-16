@@ -117,6 +117,7 @@ _VER="$1"
      [[ "${_CONFIG}" = *'nohttp'* ]]; then
     CFG+='-sync'
     CPPFLAGS+=' -DCURL_DISABLE_NETRC=1'
+    CPPFLAGS+=' -DCURL_DISABLE_LIBCURL_OPTION=1'
   else
     CFG+='-ipv6'
   fi

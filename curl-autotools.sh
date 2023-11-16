@@ -143,10 +143,12 @@ _VER="$1"
     options+=' --disable-threaded-resolver'
     options+=' --disable-netrc'
     options+=' --disable-ipv6'
+    options+=' --disable-libcurl-option'
   else
     options+=' --enable-threaded-resolver'
     options+=' --enable-netrc'
     options+=' --enable-ipv6'
+    options+=' --enable-libcurl-option'
   fi
   if [ "${_OS}" = 'win' ]; then
     options+=' --disable-pthreads'
@@ -403,7 +405,6 @@ _VER="$1"
       --enable-warnings \
       --enable-symbol-hiding \
       --enable-manual \
-      --enable-libcurl-option \
       --enable-verbose \
       --enable-cookies \
       --enable-http-auth \
