@@ -138,6 +138,7 @@ _VER="$1"
     options+=' -DCURL_DISABLE_NETRC=ON'
     options+=' -DENABLE_IPV6=OFF'
     options+=' -DCURL_DISABLE_LIBCURL_OPTION=ON'
+    options+=' -DCURL_DISABLE_GETOPTIONS=ON'
   else
     options+=' -DENABLE_THREADED_RESOLVER=ON'
   fi
