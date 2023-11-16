@@ -105,6 +105,9 @@ _VER="$1"
     else
       options+=' --disable-imap'
     fi
+    if [ "${_OS}" != 'win' ]; then
+      options+=' --disable-bindlocal'
+    fi
     options+=' --disable-unix-sockets'
     options+=' --disable-websockets'
     options+=' --disable-ldap --disable-ldaps'

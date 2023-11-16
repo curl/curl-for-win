@@ -99,6 +99,9 @@ _VER="$1"
     CPPFLAGS+=' -DCURL_DISABLE_POP3=1 -DCURL_DISABLE_SMTP=1'
     [[ "${_CONFIG}" != *'imap'* ]] && CPPFLAGS+=' -DCURL_DISABLE_IMAP=1'
     CPPFLAGS+=' -DCURL_DISABLE_LDAP=1 -DCURL_DISABLE_LDAPS=1'
+    if [ "${_OS}" != 'win' ]; then
+      CPPFLAGS+=' -DCURL_DISABLE_BINDLOCAL=1'
+    fi
     # Not possible to disable USE_UNIX_SOCKETS with GNU Make
   else
     CPPFLAGS+=' -DUSE_WEBSOCKETS=1'
