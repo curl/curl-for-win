@@ -31,7 +31,7 @@ _VER="$1"
 
   # Build
 
-  export CFG='-ipv6'
+  export CFG=''
 
   export CC="${_CC_GLOBAL}"
   export CFLAGS="${_CFLAGS_GLOBAL} -O3"
@@ -114,6 +114,8 @@ _VER="$1"
      [[ "${_CONFIG}" = *'nohttp'* ]]; then
     CFG+='-sync'
     CPPFLAGS+=' -DCURL_DISABLE_NETRC=1'
+  else
+    CFG+='-ipv6'
   fi
 
   if [ "${_OS}" = 'win' ] && [[ "${_CONFIG}" = *'unicode'* ]]; then
