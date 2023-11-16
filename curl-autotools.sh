@@ -126,6 +126,14 @@ _VER="$1"
     fi
   fi
 
+  if [[ "${_CONFIG}" = *'nohttp'* ]]; then
+    options+=' --disable-http'
+    options+=' --disable-proxy'
+  else
+    options+=' --enable-http'
+    options+=' --enable-proxy'
+  fi
+
   # NOTE: root path with spaces breaks all values with '${_TOP}'. But,
   #       autotools breaks on spaces anyway, so we leave it like that.
 
@@ -381,8 +389,6 @@ _VER="$1"
       --disable-tls-srp \
       --enable-warnings \
       --enable-symbol-hiding \
-      --enable-http \
-      --enable-proxy \
       --enable-manual \
       --enable-libcurl-option \
       --enable-ipv6 \

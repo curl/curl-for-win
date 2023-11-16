@@ -104,6 +104,11 @@ _VER="$1"
     CPPFLAGS+=' -DUSE_WEBSOCKETS=1'
   fi
 
+  if [[ "${_CONFIG}" = *'nohttp'* ]]; then
+    CPPFLAGS+=' -DCURL_DISABLE_HTTP=1'
+    CPPFLAGS+=' -DCURL_DISABLE_PROXY=1'
+  fi
+
   if [ "${_OS}" = 'win' ] && [[ "${_CONFIG}" = *'unicode'* ]]; then
     CFG+='-unicode'
   fi

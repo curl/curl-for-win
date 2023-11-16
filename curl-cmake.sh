@@ -119,6 +119,11 @@ _VER="$1"
     fi
   fi
 
+  if [[ "${_CONFIG}" = *'nohttp'* ]]; then
+    options+=' -DCURL_DISABLE_HTTP=ON'
+    options+=' -DCURL_DISABLE_PROXY=ON'
+  fi
+
   if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
     options+=" -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
     options+=" -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
