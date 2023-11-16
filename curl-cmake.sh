@@ -31,7 +31,10 @@ _VER="$1"
   LDFLAGS_BIN="${_LDFLAGS_BIN_GLOBAL}"
   LDFLAGS_LIB=''
 
-  [[ "${_CONFIG}" != *'main'* ]] && LDFLAGS+=' -v'
+  if [[ "${_CONFIG}" != *'main'* ]]; then
+    LDFLAGS+=' -v'
+  # [ "${_CC}" = 'gcc' ] && LDFLAGS+=' -Wl,--trace'
+  fi
 
   if [ "${_OS}" = 'win' ] && [[ "${_CONFIG}" = *'unicode'* ]]; then
     options+=' -DENABLE_UNICODE=ON'

@@ -33,7 +33,10 @@ _VER="$1"
   LDFLAGS_BIN=''
   export LIBS=''
 
-  [[ "${_CONFIG}" != *'main'* ]] && LDFLAGS+=' -v'
+  if [[ "${_CONFIG}" != *'main'* ]]; then
+    LDFLAGS+=' -v'
+  # [ "${_CC}" = 'gcc' ] && LDFLAGS+=' -Wl,--trace'
+  fi
 
   if [[ "${_CONFIG}" = *'werror'* ]]; then
     options+=' --enable-werror'

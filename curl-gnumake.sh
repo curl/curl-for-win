@@ -55,7 +55,10 @@ _VER="$1"
   [ "${_CC}" = 'llvm' ] && CFLAGS+=' -Wassign-enum -Wcomma -Wextra-semi-stmt -Wmissing-variable-declarations -Wshift-sign-overflow -Wshorten-64-to-32'
   [ "${_CC}" = 'gcc'  ] && CFLAGS+=' -Walloc-zero -Warith-conversion -Warray-bounds=2 -Wclobbered -Wduplicated-branches -Wduplicated-cond -Wformat-overflow=2 -Wformat-truncation=2 -Wformat=2 -Wmissing-parameter-type -Wno-pedantic-ms-format -Wnull-dereference -Wold-style-declaration -Wrestrict -Wshift-negative-value -Wshift-overflow=2 -Wstrict-aliasing=3 -fdelete-null-pointer-checks -ftree-vrp'
 
-  [[ "${_CONFIG}" != *'main'* ]] && LDFLAGS+=' -v'
+  if [[ "${_CONFIG}" != *'main'* ]]; then
+    LDFLAGS+=' -v'
+  # [ "${_CC}" = 'gcc' ] && LDFLAGS+=' -Wl,--trace'
+  fi
 
   LDFLAGS_BIN="${_LDFLAGS_BIN_GLOBAL}"
   LDFLAGS_LIB=''
