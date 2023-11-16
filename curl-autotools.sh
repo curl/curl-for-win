@@ -138,8 +138,10 @@ _VER="$1"
      [[ "${_CONFIG}" != *'imap'* ]] && \
      [[ "${_CONFIG}" = *'nohttp'* ]]; then
     options+=' --disable-threaded-resolver'
+    options+=' --disable-netrc'
   else
     options+=' --enable-threaded-resolver'
+    options+=' --enable-netrc'
   fi
   if [ "${_OS}" = 'win' ]; then
     options+=' --disable-pthreads'
@@ -404,7 +406,6 @@ _VER="$1"
       --enable-doh \
       --enable-mime \
       --enable-dateparse \
-      --enable-netrc \
       --enable-progress-meter \
       --enable-dnsshuffle \
       --enable-get-easy-options \

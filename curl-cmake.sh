@@ -128,6 +128,7 @@ _VER="$1"
      [[ "${_CONFIG}" != *'imap'* ]] && \
      [[ "${_CONFIG}" = *'nohttp'* ]]; then
     options+=' -DENABLE_THREADED_RESOLVER=OFF'
+    options+=' -DCURL_DISABLE_NETRC=ON'
   else
     options+=' -DENABLE_THREADED_RESOLVER=ON'
   fi

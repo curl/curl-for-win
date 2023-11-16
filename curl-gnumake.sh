@@ -113,6 +113,7 @@ _VER="$1"
      [[ "${_CONFIG}" != *'imap'* ]] && \
      [[ "${_CONFIG}" = *'nohttp'* ]]; then
     CFG+='-sync'
+    CPPFLAGS+=' -DCURL_DISABLE_NETRC=1'
   fi
 
   if [ "${_OS}" = 'win' ] && [[ "${_CONFIG}" = *'unicode'* ]]; then
