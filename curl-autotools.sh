@@ -134,6 +134,13 @@ _VER="$1"
     options+=' --enable-proxy'
   fi
 
+  options+=' --enable-threaded-resolver'
+  if [ "${_OS}" = 'win' ]; then
+    options+=' --disable-pthreads'
+  else
+    options+=' --enable-pthreads'
+  fi
+
   # NOTE: root path with spaces breaks all values with '${_TOP}'. But,
   #       autotools breaks on spaces anyway, so we leave it like that.
 
@@ -367,13 +374,6 @@ _VER="$1"
   fi
 
   options+=' --without-quiche --without-msh3'
-
-  options+=' --enable-threaded-resolver'
-  if [ "${_OS}" = 'win' ]; then
-    options+=' --disable-pthreads'
-  else
-    options+=' --enable-pthreads'
-  fi
 
   if [ "${_OS}" = 'win' ]; then
     _DEF_NAME="libcurl${_CURL_DLL_SUFFIX}.def"

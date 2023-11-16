@@ -124,6 +124,8 @@ _VER="$1"
     options+=' -DCURL_DISABLE_PROXY=ON'
   fi
 
+  options+=' -DENABLE_THREADED_RESOLVER=ON'
+
   if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
     options+=" -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
     options+=" -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
@@ -431,7 +433,6 @@ _VER="$1"
       '-DCURL_CA_BUNDLE=none' \
       '-DBUILD_SHARED_LIBS=ON' \
       '-DBUILD_STATIC_LIBS=ON' \
-      '-DENABLE_THREADED_RESOLVER=ON' \
       '-DBUILD_TESTING=OFF' \
       '-DCURL_HIDDEN_SYMBOLS=ON' \
       "-DCMAKE_RC_FLAGS=${_RCFLAGS_GLOBAL}" \
