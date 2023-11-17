@@ -140,6 +140,7 @@ _VER="$1"
     options+=' -DCURL_DISABLE_LIBCURL_OPTION=ON'
     options+=' -DCURL_DISABLE_GETOPTIONS=ON'
     options+=' -DCURL_DISABLE_PARSEDATE=ON'
+    options+=' -DCURL_DISABLE_SHUFFLE_DNS=ON'
   else
     options+=' -DENABLE_THREADED_RESOLVER=ON'
   fi

@@ -146,6 +146,7 @@ _VER="$1"
     options+=' --disable-libcurl-option'
     options+=' --disable-get-easy-options'
     options+=' --disable-dateparse'
+    options+=' --disable-dnsshuffle'
   else
     options+=' --enable-threaded-resolver'
     options+=' --enable-netrc'
@@ -153,6 +154,7 @@ _VER="$1"
     options+=' --enable-libcurl-option'
     options+=' --enable-get-easy-options'
     options+=' --enable-dateparse'
+    options+=' --enable-dnsshuffle'
   fi
   if [ "${_OS}" = 'win' ]; then
     options+=' --disable-pthreads'
@@ -415,7 +417,6 @@ _VER="$1"
       --enable-doh \
       --enable-mime \
       --enable-progress-meter \
-      --enable-dnsshuffle \
       --without-ca-path \
       --without-ca-bundle
   )
