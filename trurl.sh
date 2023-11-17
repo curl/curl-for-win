@@ -24,7 +24,10 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LDLIBS=''
 
-  [[ "${_CONFIG}" != *'main'* ]] && LDFLAGS+=' -v'
+  if [[ "${_CONFIG}" != *'main'* ]]; then
+    LDFLAGS+=' -v'
+  # [ "${_CC}" = 'gcc' ] && LDFLAGS+=' -Wl,--trace'
+  fi
 
   CPPFLAGS+=" -I../curl/${_PP}/include"
   if [[ "${_CONFIG}" = *'zero'* ]]; then
