@@ -29,6 +29,15 @@ _VER="$1"
   # [ "${_CC}" = 'gcc' ] && LDFLAGS+=' -Wl,--trace'
   fi
 
+  if [ "${CW_MAP}" = '1' ]; then
+    map_name='trurl.map'
+    if [ "${_OS}" = 'mac' ]; then
+      LDFLAGS+=" -Wl,-map,${map_name}"
+    else
+      LDFLAGS+=" -Wl,-Map,${map_name}"
+    fi
+  fi
+
   CPPFLAGS+=" -I../curl/${_PP}/include"
   if [[ "${_CONFIG}" = *'zero'* ]]; then
     # link statically in 'zero' (no external dependencies) config
@@ -72,6 +81,9 @@ _VER="$1"
   mkdir -p "${_PP}/bin"
 
   cp -f -p "./trurl${BIN_EXT}" "${_PP}/bin/"
+  if [ "${CW_MAP}" = '1' ]; then
+    cp -f -p "./${map_name}" "${_PP}/bin/"
+  fi
 
   # Make steps for determinism
 
@@ -113,6 +125,10 @@ _VER="$1"
   cp -f -p COPYING        "${_DST}/COPYING.txt"
   cp -f -p README.md      "${_DST}/README.md"
   cp -f -p RELEASE-NOTES  "${_DST}/RELEASE-NOTES.txt"
+
+  if [ "${CW_MAP}" = '1' ]; then
+    cp -f -p "${_PP}/bin/${map_name}"  "${_DST}/bin/"
+  fi
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )
