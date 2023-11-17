@@ -139,6 +139,7 @@ _VER="$1"
     options+=' -DENABLE_IPV6=OFF'
     options+=' -DCURL_DISABLE_LIBCURL_OPTION=ON'
     options+=' -DCURL_DISABLE_GETOPTIONS=ON'
+    options+=' -DCURL_DISABLE_PARSEDATE=ON'
   else
     options+=' -DENABLE_THREADED_RESOLVER=ON'
   fi

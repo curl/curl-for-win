@@ -145,12 +145,14 @@ _VER="$1"
     options+=' --disable-ipv6'
     options+=' --disable-libcurl-option'
     options+=' --disable-get-easy-options'
+    options+=' --disable-dateparse'
   else
     options+=' --enable-threaded-resolver'
     options+=' --enable-netrc'
     options+=' --enable-ipv6'
     options+=' --enable-libcurl-option'
     options+=' --enable-get-easy-options'
+    options+=' --enable-dateparse'
   fi
   if [ "${_OS}" = 'win' ]; then
     options+=' --disable-pthreads'
@@ -412,7 +414,6 @@ _VER="$1"
       --enable-http-auth \
       --enable-doh \
       --enable-mime \
-      --enable-dateparse \
       --enable-progress-meter \
       --enable-dnsshuffle \
       --without-ca-path \
