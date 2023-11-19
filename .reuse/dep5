@@ -3,6 +3,6 @@ Upstream-Name: curl-for-win
 Source: https://github.com/curl/curl-for-win
 
 # Keys
-Files: curl-for-win-ca-cert.pem *.asc
+Files: curl-for-win-ca-cert.pem *.asc *.patch
 Copyright: The curl-for-win project and its contributors.
 License: MIT
