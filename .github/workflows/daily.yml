@@ -87,6 +87,41 @@ jobs:
             *-*-linux*.*
             urls.txt
 
+  linux-musl-riscv64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 'build'
+        run: |
+          export CW_CONFIG='dev-linux-musl-r64'
+          export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
+          DOCKER_IMAGE='debian:sid-slim'
+          export CW_CCSUFFIX='-16'
+          export CW_GCCSUFFIX='-13'
+          docker trust inspect --pretty "${DOCKER_IMAGE}"
+          time docker pull "${DOCKER_IMAGE}"
+          docker images --digests
+          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+            --env-file <(env | grep -a -E \
+              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
+            "${DOCKER_IMAGE}" \
+            sh -c ./_ci-linux-debian.sh
+
+      - name: 'list dependencies'
+        run: cat urls.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'curl-linux-musl-riscv64-daily-tool'
+          retention-days: 42
+          path: curl-*-*-*/curl*
+      - uses: actions/upload-artifact@v3
+        with:
+          name: 'curl-linux-musl-riscv64-daily'
+          retention-days: 42
+          path: |
+            *-*-linux*.*
+            urls.txt
+
   mac:
     runs-on: macos-latest
     steps:
