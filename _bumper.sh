@@ -31,7 +31,7 @@ export _CONFIG="${1:-}"
 llvm_latest="$(curl --disable --user-agent '' --silent --fail --show-error \
   'https://packages.debian.org/search?keywords=llvm&searchon=names&suite=testing&section=all' \
   | hxclean | hxselect -i -c -s '\n' 'h3' \
-  | grep -a -o -E 'llvm-[0-9]+' | sort -u | tail -1)"
+  | grep -a -o -E 'llvm-[0-9]+' | sort -u | tail -n -1)"
 
 echo; echo "export CW_CCSUFFIX='$(echo "${llvm_latest}" | cut -c 5-)'  # ${llvm_latest}"
 
@@ -48,7 +48,7 @@ tag="$(curl --disable --user-agent '' --silent --fail --show-error \
     --header 'Accept: application/json' \
     --header @/dev/stdin \
     "https://registry-1.docker.io/v2/library/${name}/tags/list" <<EOF \
-  | jq --raw-output '.tags[]' | grep -E '^testing-[0-9]{8}-slim$' | sort | tail -1
+  | jq --raw-output '.tags[]' | grep -E '^testing-[0-9]{8}-slim$' | sort | tail -n -1
 Authorization: Bearer ${token}
 EOF
 )"
@@ -59,7 +59,7 @@ echo; echo "export DOCKER_IMAGE='${name}:${tag}'"
 if false; then
   image="$(curl --disable --user-agent '' --silent --fail --show-error \
     'https://www.appveyor.com/docs/build-environment/' \
-    | grep -a -o -E 'Ubuntu[0-9]{4}' | sort | tail -1)"
+    | grep -a -o -E 'Ubuntu[0-9]{4}' | sort | tail -n -1)"
 
   echo; echo "image: ${image}"
 fi
