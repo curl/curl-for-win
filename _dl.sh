@@ -28,7 +28,6 @@ cat <<EOF
   },
   {
     "name": "cares",
-    "descending": true,
     "url": "https://c-ares.org/download/c-ares-{ver}.tar.gz",
     "mirror": "https://github.com/c-ares/c-ares/releases/download/cares-{veru}/c-ares-{ver}.tar.gz",
     "sig": ".asc",
@@ -37,7 +36,6 @@ cat <<EOF
   },
   {
     "name": "curl",
-    "descending": true,
     "url": "https://curl.se/download/curl-{ver}.tar.xz",
     "mirror": "https://github.com/curl/curl/releases/download/curl-{veru}/curl-{ver}.tar.xz",
     "sig": ".asc",
@@ -51,7 +49,6 @@ cat <<EOF
   },
   {
     "name": "cacert",
-    "descending": true,
     "url": "https://curl.se/ca/cacert-{ver}.pem",
     "sha": ".sha256",
     "ref_url": "https://curl.se/docs/caextract.html",
@@ -328,17 +325,12 @@ check_update() {
       fi
     fi
   else
-    if [ "$4" = 'true' ]; then
-      latest='head'
-    else
-      latest='tail'
-    fi
     # Special logic for libssh, where each major/minor release resides in
     # a separate subdirectory.
     if [ "${pkg}" = 'libssh' ]; then
       # ugly hack: repurpose 'ref_url' for this case:
       res="$(my_curl "${options[@]}" "$7" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
-        | grep -a -o -E -- '[0-9.]+' | "${latest}" -n -1)"
+        | grep -a -o -E -- '[0-9.]+' | sort -V | tail -n -1)"
       url="$7${res}"
       urldir="${url}/"
     elif [ -n "$7" ]; then
@@ -351,7 +343,7 @@ check_update() {
     [ -n "$9" ] && mask="$9"
     # >&2 echo "mask|${mask}|"
     res="$(my_curl "${options[@]}" "${urldir}" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
-      | grep -a -o -E -- "${mask}" | "${latest}" -n -1)"
+      | grep -a -o -E -- "${mask}" | sort -V | tail -n -1)"
     # >&2 echo "res|${res}|"
     if [[ "${res}" =~ ${mask} ]]; then
       newver="${BASH_REMATCH[1]}"
