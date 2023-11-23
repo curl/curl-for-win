@@ -67,10 +67,24 @@ _VER="$1"
   fi
   [ "${_CPU}" = 'x86' ] || options+=' enable-ec_nistp_64_gcc_128'
 
-  if false && [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
-    options+=" --with-zlib-lib=${_TOP}/${_ZLIB}/${_PP}/lib"
-    options+=" --with-zlib-include=${_TOP}/${_ZLIB}/${_PP}/include"
-    options+=' zlib'
+  if false; then
+    if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
+      options+=" --with-zlib-lib=${_TOP}/${_ZLIB}/${_PP}/lib"
+      options+=" --with-zlib-include=${_TOP}/${_ZLIB}/${_PP}/include"
+      options+=' zlib'
+    fi
+    if [ "${_VER}" != '3.1.4' ]; then
+      if [[ "${_DEPS}" = *'brotli'* ]] && [ -d "../brotli/${_PP}" ]; then
+        options+=" --with-brotli-lib=${_TOP}/brotli/${_PP}/lib"
+        options+=" --with-brotli-include=${_TOP}/brotli/${_PP}/include"
+        options+=' brotli'
+      fi
+      if [[ "${_DEPS}" = *'zstd'* ]] && [ -d "../zstd/${_PP}" ]; then
+        options+=" --with-zstd-lib=${_TOP}/zstd/${_PP}/lib"
+        options+=" --with-zstd-include=${_TOP}/zstd/${_PP}/include"
+        options+=' zstd'
+      fi
+    fi
   else
     options+=' no-comp'
   fi
@@ -94,17 +108,22 @@ _VER="$1"
   # Patch OpenSSL to omit build options from its binary:
   sed -i.bak -E '/mkbuildinf/s/".+/""/' crypto/build.info
 
-  # Patch OpenSSL ./Configure to:
-  # - make it accept Windows-style absolute paths as --prefix. Without the
-  #   patch it misidentifies all such absolute paths as relative ones and
-  #   aborts.
-  #   Reported: https://github.com/openssl/openssl/issues/9520
-  # - allow no-apps option to save time building openssl command-line tool.
-  sed \
-    -e 's/die "Directory given with --prefix/print "Directory given with --prefix/g' \
-    -e 's/"aria",$/"apps", "aria",/g' \
-    < ./Configure > ./Configure-patched
-  chmod a+x ./Configure-patched
+  if [ "${_VER}" = '3.1.4' ]; then
+    # Patch OpenSSL ./Configure to:
+    # - make it accept Windows-style absolute paths as --prefix. Without the
+    #   patch it misidentifies all such absolute paths as relative ones and
+    #   aborts.
+    #   Reported: https://github.com/openssl/openssl/issues/9520
+    #   Fixed in OpenSSL 3.2.0.
+    # - allow no-apps option to save time building openssl command-line tool.
+    #   Fixed in OpenSSL 3.2.0.
+    sed \
+      -e 's/die "Directory given with --prefix/print "Directory given with --prefix/g' \
+      -e 's/"aria",$/"apps", "aria",/g' \
+      < ./Configure > ./Configure-patched
+    chmod a+x ./Configure-patched
+    mv ./Configure-patched ./Configure
+  fi
 
   if [ "${_OS}" = 'win' ]; then
     # Space or backslash not allowed. Needs to be a folder restricted
@@ -120,17 +139,31 @@ _VER="$1"
     # detect OS location at runtime and adjust config paths accordingly; none
     # supported by OpenSSL.
     _my_prefix='C:/Windows/System32/OpenSSL'
+    if [ "${_OS}" != "${_HOST}" ] && [ "${_VER}" != '3.1.4' ]; then
+      # Hack to skip (mis-)checking for an absolute prefix using unixy rules
+      # while cross-building on a *nix host for Windows. For that, we must
+      # pass a non-empty CROSS_COMPILE value while making sure that
+      # CROSS_COMPILE + CC points to our compiler. Take extra care of the
+      # compiler options we must pass to OpenSSL in the CC value.
+      export CROSS_COMPILE="$(dirname "$(command -v "$(echo "${CC}" | cut -d ' ' -f 1)")")/"
+    fi
   else
     _my_prefix='/etc'
   fi
   _ssldir='ssl'
+
+  if [ "${_VER}" != '3.1.4' ]; then
+    # no-quic: disable OpenSSL's own (non-quictls-compatible) QUIC API.
+    # no-sm2-precomp: avoid a 3.2.0 optimization that makes libcrypto 0.5MB larger.
+    options+=' no-docs no-quic no-sm2-precomp'
+  fi
 
   # 'no-dso' implies 'no-dynamic-engine' which in turn compiles in these
   # engines non-dynamically. To avoid them, also set `no-engine`.
   (
     mkdir "${_BLDDIR}"; cd "${_BLDDIR}"
     # shellcheck disable=SC2086
-    ../Configure-patched ${options} \
+    ../Configure ${options} \
       no-filenames \
       no-legacy \
       no-apps \
