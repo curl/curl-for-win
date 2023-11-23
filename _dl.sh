@@ -275,20 +275,20 @@ check_update() {
   ourvern="${2:-000000}"
   url="$3"
   newver=''
-  curlopt="${10}"
+  curlopt="$9"
   options=()
   [ -n "${curlopt}" ] && options+=("${curlopt}")
   if [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
     slug="${BASH_REMATCH[1]}"
-    if [ -n "$7" ]; then
+    if [ -n "$6" ]; then
       # base64 is there for googlesource.com '?format=text' mode.
       # raw.githubusercontent.com does not need it.
-      newver="$(my_curl "$7" \
+      newver="$(my_curl "$6" \
         | base64 -d \
-        | grep -F "$8" \
-        | grep -a -o -E "$9")"
+        | grep -F "$7" \
+        | grep -a -o -E "$8")"
     # heavily rate-limited
-    elif [ -n "$5" ]; then
+    elif [ -n "$4" ]; then
       if [[ "${url}" = *'/refs/heads/'* ]]; then
         heads_or_tags='heads'
       else
@@ -298,11 +298,11 @@ check_update() {
       ref="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/git/refs/${heads_or_tags}" \
         --header 'X-GitHub-Api-Version: 2022-11-28' \
         | jq --raw-output '.[].ref' \
-        | grep -a -E "$5" | tail -n -1)"
+        | grep -a -E "$4" | tail -n -1)"
       newver="$(printf '%s' "${ref}" | grep -a -E -o '\d+\.\d+\.\d')"
       # Optionally, check for the presence of a path
-      if [ -n "$6" ] && \
-         ! my_curl --head "https://raw.githubusercontent.com/${slug}/${ref}/$6" >/dev/null 2>&1; then
+      if [ -n "$5" ] && \
+         ! my_curl --head "https://raw.githubusercontent.com/${slug}/${ref}/$5" >/dev/null 2>&1; then
         newver=''
       fi
     else
@@ -318,8 +318,8 @@ check_update() {
           --header 'X-GitHub-Api-Version: 2022-11-28' \
           | jq --raw-output '.tag_name' | sed 's/^v//')"
       fi
-      if [ -n "$9" ]; then
-        newver="$(printf '%s' "${newver}" | grep -a -o -E "$9")"
+      if [ -n "$8" ]; then
+        newver="$(printf '%s' "${newver}" | grep -a -o -E "$8")"
       elif [[ "${newver}" =~ ^[0-9]+\.[0-9]+$ ]]; then
         newver="${newver}.0"
       fi
@@ -329,18 +329,18 @@ check_update() {
     # a separate subdirectory.
     if [ "${pkg}" = 'libssh' ]; then
       # ugly hack: repurpose 'ref_url' for this case:
-      res="$(my_curl "${options[@]}" "$7" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
+      res="$(my_curl "${options[@]}" "$6" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
         | grep -a -o -E -- '[0-9.]+' | sort -V | tail -n -1)"
-      url="$7${res}"
+      url="$6${res}"
       urldir="${url}/"
-    elif [ -n "$7" ]; then
-      url="$7"
+    elif [ -n "$6" ]; then
+      url="$6"
       urldir="${url}"
     else
       urldir="$(dirname "${url}")/"
     fi
     mask="${pkg}[._-]v?([0-9]+(\.[0-9]+)+)\.t"
-    [ -n "$9" ] && mask="$9"
+    [ -n "$8" ] && mask="$8"
     # >&2 echo "mask|${mask}|"
     res="$(my_curl "${options[@]}" "${urldir}" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
       | grep -a -o -E -- "${mask}" | sort -V | tail -n -1)"
@@ -434,7 +434,7 @@ EOF
 }
 
 bump() {
-  local keypkg newcurl newdep pkg name ourver ourvern hashenv hash jp url desc pin
+  local keypkg newcurl newdep pkg name ourver ourvern hashenv hash jp url pin
   local newver newhash sig sha redir keys urlver
 
   set +x
@@ -462,7 +462,6 @@ bump() {
 
       if [ -n "${jp}" ]; then
         url="$(     printf '%s' "${jp}" | jq --raw-output '.url')"
-        desc="$(    printf '%s' "${jp}" | jq --raw-output '.descending')"
         pin="$(     printf '%s' "${jp}" | jq --raw-output '.pinned')"
         tag="$(     printf '%s' "${jp}" | jq --raw-output '.tag' | sed 's/^null$//')"
         hasfile="$( printf '%s' "${jp}" | jq --raw-output '.hasfile' | sed 's/^null$//')"
@@ -478,7 +477,7 @@ bump() {
           # Caveat: Major/minor upgrades are not detected in that case.
           # (e.g. libssh)
           urlver="$(printf '%s' "${url}" | expandver "${ourver}")"
-          newver="$(check_update "${name}" "${ourvern}" "${urlver}" "${desc}" \
+          newver="$(check_update "${name}" "${ourvern}" "${urlver}" \
             "${tag}" \
             "${hasfile}" \
             "${ref_url}" "${ref_expr}" "${ref_mask}" "${curlopt}")"
