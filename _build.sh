@@ -40,7 +40,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        awslc      build with AWS-LC
 #        boringssl  build with BoringSSL
 #        libressl   build with LibreSSL
-#        openssl    build with OpenSSL (mainline)
+#        quictls    build with quictls
+#        openssl    build with OpenSSL
 #        ostls      build with OS-supplied TLS backend-only (Schannel or SecureTransport)
 #        osnotls    build without OS-supplied TLS backends
 #        mbedtls    build with mbedTLS

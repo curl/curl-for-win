@@ -730,6 +730,8 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
       _DEPS+=' boringssl'
     elif [[ "${_CONFIG}" = *'openssl'* ]]; then
       _DEPS+=' openssl'
+    elif [[ "${_CONFIG}" = *'quictls'* ]]; then
+      _DEPS+=' quictls'
     else
       _DEPS+=' quictls'
     fi
