@@ -145,7 +145,8 @@ _VER="$1"
       # pass a non-empty CROSS_COMPILE value while making sure that
       # CROSS_COMPILE + CC points to our compiler. Take extra care of the
       # compiler options we must pass to OpenSSL in the CC value.
-      export CROSS_COMPILE="$(dirname "$(command -v "$(echo "${CC}" | cut -d ' ' -f 1)")")/"
+      export CROSS_COMPILE
+      CROSS_COMPILE="$(dirname "$(command -v "$(echo "${CC}" | cut -d ' ' -f 1)")")/"
     fi
   else
     _my_prefix='/etc'
