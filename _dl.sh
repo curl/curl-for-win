@@ -733,7 +733,12 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
     elif [[ "${_CONFIG}" = *'quictls'* ]]; then
       _DEPS+=' quictls'
     else
-      _DEPS+=' quictls'
+      # Use LibreSSL by default in dev builds
+      if [[ "${_CONFIG}" = *'dev'* ]]; then
+        _DEPS+=' libressl'
+      else
+        _DEPS+=' quictls'
+      fi
     fi
     need_cacert=1
   fi
