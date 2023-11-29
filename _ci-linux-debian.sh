@@ -12,7 +12,7 @@ extra=''
 dl=''
 
 if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
-  [ -n "${CW_CCSUFFIX:-}" ] || export CW_CCSUFFIX='-16'
+  [ -n "${CW_CCSUFFIX:-}" ] || export CW_CCSUFFIX='-17'
   extra+=" llvm${CW_CCSUFFIX} clang${CW_CCSUFFIX} lld${CW_CCSUFFIX}"
 fi
 
@@ -56,7 +56,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
       fi
       [[ "${CW_CONFIG:-}" = *'r64'* ]] && dl+=" libclang-common${CW_CCSUFFIX}-dev:riscv64"
     else
-      # ./my-pkg/usr/lib/llvm-16/lib/clang/16/lib/linux/libclang_rt.builtins-aarch64.a
+      # ./my-pkg/usr/lib/llvm-17/lib/clang/17/lib/linux/libclang_rt.builtins-aarch64.a
       if [ "$(uname -m)" = 'aarch64' ]; then
         dl+=" libclang-rt${CW_CCSUFFIX}-dev:amd64"
       else
@@ -104,7 +104,7 @@ apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
 if [ -n "${dl}" ]; then
   # shellcheck disable=SC2086
   apt-get --quiet 2 --option Dpkg::Use-Pty=0 download ${dl}
-  # https://deb.debian.org/debian/pool/main/l/llvm-toolchain-16/libclang-rt-16-dev_16.0.6-16_arm64.deb -> libclang-rt-16-dev_1%3a16.0.6-16_arm64.deb
+  # https://deb.debian.org/debian/pool/main/l/llvm-toolchain-17/libclang-rt-17-dev_17.0.5-1_arm64.deb -> libclang-rt-17-dev_1%3a17.0.5-1_arm64.deb
   # libclang-common-15-dev_1%3a15.0.6-4+b1_amd64.deb
   for f in ./*.deb; do
     dpkg-deb --contents "${f}"

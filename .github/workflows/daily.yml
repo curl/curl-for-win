@@ -96,7 +96,7 @@ jobs:
           export CW_CONFIG='dev-linux-musl-r64'
           export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           DOCKER_IMAGE='debian:sid-slim'
-          export CW_CCSUFFIX='-16'
+          export CW_CCSUFFIX='-17'
           export CW_GCCSUFFIX='-13'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"

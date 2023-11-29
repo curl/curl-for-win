@@ -153,7 +153,7 @@ jobs:
           export CW_CONFIG='${{ github.ref_name }}-linux-r64'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='debian:sid-slim'
-          export CW_CCSUFFIX='-16'
+          export CW_CCSUFFIX='-17'
           export CW_GCCSUFFIX='-13'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"
@@ -183,7 +183,7 @@ jobs:
           export CW_CONFIG='${{ github.ref_name }}-linux-gcc-r64'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='debian:sid-slim'
-          export CW_CCSUFFIX='-16'
+          export CW_CCSUFFIX='-17'
           export CW_GCCSUFFIX='-13'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"
@@ -329,7 +329,7 @@ jobs:
           export CW_CONFIG='${{ github.ref_name }}-linux-musl-r64'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='debian:sid-slim'
-          export CW_CCSUFFIX='-16'
+          export CW_CCSUFFIX='-17'
           export CW_GCCSUFFIX='-13'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"
@@ -359,7 +359,7 @@ jobs:
           export CW_CONFIG='${{ github.ref_name }}-linux-musl-gcc-r64'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='debian:sid-slim'
-          export CW_CCSUFFIX='-16'
+          export CW_CCSUFFIX='-17'
           export CW_GCCSUFFIX='-13'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"

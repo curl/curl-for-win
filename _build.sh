@@ -877,7 +877,7 @@ build_single_target() {
     if [ "${_DISTRO}" = 'alpine' ]; then
       _CCRT='clang-rt'
     # Debian does not support clang-rt for cross-builds easily,
-    # it requires manually installing package `libclang-rt-16-dev` or `libclang-common-15-dev`.
+    # it requires manually installing package `libclang-rt-17-dev` (or `libclang-common-15-dev` on bookworm).
     elif [ "${_DISTRO}" = 'debian' ] && [ -d 'my-pkg/usr/lib/clang' ]; then
       # FIXME: This combination fails to link with clang-rt, due to:
       #        ld.lld-16: error: relocation R_RISCV_PCREL_HI20 cannot be used against symbol '__global_pointer$'; recompile with -fPIC
@@ -1179,29 +1179,6 @@ build_single_target() {
   export _READELF="${_BINUTILS_PREFIX}readelf${_BINUTILS_SUFFIX}"
   if [ "${_OS}" = 'win' ]; then
     export RC="${_BINUTILS_PREFIX}windres${_BINUTILS_SUFFIX}"
-  fi
-  if [ "${_OS}" = 'win' ] && \
-     [ "${_CC}" = 'llvm' ] && \
-     [ "${_TOOLCHAIN}" != 'llvm-mingw' ] && \
-     [ "${_HOST}" = 'linux' ] && \
-     [ -n "${_BINUTILS_SUFFIX}" ]; then
-    # FIXME: llvm-windres present, but unable to find its clang counterpart
-    #        when suffixed:
-    #          llvm-windres-16 -O coff  --target=pe-x86-64 -I../include -i libcurl.rc -o x86_64-w64-windows-gnu/libcurl.res
-    #          llvm-rc: Unable to find clang, skipping preprocessing.
-    #          Pass --no-preprocess to disable preprocessing. This will be an error in the future.
-    #          https://reviews.llvm.org/D100755
-    #          https://github.com/llvm/llvm-project/blob/main/llvm/tools/llvm-rc/llvm-rc.cpp
-    #          https://github.com/msys2/MINGW-packages/discussions/8736
-    #        Partially fixed in v16.0.2, additional fix pending for v17.0.0:
-    #          https://reviews.llvm.org/D157241
-    #          https://github.com/curl/curl-for-win/commit/caaae171ac43af5b883403714dafd42030d8de61
-    RC="$(pwd)/${RC}"
-    ln -s -f "/usr/bin/${_BINUTILS_PREFIX}rc${_BINUTILS_SUFFIX}" "${RC}"
-    # llvm-windres/llvm-rc wants to find clang on the same path as itself
-    # (or in PATH), with the hard-wired name of clang (or <TRIPLET>-clang,
-    # or clang-cl). Workaround: create an alias for it:
-    ln -s -f "/usr/bin/clang${_CCSUFFIX}" "$(pwd)/clang"
   fi
   export AR="${_BINCORE_PREFIX}ar${_BINCORE_SUFFIX}"
   export NM="${_BINCORE_PREFIX}nm${_BINCORE_SUFFIX}"
