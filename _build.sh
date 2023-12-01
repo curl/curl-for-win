@@ -828,21 +828,21 @@ build_single_target() {
     # Override defaults such as: 'lib/aarch64-linux-gnu'
     _CMAKE_GLOBAL+=' -DCMAKE_INSTALL_LIBDIR=lib'
 
+    # With musl, this seems to be a no-op as of Alpine v3.18
+    # https://en.wikipedia.org/wiki/Buffer_overflow_protection
+    _CFLAGS_GLOBAL+=' -fstack-protector-all'
+    _CXXFLAGS_GLOBAL+=' -fstack-protector-all'
+
+    # https://en.wikipedia.org/wiki/Position-independent_code#PIE
+    _CFLAGS_GLOBAL+=' -fPIC'
+    _CXXFLAGS_GLOBAL+=' -fPIC'
+
     # With musl, this relies on package `fortify-headers` (Alpine)
     _CPPFLAGS_GLOBAL+=' -D_FORTIFY_SOURCE=2'
     # Requires glibc 2.34, gcc 12 (2022)
     #   https://developers.redhat.com/articles/2023/02/06/how-improve-application-security-using-fortifysource3
     #   https://developers.redhat.com/articles/2022/09/17/gccs-new-fortification-level
   # _CPPFLAGS_GLOBAL+=' -D_FORTIFY_SOURCE=3'
-
-    # https://en.wikipedia.org/wiki/Position-independent_code#PIE
-    _CFLAGS_GLOBAL+=' -fPIC'
-    _CXXFLAGS_GLOBAL+=' -fPIC'
-
-    # With musl, this seems to be a no-op as of Alpine v3.18
-    # https://en.wikipedia.org/wiki/Buffer_overflow_protection
-    _CFLAGS_GLOBAL+=' -fstack-protector-all'
-    _CXXFLAGS_GLOBAL+=' -fstack-protector-all'
 
     _LDFLAGS_GLOBAL+=' -Wl,-z,relro,-z,now'
 
