@@ -828,23 +828,56 @@ build_single_target() {
     # Override defaults such as: 'lib/aarch64-linux-gnu'
     _CMAKE_GLOBAL+=' -DCMAKE_INSTALL_LIBDIR=lib'
 
+    if [[ ( "${_CC}" = 'llvm' && "${_CCVER}" -ge '1600' ) || \
+          ( "${_CC}" = 'gcc'  && "${_CCVER}" -ge '1300' ) ]]; then
+      _CFLAGS_GLOBAL+=' -fstrict-flex-arrays=3'
+      _CXXFLAGS_GLOBAL+=' -fstrict-flex-arrays=3'
+    fi
+
+    if [ "${_CPU}" = 'a64' ]; then
+      _CFLAGS_GLOBAL+=' -mbranch-protection=standard'
+      _CXXFLAGS_GLOBAL+=' -mbranch-protection=standard'
+    fi
+
     # With musl, this seems to be a no-op as of Alpine v3.18
     # https://en.wikipedia.org/wiki/Buffer_overflow_protection
     _CFLAGS_GLOBAL+=' -fstack-protector-all'
     _CXXFLAGS_GLOBAL+=' -fstack-protector-all'
 
-    # https://en.wikipedia.org/wiki/Position-independent_code#PIE
-    _CFLAGS_GLOBAL+=' -fPIC'
-    _CXXFLAGS_GLOBAL+=' -fPIC'
+    if false && [ "${_CC}" = 'gcc' ] && [ "${_CCVER}" -ge '1400' ]; then
+      # https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html#index-fhardened
+      _CFLAGS_GLOBAL+=' -fhardened'
+      _CXXFLAGS_GLOBAL+=' -fhardened'
+    else
+      # https://en.wikipedia.org/wiki/Position-independent_code#PIE
+      _CFLAGS_GLOBAL+=' -fPIC'
+      _CXXFLAGS_GLOBAL+=' -fPIC'
 
-    # With musl, this relies on package `fortify-headers` (Alpine)
-    _CPPFLAGS_GLOBAL+=' -D_FORTIFY_SOURCE=2'
-    # Requires glibc 2.34, gcc 12 (2022)
-    #   https://developers.redhat.com/articles/2023/02/06/how-improve-application-security-using-fortifysource3
-    #   https://developers.redhat.com/articles/2022/09/17/gccs-new-fortification-level
-  # _CPPFLAGS_GLOBAL+=' -D_FORTIFY_SOURCE=3'
+      # With musl, this relies on package `fortify-headers` (Alpine)
+      _CPPFLAGS_GLOBAL+=' -D_FORTIFY_SOURCE=2'
+      # Requires glibc 2.34, gcc 12 (2022)
+      #   https://developers.redhat.com/articles/2023/02/06/how-improve-application-security-using-fortifysource3
+      #   https://developers.redhat.com/articles/2022/09/17/gccs-new-fortification-level
+    # _CPPFLAGS_GLOBAL+=' -D_FORTIFY_SOURCE=3'
 
-    _LDFLAGS_GLOBAL+=' -Wl,-z,relro,-z,now'
+      if [ "${_CPU}" = 'x64' ] || \
+         [ "${_CPU}" = 'x86' ] || \
+         [ "${_CC}" = 'gcc' ]; then
+        _CFLAGS_GLOBAL+=' -fstack-clash-protection'
+        _CXXFLAGS_GLOBAL+=' -fstack-clash-protection'
+      fi
+
+      if [ "${_CPU}" = 'x64' ] || \
+         [ "${_CPU}" = 'x86' ]; then
+        _CFLAGS_GLOBAL+=' -fcf-protection=full'
+        _CXXFLAGS_GLOBAL+=' -fcf-protection=full'
+      fi
+
+      _LDFLAGS_GLOBAL+=' -Wl,-z,relro,-z,now'
+    fi
+
+    _LDFLAGS_GLOBAL+=' -Wl,-z,noexecstack'  # Seems to be the default on our platforms, but make it explicit.
+    _LDFLAGS_GLOBAL+=' -Wl,-z,nodlopen'
 
     if [ "${_CRT}" = 'musl' ]; then
       if [ "${_HOST}" = 'mac' ]; then
