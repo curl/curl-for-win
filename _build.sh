@@ -803,6 +803,18 @@ build_single_target() {
       fi
     fi
 
+    # This works, but forces the linker generate a build-id segment, which is
+    # different for each, otherwise identical build. Linux also does this, but
+    # there the build-id is reproducible for identical builds.
+    # Issue: https://github.com/llvm/llvm-project/issues/74238
+    if false && [ "${_CC}" = 'llvm' ]; then
+      if [ "${_CPU}" = 'x64' ] || \
+         [ "${_CPU}" = 'x86' ]; then
+        _CFLAGS_GLOBAL+=' -fcf-protection=full'
+        _LDFLAGS_GLOBAL+=' -Wl,-Xlink=-cetcompat'
+      fi
+    fi
+
     if [ "${_CPU}" = 'a64' ]; then
       _CFLAGS_GLOBAL+=' -mbranch-protection=standard'
       _CXXFLAGS_GLOBAL+=' -mbranch-protection=standard'
