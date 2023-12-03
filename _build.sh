@@ -802,6 +802,12 @@ build_single_target() {
         _LDFLAGS_GLOBAL+=" -specs=${_GCCSPECS}"
       fi
     fi
+
+    if [ "${_CPU}" = 'a64' ]; then
+      _CFLAGS_GLOBAL+=' -mbranch-protection=standard'
+      _CXXFLAGS_GLOBAL+=' -mbranch-protection=standard'
+    fi
+
   elif [ "${_OS}" = 'mac' ]; then
     if [ "${_HOST}" != "${_OS}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Darwin ${_CMAKE_GLOBAL}"
