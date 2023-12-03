@@ -106,9 +106,14 @@ _VER="$1"
 
   # Execute curl and compiled-in dependency code. This is not secure.
   [ "${_OS}" = 'win' ] && cp -p "../curl/${_PP}/bin/"*"${DYN_EXT}" .
+  if [ "${_OS}" = 'linux' ] && [ "${_HOST}" = 'linux' ]; then
+    # https://www.man7.org/training/download/shlib_dynlinker_slides.pdf
+    export LD_DEBUG='libs,versions,statistics'
+  fi
   # On macOS this picks up a system libcurl. Ours is picked up
   # when running it from the unpacked release tarball.
   LD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" ${_RUN_BIN} "${bin}" --version | tee "trurl-${_CPU}.txt" || true
+  unset LD_DEBUG
 
   if [ "${CW_TURL_TEST:-}" = '1' ] && \
      [ "${_RUN_BIN}" != 'echo' ]; then
