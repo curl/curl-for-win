@@ -566,9 +566,10 @@ build_single_target() {
   if [ "${_OS}" = 'mac' ] && [ "${_machine}" = 'aarch64' ] && [ "${_CC}" = 'llvm' ]; then
     # llvm-apple supports multiple archs separated by ';', e.g. 'arm64e;x86_64'
     # It also understands arm64e (vs arm64)
-    # Revert to arm64, because documents on the internet suggests that arm64e
-    # is not supported by macOS by default (for user apps) and enabling it is
-    # an involved process (as of macOS Ventura).
+    # Revert to arm64, because documents suggests that arm64e is not supported
+    # by macOS by default (for user apps) and enabling it is an involved process
+    # (as of macOS Ventura):
+    #   https://github.com/lelegard/arm-cpusysregs/blob/6316fb608c8e4cd817d72485a57abbffd3d811b4/docs/arm64e-on-macos.md#enabling-arm64e-on-macos-13-ventura
     _machines='arm64'
   # _machines='arm64e'
   else
