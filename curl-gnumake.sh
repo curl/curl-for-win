@@ -34,11 +34,17 @@ _VER="$1"
   export CFG=''
 
   export CC="${_CC_GLOBAL}"
-  export CFLAGS="${_CFLAGS_GLOBAL} -O3"
+  export CFLAGS="${_CFLAGS_GLOBAL}"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL} -DOS=\\\"${_TRIPLET}\\\""
   export RCFLAGS="${_RCFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LIBS=''
+
+  if [[ "${_CONFIG}" =~ *'zero'* ]]; then
+    CFLAGS+=' -Os'
+  else
+    CFLAGS+=' -O3'
+  fi
 
   CFLAGS+=' -fvisibility=hidden'
 

@@ -19,7 +19,7 @@ _VER="$1"
   # Build
 
   export CC="${_CC_GLOBAL}"
-  export CFLAGS="${_CFLAGS_GLOBAL} -O3"
+  export CFLAGS="${_CFLAGS_GLOBAL}"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LDLIBS=''
@@ -40,6 +40,7 @@ _VER="$1"
 
   CPPFLAGS+=" -I../curl/${_PP}/include"
   if [[ "${_CONFIG}" = *'zero'* ]]; then
+    CFLAGS+=' -Os'
     # link statically in 'zero' (no external dependencies) config
     LDLIBS+=" ../curl/${_PP}/lib/libcurl.a"
     if [ "${_OS}" = 'win' ]; then
@@ -54,6 +55,7 @@ _VER="$1"
       LDFLAGS+=' -static'
     fi
   else
+    CFLAGS+=' -O3'
     LDFLAGS+=" -L../curl/${_PP}/lib"
     LDLIBS+=' -lcurl'
   fi
