@@ -820,11 +820,6 @@ build_single_target() {
       fi
     fi
 
-    if [ "${_CPU}" = 'a64' ]; then
-      _CFLAGS_GLOBAL+=' -mbranch-protection=standard'
-      _CXXFLAGS_GLOBAL+=' -mbranch-protection=standard'
-    fi
-
   elif [ "${_OS}" = 'mac' ]; then
     if [ "${_HOST}" != "${_OS}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Darwin ${_CMAKE_GLOBAL}"
@@ -855,11 +850,6 @@ build_single_target() {
           ( "${_CC}" = 'gcc'  && "${_CCVER}" -ge '1300' ) ]]; then
       _CFLAGS_GLOBAL+=' -fstrict-flex-arrays=3'
       _CXXFLAGS_GLOBAL+=' -fstrict-flex-arrays=3'
-    fi
-
-    if [ "${_CPU}" = 'a64' ]; then
-      _CFLAGS_GLOBAL+=' -mbranch-protection=standard'
-      _CXXFLAGS_GLOBAL+=' -mbranch-protection=standard'
     fi
 
     # With musl, this seems to be a no-op as of Alpine v3.18
@@ -911,6 +901,11 @@ build_single_target() {
         _LDFLAGS_BIN_GLOBAL+=' -static'
       fi
     fi
+  fi
+
+  if [ "${_CPU}" = 'a64' ]; then
+    _CFLAGS_GLOBAL+=' -mbranch-protection=standard'
+    _CXXFLAGS_GLOBAL+=' -mbranch-protection=standard'
   fi
 
   _CMAKE_GLOBAL+=' -DCMAKE_INSTALL_MESSAGE=NEVER'
