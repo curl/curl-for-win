@@ -925,6 +925,7 @@ build_single_target() {
   # curl recommended options to reduce binary size:
   # https://github.com/curl/curl/blob/master/docs/INSTALL.md#reducing-size
 
+  _CFLAGS_GLOBAL+=' -fno-unwind-tables'
   _CFLAGS_GLOBAL+=' -fno-asynchronous-unwind-tables'
 
   _CCRT='libgcc'  # compiler runtime, 'libgcc' (for libgcc and libstdc++) or 'clang-rt' (for compiler-rt and libc++)
