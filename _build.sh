@@ -846,6 +846,10 @@ build_single_target() {
     # Override defaults such as: 'lib/aarch64-linux-gnu'
     _CMAKE_GLOBAL+=' -DCMAKE_INSTALL_LIBDIR=lib'
 
+    # OpenSSF guide:
+    # https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++.html
+    # https://github.com/ossf/wg-best-practices-os-developers/blob/main/docs/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C%2B%2B.md
+
     if [[ ( "${_CC}" = 'llvm' && "${_CCVER}" -ge '1600' ) || \
           ( "${_CC}" = 'gcc'  && "${_CCVER}" -ge '1300' ) ]]; then
       _CFLAGS_GLOBAL+=' -fstrict-flex-arrays=3'
