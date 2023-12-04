@@ -921,7 +921,11 @@ build_single_target() {
   # - '--host' is the host we are building the binaries for.
   #   We call it '_TRIPLET' (and '_OS' for our short name).
   _CONFIGURE_GLOBAL+=" --build=${_HOST_TRIPLET} --host=${_TRIPLET}"
-  [ "${_CPU}" = 'x86' ] && _CFLAGS_GLOBAL+=' -fno-asynchronous-unwind-tables'
+
+  # curl recommended options to reduce binary size:
+  # https://github.com/curl/curl/blob/master/docs/INSTALL.md#reducing-size
+
+  _CFLAGS_GLOBAL+=' -fno-asynchronous-unwind-tables'
 
   _CCRT='libgcc'  # compiler runtime, 'libgcc' (for libgcc and libstdc++) or 'clang-rt' (for compiler-rt and libc++)
   if [ "${_TOOLCHAIN}" = 'llvm-apple' ] || \
