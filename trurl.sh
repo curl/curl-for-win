@@ -24,6 +24,10 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LDLIBS=''
 
+  # musl-debian-gcc issues
+  # https://github.com/curl/curl-for-win/actions/runs/7095411627/job/19312285992
+  CFLAGS="${CFLAGS//-fvisibility=hidden/}"
+
   if [[ "${_CONFIG}" != *'main'* ]]; then
     LDFLAGS+=' -v'
   # [ "${_CC}" = 'gcc' ] && LDFLAGS+=' -Wl,--trace'

@@ -68,6 +68,10 @@ _VER="$1"
     options+=' -DCMAKE_UNITY_BUILD=ON'
   fi
 
+  if [ "${_OS}" != 'win' ]; then
+    options+=' -DHIDE_SYMBOLS=OFF'
+  fi
+
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
     # shellcheck disable=SC2086
     cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \

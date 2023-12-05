@@ -70,7 +70,11 @@ while [ -n "${1:-}" ]; do
     TZ=UTC "${_prefix}otool" -arch all -f -v -L -dyld_info "${f}"
     # Display `LC_BUILD_VERSION` / `LC_VERSION_MIN_MACOSX` info
     TZ=UTC "${_prefix}otool" -arch all -f -l "${f}" | grep -a -w -E '(\(architecture|^ *(minos|version|sdk))'
-    # nm -g -U = --extern-only --defined-only
+    if [ "${is_curl}" = '1' ] && [ "${filetype}" != 'exe' ]; then  # Verify exported curl symbols
+      "${NM}" --extern-only --defined-only "${f}"  # -g -U
+      "${NM}" --extern-only --defined-only "${f}" | grep -a -F ' _curl_' | sort || false  # -g -U
+    # "${NM}" --extern-only --defined-only "${f}" | grep -a -F 'Name: ' | grep -a -F -v ' curl_' && false  # should not export anything else except the libcurl API
+    fi
   elif [ "${_OS}" = 'linux' ]; then
     "${_READELF}" --file-header --dynamic "${f}"
     "${_READELF}" --program-headers "${f}"
@@ -102,7 +106,11 @@ while [ -n "${1:-}" ]; do
         | grep -E -o '@GLIBC_[0-9]+\.[0-9]+$' | sed 's/@GLIBC_//g' | sort -u -V || true
       "${NM}" --dynamic --undefined-only "${f}" \
         | grep -F '@GLIBC_' | grep -E -v "${filter}" || true
-      # nm -D -U = --dynamic --defined-only
+      if [ "${filetype}" != 'exe' ]; then  # Verify exported curl symbols
+        "${NM}" --dynamic --defined-only "${f}"  # -D -U
+        "${NM}" --dynamic --defined-only "${f}" | grep -a -F ' curl_' | sort || false  # -D -U
+      # "${NM}" --dynamic --defined-only "${f}" | grep -a -F 'Name: ' | grep -a -F -v ' curl_' && false  # should not export anything else except the libcurl API
+      fi
       # nm -D -g = --dynamic --extern-only
     fi
   fi

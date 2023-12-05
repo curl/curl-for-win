@@ -940,6 +940,23 @@ build_single_target() {
   #   We call it '_TRIPLET' (and '_OS' for our short name).
   _CONFIGURE_GLOBAL+=" --build=${_HOST_TRIPLET} --host=${_TRIPLET}"
 
+  # Hide symbols by default. Our goal is to create curl and libcurl, and to
+  # export the libcurl interface from the libcurl shared lib, without exporting
+  # the interfaces of its dependencies statically linked to the libcurl shared
+  # lib. This needs setting the default visibility 'hidden' and make sure that
+  # no dependency build is overriding this default, nor do they enable any
+  # per-function attribute to override it. Except when building libcurl itself.
+  # https://gcc.gnu.org/wiki/Visibility
+  #
+  # FIXME: We enable assembly code with most TLS backends (and zstd has some
+  # too on some targets). I have not found a way to enforce hidden visibility
+  # for symbols declared in assembly code (via .global or .globl) meaning these
+  # continue to leak out from the libcurl shared library.
+  if [ "${_OS}" != 'win' ]; then
+    _CFLAGS_GLOBAL+=' -fvisibility=hidden'
+    _CXXFLAGS_GLOBAL+=' -fvisibility=hidden'
+  fi
+
   # curl recommended options to reduce binary size:
   # https://github.com/curl/curl/blob/master/docs/INSTALL.md#reducing-size
 
