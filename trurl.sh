@@ -101,6 +101,9 @@ _VER="$1"
   ../_sign-code.sh "${_ref}" "${bin}"
 
   touch -c -r "${_ref}" "${bin}"
+  if [ "${CW_MAP}" = '1' ]; then
+    touch -c -r "${_ref}" "${_PP}/bin/${map_name}"
+  fi
 
   ../_info-bin.sh --filetype 'exe' "${bin}"
 
