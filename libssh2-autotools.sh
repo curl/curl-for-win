@@ -62,6 +62,10 @@ _VER="$1"
     options+=' --with-crypto=wincng'
   fi
 
+  if [ "${LIBSSH2_VER_}" != '1.11.0' ]; then
+    options+=' --disable-deprecated'
+  fi
+
   (
     mkdir "${_BLDDIR}"; cd "${_BLDDIR}"
     # shellcheck disable=SC2086

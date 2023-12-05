@@ -59,6 +59,10 @@ _VER="$1"
     options+=' -DCRYPTO_BACKEND=WinCNG'
   fi
 
+  if [ "${LIBSSH2_VER_}" != '1.11.0' ]; then
+    options+=' -DLIBSSH2_NO_DEPRECATED=ON'
+  fi
+
   if [ "${CW_DEV_CROSSMAKE_REPRO:-}" != '1' ] && \
      [[ "${_CONFIG}" != *'nounity'* ]]; then
     options+=' -DCMAKE_UNITY_BUILD=ON'
