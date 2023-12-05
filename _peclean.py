@@ -30,6 +30,11 @@ if len(sys.argv) > 2:
                 pe.DIRECTORY_ENTRY_EXPORT.struct.TimeDateStamp = ts
             except AttributeError:
                 pass
+            try:
+                for entry in pe.DIRECTORY_ENTRY_DEBUG:
+                    entry.struct.TimeDateStamp = ts
+            except AttributeError:
+                pass
             pe.OPTIONAL_HEADER.CheckSum = pe.generate_checksum()
             pe.write(fname)
             pe.close()
