@@ -36,13 +36,21 @@ while [ -n "${1:-}" ]; do
         fi
       fi
     fi
-    # Dump 'DllCharacteristics' flags, e.g. HIGH_ENTROPY_VA, DYNAMIC_BASE, NX_COMPAT, GUARD_CF, TERMINAL_SERVICE_AWARE
-    # = llvm-readobj --file-headers | grep -a -F 'IMAGE_DLL_CHARACTERISTICS_'
-    "${_OBJDUMP}" --all-headers "${f}" | grep -a -E -o '^\s+[A-Z_]{4,}$' | sort
-    # Dump cfguard load configuration flags
-    if [ "${_CC}" = 'llvm' ]; then  # binutils readelf (as of v2.40) does not recognize this option
-      # CF_FUNCTION_TABLE_PRESENT, CF_INSTRUMENTED, CF_LONGJUMP_TABLE_PRESENT (optional)
+    if [ "${_CC}" = 'llvm' ]; then
+      # Dump 'Characteristics' flags, e.g.
+      #   IMAGE_DLL_CHARACTERISTICS_DYNAMIC_BASE, IMAGE_DLL_CHARACTERISTICS_HIGH_ENTROPY_VA
+      #   IMAGE_DLL_CHARACTERISTICS_NX_COMPAT, IMAGE_DLL_CHARACTERISTICS_TERMINAL_SERVER_AWARE
+      # Dump 'ExtendedCharacteristics' flags, e.g.
+      #   IMAGE_DLL_CHARACTERISTICS_EX_CET_COMPAT
+      "${_READELF}" --file-headers --coff-debug-directory "${f}" | grep -a -F 'IMAGE_DLL_CHARACTERISTICS_' | sort || true
+      # Dump cfguard load configuration flags
+      #   CF_FUNCTION_TABLE_PRESENT, CF_INSTRUMENTED, CF_LONGJUMP_TABLE_PRESENT (optional)
+      # binutils readelf (as of v2.40) does not recognize this option
       "${_READELF}" --coff-load-config "${f}" | grep -a -E 'CF_[A-Z_]' | sort || true
+    else
+      # Dump 'DllCharacteristics' flags, e.g.
+      #   HIGH_ENTROPY_VA, DYNAMIC_BASE, NX_COMPAT, GUARD_CF, TERMINAL_SERVICE_AWARE
+      "${_OBJDUMP}" --all-headers "${f}" | grep -a -E -o '^\s+[A-Z_]{4,}$' | sort
     fi
     if [ "${filetype}" = 'exe' ] && [ "${is_curl}" = '1' ]; then  # should be the same output for the DLL
       # regexp compatible with llvm and binutils output
@@ -75,6 +83,9 @@ while [ -n "${1:-}" ]; do
         # We have seen this fail in some cases, so ignore exit code
         checksec --format=xml --fortify-file="${f}" || true  # duplicate keys in json, cannot apply jq
       fi
+    fi
+    if [ "${_CC}" = 'llvm' ]; then
+      "${_READELF}" --headers "${f}" | grep -a -F '.note.gnu.property' || true
     fi
     if [ "${is_curl}" = '1' ]; then
       # Show linked GLIBC versions
