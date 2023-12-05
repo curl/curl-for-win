@@ -1236,7 +1236,7 @@ build_single_target() {
     _STRIPFLAGS_LIB='--enable-deterministic-archives --strip-debug'
   fi
   export _OBJDUMP="${_BINUTILS_PREFIX}objdump${_BINUTILS_SUFFIX}"
-  export _READELF="${_BINUTILS_PREFIX}readelf${_BINUTILS_SUFFIX}"
+  export _READELF="${_BINUTILS_PREFIX}readelf${_BINUTILS_SUFFIX}"  # symlink to llvm-readobj in llvm
   if [ "${_OS}" = 'win' ]; then
     export RC="${_BINUTILS_PREFIX}windres${_BINUTILS_SUFFIX}"
   fi

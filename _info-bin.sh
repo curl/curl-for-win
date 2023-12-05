@@ -22,9 +22,11 @@ while [ -n "${1:-}" ]; do
   f="$1"; shift
 
   if [ "${_OS}" = 'win' ]; then
+    # = llvm-readobj --coff-imports | grep -a -F 'Name: ' | sort -r -f
     TZ=UTC "${_OBJDUMP}" --all-headers "${f}" | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f
     if [ "${is_curl}" = '1' ]; then
       # Verify exported curl symbols
+      # = llvm-readobj --coff-exports | grep -a -F 'Name: ' | grep -a -F ' curl_'
       if [ "${filetype}" = 'exe' ]; then
         "${_OBJDUMP}" --all-headers "${f}" | grep -a -F ' curl_' && false  # should not have any hits for statically linked curl
       else
@@ -32,6 +34,7 @@ while [ -n "${1:-}" ]; do
       fi
     fi
     # Dump 'DllCharacteristics' flags, e.g. HIGH_ENTROPY_VA, DYNAMIC_BASE, NX_COMPAT, GUARD_CF, TERMINAL_SERVICE_AWARE
+    # = llvm-readobj --file-headers | grep -a -F 'IMAGE_DLL_CHARACTERISTICS_'
     "${_OBJDUMP}" --all-headers "${f}" | grep -a -E -o '^\s+[A-Z_]{4,}$' | sort
     # Dump cfguard load configuration flags
     if [ "${_CC}" = 'llvm' ]; then  # binutils readelf (as of v2.40) does not recognize this option
@@ -40,6 +43,7 @@ while [ -n "${1:-}" ]; do
     fi
     if [ "${filetype}" = 'exe' ] && [ "${is_curl}" = '1' ]; then  # should be the same output for the DLL
       # regexp compatible with llvm and binutils output
+      # = llvm-readobj --coff-imports | grep -a -F 'Symbol: ' | sort
       "${_OBJDUMP}" --all-headers "${f}" \
         | grep -a -E ' [0-9]{1,5} +[a-zA-Z_][a-zA-Z0-9_]*$' \
         | grep -a -E -o '\S+$' | sort || true
@@ -55,6 +59,7 @@ while [ -n "${1:-}" ]; do
     TZ=UTC "${_prefix}otool" -arch all -f -v -L -dyld_info "${f}"
     # Display `LC_BUILD_VERSION` / `LC_VERSION_MIN_MACOSX` info
     TZ=UTC "${_prefix}otool" -arch all -f -l "${f}" | grep -a -w -E '(\(architecture|^ *(minos|version|sdk))'
+    # nm -g -U = --extern-only --defined-only
   elif [ "${_OS}" = 'linux' ]; then
     "${_READELF}" --file-header --dynamic "${f}"
     "${_READELF}" --program-headers "${f}"
@@ -77,11 +82,14 @@ while [ -n "${1:-}" ]; do
       else
         filter='@GLIBC_([0-9]+\.[0-9]+\.[0-9]+|2\.([0-9]|1[0-9]))$'  # Exclude: x.y.z, 2.x, 2.1x (-2014-02)
       fi
+      # nm -D -u =
       "${NM}" --dynamic --undefined-only "${f}" \
         | grep -E -v "${filter}" \
         | grep -E -o '@GLIBC_[0-9]+\.[0-9]+$' | sed 's/@GLIBC_//g' | sort -u -V || true
       "${NM}" --dynamic --undefined-only "${f}" \
         | grep -F '@GLIBC_' | grep -E -v "${filter}" || true
+      # nm -D -U = --dynamic --defined-only
+      # nm -D -g = --dynamic --extern-only
     fi
   fi
 done
