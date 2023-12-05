@@ -31,6 +31,9 @@ while [ -n "${1:-}" ]; do
         "${_OBJDUMP}" --all-headers "${f}" | grep -a -F ' curl_' && false  # should not have any hits for statically linked curl
       else
         "${_OBJDUMP}" --all-headers "${f}" | grep -a -F ' curl_' || false  # show public libcurl APIs (in a well-defined order)
+        if [ "${_CC}" = 'llvm' ]; then
+          "${_READELF}" --coff-exports "${f}" | grep -a -F 'Name: ' | grep -a -F -v ' curl_' && false  # should not export anything else except the libcurl API
+        fi
       fi
     fi
     # Dump 'DllCharacteristics' flags, e.g. HIGH_ENTROPY_VA, DYNAMIC_BASE, NX_COMPAT, GUARD_CF, TERMINAL_SERVICE_AWARE
