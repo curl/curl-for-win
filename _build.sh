@@ -139,7 +139,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - https://sourceware.org/git/binutils-gdb.git
 #   - https://github.com/netwide-assembler/nasm
 
-# Build times for windows (2023-10-25):
+# Build times for Windows with quictls (2023-10-25):
 #   - cmake-unity:  27 min 22 sec   1642s   100%
 #   - gnumake:      29 min 11 sec   1751s   107%   100%
 #   - autotools:    33 min 40 sec   2020s   123%   115%
