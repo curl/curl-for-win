@@ -1186,9 +1186,7 @@ build_single_target() {
   export _STRIP_LIB
   export _STRIPFLAGS_LIB
   # All mac except standard llvm which uses a standard strip tool.
-  # It means _CC + _TOOLCHAIN must be 'llvm' + 'llvm-apple' or 'gcc' + 'llvm-apple' or 'gcc' + '',
-  # but not 'llvm' + ''.
-  if [ "${_OS}" = 'mac' ] && [ "${_CC}${_TOOLCHAIN}" != 'llvm' ]; then
+  if [ "${_OS}" = 'mac' ]; then
     # Xcode strip command-line interface is different than GNU/llvm strip.
     # Binaries are by default reproducible. After strip, they lose some
     # debug data and remain reproducible.
