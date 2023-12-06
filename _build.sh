@@ -107,7 +107,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 # TODO:
 #   - delete curl-gnumake.sh.
-#   - change default TLS to BoringSSL (with OPENSSL_SMALL?) or LibreSSL?
 #   - prepare for Xcode 15 with new ld_prime (-Wl,-ld_new) linker (vs. -Wl,-ld_classic).
 #     https://developer.apple.com/forums/thread/715385
 #   - linux: musl alpine why need -static-pie and not -static?

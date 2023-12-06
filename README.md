@@ -7,11 +7,6 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 
 # Reproducible curl binaries for Linux, macOS and Windows
 
-- **We are switching the default TLS backend to LibreSSL upon the curl
-  8.5.0 release, after a final revision for 8.4.0 built with LibreSSL.
-  This fixes a long-standing OpenSSL
-  [vulnerability](https://curl.se/docs/CVE-2019-5443.html) on Windows. It also
-  makes binaries 40% smaller. Major crypto and curl features remain the same.**
 - [Download](https://curl.se/windows/) our
   `.tar.xz` or `.zip` packages,<br>PGP signed with:
   [`9948 0C09 BC89 B68A 0764 3F30 8C8F 5B14 19BD CAB8`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
@@ -59,7 +54,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 
 # Features
 
-Uses [quictls](https://github.com/quictls/openssl/) TLS backend.
+Uses [LibreSSL](https://www.libressl.org/) TLS backend.
 
 ```
 Windows with runtime-selectable option Schannel:
