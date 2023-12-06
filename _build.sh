@@ -106,7 +106,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
-#   - delete curl-gnumake.sh.
 #   - prepare for Xcode 15 with new ld_prime (-Wl,-ld_new) linker (vs. -Wl,-ld_classic).
 #     https://developer.apple.com/forums/thread/715385
 #   - linux: musl alpine why need -static-pie and not -static?
@@ -168,7 +167,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   wolfssh          autotools
 #   libssh           cmake
 #   libssh2          cmake-unity, autotools
-#   curl             cmake-unity, autotools, gnumake [windows-only]
+#   curl             cmake-unity, autotools
 #   trurl            gnumake
 
 cd "$(dirname "$0")"

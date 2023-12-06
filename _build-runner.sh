@@ -17,7 +17,6 @@ cd "$(dirname "$0")"
 # Customize these
 export CW_CONFIG='dev-x64-big-cares'
 #export CURL_REV_='master'
-#CURL_SCRIPT='curl-cmake'  # curl-gnumake (default) or curl-cmake or curl-autotools
 
 # Install necessary packages
 if [ ! -f .cw-initialized ]; then
@@ -85,8 +84,5 @@ export SIGN_PKG_GPG_PASS=
 export SIGN_PKG_KEY_PASS=
 export DEPLOY_GPG_PASS=
 export DEPLOY_KEY_PASS=
-
-# Run
-[ -n "${CURL_SCRIPT:-}" ] && ln -s -f "${CURL_SCRIPT}.sh" 'curl.sh'
 
 ./_build.sh 2>&1 | stdbuf -i0 -o0 -e0 tee "log-$(date '+%s').txt"

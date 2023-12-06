@@ -312,8 +312,8 @@ _VER="$1"
 
     if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
       # By passing -lssh2 _before_ -lcrypto (of openssl/libressl) to the
-      # linker, DLL size becomes closer/identical to autotools/gnumake-built
-      # DLLs. Otherwise this is not necessary, and there should not be any
+      # linker, DLL size becomes closer/identical to autotools-built DLLs.
+      # Otherwise this is not necessary, and there should not be any
       # functional difference. Could not find the reason for it.
       # File-offset-stripped-then-sorted .map files are identical either way.
       # It would be useful to have a linker option to sort object/lib inputs
