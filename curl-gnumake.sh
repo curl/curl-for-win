@@ -40,7 +40,7 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LIBS=''
 
-  if [[ "${_CONFIG}" =~ *'zero'* ]]; then
+  if [[ "${_CONFIG}" = *'zero'* ]]; then
     CFLAGS+=' -Os'
   else
     CFLAGS+=' -O3'

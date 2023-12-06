@@ -33,7 +33,7 @@ _VER="$1"
   LDFLAGS_BIN=''
   export LIBS=''
 
-  if [[ "${_CONFIG}" =~ *'zero'* ]]; then
+  if [[ "${_CONFIG}" = *'zero'* ]]; then
     CFLAGS+=' -Os'
   else
     CFLAGS+=' -O3'
