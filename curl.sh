@@ -1,1 +1,1 @@
-curl-gnumake.sh
+curl-cmake.sh
