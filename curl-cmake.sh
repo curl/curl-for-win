@@ -111,11 +111,7 @@ _VER="$1"
     options+=' -DCURL_DISABLE_POP3=ON -DCURL_DISABLE_SMTP=ON'
     [[ "${_CONFIG}" != *'imap'* ]] && options+=' -DCURL_DISABLE_IMAP=ON'
     if [ "${_OS}" != 'win' ]; then
-      if [ "${CURL_VER_}" = '8.4.0' ]; then
-        CPPFLAGS+=' -DCURL_DISABLE_BINDLOCAL=1'
-      else
-        options+=' -DCURL_DISABLE_BINDLOCAL=ON'
-      fi
+      options+=' -DCURL_DISABLE_BINDLOCAL=ON'
     fi
     options+=' -DENABLE_UNIX_SOCKETS=OFF'
     options+=' -DENABLE_WEBSOCKETS=OFF'
@@ -167,9 +163,6 @@ _VER="$1"
     options+=' -DCURL_ZSTD=ON'
     options+=" -DZstd_INCLUDE_DIR=${_TOP}/zstd/${_PP}/include"
     options+=" -DZstd_LIBRARY=${_TOP}/zstd/${_PP}/lib/libzstd.a"
-    if [ "${CURL_VER_}" = '8.4.0' ]; then
-      options+=' -DHAVE_ZSTD_CREATEDSTREAM=1'  # fast-track configuration. Introduced in v1.0.0 2016-08-31.
-    fi
   else
     options+=' -DCURL_ZSTD=OFF'
   fi
@@ -247,12 +240,6 @@ _VER="$1"
 
   # fast-track configuration
   if [ "${_OS}" = 'win' ]; then
-    if [ "${CURL_VER_}" = '8.4.0' ]; then
-      # THREADS_HAVE_PTHREAD_ARG is detected in arm64/x86 builds, then
-      # referenced from the .map file even though not used in the binary.
-      options+=' -DTHREADS_HAVE_PTHREAD_ARG=0 -DCMAKE_HAVE_LIBC_PTHREAD=0 -DCMAKE_HAVE_PTHREADS_CREATE=0 -DCMAKE_HAVE_PTHREAD_CREATE=0'  # find_package(Threads)
-      options+=' -DHAVE_VARIADIC_MACROS_C99=1 -DHAVE_VARIADIC_MACROS_GCC=1'
-    fi
     options+=' -DHAVE_STDATOMIC_H=1 -DHAVE_ATOMIC=1 -DHAVE_STRTOK_R=1 -DHAVE_FILE_OFFSET_BITS=1'
   fi
 

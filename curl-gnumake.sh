@@ -7,7 +7,7 @@
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 # Unixy platforms require the configure phase, thus cannot build with pure GNU Make.
-if [ "${_OS}" != 'win' ] || [ "${CURL_VER_}" != '8.4.0' ]; then
+if [ "${_OS}" != 'win' ]; then
   ./curl-cmake.sh "$@"
   exit
 fi
@@ -47,11 +47,6 @@ _VER="$1"
   fi
 
   CFLAGS+=' -fvisibility=hidden'
-
-  if [ "${CURL_VER_}" = '8.4.0' ]; then
-    CPPFLAGS+=' -DHAVE_VARIADIC_MACROS_C99=1 -DHAVE_VARIADIC_MACROS_GCC=1'
-    CPPFLAGS+=' -DHAVE_SNPRINTF=1'
-  fi
 
   # Picky compiler warnings as seen in curl CMake/autotools.
   # builds with llvm/clang 15 and gcc 12.2:

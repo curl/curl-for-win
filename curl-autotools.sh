@@ -214,15 +214,6 @@ _VER="$1"
       if [ "${_OS}" = 'win' ]; then
         if [ "${_OPENSSL}" = 'libressl' ]; then
           CPPFLAGS+=' -DLIBRESSL_DISABLE_OVERRIDE_WINCRYPT_DEFINES_WARNING'
-          if [ "${CURL_VER_}" = '8.4.0' ]; then
-            # Workaround for accidentally detecting 'arc4random' inside LibreSSL (as of
-            # v3.8.2) then failing to use it due to missing the necessary LibreSSL header,
-            # then using a non-C89 type in curl's local replacement declaration:
-            #   ../../lib/rand.c:37:1: error: unknown type name 'uint32_t'
-            #      37 | uint32_t arc4random(void);
-            #         | ^
-            export ac_cv_func_arc4random='no'
-          fi
         fi
         LIBS+=' -lbcrypt'  # for auto-detection
       fi
@@ -435,20 +426,10 @@ _VER="$1"
 
   VERSIONINFO='-avoid-version'
   [ -n "${_CURL_DLL_SUFFIX_NODASH}" ] && VERSIONINFO="-release '${_CURL_DLL_SUFFIX_NODASH}' ${VERSIONINFO}"
-  if [ "${CURL_VER_}" = '8.4.0' ]; then
-    make "AM_LDFLAGS=${LDFLAGS_LIB}" "VERSIONINFO=${VERSIONINFO}" \
-      --directory="${_BLDDIR}/lib" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
-
-    make "AM_LDFLAGS=${LDFLAGS_BIN}" \
-      --directory="${_BLDDIR}/src" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
-
-    make --directory="${_BLDDIR}/include" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
-  else
-    export CURL_LDFLAGS_LIB="${LDFLAGS_LIB}"
-    export CURL_LDFLAGS_BIN="${LDFLAGS_BIN}"
-    make "VERSIONINFO=${VERSIONINFO}" \
-      --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
-  fi
+  export CURL_LDFLAGS_LIB="${LDFLAGS_LIB}"
+  export CURL_LDFLAGS_BIN="${LDFLAGS_BIN}"
+  make "VERSIONINFO=${VERSIONINFO}" \
+    --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
   # Manual copy to DESTDIR
 
