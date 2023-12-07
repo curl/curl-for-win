@@ -994,10 +994,10 @@ build_single_target() {
     _CFLAGS_GLOBAL+=' -ffunction-sections -fdata-sections'
     _CXXFLAGS_GLOBAL+=' -ffunction-sections -fdata-sections'
     _LDFLAGS_GLOBAL+=' -Wl,--gc-sections'
+  fi
 
-    if [ "${_CC}" = 'llvm' ]; then
-      _LDFLAGS_GLOBAL+=' -Wl,--icf=all'
-    fi
+  if [ "${_CC}" = 'llvm' ] && [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
+    _LDFLAGS_GLOBAL+=' -Wl,--icf=all'
   fi
 
   _CCRT='libgcc'  # compiler runtime, 'libgcc' (for libgcc and libstdc++) or 'clang-rt' (for compiler-rt and libc++)
