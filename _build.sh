@@ -994,6 +994,14 @@ build_single_target() {
     _CFLAGS_GLOBAL+=' -ffunction-sections -fdata-sections'
     _CXXFLAGS_GLOBAL+=' -ffunction-sections -fdata-sections'
     _LDFLAGS_GLOBAL+=' -Wl,--gc-sections'
+
+    if [ "${_CC}" = 'llvm' ]; then
+      if [ "${_OS}" = 'win' ] && [ "${_CCVER}" -lt '1800' ]; then
+        _LDFLAGS_GLOBAL+=' -Wl,-Xlink=-opt:safeicf'
+      else
+        _LDFLAGS_GLOBAL+=' -Wl,--icf=safe'
+      fi
+    fi
   fi
 
   _CCRT='libgcc'  # compiler runtime, 'libgcc' (for libgcc and libstdc++) or 'clang-rt' (for compiler-rt and libc++)
