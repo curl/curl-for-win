@@ -56,6 +56,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        bldtst     build without 3rd-party dependencies (except zlib) (for testing)
 #        zero       build without 3rd-party dependencies (for testing, implies 'small' option)
 #        trurl      build trurl (default for 'dev' and 'test' configs)
+#        thinlto    build with ThinLTO enabled (requires llvm) [EXPERIMENTAL]
 #        small      optimize for size
 #        r64        build riscv64 target only [EXPERIMENTAL]
 #        a64        build arm64 target only
@@ -1320,6 +1321,25 @@ build_single_target() {
   export AR="${_BINCORE_PREFIX}ar${_BINCORE_SUFFIX}"
   export NM="${_BINCORE_PREFIX}nm${_BINCORE_SUFFIX}"
   export RANLIB="${_BINCORE_PREFIX}ranlib${_BINCORE_SUFFIX}"
+
+  # LTO
+  if [[ "${_CONFIG}" = *'thinlto'* ]]; then
+    if [[ "${_CC}" = 'llvm' ]]; then
+      _CFLAGS_GLOBAL+=' -flto=thin'
+      _CXXFLAGS_GLOBAL+=' -flto=thin'
+
+      # `llvm-strip` as of v17 does not support ThinLTO objects, with:
+      #   The file was not recognized as a valid object file
+      # Static libs may not be reproducible!
+      _STRIP_LIB='echo'
+
+      # Apple `lipo` cannot deal with ThinLTO static libs created by non-Apple llvm:
+      #   fatal error: /Applications/Xcode_14.2.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo: archive with no architecture specification: ./curl-8.5.0-aarch64-macos/lib/libngtcp2.a (can't determine architecture for it)
+      if [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
+        _CONFIG="${_CONFIG//macuni/ }"
+      fi
+    fi
+  fi
 
   # ar wrapper to normalize created libs
   if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
