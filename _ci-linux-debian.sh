@@ -8,6 +8,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 cat /etc/*-release
 
+export DEBIAN_FRONTEND='noninteractive'
+
 extra=''
 dl=''
 
