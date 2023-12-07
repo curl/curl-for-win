@@ -25,19 +25,13 @@ _VER="$1"
 
   options="${_CONFIGURE_GLOBAL}"
   export CC="${_CC_GLOBAL}"
-  export CFLAGS="${_CFLAGS_GLOBAL}"
+  export CFLAGS="${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_AUTOTOOLS}"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
   export RCFLAGS="${_RCFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
   LDFLAGS_LIB=''
   LDFLAGS_BIN=''
   export LIBS=''
-
-  if [[ "${_CONFIG}" = *'zero'* ]]; then
-    CFLAGS+=' -Os'
-  else
-    CFLAGS+=' -O3'
-  fi
 
   if [[ "${_CONFIG}" != *'main'* ]]; then
     LDFLAGS+=' -v'

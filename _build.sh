@@ -54,8 +54,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        nano       build with less features, see README.md
 #        pico       build with less features, see README.md
 #        bldtst     build without 3rd-party dependencies (except zlib) (for testing)
-#        zero       build without 3rd-party dependencies (for testing)
+#        zero       build without 3rd-party dependencies (for testing, implies 'small' option)
 #        trurl      build trurl (default for 'dev' and 'test' configs)
+#        small      optimize for size
 #        r64        build riscv64 target only [EXPERIMENTAL]
 #        a64        build arm64 target only
 #        x64        build x86_64 target only
@@ -776,6 +777,7 @@ build_single_target() {
   export _CC_GLOBAL=''
   export _CFLAGS_GLOBAL=''
   export _CFLAGS_GLOBAL_CMAKE=''
+  export _CFLAGS_GLOBAL_AUTOTOOLS=''
   export _CPPFLAGS_GLOBAL=''
   export _CXXFLAGS_GLOBAL=''
   export _RCFLAGS_GLOBAL=''
@@ -784,11 +786,16 @@ build_single_target() {
   export _LDFLAGS_BIN_GLOBAL=''
   export _LDFLAGS_CXX_GLOBAL=''  # CMake uses this
   export _CONFIGURE_GLOBAL=''
-  export _CMAKE_GLOBAL='-DCMAKE_BUILD_TYPE=Release'
+  export _CMAKE_GLOBAL='-Wno-dev'  # Suppress CMake warnings meant for upstream developers
   export _CMAKE_CXX_GLOBAL=''
 
-  # Suppress CMake warnings meant for upstream developers
-  _CMAKE_GLOBAL="-Wno-dev ${_CMAKE_GLOBAL}"
+  if [[ "${_CONFIG}" =~ (small|zero) ]]; then
+    _CFLAGS_GLOBAL_AUTOTOOLS+=' -Os'
+    _CMAKE_GLOBAL+=' -DCMAKE_BUILD_TYPE=MinSizeRel'
+  else
+    _CFLAGS_GLOBAL_AUTOTOOLS+=' -O3'
+    _CMAKE_GLOBAL+=' -DCMAKE_BUILD_TYPE=Release'
+  fi
 
   # for CMake and openssl
   unset CC
