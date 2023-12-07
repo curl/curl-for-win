@@ -981,7 +981,7 @@ build_single_target() {
 
   if [ "${_OS}" != 'mac' ]; then
     # May cause `osslsigncode` (as of v2.7, 2023-12) to crash while signing
-    # a trurl.exe build with a CMake non-unity libcurl static library. Same
+    # a trurl.exe built with a CMake non-unity libcurl static library. Same
     # worked with unity mode.
     # $ export CW_CONFIG=test-x64-zero-osnotls-osnoidn-nohttp-win-nocurltool-nounity
     # $ Segmentation fault: 11  osslsigncode sign -h sha512 -in "${file}" -out "${file}-signed" -time "${unixts}" -pkcs12 "${SIGN_CODE_KEY}" -readpass [...]
