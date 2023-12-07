@@ -139,6 +139,20 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - https://sourceware.org/git/binutils-gdb.git
 #   - https://github.com/netwide-assembler/nasm
 
+# Manuals:
+#   - https://www.man7.org/linux/man-pages/man1/as.1.html
+#   - https://sourceware.org/binutils/docs/as.html
+#   - https://sourceware.org/binutils/docs-2.41/as.html
+#
+#   - https://www.man7.org/linux/man-pages/man1/gcc.1.html
+#   - https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
+#   - https://gcc.gnu.org/onlinedocs/gcc-13.2.0/gcc/Optimize-Options.html#index-fsemantic-interposition
+#
+#   - https://www.man7.org/linux/man-pages/man1/ld.1.html
+#   - https://sourceware.org/binutils/docs/ld.html
+#   - https://sourceware.org/binutils/docs-2.41/ld.html
+#   - https://man.archlinux.org/man/extra/lld/ld.lld.1.en
+
 # Build times for Windows with quictls (2023-10-25):
 #   - cmake-unity:  27 min 22 sec   1642s   100%
 #   - gnumake:      29 min 11 sec   1751s   107%   100%
