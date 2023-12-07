@@ -996,11 +996,7 @@ build_single_target() {
     _LDFLAGS_GLOBAL+=' -Wl,--gc-sections'
 
     if [ "${_CC}" = 'llvm' ]; then
-      if [ "${_OS}" = 'win' ] && [ "${_CCVER}" -lt '1800' ]; then
-        _LDFLAGS_GLOBAL+=' -Wl,-Xlink=-opt:safeicf'
-      else
-        _LDFLAGS_GLOBAL+=' -Wl,--icf=safe'
-      fi
+      _LDFLAGS_GLOBAL+=' -Wl,--icf=all'
     fi
   fi
 
