@@ -957,6 +957,20 @@ build_single_target() {
     _CXXFLAGS_GLOBAL+=' -fvisibility=hidden'
   fi
 
+  # These options have just minor effect when using -fvisibility=hidden, but
+  # we're going for it.
+  if [ "${_OS}" = 'linux' ]; then
+    # gcc (as of v12/v13) creates slightly larger exes and shared libs with these options.
+    if [ "${_CC}" = 'llvm' ]; then
+      # https://maskray.me/blog/2021-05-09-fno-semantic-interposition
+      # https://maskray.me/blog/2021-05-16-elf-interposition-and-bsymbolic
+      # https://flameeyes.blog/2012/10/07/symbolism-and-elf-files-or-what-does-bsymbolic-do/
+      _CFLAGS_GLOBAL+=' -fno-semantic-interposition'
+      _CXXFLAGS_GLOBAL+=' -fno-semantic-interposition'
+      _LDFLAGS_GLOBAL+=' -Wl,-Bsymbolic'  # -Wl,-Bsymbolic-functions (safer option, but libcurl isn't affected)
+    fi
+  fi
+
   # curl recommended options to reduce binary size:
   # https://github.com/curl/curl/blob/master/docs/INSTALL.md#reducing-size
 
