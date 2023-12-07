@@ -152,6 +152,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - https://sourceware.org/binutils/docs/ld.html
 #   - https://sourceware.org/binutils/docs-2.41/ld.html
 #   - https://man.archlinux.org/man/extra/lld/ld.lld.1.en
+#
+#   - https://rui314.github.io/mold.html
 
 # Build times for Windows with quictls (2023-10-25):
 #   - cmake-unity:  27 min 22 sec   1642s   100%
