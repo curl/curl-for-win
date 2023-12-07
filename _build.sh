@@ -977,6 +977,23 @@ build_single_target() {
   _CFLAGS_GLOBAL+=' -fno-unwind-tables'
   _CFLAGS_GLOBAL+=' -fno-asynchronous-unwind-tables'
 
+  if [ "${_OS}" != 'mac' ]; then
+    # May cause `osslsigncode` (as of v2.7, 2023-12) to crash while signing
+    # a trurl.exe build with a CMake non-unity libcurl static library. Same
+    # worked with unity mode.
+    # $ export CW_CONFIG=test-x64-zero-osnotls-osnoidn-nohttp-win-nocurltool-nounity
+    # $ Segmentation fault: 11  osslsigncode sign -h sha512 -in "${file}" -out "${file}-signed" -time "${unixts}" -pkcs12 "${SIGN_CODE_KEY}" -readpass [...]
+    # These options add extra information to static libs that allows to
+    # drop unused functions (instead of objects) when linking binaries.
+    # The end result is smaller binaries and larger static libs. It also
+    # resolves the downside of unity builds which generate a single object
+    # per lib (currently libcurl and libssh2). Build times seem to remain
+    # around the same. Makes '.map' files grow significantly.
+    _CFLAGS_GLOBAL+=' -ffunction-sections -fdata-sections'
+    _CXXFLAGS_GLOBAL+=' -ffunction-sections -fdata-sections'
+    _LDFLAGS_GLOBAL+=' -Wl,--gc-sections'
+  fi
+
   _CCRT='libgcc'  # compiler runtime, 'libgcc' (for libgcc and libstdc++) or 'clang-rt' (for compiler-rt and libc++)
   if [ "${_TOOLCHAIN}" = 'llvm-apple' ] || \
      [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
