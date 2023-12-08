@@ -1340,12 +1340,12 @@ build_single_target() {
     chmod +x "${AR_NORMALIZE}"
   fi
 
-  if [ "${_OS}" = 'win' ] && [ "${_HOST}" = 'mac' ]; then
+  if [ "${_HOST}" = 'mac' ] && [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       _CMAKE_GLOBAL+=" -DCMAKE_AR=${CW_LLVM_MINGW_PATH}/bin/${AR}"
-    elif [ "${_CC}" = 'llvm' ]; then
+    elif [ "${_OS}" = 'mac' ] && [ "${_CC}" = 'llvm' ]; then
       _CMAKE_GLOBAL+=" -DCMAKE_AR=${_MAC_LLVM_PATH}/${AR}"
-    else
+    elif [ "${_OS}" = 'win' ]; then
       _CMAKE_GLOBAL+=" -DCMAKE_AR=${_SYSROOT}/bin/${AR}"
     fi
   fi
