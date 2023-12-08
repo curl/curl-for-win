@@ -1329,7 +1329,7 @@ build_single_target() {
   # LTO
   # https://blog.llvm.org/2016/06/thinlto-scalable-and-incremental-lto.html
   # https://convolv.es/guides/lto/
-  if [[ "${_CONFIG}" = *'thinlto'* ]]; then
+  if true || [[ "${_CONFIG}" = *'thinlto'* ]]; then
     if [[ "${_CC}" = 'llvm' ]]; then
       _CFLAGS_GLOBAL+=' -flto=thin'
       _CXXFLAGS_GLOBAL+=' -flto=thin'
