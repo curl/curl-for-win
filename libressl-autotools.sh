@@ -23,6 +23,8 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
   export LIBS=''
 
+  CPPFLAGS+=' -DS2N_BN_HIDE_SYMBOLS'
+
   if [ "${_CC}" = 'llvm' ]; then
     CFLAGS+=' -Wa,--noexecstack'
   else

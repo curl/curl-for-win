@@ -25,6 +25,8 @@ _VER="$1"
     CFLAGS+=' -Wno-attributes'
   fi
 
+  CPPFLAGS+=' -DS2N_BN_HIDE_SYMBOLS'
+
   if [ "${_OS}" = 'mac' ]; then
     CPPFLAGS+=' -Dglobl=private_extern'  # make assembly symbols hidden
 
