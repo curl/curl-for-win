@@ -47,6 +47,12 @@ _VER="$1"
       # more verbose.
       export ac_cv_func_strtonum='no'
     fi
+  elif [ "${_OS}" = 'linux' ] && [ "${_CPU}" = 'x64' ]; then
+    # Add a `.hidden <func>` next to each `.globl <func>` one:
+    find . -name '*-elf-x86_64.S' | sort | while read -r f; do
+      awk '/^\.globl\t/ {s=$0; sub("^.globl", ".hidden", s); print s}; {print}' < "${f}" > "${f}.tmp"
+      mv "${f}.tmp" "${f}"
+    done
   fi
 
   if [ "${_OS}" = 'win' ]; then
