@@ -690,6 +690,7 @@ build_single_target() {
       # the curl version banner.
       if [ "${_HOST}" = 'mac' ]; then
         _TRIPLET="${_machine}-linux-musl"
+        _TRIPLETSH="${_TRIPLET}"
         _CCPREFIX="${_TRIPLET}-"
       elif [ "${_DISTRO}" = 'alpine' ]; then
         # E.g. x86_64-alpine-linux-musl
