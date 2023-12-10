@@ -17,11 +17,16 @@ _VER="$1"
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   CFLAGS="-ffile-prefix-map=$(pwd)="
+  CPPFLAGS=''
 
   if [ "${_CC}" = 'llvm' ]; then
     CFLAGS+=' -Wa,--noexecstack'
   else
     CFLAGS+=' -Wno-attributes'
+  fi
+
+  if [ "${_OS}" = 'mac' ]; then
+    CPPFLAGS+=' -Dglobl=private_extern'  # make assembly symbols hidden
   fi
 
   options=''
@@ -54,7 +59,7 @@ _VER="$1"
     '-DBUILD_SHARED_LIBS=OFF' \
     '-DLIBRESSL_APPS=OFF' \
     '-DLIBRESSL_TESTS=OFF' \
-    "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${_LDFLAGS_GLOBAL}"
+    "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
