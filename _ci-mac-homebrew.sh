@@ -18,7 +18,7 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
     extra+=' nasm'
   fi
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
-  extra+=' FiloSottile/musl-cross/musl-cross'
+  extra+=' filosottile/musl-cross/musl-cross'
 elif [[ "${CW_CONFIG:-}" = *'mac'* ]] && [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
   extra+=' gcc'
 fi
