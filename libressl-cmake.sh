@@ -27,6 +27,10 @@ _VER="$1"
 
   if [ "${_OS}" = 'mac' ]; then
     CPPFLAGS+=' -Dglobl=private_extern'  # make assembly symbols hidden
+
+    if [ "${_OSVER}" -ge '1100' ]; then
+      options+='-DHAVE_STRTONUM=1'
+    fi
   fi
 
   options=''
