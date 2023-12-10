@@ -1735,7 +1735,7 @@ elif [ "${_OS}" = 'mac' ]; then
   fi
 elif [ "${_OS}" = 'linux' ]; then
   if [ "${_HOST}" = 'mac' ]; then
-    # Custom installs of musl-cross can support a64 and other targets
+    # Custom installs of musl-cross may support various CPU targets
     if [[ "${_CONFIG}" != *'a64'* ]] && \
        command -v x86_64-linux-musl-gcc >/dev/null 2>&1; then
       build_single_target x64

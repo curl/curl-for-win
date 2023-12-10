@@ -450,7 +450,7 @@ jobs:
         run: cat urls.txt
       - uses: actions/upload-artifact@v3
         with:
-          name: 'curl-linux-musl-from-mac-x86_64'
+          name: 'curl-linux-musl-from-mac'
           retention-days: 5
           path: |
             *-*-linux*.*
