@@ -437,7 +437,7 @@ jobs:
             urls.txt
 
   linux-musl-from-mac:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v4
       - name: 'build'
