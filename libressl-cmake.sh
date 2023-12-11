@@ -16,6 +16,7 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
+  options=''
   CFLAGS="-ffile-prefix-map=$(pwd)="
   CPPFLAGS=''
 
@@ -41,7 +42,6 @@ _VER="$1"
     done
   fi
 
-  options=''
   if [ "${CW_DEV_CMAKE_PREFILL:-}" = '1' ] && [ "${_OS}" = 'win' ]; then
     # fast-track configuration
     options+=' -DHAVE_ASPRINTF=1 -DHAVE_GETOPT=1 -DHAVE_REALLOCARRAY=0'
