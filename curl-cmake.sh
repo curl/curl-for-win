@@ -26,10 +26,6 @@ _VER="$1"
 
   [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && options+=" -DCMAKE_AR=${AR_NORMALIZE}"
 
-  if [[ "${_CONFIG}" = *'zero'* ]]; then
-    options+=' -DCMAKE_BUILD_TYPE=MinSizeRel'
-  fi
-
   LIBS=''
   LDFLAGS=''
   LDFLAGS_BIN="${_LDFLAGS_BIN_GLOBAL}"
