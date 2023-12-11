@@ -32,7 +32,7 @@ _VER="$1"
     CPPFLAGS+=' -Dglobl=private_extern'  # make assembly symbols hidden
 
     if [ "${_OSVER}" -ge '1100' ]; then
-      options+='-DHAVE_STRTONUM=1'
+      options+=' -DHAVE_STRTONUM=1'
     fi
   elif [ "${_OS}" = 'linux' ] && [ "${_CPU}" = 'x64' ]; then
     # Add a `.hidden <func>` next to each `.globl <func>` one:
