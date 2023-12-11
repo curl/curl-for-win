@@ -5,6 +5,17 @@
 
 # Caveats (as of 3.8.2):
 # - ASM support only for x64.
+# - ASM missing Intel CET support, resulting in linker warnings:
+#   ld.lld-17: warning: libressl/_x64-linux-gnu/usr/lib/libcrypto.a(cpuid-elf-x86_64.S.o): -z cet-report: file does not have GNU_PROPERTY_X86_FEATURE_1_IBT property
+#   ld.lld-17: warning: libressl/_x64-linux-gnu/usr/lib/libcrypto.a(cpuid-elf-x86_64.S.o): -z cet-report: file does not have GNU_PROPERTY_X86_FEATURE_1_SHSTK property
+#   https://github.com/curl/curl-for-win/actions/runs/7159857921/job/19493575609#step:3:11146
+# - No possible to hide most ASM symbols from shared lib exports in Linux, macOS.
+#   https://github.com/libressl/portable/issues/957
+#   Local patch exists for this, or ASM can be disabled.
+# - Non-namespaced functions are defined and exported from libcrypto.
+#   This causes a list of issues, from mis-detection, mis-use, unhidden
+#   export from shared lib. Mostly affects macOS.
+#   https://github.com/libressl/portable/issues/928
 # - Still loads config from hardcoded prefix.
 # - Missing `SSL_set0_wbio()` function.
 #   https://github.com/libressl/portable/issues/838
