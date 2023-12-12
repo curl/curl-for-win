@@ -31,8 +31,17 @@ _VER="$1"
   if [ "${_OS}" = 'mac' ]; then
     CPPFLAGS+=' -Dglobl=private_extern'  # make assembly symbols hidden
 
-    if [ "${_OSVER}" -ge '1100' ]; then
-      options+=' -DHAVE_STRTONUM=1'
+    # Syncs behaviour with autotools on next version: https://github.com/libressl/portable/pull/963
+    if [ "${LIBRESSL_VER_}" = '3.8.2' ]; then
+      if [ "${_OSVER}" -ge '1100' ]; then
+        options+=' -DHAVE_STRTONUM=1'
+      fi
+    else
+      # Workaround for mis-detecting 'strtonum' successfully despite targeting
+      # older OS version, then using it.
+      if [ "${_OSVER}" -lt '1100' ]; then
+        options+=' -DHAVE_STRTONUM=0'
+      fi
     fi
   elif [ "${_OS}" = 'linux' ] && [ "${_CPU}" = 'x64' ]; then
     # Add a `.hidden <func>` next to each `.globl <func>` one:
