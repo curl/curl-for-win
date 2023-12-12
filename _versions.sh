@@ -10,13 +10,13 @@ export CURL_HASH=42ab8db9e20d8290a3b633e7fbb3cec15db34df65fd1015ef8ac1e4723750ee
 # Create revision string
 # NOTE: Set _REV to 1 after bumping CURL_VER_, then increment for each
 #       CI rebuild via `main` branch push (e.g. after bumping a dependency).
-export _REV="${CW_REVISION:-1}"
+export _REV="${CW_REVISION:-2}"
 
 export TRURL_VER_='0.9'
 export TRURL_HASH=848da38c0ea07cd96d6adac4a5e5e141fe26e5bd846039aa350c3ca589a948e0
 
-export CACERT_VER_='2023-08-22'
-export CACERT_HASH=23c2469e2a568362a62eecf1b49ed90a15621e6fa30e29947ded3436422de9b9
+export CACERT_VER_='2023-12-12'
+export CACERT_HASH=ccbdfc2fe1a0d7bbbb9cc15710271acf1bb1afe4c8f1725fe95c4c7733fcbe5a
 export BROTLI_VER_='1.1.0'
 export BROTLI_HASH=e720a6ca29428b803f4ad165371771f5398faba397edf6778837a18599ea13ff
 export CARES_VER_='1.23.0'
