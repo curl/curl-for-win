@@ -12,7 +12,7 @@
 # - No possible to hide most ASM symbols from shared lib exports in Linux, macOS.
 #   https://github.com/libressl/portable/issues/957
 #   Local patch exists for this, or ASM can be disabled.
-# - Non-namespaced functions are defined and exported from libcrypto.
+# - Non-namespaced functions are defined and exported from libcrypto. [fix pending]
 #   This causes a list of issues, from mis-detection, mis-use, unhidden
 #   export from shared lib. Mostly affects macOS.
 #   https://github.com/libressl/portable/issues/928
