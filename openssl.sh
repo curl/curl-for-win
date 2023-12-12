@@ -149,12 +149,9 @@ _VER="$1"
     # OpenSSL 1.1.1d, because by using the C:\Program Files*\ value, the
     # prefix remains vulnerable on localized Windows versions. The default
     # below gives a "more secure" configuration for most Windows installations.
-    # Also notice that said OpenSSL default breaks OpenSSL's own build system
-    # when used in cross-build scenarios. I submitted the working patch, but
-    # closed subsequently due to mixed/no response. The secure solution would
-    # be to disable loading anything from hard-coded paths and preferably to
-    # detect OS location at runtime and adjust config paths accordingly; none
-    # supported by OpenSSL.
+    # The secure solution would be to disable loading anything from hard-coded
+    # paths and preferably to detect OS location at runtime and adjust config
+    # paths accordingly; none supported by OpenSSL.
     _my_prefix='C:/Windows/System32/OpenSSL'
     if [ "${_OS}" != "${_HOST}" ] && [ "${_VER}" != '3.1.4' ]; then
       # Hack to skip (mis-)checking for an absolute prefix using unixy rules
