@@ -37,10 +37,11 @@ _VER="$1"
       fi
     fi
     if [ "${_OS}" = 'win' ]; then
-      # Silence useless libssh2 warnings about missing runtime DLLs
-      touch \
-        "${_TOP}/${_OPENSSL}/${_PP}/crypto.dll" \
-        "${_TOP}/${_OPENSSL}/${_PP}/ssl.dll"
+      # Silence useless libssh2 warning about missing runtime DLL
+      touch "${_TOP}/${_OPENSSL}/${_PP}/crypto.dll"
+      if [ "${LIBSSH2_VER_}" = '1.11.0' ]; then
+        touch "${_TOP}/${_OPENSSL}/${_PP}/ssl.dll"
+      fi
     fi
   elif [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d "../wolfssl/${_PP}" ]; then
     options+=' -DCRYPTO_BACKEND=wolfSSL'
