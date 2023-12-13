@@ -31,7 +31,7 @@ _VER="$1"
     CFLAGS+=' -Wno-attributes'
   fi
 
-  if [ "${_OS}" = 'mac' ]
+  if [ "${_OS}" = 'mac' ]; then
     CPPFLAGS+=' -Dglobl=private_extern'  # make assembly symbols hidden
 
     if [ "${_OSVER}" -lt '1100' ]; then
