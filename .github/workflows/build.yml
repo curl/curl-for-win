@@ -50,7 +50,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-glibc-debian-testing-llvm'
           retention-days: 5
@@ -79,7 +79,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-glibc-debian-testing-gcc'
           retention-days: 5
@@ -110,7 +110,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-glibc-debian-bookworm-llvm'
           retention-days: 5
@@ -141,7 +141,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-glibc-debian-bookworm-gcc'
           retention-days: 5
@@ -172,7 +172,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-glibc-debian-sid-llvm-riscv64'
           retention-days: 5
@@ -203,7 +203,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-glibc-debian-sid-gcc-riscv64'
           retention-days: 5
@@ -232,7 +232,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-debian-testing-llvm'
           retention-days: 5
@@ -261,7 +261,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-debian-testing-gcc'
           retention-days: 5
@@ -292,7 +292,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-debian-bookworm-llvm'
           retention-days: 5
@@ -323,7 +323,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-debian-bookworm-gcc'
           retention-days: 5
@@ -354,7 +354,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-debian-sid-llvm-riscv64'
           retention-days: 5
@@ -385,7 +385,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-debian-sid-gcc-riscv64'
           retention-days: 5
@@ -414,7 +414,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-alpine-llvm-x86_64'
           retention-days: 5
@@ -443,7 +443,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-alpine-gcc-x86_64'
           retention-days: 5
@@ -464,7 +464,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-from-mac'
           retention-days: 5
@@ -485,7 +485,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-macos-universal-clang'
           retention-days: 5
@@ -506,7 +506,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-macos-universal-llvm'
           retention-days: 5
@@ -541,7 +541,7 @@ jobs:
       - name: 'list dependencies'
         run: cat urls.txt
       # https://github.com/actions/upload-artifact
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-windows-llvm'
           retention-days: 5
@@ -576,7 +576,7 @@ jobs:
       - name: 'list dependencies'
         run: cat urls.txt
       # https://github.com/actions/upload-artifact
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-windows-gcc-noarm64'
           retention-days: 5
