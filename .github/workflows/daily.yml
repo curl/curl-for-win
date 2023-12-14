@@ -42,12 +42,12 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-glibc-daily-tool'
           retention-days: 42
           path: curl-*-*-*/curl*
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-glibc-daily'
           retention-days: 42
@@ -76,12 +76,12 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-daily-tool'
           retention-days: 42
           path: curl-*-*-*/curl*
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-daily'
           retention-days: 42
@@ -112,12 +112,12 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-riscv64-daily-tool'
           retention-days: 42
           path: curl-*-*-*/curl*
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-riscv64-daily'
           retention-days: 42
@@ -138,12 +138,12 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-macos-universal-daily-tool'
           retention-days: 42
           path: curl-*-*-*/curl*
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-macos-universal-daily'
           retention-days: 42
@@ -178,12 +178,12 @@ jobs:
       - name: 'list dependencies'
         run: cat urls.txt
       # https://github.com/actions/upload-artifact
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-windows-daily-tool'
           retention-days: 42
           path: curl-*-*-*/curl*
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: 'curl-windows-daily'
           retention-days: 42
