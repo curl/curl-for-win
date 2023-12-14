@@ -41,6 +41,18 @@ jobs:
             --enable=avoid-nullary-conditions,deprecate-which,quote-safe-variables,require-variable-braces \
             ./*.sh
 
+  spellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 'install tools'
+        run: pip install -U codespell
+      - name: 'spellcheck'
+        run: |
+          codespell --version
+          codespell --skip='*.patch' \
+            $(git ls-files)
+
   linux-glibc-debian-testing-llvm:
     runs-on: ubuntu-latest
     timeout-minutes: 30
