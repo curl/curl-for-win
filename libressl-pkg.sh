@@ -38,7 +38,7 @@
 {
   # Tests
 
-  # shellcheck disable=SC2043
+  # shellcheck disable=SC2066
   for bin in \
     "${_PP}/bin/openssl${BIN_EXT}" \
   ; do
