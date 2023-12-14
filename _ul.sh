@@ -28,7 +28,7 @@ cat "${_URLS}"
 
 # Strip '-built-on-*' suffix for the single-file artifact.
 find . -maxdepth 1 -type f -name "*-*-${_PKGOS}*.*" | sort | while read -r f; do
-  new="$(echo "${f}" | sed 's/-built-on-[^.]*//g')"
+  new="${f//-built-on-[^.]*/}"
   [ "${f}" = "${new}" ] || mv -f "${f}" "${new}"
 done
 
