@@ -36,8 +36,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: 'shellcheck'
         run: |
-          sudo apt-get --quiet 2 --option Dpkg::Use-Pty=0 install shellcheck
-          shellcheck --exclude=1091 ./*.sh
+          shellcheck --version
+          shellcheck --exclude=1091 \
+            --enable=avoid-nullary-conditions,deprecate-which,quote-safe-variables,require-variable-braces \
+            ./*.sh
 
   linux-glibc-debian-testing-llvm:
     runs-on: ubuntu-latest
