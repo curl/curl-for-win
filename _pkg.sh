@@ -105,7 +105,7 @@ create_pkg() {
 }
 
 if [ "${CW_NOPKG:-}" = '1' ]; then
-  if [ "${CW_PKG_NODELETE:-}" = '1' ]; then
+  if [ "${CW_PKG_NODELETE:-}" != '1' ]; then
     rm -r -f "${_DST:?}"
   fi
   exit
