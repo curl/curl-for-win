@@ -724,18 +724,23 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
 
     if   [[ "${_CONFIG}" = *'libressl'* ]]; then
       _DEPS+=' libressl'
+      need_cacert=1
     elif [[ "${_CONFIG}" = *'awslc'* ]]; then
       _DEPS+=' awslc'
+      need_cacert=1
     elif [[ "${_CONFIG}" = *'boringssl'* ]]; then
       _DEPS+=' boringssl'
+      need_cacert=1
     elif [[ "${_CONFIG}" = *'openssl'* ]]; then
       _DEPS+=' openssl'
+      need_cacert=1
     elif [[ "${_CONFIG}" = *'quictls'* ]]; then
       _DEPS+=' quictls'
+      need_cacert=1
     else
       _DEPS+=' libressl'
+      need_cacert=1
     fi
-    need_cacert=1
   fi
 fi
 
