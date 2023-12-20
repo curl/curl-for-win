@@ -632,6 +632,15 @@ build_single_target() {
         [ -n "${_MSYSROOT}" ] && PATH="${_MSYSROOT}/bin:${_ori_path}"
       fi
       _MAKE='mingw32-make'
+
+      _RUN_BIN='echo'
+      # Skip ARM64 target on 64-bit Intel, run all targets on ARM64:
+      if [ "${unamem}" = 'x86_64' ] && \
+         [ "${_CPU}" != 'a64' ]; then
+        _RUN_BIN=
+      elif [ "${unamem}" = 'aarch64' ]; then
+        _RUN_BIN=
+      fi
     else
       if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
         export PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
@@ -669,14 +678,6 @@ build_single_target() {
         if [ "${_CPU}" = 'x64' ] && \
            command -v wine64 >/dev/null 2>&1; then
           _RUN_BIN='wine64'
-        fi
-      elif [ "${_HOST}" = 'win' ]; then
-        # Skip ARM64 target on 64-bit Intel, run all targets on ARM64:
-        if [ "${unamem}" = 'x86_64' ] && \
-           [ "${_CPU}" != 'a64' ]; then
-          _RUN_BIN=
-        elif [ "${unamem}" = 'aarch64' ]; then
-          _RUN_BIN=
         fi
       fi
     fi
