@@ -17,7 +17,11 @@ _VER="$1"
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   options=''
-  CPPFLAGS='-DNDEBUG'
+  CPPFLAGS=''
+
+  if [[ "${_CONFIG}" != *'debug'* ]]; then
+    CPPFLAGS+=' -DNDEBUG'
+  fi
 
   # Avoid finding unnecessary system (Homebrew, or system for libxml2) packages and the log noise with it.
   options+=' -DOPENSSL_INCLUDE_DIR= -DLIBCARES_INCLUDE_DIR= -DLIBEV_INCLUDE_DIR= -DLIBXML2_INCLUDE_DIR='

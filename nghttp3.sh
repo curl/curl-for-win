@@ -16,7 +16,11 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
-  CPPFLAGS='-DNDEBUG'
+  CPPFLAGS=''
+
+  if [[ "${_CONFIG}" != *'debug'* ]]; then
+    CPPFLAGS+=' -DNDEBUG'
+  fi
 
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} \

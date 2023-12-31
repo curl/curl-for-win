@@ -23,6 +23,11 @@ _VER="$1"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LDLIBS=''
+  options='TRURL_IGNORE_CURL_CONFIG=1'
+
+  if [[ "${_CONFIG}" != *'debug'* ]]; then
+    options+=' NDEBUG=1'
+  fi
 
   # musl-debian-gcc issues
   # https://github.com/curl/curl-for-win/actions/runs/7095411627/job/19312285992
@@ -72,7 +77,8 @@ _VER="$1"
   fi
 
   "${_MAKE}" clean
-  "${_MAKE}" NDEBUG=1 TRURL_IGNORE_CURL_CONFIG=1
+  # shellcheck disable=SC2086
+  "${_MAKE}" ${options}
 
   if [ "${_OS}" = 'mac' ]; then
     install_name_tool -change \

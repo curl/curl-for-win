@@ -16,10 +16,14 @@ _VER="$1"
 
   rm -r -f "${_PKGDIRS:?}" "${_BLDDIR:?}"
 
-  CPPFLAGS='-DNDEBUG'
+  CPPFLAGS=''
   LDFLAGS=''
   LIBS=''
   options=''
+
+  if [[ "${_CONFIG}" != *'debug'* ]]; then
+    CPPFLAGS+=' -DNDEBUG'
+  fi
 
   # Avoid finding unnecessary system (Homebrew) package. This avoids log noise and
   # prevents building examples, which may fail for reasons or just take extra time.
