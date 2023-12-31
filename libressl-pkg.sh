@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: MIT
 
 # Caveats (as of 3.8.2):
+# - CMake builds override -NDEBUG and do not allow building with this option.
 # - ASM support only for x64.
 # - ASM missing Intel CET support, resulting in linker warnings:
 #   ld.lld-17: warning: libressl/_x64-linux-gnu/usr/lib/libcrypto.a(cpuid-elf-x86_64.S.o): -z cet-report: file does not have GNU_PROPERTY_X86_FEATURE_1_IBT property
