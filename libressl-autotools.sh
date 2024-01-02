@@ -27,13 +27,13 @@ _VER="$1"
     CPPFLAGS+=' -DNDEBUG'
   fi
 
-  CPPFLAGS+=' -DS2N_BN_HIDE_SYMBOLS'
-
   if [ "${_CC}" = 'llvm' ]; then
     CFLAGS+=' -Wa,--noexecstack'
   else
     CFLAGS+=' -Wno-attributes'
   fi
+
+  CPPFLAGS+=' -DS2N_BN_HIDE_SYMBOLS'
 
   if [ "${_OS}" = 'mac' ]; then
     CPPFLAGS+=' -Dglobl=private_extern'  # make assembly symbols hidden
