@@ -23,6 +23,10 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
   export LIBS=''
 
+  if [[ "${_CONFIG}" != *'debug'* ]]; then
+    CPPFLAGS+=' -DNDEBUG'
+  fi
+
   CPPFLAGS+=' -DS2N_BN_HIDE_SYMBOLS'
 
   if [ "${_CC}" = 'llvm' ]; then
