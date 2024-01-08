@@ -3,6 +3,33 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
+# Issues:
+# - does not support CMake (only autotool and meson).
+# - does not support WinIDN as an IDN backend (and/or Windows API for Unicode
+#   operations.)
+# - it builds without an IDN backend while saying
+#   "libpsl/0.21.1 (no IDNA support)" in the version string.
+# - this leaves more heavy GNU (autotools) dependencies as the only option for
+#   IDNA. This also means that curl needs to switch to libidn2 from WinIDN for
+#   Windows, which IDN support may behave differently than other Windows apps
+#   using WinIDN.)
+# - autotools build force-sets _WIN32_WINNT to 0x500, while also causing
+#   a compiler warning when overriding our value (which is a higher version).
+#   Builds are not supposed to set _WIN32_WINNT on their own, esp. not override
+#   a custom value.
+# - the source tarball comes with a latest PSL database at the time.
+# - obtaining a fresh PSL database means another build-time dependency:
+#   Even though the PSL has security/privacy implications, its releases are
+#   missing versioning, a hash and also a signature, making it tedious to
+#   package it verifiably and reproducibly. The libpsl project rejected these
+#   raised issues in 2016:
+#     https://github.com/publicsuffix/list/issues/31
+# - the shipped PSL database is not compiled-in the built binary, even when
+#   explicitly specified with:
+#     --with-psl-distfile="${TOP}/libpsl/list/public_suffix_list.dat"
+#   It seems it needs the extra IDN libs for that to work.
+#   (But does not when loading the same (?) file at runtime?)
+
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
