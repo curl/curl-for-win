@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: MIT
 
 # Issues:
-# - does not support CMake (only autotool and meson).
+# - does not support CMake (only autotools and meson).
 # - does not support WinIDN as an IDN backend (and/or Windows API for Unicode
 #   operations.)
 # - it builds without an IDN backend while saying
@@ -21,7 +21,7 @@
 # - obtaining a fresh PSL database means another build-time dependency:
 #   Even though the PSL has security/privacy implications, its releases are
 #   missing versioning, a hash and also a signature, making it tedious to
-#   package it verifiably and reproducibly. The libpsl project rejected these
+#   package it verifiably and reproducibly. The PSL project rejected these
 #   raised issues in 2016:
 #     https://github.com/publicsuffix/list/issues/31
 # - the shipped PSL database is not compiled-in the built binary, even when
