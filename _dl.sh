@@ -161,12 +161,6 @@ cat <<EOF
     "keys": "A1EB079B8D3EB92B4EBD3139663AF51BD5E4D8D5"
   },
   {
-    "name": "awslc",
-    "url": "https://github.com/aws/aws-lc/archive/refs/tags/v{ver}.tar.gz",
-    "redir": "redir",
-    "tag": "v\\\\d+\\\\.\\\\d+\\\\.\\\\d+$"
-  },
-  {
     "name": "boringssl",
     "url": "https://github.com/google/boringssl/archive/{ver}.tar.gz",
     "redir": "redir",
@@ -722,9 +716,6 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
   if   [[ "${_CONFIG}" = *'libressl'* ]]; then
     _DEPS+=' libressl'
     need_cacert=1
-  elif [[ "${_CONFIG}" = *'awslc'* ]]; then
-    _DEPS+=' awslc'
-    need_cacert=1
   elif [[ "${_CONFIG}" = *'boringssl'* ]]; then
     _DEPS+=' boringssl'
     need_cacert=1
@@ -824,10 +815,6 @@ fi
 if [[ "${_DEPS}" = *'libressl'* ]]; then
   live_dl libressl "${LIBRESSL_VER_}"
   live_xt libressl "${LIBRESSL_HASH}"
-fi
-if [[ "${_DEPS}" = *'awslc'* ]]; then
-  live_dl awslc "${AWSLC_VER_}"
-  live_xt awslc "${AWSLC_HASH}"
 fi
 if [[ "${_DEPS}" = *'boringssl'* ]]; then
   live_dl boringssl "${BORINGSSL_VER_}"

@@ -14,7 +14,7 @@ fi
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   extra+=' mingw-w64 osslsigncode wine-stable openssh'
-  if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+  if [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
     extra+=' nasm'
   fi
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then

@@ -29,7 +29,7 @@ _VER="$1"
   # prevents building examples, which may fail for reasons or just take extra time.
   options+=' -DLIBEV_INCLUDE_DIR='
 
-  if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
+  if [ "${_OPENSSL}" = 'boringssl' ]; then
     options+=' -DENABLE_OPENSSL=OFF'
     options+=' -DENABLE_BORINGSSL=ON'
     options+=" -DBORINGSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"

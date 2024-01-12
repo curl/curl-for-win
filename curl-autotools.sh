@@ -194,7 +194,7 @@ _VER="$1"
     [ -n "${mainssl}" ] || mainssl='openssl'
     options+=" --with-openssl=${_TOP}/${_OPENSSL}/${_PP}"
     options+=' --disable-openssl-auto-load-config'
-    if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
+    if [ "${_OPENSSL}" = 'boringssl' ]; then
       if [ "${_OPENSSL}" = 'boringssl' ]; then
         CPPFLAGS+=" -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
       fi
@@ -369,7 +369,7 @@ _VER="$1"
     CPPFLAGS+=" -I${_TOP}/ngtcp2/${_PPS}/include"
     LDFLAGS+=" -L${_TOP}/ngtcp2/${_PPS}/lib"
     LIBS+=' -lngtcp2'
-    if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
+    if [ "${_OPENSSL}" = 'boringssl' ]; then
       LIBS+=' -lngtcp2_crypto_boringssl'
     elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ]; then
       LIBS+=' -lngtcp2_crypto_quictls'

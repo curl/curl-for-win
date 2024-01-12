@@ -37,7 +37,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        noftp      build without FTP/FTPS support
 #        nohttp     build without HTTP and proxy support
 #        imap       build with IMAP protocol (for zero, bldtst or pico build)
-#        awslc      build with AWS-LC
 #        boringssl  build with BoringSSL
 #        libressl   build with LibreSSL
 #        quictls    build with quictls
@@ -181,7 +180,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   wolfssl          autotools
 #   mbedtls          cmake
 #   openssl/quictls  proprietary
-#   boringssl/awslc  cmake
+#   boringssl        cmake
 #   libressl         cmake, autotools
 #   wolfssh          autotools
 #   libssh           cmake
@@ -510,8 +509,6 @@ build_single_target() {
   export _OPENSSL=''; boringssl=0
   if   [[ "${_DEPS}" = *'libressl'* ]]; then
     _OPENSSL='libressl'
-  elif [[ "${_DEPS}" = *'awslc'* ]]; then
-    _OPENSSL='awslc'; boringssl=1
   elif [[ "${_DEPS}" = *'boringssl'* ]]; then
     _OPENSSL='boringssl'; boringssl=1
   elif [[ "${_DEPS}" = *'quictls'* ]]; then
@@ -1639,7 +1636,6 @@ build_single_target() {
   bld nghttp3           "${NGHTTP3_VER_}"
   bld wolfssl           "${WOLFSSL_VER_}"
   bld mbedtls           "${MBEDTLS_VER_}"
-  bld awslc               "${AWSLC_VER_}" boringssl
   bld boringssl       "${BORINGSSL_VER_}"
   bld libressl         "${LIBRESSL_VER_}"
   bld quictls           "${QUICTLS_VER_}" openssl

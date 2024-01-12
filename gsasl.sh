@@ -36,7 +36,7 @@ _VER="$1"
     options+=' --with-openssl=yes'
     CPPFLAGS+=" -I${_TOP}/${_OPENSSL}/${_PP}/include"
     LDFLAGS+=" -L${_TOP}/${_OPENSSL}/${_PP}/lib"
-    if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
+    if [ "${_OPENSSL}" = 'boringssl' ]; then
       LIBS+=' -lpthread'
     fi
   fi

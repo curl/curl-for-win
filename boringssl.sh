@@ -12,7 +12,7 @@
 #   of this writing) and consumes 9x the disk space for ${_BLDDIR}, that is
 #   32MB -> 283MB (for x64).
 #   Disabling them requires elaborate edits in ./CMakeList.txt.
-#   This is fixed in AWS-LC with a CMake option.
+#   This is fixed in AWS-LC fork with a CMake option.
 # - A test object named trampoline-x86_64.asm.obj ends up in libcrypto.a.
 # - nasm includes the first 18 bytes of the HOME directory in its output.
 #   e.g. rdrand-x86_64.asm.obj. This only affects libcrypto.a.
@@ -22,8 +22,6 @@
 #   binutils strip is able to delete it (llvm-strip is not, as of 14.0.6).
 # - Objects built on different OSes result in a few byte differences.
 #   e.g. windows.c.obj, a_utf8.c.obj. But not a_octet.c.obj.
-
-# https://github.com/aws/aws-lc
 
 # https://boringssl.googlesource.com/boringssl/
 # https://bugs.chromium.org/p/boringssl/issues/list
@@ -82,12 +80,6 @@ _VER="$1"
   # ARM64, so patch it out in that case.
   # Enable it for all targets for consistency.
   sed -i.bak 's/ -ggdb//g' ./CMakeLists.txt
-
-  if [ "${_NAM}" = 'awslc' ]; then
-    options+=' -DBUILD_TESTING=OFF'
-    options+=' -DBUILD_TOOL=OFF'
-    options+=' -DDISABLE_GO=ON'
-  fi
 
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
