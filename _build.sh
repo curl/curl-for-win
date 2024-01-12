@@ -911,10 +911,11 @@ build_single_target() {
     fi
   fi
 
-  # TODO: PAC/BTI for arm64/riscv64
-  # https://maskray.me/blog/2022-12-18-control-flow-integrity
+  # https://fedoraproject.org/wiki/Security_Features_Matrix
+  # RISC-V: https://gcc.gnu.org/onlinedocs/gcc/RISC-V-Options.html
   if [ "${_CPU}" = 'x64' ] || \
      [ "${_CPU}" = 'x86' ]; then
+    # https://maskray.me/blog/2022-12-18-control-flow-integrity
     _CFLAGS_GLOBAL+=' -fcf-protection=full'
     _CXXFLAGS_GLOBAL+=' -fcf-protection=full'
     if [ "${_OS}" = 'linux' ]; then
@@ -925,9 +926,8 @@ build_single_target() {
     elif [ "${_OS}" = 'win' ] && [ "${_CC}" = 'llvm' ]; then
       _LDFLAGS_GLOBAL+=' -Wl,-Xlink=-cetcompat'
     fi
-  fi
-
-  if [ "${_CPU}" = 'a64' ]; then
+  elif [ "${_CPU}" = 'a64' ]; then
+    # https://gcc.gnu.org/onlinedocs/gcc/AArch64-Options.html
     _CFLAGS_GLOBAL+=' -mbranch-protection=standard'
     _CXXFLAGS_GLOBAL+=' -mbranch-protection=standard'
   fi
