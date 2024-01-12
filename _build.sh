@@ -911,20 +911,18 @@ build_single_target() {
     fi
   fi
 
-  # TODO: PAC/BTI for arm64/riscv64 and CET for intel mac?
+  # TODO: PAC/BTI for arm64/riscv64
   # https://maskray.me/blog/2022-12-18-control-flow-integrity
   if [ "${_CPU}" = 'x64' ] || \
      [ "${_CPU}" = 'x86' ]; then
+    _CFLAGS_GLOBAL+=' -fcf-protection=full'
+    _CXXFLAGS_GLOBAL+=' -fcf-protection=full'
     if [ "${_OS}" = 'linux' ]; then
-      _CFLAGS_GLOBAL+=' -fcf-protection=full'
-      _CXXFLAGS_GLOBAL+=' -fcf-protection=full'
       # https://github.com/llvm/llvm-project/issues/44828
       # https://reviews.llvm.org/D59780
       # https://github.com/llvm/llvm-project/commit/7cd429f27d4886bb841ed0e3702e970f5f6cccd1
       _LDFLAGS_GLOBAL+=' -Wl,-z,cet-report=warning -Wl,-z,force-ibt,-z,shstk'
     elif [ "${_OS}" = 'win' ] && [ "${_CC}" = 'llvm' ]; then
-      _CFLAGS_GLOBAL+=' -fcf-protection=full'
-      _CXXFLAGS_GLOBAL+=' -fcf-protection=full'
       _LDFLAGS_GLOBAL+=' -Wl,-Xlink=-cetcompat'
     fi
   fi
