@@ -894,12 +894,6 @@ build_single_target() {
         _CXXFLAGS_GLOBAL+=' -fstack-clash-protection'
       fi
 
-      if [ "${_CPU}" = 'x64' ] || \
-         [ "${_CPU}" = 'x86' ]; then
-        _CFLAGS_GLOBAL+=' -fcf-protection=full'
-        _CXXFLAGS_GLOBAL+=' -fcf-protection=full'
-      fi
-
       _LDFLAGS_GLOBAL+=' -Wl,-z,relro,-z,now'
     fi
 
