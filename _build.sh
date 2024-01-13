@@ -169,8 +169,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   zstd             cmake
 #   brotli           cmake
 #   cares            cmake
-#   libunistring     autotools
-#   libiconv         autotools
 #   libidn2          autotools
 #   libpsl           autotools
 #   gsasl            autotools
@@ -1620,8 +1618,6 @@ build_single_target() {
   bld zstd                 "${ZSTD_VER_}"
   bld brotli             "${BROTLI_VER_}"
   bld cares               "${CARES_VER_}"
-  bld libunistring "${LIBUNISTRING_VER_}"
-  bld libiconv         "${LIBICONV_VER_}"
   bld libidn2           "${LIBIDN2_VER_}"
   bld libpsl             "${LIBPSL_VER_}"
   bld nghttp3           "${NGHTTP3_VER_}"

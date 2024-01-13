@@ -26,13 +26,6 @@ _VER="$1"
   export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
   export LIBS=''
 
-  if [[ "${_DEPS}" = *'libiconv'* ]] && [ -d "../libiconv/${_PP}" ]; then
-    options+=" --with-libiconv-prefix=${_TOP}/libiconv/${_PP}"
-  fi
-  if [[ "${_DEPS}" = *'libunistring'* ]] && [ -d "../libunistring/${_PP}" ]; then
-    options+=" --with-libunistring-prefix=${_TOP}/libunistring/${_PP}"
-  fi
-
   (
     mkdir "${_BLDDIR}"; cd "${_BLDDIR}"
     # shellcheck disable=SC2086

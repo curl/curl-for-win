@@ -67,18 +67,6 @@ cat <<EOF
     "keys": "A3CC9C870B9D310ABAD4CF2F51722B08FE4745A2"
   },
   {
-    "name": "libunistring",
-    "url": "https://ftp.gnu.org/gnu/libunistring/libunistring-{ver}.tar.xz",
-    "sig": ".sig",
-    "keys": "9001B85AF9E1B83DF1BDA942F5BE8B267C6A406D"
-  },
-  {
-    "name": "libiconv",
-    "url": "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-{ver}.tar.gz",
-    "sig": ".sig",
-    "keys": "9001B85AF9E1B83DF1BDA942F5BE8B267C6A406D"
-  },
-  {
     "name": "libpsl",
     "url": "https://github.com/rockdaboot/libpsl/releases/download/{ver}/libpsl-{ver}.tar.gz",
     "sig": ".sig",
@@ -703,7 +691,7 @@ fi
 need_cacert=0
 
 if [[ "${_CONFIG}" = *'big'* ]]; then
-  _DEPS+=' libidn2 libunistring libiconv libpsl gsasl'
+  _DEPS+=' libidn2 libpsl gsasl'
 fi
 if [[ "${_CONFIG}" = *'wolfssl'* ]]; then
   _DEPS+=' wolfssl'
@@ -788,14 +776,6 @@ fi
 if [[ "${_DEPS}" = *'libidn2'* ]]; then
   live_dl libidn2 "${LIBIDN2_VER_}"
   live_xt libidn2 "${LIBIDN2_HASH}"
-fi
-if [[ "${_DEPS}" = *'libunistring'* ]]; then
-  live_dl libunistring "${LIBUNISTRING_VER_}"
-  live_xt libunistring "${LIBUNISTRING_HASH}"
-fi
-if [[ "${_DEPS}" = *'libiconv'* ]]; then
-  live_dl libiconv "${LIBICONV_VER_}"
-  live_xt libiconv "${LIBICONV_HASH}"
 fi
 if [[ "${_DEPS}" = *'libpsl'* ]]; then
   live_dl libpsl "${LIBPSL_VER_}"
