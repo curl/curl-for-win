@@ -296,31 +296,21 @@ _VER="$1"
     options+=" --with-libidn2=${_TOP}/libidn2/${_PP}"
     LDFLAGS+=" -L${_TOP}/libidn2/${_PP}/lib"
     LIBS+=' -lidn2'
-
-    if [[ "${_DEPS}" = *'libpsl'* ]] && [ -d "../libpsl/${_PP}" ]; then
-      options+=" --with-libpsl=${_TOP}/libpsl/${_PP}"
-      CPPFLAGS+=" -I${_TOP}/libpsl/${_PP}/include"
-      LDFLAGS+=" -L${_TOP}/libpsl/${_PP}/lib"
-      LIBS+=' -lpsl'
-    else
-      options+=' --without-libpsl'
-    fi
-
-    if [[ "${_DEPS}" = *'libiconv'* ]] && [ -d "../libiconv/${_PP}" ]; then
-      LDFLAGS+=" -L${_TOP}/libiconv/${_PP}/lib"
-      LIBS+=' -liconv'
-    fi
-    if [[ "${_DEPS}" = *'libunistring'* ]] && [ -d "../libunistring/${_PP}" ]; then
-      LDFLAGS+=" -L${_TOP}/libunistring/${_PP}/lib"
-      LIBS+=' -lunistring'
-    fi
   else
     options+=' --without-libidn2'
-    options+=' --without-libpsl'
     if [[ ! "${_CONFIG}" =~ (pico|osnoidn) ]] && \
        [ "${_OS}" = 'win' ]; then
       options+=' --with-winidn'
     fi
+  fi
+
+  if [[ "${_DEPS}" = *'libpsl'* ]] && [ -d "../libpsl/${_PP}" ]; then
+    options+=" --with-libpsl=${_TOP}/libpsl/${_PP}"
+    CPPFLAGS+=" -I${_TOP}/libpsl/${_PP}/include"
+    LDFLAGS+=" -L${_TOP}/libpsl/${_PP}/lib"
+    LIBS+=' -lpsl'
+  else
+    options+=' --without-libpsl'
   fi
 
   if [[ "${_DEPS}" = *'cares'* ]] && [ -d "../cares/${_PP}" ]; then

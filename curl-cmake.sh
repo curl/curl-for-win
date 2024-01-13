@@ -366,30 +366,20 @@ _VER="$1"
     CPPFLAGS+=" -I${_TOP}/libidn2/${_PP}/include"
     LDFLAGS+=" -L${_TOP}/libidn2/${_PP}/lib"
     LIBS+=' -lidn2'
-
-    if [[ "${_DEPS}" = *'libpsl'* ]] && [ -d "../libpsl/${_PP}" ] && \
-       [[ "${_DEPS}" = *'libiconv'* ]] && [ -d "../libiconv/${_PP}" ] && \
-       [[ "${_DEPS}" = *'libunistring'* ]] && [ -d "../libunistring/${_PP}" ]; then
-      options+=' -DUSE_LIBPSL=ON'
-      options+=" -DLIBPSL_INCLUDE_DIR=${_TOP}/libpsl/${_PP}/include"
-      options+=" -DLIBPSL_LIBRARY=${_TOP}/libpsl/${_PP}/lib/libpsl.a;${_TOP}/libiconv/${_PP}/lib/libiconv.a;${_TOP}/libunistring/${_PP}/lib/libunistring.a"
-    fi
-
-    if [[ "${_DEPS}" = *'libiconv'* ]] && [ -d "../libiconv/${_PP}" ]; then
-      LDFLAGS+=" -L${_TOP}/libiconv/${_PP}/lib"
-      LIBS+=' -liconv'
-    fi
-    if [[ "${_DEPS}" = *'libunistring'* ]] && [ -d "../libunistring/${_PP}" ]; then
-      LDFLAGS+=" -L${_TOP}/libunistring/${_PP}/lib"
-      LIBS+=' -lunistring'
-    fi
   else
     options+=' -DUSE_LIBIDN2=OFF'
-    options+=' -DCURL_USE_LIBPSL=OFF'
     if [[ ! "${_CONFIG}" =~ (pico|osnoidn) ]] && \
        [ "${_OS}" = 'win' ]; then
       options+=' -DUSE_WIN32_IDN=ON'
     fi
+  fi
+
+  if [[ "${_DEPS}" = *'libpsl'* ]] && [ -d "../libpsl/${_PP}" ]; then
+    options+=' -DCURL_USE_LIBPSL=ON'
+    options+=" -DLIBPSL_INCLUDE_DIR=${_TOP}/libpsl/${_PP}/include"
+    options+=" -DLIBPSL_LIBRARY=${_TOP}/libpsl/${_PP}/lib/libpsl.a"
+  else
+    options+=' -DCURL_USE_LIBPSL=OFF'
   fi
 
   # Official method correctly enables the manual, but with the side-effect
