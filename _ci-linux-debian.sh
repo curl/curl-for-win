@@ -101,7 +101,7 @@ fi
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 update
 # shellcheck disable=SC2086
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
-  curl git gpg rsync python3-pefile make cmake \
+  curl git gpg gpg-agent rsync python3-pefile make cmake \
   autoconf automake autopoint libtool \
   zip time jq secure-delete ${extra}
 
