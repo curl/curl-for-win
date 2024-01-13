@@ -78,11 +78,13 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
       extra+=" libgcc${CW_GCCSUFFIX}-dev"
     fi
-    # for openssl 'secure-memory' feature
-    if [ "$(uname -m)" = 'aarch64' ]; then
-      extra+=' linux-headers-arm64'
-    elif [ "$(uname -m)" = 'x86_64' ]; then
-      extra+=' linux-headers-amd64'
+    if [[ "${CW_CONFIG:-}" =~ (quictls|openssl) ]]; then
+      # for openssl 'secure-memory' feature
+      if [ "$(uname -m)" = 'aarch64' ]; then
+        extra+=' linux-headers-arm64'
+      elif [ "$(uname -m)" = 'x86_64' ]; then
+        extra+=' linux-headers-amd64'
+      fi
     fi
   else
     # FIXME: workaround for glibc-llvm-riscv64 builds:

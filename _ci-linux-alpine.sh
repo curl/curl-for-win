@@ -21,7 +21,9 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   apk add --no-cache checksec-rs --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community/
   extra+=' compiler-rt libc++-static'  # for llvm
-  extra+=' linux-headers'  # for openssl 'secure-memory' feature
+  if [[ "${CW_CONFIG:-}" =~ (quictls|openssl) ]]; then
+    extra+=' linux-headers'  # for openssl 'secure-memory' feature
+  fi
   if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
     extra+=' gcc'
   fi
