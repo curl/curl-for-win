@@ -15,7 +15,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 cd "$(dirname "$0")"
 
 # Customize these
-export CW_CONFIG='dev-x64-big-cares'
+export CW_CONFIG='dev-x64-psl-cares'
 #export CURL_REV_='master'
 
 # Install necessary packages

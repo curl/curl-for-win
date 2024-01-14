@@ -681,6 +681,16 @@ if [[ "${_CONFIG}" = *'cares'* ]]; then
   _DEPS+=' cares'
 fi
 
+if [[ "${_CONFIG}" = *'idn2'* ]]; then
+  _DEPS+=' libidn2'
+fi
+if [[ "${_CONFIG}" = *'psl'* ]]; then
+  _DEPS+=' libpsl'
+fi
+if [[ "${_CONFIG}" = *'gsasl'* ]]; then
+  _DEPS+=' gsasl'
+fi
+
 if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
   _DEPS+=' nghttp2'
   if [[ "${_CONFIG}" != *'noh3'* ]]; then
@@ -690,9 +700,6 @@ fi
 
 need_cacert=0
 
-if [[ "${_CONFIG}" = *'big'* ]]; then
-  _DEPS+=' libidn2 libpsl gsasl'
-fi
 if [[ "${_CONFIG}" = *'wolfssl'* ]]; then
   _DEPS+=' wolfssl'
   need_cacert=1
