@@ -6,11 +6,12 @@
 # Issues:
 # - does not support CMake (only autotools and meson). Where autotools is broken
 #   in curl-for-win.
-# - version string says "libpsl/0.21.1 (no IDNA support)".
+# - could not make symbol-hiding work with autotools.
 # - autotools build force-sets _WIN32_WINNT to 0x500, while also causing
 #   a compiler warning when overriding our value (which is a higher version).
 #   Builds are not supposed to set _WIN32_WINNT on their own, esp. not override
 #   a custom value.
+# Workaround these by building manually.
 
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
@@ -25,32 +26,27 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
-  options="${_CONFIGURE_GLOBAL}"
-  export CC="${_CC_GLOBAL}"
-  export CFLAGS="${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_AUTOTOOLS}"
-  export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
-  export LDFLAGS="${_LDFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL_AUTOTOOLS}"
-  export LIBS=''
+  # Build manually
 
-  export PKG_CONFIG_LIBDIR=''  # Avoid picking up non-cross copies
-
+  mkdir -p "${_BLDDIR}"
   (
-    mkdir "${_BLDDIR}"; cd "${_BLDDIR}"
-    # shellcheck disable=SC2086
-    ../configure ${options} \
-      --disable-rpath \
-      --enable-static \
-      --disable-shared \
-      --disable-runtime \
-      --enable-builtin \
-      --disable-man --silent
+    cd "${_BLDDIR}"
+    python3 '../src/psl-make-dafsa' --output-format=cxx+ '../list/public_suffix_list.dat' 'suffixes_dafsa.h'
+    # shellcheck disable=SC2046,SC2086
+    ${_CC_GLOBAL} ${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_AUTOTOOLS} ${_CPPFLAGS_GLOBAL} \
+      -DENABLE_BUILTIN -DPACKAGE_VERSION="\"${LIBPSL_VER_}\"" \
+      -I. -I../include -c $(find ../src -name '*.c' | sort)
+    # shellcheck disable=SC2046
+    "${AR}" rcs libpsl.a $(find . -name '*.o' | sort)
   )
 
-  make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
+  # Install manually
 
-  # Delete .pc and .la files
-  rm -r -f "${_PP}"/lib/pkgconfig
-  rm -f    "${_PP}"/lib/*.la
+  mkdir -p "${_PP}/include"
+  mkdir -p "${_PP}/lib"
+
+  cp -f -p include/libpsl.h "${_PP}/include/"
+  cp -f -p "${_BLDDIR}"/*.a "${_PP}/lib/"
 
   # Make steps for determinism
 

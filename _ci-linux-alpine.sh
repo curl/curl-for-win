@@ -36,7 +36,7 @@ fi
 # https://pkgs.alpinelinux.org/packages
 # shellcheck disable=SC2086
 apk add --no-cache curl git gpg rsync build-base cmake \
-  autoconf automake libtool \
+  autoconf automake libtool python3 \
   zip tar xz jq openssl ${extra}
 
 ./_build.sh

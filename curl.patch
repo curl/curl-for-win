@@ -11,3 +11,22 @@ index 1f735e00144a66..737c2f7e144892 100644
    /* OpenSSL 1.1 deprecates all these cleanup functions and
       turns them into no-ops in OpenSSL 1.0 compatibility mode */
  #else
+diff --git a/lib/version.c b/lib/version.c
+index f957f085d8e23b..01c2a315e5c208 100644
+--- a/lib/version.c
++++ b/lib/version.c
+@@ -211,8 +211,12 @@ char *curl_version(void)
+ #endif
+ 
+ #ifdef USE_LIBPSL
+-  msnprintf(psl_version, sizeof(psl_version), "libpsl/%s", psl_get_version());
+-  src[i++] = psl_version;
++  {
++    int num = psl_check_version_number(0);
++    msnprintf(psl_version, sizeof(psl_version), "libpsl/%d.%d.%d",
++              num >> 16, (num >> 8) & 0xff, num & 0xff);
++    src[i++] = psl_version;
++  }
+ #endif
+ 
+ #ifdef USE_SSH

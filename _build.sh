@@ -48,7 +48,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        wolfssh    build with wolfSSH (requires wolfSSL)
 #        libssh     build with libssh
 #        idn2       build with libidn2
-#        psl        build with libpsl + embedded PublicSuffixList
 #        gsasl      build with gsasl
 #        mini       build with less features, see README.md
 #        micro      build with less features, see README.md
@@ -171,8 +170,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   zstd             cmake
 #   brotli           cmake
 #   cares            cmake
+#   libpsl           manual
 #   libidn2          autotools
-#   libpsl           autotools
 #   gsasl            autotools
 #   nghttp2          cmake
 #   nghttp3          cmake
@@ -1618,8 +1617,8 @@ build_single_target() {
   bld zstd                 "${ZSTD_VER_}"
   bld brotli             "${BROTLI_VER_}"
   bld cares               "${CARES_VER_}"
-  bld libidn2           "${LIBIDN2_VER_}"
   bld libpsl             "${LIBPSL_VER_}"
+  bld libidn2           "${LIBIDN2_VER_}"
   bld nghttp3           "${NGHTTP3_VER_}"
   bld wolfssl           "${WOLFSSL_VER_}"
   bld mbedtls           "${MBEDTLS_VER_}"

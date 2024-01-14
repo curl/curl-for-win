@@ -10,7 +10,7 @@ export CURL_HASH=42ab8db9e20d8290a3b633e7fbb3cec15db34df65fd1015ef8ac1e4723750ee
 # Create revision string
 # NOTE: Set _REV to 1 after bumping CURL_VER_, then increment for each
 #       CI rebuild via `main` branch push (e.g. after bumping a dependency).
-export _REV="${CW_REVISION:-4}"
+export _REV="${CW_REVISION:-5}"
 
 export TRURL_VER_='0.9'
 export TRURL_HASH=848da38c0ea07cd96d6adac4a5e5e141fe26e5bd846039aa350c3ca589a948e0
@@ -21,12 +21,12 @@ export BROTLI_VER_='1.1.0'
 export BROTLI_HASH=e720a6ca29428b803f4ad165371771f5398faba397edf6778837a18599ea13ff
 export CARES_VER_='1.24.0'
 export CARES_HASH=c517de6d5ac9cd55a9b72c1541c3e25b84588421817b5f092850ac09a8df5103
+export LIBPSL_VER_='0.21.5'
+export LIBPSL_HASH=1dcc9ceae8b128f3c0b3f654decd0e1e891afc6ff81098f227ef260449dae208
 export GSASL_VER_='2.2.1'
 export GSASL_HASH=d45b562e13bd13b9fc20b372f4b53269740cf6279f836f09ce11b9d32bcee075
 export LIBIDN2_VER_='2.3.4'
 export LIBIDN2_HASH=93caba72b4e051d1f8d4f5a076ab63c99b77faee019b72b9783b267986dbb45f
-export LIBPSL_VER_='0.21.5'
-export LIBPSL_HASH=1dcc9ceae8b128f3c0b3f654decd0e1e891afc6ff81098f227ef260449dae208
 export WOLFSSH_VER_='1.4.15'
 export WOLFSSH_HASH=7381144990fdc977c4c25e012aaa1b5cb798532a6a069634c0d6a7798c62ccec
 export LIBSSH_VER_='0.10.6'

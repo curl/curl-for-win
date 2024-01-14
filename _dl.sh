@@ -681,11 +681,12 @@ if [[ "${_CONFIG}" = *'cares'* ]]; then
   _DEPS+=' cares'
 fi
 
+if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
+  _DEPS+=' libpsl'
+fi
+
 if [[ "${_CONFIG}" = *'idn2'* ]]; then
   _DEPS+=' libidn2'
-fi
-if [[ "${_CONFIG}" = *'psl'* ]]; then
-  _DEPS+=' libpsl'
 fi
 if [[ "${_CONFIG}" = *'gsasl'* ]]; then
   _DEPS+=' gsasl'
