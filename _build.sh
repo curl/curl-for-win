@@ -1404,7 +1404,6 @@ build_single_target() {
   if [ "${_CCRT}" = 'clang-rt' ]; then
     if [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
       if [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
-        # This method should also work to replace the `_CCPREFIX='musl-'` solution we use with gcc.
         ccrsdir="$("clang${_CCSUFFIX}" -print-resource-dir)"                           # /usr/lib/llvm-13/lib/clang/13.0.1
         if [ "${unamem}" = "${_machine}" ]; then
           ccrtdir="$("clang${_CCSUFFIX}" -print-runtime-dir)"                          # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux
