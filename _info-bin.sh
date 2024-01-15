@@ -76,6 +76,7 @@ while [ -n "${1:-}" ]; do
     # "${NM}" --extern-only --defined-only "${f}" | grep -a -F 'Name: ' | grep -a -F -v ' curl_' && false  # should not export anything else except the libcurl API
     fi
   elif [ "${_OS}" = 'linux' ]; then
+    # NOTE: objdump -syms (-t) to show symbol visibility flags
     "${_READELF}" --file-header --dynamic "${f}"
     "${_READELF}" --program-headers "${f}"
     if command -v checksec >/dev/null 2>&1; then
