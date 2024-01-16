@@ -16,12 +16,18 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
+  CPPFLAGS=''
+
+  if [ "${_OS}" = 'linux' ] && [ "${_HOST}" != 'linux' ] && [ "${_CPU}" = 'a64' ]; then
+    CPPFLAGS+=' -DMBEDTLS_AES_USE_HARDWARE_ONLY'
+  fi
+
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
     '-DMBEDTLS_FATAL_WARNINGS=OFF' \
     '-DENABLE_PROGRAMS=OFF' \
     '-DENABLE_TESTING=OFF' \
-    "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL}"
+    "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
