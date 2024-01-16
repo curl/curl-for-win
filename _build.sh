@@ -1693,37 +1693,38 @@ EOF
 
 # Build binaries
 if [ "${_OS}" = 'win' ]; then
-  if [[ ! "${_CONFIG}" =~ (a64|x86) ]]; then
+  if [[ "${_CONFIG}" = *'x64'* || ! "${_CONFIG}" =~ (a64|x86) ]]; then
     build_single_target x64
   fi
-  if [[ ! "${_CONFIG}" =~ (x64|x86) ]]; then
+  if [[ "${_CONFIG}" = *'a64'* || ! "${_CONFIG}" =~ (x64|x86) ]]; then
     build_single_target a64
   fi
-  if [[ ! "${_CONFIG}" =~ (x64|a64) ]]; then
+  if [[ "${_CONFIG}" = *'x86'* || ! "${_CONFIG}" =~ (x64|a64) ]]; then
     build_single_target x86
   fi
 elif [ "${_OS}" = 'mac' ]; then
   # TODO: This method is suboptimal. We might want to build pure C
   #       projects in dual mode and only manual-merge libs that have
   #       ASM components.
-  if [[ "${_CONFIG}" != *'x64'* ]]; then
-    build_single_target a64
+  platcount=0
+  if [[ "${_CONFIG}" = *'a64'* || "${_CONFIG}" != *'x64'* ]]; then
+    build_single_target a64; ((platcount++))
   fi
-  if [[ "${_CONFIG}" != *'a64'* ]]; then
-    build_single_target x64
+  if [[ "${_CONFIG}" = *'x64'* || "${_CONFIG}" != *'a64'* ]]; then
+    build_single_target x64; ((platcount++))
   fi
-  if [[ ! "${_CONFIG}" =~ (x64|a64) ]] && \
+  if [[ "${platcount}" -gt 1 ]] && \
      [[ "${_CONFIG}" = *'macuni'* ]]; then
     ./_macuni.sh
   fi
 elif [ "${_OS}" = 'linux' ]; then
   if [ "${_HOST}" = 'mac' ]; then
     # Custom installs of musl-cross may support various CPU targets
-    if [[ "${_CONFIG}" != *'a64'* ]] && \
+    if [[ "${_CONFIG}" = *'x64'* || "${_CONFIG}" != *'a64'* ]] && \
        command -v x86_64-linux-musl-gcc >/dev/null 2>&1; then
       build_single_target x64
     fi
-    if [[ "${_CONFIG}" != *'x64'* ]] && \
+    if [[ "${_CONFIG}" = *'a64'* || "${_CONFIG}" != *'x64'* ]] && \
        command -v aarch64-linux-musl-gcc >/dev/null 2>&1; then
       build_single_target a64
     fi
@@ -1738,10 +1739,10 @@ elif [ "${_OS}" = 'linux' ]; then
     if [[ "${_CONFIG}" = *'r64'* ]]; then
       build_single_target r64  # [EXPERIMENTAL]
     fi
-    if [[ ! "${_CONFIG}" =~ (x64|r64) ]]; then
+    if [[ "${_CONFIG}" = *'a64'* || ! "${_CONFIG}" =~ (x64|r64) ]]; then
       build_single_target a64
     fi
-    if [[ ! "${_CONFIG}" =~ (a64|r64) ]]; then
+    if [[ "${_CONFIG}" = *'x64'* || ! "${_CONFIG}" =~ (a64|r64) ]]; then
       build_single_target x64
     fi
   fi
