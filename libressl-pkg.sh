@@ -44,8 +44,8 @@
 
   # shellcheck disable=SC2066
   for bin in \
-    "${_PP}/bin/openssl${BIN_EXT}" \
-  ; do
+    "${_PP}/bin/openssl${BIN_EXT}"
+  do
     if [ -f "${bin}" ]; then
       file "${bin}"
       # Produce 'openssl version -a'-like output without executing the build:
