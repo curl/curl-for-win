@@ -31,7 +31,7 @@ _VER="$1"
   mkdir -p "${_BLDDIR}"
   (
     cd "${_BLDDIR}"
-    python3 '../src/psl-make-dafsa' --output-format=cxx+ '../list/public_suffix_list.dat' 'suffixes_dafsa.h'
+    [ -f 'suffixes_dafsa.h' ] || python3 '../src/psl-make-dafsa' --output-format=cxx+ '../list/public_suffix_list.dat' 'suffixes_dafsa.h'
     # shellcheck disable=SC2046,SC2086
     ${_CC_GLOBAL} ${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_AUTOTOOLS} ${_CPPFLAGS_GLOBAL} \
       -DENABLE_BUILTIN -DPACKAGE_VERSION="\"${LIBPSL_VER_}\"" \
