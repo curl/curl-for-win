@@ -96,7 +96,7 @@ create_pkg() {
     *)       TZ=UTC stat -c '%n: %s bytes %y' "${_pkg}";;
   esac
 
-  openssl dgst -sha256 "${_pkg}" | sed 's/^SHA256/SHA2-256/g' | tee -a hashes.txt
+  openssl dgst -sha256 "${_pkg}" | sed 's/^SHA256/SHA2-256/g' | tee "${_pkg}.txt" | tee -a hashes.txt
 
   # Sign releases only
   if [ -z "${_suf}" ]; then
