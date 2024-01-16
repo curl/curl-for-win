@@ -27,7 +27,6 @@ _VER="$1"
 
   # LibreSSL (as of v3.8.2) hangs with ASM enabled on Windows ARM64.
   # It also results in long list of ASM warnings when -DNDEBUG is set.
-  # This is hidden by CMake which force-unsets -DNDEBUG.
   if [ "${_OS}" = 'win' ] && [ "${_CPU}" = 'a64' ]; then
     options+=' -DENABLE_ASM=OFF'
   fi
