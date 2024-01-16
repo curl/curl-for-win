@@ -722,10 +722,7 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
   elif [[ "${_CONFIG}" = *'quictls'* ]]; then
     _DEPS+=' quictls'
     need_cacert=1
-  elif [ "${_OS}" = 'linux' ] && \
-       [[ "${_CONFIG}" = *'pico'* ]]; then \
-    _DEPS+=' mbedtls'
-  elif [ "${_OS}" = 'linux' ] || \
+  elif [[ "${_OS}" = 'linux' && ! "${_CONFIG}" =~ (mbedtls|wolfssl) ]] || \
        [[ ! "${_CONFIG}" =~ (pico|nano|micro|mini|ostls) ]]; then
     _DEPS+=' libressl'
     need_cacert=1
