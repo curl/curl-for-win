@@ -90,7 +90,7 @@ Features: alt-svc AsynchDNS        HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerbero
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp ws wss
 Features:         AsynchDNS        HSTS             HTTPS-proxy IDN IPv6 Kerberos Largefile libz          NTLM PSL SPNEGO SSL SSPI threadsafe UnixSockets
 
-"pico", HTTP/1.1-only:
+"pico", HTTP/1.1-only (using mbedTLS for Linux):
 Protocols:                                   http https            ipfs ipns
 Features:         AsynchDNS        HSTS             HTTPS-proxy     IPv6          Largefile libz               PSL        SSL SSPI threadsafe
 ```
