@@ -31,6 +31,12 @@ _VER="$1"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
+  # Build fixups
+
+  # Delete stray, empty, libs generated as of v3.5.1 (upstream bug?).
+  rm -f "${_PP}/lib/libeverest.a"
+  rm -f "${_PP}/lib/libp256m.a"
+
   # Make steps for determinism
 
   readonly _ref='ChangeLog'
