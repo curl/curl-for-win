@@ -120,6 +120,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - FIXME: curl-autotools: Linux MUSL builds broken.
 #     https://github.com/curl/curl-for-win/actions/runs/6873050459
 #     https://github.com/curl/curl-for-win/actions/runs/6868572571
+#     One last escape hatch is making custom wrappers around build tools and
+#     make libtool use them, then pass any necessary options via those wrappers.
 #   - win: Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
 #       https://gs.statcounter.com/windows-version-market-share
