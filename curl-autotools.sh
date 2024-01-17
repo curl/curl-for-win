@@ -129,6 +129,12 @@ _VER="$1"
     fi
   fi
 
+  if [[ "${_CONFIG}" = *'nocookie'* ]]; then
+    options+=' --disable-cookies'
+  else
+    options+=' --enable-cookies'
+  fi
+
   if [[ "${_CONFIG}" = *'nohttp'* ]]; then
     options+=' --disable-http'
     options+=' --disable-proxy'
@@ -393,7 +399,6 @@ _VER="$1"
       --enable-symbol-hiding \
       --enable-manual \
       --enable-verbose \
-      --enable-cookies \
       --enable-http-auth \
       --enable-doh \
       --enable-mime \

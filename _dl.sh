@@ -681,7 +681,7 @@ if [[ "${_CONFIG}" = *'cares'* ]]; then
   _DEPS+=' cares'
 fi
 
-if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
+if [[ ! "${_CONFIG}" =~ (zero|bldtst|nocookie) ]]; then
   _DEPS+=' libpsl'
 fi
 
