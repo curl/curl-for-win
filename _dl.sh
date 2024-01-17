@@ -707,6 +707,7 @@ if [[ "${_CONFIG}" = *'wolfssl'* ]]; then
 fi
 if [[ "${_CONFIG}" = *'mbedtls'* ]]; then
   _DEPS+=' mbedtls'
+  need_cacert=1
 fi
 
 if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
