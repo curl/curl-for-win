@@ -389,7 +389,7 @@ _VER="$1"
   # Official method correctly enables the manual, but with the side-effect
   # of rebuilding tool_hugehelp.c (with empty content). We work around this
   # by enabling the manual directly via its C flag.
-  # options+=' -DUSE_MANUAL=ON'
+  options+=' -DUSE_MANUAL=OFF -DENABLE_MANUAL=OFF'
   CPPFLAGS+=' -DUSE_MANUAL=1'
 
   if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
