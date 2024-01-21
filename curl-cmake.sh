@@ -19,6 +19,13 @@ _VER="$1"
 
   [ "${CW_DEV_INCREMENTAL:-}" != '1' ] && rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
+  readonly _ref='CHANGES'
+
+  case "${_HOST}" in
+    bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${_ref}")";;
+    *)       unixts="$(TZ=UTC stat -c '%Y' "${_ref}")";;
+  esac
+
   # Build
 
   options=''
@@ -448,7 +455,7 @@ _VER="$1"
     fi
   fi
 
-  make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
+  SOURCE_DATE_EPOCH="${unixts}" TZ=UTC make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
   # Needs BUILD_TESTING=ON to build everything
 # make --directory="${_BLDDIR}" --jobs="${_JOBS}" testdeps
 
