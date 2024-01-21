@@ -110,7 +110,7 @@
   _DST="$(pwd)/_pkg"; rm -r -f "${_DST}"
 
   mkdir -p "${_DST}/docs/examples"
-  mkdir -p "${_DST}/docs/libcurl/opts"
+  mkdir -p "${_DST}/docs/libcurl"
   mkdir -p "${_DST}/include/curl"
   mkdir -p "${_DST}/lib"
   mkdir -p "${_DST}/bin"
