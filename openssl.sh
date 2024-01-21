@@ -197,7 +197,7 @@ _VER="$1"
       "--openssldir=${_ssldir}"
   )
 
-  SOURCE_DATE_EPOCH=${unixts} TZ=UTC make --directory="${_BLDDIR}" --jobs="${_JOBS}"
+  SOURCE_DATE_EPOCH="${unixts}" TZ=UTC make --directory="${_BLDDIR}" --jobs="${_JOBS}"
   # Ending slash required.
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}/" >/dev/null # 2>&1
 
