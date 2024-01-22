@@ -219,7 +219,7 @@ _VER="$1"
         LDFLAGS+=' -Wl,-Bstatic,-lpthread,-Bdynamic'
       fi
       h3=1
-    elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ] || [ "${_OPENSSL}" = 'openssl' ]; then
+    else
       if [ "${_OS}" = 'win' ]; then
         if [ "${_OPENSSL}" = 'libressl' ]; then
           CPPFLAGS+=' -DLIBRESSL_DISABLE_OVERRIDE_WINCRYPT_DEFINES_WARNING'

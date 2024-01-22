@@ -48,7 +48,7 @@ _VER="$1"
         else
           LDFLAGS+=' -Wl,-Bstatic,-lpthread,-Bdynamic'
         fi
-      elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ] || [ "${_OPENSSL}" = 'openssl' ]; then
+      else
         LIBS+=' -lbcrypt'
       fi
     fi
