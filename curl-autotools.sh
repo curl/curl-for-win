@@ -397,6 +397,17 @@ _VER="$1"
     LDFLAGS_LIB+=" -Wl,--output-def,${_DEF_NAME}"
   fi
 
+  # If the source tarball provides these pre-built, just use them without
+  # trying to rebuild them. Rebuilding introduces env-specific differences
+  # via `nroff`.
+  if [ -f 'docs/curl.1' ] && \
+     [ -f 'src/tool_hugehelp.c' ]; then
+    options+=' --disable-manual'
+    CPPFLAGS+=' -DUSE_MANUAL=1'  # Use pre-built manual
+  else
+    options+=' --enable-manual'
+  fi
+
   options+=' --enable-static --enable-shared'
 
   (
@@ -406,7 +417,6 @@ _VER="$1"
       --disable-tls-srp \
       --enable-warnings \
       --enable-symbol-hiding \
-      --enable-manual \
       --enable-verbose \
       --enable-http-auth \
       --enable-doh \

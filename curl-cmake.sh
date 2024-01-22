@@ -393,11 +393,21 @@ _VER="$1"
     options+=' -DCURL_USE_LIBPSL=OFF'
   fi
 
-  # Official method correctly enables the manual, but with the side-effect
-  # of rebuilding tool_hugehelp.c (with empty content). We work around this
-  # by enabling the manual directly via its C flag.
-  options+=' -DENABLE_MANUAL=OFF -DUSE_MANUAL=OFF'
-  CPPFLAGS+=' -DUSE_MANUAL=1'
+  # If the source tarball provides these pre-built, just use them without
+  # trying to rebuild them. Rebuilding introduces env-specific differences
+  # via `nroff`.
+  if [ -f 'docs/curl.1' ] && \
+     [ -f 'src/tool_hugehelp.c' ]; then
+    options+=' -DENABLE_MANUAL=OFF -DUSE_MANUAL=OFF'
+    CPPFLAGS+=' -DUSE_MANUAL=1'  # Use pre-built manual
+  # 8.5.0 and earlier have issues with `ENABLE_MANUAL` and/or may end up
+  # building an empty manual.
+  elif [ "${CURL_VER_}" = '8.5.0' ]; then
+    options+=' -DENABLE_MANUAL=OFF -DUSE_MANUAL=OFF'
+    CPPFLAGS+=' -DUSE_MANUAL=1'
+  else
+    options+=' -DENABLE_MANUAL=ON'  # Build it
+  fi
 
   if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
     LDFLAGS_BIN+=" -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-bin.tar"
@@ -444,7 +454,7 @@ _VER="$1"
       "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}"  # --debug-find --debug-trycompile
   fi
 
-  if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
+  if [[ "${_CONFIG}" != *'nocurltool'* ]] && [ "${CURL_VER_}" = '8.5.0' ]; then
     # When doing an out of tree build, this is necessary to avoid make
     # re-generating the embedded manual with blank content.
     if [ -f src/tool_hugehelp.c ]; then
