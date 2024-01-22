@@ -168,9 +168,11 @@ _VER="$1"
   _ssldir='ssl'
 
   if [ "${_VER}" != '3.1.4' ]; then
-    # no-quic: disable OpenSSL's own (non-quictls-compatible) QUIC API.
     # no-sm2-precomp: avoid a 3.2.0 optimization that makes libcrypto 0.5MB larger.
-    options+=' no-docs no-quic no-sm2-precomp'
+    options+=' no-docs no-sm2-precomp'
+    if [[ "${_CONFIG}" = *'noh3'* ]]; then
+      options+=' no-quic'
+    fi
   fi
 
   # 'no-dso' implies 'no-dynamic-engine' which in turn compiles in these

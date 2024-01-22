@@ -212,6 +212,9 @@ _VER="$1"
       if [ "${_OS}" = 'win' ]; then
         LIBS+=' -lcrypt32'
       fi
+      if [[ "${_CONFIG}" != *'noh3'* ]]; then
+        options+=' --with-openssl-quic'
+      fi
     fi
     options+=' --disable-openssl-auto-load-config'
     if [ "${_OPENSSL}" = 'boringssl' ]; then
@@ -223,7 +226,6 @@ _VER="$1"
       else
         LDFLAGS+=' -Wl,-Bstatic,-lpthread,-Bdynamic'
       fi
-      h3=1
     else
       if [ "${_OS}" = 'win' ]; then
         if [ "${_OPENSSL}" = 'libressl' ]; then
@@ -231,8 +233,8 @@ _VER="$1"
         fi
         LIBS+=' -lbcrypt'  # for auto-detection
       fi
-      [ "${_OPENSSL}" = 'openssl' ] || h3=1
     fi
+    h3=1
   fi
 
   if [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d "../wolfssl/${_PP}" ]; then
@@ -361,9 +363,10 @@ _VER="$1"
   fi
 
   # We enable HTTP/3 manually, so it shows up "disabled" in 'configure summary'.
-  if [ "${h3}" = '1' ] && \
-     [[ "${_DEPS}" = *'nghttp3'* ]] && [ -d "../nghttp3/${_PP}" ] && \
-     [[ "${_DEPS}" = *'ngtcp2'* ]] && [ -d "../ngtcp2/${_PPS}" ]; then
+  if [[ "${h3}" = '1' && \
+        "${_DEPS}" = *'nghttp3'* && -d "../nghttp3/${_PP}" &&
+        (( "${_DEPS}" = *'ngtcp2'* && -d "../ngtcp2/${_PPS}" ) || "${_OPENSSL}" = 'openssl' ) ]]; then
+
     # Detection insists on having a pkg-config, so force feed everything manually.
     # We enable this lib manually, so it shows up "disabled" in 'configure summary'.
     options+=' --with-nghttp3=yes'
@@ -372,19 +375,25 @@ _VER="$1"
     LDFLAGS+=" -L${_TOP}/nghttp3/${_PP}/lib"
     LIBS+=' -lnghttp3'
 
-    # Detection insists on having a pkg-config, so force feed everything manually.
-    # We enable this lib manually, so it shows up "disabled" in 'configure summary'.
-    options+=' --with-ngtcp2=yes'
-    CPPFLAGS+=' -DNGTCP2_STATICLIB -DUSE_NGTCP2'
-    CPPFLAGS+=" -I${_TOP}/ngtcp2/${_PPS}/include"
-    LDFLAGS+=" -L${_TOP}/ngtcp2/${_PPS}/lib"
-    LIBS+=' -lngtcp2'
-    if [ "${_OPENSSL}" = 'boringssl' ]; then
-      LIBS+=' -lngtcp2_crypto_boringssl'
-    elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ]; then
-      LIBS+=' -lngtcp2_crypto_quictls'
-    elif [[ "${_DEPS}" = *'wolfssl'* ]]; then
-      LIBS+=' -lngtcp2_crypto_wolfssl'
+    if [ "${_OPENSSL}" != 'openssl' ]; then
+      # Detection insists on having a pkg-config, so force feed everything manually.
+      # We enable this lib manually, so it shows up "disabled" in 'configure summary'.
+      options+=' --with-ngtcp2=yes'
+      CPPFLAGS+=' -DNGTCP2_STATICLIB -DUSE_NGTCP2'
+      CPPFLAGS+=" -I${_TOP}/ngtcp2/${_PPS}/include"
+      LDFLAGS+=" -L${_TOP}/ngtcp2/${_PPS}/lib"
+      LIBS+=' -lngtcp2'
+      if [ "${_OPENSSL}" = 'boringssl' ]; then
+        LIBS+=' -lngtcp2_crypto_boringssl'
+      elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ]; then
+        LIBS+=' -lngtcp2_crypto_quictls'
+      elif [[ "${_DEPS}" = *'wolfssl'* ]]; then
+        LIBS+=' -lngtcp2_crypto_wolfssl'
+      fi
+    else
+      options+=' --without-ngtcp2'
+      # Because nghttp3 is not detected by autotools, we need to force-enable H3 too:
+      CPPFLAGS+=' -DUSE_NGTCP2_H3'
     fi
   else
     options+=' --without-nghttp3'

@@ -692,13 +692,6 @@ if [[ "${_CONFIG}" = *'gsasl'* ]]; then
   _DEPS+=' gsasl'
 fi
 
-if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
-  _DEPS+=' nghttp2'
-  if [[ "${_CONFIG}" != *'noh3'* ]]; then
-    _DEPS+=' nghttp3 ngtcp2'
-  fi
-fi
-
 need_cacert=0
 
 if [[ "${_CONFIG}" = *'wolfssl'* ]]; then
@@ -727,6 +720,16 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
        [[ ! "${_CONFIG}" =~ (pico|nano|micro|mini|ostls) ]]; then
     _DEPS+=' libressl'
     need_cacert=1
+  fi
+fi
+
+if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
+  _DEPS+=' nghttp2'
+  if [[ "${_CONFIG}" != *'noh3'* ]]; then
+    _DEPS+=' nghttp3'
+    if [[ "${_CONFIG}" != *'openssl'* ]]; then
+      _DEPS+=' ngtcp2'
+    fi
   fi
 fi
 
