@@ -182,6 +182,11 @@ _VER="$1"
     [ -n "${mainssl}" ] || mainssl='openssl'
     options+=' -DCURL_USE_OPENSSL=ON'
     options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
+    if [ "${_OPENSSL}" = 'openssl' ]; then
+      if [ "${_OS}" = 'win' ]; then
+        LIBS+=' -lcrypt32'
+      fi
+    fi
     options+=' -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON'
     if [ "${_OPENSSL}" = 'boringssl' ]; then
       CPPFLAGS+=" -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""

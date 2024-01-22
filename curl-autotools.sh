@@ -208,6 +208,11 @@ _VER="$1"
   if [ -n "${_OPENSSL}" ] && [ -d "../${_OPENSSL}/${_PP}" ]; then
     [ -n "${mainssl}" ] || mainssl='openssl'
     options+=" --with-openssl=${_TOP}/${_OPENSSL}/${_PP}"
+    if [ "${_OPENSSL}" = 'openssl' ]; then
+      if [ "${_OS}" = 'win' ]; then
+        LIBS+=' -lcrypt32'
+      fi
+    fi
     options+=' --disable-openssl-auto-load-config'
     if [ "${_OPENSSL}" = 'boringssl' ]; then
       if [ "${_OPENSSL}" = 'boringssl' ]; then
