@@ -21,9 +21,9 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   and [more](#features).
 - ARM64 Windows builds are
   [Control Flow Guard](https://learn.microsoft.com/windows/win32/secbp/control-flow-guard)
-  enabled. Intel Linux/Windows have
+  enabled. Intel builds have
   [CET](https://www.intel.com/content/www/us/en/developer/articles/technical/technical-look-control-flow-enforcement-technology.html)
-  enabled. [EXPERIMENTAL]
+  enabled.
 - Transparent builds, using open source code, run in
   [public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
   with auditable [logs](#build-logs).
