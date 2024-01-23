@@ -72,7 +72,6 @@ _VER="$1"
   cp -f -p NEWS                 "${_DST}/NEWS.txt"
   cp -f -p AUTHORS              "${_DST}/AUTHORS.txt"
   cp -f -p COPYING              "${_DST}/COPYING.txt"
-  cp -f -p README               "${_DST}/README.txt"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )
