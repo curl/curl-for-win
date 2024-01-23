@@ -110,7 +110,7 @@
   _DST="$(pwd)/_pkg"; rm -r -f "${_DST}"
 
   mkdir -p "${_DST}/docs/examples"
-  mkdir -p "${_DST}/docs/libcurl"
+  mkdir -p "${_DST}/docs/libcurl/opts"
   mkdir -p "${_DST}/include/curl"
   mkdir -p "${_DST}/lib"
   mkdir -p "${_DST}/bin"
@@ -139,6 +139,10 @@
   cp -f -p "${_PP}"/include/curl/*.h          "${_DST}/include/curl/"
   cp -f -a "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"  "${_DST}/${DYN_DIR}/"  # we must not pick up *.dll.a here
   cp -f -p "${_PP}"/lib/*.a                   "${_DST}/lib/"
+  if [ "${CURL_VER_}" != '8.5.0' ] && [[ "${_CONFIG}" = *'curldocs'* ]]; then
+    cp -f -p docs/libcurl/opts/*.md             "${_DST}/docs/libcurl/opts/"
+    cp -f -p docs/libcurl/*.md                  "${_DST}/docs/libcurl/"
+  fi
   cp -f -p docs/*.md                          "${_DST}/docs/"
   cp -f -p CHANGES                            "${_DST}/CHANGES.txt"
   cp -f -p COPYING                            "${_DST}/COPYING.txt"

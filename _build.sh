@@ -65,6 +65,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        x86        build i686 target only (for win target)
 #        nounity    build without CMake UNITY mode (slower builds for slightly smaller binaries)
 #        nocurltool do not build the curl tool (requires cmake)
+#        curldocs   include curl Markdown manual pages in the package
 #        msvcrt     build against msvcrt instead of UCRT (for win target)
 #        gcc        build with GCC (including Apple clang aliased to gcc) (defaults to llvm, and "gcc" (= Apple clang) for mac target)
 #        unicode    build curl in UNICODE mode (for win target) [EXPERIMENTAL]
