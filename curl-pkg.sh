@@ -140,6 +140,10 @@
   cp -f -a "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"  "${_DST}/${DYN_DIR}/"  # we must not pick up *.dll.a here
   cp -f -p "${_PP}"/lib/*.a                   "${_DST}/lib/"
   if [ "${CURL_VER_}" != '8.5.0' ] && [[ "${_CONFIG}" = *'curldocs'* ]]; then
+    if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
+      mkdir -p "${_DST}/docs/cmdline-opts"
+      cp -f -p docs/cmdline-opts/*.md             "${_DST}/docs/cmdline-opts/"
+    fi
     cp -f -p docs/libcurl/opts/*.md             "${_DST}/docs/libcurl/opts/"
     cp -f -p docs/libcurl/*.md                  "${_DST}/docs/libcurl/"
   fi
