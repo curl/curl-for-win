@@ -414,6 +414,11 @@ _VER="$1"
     options+=' -DENABLE_MANUAL=ON'  # Build it
   fi
 
+  if [ "${CURL_VER_}" != '8.5.0' ]; then
+    # Skip generating documentation in man page format
+    options+=' -DBUILD_DOCS=OFF'
+  fi
+
   if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
     LDFLAGS_BIN+=" -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-bin.tar"
     LDFLAGS_LIB+=" -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-dyn.tar"
