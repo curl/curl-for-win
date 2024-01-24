@@ -398,23 +398,24 @@ _VER="$1"
     options+=' -DCURL_USE_LIBPSL=OFF'
   fi
 
-  # If the source tarball provides these pre-built, just use them without
-  # trying to rebuild them. Rebuilding introduces env-specific differences
-  # via `nroff`.
-  if [ -f 'docs/curl.1' ] && \
-     [ -f 'src/tool_hugehelp.c' ]; then
-    options+=' -DENABLE_MANUAL=OFF -DUSE_MANUAL=OFF'
-    CPPFLAGS+=' -DUSE_MANUAL=1'  # Use pre-built manual
-  # 8.5.0 and earlier have issues with `ENABLE_MANUAL` and/or may end up
-  # building an empty manual.
-  elif [ "${CURL_VER_}" = '8.5.0' ]; then
-    options+=' -DENABLE_MANUAL=OFF -DUSE_MANUAL=OFF'
+  if [ "${CURL_VER_}" = '8.5.0' ]; then
+    # Official method correctly enables the manual, but with the side-effect
+    # of rebuilding tool_hugehelp.c (with empty content). We work around this
+    # by enabling the manual directly via its C flag.
+    # options+=' -DUSE_MANUAL=ON'
     CPPFLAGS+=' -DUSE_MANUAL=1'
   else
-    options+=' -DENABLE_MANUAL=ON'  # Build it
-  fi
+    # If the source tarball provides these pre-built, just use them without
+    # trying to rebuild them. Rebuilding introduces env-specific differences
+    # via `nroff`.
+    if [ -f 'docs/curl.1' ] && \
+       [ -f 'src/tool_hugehelp.c' ]; then
+      options+=' -DENABLE_MANUAL=OFF -DUSE_MANUAL=OFF'
+      CPPFLAGS+=' -DUSE_MANUAL=1'  # Use pre-built manual
+    else
+      options+=' -DENABLE_MANUAL=ON'  # Build it
+    fi
 
-  if [ "${CURL_VER_}" != '8.5.0' ]; then
     # Skip generating documentation in man page format
     options+=' -DBUILD_DOCS=OFF'
   fi
