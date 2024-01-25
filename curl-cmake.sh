@@ -410,14 +410,13 @@ _VER="$1"
     # via `nroff`.
     if [ -f 'docs/curl.1' ] && \
        [ -f 'src/tool_hugehelp.c' ]; then
-      options+=' -DENABLE_MANUAL=OFF -DUSE_MANUAL=OFF'
-      CPPFLAGS+=' -DUSE_MANUAL=1'  # Use pre-built manual
+      CPPFLAGS+=' -DUSE_MANUAL=1'  # Embed pre-built manual
     else
-      options+=' -DENABLE_MANUAL=ON'  # Build it
+      options+=' -DENABLE_CURL_MANUAL=ON'  # Build and embed manual
     fi
 
-    # Skip generating documentation in man page format
-    options+=' -DBUILD_DOCS=OFF'
+    # Skip building documentation in man page format
+    options+=' -DBUILD_LIBCURL_DOCS=OFF'
   fi
 
   if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
