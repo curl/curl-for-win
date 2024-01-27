@@ -17,7 +17,6 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   has since implemented support for this in curl and libcurl via `--ca-native`
   and `CURLSSLOPT_NATIVE_CA` respectively. macOS features a CA bundle at
   `/etc/ssl/cert.pem`.**
-
 - [Download](https://curl.se/windows/) our
   `.tar.xz` or `.zip` packages,<br>PGP signed with:
   [`9948 0C09 BC89 B68A 0764 3F30 8C8F 5B14 19BD CAB8`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
