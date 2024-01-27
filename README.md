@@ -69,40 +69,40 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 Uses [LibreSSL](https://www.libressl.org/) TLS backend.
 
 ```
-Windows with runtime-selectable option Schannel:
+Windows:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
-Features: alt-svc AsynchDNS brotli HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM PSL SPNEGO SSL SSPI threadsafe UnixSockets zstd
+Features: alt-svc AsynchDNS brotli HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL SSPI threadsafe UnixSockets zstd
 
-macOS with runtime-selectable option SecureTransport:
+macOS:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
-Features: alt-svc AsynchDNS brotli HSTS HTTP2 HTTP3 HTTPS-proxy     IPv6          Largefile libz MultiSSL NTLM PSL        SSL      threadsafe UnixSockets zstd
+Features: alt-svc AsynchDNS brotli HSTS HTTP2 HTTP3 HTTPS-proxy     IPv6          Largefile libz NTLM PSL        SSL      threadsafe UnixSockets zstd
 
 Linux:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns            mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
-Features: alt-svc AsynchDNS brotli HSTS HTTP2 HTTP3 HTTPS-proxy     IPv6          Largefile libz          NTLM PSL        SSL      threadsafe UnixSockets zstd
+Features: alt-svc AsynchDNS brotli HSTS HTTP2 HTTP3 HTTPS-proxy     IPv6          Largefile libz NTLM PSL        SSL      threadsafe UnixSockets zstd
 ```
 <details><summary>Alternate configurations:</summary><p>
 
 ```
 "noh3", HTTP/2:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
-Features: alt-svc AsynchDNS brotli HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz MultiSSL NTLM PSL SPNEGO SSL SSPI threadsafe UnixSockets zstd
+Features: alt-svc AsynchDNS brotli HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL SSPI threadsafe UnixSockets zstd
 
 "mini", without brotli and zstd, with OS TLS backend (Schannel, SecureTransport) if available:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
-Features: alt-svc AsynchDNS        HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz          NTLM PSL SPNEGO SSL SSPI threadsafe UnixSockets
+Features: alt-svc AsynchDNS        HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL SSPI threadsafe UnixSockets
 
 "micro", without libssh2:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp ws wss
-Features: alt-svc AsynchDNS        HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz          NTLM PSL SPNEGO SSL SSPI threadsafe UnixSockets
+Features: alt-svc AsynchDNS        HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL SSPI threadsafe UnixSockets
 
 "nano", HTTP/1.1:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp ws wss
-Features:         AsynchDNS        HSTS             HTTPS-proxy IDN IPv6 Kerberos Largefile libz          NTLM PSL SPNEGO SSL SSPI threadsafe UnixSockets
+Features:         AsynchDNS        HSTS             HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL SSPI threadsafe UnixSockets
 
 "pico", HTTP/1.1-only:
 Protocols:                                   http https            ipfs ipns
-Features:         AsynchDNS        HSTS             HTTPS-proxy     IPv6          Largefile libz               PSL        SSL SSPI threadsafe
+Features:         AsynchDNS        HSTS             HTTPS-proxy     IPv6          Largefile libz      PSL        SSL SSPI threadsafe
 ```
 </p></details>
 

@@ -269,7 +269,7 @@ _VER="$1"
     options+=" -DMBEDX509_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedx509.a"
   fi
 
-  if [[ "${_CONFIG}" != *'osnotls'* ]]; then
+  if [[ "${_CONFIG}" != *'osnotls'* && "${_CONFIG}" = *'noh3'* ]]; then
     if [ "${_OS}" = 'win' ]; then
       options+=' -DCURL_USE_SCHANNEL=ON'
     elif [ "${_OS}" = 'mac' ] && [ "${_OSVER}" -lt '1015' ]; then

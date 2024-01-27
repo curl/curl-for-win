@@ -257,7 +257,7 @@ _VER="$1"
 
   options+=' --without-gnutls --without-bearssl --without-rustls --without-hyper'
 
-  if [[ "${_CONFIG}" != *'osnotls'* ]]; then
+  if [[ "${_CONFIG}" != *'osnotls'* && "${_CONFIG}" = *'noh3'* ]]; then
     if [ "${_OS}" = 'win' ]; then
       options+=' --with-schannel'
     elif [ "${_OS}" = 'mac' ] && [ "${_OSVER}" -lt '1015' ]; then
