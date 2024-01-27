@@ -12,10 +12,10 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   100% compatible and not officially endorsed with HTTP/3. This remains true
   if a single TLS backend is using HTTP/3. We have not noticed any issues nor
   received reports about this for 20 months, but we are disabling it out of
-  caution anyway. MultiSSL was originally introduced mainly because the native
-  OpenSSL (and its forks) did not support the native Windows CA store. curl
-  has since implemented support for this in curl and libcurl via `--ca-native`
-  and `CURLSSLOPT_NATIVE_CA` respectively. macOS features a CA bundle at
+  caution anyway. MultiSSL was originally introduced mainly because OpenSSL
+  (and its forks) did not support the native Windows CA store. curl has since
+  implemented support for this in curl and libcurl via `--ca-native` and
+  `CURLSSLOPT_NATIVE_CA` respectively. macOS features a CA bundle at
   `/etc/ssl/cert.pem`.**
 - [Download](https://curl.se/windows/) our
   `.tar.xz` or `.zip` packages,<br>PGP signed with:
