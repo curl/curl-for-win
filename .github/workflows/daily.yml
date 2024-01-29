@@ -142,7 +142,7 @@ jobs:
         with:
           name: 'curl-macos-universal-daily-tool'
           retention-days: 42
-          path: curl-*-*-*/curl*
+          path: curl-*-universal-*/curl*
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-macos-universal-daily'
@@ -182,7 +182,7 @@ jobs:
         with:
           name: 'curl-windows-daily-tool'
           retention-days: 42
-          path: curl-*-universal-*/curl*
+          path: curl-*-*-*/curl*
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-windows-daily'
