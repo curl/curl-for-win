@@ -7,7 +7,7 @@
 # - ARM64 Windows builds exit with an assert and hang with asserts disabled.
 #   https://github.com/libressl/portable/issues/987
 #   https://github.com/libressl/portable/pull/989
-# - CMake builds override -NDEBUG and do not allow building with this option.
+# - CMake builds override -NDEBUG and do not allow building with this option. [FIX MERGED]
 # - ASM support only for x64.
 # - ASM missing Intel CET support, resulting in linker warnings:
 #   ld.lld-17: warning: libressl/_x64-linux-gnu/usr/lib/libcrypto.a(cpuid-elf-x86_64.S.o): -z cet-report: file does not have GNU_PROPERTY_X86_FEATURE_1_IBT property

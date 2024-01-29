@@ -20,7 +20,7 @@ _VER="$1"
   CFLAGS="-ffile-prefix-map=$(pwd)="
   CPPFLAGS=''
 
-  # FIXME upstream: debug options are permanently force-enabled.
+  # FIXME upstream: debug options are permanently force-enabled. [FIX MERGED]
   if [[ "${_CONFIG}" != *'debug'* ]]; then
     CPPFLAGS+=' -DNDEBUG'
   fi
