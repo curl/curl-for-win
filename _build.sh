@@ -1175,6 +1175,9 @@ build_single_target() {
   fi
 
   if [ "${_OS}" = 'mac' ]; then
+    # Minimum SDK version supported by Xcode releases:
+    #   https://developer.apple.com/support/xcode/
+
     # Explicitly set the SDK root. This forces clang to drop /usr/local
     # from the list of default header search paths. This is necessary
     # to avoid ./configure picking up e.g. installed Homebrew package
