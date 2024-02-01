@@ -28,14 +28,15 @@ _VER="$1"
 
   # Build manually
 
+  [ -f 'suffixes_dafsa.h' ] || python3 'src/psl-make-dafsa' --output-format=cxx+ 'list/public_suffix_list.dat' 'suffixes_dafsa.h'
+
   mkdir -p "${_BLDDIR}"
   (
     cd "${_BLDDIR}"
-    [ -f 'suffixes_dafsa.h' ] || python3 '../src/psl-make-dafsa' --output-format=cxx+ '../list/public_suffix_list.dat' 'suffixes_dafsa.h'
     # shellcheck disable=SC2046,SC2086
     ${_CC_GLOBAL} ${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_AUTOTOOLS} ${_CPPFLAGS_GLOBAL} \
       -DENABLE_BUILTIN -DPACKAGE_VERSION="\"${LIBPSL_VER_}\"" \
-      -I. -I../include -c $(find ../src -name '*.c' | sort)
+      -I. -I.. -I../include -c $(find ../src -name '*.c' | sort)
     # shellcheck disable=SC2046
     "${AR}" rcs libpsl.a $(find . -name '*.o' | sort)
   )
