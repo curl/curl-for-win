@@ -423,10 +423,7 @@ _VER="$1"
   fi
 
   if [ "${CURL_VER_}" != '8.6.0' ]; then
-    # Try to skip building documentation in man page format.
-    # FIXME (upstream): .3 files are still built. It seems this new option
-    #                   is not compatible with `--enable-manual` (which is
-    #                   the default).
+    # Skip building documentation in man page format
     options+=' --disable-docs'
   fi
 
