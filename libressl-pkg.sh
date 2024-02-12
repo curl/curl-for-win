@@ -4,9 +4,7 @@
 # SPDX-License-Identifier: MIT
 
 # Caveats (as of 3.8.2):
-# - ARM64 Windows builds exit with an assert and hang with asserts disabled.
-#   https://github.com/libressl/portable/issues/987
-#   https://github.com/libressl/portable/pull/989
+# - ARM64 Windows builds exit with an assert and hang with asserts disabled. [FIX MERGED]
 # - CMake builds override -NDEBUG and do not allow building with this option. [FIX MERGED]
 # - ASM support only for x64.
 # - ASM missing Intel CET support, resulting in linker warnings:

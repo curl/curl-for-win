@@ -25,9 +25,11 @@ _VER="$1"
     CPPFLAGS+=' -DNDEBUG'
   fi
 
-  # LibreSSL (as of v3.8.2) hangs with ASM enabled on Windows ARM64.
-  if [ "${_OS}" = 'win' ] && [ "${_CPU}" = 'a64' ]; then
-    options+=' -DENABLE_ASM=OFF'
+  if [ "${LIBRESSL_VER_}" = '3.8.2' ]; then
+    # LibreSSL (as of v3.8.2) hangs with ASM enabled on Windows ARM64.
+    if [ "${_OS}" = 'win' ] && [ "${_CPU}" = 'a64' ]; then
+      options+=' -DENABLE_ASM=OFF'
+    fi
   fi
 
   if [ "${_CC}" = 'llvm' ]; then
