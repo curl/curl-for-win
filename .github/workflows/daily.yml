@@ -20,6 +20,7 @@ env:
 
 jobs:
   linux-glibc:
+    if: ${{ github.repository_owner == 'curl' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -56,6 +57,7 @@ jobs:
             urls.txt
 
   linux-musl:
+    if: ${{ github.repository_owner == 'curl' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -90,6 +92,7 @@ jobs:
             urls.txt
 
   linux-musl-riscv64:
+    if: ${{ github.repository_owner == 'curl' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -126,6 +129,7 @@ jobs:
             urls.txt
 
   mac:
+    if: ${{ github.repository_owner == 'curl' }}
     runs-on: macos-latest
     timeout-minutes: 30
     steps:
@@ -152,6 +156,7 @@ jobs:
             urls.txt
 
   win:
+    if: ${{ github.repository_owner == 'curl' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
