@@ -12,8 +12,8 @@ export CURL_HASH=3ccd55d91af9516539df80625f818c734dc6f2ecf9bada33c76765e99121db1
 #       CI rebuild via `main` branch push (e.g. after bumping a dependency).
 export _REV="${CW_REVISION:-1}"
 
-export TRURL_VER_='0.9'
-export TRURL_HASH=848da38c0ea07cd96d6adac4a5e5e141fe26e5bd846039aa350c3ca589a948e0
+export TRURL_VER_='0.10'
+export TRURL_HASH=e54ee05a1a39f2547fbb39225f9cf5e2608eeaf07ad3f7dbff0a069d060d3c46
 
 export CACERT_VER_='2023-12-12'
 export CACERT_HASH=ccbdfc2fe1a0d7bbbb9cc15710271acf1bb1afe4c8f1725fe95c4c7733fcbe5a
