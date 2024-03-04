@@ -467,7 +467,8 @@ _VER="$1"
   if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
     # When doing an out of tree build, this is necessary to avoid make
     # re-generating the embedded manual with blank content.
-    if [ -f src/tool_hugehelp.c ]; then
+    if [ -f 'docs/curl.1' ] && \
+       [ -f 'src/tool_hugehelp.c' ]; then
       cp -p src/tool_hugehelp.c "${_BLDDIR}/src/"
     fi
   fi
