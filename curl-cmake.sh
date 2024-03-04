@@ -469,9 +469,6 @@ _VER="$1"
     # re-generating the embedded manual with blank content.
     if [ -f src/tool_hugehelp.c ]; then
       cp -p src/tool_hugehelp.c "${_BLDDIR}/src/"
-    elif [ -f src/tool_hugehelp.c.cvs ]; then
-      # Copy the dummy replacement when building from a raw source tree.
-      cp -p src/tool_hugehelp.c.cvs "${_BLDDIR}/src/tool_hugehelp.c"
     fi
   fi
 
