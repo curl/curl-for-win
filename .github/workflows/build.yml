@@ -29,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: 'REUSE compliance check'
-        uses: fsfe/reuse-action@v2
+        uses: fsfe/reuse-action@v3
         env:
           DOCKER_CONTENT_TRUST: ''
 
