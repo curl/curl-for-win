@@ -364,8 +364,8 @@ _VER="$1"
 
   # We enable HTTP/3 manually, so it shows up "disabled" in 'configure summary'.
   if [[ "${h3}" = '1' && \
-        "${_DEPS}" = *'nghttp3'* && -d "../nghttp3/${_PP}" &&
-        (( "${_DEPS}" = *'ngtcp2'* && -d "../ngtcp2/${_PPS}" ) || "${_OPENSSL}" = 'openssl' ) ]]; then
+        "${_DEPS}" = *'nghttp3'* && -d "../nghttp3/${_PP}" && \
+        (("${_DEPS}" = *'ngtcp2'* && -d "../ngtcp2/${_PPS}") || "${_OPENSSL}" = 'openssl') ]]; then
 
     # Detection insists on having a pkg-config, so force feed everything manually.
     # We enable this lib manually, so it shows up "disabled" in 'configure summary'.
