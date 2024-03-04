@@ -214,6 +214,7 @@ _VER="$1"
       fi
       if [[ "${_CONFIG}" != *'noh3'* ]]; then
         options+=' --with-openssl-quic'
+        h3=1
       fi
     fi
     options+=' --disable-openssl-auto-load-config'
@@ -226,6 +227,7 @@ _VER="$1"
       else
         LDFLAGS+=' -Wl,-Bstatic,-lpthread,-Bdynamic'
       fi
+      h3=1
     else
       if [ "${_OS}" = 'win' ]; then
         if [ "${_OPENSSL}" = 'libressl' ]; then
@@ -233,8 +235,8 @@ _VER="$1"
         fi
         LIBS+=' -lbcrypt'  # for auto-detection
       fi
+      [ "${_OPENSSL}" = 'openssl' ] || h3=1
     fi
-    h3=1
   fi
 
   if [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d "../wolfssl/${_PP}" ]; then
