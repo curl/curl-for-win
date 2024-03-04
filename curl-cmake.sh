@@ -186,6 +186,10 @@ _VER="$1"
       if [ "${_OS}" = 'win' ]; then
         LIBS+=' -lcrypt32'
       fi
+      if [[ "${_CONFIG}" != *'noh3'* ]]; then
+        options+=' -DUSE_OPENSSL_QUIC=ON'
+        h3=1
+      fi
     fi
     options+=' -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON'
     if [ "${_OPENSSL}" = 'boringssl' ]; then
@@ -344,19 +348,23 @@ _VER="$1"
     options+=' -DUSE_NGHTTP2=OFF'
   fi
 
-  if [ "${h3}" = '1' ] && \
-     [[ "${_DEPS}" = *'nghttp3'* ]] && [ -d "../nghttp3/${_PP}" ] && \
-     [[ "${_DEPS}" = *'ngtcp2'* ]] && [ -d "../ngtcp2/${_PPS}" ]; then
+  if [[ "${h3}" = '1' && \
+        "${_DEPS}" = *'nghttp3'* && -d "../nghttp3/${_PP}" && \
+        (("${_DEPS}" = *'ngtcp2'* && -d "../ngtcp2/${_PPS}") || "${_OPENSSL}" = 'openssl') ]]; then
     options+=' -DUSE_NGHTTP3=ON'
     options+=" -DNGHTTP3_INCLUDE_DIR=${_TOP}/nghttp3/${_PP}/include"
     options+=" -DNGHTTP3_LIBRARY=${_TOP}/nghttp3/${_PP}/lib/libnghttp3.a"
     CPPFLAGS+=' -DNGHTTP3_STATICLIB'
 
-    options+=' -DUSE_NGTCP2=ON'
-    options+=" -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PPS}/include"
-    options+=" -DNGTCP2_LIBRARY=${_TOP}/ngtcp2/${_PPS}/lib/libngtcp2.a"
-    options+=" -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/${_PPS}/lib"
-    CPPFLAGS+=' -DNGTCP2_STATICLIB'
+    if [ "${_OPENSSL}" != 'openssl' ]; then
+      options+=' -DUSE_NGTCP2=ON'
+      options+=" -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PPS}/include"
+      options+=" -DNGTCP2_LIBRARY=${_TOP}/ngtcp2/${_PPS}/lib/libngtcp2.a"
+      options+=" -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/${_PPS}/lib"
+      CPPFLAGS+=' -DNGTCP2_STATICLIB'
+    else
+      options+=' -DUSE_NGTCP2=OFF'
+    fi
   else
     options+=' -DUSE_NGHTTP3=OFF'
     options+=' -DUSE_NGTCP2=OFF'
