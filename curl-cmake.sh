@@ -414,9 +414,7 @@ _VER="$1"
     options+=' -DCURL_USE_LIBPSL=OFF'
   fi
 
-  # If the source tarball provides these pre-built, just use them without
-  # trying to rebuild them. Rebuilding introduces env-specific differences
-  # via `nroff`.
+  # If the source tarball provides these pre-built, use them to save time.
   if [ -f 'docs/curl.1' ] && \
      [ -f 'src/tool_hugehelp.c' ]; then
     CPPFLAGS+=' -DUSE_MANUAL=1'  # Embed pre-built manual

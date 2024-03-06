@@ -413,9 +413,7 @@ _VER="$1"
     LDFLAGS_LIB+=" -Wl,--output-def,${_DEF_NAME}"
   fi
 
-  # If the source tarball provides these pre-built, just use them without
-  # trying to rebuild them. Rebuilding introduces env-specific differences
-  # via `nroff`.
+  # If the source tarball provides these pre-built, use them to save time.
   if [ -f 'docs/curl.1' ] && \
      [ -f 'src/tool_hugehelp.c' ]; then
     options+=' --disable-manual'
