@@ -129,10 +129,12 @@ _VER="$1"
     fi
   fi
 
-  if [ "${CURL_VER_}" = '8.6.0' ]; then
-    CPPFLAGS+=' -DUSE_WINDOWS_SSPI'
-  else
-    options+=' -DCURL_WINDOWS_SSPI=ON'
+  if [ "${_OS}" = 'win' ]; then
+    if [ "${CURL_VER_}" = '8.6.0' ]; then
+      CPPFLAGS+=' -DUSE_WINDOWS_SSPI'
+    else
+      options+=' -DCURL_WINDOWS_SSPI=ON'
+    fi
   fi
 
   if [[ "${_CONFIG}" = *'nocookie'* ]]; then
