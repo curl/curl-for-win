@@ -413,13 +413,23 @@ _VER="$1"
     LDFLAGS_LIB+=" -Wl,--output-def,${_DEF_NAME}"
   fi
 
-  # If the source tarball provides these pre-built, use them to save time.
-  if [ -f 'docs/curl.1' ] && \
-     [ -f 'src/tool_hugehelp.c' ]; then
-    options+=' --disable-manual'
-    CPPFLAGS+=' -DUSE_MANUAL=1'  # Use pre-built manual
+  if [ "${CURL_VER_}" = '8.6.0' ]; then
+    # If the source tarball provides these pre-built, just use them without
+    # trying to rebuild them. Rebuilding introduces env-specific differences
+    # via `nroff`.
+    if [ -f 'docs/curl.1' ] && \
+       [ -f 'src/tool_hugehelp.c' ]; then
+      options+=' --disable-manual'
+      CPPFLAGS+=' -DUSE_MANUAL=1'  # Use pre-built manual
+    else
+      options+=' --enable-manual'
+    fi
   else
-    options+=' --enable-manual'
+    if [[ "${_CONFIG}" = *'nocurltool'* ]]; then
+      options+=' --disable-manual'
+    else
+      options+=' --enable-manual'
+    fi
   fi
 
   if [ "${CURL_VER_}" != '8.6.0' ]; then
@@ -447,12 +457,6 @@ _VER="$1"
       exit 1
     fi
   )
-
-  # NOTE: 'make clean' deletes src/tool_hugehelp.c and docs/curl.1. Next,
-  #       'make' regenerates them, including the current date in curl.1,
-  #       and breaking reproducibility. tool_hugehelp.c might also be
-  #       reflowed/hyphened differently than the source distro, breaking
-  #       reproducibility again. Skip the clean phase to resolve it.
 
   VERSIONINFO='-avoid-version'
   [ -n "${_CURL_DLL_SUFFIX_NODASH}" ] && VERSIONINFO="-release '${_CURL_DLL_SUFFIX_NODASH}' ${VERSIONINFO}"

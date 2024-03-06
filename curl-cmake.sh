@@ -414,10 +414,16 @@ _VER="$1"
     options+=' -DCURL_USE_LIBPSL=OFF'
   fi
 
-  # If the source tarball provides these pre-built, use them to save time.
-  if [ -f 'docs/curl.1' ] && \
-     [ -f 'src/tool_hugehelp.c' ]; then
-    CPPFLAGS+=' -DUSE_MANUAL=1'  # Embed pre-built manual
+  if [ "${CURL_VER_}" = '8.6.0' ]; then
+    # If the source tarball provides these pre-built, just use them without
+    # trying to rebuild them. Rebuilding introduces env-specific differences
+    # via `nroff`.
+    if [ -f 'docs/curl.1' ] && \
+       [ -f 'src/tool_hugehelp.c' ]; then
+      CPPFLAGS+=' -DUSE_MANUAL=1'  # Embed pre-built manual
+    else
+      options+=' -DENABLE_CURL_MANUAL=ON'  # Build and embed manual
+    fi
   else
     options+=' -DENABLE_CURL_MANUAL=ON'  # Build and embed manual
   fi
@@ -470,7 +476,7 @@ _VER="$1"
       "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}"  # --debug-find --debug-trycompile
   fi
 
-  if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
+  if [ "${CURL_VER_}" = '8.6.0' ] && [[ "${_CONFIG}" != *'nocurltool'* ]]; then
     # When doing an out of tree build, this is necessary to avoid make
     # re-generating the embedded manual with blank content.
     if [ -f 'docs/curl.1' ] && \
