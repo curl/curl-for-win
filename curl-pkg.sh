@@ -8,8 +8,9 @@
 {
   # Make steps for determinism
 
+  readonly _ref='CHANGES'
+
   # Show the reference timestamp in UTC.
-  # shellcheck disable=SC2154
   case "${_HOST}" in
     bsd|mac) TZ=UTC stat -f '%N: %Sm' -t '%Y-%m-%d %H:%M' "${_ref}";;
     *)       TZ=UTC stat -c '%n: %y' "${_ref}";;

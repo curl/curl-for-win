@@ -16,13 +16,6 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
-  readonly _ref='CHANGES'
-
-  case "${_HOST}" in
-    bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${_ref}")";;
-    *)       unixts="$(TZ=UTC stat -c '%Y' "${_ref}")";;
-  esac
-
   # Build
 
   [ -f 'configure' ] || autoreconf --force --install
@@ -462,7 +455,7 @@ _VER="$1"
   [ -n "${_CURL_DLL_SUFFIX_NODASH}" ] && VERSIONINFO="-release '${_CURL_DLL_SUFFIX_NODASH}' ${VERSIONINFO}"
   export CURL_LDFLAGS_LIB="${LDFLAGS_LIB}"
   export CURL_LDFLAGS_BIN="${LDFLAGS_BIN}"
-  SOURCE_DATE_EPOCH="${unixts}" TZ=UTC make "VERSIONINFO=${VERSIONINFO}" \
+  make "VERSIONINFO=${VERSIONINFO}" \
     --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
   # Manual copy to DESTDIR
