@@ -20,16 +20,9 @@ _VER="$1"
   CFLAGS="-ffile-prefix-map=$(pwd)="
   CPPFLAGS=''
 
-  # FIXME upstream: debug options are permanently force-enabled. [FIX MERGED]
+  # FIXME upstream: debug options are permanently force-enabled. [FIX MERGED THEN LOST]
   if [[ "${_CONFIG}" != *'debug'* ]]; then
     CPPFLAGS+=' -DNDEBUG'
-  fi
-
-  if [ "${LIBRESSL_VER_}" = '3.8.2' ]; then
-    # LibreSSL (as of v3.8.2) hangs with ASM enabled on Windows ARM64.
-    if [ "${_OS}" = 'win' ] && [ "${_CPU}" = 'a64' ]; then
-      options+=' -DENABLE_ASM=OFF'
-    fi
   fi
 
   if [ "${_CC}" = 'llvm' ]; then
@@ -43,17 +36,10 @@ _VER="$1"
   if [ "${_OS}" = 'mac' ]; then
     CPPFLAGS+=' -Dglobl=private_extern'  # make assembly symbols hidden
 
-    # Syncs behaviour with autotools on next version: https://github.com/libressl/portable/pull/963
-    if [ "${LIBRESSL_VER_}" = '3.8.2' ]; then
-      if [ "${_OSVER}" -ge '1100' ]; then
-        options+=' -DHAVE_STRTONUM=1'
-      fi
-    else
-      # Workaround for mis-detecting 'strtonum' successfully despite targeting
-      # older OS version, then using it.
-      if [ "${_OSVER}" -lt '1100' ]; then
-        options+=' -DHAVE_STRTONUM=0'
-      fi
+    # Workaround for mis-detecting 'strtonum' successfully despite targeting
+    # older OS version, then using it.
+    if [ "${_OSVER}" -lt '1100' ]; then
+      options+=' -DHAVE_STRTONUM=0'
     fi
   elif [ "${_OS}" = 'linux' ] && [ "${_CPU}" = 'x64' ]; then
     # Add a `.hidden <func>` next to each `.globl <func>` one:
@@ -75,20 +61,9 @@ _VER="$1"
     options+=' -DHAVE_SYS_TYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_STDDEF_H=1'
   fi
 
-  if [ "${LIBRESSL_VER_}" = '3.8.2' ]; then
-    # We might prefer passing the triplet as-is, but as of LibreSSL v3.8.2,
-    # a triplet does not work in all cases due to the use of `STREQUAL`.
-    [ "${_CPU}" = 'x86' ] && cpu='x86'
-    [ "${_CPU}" = 'x64' ] && cpu='x86_64'
-    [ "${_CPU}" = 'a64' ] && cpu='aarch64'
-    [ "${_CPU}" = 'r64' ] && cpu='riscv64'
-  else
-    cpu="${_TRIPLET}"
-  fi
-
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
-    "-DCMAKE_SYSTEM_PROCESSOR=${cpu}" \
+    "-DCMAKE_SYSTEM_PROCESSOR=${_TRIPLET}" \
     '-DBUILD_SHARED_LIBS=OFF' \
     '-DLIBRESSL_APPS=OFF' \
     '-DLIBRESSL_TESTS=OFF' \
