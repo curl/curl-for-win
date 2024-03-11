@@ -806,6 +806,10 @@ if [[ "${_DEPS}" = *'mbedtls'* ]]; then
   live_xt mbedtls "${MBEDTLS_HASH}"
 fi
 if [[ "${_DEPS}" = *'libressl'* ]]; then
+  if [[ "${_CONFIG}" = *'dev'* ]]; then
+    LIBRESSL_VER_='3.9.0'
+    LIBRESSL_HASH=1cc232418498de305e6d5cb80c94a16415c01dcb3cd98f2e8c3a2202091a3420
+  fi
   live_dl libressl "${LIBRESSL_VER_}"
   live_xt libressl "${LIBRESSL_HASH}"
 fi
