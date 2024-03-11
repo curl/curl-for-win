@@ -19,6 +19,15 @@ _VER="$1"
 
   [ "${CW_DEV_INCREMENTAL:-}" != '1' ] && rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
+  readonly _ref='CHANGES'
+
+  case "${_HOST}" in
+    bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${_ref}")";;
+    *)       unixts="$(TZ=UTC stat -c '%Y' "${_ref}")";;
+  esac
+
+  export SOURCE_DATE_EPOCH="${unixts}"
+
   # Build
 
   options=''
