@@ -62,7 +62,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        r64        build riscv64 target only [EXPERIMENTAL]
 #        a64        build arm64 target only
 #        x64        build x86_64 target only
-#        x86        build i686 target only (for win target)
 #        nounity    build without CMake UNITY mode (slower builds for slightly smaller binaries)
 #        nocurltool do not build the curl tool (requires cmake)
 #        curldocs   include curl Markdown manual pages in the package
@@ -125,15 +124,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     One last escape hatch is making custom wrappers around build tools and
 #     make libtool use them, then pass any necessary options via those wrappers.
 #   - enable -fno-omit-frame-pointer on 64-bit archs?
-#   - win: Drop x86 builds.
-#       https://data.firefox.com/dashboard/hardware
-#     A hidden aspect of x86: The Chocolatey package manager installs x86
-#     binaries on ARM systems to run them in emulated mode. Windows as of ~2021
-#     got the ability to run x64 in emulated mode, but tooling support is
-#     missing, just like support for native ARM binaries:
-#       https://github.com/chocolatey/choco/issues/1803
-#       https://github.com/chocolatey/choco/issues/2172
-#     winget and scoop both support native ARM64.
 
 # Resources:
 #   - https://clang.llvm.org/docs/Toolchain.html
@@ -565,11 +555,9 @@ build_single_target() {
   fi
 
   # GCC-specific machine selection option
-  [ "${_CPU}" = 'x86' ] && _OPTM='-m32'
   [ "${_CPU}" = 'x64' ] && _OPTM='-m64'
   [ "${_CPU}" = 'a64' ] && _OPTM='-marm64pe'
 
-  [ "${_CPU}" = 'x86' ] && _machine='i686'
   [ "${_CPU}" = 'x64' ] && _machine='x86_64'
   [ "${_CPU}" = 'a64' ] && _machine='aarch64'
   [ "${_CPU}" = 'r64' ] && _machine='riscv64'
@@ -596,7 +584,6 @@ build_single_target() {
   fi
 
   if [ "${_OS}" = 'win' ]; then
-    [ "${_CPU}" = 'x86' ] && pkgcpu='win32'
     [ "${_CPU}" = 'x64' ] && pkgcpu='win64'
     [ "${_CPU}" = 'a64' ] && pkgcpu='win64a'
   else
@@ -619,7 +606,6 @@ build_single_target() {
       if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
         PATH="${CW_LLVM_MINGW_PATH}/bin:${_ori_path}"
       else
-        [ "${_CPU}" = 'x86' ] && _MSYSROOT='/mingw32'
         [ "${_CPU}" = 'x64' ] && _MSYSROOT='/mingw64'
         [ "${_CPU}" = 'a64' ] && _MSYSROOT='/clangarm64'
 
@@ -807,7 +793,6 @@ build_single_target() {
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Windows ${_CMAKE_GLOBAL}"
     fi
 
-    [ "${_CPU}" = 'x86' ] && _RCFLAGS_GLOBAL+=' --target=pe-i386'
     [ "${_CPU}" = 'x64' ] && _RCFLAGS_GLOBAL+=' --target=pe-x86-64'
     [ "${_CPU}" = 'a64' ] && _RCFLAGS_GLOBAL+=" --target=${_TRIPLET}"  # llvm-windres supports triplets here. https://github.com/llvm/llvm-project/blob/main/llvm/tools/llvm-rc/llvm-rc.cpp
 
@@ -885,7 +870,6 @@ build_single_target() {
     # _CPPFLAGS_GLOBAL+=' -D_FORTIFY_SOURCE=3'
 
       if [ "${_CPU}" = 'x64' ] || \
-         [ "${_CPU}" = 'x86' ] || \
          [ "${_CC}" = 'gcc' ]; then
         _CFLAGS_GLOBAL+=' -fstack-clash-protection'
         _CXXFLAGS_GLOBAL+=' -fstack-clash-protection'
@@ -910,8 +894,7 @@ build_single_target() {
 
   # https://fedoraproject.org/wiki/Security_Features_Matrix
   # RISC-V: https://gcc.gnu.org/onlinedocs/gcc/RISC-V-Options.html
-  if [ "${_CPU}" = 'x64' ] || \
-     [ "${_CPU}" = 'x86' ]; then
+  if [ "${_CPU}" = 'x64' ]; then
     # https://maskray.me/blog/2022-12-18-control-flow-integrity
     _CFLAGS_GLOBAL+=' -fcf-protection=full'
     _CXXFLAGS_GLOBAL+=' -fcf-protection=full'
@@ -1162,11 +1145,7 @@ build_single_target() {
     if [ "${_OS}" = 'win' ]; then
       _LDFLAGS_GLOBAL="${_OPTM} ${_LDFLAGS_GLOBAL}"
       # https://lists.ffmpeg.org/pipermail/ffmpeg-devel/2015-September/179242.html
-      if [ "${_CPU}" = 'x86' ]; then
-        _LDFLAGS_BIN_GLOBAL+=' -Wl,--pic-executable,-e,_mainCRTStartup'
-      else
-        _LDFLAGS_BIN_GLOBAL+=' -Wl,--pic-executable,-e,mainCRTStartup'
-      fi
+      _LDFLAGS_BIN_GLOBAL+=' -Wl,--pic-executable,-e,mainCRTStartup'
       _CFLAGS_GLOBAL="${_OPTM} ${_CFLAGS_GLOBAL}"
     fi
 
@@ -1238,8 +1217,7 @@ build_single_target() {
   # for boringssl
   export _STRIP_BINUTILS=''
   if [ "${_OS}" = 'win' ] && [ "${_CC}" = 'llvm' ]; then
-    if [ "${_CPU}" = 'x64' ] || \
-       [ "${_CPU}" = 'x86' ]; then
+    if [ "${_CPU}" = 'x64' ]; then
       # Make sure to pick the prefixed binutils strip tool from an unmodified
       # PATH. This avoids picking the llvm-mingw copy using the same name.
       tmp="${_CCPREFIX}strip"
@@ -1712,14 +1690,11 @@ EOF
 
 # Build binaries
 if [ "${_OS}" = 'win' ]; then
-  if [[ "${_CONFIG}" = *'x64'* || ! "${_CONFIG}" =~ (a64|x86) ]]; then
+  if [[ "${_CONFIG}" = *'x64'* || "${_CONFIG}" != *'a64'* ]]; then
     build_single_target x64
   fi
-  if [[ "${_CONFIG}" = *'a64'* || ! "${_CONFIG}" =~ (x64|x86) ]]; then
+  if [[ "${_CONFIG}" = *'a64'* || "${_CONFIG}" != *'x64'* ]]; then
     build_single_target a64
-  fi
-  if [[ "${_CONFIG}" = *'x86'* || ! "${_CONFIG}" =~ (x64|a64) ]]; then
-    build_single_target x86
   fi
 elif [ "${_OS}" = 'mac' ]; then
   # TODO: This method is suboptimal. We might want to build pure C

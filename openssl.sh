@@ -31,7 +31,6 @@ _VER="$1"
   options=''
 
   if [ "${_OS}" = 'win' ]; then
-    [ "${_CPU}" = 'x86' ] && options+=' mingw'
     [ "${_CPU}" = 'x64' ] && options+=' mingw64'
     if [ "${_CPU}" = 'a64' ]; then
       # Sources:
@@ -65,7 +64,7 @@ _VER="$1"
   if [ "${_OS}" = 'win' ]; then
     options+=' -DUSE_BCRYPTGENRANDOM -lbcrypt'
   fi
-  [ "${_CPU}" = 'x86' ] || options+=' enable-ec_nistp_64_gcc_128'
+  options+=' enable-ec_nistp_64_gcc_128'
 
   if false; then
     if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then

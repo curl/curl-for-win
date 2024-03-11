@@ -62,7 +62,6 @@ _VER="$1"
   LIBS='-lpthread'  # for tests
   options=''
 
-  [ "${_CPU}" = 'x86' ] && cpu='x86'
   [ "${_CPU}" = 'x64' ] && cpu='x86_64'
   [ "${_CPU}" = 'a64' ] && cpu='ARM64'
   [ "${_CPU}" = 'r64' ] && exit 1  # No support as of 2023-10
@@ -76,7 +75,7 @@ _VER="$1"
     options+=' -DOPENSSL_NO_ASM=ON'
   else
     if [ "${_OS}" = 'win' ] && [ "${_CPU}" != 'a64' ]; then
-      # nasm is used for Windows x64 and x86
+      # nasm is used for Windows x64
       options+=' -DCMAKE_ASM_NASM_FLAGS=--reproducible'
     fi
   fi
@@ -128,7 +127,7 @@ _VER="$1"
   #        - fails to clear timestamps in NASM objects.
   #          (fixed by --reproducible with nasm v2.15.05)
   #        Work around them by running it through binutils strip. This works for
-  #        x64 and x86, but not for ARM64.
+  #        x64, but not for ARM64.
   #
   # Most combinations/orders running binutils/llvm strip over the output results
   # in different output, and except pure llvm-strip, all seem to be
