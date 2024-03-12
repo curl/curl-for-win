@@ -46,7 +46,7 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
+  [ "${CW_DEV_INCREMENTAL:-}" != '1' ] && rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   CFLAGS="-ffile-prefix-map=$(pwd)="
   LIBS='-lpthread'  # for tests
@@ -73,22 +73,24 @@ _VER="$1"
     options+=' -DOPENSSL_SMALL=OFF'  # ON reduces curl binary sizes by ~300 KB
   fi
 
-  # Patch the build to omit debug info. This results in 50% smaller footprint
-  # for each ${_BLDDIR}. As of llvm 14.0.6, llvm-strip does an imperfect job
-  # when deleting -ggdb debug info and ends up having ~100 bytes of metadata
-  # different (e.g. in windows.c.obj, a_utf8.c.obj, but not a_octet.c.obj)
-  # across build host platforms. Fixed either by patching out this flag here,
-  # or by running binutils strip on the result. binutils strip do not support
-  # ARM64, so patch it out in that case.
-  # Enable it for all targets for consistency.
-  sed -i.bak 's/ -ggdb//g' ./CMakeLists.txt
+  if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
+    # Patch the build to omit debug info. This results in 50% smaller footprint
+    # for each ${_BLDDIR}. As of llvm 14.0.6, llvm-strip does an imperfect job
+    # when deleting -ggdb debug info and ends up having ~100 bytes of metadata
+    # different (e.g. in windows.c.obj, a_utf8.c.obj, but not a_octet.c.obj)
+    # across build host platforms. Fixed either by patching out this flag here,
+    # or by running binutils strip on the result. binutils strip do not support
+    # ARM64, so patch it out in that case.
+    # Enable it for all targets for consistency.
+    sed -i.bak 's/ -ggdb//g' ./CMakeLists.txt
 
-  # shellcheck disable=SC2086
-  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
-    "-DCMAKE_SYSTEM_PROCESSOR=${cpu}" \
-    '-DBUILD_SHARED_LIBS=OFF' \
-    "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS}" \
-    "-DCMAKE_CXX_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
+    # shellcheck disable=SC2086
+    cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
+      "-DCMAKE_SYSTEM_PROCESSOR=${cpu}" \
+      '-DBUILD_SHARED_LIBS=OFF' \
+      "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS}" \
+      "-DCMAKE_CXX_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
+  fi
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
 
