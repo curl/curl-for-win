@@ -861,8 +861,8 @@ build_single_target() {
     # https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++.html
     # https://github.com/ossf/wg-best-practices-os-developers/blob/main/docs/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C%2B%2B.md
 
-    if [[ ( "${_CC}" = 'llvm' && "${_CCVER}" -ge '1600' ) || \
-          ( "${_CC}" = 'gcc'  && "${_CCVER}" -ge '1300' ) ]]; then
+    if [[ ( "${_CC}" = 'llvm' && "${_CCVER}" -ge '16' ) || \
+          ( "${_CC}" = 'gcc'  && "${_CCVER}" -ge '13' ) ]]; then
       _CFLAGS_GLOBAL+=' -fstrict-flex-arrays=3'
       _CXXFLAGS_GLOBAL+=' -fstrict-flex-arrays=3'
     fi
@@ -872,7 +872,7 @@ build_single_target() {
     _CFLAGS_GLOBAL+=' -fstack-protector-all'
     _CXXFLAGS_GLOBAL+=' -fstack-protector-all'
 
-    if false && [ "${_CC}" = 'gcc' ] && [ "${_CCVER}" -ge '1400' ]; then
+    if false && [ "${_CC}" = 'gcc' ] && [ "${_CCVER}" -ge '14' ]; then
       # https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html#index-fhardened
       _CFLAGS_GLOBAL+=' -fhardened'
       _CXXFLAGS_GLOBAL+=' -fhardened'
