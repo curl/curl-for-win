@@ -8,6 +8,8 @@
 # - BoringSSL also supports native-Windows threading, but it uses
 #   MSVC-specific hacks, thus cannot be enabled for MinGW:
 #     https://github.com/google/boringssl/blob/master/crypto/thread_win.c
+#   Possible solution:
+#     https://github.com/dotnet/runtime/blob/cbca5083d3e69f2bd25e397f8894d94d7763a13a/src/mono/mono/mini/mini-windows-tls-callback.c#L56
 # - Building tests takes 3 minutes per target (on AppVeyor CI, at the time
 #   of this writing) and consumes 9x the disk space for ${_BLDDIR}, that is
 #   32MB -> 283MB (for x64).
