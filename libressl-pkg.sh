@@ -4,6 +4,8 @@
 # SPDX-License-Identifier: MIT
 
 # Caveats (as of 3.9.0):
+# - crash on startup after 3.8.3, with mingw-w64 x64 with ASM and CET enabled.
+#   https://github.com/libressl/portable/issues/1015
 # - CMake builds override -NDEBUG and do not allow building with this option. [FIX MERGED THEN LOST] https://github.com/libressl/portable/pull/988
 # - ASM support only for x64.
 # - Not possible to hide most ASM symbols from shared lib exports in Linux, macOS.
