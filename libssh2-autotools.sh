@@ -40,17 +40,11 @@ _VER="$1"
 
   if [ -n "${_OPENSSL}" ] && [ -d "../${_OPENSSL}/${_PP}" ]; then
     options+=" --with-crypto=openssl --with-libssl-prefix=${_TOP}/${_OPENSSL}/${_PP}"
-    if [ "${_OS}" = 'win' ]; then
-      if [ "${_OPENSSL}" = 'boringssl' ]; then
-        # for DLL
-        if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
-          LDFLAGS+=' -Wl,-Bdynamic,-lpthread,-Bstatic'
-        else
-          LDFLAGS+=' -Wl,-Bstatic,-lpthread,-Bdynamic'
-        fi
-      else
-        LIBS+=' -lbcrypt'
-      fi
+    if [ "${_OPENSSL}" = 'boringssl' ]; then
+      LIBS+=' -lpthread'
+    fi
+    if [ "${_OS}" = 'win' ] && [ "${_OPENSSL}" != 'boringssl' ]; then
+      LIBS+=' -lbcrypt'
     fi
   elif [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d "../wolfssl/${_PP}" ]; then
     options+=" --with-crypto=wolfssl --with-libwolfssl-prefix=${_TOP}/wolfssl/${_PP}"

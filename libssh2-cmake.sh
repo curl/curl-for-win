@@ -29,12 +29,7 @@ _VER="$1"
     options+=' -DCRYPTO_BACKEND=OpenSSL'
     options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     if [ "${_OPENSSL}" = 'boringssl' ]; then
-      # for DLL
-      if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
-        LIBS+=' -Wl,-Bdynamic -lpthread -Wl,-Bstatic'
-      else
-        LIBS+=' -lpthread'
-      fi
+      LIBS+=' -lpthread'
     fi
     if [ "${_OS}" = 'win' ]; then
       # Silence useless libssh2 warning about missing runtime DLL

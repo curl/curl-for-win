@@ -525,10 +525,6 @@ build_single_target() {
   if [ "${_OS}" = 'win' ]; then
     if [ "${CW_LLVM_MINGW_ONLY:-}" = '1' ]; then
       use_llvm_mingw=1
-    # llvm-mingw is required for x64 (to avoid pthread link bug with BoringSSL),
-    # but for consistency, use it for all targets when building with BoringSSL.
-    elif [ "${boringssl}" = '1' ] && [ "${_CRT}" = 'ucrt' ]; then
-      use_llvm_mingw=1
     elif [ "${_CPU}" = 'a64' ]; then
       use_llvm_mingw=1
       versuffix_llvm_mingw=' (ARM64)'
@@ -969,8 +965,6 @@ build_single_target() {
       #   ld.lld: error: undefined symbol: _Unwind_Resume
       #   >>> referenced by objects.a(args.cc.obj):[...]
       _LDFLAGS_GLOBAL+=' -lunwind'
-    else
-      _LDFLAGS_GLOBAL+=' -lpthread'
     fi
   fi
 
