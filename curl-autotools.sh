@@ -221,9 +221,7 @@ _VER="$1"
     fi
     options+=' --disable-openssl-auto-load-config'
     if [ "${_OPENSSL}" = 'boringssl' ]; then
-      if [ "${_OPENSSL}" = 'boringssl' ]; then
-        CPPFLAGS+=" -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
-      fi
+      CPPFLAGS+=" -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
       if [ "${_TOOLCHAIN}" = 'mingw-w64' ] && [ "${_CPU}" = 'x64' ] && [ "${_CRT}" = 'ucrt' ]; then  # FIXME
         LDFLAGS+=' -Wl,-Bdynamic,-lpthread,-Bstatic'
       else
