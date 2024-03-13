@@ -960,6 +960,20 @@ build_single_target() {
     _CXXFLAGS_GLOBAL+=' -fvisibility=hidden'
   fi
 
+  if [ "${_OPENSSL}" = 'boringssl' ]; then
+    _CFLAGS_GLOBAL+=' -fno-addrsig'  # to avoid (as of 4fe29ebc, root cause undiscovered): ld.lld: error: libcrypto.a({mem,err,...}.o): invalid symbol index in addrsig section
+    _LDFLAGS_GLOBAL+=' -Wl,-Bstatic -lstdc++'
+    if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
+      _LDFLAGS_GLOBAL+=' -stdlib=libc++'
+      # to avoid:
+      #   ld.lld: error: undefined symbol: _Unwind_Resume
+      #   >>> referenced by objects.a(args.cc.obj):[...]
+      _LDFLAGS_GLOBAL+=' -lunwind'
+    else
+      _LDFLAGS_GLOBAL+=' -lpthread'
+    fi
+  fi
+
   # These options have just minor effect when using -fvisibility=hidden, but
   # we're going for it.
   if [ "${_OS}" = 'linux' ]; then
@@ -1395,7 +1409,9 @@ build_single_target() {
       fi
       ccrsdir="${ccrtdir}"
       ccrtlib="-Wl,-lgcc -Wl,-lgcc_eh"
-      _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
+      if [ "${_OPENSSL}" != 'boringssl' ]; then
+        _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
+      fi
       ccridir="$("clang${_CCSUFFIX}" -print-resource-dir)"                             # /usr/lib/llvm-13/lib/clang/13.0.1
     fi
     libprefix="/usr/lib/${_machine}-linux-musl"
@@ -1473,7 +1489,9 @@ build_single_target() {
         #   https://www.gnu.org/software/libtool/manual/html_node/Stripped-link-flags.html
         _LDFLAGS_GLOBAL_AUTOTOOLS+=' -Wc,-rtlib=compiler-rt'
       fi
-      _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
+      if [ "${_OPENSSL}" != 'boringssl' ]; then
+        _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
+      fi
     fi
   else
     if [ "${_OS}" = 'win' ]; then

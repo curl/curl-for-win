@@ -5,11 +5,21 @@
 
 # FIXME (upstream):
 # - x64 mingw-w64 pthread ucrt static linking bug -> requires llvm-mingw
+# - as of 4fe29ebc hacks are need to avoid build issues. grep for the hash
+#   to find them.
 # - BoringSSL also supports native-Windows threading, but it uses
 #   MSVC-specific hacks, thus cannot be enabled for MinGW:
 #     https://github.com/google/boringssl/blob/master/crypto/thread_win.c
 #   Possible solution:
 #     https://github.com/dotnet/runtime/blob/cbca5083d3e69f2bd25e397f8894d94d7763a13a/src/mono/mono/mini/mini-windows-tls-callback.c#L56
+# - managed to patch BoringSSL to use native Windows threads and thus be
+#   able to drop pthreads. curl crashes (with or without this patch.)
+# - as of 4fe29ebc, BoringSSL uses C++, so dependents must be built with
+#   static standard C++ library. static libunwind is also needed e.g. when
+#   using llvm-mingw. Integrating all of this is non-trivial. When not
+#   using llvm-mingw, pthreads is necessary again, but it does not trigger
+#   the static pthreads linking bug (undefined reference to `_setjmp') we
+#   hit earlier.
 # - Building tests takes 3 minutes per target (on AppVeyor CI, at the time
 #   of this writing) and consumes 9x the disk space for ${_BLDDIR}, that is
 #   32MB -> 283MB (for x64).
@@ -57,9 +67,18 @@ _VER="$1"
   [ "${_CPU}" = 'a64' ] && cpu='ARM64'
   [ "${_CPU}" = 'r64' ] && exit 1  # No support as of 2023-10
 
-  if [ "${_OS}" = 'win' ] && [ "${_CPU}" != 'a64' ]; then
-    # nasm is used for Windows x64 and x86
-    options+=' -DCMAKE_ASM_NASM_FLAGS=--reproducible'
+  if true; then
+    # to avoid (as of 4fe29ebc, root cause undiscovered):
+    #   ld.lld: error: undefined symbol: fiat_p256_adx_mul
+    #   >>> referenced by libcrypto.a(bcm.o):(fiat_p256_mul)
+    #   ld.lld: error: undefined symbol: fiat_p256_adx_sqr
+    #   >>> referenced by libcrypto.a(bcm.o):(fiat_p256_square)
+    options+=' -DOPENSSL_NO_ASM=ON'
+  else
+    if [ "${_OS}" = 'win' ] && [ "${_CPU}" != 'a64' ]; then
+      # nasm is used for Windows x64 and x86
+      options+=' -DCMAKE_ASM_NASM_FLAGS=--reproducible'
+    fi
   fi
 
   # Workaround for Windows x64 llvm 16 breakage as of 85081c6b:
