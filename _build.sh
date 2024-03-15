@@ -126,7 +126,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     make libtool use them, then pass any necessary options via those wrappers.
 #   - win: Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
-#       https://gs.statcounter.com/windows-version-market-share
 #     A hidden aspect of x86: The Chocolatey package manager installs x86
 #     binaries on ARM systems to run them in emulated mode. Windows as of ~2021
 #     got the ability to run x64 in emulated mode, but tooling support is
