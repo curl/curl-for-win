@@ -67,15 +67,6 @@ _VER="$1"
     LDLIBS+=' -lcurl'
   fi
 
-  if [ "${TRURL_VER_}" = '0.9' ]; then
-    LDFLAGS+=" ${LDLIBS}"
-    # Add dummy curl-config to avoid picking up any system default and
-    # linking to it instead of using our build.
-    echo '#!/bin/sh' > ./curl-config
-    chmod +x ./curl-config
-    export PATH; PATH="$(pwd):${PATH}"
-  fi
-
   "${_MAKE}" clean
   # shellcheck disable=SC2086
   "${_MAKE}" ${options}
