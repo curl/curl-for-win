@@ -112,7 +112,7 @@ cat <<EOF
     "sig": "https://github.com/ngtcp2/ngtcp2/releases/download/v{ver}/ngtcp2-{ver}.tar.xz.asc",
     "redir": "redir",
     "tag": ".+",
-    "keys": "https://keyserver.ubuntu.com/pks/lookup?op=get&options=mr&exact=on&search=0x516B622918D15C478AB1EA3A5339A2BE82E07DEC"
+    "keys": "516B622918D15C478AB1EA3A5339A2BE82E07DEC"
   },
   {
     "name": "wolfssl",
@@ -384,11 +384,7 @@ EOF
       fi
     else
       for key in ${keys}; do
-        if [[ "${key}" = 'https://'* ]]; then
-          my_curl "${key}" | my_gpg --quiet --import >/dev/null 2>&1
-        else
-          gpg_recv_key "${key}" >/dev/null 2>&1
-        fi
+        gpg_recv_key "${key}" >/dev/null 2>&1
       done
 
       if my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin >/dev/null 2>&1; then
@@ -623,11 +619,7 @@ EOF
         ssh-keygen -Y check-novalidate -n 'file' -f /dev/fd/3 -s pkg.sig < pkg.bin || exit 1
       else
         for key in ${keys}; do
-          if printf '%s' "${key}" | grep -q -a '^https://'; then
-            my_curl "${key}" | my_gpg --quiet --import 2>/dev/null
-          else
-            gpg_recv_key "${key}"
-          fi
+          gpg_recv_key "${key}"
         done
         my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
       fi
