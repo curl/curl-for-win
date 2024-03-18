@@ -108,9 +108,11 @@ cat <<EOF
   },
   {
     "name": "ngtcp2",
-    "url": "https://github.com/ngtcp2/ngtcp2/releases/download/v{ver}/ngtcp2-{ver}.tar.xz",
+    "url": "https://github.com/ngtcp2/ngtcp2/releases/download/v{ver}/ngtcp2-{ver}.tar.bz2",
+    "sig": "https://github.com/ngtcp2/ngtcp2/releases/download/v{ver}/ngtcp2-{ver}.tar.bz2.asc",
     "redir": "redir",
-    "tag": ".+"
+    "tag": ".+",
+    "keys": "516B622918D15C478AB1EA3A5339A2BE82E07DEC"
   },
   {
     "name": "wolfssl",
