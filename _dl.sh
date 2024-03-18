@@ -108,11 +108,11 @@ cat <<EOF
   },
   {
     "name": "ngtcp2",
-    "url": "https://github.com/ngtcp2/ngtcp2/releases/download/v{ver}/ngtcp2-{ver}.tar.bz2",
-    "sig": "https://github.com/ngtcp2/ngtcp2/releases/download/v{ver}/ngtcp2-{ver}.tar.bz2.asc",
+    "url": "https://github.com/ngtcp2/ngtcp2/releases/download/v{ver}/ngtcp2-{ver}.tar.xz",
+    "sig": "https://github.com/ngtcp2/ngtcp2/releases/download/v{ver}/ngtcp2-{ver}.tar.xz.asc",
     "redir": "redir",
     "tag": ".+",
-    "keys": "516B622918D15C478AB1EA3A5339A2BE82E07DEC"
+    "keys": "https://keyserver.ubuntu.com/pks/lookup?op=get&options=mr&exact=on&search=0x516B622918D15C478AB1EA3A5339A2BE82E07DEC"
   },
   {
     "name": "wolfssl",
@@ -373,7 +373,7 @@ check_dl() {
     if [ ! -s pkg.sig ]; then
       >&2 echo "! ${name}: Verify: Failed (Signature expected, but missing)"
     elif grep -a -q -F 'BEGIN SSH SIGNATURE' pkg.sig; then
-      [[ "${key}" = 'https://'* ]] && key="$(my_curl --max-time 60 "${key}")"
+      [[ "${key}" = 'https://'* ]] && key="$(my_curl "${key}")"
       exec 3<<EOF
 ${key}
 EOF
@@ -385,7 +385,11 @@ EOF
       fi
     else
       for key in ${keys}; do
-        gpg_recv_key "${key}" >/dev/null 2>&1
+        if [[ "${key}" = 'https://'* ]]; then
+          my_curl "${key}" | my_gpg --quiet --import >/dev/null 2>&1
+        else
+          gpg_recv_key "${key}" >/dev/null 2>&1
+        fi
       done
 
       if my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin >/dev/null 2>&1; then
@@ -613,14 +617,18 @@ live_dl() {
         >&2 echo "! ${name}: Verify: Failed (Signature expected, but missing)"
         exit 1
       elif grep -a -q -F 'BEGIN SSH SIGNATURE' pkg.sig; then
-        [[ "${key}" = 'https://'* ]] && key="$(my_curl --max-time 60 "${key}")"
+        [[ "${key}" = 'https://'* ]] && key="$(my_curl "${key}")"
         exec 3<<EOF
 ${key}
 EOF
         ssh-keygen -Y check-novalidate -n 'file' -f /dev/fd/3 -s pkg.sig < pkg.bin || exit 1
       else
         for key in ${keys}; do
-          gpg_recv_key "${key}"
+          if printf '%s' "${key}" | grep -q -a '^https://'; then
+            my_curl "${key}" | my_gpg --quiet --import 2>/dev/null
+          else
+            gpg_recv_key "${key}"
+          fi
         done
         my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin || exit 1
       fi
