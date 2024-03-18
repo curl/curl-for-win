@@ -124,6 +124,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     https://github.com/curl/curl-for-win/actions/runs/6868572571
 #     One last escape hatch is making custom wrappers around build tools and
 #     make libtool use them, then pass any necessary options via those wrappers.
+#   - enable -fno-omit-frame-pointer on 64-bit archs?
 #   - win: Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
 #     A hidden aspect of x86: The Chocolatey package manager installs x86
