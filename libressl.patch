@@ -1,10 +1,11 @@
 --- a/crypto/CMakeLists.txt
 +++ b/crypto/CMakeLists.txt
-@@ -193,7 +193,6 @@
+@@ -193,7 +193,7 @@
  		whrlpool/wp-mingw64-x86_64.S
  		cpuid-mingw64-x86_64.S
  	)
 -	add_definitions(-Dendbr64=)
++	add_definitions(-Dendbr32=endbr64)
  	add_definitions(-DAES_ASM)
  	add_definitions(-DBSAES_ASM)
  	add_definitions(-DVPAES_ASM)
