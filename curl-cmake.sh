@@ -375,9 +375,7 @@ _VER="$1"
   fi
 
   options+=' -DENABLE_CURL_MANUAL=ON'  # Build and embed manual
-
-  # Skip building documentation in man page format
-  options+=' -DBUILD_LIBCURL_DOCS=OFF'
+  options+=' -DBUILD_LIBCURL_DOCS=OFF'  # Skip building documentation in man page format
 
   if [ "${CW_DEV_LLD_REPRODUCE:-}" = '1' ] && [ "${_LD}" = 'lld' ]; then
     LDFLAGS_BIN+=" -Wl,--reproduce=$(pwd)/$(basename "$0" .sh)-bin.tar"

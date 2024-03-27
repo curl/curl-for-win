@@ -415,8 +415,7 @@ _VER="$1"
     options+=' --enable-manual'
   fi
 
-  # Skip building documentation in man page format
-  options+=' --disable-docs'
+  options+=' --disable-docs'  # Skip building documentation in man page format
 
   options+=' --enable-static --enable-shared'
 
