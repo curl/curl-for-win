@@ -132,11 +132,7 @@ _VER="$1"
   fi
 
   if [ "${_OS}" = 'win' ]; then
-    if [ "${CURL_VER_}" = '8.6.0' ]; then
-      CPPFLAGS+=' -DUSE_WINDOWS_SSPI'
-    else
-      options+=' -DCURL_WINDOWS_SSPI=ON'
-    fi
+    options+=' -DCURL_WINDOWS_SSPI=ON'
   fi
 
   if [[ "${_CONFIG}" = *'nocookie'* ]]; then
@@ -378,19 +374,7 @@ _VER="$1"
     options+=' -DCURL_USE_LIBPSL=OFF'
   fi
 
-  if [ "${CURL_VER_}" = '8.6.0' ]; then
-    # If the source tarball provides these pre-built, just use them without
-    # trying to rebuild them. Rebuilding introduces env-specific differences
-    # via `nroff`.
-    if [ -f 'docs/curl.1' ] && \
-       [ -f 'src/tool_hugehelp.c' ]; then
-      CPPFLAGS+=' -DUSE_MANUAL=1'  # Embed pre-built manual
-    else
-      options+=' -DENABLE_CURL_MANUAL=ON'  # Build and embed manual
-    fi
-  else
-    options+=' -DENABLE_CURL_MANUAL=ON'  # Build and embed manual
-  fi
+  options+=' -DENABLE_CURL_MANUAL=ON'  # Build and embed manual
 
   # Skip building documentation in man page format
   options+=' -DBUILD_LIBCURL_DOCS=OFF'
@@ -438,15 +422,6 @@ _VER="$1"
       "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}" \
       "-DCMAKE_EXE_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_BIN} ${LIBS}" \
       "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}"  # --debug-find --debug-trycompile
-  fi
-
-  if [ "${CURL_VER_}" = '8.6.0' ] && [[ "${_CONFIG}" != *'nocurltool'* ]]; then
-    # When doing an out of tree build, this is necessary to avoid make
-    # re-generating the embedded manual with blank content.
-    if [ -f 'docs/curl.1' ] && \
-       [ -f 'src/tool_hugehelp.c' ]; then
-      cp -p src/tool_hugehelp.c "${_BLDDIR}/src/"
-    fi
   fi
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1

@@ -409,29 +409,14 @@ _VER="$1"
     LDFLAGS_LIB+=" -Wl,--output-def,${_DEF_NAME}"
   fi
 
-  if [ "${CURL_VER_}" = '8.6.0' ]; then
-    # If the source tarball provides these pre-built, just use them without
-    # trying to rebuild them. Rebuilding introduces env-specific differences
-    # via `nroff`.
-    if [ -f 'docs/curl.1' ] && \
-       [ -f 'src/tool_hugehelp.c' ]; then
-      options+=' --disable-manual'
-      CPPFLAGS+=' -DUSE_MANUAL=1'  # Use pre-built manual
-    else
-      options+=' --enable-manual'
-    fi
+  if [[ "${_CONFIG}" = *'nocurltool'* ]]; then
+    options+=' --disable-manual'
   else
-    if [[ "${_CONFIG}" = *'nocurltool'* ]]; then
-      options+=' --disable-manual'
-    else
-      options+=' --enable-manual'
-    fi
+    options+=' --enable-manual'
   fi
 
-  if [ "${CURL_VER_}" != '8.6.0' ]; then
-    # Skip building documentation in man page format
-    options+=' --disable-docs'
-  fi
+  # Skip building documentation in man page format
+  options+=' --disable-docs'
 
   options+=' --enable-static --enable-shared'
 
