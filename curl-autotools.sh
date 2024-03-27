@@ -411,11 +411,11 @@ _VER="$1"
 
   if [[ "${_CONFIG}" = *'nocurltool'* ]]; then
     options+=' --disable-manual'
+    options+=' --disable-docs'  # Skip building documentation in man page format
   else
     options+=' --enable-manual'
+    options+=' --enable-docs'  # Required for `--enable-manual`
   fi
-
-  options+=' --disable-docs'  # Skip building documentation in man page format
 
   options+=' --enable-static --enable-shared'
 
