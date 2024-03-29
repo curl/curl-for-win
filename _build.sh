@@ -110,6 +110,12 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
+#   - switch to git tags / auto-generated tarballs to pull source code and
+#     always `autoreconf` when using autotools. To avoid relying on tarballs
+#     bundled with non-source-tree files, including backdoors.
+#     How to verify integrity / signature? Also, Git hash is still SHA1.
+#     Some Git servers do not provide stable tarballs, e.g. googlesource.com.
+#     And/or dump support for autotools builds. (it is already broken anyway)
 #   - prepare for Xcode 15 with new ld_prime (-Wl,-ld_new) linker (vs. -Wl,-ld_classic).
 #     https://developer.apple.com/forums/thread/715385
 #   - add FreeBSD builds?
