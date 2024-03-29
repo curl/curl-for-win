@@ -1,10 +1,35 @@
 --- a/crypto/CMakeLists.txt
 +++ b/crypto/CMakeLists.txt
-@@ -194,6 +194,7 @@
+@@ -194,8 +194,7 @@
+ 		whrlpool/wp-mingw64-x86_64.S
  		cpuid-mingw64-x86_64.S
  	)
- 	add_definitions(-Dendbr64=)
-+	add_definitions(-Dendbr32=)  # zap opcode emitted by llvm cet.h
+-	add_definitions(-Dendbr64=)
+-	add_definitions(-Dendbr32=)
++	add_definitions(-Dendbr32=endbr64)
  	add_definitions(-DAES_ASM)
  	add_definitions(-DBSAES_ASM)
  	add_definitions(-DVPAES_ASM)
+--- a/crypto/Makefile.am.mingw64-x86_64
++++ b/crypto/Makefile.am.mingw64-x86_64
+@@ -21,8 +21,7 @@
+ EXTRA_DIST += $(ASM_X86_64_MINGW64)
+ 
+ if HOST_ASM_MINGW64_X86_64
+-libcrypto_la_CPPFLAGS += -Dendbr64=
+-libcrypto_la_CPPFLAGS += -Dendbr32=
++libcrypto_la_CPPFLAGS += -Dendbr32=endbr64
+ libcrypto_la_CPPFLAGS += -DAES_ASM
+ libcrypto_la_CPPFLAGS += -DBSAES_ASM
+ libcrypto_la_CPPFLAGS += -DVPAES_ASM
+--- a/crypto/cpuid-mingw64-x86_64.S
++++ b/crypto/cpuid-mingw64-x86_64.S
+@@ -8,8 +8,6 @@
+ 
+ 
+ .section	.ctors
+-_CET_ENDBR
+-	.p2align	3
+ 	.quad	OPENSSL_cpuid_setup
+ 
+ 
