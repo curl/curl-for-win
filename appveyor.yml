@@ -34,9 +34,9 @@ environment:
   CW_MAP: '0'
   CW_JOBS: '2'
   SIGN_CODE_GPG_PASS:
-    secure: 'N+xoeCLwFHPsb/KBdgOIvJ0NnbVrBI/PLcPkPBTBmedgDVUBlbEZu7HrJcEHNyuR'
+    secure: 'wPf2iGvsKmSiXoTO7P6OoKYeRfRpuym4t/Xmq/9EprJUVzh8VXxLjcWgbd6CaA8y'
   SIGN_CODE_KEY_PASS:
-    secure: 'vvbDZUlaB2WICMOD2zqO3MyPRpy3S06hE3ShA0q+YXWDdj4GX+am+RepjZIlpxtB'
+    secure: 'YwtMnlHu3c6WDBY0GExfb6NxqQELKhJ1SrNV6aSh7a7sE1DEwcpR+J09MN3PDKl/'
   SIGN_PKG_KEY_ID: '99480C09BC89B68A07643F308C8F5B1419BDCAB8'
   SIGN_PKG_GPG_PASS:
     secure: 'QjsSPh1Fo56DuIk+LqHmiMyP2xcAsrtdiFCTOkZkv88/dTFJQDg63RcZFr8+BeFc'
