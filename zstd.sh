@@ -23,6 +23,11 @@ _VER="$1"
     CPPFLAGS+=' -DZSTDERRORLIB_VISIBLE='
   fi
 
+  # Fixed in upstream dev: https://github.com/facebook/zstd/commit/b1a30e2b4a69e6fcca9c2a6f9d4e43e8e3b243c8
+  if [ "${_OS}" = 'mac' ] && [ "${ZSTD_VER_}" = '1.5.5' ]; then
+    CPPFLAGS+=' -Dglobal=private_extern'
+  fi
+
   # shellcheck disable=SC2086
   cmake build/cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} \
     '-DZSTD_BUILD_CONTRIB=OFF' \
