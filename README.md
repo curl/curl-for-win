@@ -9,7 +9,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 
 - [Download](https://curl.se/windows/) our
   `.tar.xz` or `.zip` packages,<br>PGP signed with:
-  [`9948 0C09 BC89 B68A 0764 3F30 8C8F 5B14 19BD CAB8`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
+  [`FB68 38A5 C96D 62E8 0D61 9452 4F43 1EA8 FF34 D840`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
 - Standalone `curl` tool and `libcurl` DLL. Static libraries included.
 - Required: Windows Vista with
   [Universal CRT](https://support.microsoft.com/topic/update-for-universal-c-runtime-in-windows-322bf30f-4735-bb94-3949-49f5c49f4732)
