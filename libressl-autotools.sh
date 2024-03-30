@@ -16,6 +16,8 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
+  [ -f 'configure' ] || autoreconf --force --install
+
   options="${_CONFIGURE_GLOBAL}"
   export CC="${_CC_GLOBAL}"
   export CFLAGS="${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_AUTOTOOLS}"

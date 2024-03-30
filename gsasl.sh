@@ -16,13 +16,6 @@ _VER="$1"
 
   rm -r -f "${_PKGDIRS:?}" "${_BLDDIR:?}"
 
-  # Fix this bizarre error when executing 'make':
-  #   configure.ac:39: error: version mismatch.  This is Automake 1.16.4,
-  #   configure.ac:39: but the definition used by this AM_INIT_AUTOMAKE
-  #   configure.ac:39: comes from Automake 1.16.3.  You should recreate
-  #   configure.ac:39: aclocal.m4 with aclocal and run automake again.
-  #   [...]
-  # Requires: autopoint (sometimes offered by the gettext package)
   [ -f 'configure' ] || autoreconf --force --install
 
   options="${_CONFIGURE_GLOBAL}"
