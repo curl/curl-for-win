@@ -83,6 +83,7 @@ while [ -n "${1:-}" ]; do
       if [ "${_DISTRO}" = 'alpine' ]; then
         checksec --json --file "${f}" | jq  # checksec-rs
       else
+        # FIXME: `checksec` uses `lld` which is unsafe.
         # May fail e.g. in cross-builds when `ldd` is not present
         checksec --format=json --file="${f}" | jq || true
         # We have seen this fail in some cases, so ignore exit code
