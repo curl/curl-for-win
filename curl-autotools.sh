@@ -442,7 +442,7 @@ _VER="$1"
   [ -n "${_CURL_DLL_SUFFIX_NODASH}" ] && VERSIONINFO="-release '${_CURL_DLL_SUFFIX_NODASH}' ${VERSIONINFO}"
   export CURL_LDFLAGS_LIB="${LDFLAGS_LIB}"
   export CURL_LDFLAGS_BIN="${LDFLAGS_BIN}"
-  make "VERSIONINFO=${VERSIONINFO}" \
+  TZ=UTC make "VERSIONINFO=${VERSIONINFO}" \
     --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" # >/dev/null # V=1
 
   # Manual copy to DESTDIR

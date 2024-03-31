@@ -422,7 +422,7 @@ _VER="$1"
       "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}"  # --debug-find --debug-trycompile
   fi
 
-  make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
+  TZ=UTC make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
   # Needs BUILD_TESTING=ON to build everything
 # make --directory="${_BLDDIR}" --jobs="${_JOBS}" testdeps
 
