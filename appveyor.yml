@@ -43,9 +43,9 @@ environment:
   SIGN_PKG_KEY_PASS:
     secure: 'mV/nb16oXTF7b56NYzJro+Md07bfhtwqN6tAcZGCyda+DDwtrZhwS3GihROHJjp2'
   DEPLOY_GPG_PASS:
-    secure: 'SxpZpEtfZoIav9uQiokFpHK9jBOSD9i2CPrTQ5cyucZ0EuyqYqFLAt66SJtnm07x'
+    secure: 'zb5hAQukLzixNEtXf2rM4gozjsa1jdxzc+Dq+XzEvu19wn/YRplfvM2euY4N5t3g'
   DEPLOY_KEY_PASS:
-    secure: 'pSOhCTGiXFbOaY83f17iP2QX9HFznO1Va2DyMGhs9aP79i14Mbk3ukn3qhPF/wIT'
+    secure: 'CS5o1b7BhBEmoEq+RFaTmtWpAd3HqHLqnpJvkAjF+DmnlJVPLo34MeusmnJ56wAX'
   DO_NOT_TRACK: '1'
   DOCKER_CONTENT_TRUST: '1'
 build_script:
