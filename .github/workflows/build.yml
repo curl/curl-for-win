@@ -54,7 +54,7 @@ jobs:
       - name: 'spellcheck'
         run: |
           codespell --version
-          codespell --skip='*.patch' \
+          codespell --skip='*.asc,*.patch,*.pem' \
             $(git ls-files)
 
   linux-glibc-debian-testing-llvm:
