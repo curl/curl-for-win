@@ -1337,25 +1337,6 @@ build_single_target() {
     fi
   fi
 
-  # ar wrapper to normalize created libs
-  if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
-    export AR_NORMALIZE
-    AR_NORMALIZE="$(pwd)/ar-wrapper-normalize"
-    if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
-      _opt_binutils='--binutils apple'
-    elif [ "${_OS}" = 'linux' ] && [ "${_HOST}" = 'mac' ]; then
-      _opt_binutils='--binutils old'
-    else
-      _opt_binutils=''
-    fi
-    {
-      echo '#!/bin/sh -e'
-      echo "'${AR}' \"\$@\""
-      echo "'$(pwd)/_clean-lib.sh' ${_opt_binutils} --ar '${AR}' \"\$@\""
-    } > "${AR_NORMALIZE}"
-    chmod +x "${AR_NORMALIZE}"
-  fi
-
   if [ "${_HOST}" = 'mac' ] && [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       _CMAKE_GLOBAL+=" -DCMAKE_AR=${CW_LLVM_MINGW_PATH}/bin/${AR}"

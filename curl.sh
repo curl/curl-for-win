@@ -33,8 +33,6 @@ _VER="$1"
   options=''
   CPPFLAGS=''
 
-  [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ] && options+=" -DCMAKE_AR=${AR_NORMALIZE}"
-
   LIBS=''
   LDFLAGS=''
   LDFLAGS_BIN="${_LDFLAGS_BIN_GLOBAL}"
@@ -272,19 +270,6 @@ _VER="$1"
     options+=' -DCURL_USE_LIBSSH=OFF'
     options+=" -DLIBSSH2_INCLUDE_DIR=${_TOP}/libssh2/${_PPS}/include"
     options+=" -DLIBSSH2_LIBRARY=${_TOP}/libssh2/${_PPS}/lib/libssh2.a"
-
-    if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
-      # By passing -lssh2 _before_ -lcrypto (of openssl/libressl) to the
-      # linker, DLL size becomes closer/identical to autotools-built DLLs.
-      # Otherwise this is not necessary, and there should not be any
-      # functional difference. Could not find the reason for it.
-      # File-offset-stripped-then-sorted .map files are identical either way.
-      # It would be useful to have a linker option to sort object/lib inputs
-      # to make output deterministic (these builds do not rely on ordering
-      # side-effects.)
-      LDFLAGS+=" -L${_TOP}/libssh2/${_PPS}/lib"
-      LIBS+=' -lssh2'
-    fi
   else
     options+=' -DCURL_USE_LIBSSH=OFF'
     options+=' -DCURL_USE_LIBSSH2=OFF'
@@ -367,8 +352,7 @@ _VER="$1"
     options+=' --no-warn-unused-cli'
   fi
 
-  if [ "${CW_DEV_CROSSMAKE_REPRO:-}" != '1' ] && \
-     [[ "${_CONFIG}" != *'nounity'* ]]; then
+  if [[ "${_CONFIG}" != *'nounity'* ]]; then
     options+=' -DCMAKE_UNITY_BUILD=ON'
   fi
 

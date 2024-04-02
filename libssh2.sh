@@ -55,8 +55,7 @@ _VER="$1"
     options+=' -DLIBSSH2_NO_DEPRECATED=ON'
   fi
 
-  if [ "${CW_DEV_CROSSMAKE_REPRO:-}" != '1' ] && \
-     [[ "${_CONFIG}" != *'nounity'* ]]; then
+  if [[ "${_CONFIG}" != *'nounity'* ]]; then
     options+=' -DCMAKE_UNITY_BUILD=ON'
   fi
 
