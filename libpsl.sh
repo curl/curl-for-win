@@ -4,13 +4,7 @@
 # SPDX-License-Identifier: MIT
 
 # Issues:
-# - does not support CMake (only autotools and meson). Where autotools is broken
-#   in curl-for-win.
-# - could not make symbol-hiding work with autotools.
-# - autotools build force-sets _WIN32_WINNT to 0x500, while also causing
-#   a compiler warning when overriding our value (which is a higher version).
-#   Builds are not supposed to set _WIN32_WINNT on their own, esp. not override
-#   a custom value.
+# - does not support CMake, only autotools (with showstoppers) and meson.
 # Workaround these by building manually.
 
 # shellcheck disable=SC3040,SC2039
@@ -34,7 +28,7 @@ _VER="$1"
   (
     cd "${_BLDDIR}"
     # shellcheck disable=SC2046,SC2086
-    ${_CC_GLOBAL} ${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_AUTOTOOLS} ${_CPPFLAGS_GLOBAL} \
+    ${_CC_GLOBAL} ${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_RAW} ${_CPPFLAGS_GLOBAL} \
       -DENABLE_BUILTIN -DPACKAGE_VERSION="\"${LIBPSL_VER_}\"" \
       -I. -I.. -I../include -c $(find ../src -name '*.c' | sort)
     # shellcheck disable=SC2046

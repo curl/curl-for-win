@@ -19,7 +19,7 @@ _VER="$1"
   # Build
 
   export CC="${_CC_GLOBAL}"
-  export CFLAGS="${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_AUTOTOOLS}"
+  export CFLAGS="${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_RAW}"
   export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
   export LDFLAGS="${_LDFLAGS_GLOBAL}"
   export LDLIBS=''

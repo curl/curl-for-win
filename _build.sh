@@ -45,11 +45,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        ostls      build with OS-supplied TLS backend-only (Schannel or SecureTransport)
 #        osnotls    build without OS-supplied TLS backends
 #        mbedtls    build with mbedTLS
-#        wolfssl    build with wolfSSL (caveats!)
-#        wolfssh    build with wolfSSH (requires wolfSSL)
 #        libssh     build with libssh
-#        idn2       build with libidn2
-#        gsasl      build with gsasl
 #        mini       build with less features, see README.md
 #        micro      build with less features, see README.md
 #        nano       build with less features, see README.md
@@ -110,12 +106,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
-#   - switch to git tags / auto-generated tarballs to pull source code and
-#     always `autoreconf` when using autotools. To avoid relying on tarballs
-#     bundled with non-source-tree files, including backdoors.
+#   - switch to git tags / auto-generated tarballs.
 #     How to verify integrity / signature? Also, Git hash is still SHA1.
 #     Some Git servers do not provide stable tarballs, e.g. googlesource.com.
-#     And/or dump support for autotools builds. (it is already broken anyway)
 #   - prepare for Xcode 15 with new ld_prime (-Wl,-ld_new) linker (vs. -Wl,-ld_classic).
 #     https://developer.apple.com/forums/thread/715385
 #   - add FreeBSD builds?
@@ -125,11 +118,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     they require '/lib/ld-musl-x86_64.so.1' / '/lib/ld-musl-aarch64.so.1' now.
 #     meaning e.g.: `apt install musl; LD_LIBRARY_PATH=. ./trurl`
 #   - merge _ci-*.sh scripts into one.
-#   - FIXME: curl-autotools: Linux MUSL builds broken.
-#     https://github.com/curl/curl-for-win/actions/runs/6873050459
-#     https://github.com/curl/curl-for-win/actions/runs/6868572571
-#     One last escape hatch is making custom wrappers around build tools and
-#     make libtool use them, then pass any necessary options via those wrappers.
 #   - win: Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
 #     A hidden aspect of x86: The Chocolatey package manager installs x86
@@ -170,7 +158,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # Build times for Windows with quictls (2023-10-25):
 #   - cmake-unity:  27 min 22 sec   1642s   100%
 #   - gnumake:      29 min 11 sec   1751s   107%   100%
-#   - autotools:    33 min 40 sec   2020s   123%   115%
 
 # Supported build tools:
 #
@@ -180,20 +167,16 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   brotli           cmake
 #   cares            cmake
 #   libpsl           manual
-#   libidn2          autotools
-#   gsasl            autotools
 #   nghttp2          cmake
 #   nghttp3          cmake
 #   ngtcp2           cmake
-#   wolfssl          autotools
 #   mbedtls          cmake
 #   openssl/quictls  proprietary
 #   boringssl        cmake
-#   libressl         cmake, autotools
-#   wolfssh          autotools
+#   libressl         cmake
 #   libssh           cmake
-#   libssh2          cmake-unity, autotools
-#   curl             cmake-unity, autotools
+#   libssh2          cmake-unity
+#   curl             cmake-unity
 #   trurl            gnumake
 
 cd "$(dirname "$0")"
@@ -467,7 +450,7 @@ fi
 _ori_path="${PATH}"
 
 bld() {
-  bldtools='(cmake|autotools|gnumake)'
+  bldtools='(cmake|gnumake)'
   pkg="$1"
   if [ -z "${CW_BLD:-}" ] || echo " ${CW_BLD} " | grep -q -E -- " ${pkg}(-${bldtools})? "; then
     shift
@@ -780,12 +763,11 @@ build_single_target() {
   export _CC_GLOBAL=''
   export _CFLAGS_GLOBAL=''
   export _CFLAGS_GLOBAL_CMAKE=''
-  export _CFLAGS_GLOBAL_AUTOTOOLS=''
+  export _CFLAGS_GLOBAL_RAW=''
   export _CPPFLAGS_GLOBAL=''
   export _CXXFLAGS_GLOBAL=''
   export _RCFLAGS_GLOBAL=''
   export _LDFLAGS_GLOBAL=''
-  export _LDFLAGS_GLOBAL_AUTOTOOLS=''
   export _LDFLAGS_BIN_GLOBAL=''
   export _LDFLAGS_CXX_GLOBAL=''  # CMake uses this
   export _CONFIGURE_GLOBAL=''
@@ -793,10 +775,10 @@ build_single_target() {
   export _CMAKE_CXX_GLOBAL=''
 
   if [[ "${_CONFIG}" =~ (small|zero) ]]; then
-    _CFLAGS_GLOBAL_AUTOTOOLS+=' -Os'
+    _CFLAGS_GLOBAL_RAW+=' -Os'
     _CMAKE_GLOBAL+=' -DCMAKE_BUILD_TYPE=MinSizeRel'
   else
-    _CFLAGS_GLOBAL_AUTOTOOLS+=' -O3'
+    _CFLAGS_GLOBAL_RAW+=' -O3'
     _CMAKE_GLOBAL+=' -DCMAKE_BUILD_TYPE=Release'
   fi
 
@@ -1355,25 +1337,6 @@ build_single_target() {
     fi
   fi
 
-  # ar wrapper to normalize created libs
-  if [ "${CW_DEV_CROSSMAKE_REPRO:-}" = '1' ]; then
-    export AR_NORMALIZE
-    AR_NORMALIZE="$(pwd)/ar-wrapper-normalize"
-    if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
-      _opt_binutils='--binutils apple'
-    elif [ "${_OS}" = 'linux' ] && [ "${_HOST}" = 'mac' ]; then
-      _opt_binutils='--binutils old'
-    else
-      _opt_binutils=''
-    fi
-    {
-      echo '#!/bin/sh -e'
-      echo "'${AR}' \"\$@\""
-      echo "'$(pwd)/_clean-lib.sh' ${_opt_binutils} --ar '${AR}' \"\$@\""
-    } > "${AR_NORMALIZE}"
-    chmod +x "${AR_NORMALIZE}"
-  fi
-
   if [ "${_HOST}" = 'mac' ] && [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       _CMAKE_GLOBAL+=" -DCMAKE_AR=${CW_LLVM_MINGW_PATH}/bin/${AR}"
@@ -1419,7 +1382,6 @@ build_single_target() {
     libprefix="/usr/lib/${_machine}-linux-musl"
     _CFLAGS_GLOBAL+=" -static -nostdinc -isystem ${ccridir}/include -isystem /usr/include/${_machine}-linux-musl"
     _LDFLAGS_GLOBAL+=" -nostartfiles -Wl,${libprefix}/Scrt1.o -Wl,${libprefix}/crti.o -Wl,${libprefix}/crtn.o"
-    _LDFLAGS_GLOBAL_AUTOTOOLS+=' -XCClinker -nostartfiles'
     _LDFLAGS_GLOBAL+=" -L${libprefix} -L${ccrsdir} -Wl,-lc ${ccrtlib}"
   fi
 
@@ -1460,7 +1422,6 @@ build_single_target() {
         libprefix="/usr/lib/${_machine}-linux-musl"
         _CFLAGS_GLOBAL+=" -nostdinc -isystem ${ccrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
         _LDFLAGS_GLOBAL+=" -nostdlib -nodefaultlibs -nostartfiles ${libprefix}/crt1.o ${libprefix}/crti.o ${libprefix}/crtn.o"
-        _LDFLAGS_GLOBAL_AUTOTOOLS+=' -XCClinker -nodefaultlibs -XCClinker -nostartfiles'
         _LDFLAGS_GLOBAL+=" -L${libprefix} -L${ccrtdir} -Wl,-lc ${ccrtlib}"
       else
         if [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" != "${_machine}" ] && [ -d 'my-pkg/usr/lib/clang' ]; then
@@ -1477,19 +1438,13 @@ build_single_target() {
           ccrtlib="-Wl,-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
           libprefix="/usr/${_TRIPLETSH}/lib"
           _LDFLAGS_GLOBAL+=' -nodefaultlibs'
-          _LDFLAGS_GLOBAL_AUTOTOOLS+=' -XCClinker -nodefaultlibs'
           # lld by default wants to load startfiles from:
           #   /usr/bin/../lib/gcc-cross/x86_64-linux-gnu/12/../../../../x86_64-linux-gnu/lib/
           # or similar. Manually specify the ones belonging to glibc.
           _LDFLAGS_GLOBAL+=" -nostartfiles ${libprefix}/Scrt1.o ${libprefix}/crti.o ${libprefix}/crtn.o"
-          _LDFLAGS_GLOBAL_AUTOTOOLS+=' -XCClinker -nostartfiles'
           _LDFLAGS_GLOBAL+=" -L${libprefix} -L${ccrtdir} -Wl,-lc ${ccrtlib}"
         fi
         _LDFLAGS_GLOBAL+=' -rtlib=compiler-rt'
-        # `-Wc,...` is necessary for libtool to pass this option to the compiler
-        # at link-time. Otherwise libtool strips it.
-        #   https://www.gnu.org/software/libtool/manual/html_node/Stripped-link-flags.html
-        _LDFLAGS_GLOBAL_AUTOTOOLS+=' -Wc,-rtlib=compiler-rt'
       fi
       if [ "${_OPENSSL}" != 'boringssl' ]; then
         _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
@@ -1645,18 +1600,14 @@ build_single_target() {
   bld brotli             "${BROTLI_VER_}"
   bld cares               "${CARES_VER_}"
   bld libpsl             "${LIBPSL_VER_}"
-  bld libidn2           "${LIBIDN2_VER_}"
   bld nghttp3           "${NGHTTP3_VER_}"
-  bld wolfssl           "${WOLFSSL_VER_}"
   bld mbedtls           "${MBEDTLS_VER_}"
   bld boringssl       "${BORINGSSL_VER_}"
   bld libressl         "${LIBRESSL_VER_}"
   bld quictls           "${QUICTLS_VER_}" openssl
   bld openssl           "${OPENSSL_VER_}"
-  bld gsasl               "${GSASL_VER_}"
   bld ngtcp2             "${NGTCP2_VER_}"
   bld nghttp2           "${NGHTTP2_VER_}"
-  bld wolfssh           "${WOLFSSH_VER_}"
   bld libssh             "${LIBSSH_VER_}"
   bld libssh2           "${LIBSSH2_VER_}"
   bld cacert             "${CACERT_VER_}"

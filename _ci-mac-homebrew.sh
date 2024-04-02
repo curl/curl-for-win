@@ -6,7 +6,7 @@
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
-extra='automake'
+extra=''
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go'
 if [[ "${CW_CONFIG:-}" != *'mac'* ]] || [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
   extra+=' llvm'
