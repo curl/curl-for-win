@@ -28,7 +28,7 @@ _VER="$1"
   (
     cd "${_BLDDIR}"
     # shellcheck disable=SC2046,SC2086
-    ${_CC_GLOBAL} ${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_AUTOTOOLS} ${_CPPFLAGS_GLOBAL} \
+    ${_CC_GLOBAL} ${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_RAW} ${_CPPFLAGS_GLOBAL} \
       -DENABLE_BUILTIN -DPACKAGE_VERSION="\"${LIBPSL_VER_}\"" \
       -I. -I.. -I../include -c $(find ../src -name '*.c' | sort)
     # shellcheck disable=SC2046

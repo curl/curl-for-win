@@ -763,7 +763,7 @@ build_single_target() {
   export _CC_GLOBAL=''
   export _CFLAGS_GLOBAL=''
   export _CFLAGS_GLOBAL_CMAKE=''
-  export _CFLAGS_GLOBAL_AUTOTOOLS=''
+  export _CFLAGS_GLOBAL_RAW=''
   export _CPPFLAGS_GLOBAL=''
   export _CXXFLAGS_GLOBAL=''
   export _RCFLAGS_GLOBAL=''
@@ -775,10 +775,10 @@ build_single_target() {
   export _CMAKE_CXX_GLOBAL=''
 
   if [[ "${_CONFIG}" =~ (small|zero) ]]; then
-    _CFLAGS_GLOBAL_AUTOTOOLS+=' -Os'
+    _CFLAGS_GLOBAL_RAW+=' -Os'
     _CMAKE_GLOBAL+=' -DCMAKE_BUILD_TYPE=MinSizeRel'
   else
-    _CFLAGS_GLOBAL_AUTOTOOLS+=' -O3'
+    _CFLAGS_GLOBAL_RAW+=' -O3'
     _CMAKE_GLOBAL+=' -DCMAKE_BUILD_TYPE=Release'
   fi
 
