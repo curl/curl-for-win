@@ -106,12 +106,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
-#   - switch to git tags / auto-generated tarballs to pull source code and
-#     always `autoreconf` when using autotools. To avoid relying on tarballs
-#     bundled with non-source-tree files, including backdoors.
+#   - switch to git tags / auto-generated tarballs.
 #     How to verify integrity / signature? Also, Git hash is still SHA1.
 #     Some Git servers do not provide stable tarballs, e.g. googlesource.com.
-#     And/or dump support for autotools builds. (it is already broken anyway)
 #   - prepare for Xcode 15 with new ld_prime (-Wl,-ld_new) linker (vs. -Wl,-ld_classic).
 #     https://developer.apple.com/forums/thread/715385
 #   - add FreeBSD builds?
@@ -121,11 +118,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     they require '/lib/ld-musl-x86_64.so.1' / '/lib/ld-musl-aarch64.so.1' now.
 #     meaning e.g.: `apt install musl; LD_LIBRARY_PATH=. ./trurl`
 #   - merge _ci-*.sh scripts into one.
-#   - FIXME: curl-autotools: Linux MUSL builds broken.
-#     https://github.com/curl/curl-for-win/actions/runs/6873050459
-#     https://github.com/curl/curl-for-win/actions/runs/6868572571
-#     One last escape hatch is making custom wrappers around build tools and
-#     make libtool use them, then pass any necessary options via those wrappers.
 #   - win: Drop x86 builds.
 #       https://data.firefox.com/dashboard/hardware
 #     A hidden aspect of x86: The Chocolatey package manager installs x86
@@ -166,7 +158,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # Build times for Windows with quictls (2023-10-25):
 #   - cmake-unity:  27 min 22 sec   1642s   100%
 #   - gnumake:      29 min 11 sec   1751s   107%   100%
-#   - autotools:    33 min 40 sec   2020s   123%   115%
 
 # Supported build tools:
 #
@@ -459,7 +450,7 @@ fi
 _ori_path="${PATH}"
 
 bld() {
-  bldtools='(cmake|autotools|gnumake)'
+  bldtools='(cmake|gnumake)'
   pkg="$1"
   if [ -z "${CW_BLD:-}" ] || echo " ${CW_BLD} " | grep -q -E -- " ${pkg}(-${bldtools})? "; then
     shift

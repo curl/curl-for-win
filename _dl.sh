@@ -530,15 +530,6 @@ live_xt() {
     fi
     rm -f pkg.bin pkg.sig
     [ -f "__${pkg}.url" ] && mv "__${pkg}.url" "${pkg}/__url__.txt"
-
-    # Force running `autoreconf` locally, to not use any autotools crap bundled into tarballs.
-    # Exclude projects featuring a non-autotools `configure` script that we rely on.
-    # Capitalized `Configure` also counts because of case-insensitive filesystems.
-    if [ "${pkg}" != 'openssl' ] && \
-       [ "${pkg}" != 'quictls' ] && \
-       [ -f "${pkg}/configure" ]; then
-      rm -f "${pkg}/configure"
-    fi
   fi
   return 0
 }

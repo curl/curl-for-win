@@ -4,13 +4,7 @@
 # SPDX-License-Identifier: MIT
 
 # Issues:
-# - does not support CMake (only autotools and meson). Where autotools is broken
-#   in curl-for-win.
-# - could not make symbol-hiding work with autotools.
-# - autotools build force-sets _WIN32_WINNT to 0x500, while also causing
-#   a compiler warning when overriding our value (which is a higher version).
-#   Builds are not supposed to set _WIN32_WINNT on their own, esp. not override
-#   a custom value.
+# - does not support CMake, only autotools (with showstoppers) and meson.
 # Workaround these by building manually.
 
 # shellcheck disable=SC3040,SC2039
