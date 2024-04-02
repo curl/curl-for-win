@@ -45,7 +45,7 @@ if [ ! -f .cw-initialized ]; then
         # shellcheck disable=SC2086
         apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \
           curl git gpg rsync python3-pefile make cmake \
-          zip time jq secure-delete ${extra}
+          zip xz-utils time jq secure-delete ${extra}
       elif [ "${_DISTRO}" = 'alpine' ]; then
         [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go nasm'
         if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
