@@ -189,11 +189,11 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   mbedtls          cmake
 #   openssl/quictls  proprietary
 #   boringssl        cmake
-#   libressl         cmake, autotools
+#   libressl         cmake
 #   wolfssh          autotools
 #   libssh           cmake
-#   libssh2          cmake-unity, autotools
-#   curl             cmake-unity, autotools
+#   libssh2          cmake-unity
+#   curl             cmake-unity
 #   trurl            gnumake
 
 cd "$(dirname "$0")"
