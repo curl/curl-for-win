@@ -79,5 +79,42 @@ _VER="$1"
   # Delete .pc files
   rm -r -f "${_PPS}"/lib/pkgconfig
 
-  . ../libssh2-pkg.sh
+  # Make steps for determinism
+
+  readonly _ref='NEWS'
+
+  rm -f "${_PPS}"/lib/*.dll.a
+
+  # shellcheck disable=SC2086
+  "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PPS}"/lib/*.a
+
+  touch -c -r "${_ref}" "${_PPS}"/include/*.h
+  touch -c -r "${_ref}" "${_PPS}"/lib/*.a
+
+  # Create package
+
+  _OUT="${_NAM}-${_VER}${_REVSUFFIX}${_PKGSUFFIX}"
+  _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
+  _DST="$(pwd)/_pkg"; rm -r -f "${_DST}"
+
+  mkdir -p "${_DST}/docs"
+  mkdir -p "${_DST}/include"
+  mkdir -p "${_DST}/lib"
+
+  (
+    set +x
+    for file in docs/*; do
+      if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -E '(\.|/Makefile$)'; then
+        cp -f -p "${file}" "${_DST}/${file}.txt"
+      fi
+    done
+  )
+  cp -f -p "${_PPS}"/include/*.h "${_DST}/include/"
+  cp -f -p "${_PPS}"/lib/*.a     "${_DST}/lib/"
+  cp -f -p NEWS                  "${_DST}/NEWS.txt"
+  cp -f -p COPYING               "${_DST}/COPYING.txt"
+  cp -f -p README                "${_DST}/README.txt"
+  cp -f -p RELEASE-NOTES         "${_DST}/RELEASE-NOTES.txt"
+
+  ../_pkg.sh "$(pwd)/${_ref}"
 )
