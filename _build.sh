@@ -768,7 +768,6 @@ build_single_target() {
   export _CXXFLAGS_GLOBAL=''
   export _RCFLAGS_GLOBAL=''
   export _LDFLAGS_GLOBAL=''
-  export _LDFLAGS_GLOBAL_AUTOTOOLS=''
   export _LDFLAGS_BIN_GLOBAL=''
   export _LDFLAGS_CXX_GLOBAL=''  # CMake uses this
   export _CONFIGURE_GLOBAL=''
@@ -1402,7 +1401,6 @@ build_single_target() {
     libprefix="/usr/lib/${_machine}-linux-musl"
     _CFLAGS_GLOBAL+=" -static -nostdinc -isystem ${ccridir}/include -isystem /usr/include/${_machine}-linux-musl"
     _LDFLAGS_GLOBAL+=" -nostartfiles -Wl,${libprefix}/Scrt1.o -Wl,${libprefix}/crti.o -Wl,${libprefix}/crtn.o"
-    _LDFLAGS_GLOBAL_AUTOTOOLS+=' -XCClinker -nostartfiles'
     _LDFLAGS_GLOBAL+=" -L${libprefix} -L${ccrsdir} -Wl,-lc ${ccrtlib}"
   fi
 
@@ -1443,7 +1441,6 @@ build_single_target() {
         libprefix="/usr/lib/${_machine}-linux-musl"
         _CFLAGS_GLOBAL+=" -nostdinc -isystem ${ccrsdir}/include -isystem /usr/include/${_machine}-linux-musl"
         _LDFLAGS_GLOBAL+=" -nostdlib -nodefaultlibs -nostartfiles ${libprefix}/crt1.o ${libprefix}/crti.o ${libprefix}/crtn.o"
-        _LDFLAGS_GLOBAL_AUTOTOOLS+=' -XCClinker -nodefaultlibs -XCClinker -nostartfiles'
         _LDFLAGS_GLOBAL+=" -L${libprefix} -L${ccrtdir} -Wl,-lc ${ccrtlib}"
       else
         if [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" != "${_machine}" ] && [ -d 'my-pkg/usr/lib/clang' ]; then
@@ -1460,19 +1457,13 @@ build_single_target() {
           ccrtlib="-Wl,-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
           libprefix="/usr/${_TRIPLETSH}/lib"
           _LDFLAGS_GLOBAL+=' -nodefaultlibs'
-          _LDFLAGS_GLOBAL_AUTOTOOLS+=' -XCClinker -nodefaultlibs'
           # lld by default wants to load startfiles from:
           #   /usr/bin/../lib/gcc-cross/x86_64-linux-gnu/12/../../../../x86_64-linux-gnu/lib/
           # or similar. Manually specify the ones belonging to glibc.
           _LDFLAGS_GLOBAL+=" -nostartfiles ${libprefix}/Scrt1.o ${libprefix}/crti.o ${libprefix}/crtn.o"
-          _LDFLAGS_GLOBAL_AUTOTOOLS+=' -XCClinker -nostartfiles'
           _LDFLAGS_GLOBAL+=" -L${libprefix} -L${ccrtdir} -Wl,-lc ${ccrtlib}"
         fi
         _LDFLAGS_GLOBAL+=' -rtlib=compiler-rt'
-        # `-Wc,...` is necessary for libtool to pass this option to the compiler
-        # at link-time. Otherwise libtool strips it.
-        #   https://www.gnu.org/software/libtool/manual/html_node/Stripped-link-flags.html
-        _LDFLAGS_GLOBAL_AUTOTOOLS+=' -Wc,-rtlib=compiler-rt'
       fi
       if [ "${_OPENSSL}" != 'boringssl' ]; then
         _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
