@@ -507,14 +507,12 @@ _VER="$1"
   (
     set +x
     for file in docs/*; do
-      # Exclude `Makefile`, necessary for autotools builds.
-      if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -E '(\.|/Makefile$)'; then
+      if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -F '.'; then
         cp -f -p "${file}" "${_DST}/${file}.txt"
       fi
     done
     for file in docs/libcurl/*; do
-      # Exclude `Makefile`, necessary for autotools builds.
-      if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -E '(\.|/Makefile$)'; then
+      if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -F '.'; then
         cp -f -p "${file}" "${_DST}/${file}.txt"
       fi
     done
