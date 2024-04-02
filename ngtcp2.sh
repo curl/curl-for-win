@@ -43,18 +43,6 @@ _VER="$1"
       LDFLAGS+=" -L${_TOP}/${_ZLIB}/${_PP}/lib"
       LIBS+=' -lz'
     fi
-  elif [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d "../wolfssl/${_PP}" ]; then
-    options+=' -DENABLE_WOLFSSL=ON'
-    options+=" -DWOLFSSL_INCLUDE_DIR=../wolfssl/${_PP}/include"
-    options+=" -DWOLFSSL_LIBRARY=../wolfssl/${_PP}/lib/libwolfssl.a"
-    if [ "${_OS}" = 'win' ]; then
-      LIBS+=' -lws2_32'
-    fi
-    if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then  # required by wolfSSL
-      CPPFLAGS+=" -I${_TOP}/${_ZLIB}/${_PP}/include"
-      LDFLAGS+=" -L${_TOP}/${_ZLIB}/${_PP}/lib"
-      LIBS+=' -lz'
-    fi
   fi
 
   if [[ "${_DEPS}" = *'nghttp3'* ]] && [ -d "../nghttp3/${_PP}" ]; then

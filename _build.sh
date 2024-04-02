@@ -45,11 +45,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        ostls      build with OS-supplied TLS backend-only (Schannel or SecureTransport)
 #        osnotls    build without OS-supplied TLS backends
 #        mbedtls    build with mbedTLS
-#        wolfssl    build with wolfSSL (caveats!)
-#        wolfssh    build with wolfSSH (requires wolfSSL)
 #        libssh     build with libssh
-#        idn2       build with libidn2
-#        gsasl      build with gsasl
 #        mini       build with less features, see README.md
 #        micro      build with less features, see README.md
 #        nano       build with less features, see README.md
@@ -180,17 +176,13 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   brotli           cmake
 #   cares            cmake
 #   libpsl           manual
-#   libidn2          autotools
-#   gsasl            autotools
 #   nghttp2          cmake
 #   nghttp3          cmake
 #   ngtcp2           cmake
-#   wolfssl          autotools
 #   mbedtls          cmake
 #   openssl/quictls  proprietary
 #   boringssl        cmake
 #   libressl         cmake
-#   wolfssh          autotools
 #   libssh           cmake
 #   libssh2          cmake-unity
 #   curl             cmake-unity
@@ -1645,18 +1637,14 @@ build_single_target() {
   bld brotli             "${BROTLI_VER_}"
   bld cares               "${CARES_VER_}"
   bld libpsl             "${LIBPSL_VER_}"
-  bld libidn2           "${LIBIDN2_VER_}"
   bld nghttp3           "${NGHTTP3_VER_}"
-  bld wolfssl           "${WOLFSSL_VER_}"
   bld mbedtls           "${MBEDTLS_VER_}"
   bld boringssl       "${BORINGSSL_VER_}"
   bld libressl         "${LIBRESSL_VER_}"
   bld quictls           "${QUICTLS_VER_}" openssl
   bld openssl           "${OPENSSL_VER_}"
-  bld gsasl               "${GSASL_VER_}"
   bld ngtcp2             "${NGTCP2_VER_}"
   bld nghttp2           "${NGHTTP2_VER_}"
-  bld wolfssh           "${WOLFSSH_VER_}"
   bld libssh             "${LIBSSH_VER_}"
   bld libssh2           "${LIBSSH2_VER_}"
   bld cacert             "${CACERT_VER_}"

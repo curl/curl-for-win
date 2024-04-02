@@ -182,7 +182,7 @@ _VER="$1"
 
   h3=0
 
-  mainssl=''  # openssl, wolfssl, mbedtls, schannel, secure-transport, gnutls, bearssl, rustls
+  mainssl=''  # openssl, mbedtls, schannel, secure-transport, gnutls, bearssl, rustls
 
   if [ -n "${_OPENSSL}" ] && [ -d "../${_OPENSSL}/${_PP}" ]; then
     [ -n "${mainssl}" ] || mainssl='openssl'
@@ -223,15 +223,6 @@ _VER="$1"
     options+=' -DHAVE_STDATOMIC_H=1 -DHAVE_ATOMIC=1 -DHAVE_STRTOK_R=1 -DHAVE_FILE_OFFSET_BITS=1'
   fi
 
-  if [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d "../wolfssl/${_PP}" ]; then
-    [ -n "${mainssl}" ] || mainssl='wolfssl'
-    options+=' -DCURL_USE_WOLFSSL=ON'
-    options+=" -DWolfSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
-    options+=" -DWolfSSL_LIBRARY=${_TOP}/wolfssl/${_PP}/lib/libwolfssl.a"
-    CPPFLAGS+=' -DSIZEOF_LONG_LONG=8'
-    h3=1
-  fi
-
   if [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d "../mbedtls/${_PP}" ]; then
     [ -n "${mainssl}" ] || mainssl='mbedtls'
     options+=' -DCURL_USE_MBEDTLS=ON'
@@ -266,15 +257,7 @@ _VER="$1"
 
   options+=' -DCURL_DISABLE_SRP=ON'
 
-  if [[ "${_DEPS}" = *'wolfssh'* ]] && [ -d "../wolfssh/${_PP}" ] && \
-     [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d "../wolfssl/${_PP}" ]; then
-    # No native support, enable it manually.
-    options+=' -DCURL_USE_WOLFSSH=ON'
-    CPPFLAGS+=' -DUSE_WOLFSSH'
-    CPPFLAGS+=" -I${_TOP}/wolfssh/${_PP}/include"
-    LDFLAGS+=" -L${_TOP}/wolfssh/${_PP}/lib"
-    LIBS+=' -lwolfssh'
-  elif [[ "${_DEPS}" = *'libssh1'* ]] && [ -d "../libssh/${_PPS}" ]; then
+  if [[ "${_DEPS}" = *'libssh1'* ]] && [ -d "../libssh/${_PPS}" ]; then
     # Detection picks OS-native copy. Only a manual configuration worked
     # to defeat CMake's wisdom.
     options+=' -DCURL_USE_LIBSSH=OFF'
@@ -343,27 +326,16 @@ _VER="$1"
     options+=" -DCARES_LIBRARY=${_TOP}/cares/${_PP}/lib/libcares.a"
     CPPFLAGS+=' -DCARES_STATICLIB'
   fi
-  if [[ "${_DEPS}" = *'gsasl'* ]] && [ -d "../gsasl/${_PPS}" ]; then
-    CPPFLAGS+=' -DUSE_GSASL'
-    CPPFLAGS+=" -I${_TOP}/gsasl/${_PPS}/include"
-    LDFLAGS+=" -L${_TOP}/gsasl/${_PPS}/lib"
-    LIBS+=' -lgsasl'
-  elif [ "${_OS}" = 'mac' ]; then
+  if [ "${_OS}" = 'mac' ]; then
     # GSS API deprecated in 2012-2013 (OS X 10.8 Mountain Lion / 10.9 Mavericks, iOS 7.0)
   # options+=' -DCURL_USE_GSSAPI=ON'
     :
   fi
-  if [[ "${_DEPS}" = *'libidn2'* ]] && [ -d "../libidn2/${_PP}" ]; then
-    options+=' -DUSE_LIBIDN2=ON'
-    CPPFLAGS+=" -I${_TOP}/libidn2/${_PP}/include"
-    LDFLAGS+=" -L${_TOP}/libidn2/${_PP}/lib"
-    LIBS+=' -lidn2'
-  else
-    options+=' -DUSE_LIBIDN2=OFF'
-    if [[ ! "${_CONFIG}" =~ (pico|osnoidn) ]] && \
-       [ "${_OS}" = 'win' ]; then
-      options+=' -DUSE_WIN32_IDN=ON'
-    fi
+
+  options+=' -DUSE_LIBIDN2=OFF'
+  if [[ ! "${_CONFIG}" =~ (pico|osnoidn) ]] && \
+     [ "${_OS}" = 'win' ]; then
+    options+=' -DUSE_WIN32_IDN=ON'
   fi
 
   if [[ "${_DEPS}" = *'libpsl'* ]] && [ -d "../libpsl/${_PP}" ]; then

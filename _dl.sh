@@ -55,31 +55,11 @@ cat <<EOF
     "ref_mask": "([0-9]{4}-[0-9]{2}-[0-9]{2})"
   },
   {
-    "name": "gsasl",
-    "url": "https://ftp.gnu.org/gnu/gsasl/gsasl-{ver}.tar.gz",
-    "sig": ".sig",
-    "keys": "A3CC9C870B9D310ABAD4CF2F51722B08FE4745A2"
-  },
-  {
-    "name": "libidn2",
-    "url": "https://ftp.gnu.org/gnu/libidn/libidn2-{ver}.tar.gz",
-    "sig": ".sig",
-    "keys": "A3CC9C870B9D310ABAD4CF2F51722B08FE4745A2"
-  },
-  {
     "name": "libpsl",
     "url": "https://github.com/rockdaboot/libpsl/releases/download/{ver}/libpsl-{ver}.tar.gz",
     "sig": ".sig",
     "redir": "redir",
     "keys": "1CB27DBC98614B2D5841646D08302DB6A2670428"
-  },
-  {
-    "name": "wolfssh",
-    "url": "https://github.com/wolfSSL/wolfssh/archive/refs/tags/v{ver}-stable.tar.gz",
-    "sig": "https://github.com/wolfSSL/wolfssh/releases/download/v{ver}-stable/wolfssh-{ver}-stable.tar.gz.asc",
-    "redir": "redir",
-    "ref_mask": "([0-9]+\\\\.[0-9]+\\\\.[0-9]+)",
-    "keys": "A2A48E7BCB96C5BECB987314EBC80E415CA29677"
   },
   {
     "name": "libssh",
@@ -113,14 +93,6 @@ cat <<EOF
     "redir": "redir",
     "tag": ".+",
     "keys": "516B622918D15C478AB1EA3A5339A2BE82E07DEC"
-  },
-  {
-    "name": "wolfssl",
-    "url": "https://github.com/wolfSSL/wolfssl/archive/refs/tags/v{ver}-stable.tar.gz",
-    "sig": "https://github.com/wolfSSL/wolfssl/releases/download/v{ver}-stable/wolfssl-{ver}-stable.tar.gz.asc",
-    "redir": "redir",
-    "ref_mask": "([0-9]+\\\\.[0-9]+\\\\.[0-9]+)",
-    "keys": "A2A48E7BCB96C5BECB987314EBC80E415CA29677"
   },
   {
     "name": "mbedtls",
@@ -695,19 +667,8 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst|nocookie) ]]; then
   _DEPS+=' libpsl'
 fi
 
-if [[ "${_CONFIG}" = *'idn2'* ]]; then
-  _DEPS+=' libidn2'
-fi
-if [[ "${_CONFIG}" = *'gsasl'* ]]; then
-  _DEPS+=' gsasl'
-fi
-
 need_cacert=0
 
-if [[ "${_CONFIG}" = *'wolfssl'* ]]; then
-  _DEPS+=' wolfssl'
-  need_cacert=1
-fi
 if [[ "${_CONFIG}" = *'mbedtls'* ]]; then
   _DEPS+=' mbedtls'
   need_cacert=1
@@ -726,7 +687,7 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
   elif [[ "${_CONFIG}" = *'quictls'* ]]; then
     _DEPS+=' quictls'
     need_cacert=1
-  elif [[ "${_OS}" = 'linux' && ! "${_CONFIG}" =~ (mbedtls|wolfssl) ]] || \
+  elif [[ "${_OS}" = 'linux' && ! "${_CONFIG}" =~ (mbedtls) ]] || \
        [[ ! "${_CONFIG}" =~ (pico|nano|micro|mini|ostls) ]]; then
     _DEPS+=' libressl'
     need_cacert=1
@@ -744,9 +705,7 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
 fi
 
 if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro) ]]; then
-  if   [[ "${_CONFIG}" = *'wolfssh'* ]]; then
-    _DEPS+=' wolfssh'
-  elif [[ "${_CONFIG}" = *'libssh'* ]]; then
+  if [[ "${_CONFIG}" = *'libssh'* ]]; then
     _DEPS+=' libssh1'
   else
     _DEPS+=' libssh2'
@@ -795,21 +754,9 @@ if [[ "${_DEPS}" = *'ngtcp2'* ]]; then
   live_dl ngtcp2 "${NGTCP2_VER_}"
   live_xt ngtcp2 "${NGTCP2_HASH}"
 fi
-if [[ "${_DEPS}" = *'libidn2'* ]]; then
-  live_dl libidn2 "${LIBIDN2_VER_}"
-  live_xt libidn2 "${LIBIDN2_HASH}"
-fi
 if [[ "${_DEPS}" = *'libpsl'* ]]; then
   live_dl libpsl "${LIBPSL_VER_}"
   live_xt libpsl "${LIBPSL_HASH}"
-fi
-if [[ "${_DEPS}" = *'gsasl'* ]]; then
-  live_dl gsasl "${GSASL_VER_}"
-  live_xt gsasl "${GSASL_HASH}"
-fi
-if [[ "${_DEPS}" = *'wolfssl'* ]]; then
-  live_dl wolfssl "${WOLFSSL_VER_}"
-  live_xt wolfssl "${WOLFSSL_HASH}"
 fi
 if [[ "${_DEPS}" = *'mbedtls'* ]]; then
   live_dl mbedtls "${MBEDTLS_VER_}"
@@ -838,10 +785,6 @@ fi
 if [[ "${_DEPS}" = *'quictls'* ]]; then
   live_dl quictls "${QUICTLS_VER_}"
   live_xt quictls "${QUICTLS_HASH}"
-fi
-if [[ "${_DEPS}" = *'wolfssh'* ]]; then
-  live_dl wolfssh "${WOLFSSH_VER_}"
-  live_xt wolfssh "${WOLFSSH_HASH}"
 fi
 if [[ "${_DEPS}" = *'libssh1'* ]]; then
   # shellcheck disable=SC2153

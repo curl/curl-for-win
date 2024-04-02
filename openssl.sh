@@ -104,7 +104,7 @@ _VER="$1"
   #   builds with Schannel or SecureTransport enabled, respectively.
   #   or, curl without NTLM support if there is no alternate TLS-backend, e.g. on Linux.
   #   Or, needs building curl without the NTLM feature.
-  # - other OpenSSL dependents playing well with `no-deprecated`: gsasl, ngtcp2
+  # - other OpenSSL dependents playing well with `no-deprecated`: ngtcp2
   # - other OpenSSL dependents broken with `no-deprecated`: libssh
   if [[ "${_DEPS}" != *'libssh1'* && \
         ( "${_DEPS}" != *'libssh2'* || "${LIBSSH2_VER_}" != '1.11.0' ) && \

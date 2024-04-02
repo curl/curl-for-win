@@ -38,10 +38,6 @@ _VER="$1"
         touch "${_TOP}/${_OPENSSL}/${_PP}/ssl.dll"
       fi
     fi
-  elif [[ "${_DEPS}" = *'wolfssl'* ]] && [ -d "../wolfssl/${_PP}" ]; then
-    options+=' -DCRYPTO_BACKEND=wolfSSL'
-    options+=" -DWOLFSSL_INCLUDE_DIR=${_TOP}/wolfssl/${_PP}/include"
-    options+=" -DWOLFSSL_LIBRARY=${_TOP}/wolfssl/${_PP}/lib/libwolfssl.a"
   elif [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d "../mbedtls/${_PP}" ]; then
     options+=' -DCRYPTO_BACKEND=mbedTLS'
     options+=" -DMBEDTLS_INCLUDE_DIR=${_TOP}/mbedtls/${_PP}/include"
