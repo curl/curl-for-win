@@ -33,6 +33,10 @@ if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
   extra+=" llvm${LLVM} clang${LLVM} lld"
 fi
 
+if [[ "${CW_CONFIG:-}" = *'mbedtls'* ]]; then
+  extra+=" bzip2"
+fi
+
 # https://pkgs.alpinelinux.org/packages
 # shellcheck disable=SC2086
 apk add --no-cache curl git gpg gpg-agent rsync build-base cmake python3 \
