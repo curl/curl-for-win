@@ -7,6 +7,12 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 
 # Reproducible curl binaries for Linux, macOS and Windows
 
+- **We
+  [plan](https://github.com/curl/curl-for-win/discussions/68) to stop
+  building and distributing 32-bit Windows binaries on 2025-Aug-20.
+  Custom 32-bit builds remain available with a deprecated,
+  community-supported status. We recommend migrating to 64-bit Intel
+  or ARM binaries.**
 - [Download](https://curl.se/windows/) our
   `.tar.xz` or `.zip` packages,<br>PGP signed with:
   [`BDCF 067D 3908 B272 7A4A 9487 67C1 0037 40BF 8DC2`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
