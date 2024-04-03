@@ -346,10 +346,7 @@ elif [[ "${_CONFIG}" = *'noh3'* ]]; then
   _FLAV='-noh3'
 fi
 
-# For 'configure'-based builds.
-# This is more or less guesswork and this warning remains:
-#    `configure: WARNING: using cross tools not prefixed with host triplet`
-# Even with `_CCPREFIX` provided.
+# Required for an ugly OpenSSL hack.
 # https://clang.llvm.org/docs/CrossCompilation.html
 case "${_HOST}" in
   win)   _HOST_TRIPLET="${unamem}-pc-mingw32";;
@@ -770,7 +767,6 @@ build_single_target() {
   export _LDFLAGS_GLOBAL=''
   export _LDFLAGS_BIN_GLOBAL=''
   export _LDFLAGS_CXX_GLOBAL=''  # CMake uses this
-  export _CONFIGURE_GLOBAL=''
   export _CMAKE_GLOBAL='-Wno-dev'  # Suppress CMake warnings meant for upstream developers
   export _CMAKE_CXX_GLOBAL=''
 
@@ -922,13 +918,6 @@ build_single_target() {
   _CMAKE_GLOBAL+=' -DCMAKE_INSTALL_MESSAGE=NEVER'
   _CMAKE_GLOBAL+=" -DCMAKE_INSTALL_PREFIX=${_PREFIX}"
 
-  # 'configure' naming conventions:
-  # - '--build' is the host we are running the build on.
-  #   We call it '_HOST_TRIPLET' (and `_HOST` for our short name).
-  # - '--host' is the host we are building the binaries for.
-  #   We call it '_TRIPLET' (and '_OS' for our short name).
-  _CONFIGURE_GLOBAL+=" --build=${_HOST_TRIPLET} --host=${_TRIPLET}"
-
   # Hide symbols by default. Our goal is to create curl and libcurl, and to
   # export the libcurl interface from the libcurl shared lib, without exporting
   # the interfaces of its dependencies statically linked to the libcurl shared
@@ -1033,10 +1022,8 @@ build_single_target() {
     else
       _CC_GLOBAL="clang${_CCSUFFIX} --target=${_TRIPLET}"
     fi
-    _CONFIGURE_GLOBAL+=" --target=${_TRIPLET}"
     if [ -n "${_SYSROOT}" ]; then
       _CC_GLOBAL+=" --sysroot=${_SYSROOT}"
-      _CONFIGURE_GLOBAL+=" --with-sysroot=${_SYSROOT}"
     fi
     if [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'win' ]; then
       # We used to pass this via CFLAGS for CMake to make it detect llvm/clang,
@@ -1177,10 +1164,7 @@ build_single_target() {
     #   https://developer.apple.com/support/xcode/
 
     # Explicitly set the SDK root. This forces clang to drop /usr/local
-    # from the list of default header search paths. This is necessary
-    # to avoid ./configure picking up e.g. installed Homebrew package
-    # headers instead of the explicitly specified custom package headers,
-    # e.g. with OpenSSL.
+    # from the list of default header search paths.
     # We set it for all build tools for macOS to gain control over this.
     _SYSROOT="$(xcrun -sdk macosx --show-sdk-path)"  # E.g. /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
 
@@ -1197,7 +1181,6 @@ build_single_target() {
     if [ -n "${_SYSROOT}" ]; then
       _CMAKE_GLOBAL+=" -DCMAKE_OSX_SYSROOT=${_SYSROOT}"
       _CC_GLOBAL+=" --sysroot=${_SYSROOT}"
-      _CONFIGURE_GLOBAL+=" --with-sysroot=${_SYSROOT}"
     fi
   fi
 
@@ -1457,8 +1440,6 @@ build_single_target() {
       _LDFLAGS_CXX_GLOBAL+=' -static-libstdc++'
     fi
   fi
-
-  _CONFIGURE_GLOBAL+=" --prefix=${_PREFIX} --disable-dependency-tracking --disable-silent-rules"
 
   # Unified, per-target package: Initialize
   export _UNIPKG="curl-${CURL_VER_}${_REVSUFFIX}${_PKGSUFFIX}${_FLAV}"
