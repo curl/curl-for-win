@@ -109,6 +109,10 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   - switch to git tags / auto-generated tarballs.
 #     How to verify integrity / signature? Also, Git hash is still SHA1.
 #     Some Git servers do not provide stable tarballs, e.g. googlesource.com.
+#     A stable reference release date can be difficult to obtain when using
+#     a dynamically/automatically generated source tarball, depending on server.
+#     GitHub offers a stable timestamp, but not e.g. googlesource.com.
+#     Tags/versions need to be resolved to hashes securely and permanently.
 #   - prepare for Xcode 15 with new ld_prime (-Wl,-ld_new) linker (vs. -Wl,-ld_classic).
 #     https://developer.apple.com/forums/thread/715385
 #   - add FreeBSD builds?
