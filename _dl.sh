@@ -96,7 +96,7 @@ cat <<EOF
   },
   {
     "name": "mbedtls",
-    "url": "https://github.com/Mbed-TLS/mbedtls/archive/refs/tags/v{ver}.tar.gz",
+    "url": "https://github.com/Mbed-TLS/mbedtls/releases/download/v{ver}/mbedtls-{ver}.tar.bz2",
     "redir": "redir",
     "tag": "v\\\\d+\\\\.\\\\d+\\\\.\\\\d+$"
   },
