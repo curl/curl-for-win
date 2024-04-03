@@ -38,15 +38,6 @@ _VER="$1"
         touch "${_TOP}/${_OPENSSL}/${_PP}/ssl.dll"
       fi
     fi
-  elif [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d "../mbedtls/${_PP}" ]; then
-    options+=' -DCRYPTO_BACKEND=mbedTLS'
-    options+=" -DMBEDTLS_INCLUDE_DIR=${_TOP}/mbedtls/${_PP}/include"
-    options+=" -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedcrypto.a"
-    if [ "${LIBSSH2_VER_}" = '1.11.0' ]; then
-      # Necessary for detection only:
-      options+=" -DMBEDTLS_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedtls.a"
-      options+=" -DMBEDX509_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedx509.a"
-    fi
   elif [ "${_OS}" = 'win' ]; then
     options+=' -DCRYPTO_BACKEND=WinCNG'
   fi

@@ -44,7 +44,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        openssl    build with OpenSSL
 #        ostls      build with OS-supplied TLS backend-only (Schannel or SecureTransport)
 #        osnotls    build without OS-supplied TLS backends
-#        mbedtls    build with mbedTLS
 #        libssh     build with libssh
 #        mini       build with less features, see README.md
 #        micro      build with less features, see README.md
@@ -174,7 +173,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   nghttp2          cmake
 #   nghttp3          cmake
 #   ngtcp2           cmake
-#   mbedtls          cmake
 #   openssl/quictls  proprietary
 #   boringssl        cmake
 #   libressl         cmake
@@ -1586,7 +1584,6 @@ build_single_target() {
   bld cares               "${CARES_VER_}"
   bld libpsl             "${LIBPSL_VER_}"
   bld nghttp3           "${NGHTTP3_VER_}"
-  bld mbedtls           "${MBEDTLS_VER_}"
   bld boringssl       "${BORINGSSL_VER_}"
   bld libressl         "${LIBRESSL_VER_}"
   bld quictls           "${QUICTLS_VER_}" openssl

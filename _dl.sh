@@ -95,12 +95,6 @@ cat <<EOF
     "keys": "516B622918D15C478AB1EA3A5339A2BE82E07DEC"
   },
   {
-    "name": "mbedtls",
-    "url": "https://github.com/Mbed-TLS/mbedtls/releases/download/v{ver}/mbedtls-{ver}.tar.bz2",
-    "redir": "redir",
-    "tag": "v\\\\d+\\\\.\\\\d+\\\\.\\\\d+$"
-  },
-  {
     "name": "quictls",
     "url": "https://github.com/quictls/openssl/archive/refs/heads/openssl-{ver}+quic.tar.gz",
     "redir": "redir",
@@ -660,11 +654,6 @@ fi
 
 need_cacert=0
 
-if [[ "${_CONFIG}" = *'mbedtls'* ]]; then
-  _DEPS+=' mbedtls'
-  need_cacert=1
-fi
-
 if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
   if   [[ "${_CONFIG}" = *'libressl'* ]]; then
     _DEPS+=' libressl'
@@ -678,7 +667,7 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
   elif [[ "${_CONFIG}" = *'quictls'* ]]; then
     _DEPS+=' quictls'
     need_cacert=1
-  elif [[ "${_OS}" = 'linux' && ! "${_CONFIG}" =~ (mbedtls) ]] || \
+  elif [[ "${_OS}" = 'linux' ]] || \
        [[ ! "${_CONFIG}" =~ (pico|nano|micro|mini|ostls) ]]; then
     _DEPS+=' libressl'
     need_cacert=1
@@ -748,10 +737,6 @@ fi
 if [[ "${_DEPS}" = *'libpsl'* ]]; then
   live_dl libpsl "${LIBPSL_VER_}"
   live_xt libpsl "${LIBPSL_HASH}"
-fi
-if [[ "${_DEPS}" = *'mbedtls'* ]]; then
-  live_dl mbedtls "${MBEDTLS_VER_}"
-  live_xt mbedtls "${MBEDTLS_HASH}"
 fi
 if [[ "${_DEPS}" = *'libressl'* ]]; then
   if [[ "${_CONFIG}" = *'dev'* ]] && false; then

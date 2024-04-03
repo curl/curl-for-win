@@ -98,10 +98,6 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   fi
 fi
 
-if [[ "${CW_CONFIG:-}" = *'mbedtls'* ]]; then
-  extra+=" bzip2"
-fi
-
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 update
 # shellcheck disable=SC2086
 apt-get --quiet 2 --option Dpkg::Use-Pty=0 install \

@@ -221,15 +221,6 @@ _VER="$1"
     options+=' -DHAVE_STDATOMIC_H=1 -DHAVE_ATOMIC=1 -DHAVE_STRTOK_R=1 -DHAVE_FILE_OFFSET_BITS=1'
   fi
 
-  if [[ "${_DEPS}" = *'mbedtls'* ]] && [ -d "../mbedtls/${_PP}" ]; then
-    [ -n "${mainssl}" ] || mainssl='mbedtls'
-    options+=' -DCURL_USE_MBEDTLS=ON'
-    options+=" -DMBEDTLS_INCLUDE_DIRS=${_TOP}/mbedtls/${_PP}/include"
-    options+=" -DMBEDCRYPTO_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedcrypto.a"
-    options+=" -DMBEDTLS_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedtls.a"
-    options+=" -DMBEDX509_LIBRARY=${_TOP}/mbedtls/${_PP}/lib/libmbedx509.a"
-  fi
-
   if [[ "${_CONFIG}" != *'osnotls'* && "${_CONFIG}" = *'noh3'* ]]; then
     if [ "${_OS}" = 'win' ]; then
       options+=' -DCURL_USE_SCHANNEL=ON'
@@ -249,7 +240,7 @@ _VER="$1"
     fi
   fi
 
-  CPPFLAGS+=' -DHAS_ALPN'  # for mbedTLS, OpenSSL, Schannel when enabled
+  CPPFLAGS+=' -DHAS_ALPN'  # for OpenSSL, Schannel when enabled
 
 # options+=' -DCURL_CA_FALLBACK=ON'
 
