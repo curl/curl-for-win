@@ -10,7 +10,7 @@ export CURL_HASH=6fea2aac6a4610fbd0400afb0bcddbe7258a64c63f1f68e5855ebc0c659710c
 # Create revision string
 # NOTE: Set _REV to 1 after bumping CURL_VER_, then increment for each
 #       CI rebuild via `main` branch push (e.g. after bumping a dependency).
-export _REV="${CW_REVISION:-6}"
+export _REV="${CW_REVISION:-7}"
 
 export TRURL_VER_='0.10'
 export TRURL_HASH=e54ee05a1a39f2547fbb39225f9cf5e2608eeaf07ad3f7dbff0a069d060d3c46
@@ -28,8 +28,8 @@ export LIBSSH_HASH=1861d498f5b6f1741b6abc73e608478491edcf9c9d4b6630eef6e74596de9
 export LIBSSH2_VER_='1.11.0'
 export LIBSSH2_HASH=a488a22625296342ddae862de1d59633e6d446eff8417398e06674a49be3d7c2
 export LIBSSH2_CPPFLAGS='-DLIBSSH2_NO_DSA -DLIBSSH2_NO_BLOWFISH -DLIBSSH2_NO_RC4 -DLIBSSH2_NO_HMAC_RIPEMD -DLIBSSH2_NO_CAST -DLIBSSH2_NO_3DES -DLIBSSH2_NO_MD5'
-export NGHTTP2_VER_='1.60.0'
-export NGHTTP2_HASH=625d6c3da1d9ca4fd643a638256431ae68fd1901653b2a61a245eea7b261bf4e
+export NGHTTP2_VER_='1.61.0'
+export NGHTTP2_HASH=c0e660175b9dc429f11d25b9507a834fb752eea9135ab420bb7cb7e9dbcc9654
 export NGHTTP3_VER_='1.2.0'
 export NGHTTP3_HASH=d2e216bae7bd7362f850922e4237a5caa204853b3594b22adccab4c1e1c1d1aa
 export NGTCP2_VER_='1.4.0'
