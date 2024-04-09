@@ -18,7 +18,6 @@ _cdo="$(pwd)"
 
 if [ "${_NAM}" != "${_UNIPKG}" ]; then
 
-  find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' +
   chmod -R a+rw-s,go-w "${_DST}"
   # NOTE: Not effective on MSYS2:
   find "${_DST}" -name '*.a' -exec chmod a-x '{}' +
@@ -74,13 +73,17 @@ create_pkg() {
       win) find "${_BAS}" -exec attrib +A -R '{}' \;
     esac
 
-    find "${_BAS}" -type f -o -type l | sort > "${_FLS}"
+    find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' +
+
+    find "${_BAS}" | sort > "${_FLS}"
 
     rm -f "${_cdo}/${_pkg}"
     case "${arch_ext}" in
       .tar.xz) TZ=UTC tar --create \
         --format=ustar \
         --owner=0 --group=0 --numeric-owner \
+        --sort=name \
+        --no-recursion \
         --files-from "${_FLS}" | xz > "${_cdo}/${_pkg}";;
       .zip) TZ=UTC zip --quiet -9 --strip-extra \
         --names-stdin - < "${_FLS}" > "${_cdo}/${_pkg}";;
