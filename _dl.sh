@@ -513,7 +513,8 @@ fi
 live_xt() {
   local pkg hash
   pkg="$1"
-  if [[ -z "${CW_GET:-}" || " ${CW_GET} " = *" ${pkg} "* ]]; then
+  if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *" ${pkg} "* ]] && \
+     [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *" ${pkg} "* ]]; then
     hash="$(openssl dgst -sha256 pkg.bin)"
     echo "${hash}"
     echo "${hash}" | grep -q -a -F -- "${2:-}" || exit 1
@@ -535,7 +536,8 @@ live_dl() {
 
   name="$1"
 
-  if [[ -z "${CW_GET:-}" || " ${CW_GET} " = *" ${pkg} "* ]]; then
+  if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *" ${pkg} "* ]] && \
+     [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *" ${pkg} "* ]]; then
 
     ver="$2"
     hash="${3:-}"
@@ -773,7 +775,8 @@ fi
 if [[ "${_DEPS}" = *'libssh2'* ]]; then
   if [[ "${_CONFIG}" = *'dev'* ]]; then
     LIBSSH2_HASH=
-    if [[ -z "${CW_GET:-}" || " ${CW_GET} " = *' libssh2 '* ]]; then
+    if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *' libssh2 '* ]] && \
+       [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *' libssh2 '* ]]; then
       LIBSSH2_REV_="${LIBSSH2_REV_:-master}"
       rev="$(my_curl --user-agent ' ' "https://api.github.com/repos/libssh2/libssh2/commits/${LIBSSH2_REV_}" \
         --header 'X-GitHub-Api-Version: 2022-11-28' \
@@ -799,7 +802,8 @@ fi
 if [[ "${_DEPS}" = *'curl'* ]]; then
   if [[ "${_CONFIG}" = *'dev'* ]]; then
     CURL_HASH=
-    if [[ -z "${CW_GET:-}" || " ${CW_GET} " = *' curl '* ]]; then
+    if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *' curl '* ]] && \
+       [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *' curl '* ]]; then
       CURL_REV_="${CURL_REV_:-master}"
       rev="$(my_curl --user-agent ' ' "https://api.github.com/repos/curl/curl/commits/${CURL_REV_}" \
         --header 'X-GitHub-Api-Version: 2022-11-28' \

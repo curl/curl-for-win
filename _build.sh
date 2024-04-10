@@ -16,6 +16,10 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      List of components to (re-)download. E.g. 'zlib curl' or 'none'.
 #      Optional. Default: (all)
 #
+# CW_NOGET
+#      List of components to never download. E.g. 'curl'.
+#      Optional. Default: (none)
+#
 # CW_LLVM_MINGW_PATH
 #      Point to LLVM MinGW installation (for win target).
 #
