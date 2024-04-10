@@ -536,8 +536,8 @@ live_dl() {
 
   name="$1"
 
-  if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *" ${pkg} "* ]] && \
-     [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *" ${pkg} "* ]]; then
+  if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *" ${name} "* ]] && \
+     [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *" ${name} "* ]]; then
 
     ver="$2"
     hash="${3:-}"
