@@ -773,8 +773,8 @@ fi
 if [[ "${_DEPS}" = *'libssh2'* ]]; then
   if [[ "${_CONFIG}" = *'dev'* ]]; then
     LIBSSH2_HASH=
-    LIBSSH2_REV_="${LIBSSH2_REV_:-master}"
     if [[ -z "${CW_GET:-}" || " ${CW_GET} " = *' libssh2 '* ]]; then
+      LIBSSH2_REV_="${LIBSSH2_REV_:-master}"
       rev="$(my_curl --user-agent ' ' "https://api.github.com/repos/libssh2/libssh2/commits/${LIBSSH2_REV_}" \
         --header 'X-GitHub-Api-Version: 2022-11-28' \
         | jq --raw-output '.sha')"
@@ -799,8 +799,8 @@ fi
 if [[ "${_DEPS}" = *'curl'* ]]; then
   if [[ "${_CONFIG}" = *'dev'* ]]; then
     CURL_HASH=
-    CURL_REV_="${CURL_REV_:-master}"
     if [[ -z "${CW_GET:-}" || " ${CW_GET} " = *' curl '* ]]; then
+      CURL_REV_="${CURL_REV_:-master}"
       rev="$(my_curl --user-agent ' ' "https://api.github.com/repos/curl/curl/commits/${CURL_REV_}" \
         --header 'X-GitHub-Api-Version: 2022-11-28' \
         | jq --raw-output '.sha')"
