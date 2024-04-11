@@ -563,18 +563,26 @@ live_dl() {
       options+=(--output pkg.sig "${sig}")
     fi
     set -x
-    if ! my_curl "${options[@]}" && [ -n "${mirror}" ]; then
-      options=()
-      if [[ "${mirror}" = 'https://github.com/'* ]]; then
-        options+=(--location --proto-redir '=https')
+    if ! my_curl "${options[@]}"; then
+      if [ -n "${mirror}" ]; then
+        options=()
+        if [[ "${mirror}" = 'https://github.com/'* ]]; then
+          options+=(--location --proto-redir '=https')
+        fi
+        options+=(--output pkg.bin "${mirror}")
+        sig="${sigraw}"
+        if [ -n "${sig}" ]; then
+          [[ "${sig}" = 'https://'* ]] || sig="${mirror}${sig}"
+          options+=(--output pkg.sig "${sig}")
+        fi
+        if ! my_curl "${options[@]}"; then
+          >&2 echo "! ${name}: Download: Failed (from mirror)"
+          exit 1
+        fi
+      else
+        >&2 echo "! ${name}: Download: Failed"
+        exit 1
       fi
-      options+=(--output pkg.bin "${mirror}")
-      sig="${sigraw}"
-      if [ -n "${sig}" ]; then
-        [[ "${sig}" = 'https://'* ]] || sig="${mirror}${sig}"
-        options+=(--output pkg.sig "${sig}")
-      fi
-      my_curl "${options[@]}"
     fi
 
     if [ -n "${sig}" ]; then
