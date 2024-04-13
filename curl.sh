@@ -251,7 +251,7 @@ _VER="$1"
     # to defeat CMake's wisdom.
     options+=' -DCURL_USE_LIBSSH=OFF'
     options+=' -DCURL_USE_LIBSSH2=OFF'
-    CPPFLAGS+=' -DUSE_LIBSSH'
+    options+=' -DUSE_LIBSSH=ON'
     CPPFLAGS+=' -DLIBSSH_STATIC'
     CPPFLAGS+=" -I${_TOP}/libssh/${_PPS}/include"
     LDFLAGS+=" -L${_TOP}/libssh/${_PPS}/lib"
