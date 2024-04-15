@@ -309,9 +309,12 @@ _VER="$1"
   fi
 
   options+=' -DUSE_LIBIDN2=OFF'
-  if [[ ! "${_CONFIG}" =~ (pico|osnoidn) ]] && \
-     [ "${_OS}" = 'win' ]; then
-    options+=' -DUSE_WIN32_IDN=ON'
+  if [[ ! "${_CONFIG}" =~ (pico|osnoidn) ]]; then
+    if [ "${_OS}" = 'win' ]; then
+      options+=' -DUSE_WIN32_IDN=ON'
+    elif [ "${_OS}" = 'mac' ] && [ "${CURL_VER_}" != '8.7.1' ]; then
+      options+=' -DUSE_APPLE_IDN=ON'
+    fi
   fi
 
   if [[ "${_DEPS}" = *'libpsl'* ]] && [ -d "../libpsl/${_PP}" ]; then
