@@ -185,7 +185,7 @@ _VER="$1"
   if [ -n "${_OPENSSL}" ] && [ -d "../${_OPENSSL}/${_PP}" ]; then
     # ECH feature requests:
     #   https://github.com/libressl/portable/issues/546
-    #   https://github.com/openssl/openssl/issues/7482
+    #   https://github.com/openssl/openssl/pull/22938
     [ -n "${mainssl}" ] || mainssl='openssl'
     options+=' -DCURL_USE_OPENSSL=ON'
     options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
