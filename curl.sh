@@ -183,6 +183,9 @@ _VER="$1"
   mainssl=''  # openssl, mbedtls, schannel, secure-transport, gnutls, bearssl, rustls
 
   if [ -n "${_OPENSSL}" ] && [ -d "../${_OPENSSL}/${_PP}" ]; then
+    # ECH feature requests:
+    #   https://github.com/libressl/portable/issues/546
+    #   https://github.com/openssl/openssl/issues/7482
     [ -n "${mainssl}" ] || mainssl='openssl'
     options+=' -DCURL_USE_OPENSSL=ON'
     options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
@@ -199,6 +202,9 @@ _VER="$1"
     if [ "${_OPENSSL}" = 'boringssl' ]; then
       CPPFLAGS+=" -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
       options+=' -DHAVE_BORINGSSL=1 -DHAVE_AWSLC=0'  # fast-track configuration
+      if [ "${CURL_VER_}" != '8.7.1' ]; then
+        options+=' -DUSE_HTTPSRR=ON -DUSE_ECH=ON'
+      fi
       LIBS+=' -lpthread'
       h3=1
     else
@@ -211,10 +217,6 @@ _VER="$1"
       fi
     fi
     if [ "${_OPENSSL}" != 'libressl' ]; then
-      # LibreSSL ECH feature request: https://github.com/libressl/portable/issues/546
-      if [ "${CURL_VER_}" != '8.7.1' ]; then
-        options+=' -DUSE_HTTPSRR=ON -DUSE_ECH=ON'
-      fi
       options+=' -DHAVE_SSL_SET0_WBIO=1'  # fast-track configuration
     fi
     [ "${h3}" = '1' ] && options+=' -DHAVE_SSL_CTX_SET_QUIC_METHOD=1'  # fast-track configuration
