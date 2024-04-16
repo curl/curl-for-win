@@ -211,6 +211,7 @@ _VER="$1"
       fi
     fi
     if [ "${_OPENSSL}" != 'libressl' ]; then
+      # LibreSSL ECH feature request: https://github.com/libressl/portable/issues/546
       if [ "${CURL_VER_}" != '8.7.1' ]; then
         options+=' -DUSE_HTTPSRR=ON -DUSE_ECH=ON'
       fi
