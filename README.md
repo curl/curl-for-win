@@ -71,7 +71,7 @@ Features: alt-svc AsynchDNS brotli HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerbero
 
 macOS:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
-Features: alt-svc AsynchDNS brotli HSTS HTTP2 HTTP3 HTTPS-proxy     IPv6          Largefile libz NTLM PSL        SSL      threadsafe UnixSockets zstd
+Features: alt-svc AsynchDNS brotli HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6          Largefile libz NTLM PSL        SSL      threadsafe UnixSockets zstd
 
 Linux:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns            mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
