@@ -210,7 +210,12 @@ _VER="$1"
         h3=1
       fi
     fi
-    [ "${_OPENSSL}" != 'libressl' ] && options+=' -DHAVE_SSL_SET0_WBIO=1'  # fast-track configuration
+    if [ "${_OPENSSL}" != 'libressl' ]; then
+      if [ "${CURL_VER_}" != '8.7.1' ]; then
+        options+=' -DUSE_HTTPSRR=ON -DUSE_ECH=ON'
+      fi
+      options+=' -DHAVE_SSL_SET0_WBIO=1'  # fast-track configuration
+    fi
     [ "${h3}" = '1' ] && options+=' -DHAVE_SSL_CTX_SET_QUIC_METHOD=1'  # fast-track configuration
   else
     options+=' -DCURL_USE_OPENSSL=OFF'
