@@ -197,6 +197,11 @@ export ZIP=
 
 unamem="$(uname -m)"
 
+# for macOS ARM64 hosts
+if [ "${unamem}" = 'arm64' ]; then
+  unamem='aarch64'
+fi
+
 readonly _LOG='logurl.txt'
 readonly _SELF='curl-for-win'
 if [ -n "${APPVEYOR_ACCOUNT_NAME:-}" ]; then
