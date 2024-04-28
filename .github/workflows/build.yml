@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 ---
 # https://docs.github.com/actions/learn-github-actions
+# https://github.com/actions/upload-artifact
 name: build
 on:
   push:
@@ -543,6 +544,33 @@ jobs:
             *-*-macos*.*
             urls.txt
 
+  win-llvm-from-mac:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 8
+      - name: 'build'
+        env:
+          CW_LLVM_MINGW_DL: '1'
+          CW_LLVM_MINGW_ONLY: '0'
+        run: |
+          export CW_CONFIG='${{ github.ref_name }}-win'
+          export CW_REVISION='${{ github.sha }}'
+          . ./_versions.sh
+          sh -c ./_ci-mac-homebrew.sh
+
+      - name: 'list dependencies'
+        run: cat urls.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 'curl-windows-llvm-from-mac'
+          retention-days: 5
+          path: |
+            *-*-mingw*.*
+            urls.txt
+
   win-llvm:
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -569,7 +597,6 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      # https://github.com/actions/upload-artifact
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-windows-llvm'
@@ -604,7 +631,6 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt
-      # https://github.com/actions/upload-artifact
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-windows-gcc-noarm64'
