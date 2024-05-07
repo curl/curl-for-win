@@ -209,7 +209,7 @@ _VER="$1"
   # so move results to a sane, standard path:
 
   mkdir -p "./${_PP}"
-  mv "${_PKGDIR}/${_my_prefix}"/* "${_PP}"
+  mv "${_PKGDIR}/${_my_prefix}"/* "${_PP:?}"
 
   # Rename 'lib64' to 'lib'. This is what most packages expect.
   # Not using '--libdir=lib' because that also changes the paths hardwired
