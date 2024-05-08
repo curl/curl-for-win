@@ -73,7 +73,7 @@ _VER="$1"
       options+=" --with-zlib-include=${_TOP}/${_ZLIB}/${_PP}/include"
       options+=' zlib'
     fi
-    if [ "${_VER}" != '3.1.4' ]; then
+    if [ "${_VER}" != '3.1.5' ]; then
       if [[ "${_DEPS}" = *'brotli'* ]] && [ -d "../brotli/${_PP}" ]; then
         options+=" --with-brotli-lib=${_TOP}/brotli/${_PP}/lib"
         options+=" --with-brotli-include=${_TOP}/brotli/${_PP}/include"
@@ -125,7 +125,7 @@ _VER="$1"
   # Patch OpenSSL to omit build options from its binary:
   sed -i.bak -E '/mkbuildinf/s/".+/""/' crypto/build.info
 
-  if [ "${_VER}" = '3.1.4' ]; then
+  if [ "${_VER}" = '3.1.5' ]; then
     # Patch OpenSSL ./Configure to:
     # - make it accept Windows-style absolute paths as --prefix. Without the
     #   patch it misidentifies all such absolute paths as relative ones and
@@ -153,7 +153,7 @@ _VER="$1"
     # paths and preferably to detect OS location at runtime and adjust config
     # paths accordingly; none supported by OpenSSL.
     _my_prefix='C:/Windows/System32/OpenSSL'
-    if [ "${_OS}" != "${_HOST}" ] && [ "${_VER}" != '3.1.4' ]; then
+    if [ "${_OS}" != "${_HOST}" ] && [ "${_VER}" != '3.1.5' ]; then
       # Hack to skip (mis-)checking for an absolute prefix using unixy rules
       # while cross-building on a *nix host for Windows. For that, we must
       # pass a non-empty CROSS_COMPILE value while making sure that
@@ -167,7 +167,7 @@ _VER="$1"
   fi
   _ssldir='ssl'
 
-  if [ "${_VER}" != '3.1.4' ]; then
+  if [ "${_VER}" != '3.1.5' ]; then
     # no-sm2-precomp: avoid a 3.2.0 optimization that makes libcrypto 0.5MB larger.
     options+=' no-docs no-sm2-precomp'
     if [[ "${_CONFIG}" = *'noh3'* ]]; then
