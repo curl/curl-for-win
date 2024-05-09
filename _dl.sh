@@ -94,7 +94,6 @@ cat <<EOF
     "url": "https://github.com/ngtcp2/ngtcp2/releases/download/v{ver}/ngtcp2-{ver}.tar.xz",
     "sig": ".asc",
     "redir": "redir",
-    "tag": ".+",
     "keys": "516B622918D15C478AB1EA3A5339A2BE82E07DEC"
   },
   {
