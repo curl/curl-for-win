@@ -85,8 +85,9 @@ cat <<EOF
   {
     "name": "nghttp3",
     "url": "https://github.com/ngtcp2/nghttp3/releases/download/v{ver}/nghttp3-{ver}.tar.xz",
+    "sig": ".asc",
     "redir": "redir",
-    "tag": ".+"
+    "keys": "516B622918D15C478AB1EA3A5339A2BE82E07DEC"
   },
   {
     "name": "ngtcp2",
