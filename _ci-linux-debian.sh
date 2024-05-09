@@ -27,7 +27,7 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
     extra+=' nasm'
   fi
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
-  [ -n "${CW_GCCSUFFIX:-}" ] || CW_GCCSUFFIX='-13'
+  [ -n "${CW_GCCSUFFIX:-}" ] || CW_GCCSUFFIX='-14'
   extra+=' checksec qemu-user-static'
   if [[ "${CW_CONFIG:-}" != *'gcc'* ]] || [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
     if [ "$(uname -m)" = 'aarch64' ]; then

@@ -98,6 +98,7 @@ jobs:
           export CW_CONFIG='${{ github.ref_name }}-linux-gcc'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
+          export CW_GCCSUFFIX='-13'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"
           docker images --digests
