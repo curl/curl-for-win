@@ -115,6 +115,8 @@ _VER="$1"
     [[ "${_CONFIG}" != *'imap'* ]] && options+=' -DCURL_DISABLE_IMAP=ON'
     if [ "${_OS}" != 'win' ]; then
       options+=' -DCURL_DISABLE_BINDLOCAL=ON'
+    else
+      options+=' -DCURL_WINDOWS_SSPI=OFF'
     fi
     options+=' -DENABLE_UNIX_SOCKETS=OFF'
     options+=' -DENABLE_WEBSOCKETS=OFF'
@@ -124,13 +126,10 @@ _VER="$1"
     options+=' -DENABLE_WEBSOCKETS=ON'
     if [ "${_OS}" = 'win' ]; then
       LIBS+=' -lwldap32'
+      options+=' -DCURL_WINDOWS_SSPI=ON'
     elif [ "${_OS}" != 'mac' ] || [ "${_OSVER}" -ge '1010' ]; then  # On macOS we use the built-in LDAP lib
       options+=' -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON'
     fi
-  fi
-
-  if [ "${_OS}" = 'win' ]; then
-    options+=' -DCURL_WINDOWS_SSPI=ON'
   fi
 
   if [[ "${_CONFIG}" = *'nocookie'* ]]; then

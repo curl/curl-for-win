@@ -98,7 +98,7 @@ Features:         AsynchDNS        HSTS             HTTPS-proxy IDN IPv6 Kerbero
 
 "pico", HTTP/1.1-only:
 Protocols:                                   http https            ipfs ipns
-Features:         AsynchDNS        HSTS             HTTPS-proxy     IPv6          Largefile libz      PSL        SSL SSPI threadsafe
+Features:         AsynchDNS        HSTS             HTTPS-proxy     IPv6          Largefile libz      PSL        SSL      threadsafe
 ```
 </p></details>
 
