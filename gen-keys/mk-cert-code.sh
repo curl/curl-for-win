@@ -42,7 +42,7 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 #           Fun read: https://www.cs.auckland.ac.nz/~pgut001/pubs/pfx.html
 # - .pvk is Microsoft proprietary Private Key format, encrypted (weak crypto)
 # - .spc is Microsoft name for .p7b (PKCS #7) = Software Publisher Certificate
-#           (or Certificate Bundle), internally it's DER format and contains
+#           (or Certificate Bundle), internally it is DER format and contains
 #           certificates.
 #
 # - private-key ASN.1 data structure in PEM or DER format
@@ -157,7 +157,7 @@ EOF
 openssl x509 -in "${root}-cert.pem" -text -noout -nameopt utf8 -sha256 -fingerprint > "${root}-cert.pem.x509.txt"
 openssl asn1parse -i -in "${root}-cert.pem" > "${root}-cert.pem.asn1.txt"
 
-# subordinates (don't set exactly the same 'subject' data as above)
+# subordinates (do not set exactly the same 'subject' data as above)
 
 # subordinate #1: code signing
 
@@ -443,7 +443,7 @@ if [ -f "${test}" ]; then
 
       # Verify signature with sigcheck
       if "${wine}" sigcheck64.exe -nobanner -accepteula "${file}"; then
-        # If we haven't specified a timestamp server when code signing,
+        # If we have not specified a timestamp server when code signing,
         # sigcheck reports the _current time_ as "Signing date".
         echo "! OK: signed exe passes 'sigcheck64.exe': ${file}"
       else
