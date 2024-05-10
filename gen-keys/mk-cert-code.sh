@@ -1,8 +1,7 @@
 #!/bin/sh
 
 # To the extent possible under law, Viktor Szakats
-# has waived all copyright and related or neighboring rights to this
-# script.
+# has waived all copyright and related or neighboring rights to this script.
 # CC0 - https://creativecommons.org/publicdomain/zero/1.0/
 # SPDX-License-Identifier: CC0-1.0
 
@@ -11,9 +10,9 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 # This script creates a self-signed root certificate, along with a code
 # signing certificate in various formats, trying to use the best available
-# crypto/practice all along. Then, it creates a test executable and code
-# sign it using both osslsigncode and signtool.exe (on Windows only) and
-# verify those signature using osslsigncode and sigcheck.exe (on Windows only).
+# crypto/practice all along. Then, it creates a test executable and code sign
+# it using both osslsigncode and signtool.exe (on Windows only) and verify
+# those signature using osslsigncode and sigcheck.exe (on Windows only).
 
 # Requires:
 #   openssl 1.1.x+, gpg, osslsigncode 2.1.0+, GNU tail, base58
@@ -224,7 +223,8 @@ openssl x509 -in "${code}-cert.pem"       -noout -nameopt utf8 -sha1   -fingerpr
 openssl x509 -in "${code}-cert.pem"       -noout -nameopt utf8 -sha256 -fingerprint | grep -a -o -E '[A-Z0-9:]{95}' | tr -d ':' > "${code}-cert-sha256.txt"
 openssl asn1parse -i -in "${code}-cert.pem" > "${code}-cert.pem.asn1.txt"
 
-# You can include/exclude the root certificate by adding/removing option: `-chain -CAfile "${root}-cert.pem"`
+# You can include/exclude the root certificate by adding/removing option:
+#   `-chain -CAfile "${root}-cert.pem"`
 # PKCS #12 .p12 is private key and certificate(-chain), encrypted
 exec 3<<EOF
 ${code_pass}
@@ -236,7 +236,8 @@ echo "${code_pass}" | openssl pkcs12 -export \
   -in "${code}-cert.pem" \
   -chain -CAfile "${root}-cert.pem" \
   -out "${code}.p12"
-# `-nokeys` option avoids dumping unencrypted private key (kept the output private anyway)
+# `-nokeys` option avoids dumping unencrypted private key
+# (keeping the output private anyway)
 echo "${code_pass}" | openssl pkcs12 -passin fd:0 -in "${code}.p12" -info -nodes -nokeys -out "${code}.p12.txt"
 privout "${code}.p12.asn1.txt" \
 openssl asn1parse -i -inform DER -in "${code}.p12"
@@ -253,7 +254,8 @@ echo "${code_pass}" | openssl pkcs12 -export \
   -in "${code}-cert.pem" \
   -chain -CAfile "${root}-cert.pem" \
   -out "${code}-weak.p12"
-# `-nokeys` option avoids dumping unencrypted private key (kept the output private anyway)
+# `-nokeys` option avoids dumping unencrypted private key
+# (keeping the output private anyway)
 echo "${code_pass}" | openssl pkcs12 -passin fd:0 -in "${code}-weak.p12" -info -nodes -nokeys -out "${code}-weak.p12.txt" -legacy
 privout "${code}-weak.p12.asn1.txt" \
 openssl asn1parse -i -inform DER -in "${code}-weak.p12"
@@ -324,14 +326,13 @@ if [ -f "${test}" ]; then
 
   # using osslsigncode
 
-  # - osslsigncode is not deterministic and it also includes all
-  #   certificates from the .p12 file.
-  #   It always uses `Microsoft Individual Code Signing`, regardless
-  #   of the `extendedKeyUsage` value in the signing certificate. Can
-  #   switch to Commercial by passing `-comm` option.
-  # - signtool appears to be deterministic and excludes the root
-  #   certificate. Root (and intermediate) cert(s) can be added via
-  #   -ac option.
+  # - osslsigncode is not deterministic and it also includes all certificates
+  #   from the .p12 file.
+  #   It always uses `Microsoft Individual Code Signing`, regardless of
+  #   the `extendedKeyUsage` value in the signing certificate. Can switch
+  #   to Commercial by passing `-comm` option.
+  # - signtool appears to be deterministic and excludes the root certificate.
+  #   Root (and intermediate) cert(s) can be added via -ac option.
   #   It honors the Commercial/Individual info in `extendedKeyUsage`.
   #   if both are specified, it is Commercial,
   #   if none, it is Individual.
@@ -366,8 +367,8 @@ if [ -f "${test}" ]; then
   rm -f "${temp}"
 
   # osslsigncode is non-deterministic, even if not specifying a timestamp
-  # server, because openssl PKCS #7 code unconditionally includes the
-  # local timestamp inside a `signingTime` PKCS #7 record.
+  # server, because openssl PKCS #7 code unconditionally includes the local
+  # timestamp inside a `signingTime` PKCS #7 record.
   if cmp --quiet -- \
        "${test%.exe}-signed-ossl-1.exe" \
        "${test%.exe}-signed-ossl-2.exe"; then

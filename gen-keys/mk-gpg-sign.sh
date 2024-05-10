@@ -47,7 +47,7 @@ privout "${master}.password" printf '%s' "${pass}"
 
 # FIXME:
 # Private keys are stored and exported using obsolete SHA1 and less-secure
-# AES128, and there is no way to override that:
+# AES128, and no way to override that:
 #   "iter+salt S2K, algo: 7 (AES128), SHA1 protection, hash: 2"
 #   https://dev.gnupg.org/T1800 (open since 2014-12-30)
 #   https://lists.gnupg.org/pipermail/gnupg-users/2017-January/057506.html
