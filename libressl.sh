@@ -3,7 +3,7 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-# Caveats (as of 3.9.1):
+# Caveats (as of 3.9.2):
 # - CET not enabled in mingw-w64 x64 ASM functions.
 #   https://github.com/libressl/portable/pull/1032
 # - ASM support only for x64.
