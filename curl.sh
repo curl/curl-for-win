@@ -93,6 +93,7 @@ _VER="$1"
     # DLL and static lib names (`libcurl-d-x64.dll`, `libcurl-d.a`,
     # `libcurl-d.dll.a` on Windows) which breaks packaging logic. We also
     # strip debug info when making libs reproducible anyway.
+    # The `-d` suffix may be deleted/customized via `CMAKE_DEBUG_POSTFIX`.
     CPPFLAGS+=' -DDEBUGBUILD'
   fi
 
