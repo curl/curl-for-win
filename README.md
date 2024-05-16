@@ -59,6 +59,10 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   BoringSSL builds are such by default.
 - We code-sign with a self-signed certificate on Windows, and avoid trusted
   timestamps for reproducibility.
+  **NOTICE: Code-signing is missing until
+  Debian testing makes the necessary
+  [osslsigncode](https://tracker.debian.org/pkg/osslsigncode)
+  package available again.**
 
 # Features
 
