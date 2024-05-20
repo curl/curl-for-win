@@ -97,6 +97,12 @@ _VER="$1"
     CPPFLAGS+=' -DDEBUGBUILD'
   fi
 
+  if [[ "${_CONFIG}" = *'curltests'* ]]; then
+    options+=' -DBUILD_TESTING=ON'
+  else
+    options+=' -DBUILD_TESTING=OFF'
+  fi
+
   # for H2/H3
   if [[ "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
     options+=' -DCURL_DISABLE_ALTSVC=ON'
@@ -372,7 +378,6 @@ _VER="$1"
       '-DCURL_CA_BUNDLE=none' \
       '-DBUILD_SHARED_LIBS=ON' \
       '-DBUILD_STATIC_LIBS=ON' \
-      '-DBUILD_TESTING=OFF' \
       '-DCURL_HIDDEN_SYMBOLS=ON' \
       "-DCMAKE_RC_FLAGS=${_RCFLAGS_GLOBAL}" \
       "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}" \
@@ -381,8 +386,9 @@ _VER="$1"
   fi
 
   TZ=UTC make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
-  # Needs BUILD_TESTING=ON to build everything
-# make --directory="${_BLDDIR}" --jobs="${_JOBS}" testdeps
+  if [[ "${_CONFIG}" = *'curltests'* ]]; then
+    make --directory="${_BLDDIR}" --jobs="${_JOBS}" testdeps
+  fi
 
   # Manual copy to DESTDIR
 

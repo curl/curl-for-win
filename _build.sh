@@ -71,6 +71,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        osnoidn    build curl without OS-supplied IDN support
 #        werror     turn compiler warnings into errors
 #        debug      debug build
+#        curltests  build curl tests
 #        win        build Windows target (default)
 #        mac        build macOS target (requires macOS host)
 #        linux      build Linux target (requires Linux host)
