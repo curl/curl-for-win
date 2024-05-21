@@ -454,7 +454,11 @@ fi
 if [ "${_OS}" = 'win' ] && \
    [ -s "${SIGN_CODE_KEY}" ]; then
   if command -v osslsigncode >/dev/null 2>&1; then
-    osslsigncode --version  # We need 2.2 or newer
+    export _OSSLSIGNCODE=osslsigncode
+    "${_OSSLSIGNCODE}" --version  # We need 2.2 or newer
+  elif [ -x "$(pwd)/osslsigncode-local" ]; then
+    export _OSSLSIGNCODE; _OSSLSIGNCODE="$(pwd)/osslsigncode-local"
+    "${_OSSLSIGNCODE}" --version
   elif [ -n "${SIGN_PKG_KEY_PASS:+1}" ]; then
     unset SIGN_CODE_KEY_PASS
     echo "! WARNING: osslsigncode not found, code signing disabled."

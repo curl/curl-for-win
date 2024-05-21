@@ -128,6 +128,11 @@ cat <<EOF
     "ref_mask": "([0-9a-fA-F]{32,})"
   },
   {
+    "name": "osslsigncode",
+    "url": "https://github.com/mtrojnar/osslsigncode/archive/refs/tags/{vermm}.tar.gz",
+    "redir": "redir"
+  },
+  {
     "name": "zlibng",
     "url": "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/{ver}.tar.gz",
     "redir": "redir"
@@ -835,6 +840,14 @@ if [[ "${_DEPS}" = *'trurl'* ]]; then
   live_dl trurl "${TRURL_VER_}"
   # shellcheck disable=SC2153
   live_xt trurl "${TRURL_HASH}"
+fi
+
+if [ "${_OS}" = 'win' ] && \
+   [ -n "${SIGN_CODE_GPG_PASS:+1}" ] && \
+  ! command -v osslsigncode >/dev/null 2>&1; then
+  live_dl osslsigncode "${OSSLSIGNCODE_VER_}"
+  live_xt osslsigncode "${OSSLSIGNCODE_HASH}"
+  ./osslsigncode.sh "${OSSLSIGNCODE_VER_}"
 fi
 
 rm -r -f "${gpgdir:?}"

@@ -103,6 +103,7 @@ apt-get --option Dpkg::Use-Pty=0 --yes update
 # shellcheck disable=SC2086
 apt-get --option Dpkg::Use-Pty=0 --yes install \
   curl git gpg gpg-agent rsync python3-pefile make cmake \
+  libssl-dev zlib1g-dev \
   zip xz-utils time jq secure-delete ${extra}
 
 if [ -n "${dl}" ]; then

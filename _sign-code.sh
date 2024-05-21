@@ -11,7 +11,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #       Linux: https://stackoverflow.com/questions/1732927/signed-executables-under-linux
 if [ "${_OS}" = 'win' ] && \
    [ -s "${SIGN_CODE_KEY}" ] && \
-   [ -n "${SIGN_CODE_KEY_PASS:+1}" ]; then
+   [ -n "${SIGN_CODE_KEY_PASS:+1}" ] && \
+   [ -n "${_OSSLSIGNCODE}" ]; then
 
   _ref="$1"
   shift
@@ -26,7 +27,7 @@ if [ "${_OS}" = 'win' ] && \
     echo "Code signing: '${file}'"
     # Requires: osslsigncode 2.4 or newer
     # -ts 'https://freetsa.org/tsr'
-    osslsigncode sign \
+    "${_OSSLSIGNCODE}" sign \
       -h sha512 \
       -in "${file}" -out "${file}-signed" \
       -time "${unixts}" \
@@ -34,7 +35,7 @@ if [ "${_OS}" = 'win' ] && \
 ${SIGN_CODE_KEY_PASS}
 EOF
   # # Create detached code signature:
-  # osslsigncode extract-signature \
+  # "${_OSSLSIGNCODE}" extract-signature \
   #   -in  "${file}-signed" \
   #   -out "${file}.p7"
     cp -f "${file}-signed" "${file}"
