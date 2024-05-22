@@ -86,8 +86,7 @@ _VER="$1"
   if [[ "${_CONFIG}" = *'debug'* ]]; then
     options+=' -DENABLE_DEBUG=ON'
     # Pending https://github.com/curl/curl/pull/13592
-    if [ "${CURL_VER_}" != '8.7.1' ] && \
-       [ "${CURL_VER_}" != '8.8.0' ]; then
+    if [ "${CURL_VER_}" != '8.8.0' ]; then
       # curl would only set this automatically for the 'Debug' configuration
       # Required for certain BUILD_TESTING=ON 'testdeps' build targets to link
       # correctly.
@@ -211,10 +210,8 @@ _VER="$1"
     options+=' -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON'
     if [ "${_OPENSSL}" = 'boringssl' ]; then
       CPPFLAGS+=" -DCURL_BORINGSSL_VERSION=\\\"$(printf '%.8s' "${BORINGSSL_VER_}")\\\""
+      options+=' -DUSE_HTTPSRR=ON -DUSE_ECH=ON'
       options+=' -DHAVE_BORINGSSL=1 -DHAVE_AWSLC=0'  # fast-track configuration
-      if [ "${CURL_VER_}" != '8.7.1' ]; then
-        options+=' -DUSE_HTTPSRR=ON -DUSE_ECH=ON'
-      fi
       LIBS+=' -lpthread'
       h3=1
     else
@@ -330,7 +327,7 @@ _VER="$1"
   if [[ ! "${_CONFIG}" =~ (pico|osnoidn) ]]; then
     if [ "${_OS}" = 'win' ]; then
       options+=' -DUSE_WIN32_IDN=ON'
-    elif [ "${_OS}" = 'mac' ] && [ "${CURL_VER_}" != '8.7.1' ]; then
+    elif [ "${_OS}" = 'mac' ]; then
       options+=' -DUSE_APPLE_IDN=ON'
     fi
   fi
