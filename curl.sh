@@ -85,7 +85,6 @@ _VER="$1"
 
   if [[ "${_CONFIG}" = *'debug'* ]]; then
     options+=' -DENABLE_DEBUG=ON'
-    # Pending https://github.com/curl/curl/pull/13592
     if [ "${CURL_VER_}" != '8.8.0' ]; then
       # curl would only set this automatically for the 'Debug' configuration
       # Required for certain BUILD_TESTING=ON 'testdeps' build targets to link
