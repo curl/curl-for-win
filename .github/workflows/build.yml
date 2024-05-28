@@ -507,6 +507,8 @@ jobs:
   mac-clang:
     runs-on: macos-latest
     timeout-minutes: 30
+    env:
+      CW_JOBS: '3'
     steps:
       - uses: actions/checkout@v4
       - name: 'build'
@@ -528,6 +530,8 @@ jobs:
   mac-llvm:
     runs-on: macos-latest
     timeout-minutes: 30
+    env:
+      CW_JOBS: '3'
     steps:
       - uses: actions/checkout@v4
       - name: 'build'
@@ -549,6 +553,8 @@ jobs:
   win-llvm-from-mac:
     runs-on: macos-latest
     timeout-minutes: 30
+    env:
+      CW_JOBS: '3'
     steps:
       - uses: actions/checkout@v4
         with:
