@@ -57,6 +57,7 @@ jobs:
         run: |
           codespell --version
           codespell --skip='*.asc,*.patch,*.pem' \
+            --ignore-words '.github/workflows/codespell-ignore.txt' \
             $(git ls-files)
 
   linux-glibc-debian-testing-llvm:
