@@ -19,7 +19,7 @@ permissions: {}
 
 env:
   CW_MAP: '1'
-  CW_JOBS: '4'
+  CW_JOBS: '5'
   DO_NOT_TRACK: '1'
   DOCKER_CONTENT_TRUST: '1'
 
@@ -508,7 +508,7 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 30
     env:
-      CW_JOBS: '3'
+      CW_JOBS: '4'
     steps:
       - uses: actions/checkout@v4
       - name: 'build'
@@ -531,7 +531,7 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 30
     env:
-      CW_JOBS: '3'
+      CW_JOBS: '4'
     steps:
       - uses: actions/checkout@v4
       - name: 'build'
@@ -554,7 +554,7 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 30
     env:
-      CW_JOBS: '3'
+      CW_JOBS: '4'
     steps:
       - uses: actions/checkout@v4
         with:
