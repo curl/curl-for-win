@@ -797,7 +797,7 @@ if [[ "${_DEPS}" = *'libssh2'* ]]; then
       [ -n "${rev}" ] && LIBSSH2_REV_="${rev}"
       url="https://github.com/libssh2/libssh2/archive/${LIBSSH2_REV_}.tar.gz"
       echo "${url}" > '__libssh2.url'
-      my_curl --location --proto-redir =https --output pkg.bin "${url}"
+      my_curl --retry-all-errors --location --proto-redir =https --output pkg.bin "${url}"
       live_xt libssh2 "${LIBSSH2_HASH}"
     fi
   else
@@ -824,7 +824,7 @@ if [[ "${_DEPS}" = *'curl'* ]]; then
       [ -n "${rev}" ] && CURL_REV_="${rev}"
       url="https://github.com/curl/curl/archive/${CURL_REV_}.tar.gz"
       echo "${url}" > '__curl.url'
-      my_curl --location --proto-redir =https --output pkg.bin "${url}"
+      my_curl --retry-all-errors --location --proto-redir =https --output pkg.bin "${url}"
       live_xt curl "${CURL_HASH}"
     fi
   else
