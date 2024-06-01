@@ -791,13 +791,16 @@ if [[ "${_DEPS}" = *'libssh2'* ]]; then
     if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *' libssh2 '* ]] && \
        [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *' libssh2 '* ]]; then
       LIBSSH2_REV_="${LIBSSH2_REV_:-master}"
-      rev="$(my_curl --user-agent ' ' "https://api.github.com/repos/libssh2/libssh2/commits/${LIBSSH2_REV_}" \
-        --header 'X-GitHub-Api-Version: 2022-11-28' \
-        | jq --raw-output '.sha')"
+      tmp="$(mktemp)"
+      my_curl --user-agent ' ' "https://api.github.com/repos/libssh2/libssh2/commits/${LIBSSH2_REV_}" \
+        --retry-all-errors \
+        --header 'X-GitHub-Api-Version: 2022-11-28' --output "${tmp}"
+      rev="$(jq --raw-output '.sha' "${tmp}")"
+      rm -r -f "${tmp}"
       [ -n "${rev}" ] && LIBSSH2_REV_="${rev}"
       url="https://github.com/libssh2/libssh2/archive/${LIBSSH2_REV_}.tar.gz"
       echo "${url}" > '__libssh2.url'
-      my_curl --retry-all-errors --location --proto-redir =https --output pkg.bin "${url}"
+      my_curl --location --proto-redir =https --output pkg.bin "${url}"
       live_xt libssh2 "${LIBSSH2_HASH}"
     fi
   else
@@ -818,13 +821,16 @@ if [[ "${_DEPS}" = *'curl'* ]]; then
     if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *' curl '* ]] && \
        [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *' curl '* ]]; then
       CURL_REV_="${CURL_REV_:-master}"
-      rev="$(my_curl --user-agent ' ' "https://api.github.com/repos/curl/curl/commits/${CURL_REV_}" \
-        --header 'X-GitHub-Api-Version: 2022-11-28' \
-        | jq --raw-output '.sha')"
+      tmp="$(mktemp)"
+      my_curl --user-agent ' ' "https://api.github.com/repos/curl/curl/commits/${CURL_REV_}" \
+        --retry-all-errors \
+        --header 'X-GitHub-Api-Version: 2022-11-28'
+      rev="$(jq --raw-output '.sha' "${tmp}")"
+      rm -r -f "${tmp}"
       [ -n "${rev}" ] && CURL_REV_="${rev}"
       url="https://github.com/curl/curl/archive/${CURL_REV_}.tar.gz"
       echo "${url}" > '__curl.url'
-      my_curl --retry-all-errors --location --proto-redir =https --output pkg.bin "${url}"
+      my_curl --location --proto-redir =https --output pkg.bin "${url}"
       live_xt curl "${CURL_HASH}"
     fi
   else
