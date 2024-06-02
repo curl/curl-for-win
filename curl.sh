@@ -243,8 +243,10 @@ _VER="$1"
       # Another known deprecation issue:
       #   curl/lib/vtls/sectransp.c:1206:7: warning: 'CFURLCreateDataAndPropertiesFromResource' is deprecated: first deprecated in macOS 10.9 - For resource data, use the CFReadStream API. For file resource properties, use CFURLCopyResourcePropertiesForKeys. [-Wdeprecated-declarations]
       options+=' -DCURL_USE_SECTRANSP=ON'
-      # Without this, SecureTransport becomes the default TLS backend
-      [ -n "${mainssl}" ] && options+=" -DCURL_DEFAULT_SSL_BACKEND=${mainssl}"
+      if [ "${CURL_VER_}" = '8.8.0' ]; then
+        # Without this, SecureTransport becomes the default TLS backend
+        [ -n "${mainssl}" ] && options+=" -DCURL_DEFAULT_SSL_BACKEND=${mainssl}"
+      fi
     fi
   else
     if [ "${_OS}" = 'win' ]; then
