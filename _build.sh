@@ -9,7 +9,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # Build configuration environment variables:
 #
 # CW_BLD
-#      List of components to build. E.g. 'curl' or 'zlib libssh2 curl' or 'zlib curl-cmake' or 'none'.
+#      List of components to build. E.g. 'curl' or 'zlib libssh2 curl' or 'none'.
 #      Optional. Default: (all)
 #
 # CW_GET

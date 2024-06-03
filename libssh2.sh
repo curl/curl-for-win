@@ -8,7 +8,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 export _NAM _VER _OUT _BAS _DST
 
-_NAM="$(basename "$0" | cut -f 1 -d '.' | sed 's/-cmake//')"
+_NAM="$(basename "$0" | cut -f 1 -d '.')"
 _VER="$1"
 
 (
