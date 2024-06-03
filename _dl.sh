@@ -507,12 +507,13 @@ fi
 
 my_gpg --version | grep -a -F gpg
 
+export _PATCHSUFFIX
 if [[ "${_CONFIG}" = *'dev'* ]]; then
-  _patsuf='.dev'
+  _PATCHSUFFIX='.dev'
 elif [[ "${_CONFIG}" != *'main'* ]]; then
-  _patsuf='.test'
+  _PATCHSUFFIX='.test'
 else
-  _patsuf=''
+  _PATCHSUFFIX=''
 fi
 
 live_xt() {
@@ -528,7 +529,7 @@ live_xt() {
       mv pkg.bin "${pkg}/${_CACERT}"
     else
       tar --strip-components="${3:-1}" -xf pkg.bin --directory="${pkg}"
-      [ -f "${pkg}${_patsuf}.patch" ] && patch --forward --strip=1 --directory="${pkg}" < "${pkg}${_patsuf}.patch"
+      [ -f "${pkg}${_PATCHSUFFIX}.patch" ] && patch --forward --strip=1 --directory="${pkg}" < "${pkg}${_PATCHSUFFIX}.patch"
     fi
     rm -f pkg.bin pkg.sig
     [ -f "__${pkg}.url" ] && mv "__${pkg}.url" "${pkg}/__url__.txt"

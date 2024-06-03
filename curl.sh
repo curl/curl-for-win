@@ -373,6 +373,13 @@ _VER="$1"
     options+=' -DBUILD_CURL_EXE=OFF'
   fi
 
+  patch="../${_NAM}${_PATCHSUFFIX}.patch"
+  if [ -f "${patch}" ]; then
+    patchstamp="$(grep -E -o '[a-f0-9]{32,}' "${patch}" | cut -c -8 | tr $'\n' ',' | sed -e 's/,$//')"
+    # Appearing as: "security patched: abcd0123,12345678"
+    [ -n "${patchstamp}" ] && CPPFLAGS+=" -DCURL_PATCHSTAMP=\\\"${patchstamp}\\\""
+  fi
+
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
     # shellcheck disable=SC2086
     cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
