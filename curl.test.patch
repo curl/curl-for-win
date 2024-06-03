@@ -1,0 +1,130 @@
+From 582743f2e74bce21003373c2e6b02ef9661638f7 Mon Sep 17 00:00:00 2001
+Subject: [PATCH] openssl/gnutls: rectify the TLS version checks for QUIC
+
+The versions check wrongly complained and return error if the *minimum*
+version was set to something less than 1.3. QUIC is always TLS 1.3, but
+that means minimum 1.2 is still fine to ask for.
+
+This also renames the local variable to make the mistake harder to make
+in the future.
+
+Regression shipped in 8.8.0
+
+Follow-up to 3210101088dfa3d6a125
+
+Fixes #13799
+Closes #13802
+---
+ lib/vtls/gtls.c    | 15 ++++++++-------
+ lib/vtls/openssl.c | 13 +++++++------
+ 2 files changed, 15 insertions(+), 13 deletions(-)
+
+diff --git a/lib/vtls/gtls.c b/lib/vtls/gtls.c
+index 262933e50e1b30..8de95df0c23048 100644
+--- a/lib/vtls/gtls.c
++++ b/lib/vtls/gtls.c
+@@ -376,9 +376,15 @@ set_ssl_version_min_max(struct Curl_easy *data,
+   long ssl_version = conn_config->version;
+   long ssl_version_max = conn_config->version_max;
+ 
++  if((ssl_version == CURL_SSLVERSION_DEFAULT) ||
++     (ssl_version == CURL_SSLVERSION_TLSv1))
++    ssl_version = CURL_SSLVERSION_TLSv1_0;
++  if(ssl_version_max == CURL_SSLVERSION_MAX_NONE)
++    ssl_version_max = CURL_SSLVERSION_MAX_DEFAULT;
++
+   if(peer->transport == TRNSPRT_QUIC) {
+-    if((ssl_version != CURL_SSLVERSION_DEFAULT) &&
+-       (ssl_version < CURL_SSLVERSION_TLSv1_3)) {
++    if((ssl_version_max != CURL_SSLVERSION_MAX_DEFAULT) &&
++       (ssl_version_max < CURL_SSLVERSION_MAX_TLSv1_3)) {
+       failf(data, "QUIC needs at least TLS version 1.3");
+       return CURLE_SSL_CONNECT_ERROR;
+      }
+@@ -386,11 +392,6 @@ set_ssl_version_min_max(struct Curl_easy *data,
+     return CURLE_OK;
+   }
+ 
+-  if((ssl_version == CURL_SSLVERSION_DEFAULT) ||
+-     (ssl_version == CURL_SSLVERSION_TLSv1))
+-    ssl_version = CURL_SSLVERSION_TLSv1_0;
+-  if(ssl_version_max == CURL_SSLVERSION_MAX_NONE)
+-    ssl_version_max = CURL_SSLVERSION_MAX_DEFAULT;
+   if(!tls13support) {
+     /* If the running GnuTLS doesn't support TLS 1.3, we must not specify a
+        prioritylist involving that since it will make GnuTLS return an en
+diff --git a/lib/vtls/openssl.c b/lib/vtls/openssl.c
+index 57962484895aef..fc0c1c35f5cb49 100644
+--- a/lib/vtls/openssl.c
++++ b/lib/vtls/openssl.c
+@@ -3531,7 +3531,7 @@ CURLcode Curl_ossl_ctx_init(struct ossl_ctx *octx,
+   void *ssl_sessionid = NULL;
+   struct ssl_primary_config *conn_config = Curl_ssl_cf_get_primary_config(cf);
+   struct ssl_config_data *ssl_config = Curl_ssl_cf_get_config(cf, data);
+-  const long int ssl_version = conn_config->version;
++  const long int ssl_version_min = conn_config->version;
+   char * const ssl_cert = ssl_config->primary.clientcert;
+   const struct curl_blob *ssl_cert_blob = ssl_config->primary.cert_blob;
+   const char * const ssl_cert_type = ssl_config->cert_type;
+@@ -3551,7 +3551,7 @@ CURLcode Curl_ossl_ctx_init(struct ossl_ctx *octx,
+   switch(transport) {
+   case TRNSPRT_TCP:
+     /* check to see if we've been told to use an explicit SSL/TLS version */
+-    switch(ssl_version) {
++    switch(ssl_version_min) {
+     case CURL_SSLVERSION_DEFAULT:
+     case CURL_SSLVERSION_TLSv1:
+     case CURL_SSLVERSION_TLSv1_0:
+@@ -3577,11 +3577,12 @@ CURLcode Curl_ossl_ctx_init(struct ossl_ctx *octx,
+     }
+     break;
+   case TRNSPRT_QUIC:
+-    if((ssl_version != CURL_SSLVERSION_DEFAULT) &&
+-       (ssl_version < CURL_SSLVERSION_TLSv1_3)) {
++    if(conn_config->version_max &&
++       (conn_config->version_max != CURL_SSLVERSION_MAX_TLSv1_3)) {
+       failf(data, "QUIC needs at least TLS version 1.3");
+       return CURLE_SSL_CONNECT_ERROR;
+-     }
++    }
++
+ #ifdef USE_OPENSSL_QUIC
+     req_method = OSSL_QUIC_client_method();
+ #elif (OPENSSL_VERSION_NUMBER >= 0x10100000L)
+@@ -3677,7 +3678,7 @@ CURLcode Curl_ossl_ctx_init(struct ossl_ctx *octx,
+     ctx_options &= ~SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS;
+ #endif
+ 
+-  switch(ssl_version) {
++  switch(ssl_version_min) {
+   case CURL_SSLVERSION_SSLv2:
+   case CURL_SSLVERSION_SSLv3:
+     return CURLE_NOT_BUILT_IN;
+From c61f75388155a8145f20d2bd1bbb7a06e1af65f1 Mon Sep 17 00:00:00 2001
+Subject: [PATCH] tool_cb_hdr: return error for failed header writes
+
+By checking that fflush() works.
+
+Fixes #13836
+Closes #13859
+---
+ src/tool_cb_hdr.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/tool_cb_hdr.c b/src/tool_cb_hdr.c
+index dab4bb01c15bf5..04c5ba907b29af 100644
+--- a/src/tool_cb_hdr.c
++++ b/src/tool_cb_hdr.c
+@@ -105,7 +105,11 @@ size_t tool_header_cb(char *ptr, size_t size, size_t nmemb, void *userdata)
+     if(rc != cb)
+       return rc;
+     /* flush the stream to send off what we got earlier */
+-    (void)fflush(heads->stream);
++    if(fflush(heads->stream)) {
++      errorf(per->config->global, "Failed writing headers to %s",
++             per->config->headerfile);
++      return CURL_WRITEFUNC_ERROR;
++    }
+   }
+ 
+   curl_easy_getinfo(per->curl, CURLINFO_SCHEME, &scheme);
