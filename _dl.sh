@@ -105,9 +105,11 @@ cat <<EOF
   },
   {
     "name": "openssl",
-    "url": "https://www.openssl.org/source/openssl-{ver}.tar.gz",
+    "url": "https://github.com/openssl/openssl/releases/download/openssl-{ver}/openssl-{ver}.tar.gz",
     "sig": ".asc",
     "sha": ".sha256",
+    "redir": "redir",
+    "tag": "openssl-\\\\d+\\\\.\\\\d+\\\\.\\\\d+$",
     "keys_comment": "Via: https://raw.githubusercontent.com/openssl/openssl/master/doc/fingerprints.txt",
     "keys": "EFC0A467D613CB83C7ED6D30D894E2CE8B3D79F5 7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C 8657ABB260F056B1E5190839D9C4D26D0E604491 B7C1C14360F353A36862E4D5231C84CDDCC69C45 A21FAB74B0088AA361152586B8EF1A6BA9DA2D5C"
   },
