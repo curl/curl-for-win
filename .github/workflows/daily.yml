@@ -25,6 +25,8 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: '300'
       - name: 'build'
         run: |
           export CW_CONFIG='dev-linux'
@@ -62,6 +64,8 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: '300'
       - name: 'build'
         run: |
           export CW_CONFIG='dev-linux-musl'
@@ -97,6 +101,8 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: '300'
       - name: 'build'
         run: |
           export CW_CONFIG='dev-linux-musl-r64'
@@ -136,6 +142,8 @@ jobs:
       CW_JOBS: '4'
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: '300'
       - name: 'build'
         run: |
           export CW_CONFIG='dev-mac-macuni'
@@ -164,7 +172,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 8
+          fetch-depth: '300'
       - name: 'build'
         env:
           CW_LLVM_MINGW_DL: '1'

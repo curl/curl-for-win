@@ -373,11 +373,19 @@ _VER="$1"
     options+=' -DBUILD_CURL_EXE=OFF'
   fi
 
-  patch="../${_NAM}${_PATCHSUFFIX}.patch"
-  if [ -f "${patch}" ]; then
-    patchstamp="$(grep -E -o '[a-f0-9]{32,}' "${patch}" | cut -c -8 | tr $'\n' ',' | sed -e 's/,$//')"
-    # Appearing as: "security patched: abcd0123,12345678"
-    [ -n "${patchstamp}" ] && CPPFLAGS+=" -DCURL_PATCHSTAMP=\\\"${patchstamp}\\\""
+  patch="${_NAM}${_PATCHSUFFIX}.patch"
+  if [ -f "../${patch}" ]; then
+    # This command requires a git clone deep enough to contain all
+    # curl-for-win repo versions pointing the current latest curl release.
+    # To retrieve the hash for the commit adding or updating the .patch
+    # file (if any). In a shallow clone this could return the latest commit
+    # hash, breaking reproducibility.
+    hash="$(git -C .. log -1 '--pretty=format:%h' -- "${patch}")"
+    if [ -n "${hash}" ]; then
+      patchstamp="https://github.com/curl/curl-for-win/blob/${hash}/${patch}"
+      # Appearing as: "security patched: https://github.com/curl/curl-for-win/blob/95a0e6df/curl.test.patch"
+      [ -n "${patchstamp}" ] && CPPFLAGS+=" -DCURL_PATCHSTAMP=\\\"${patchstamp}\\\""
+    fi
   fi
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
@@ -430,7 +438,7 @@ _VER="$1"
   # Extra checks (do this before code signing)
 
   if [[ "${_CONFIG}" != *'nocurltool'* ]] && \
-     strings "${bin}" | grep -a -F 'curl-for-win'; then
+     strings "${bin}" | grep -a -F 'curl-for-win' | grep -v -a -E '/blob/[a-f0-9]+/curl(\.[a-z]+)?\.patch$'; then
     echo "! Error: Our project root path is leaking into the binary: '${bin}'"
     exit 1
   fi

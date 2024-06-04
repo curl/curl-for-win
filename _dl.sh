@@ -509,6 +509,11 @@ fi
 
 my_gpg --version | grep -a -F gpg
 
+# Required for a git command to work later in the script, to avoid:
+# "fatal: detected dubious ownership in repository at '<sandbox-path>'
+# To add an exception for this directory, call:"
+git config --global --add safe.directory "$(pwd)"
+
 export _PATCHSUFFIX
 if [[ "${_CONFIG}" = *'dev'* ]]; then
   _PATCHSUFFIX='.dev'
