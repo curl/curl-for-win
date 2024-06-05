@@ -18,7 +18,7 @@
 # - Missing `SSL_set0_wbio()` function.
 #   https://github.com/libressl/portable/issues/838
 # - No obvious way to selectively disable obsolete protocols/APIs/features.
-# - `-Wattributes` warnings with gcc. Need to be silenced with `-Wno-attributes`:
+# - `-Wattributes` warnings with gcc. Need to be silenced with `-Wno-attributes`: [FIXED IN https://github.com/openbsd/src/commit/65010fa90cde4d3844c77cb00c51b2485f66de52 2024-06-01]
 #   ```
 #   ../../crypto/chacha/chacha-merged.c:26:5: warning: 'bounded' attribute directive ignored [-Wattributes]
 #      26 |     __attribute__((__bounded__(__minbytes__, 2, CHACHA_MINKEYLEN)));
@@ -56,7 +56,7 @@ _VER="$1"
 
   if [ "${_CC}" = 'llvm' ]; then
     CFLAGS+=' -Wa,--noexecstack'
-  else
+  elif [ "${LIBRESSL_VER_}" = '3.9.2' ]; then
     CFLAGS+=' -Wno-attributes'
   fi
 
