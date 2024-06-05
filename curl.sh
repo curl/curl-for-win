@@ -383,7 +383,7 @@ _VER="$1"
     hash="$(git -C .. log -1 '--pretty=format:%h' -- "${patch}")"
     if [ -n "${hash}" ]; then
       patchstamp="https://github.com/curl/curl-for-win/blob/${hash}/${patch}"
-      # Appearing as: "security patched: https://github.com/curl/curl-for-win/blob/95a0e6df/curl.test.patch"
+      # Appearing as: "security patched: https://github.com/curl/curl-for-win/blob/95a0e6df/curl.patch"
       [ -n "${patchstamp}" ] && CPPFLAGS+=" -DCURL_PATCHSTAMP=\\\"${patchstamp}\\\""
     fi
   fi
