@@ -788,7 +788,7 @@ if [[ "${_DEPS}" = *'libssh2'* ]]; then
       LIBSSH2_REV_="${LIBSSH2_REV_:-master}"
       tmp="$(mktemp)"
       my_curl --user-agent ' ' "https://api.github.com/repos/libssh2/libssh2/commits/${LIBSSH2_REV_}" \
-        --retry-all-errors \
+        --retry-all-errors --retry 10 \
         --header 'X-GitHub-Api-Version: 2022-11-28' --output "${tmp}"
       rev="$(jq --raw-output '.sha' "${tmp}")"
       rm -r -f "${tmp}"
@@ -818,7 +818,7 @@ if [[ "${_DEPS}" = *'curl'* ]]; then
       CURL_REV_="${CURL_REV_:-master}"
       tmp="$(mktemp)"
       my_curl --user-agent ' ' "https://api.github.com/repos/curl/curl/commits/${CURL_REV_}" \
-        --retry-all-errors \
+        --retry-all-errors --retry 10 \
         --header 'X-GitHub-Api-Version: 2022-11-28'
       rev="$(jq --raw-output '.sha' "${tmp}")"
       rm -r -f "${tmp}"
