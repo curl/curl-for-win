@@ -14,7 +14,7 @@ trap 'rm -r -f "${gpgdir:?}"' EXIT HUP INT TERM
 #          https://boringssl.googlesource.com/boringssl/+archive/{ver}.tar.gz
 #          https://boringssl.googlesource.com/boringssl/+archive/58472cc752c92554343d032ab34c683005f63e30.tar.gz
 #       Ref: https://github.com/google/gitiles/issues/84 (closed)
-#       Ref: https://github.com/google/gitiles/issues/217
+#       Ref: https://github.com/google/gitiles/issues/217 (repo archived)
 #       It can happen that the active revision is not yet published via the
 #       GitHub repo. This results in a 404 when trying to download the archive.
 
