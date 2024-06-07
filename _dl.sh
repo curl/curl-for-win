@@ -32,7 +32,7 @@ cat <<EOF
     "mirror": "https://github.com/c-ares/c-ares/releases/download/cares-{veru}/c-ares-{ver}.tar.gz",
     "sig": ".asc",
     "ref_mask": "c-ares-([0-9]+(\\\\.[0-9]+)+)\\\\.tar.gz",
-    "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
+    "keys": "DA7D64E4C82C6294CB73A20E22E3D13B5411B7CA 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
   },
   {
     "name": "curl",
