@@ -114,7 +114,7 @@ cat <<EOF
     "url": "https://github.com/google/boringssl/archive/{ver}.tar.gz",
     "redir": "redir",
     "tag": "^master$",
-    "ref_url": "https://chromium.googlesource.com/chromium/src/+/refs/heads/main/DEPS?format=text",
+    "ref_url": "https://raw.githubusercontent.com/chromium/chromium/main/DEPS",
     "ref_expr": "boringssl_revision",
     "ref_mask": "([0-9a-fA-F]{32,})"
   },
@@ -229,10 +229,8 @@ check_update() {
   if [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
     slug="${BASH_REMATCH[1]}"
     if [ -n "$6" ]; then
-      # base64 is there for googlesource.com '?format=text' mode.
       # raw.githubusercontent.com does not need it.
       newver="$(my_curl "$6" \
-        | base64 -d \
         | grep -F "$7" \
         | grep -a -o -E "$8")"
     # heavily rate-limited
