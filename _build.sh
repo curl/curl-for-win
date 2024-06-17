@@ -127,7 +127,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     meaning e.g.: `apt install musl; LD_LIBRARY_PATH=. ./trurl`
 #   - merge _ci-*.sh scripts into one.
 #   - win: Drop x86 builds.
-#       https://data.firefox.com/dashboard/hardware
+#       https://data.firefox.com/dashboard/hardware#operating-system-metric-overview-2
 #     A hidden aspect of x86: The Chocolatey package manager installs x86
 #     binaries on ARM systems to run them in emulated mode. Windows as of ~2021
 #     got the ability to run x64 in emulated mode, but tooling support is
