@@ -388,6 +388,14 @@ _VER="$1"
     fi
   fi
 
+  # Pending https://github.com/curl/curl/pull/14059
+  if [[ "${_CONFIG}" != *'nocurltool'* ]] && \
+     [[ "${_DEPS}" = *'cacert'* ]] && \
+     [ "${CURL_VER_}" != '8.8.0' ] && \
+     [ "${CURL_VER_}" != '8.9.0' ]; then
+    options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
+  fi
+
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
     # shellcheck disable=SC2086
     cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
