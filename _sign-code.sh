@@ -27,6 +27,7 @@ if [ "${_OS}" = 'win' ] && \
     echo "Code signing: '${file}'"
     # Requires: osslsigncode 2.4 or newer
     # -ts 'https://freetsa.org/tsr'
+    # TODO: osslsigncode 2.9 supports `-` instead of `/dev/stdin`.
     "${_OSSLSIGNCODE}" sign \
       -h sha512 \
       -in "${file}" -out "${file}-signed" \
