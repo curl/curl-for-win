@@ -1,0 +1,15 @@
+# Copyright (C) Viktor Szakats. See LICENSE.md
+# SPDX-License-Identifier: MIT
+
+version = 1
+SPDX-PackageName = "curl-for-win"
+SPDX-PackageDownloadLocation = "https://github.com/curl/curl-for-win"
+
+[[annotations]]
+path = [
+  "curl-for-win-ca-cert*.pem",
+  "*.asc",
+  "*.patch",
+]
+SPDX-FileCopyrightText = "The curl-for-win project and its contributors."
+SPDX-License-Identifier = "MIT"
