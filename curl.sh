@@ -391,7 +391,7 @@ _VER="$1"
   # Pending https://github.com/curl/curl/pull/14059
   if [[ "${_CONFIG}" != *'nocurltool'* ]] && \
      [[ "${_DEPS}" = *'cacert'* ]] && \
-     grep -a -q 'CURL_CA_EMBED' './CMakeLists.txt' ]; then  # Expected in 8.10.0
+     grep -a -q 'CURL_CA_EMBED' './CMakeLists.txt'; then  # Expected in 8.10.0
     options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
   fi
 
