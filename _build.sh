@@ -1185,8 +1185,10 @@ build_single_target() {
     # Minimum SDK version supported by Xcode releases:
     #   https://developer.apple.com/support/xcode/
 
-    # Explicitly set the SDK root. This forces clang to drop /usr/local
-    # from the list of default header search paths.
+    # Do not pick up components from these prefixes:
+    _CMAKE_GLOBAL+=" -DCMAKE_IGNORE_PREFIX_PATH=/usr/local;${brew_root}"
+
+    # Explicitly set the SDK root.
     # We set it for all build tools for macOS to gain control over this.
     _SYSROOT="$(xcrun -sdk macosx --show-sdk-path)"  # E.g. /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
 
