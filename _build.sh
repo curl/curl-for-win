@@ -842,6 +842,7 @@ build_single_target() {
     # NOTE: 10.8 (and older) trigger C++ issues with Xcode and CMake.
     macminver='10.9'
     _CMAKE_GLOBAL+=" -DCMAKE_OSX_DEPLOYMENT_TARGET=${macminver}"
+    # TODO: This option might have been renamed to `-mmacos-version-min=`?
     _CFLAGS_GLOBAL+=" -mmacosx-version-min=${macminver}"
     _CXXFLAGS_GLOBAL+=" -mmacosx-version-min=${macminver}"
     _OSVER="$(printf '%02d%02d' \
