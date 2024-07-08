@@ -1185,8 +1185,8 @@ build_single_target() {
     # Minimum SDK version supported by Xcode releases:
     #   https://developer.apple.com/support/xcode/
 
-    # Do not pick up components from these prefixes:
-    _CMAKE_GLOBAL+=" -DCMAKE_IGNORE_PREFIX_PATH=/usr/local;${brew_root}"
+    # Do not pick up components from this prefix:
+    _CMAKE_GLOBAL+=" -DCMAKE_IGNORE_PREFIX_PATH=$(brew --prefix)"
 
     # Explicitly set the SDK root.
     # We set it for all build tools for macOS to gain control over this.
