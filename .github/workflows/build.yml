@@ -590,6 +590,34 @@ jobs:
             *-*-macos*.*
             urls.txt
 
+  mac-gcc:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    env:
+      CW_JOBS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '300'
+      - name: 'build'
+        env:
+          GITHUB_TOKEN: '${{ github.token }}'
+        run: |
+          export CW_CCSUFFIX='-14'
+          export CW_CONFIG='${{ github.ref_name }}-mac-gcc-a64'
+          export CW_REVISION='${{ github.sha }}'
+          sh -c ./_ci-mac-homebrew.sh
+
+      - name: 'list dependencies'
+        run: cat urls.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 'curl-macos-gcc-arm64'
+          retention-days: 5
+          path: |
+            *-*-macos*.*
+            urls.txt
+
   win-llvm-from-mac:
     runs-on: macos-latest
     timeout-minutes: 30

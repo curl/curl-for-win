@@ -848,7 +848,9 @@ build_single_target() {
     _OSVER="$(printf '%02d%02d' \
       "$(printf '%s' "${macminver}" | cut -d '.' -f 1)" \
       "$(printf '%s' "${macminver}" | cut -d '.' -f 2)")"
-    _CMAKE_GLOBAL+=" -DCMAKE_OSX_ARCHITECTURES=${_machines}"
+    if [ "${_CC}" != 'gcc' ]; then
+      _CMAKE_GLOBAL+=" -DCMAKE_OSX_ARCHITECTURES=${_machines}"
+    fi
   elif [ "${_OS}" = 'linux' ]; then
     if [ "${_HOST}" != "${_OS}" ] || \
        [ "${unamem}" != "${_machine}" ]; then
@@ -1190,15 +1192,39 @@ build_single_target() {
 
     # Explicitly set the SDK root.
     # We set it for all build tools for macOS to gain control over this.
-    _SYSROOT="$(xcrun -sdk macosx --show-sdk-path)"  # E.g. /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+    _SYSROOT="$(xcrun -sdk macosx --show-sdk-path 2>/dev/null)"  # E.g. /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
 
-    # Standard gcc (as of v13.2.0 and v14.1.0) fails to compile some headers in macOS SDK 13.x.
-    # Issue: https://github.com/curl/curl/issues/10356
-    # Revert to SDK 12.x as a workaround, e.g. /Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk
+    # Installed/selected Xcode version and SDK version:
+    xcodebuild -version || true
+    xcrun -sdk macosx --show-sdk-path || true
+
     if [ "${_CC}" = 'gcc' ]; then
-      tmp="$(echo "${_SYSROOT}" | sed -E 's/[0-9\.]+\.sdk$/12.sdk/g')"
-      if [ -d "${tmp}" ]; then
-        _SYSROOT="${tmp}"
+
+      libgccdir="$(dirname \
+        "$("${_CCPREFIX}gcc${_CCSUFFIX}" -print-libgcc-file-name)")"
+
+      if [ -d "${libgccdir}/include-fixed" ]; then
+        # dump SDK major version used while building Homebrew gcc:
+        grep -a -h -r -E -o '.+[0-9.]+\.sdk/' "${libgccdir}/include-fixed" | sed -E 's/^\t+//g' | tr -d '"' | sort -u || true
+
+        # Homebrew gcc (as of v14.1.0) ships with set of SDK header overrides.
+        # These are compatible with the specific SDK version the Homebrew build
+        # machines used at build-time. We only know the major version number of
+        # that SDK, and there is no guarantee that ours (or the CI machine) has
+        # the same versions installed or selected. To make it work anyway, we
+        # zap known to be incompatible/problematic parts of the gcc hacks.
+
+        # Unbreak Homebrew gcc builds by moving problematic SDK header overlay
+        # directories/files out of the way:
+        find "${libgccdir}/include-fixed" | sort
+        patch_out='dispatch os AvailabilityInternal.h'
+        patch_out+=' stdio.h'  # for Xcode 16 error: unknown type name 'FILE'
+        for f in ${patch_out}; do
+          if [ -r "${libgccdir}/include-fixed/${f}" ]; then
+            echo "! Zap gcc hack: '${libgccdir}/include-fixed/${f}'"
+            mv "${libgccdir}/include-fixed/${f}" "${libgccdir}/include-fixed/${f}-BAK"
+          fi
+        done
       fi
     fi
 
