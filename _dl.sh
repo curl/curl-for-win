@@ -827,7 +827,7 @@ if [[ "${_DEPS}" = *'curl'* ]]; then
       tmp="$(mktemp)"
       my_curl --user-agent ' ' "https://api.github.com/repos/curl/curl/commits/${CURL_REV_}" \
         --retry-all-errors --retry 10 \
-        --header 'X-GitHub-Api-Version: 2022-11-28'
+        --header 'X-GitHub-Api-Version: 2022-11-28' --output "${tmp}"
       rev="$(jq --raw-output '.sha' "${tmp}")"
       rm -r -f "${tmp}"
       [ -n "${rev}" ] && CURL_REV_="${rev}"
