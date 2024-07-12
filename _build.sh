@@ -1196,7 +1196,7 @@ build_single_target() {
 
     # Installed/selected Xcode version and SDK version:
     xcodebuild -version || true
-    xcrun -sdk macosx --show-sdk-path || true
+    echo "${_SYSROOT}"
 
     if [ "${_CC}" = 'gcc' ]; then
 
