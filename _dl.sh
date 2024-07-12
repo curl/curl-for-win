@@ -168,10 +168,18 @@ EOF
 }
 
 my_curl() {
-  # >&2 echo "my_curl|$*|"
-  curl --disable --user-agent '' --fail --silent --show-error --globoff \
+  local opts
+  opts=(--disable --user-agent '' --fail --silent --show-error --globoff \
     --remote-time --xattr \
-    --connect-timeout 15 --max-time 60 --retry 3 --max-redirs 10 "$@"
+    --connect-timeout 15 --max-time 60 --retry 3 --max-redirs 10)
+  # >&2 echo "my_curl|${opts[*]} $*|"
+  if [[ "$*" = *'https://api.github.com/'* && -n "${GITHUB_TOKEN:+1}" ]]; then
+    opts+=(--header @/dev/stdin)
+    exec <<EOF
+Authorization: Bearer ${GITHUB_TOKEN}
+EOF
+  fi
+  curl "${opts[@]}" "$@"
 }
 
 my_gpg() {

@@ -145,6 +145,8 @@ jobs:
         with:
           fetch-depth: '300'
       - name: 'build'
+        env:
+          GITHUB_TOKEN: '${{ github.token }}'
         run: |
           export CW_CONFIG='dev-mac-macuni'
           export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"

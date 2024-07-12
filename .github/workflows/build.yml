@@ -519,6 +519,8 @@ jobs:
         with:
           fetch-depth: '300'
       - name: 'build'
+        env:
+          GITHUB_TOKEN: '${{ github.token }}'
         run: |
           export CW_CONFIG='${{ github.ref_name }}-linux'
           export CW_REVISION='${{ github.sha }}'
@@ -544,6 +546,8 @@ jobs:
         with:
           fetch-depth: '300'
       - name: 'build'
+        env:
+          GITHUB_TOKEN: '${{ github.token }}'
         run: |
           export CW_CONFIG='${{ github.ref_name }}-mac-macuni'
           export CW_REVISION='${{ github.sha }}'
@@ -569,6 +573,8 @@ jobs:
         with:
           fetch-depth: '300'
       - name: 'build'
+        env:
+          GITHUB_TOKEN: '${{ github.token }}'
         run: |
           export CW_CONFIG='${{ github.ref_name }}-mac-macuni-llvm'
           export CW_REVISION='${{ github.sha }}'
