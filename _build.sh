@@ -1430,13 +1430,18 @@ build_single_target() {
         elif [ -d 'my-pkg/usr/lib/clang' ]; then  # cross
           # If we have the target CPU's clang-rt package installed, use it:
           ccrtdir="$(find -L \
-            "$(pwd)/my-pkg/usr/lib/clang" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1 || true)"  # ./my-pkg/usr/lib/clang/15/lib/linux
+            "$(pwd)/my-pkg/usr/lib/clang" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1 || true)"  # ./my-pkg/usr/lib/clang/15/lib/linux -> ./my-pkg/usr/lib/clang/18/lib/${_machine}-unknown-linux-gnu
           if [ -z "${ccrtdir}" ]; then
             >&2 echo '! Error: Failed to detect cross-clang-rt env root.'
             exit 1
           fi
-          ccrtdir+='/lib/linux'
-          ccrtlib="${ccrtdir}/libclang_rt.builtins-${_machine}.a"
+          if [ -d "${ccrtdir}/lib/${_machine}-unknown-linux-gnu" ]; then  # new dir layout seen on 2024-07-13
+            ccrtdir+="/lib/${_machine}-unknown-linux-gnu"
+            ccrtlib="${ccrtdir}/libclang_rt.builtins.a"
+          else
+            ccrtdir+='/lib/linux'
+            ccrtlib="${ccrtdir}/libclang_rt.builtins-${_machine}.a"
+          fi
           ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
           ccrtlib="-Wl,-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
         else  # cross
@@ -1460,13 +1465,18 @@ build_single_target() {
         if [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" != "${_machine}" ] && [ -d 'my-pkg/usr/lib/clang' ]; then
           # If we have the target CPU's clang-rt package installed, use it:
           ccrtdir="$(find -L \
-            "$(pwd)/my-pkg/usr/lib/clang" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)"  # ./my-pkg/usr/lib/clang/15/lib/linux
+            "$(pwd)/my-pkg/usr/lib/clang" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)"  # ./my-pkg/usr/lib/clang/15/lib/linux -> ./my-pkg/usr/lib/clang/18/lib/${_machine}-unknown-linux-gnu
           if [ -z "${ccrtdir}" ]; then
             >&2 echo '! Error: Failed to detect cross-clang-rt env root.'
             exit 1
           fi
-          ccrtdir+='/lib/linux'
-          ccrtlib="${ccrtdir}/libclang_rt.builtins-${_machine}.a"
+          if [ -d "${ccrtdir}/lib/${_machine}-unknown-linux-gnu" ]; then  # new dir layout seen on 2024-07-13
+            ccrtdir+="/lib/${_machine}-unknown-linux-gnu"
+            ccrtlib="${ccrtdir}/libclang_rt.builtins.a"
+          else
+            ccrtdir+='/lib/linux'
+            ccrtlib="${ccrtdir}/libclang_rt.builtins-${_machine}.a"
+          fi
           ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
           ccrtlib="-Wl,-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
           libprefix="/usr/${_TRIPLETSH}/lib"
