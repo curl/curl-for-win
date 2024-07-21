@@ -43,7 +43,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   [AppVeyor CI](https://www.appveyor.com/). Linux built via GHA.
   Using reproducible OS image
   [`debian:testing-slim`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing/slim)
-  via [Docker](https://hub.docker.com/_/debian/). macOS built on native OS.
+  via [Docker](https://hub.docker.com/_/debian/). macOS built via GHA.
 - Linux and macOS builds are experimental and *not* official curl builds.
 - We verify components using SHA-256, and PGP where provided.
 - We build [reproducible](https://reproducible-builds.org/) binaries,
