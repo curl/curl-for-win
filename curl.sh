@@ -85,18 +85,6 @@ _VER="$1"
 
   if [[ "${_CONFIG}" = *'debug'* ]]; then
     options+=' -DENABLE_DEBUG=ON'
-    if [ "${CURL_VER_}" != '8.8.0' ]; then
-      # curl would only set this automatically for the 'Debug' configuration
-      # Required for certain BUILD_TESTING=ON 'testdeps' build targets to link
-      # correctly.
-      # Officially we should use `-DCMAKE_BUILD_TYPE=Debug` which also enables
-      # debug info, but it has the side-effect of adding a `-d` suffix to the
-      # DLL and static lib names (`libcurl-d-x64.dll`, `libcurl-d.a`,
-      # `libcurl-d.dll.a` on Windows) which breaks packaging logic. We also
-      # strip debug info when making libs reproducible anyway.
-      # The `-d` suffix may be deleted/customized via `CMAKE_DEBUG_POSTFIX`.
-      CPPFLAGS+=' -DDEBUGBUILD'
-    fi
   fi
 
   if [[ "${_CONFIG}" = *'curltests'* ]]; then
@@ -243,10 +231,6 @@ _VER="$1"
       # Another known deprecation issue:
       #   curl/lib/vtls/sectransp.c:1206:7: warning: 'CFURLCreateDataAndPropertiesFromResource' is deprecated: first deprecated in macOS 10.9 - For resource data, use the CFReadStream API. For file resource properties, use CFURLCopyResourcePropertiesForKeys. [-Wdeprecated-declarations]
       options+=' -DCURL_USE_SECTRANSP=ON'
-      if [ "${CURL_VER_}" = '8.8.0' ]; then
-        # Without this, SecureTransport becomes the default TLS backend
-        [ -n "${mainssl}" ] && options+=" -DCURL_DEFAULT_SSL_BACKEND=${mainssl}"
-      fi
     fi
   else
     if [ "${_OS}" = 'win' ]; then
