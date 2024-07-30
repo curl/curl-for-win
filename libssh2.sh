@@ -54,6 +54,10 @@ _VER="$1"
     options+=' -DHIDE_SYMBOLS=OFF'
   fi
 
+  if [ "${LIBSSH2_VER_}" = '1.11.0' ]; then
+    LIBSSH2_CPPFLAGS+=' -DLIBSSH2_NO_DSA'
+  fi
+
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
     # shellcheck disable=SC2086
     cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
