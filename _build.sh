@@ -829,6 +829,8 @@ build_single_target() {
       fi
     fi
 
+    _CPPFLAGS_GLOBAL+=' -D_FORTIFY_SOURCE=3'
+
   elif [ "${_OS}" = 'mac' ]; then
     if [ "${_HOST}" != "${_OS}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Darwin ${_CMAKE_GLOBAL}"
