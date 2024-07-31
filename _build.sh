@@ -117,8 +117,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     a dynamically/automatically generated source tarball, depending on server.
 #     GitHub offers a stable timestamp, but not e.g. googlesource.com.
 #     Tags/versions need to be resolved to hashes securely and permanently.
-#   - prepare for Xcode 15 with new ld_prime (-Wl,-ld_new) linker (vs. -Wl,-ld_classic).
-#     https://developer.apple.com/forums/thread/715385
 #   - add FreeBSD builds?
 #   - linux: musl alpine why need -static-pie and not -static?
 #   - linux: musl libcurl.so.4.8.0 tweak to be also portable (possible?)
@@ -1043,6 +1041,7 @@ build_single_target() {
     if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
       # --target= works too, but prefer -arch for its multi-arch support (we are not using it yet)
       _CC_GLOBAL="clang${_CCSUFFIX} -arch ${_machines}"
+      _LDFLAGS_GLOBAL+=' -Wl,-ld_new'
     else
       _CC_GLOBAL="clang${_CCSUFFIX} --target=${_TRIPLET}"
     fi
