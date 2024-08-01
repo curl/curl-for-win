@@ -20,7 +20,7 @@ export _OUT="${_UNIPKG}"
 export _BAS="${_UNIPKG}"
 export _DST="${_UNIPKG}"
 
-_ref='curl/CHANGES'
+_ref='curl/CHANGES.md'
 
 if [ ! -f "${_ref}" ]; then
   # This can happen with CW_BLD partial builds.
