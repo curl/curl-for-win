@@ -19,7 +19,7 @@ _VER="$1"
 
   [ "${CW_DEV_INCREMENTAL:-}" != '1' ] && rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
-  readonly _ref='CHANGES'
+  readonly _ref='RELEASE-NOTES'
 
   case "${_HOST}" in
     bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${_ref}")";;
