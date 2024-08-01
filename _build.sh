@@ -1662,7 +1662,7 @@ build_single_target() {
   export _BAS="${_UNIPKG}"
   export _DST="${_UNIPKG}"
 
-  _ref='curl/CHANGES'
+  _ref='curl/RELEASE-NOTES'
 
   if [ ! -f "${_ref}" ]; then
     # This can happen with CW_BLD partial builds.
