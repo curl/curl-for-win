@@ -26,13 +26,13 @@ while [ -n "${1:-}" ]; do
     TZ=UTC "${_OBJDUMP}" --all-headers "${f}" | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f
     if [ "${is_curl}" = '1' ]; then
       # Verify exported curl symbols
-      # = llvm-readobj --coff-exports | grep -a -F 'Name: ' | grep -a -F ' curl_'
+      # = llvm-readobj --coff-exports | grep -a -E 'Name: .+' | grep -a -F ' curl_'
       if [ "${filetype}" = 'exe' ]; then
         "${_OBJDUMP}" --all-headers "${f}" | grep -a -F ' curl_' && false  # should not have any hits for statically linked curl
       else
         "${_OBJDUMP}" --all-headers "${f}" | grep -a -F ' curl_' || false  # show public libcurl APIs (in a well-defined order)
         if [ "${_CC}" = 'llvm' ]; then
-          "${_READELF}" --coff-exports "${f}" | grep -a -F 'Name: ' | grep -a -F -v ' curl_' && false  # should not export anything else except the libcurl API
+          "${_READELF}" --coff-exports "${f}" | grep -a -E 'Name: .+' | grep -a -F -v ' curl_' && false  # should not export anything else except the libcurl API
         fi
       fi
     fi
