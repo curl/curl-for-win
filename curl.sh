@@ -549,7 +549,6 @@ _VER="$1"
     cp -f -p docs/libcurl/*.md                  "${_DST}/docs/libcurl/"
   fi
   cp -f -p docs/*.md                          "${_DST}/docs/"
-  cp -f -p CHANGES                            "${_DST}/CHANGES.txt"
   cp -f -p COPYING                            "${_DST}/COPYING.txt"
   cp -f -p README                             "${_DST}/README.txt"
   cp -f -p RELEASE-NOTES                      "${_DST}/RELEASE-NOTES.txt"
