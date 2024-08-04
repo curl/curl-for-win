@@ -1185,6 +1185,9 @@ build_single_target() {
     _BINUTILS_SUFFIX="${_CCSUFFIX}"
   fi
 
+  # Avoid picking up dependencies from system locations
+  export PKG_CONFIG_LIBDIR=
+
   if [ "${_OS}" = 'mac' ]; then
     # Minimum SDK version supported by Xcode releases:
     #   https://developer.apple.com/support/xcode/
