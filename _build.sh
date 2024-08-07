@@ -1043,7 +1043,6 @@ build_single_target() {
     if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
       # --target= works too, but prefer -arch for its multi-arch support (we are not using it yet)
       _CC_GLOBAL="clang${_CCSUFFIX} -arch ${_machines}"
-      _LDFLAGS_GLOBAL+=' -Wl,-ld_new'
     else
       _CC_GLOBAL="clang${_CCSUFFIX} --target=${_TRIPLET}"
     fi
@@ -1249,6 +1248,10 @@ build_single_target() {
     if [ -n "${_SYSROOT}" ]; then
       _CMAKE_GLOBAL+=" -DCMAKE_OSX_SYSROOT=${_SYSROOT}"
       _CC_GLOBAL+=" --sysroot=${_SYSROOT}"
+    fi
+
+    if [ "${_TOOLCHAIN}" = 'llvm-apple' ] && [ "${_XCODEVER}" -ge '15' ]; then
+      _LDFLAGS_GLOBAL+=' -Wl,-ld_new'
     fi
   fi
 
