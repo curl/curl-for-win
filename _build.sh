@@ -1198,10 +1198,12 @@ build_single_target() {
     # Explicitly set the SDK root.
     # We set it for all build tools for macOS to gain control over this.
     _SYSROOT="$(xcrun --sdk macosx --show-sdk-path 2>/dev/null)"  # E.g. /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+    _SDKVER="$(xcrun --sdk macosx --show-sdk-version)"  # E.g. 13.1
 
     # Installed/selected Xcode version and SDK version:
     xcodebuild -version || true
     echo "${_SYSROOT}"
+    echo "macOS SDK version: ${_SDKVER}"
 
     if [ "${_CC}" = 'gcc' ]; then
 
