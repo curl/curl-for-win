@@ -1200,10 +1200,21 @@ build_single_target() {
     _SYSROOT="$(xcrun --sdk macosx --show-sdk-path 2>/dev/null)"  # E.g. /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
     _SDKVER="$(xcrun --sdk macosx --show-sdk-version)"  # E.g. 13.1
 
+    # Xcode version
+    if xcodebuild -version >/dev/null 2>/dev/null; then
+      # This fails in gcc builds for some reason:
+      _ver="$(xcodebuild -version 2>/dev/null | head -n 1 || true)"
+    else
+      _ver="$(pkgutil --pkg-info=com.apple.pkg.CLTools_Executables | grep -a -F 'version:' || true)"
+    fi
+    _XCODEVERFULL="$(printf '%s' "${_ver}" | grep -a -o -E ' [0-9]+\.[0-9]+' | cut -c 2-)"
+    _XCODEVER="$(printf '%s' "${_ver}" | grep -a -o -E ' [0-9]+' | cut -c 2-)"  # major version, 2 digits
+
     # Installed/selected Xcode version and SDK version:
     xcodebuild -version || true
     echo "${_SYSROOT}"
     echo "macOS SDK version: ${_SDKVER}"
+    echo "Xcode version: ${_XCODEVERFULL}"
 
     if [ "${_CC}" = 'gcc' ]; then
 
