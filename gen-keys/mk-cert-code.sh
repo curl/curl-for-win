@@ -1,8 +1,6 @@
 #!/bin/sh
 
-# To the extent possible under law, Viktor Szakats
-# has waived all copyright and related or neighboring rights to this script.
-# CC0 - https://creativecommons.org/publicdomain/zero/1.0/
+# Copyright (C) Viktor Szakats
 # SPDX-License-Identifier: CC0-1.0
 
 # shellcheck disable=SC3040,SC2039
