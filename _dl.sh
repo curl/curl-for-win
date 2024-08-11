@@ -55,7 +55,8 @@ cat <<EOF
     "url": "https://www.libssh.org/files/{vermm}/libssh-{ver}.tar.xz",
     "ref_url": "https://www.libssh.org/files/",
     "sig": ".asc",
-    "keys": "8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D"
+    "keys_comment": "https://www.libssh.org/files/0x03D5DF8CFDD3E8E7_libssh_libssh_org_gpgkey.asc",
+    "keys": "88A228D89B07C2C77D0C780903D5DF8CFDD3E8E7"
   },
   {
     "name": "libssh2",
