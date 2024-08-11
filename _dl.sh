@@ -284,7 +284,7 @@ check_update() {
     if [ "${pkg}" = 'libssh' ]; then
       # ugly hack: repurpose 'ref_url' for this case:
       res="$(my_curl "${options[@]}" "$6" | hxclean | hxselect -i -c -s '\n' 'a::attr(href)' \
-        | grep -a -o -E -- '[0-9.]+' | sort -V | tail -n -1)"
+        | grep -a -o -E -- '[0-9.]+/' | tr -d '/' | sort -V | tail -n -1)"
       url="$6${res}"
       urldir="${url}/"
     elif [ -n "$6" ]; then
