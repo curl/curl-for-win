@@ -14,7 +14,7 @@ extra=''
 dl=''
 
 if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
-  [ -n "${CW_CCSUFFIX:-}" ] || export CW_CCSUFFIX='-17'
+  [ -n "${CW_CCSUFFIX:-}" ] || export CW_CCSUFFIX='-18'
   extra+=" llvm${CW_CCSUFFIX} clang${CW_CCSUFFIX} lld${CW_CCSUFFIX}"
 fi
 
