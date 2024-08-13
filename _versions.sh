@@ -3,7 +3,7 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-export DOCKER_IMAGE='debian:testing-20240722-slim'
+export DOCKER_IMAGE='debian:testing-20240812-slim'
 
 export CURL_VER_='8.9.1'
 export CURL_HASH=f292f6cc051d5bbabf725ef85d432dfeacc8711dd717ea97612ae590643801e5
