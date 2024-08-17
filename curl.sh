@@ -168,8 +168,13 @@ _VER="$1"
   fi
   if [[ "${_DEPS}" = *'zstd'* ]] && [ -d "../zstd/${_PP}" ]; then
     options+=' -DCURL_ZSTD=ON'
-    options+=" -DZstd_INCLUDE_DIR=${_TOP}/zstd/${_PP}/include"
-    options+=" -DZstd_LIBRARY=${_TOP}/zstd/${_PP}/lib/libzstd.a"
+    if [ "${CURL_VER_}" = '8.9.1' ]; then
+      options+=" -DZstd_INCLUDE_DIR=${_TOP}/zstd/${_PP}/include"
+      options+=" -DZstd_LIBRARY=${_TOP}/zstd/${_PP}/lib/libzstd.a"
+    else
+      options+=" -DZSTD_INCLUDE_DIR=${_TOP}/zstd/${_PP}/include"
+      options+=" -DZSTD_LIBRARY=${_TOP}/zstd/${_PP}/lib/libzstd.a"
+    fi
   else
     options+=' -DCURL_ZSTD=OFF'
   fi
