@@ -358,6 +358,11 @@ _VER="$1"
   if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
     options+=' -DBUILD_CURL_EXE=ON'
     options+=' -DBUILD_STATIC_CURL=ON'
+
+    if [[ "${_DEPS}" = *'cacert'* ]] && \
+       [ "${CURL_VER_}" != '8.9.1' ]; then
+      options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
+    fi
   else
     options+=' -DBUILD_CURL_EXE=OFF'
   fi
@@ -375,12 +380,6 @@ _VER="$1"
       # Appearing as: "security patched: https://github.com/curl/curl-for-win/blob/95a0e6df/curl.patch"
       [ -n "${patchstamp}" ] && CPPFLAGS+=" -DCURL_PATCHSTAMP=\\\"${patchstamp}\\\""
     fi
-  fi
-
-  if [[ "${_CONFIG}" != *'nocurltool'* ]] && \
-     [[ "${_DEPS}" = *'cacert'* ]] && \
-     [ "${CURL_VER_}" != '8.9.1' ]; then
-    options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
   fi
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
