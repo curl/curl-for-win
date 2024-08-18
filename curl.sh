@@ -377,7 +377,6 @@ _VER="$1"
     fi
   fi
 
-  # Pending https://github.com/curl/curl/pull/14059
   if [[ "${_CONFIG}" != *'nocurltool'* ]] && \
      [[ "${_DEPS}" = *'cacert'* ]] && \
      [ "${CURL_VER_}" != '8.9.1' ]; then
