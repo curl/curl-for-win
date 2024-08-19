@@ -367,8 +367,9 @@ _VER="$1"
     # Pending: https://github.com/curl/curl/pull/14582
     # Restrict to daily builds to avoid impacting the official distro.
     if [[ "${_CONFIG}" = *'dev'* ]] && \
-       [ "${CURL_VER_}" != '8.9.1' ]; then
-      CPPFLAGS+=' -DCURL_WIN32_SAFE_CA_SEARCH'
+       [ "${CURL_VER_}" != '8.9.1' ] && \
+       [ "${CURL_VER_}" != '8.10.0' ]; then
+      options+=' -DCURL_WIN32_SAFE_CA_SEARCH=ON'
     fi
   else
     options+=' -DBUILD_CURL_EXE=OFF'
