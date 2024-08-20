@@ -97,7 +97,7 @@ _VER="$1"
   fi
 
   # shellcheck disable=SC2086
-  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
+  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
     "-DGLOBAL_CLIENT_CONFIG=${_my_prefix}/ssh_config" \
     "-DGLOBAL_BIND_CONFIG=${_my_prefix}/libssh_server_config" \
     '-DBUILD_SHARED_LIBS=OFF' \
@@ -106,7 +106,8 @@ _VER="$1"
     '-DWITH_SERVER=OFF' \
     '-DWITH_EXAMPLES=OFF' \
     '-DUNIT_TESTING=OFF' \
-    "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS}"
+    "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS}" \
+    "-DCMAKE_CXX_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
 
   make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIRS}"
 
