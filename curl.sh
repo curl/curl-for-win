@@ -390,6 +390,10 @@ _VER="$1"
     fi
   fi
 
+  if [ "${CURL_VER_}" != '8.9.1' ]; then
+    options+=" -DCURL_USE_PKGCONFIG=OFF"
+  fi
+
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
     # shellcheck disable=SC2086
     cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \

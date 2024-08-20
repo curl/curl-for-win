@@ -1186,7 +1186,6 @@ build_single_target() {
 
   # Avoid picking up dependencies from system locations
   export PKG_CONFIG_LIBDIR=
-  _CMAKE_GLOBAL+=' -DPKG_CONFIG_EXECUTABLE='
 
   if [ "${_OS}" = 'mac' ]; then
     # Minimum SDK version supported by Xcode releases:
