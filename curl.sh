@@ -251,15 +251,22 @@ _VER="$1"
   options+=' -DCURL_DISABLE_SRP=ON'
 
   if [[ "${_DEPS}" = *'libssh1'* ]] && [ -d "../libssh/${_PPS}" ]; then
-    # Detection picks OS-native copy. Only a manual configuration worked
-    # to defeat CMake's wisdom.
-    options+=' -DCURL_USE_LIBSSH=OFF'
-    options+=' -DCURL_USE_LIBSSH2=OFF'
-    options+=' -DUSE_LIBSSH=ON'
+    if [ "${CURL_VER_}" = '8.9.1' ]; then
+      # Detection picks OS-native copy. Only a manual configuration worked
+      # to defeat CMake's wisdom.
+      options+=' -DCURL_USE_LIBSSH=OFF'
+      options+=' -DCURL_USE_LIBSSH2=OFF'
+      options+=' -DUSE_LIBSSH=ON'
+      CPPFLAGS+=" -I${_TOP}/libssh/${_PPS}/include"
+      LDFLAGS+=" -L${_TOP}/libssh/${_PPS}/lib"
+      LIBS+=' -lssh'
+    else
+      options+=' -DCURL_USE_LIBSSH=ON'
+      options+=' -DCURL_USE_LIBSSH2=OFF'
+      options+=" -DLIBSSH_INCLUDE_DIR=${_TOP}/libssh/${_PPS}/include"
+      options+=" -DLIBSSH_LIBRARY=${_TOP}/libssh/${_PPS}/lib/libssh.a"
+    fi
     CPPFLAGS+=' -DLIBSSH_STATIC'
-    CPPFLAGS+=" -I${_TOP}/libssh/${_PPS}/include"
-    LDFLAGS+=" -L${_TOP}/libssh/${_PPS}/lib"
-    LIBS+=' -lssh'
     if [ "${_OS}" = 'win' ]; then
       LIBS+=' -liphlpapi'  # for if_nametoindex
     fi
