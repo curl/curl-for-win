@@ -76,6 +76,7 @@ _VER="$1"
       # FIXME (upstream):
       # - Public function explicit_bzero() clashes with libressl.
       #   Workaround: put -lssh before -lcrypto.
+      # - error: use of undeclared identifier 'EVP_PKEY_POLY1305'
       [ "${_OS}" = 'win' ] && CPPFLAGS+=' -DLIBRESSL_DISABLE_OVERRIDE_WINCRYPT_DEFINES_WARNING'
       if [ "${_OS}" = 'win' ]; then
         LIBS+=' -lbcrypt'
