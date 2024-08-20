@@ -262,7 +262,7 @@ _VER="$1"
     LDFLAGS+=" -L${_TOP}/libssh/${_PPS}/lib"
     LIBS+=' -lssh'
     if [ "${_OS}" = 'win' ]; then
-      LIBS+=' -liphlpapi'
+      LIBS+=' -liphlpapi'  # for if_nametoindex
     fi
   elif [[ "${_DEPS}" = *'libssh2'* ]] && [ -d "../libssh2/${_PPS}" ]; then
     options+=' -DCURL_USE_LIBSSH2=ON'
