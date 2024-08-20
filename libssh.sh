@@ -76,7 +76,7 @@ _VER="$1"
       # FIXME (upstream):
       # - Public function explicit_bzero() clashes with libressl.
       #   Workaround: put -lssh before -lcrypto.
-      CPPFLAGS+=' -DNOCRYPT'
+      [ "${_OS}" = 'win' ] && CPPFLAGS+=' -DLIBRESSL_DISABLE_OVERRIDE_WINCRYPT_DEFINES_WARNING'
       if [ "${_OS}" = 'win' ]; then
         LIBS+=' -lbcrypt'
         LIBS+=' -lws2_32'  # to detect EVP_aes_128_*
