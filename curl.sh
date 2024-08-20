@@ -261,6 +261,9 @@ _VER="$1"
     CPPFLAGS+=" -I${_TOP}/libssh/${_PPS}/include"
     LDFLAGS+=" -L${_TOP}/libssh/${_PPS}/lib"
     LIBS+=' -lssh'
+    if [ "${_OS}" = 'win' ]; then
+      LIBS+=' -liphlpapi'
+    fi
   elif [[ "${_DEPS}" = *'libssh2'* ]] && [ -d "../libssh2/${_PPS}" ]; then
     options+=' -DCURL_USE_LIBSSH2=ON'
     options+=' -DCURL_USE_LIBSSH=OFF'
