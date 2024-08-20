@@ -260,6 +260,9 @@ _VER="$1"
       CPPFLAGS+=" -I${_TOP}/libssh/${_PPS}/include"
       LDFLAGS+=" -L${_TOP}/libssh/${_PPS}/lib"
       LIBS+=' -lssh'
+      if [ "${_OS}" = 'win' ]; then
+        LIBS+=' -liphlpapi'  # for if_nametoindex
+      fi
     else
       options+=' -DCURL_USE_LIBSSH=ON'
       options+=' -DCURL_USE_LIBSSH2=OFF'
@@ -267,9 +270,6 @@ _VER="$1"
       options+=" -DLIBSSH_LIBRARY=${_TOP}/libssh/${_PPS}/lib/libssh.a"
     fi
     CPPFLAGS+=' -DLIBSSH_STATIC'
-    if [ "${_OS}" = 'win' ]; then
-      LIBS+=' -liphlpapi'  # for if_nametoindex
-    fi
   elif [[ "${_DEPS}" = *'libssh2'* ]] && [ -d "../libssh2/${_PPS}" ]; then
     options+=' -DCURL_USE_LIBSSH2=ON'
     options+=' -DCURL_USE_LIBSSH=OFF'
