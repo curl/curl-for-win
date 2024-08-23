@@ -400,7 +400,7 @@ _VER="$1"
   fi
 
   if [ "${CURL_VER_}" != '8.9.1' ]; then
-    options+=" -DCURL_USE_PKGCONFIG=OFF"
+    options+=' -DCURL_USE_PKGCONFIG=OFF'
   fi
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
