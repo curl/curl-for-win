@@ -189,7 +189,7 @@ jobs:
             *-*-linux*.*
             urls.txt
 
-  linux-glibc-debian-sid-llvm-riscv64:
+  linux-glibc-debian-testing-llvm-riscv64:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -200,7 +200,7 @@ jobs:
         run: |
           export CW_CONFIG='${{ github.ref_name }}-linux-r64'
           export CW_REVISION='${{ github.sha }}'
-          DOCKER_IMAGE='debian:sid-slim'
+          DOCKER_IMAGE='debian:testing-slim'
           export CW_CCSUFFIX='-18'
           export CW_GCCSUFFIX='-14'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -216,13 +216,13 @@ jobs:
         run: cat urls.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: 'curl-linux-glibc-debian-sid-llvm-riscv64'
+          name: 'curl-linux-glibc-debian-testing-llvm-riscv64'
           retention-days: 5
           path: |
             *-*-linux*.*
             urls.txt
 
-  linux-glibc-debian-sid-gcc-riscv64:
+  linux-glibc-debian-testing-gcc-riscv64:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -233,7 +233,7 @@ jobs:
         run: |
           export CW_CONFIG='${{ github.ref_name }}-linux-gcc-r64'
           export CW_REVISION='${{ github.sha }}'
-          DOCKER_IMAGE='debian:sid-slim'
+          DOCKER_IMAGE='debian:testing-slim'
           export CW_CCSUFFIX='-18'
           export CW_GCCSUFFIX='-14'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -249,7 +249,7 @@ jobs:
         run: cat urls.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: 'curl-linux-glibc-debian-sid-gcc-riscv64'
+          name: 'curl-linux-glibc-debian-testing-gcc-riscv64'
           retention-days: 5
           path: |
             *-*-linux*.*
@@ -383,7 +383,7 @@ jobs:
             *-*-linux*.*
             urls.txt
 
-  linux-musl-debian-sid-llvm-riscv64:
+  linux-musl-debian-testing-llvm-riscv64:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -394,7 +394,7 @@ jobs:
         run: |
           export CW_CONFIG='${{ github.ref_name }}-linux-musl-r64'
           export CW_REVISION='${{ github.sha }}'
-          DOCKER_IMAGE='debian:sid-slim'
+          DOCKER_IMAGE='debian:testing-slim'
           export CW_CCSUFFIX='-18'
           export CW_GCCSUFFIX='-14'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -410,13 +410,13 @@ jobs:
         run: cat urls.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: 'curl-linux-musl-debian-sid-llvm-riscv64'
+          name: 'curl-linux-musl-debian-testing-llvm-riscv64'
           retention-days: 5
           path: |
             *-*-linux*.*
             urls.txt
 
-  linux-musl-debian-sid-gcc-riscv64:
+  linux-musl-debian-testing-gcc-riscv64:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -427,7 +427,7 @@ jobs:
         run: |
           export CW_CONFIG='${{ github.ref_name }}-linux-musl-gcc-r64'
           export CW_REVISION='${{ github.sha }}'
-          DOCKER_IMAGE='debian:sid-slim'
+          DOCKER_IMAGE='debian:testing-slim'
           export CW_CCSUFFIX='-18'
           export CW_GCCSUFFIX='-14'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -443,7 +443,7 @@ jobs:
         run: cat urls.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: 'curl-linux-musl-debian-sid-gcc-riscv64'
+          name: 'curl-linux-musl-debian-testing-gcc-riscv64'
           retention-days: 5
           path: |
             *-*-linux*.*

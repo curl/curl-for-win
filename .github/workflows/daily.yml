@@ -113,7 +113,7 @@ jobs:
         run: |
           export CW_CONFIG='dev-linux-musl-r64'
           export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
-          DOCKER_IMAGE='debian:sid-slim'
+          DOCKER_IMAGE='debian:testing-slim'
           export CW_CCSUFFIX='-18'
           export CW_GCCSUFFIX='-14'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
