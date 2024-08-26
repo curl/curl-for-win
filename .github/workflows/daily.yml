@@ -31,7 +31,7 @@ jobs:
         env:
           GITHUB_TOKEN: '${{ github.token }}'
         run: |
-          export CW_CONFIG='dev-linux'
+          export CW_CONFIG='dev-linux-a64-r64-x64'
           export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           DOCKER_IMAGE='debian:bookworm-slim'
           export CW_CCSUFFIX='-15'
@@ -72,7 +72,7 @@ jobs:
         env:
           GITHUB_TOKEN: '${{ github.token }}'
         run: |
-          export CW_CONFIG='dev-linux-musl'
+          export CW_CONFIG='dev-linux-a64-r64-x64-musl'
           export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           . ./_versions.sh
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -94,47 +94,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-daily'
-          retention-days: 42
-          path: |
-            *-*-linux*.*
-            urls.txt
-
-  linux-musl-riscv64:
-    if: ${{ github.repository_owner == 'curl' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '300'
-      - name: 'build'
-        env:
-          GITHUB_TOKEN: '${{ github.token }}'
-        run: |
-          export CW_CONFIG='dev-linux-musl-r64'
-          export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
-          DOCKER_IMAGE='debian:testing-slim'
-          export CW_CCSUFFIX='-18'
-          export CW_GCCSUFFIX='-14'
-          docker trust inspect --pretty "${DOCKER_IMAGE}"
-          time docker pull "${DOCKER_IMAGE}"
-          docker images --digests
-          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
-            --env-file <(env | grep -a -E \
-              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
-            sh -c ./_ci-linux-debian.sh
-
-      - name: 'list dependencies'
-        run: cat urls.txt
-      - uses: actions/upload-artifact@v4
-        with:
-          name: 'curl-linux-musl-riscv64-daily-tool'
-          retention-days: 42
-          path: curl-*-*-*/curl*
-      - uses: actions/upload-artifact@v4
-        with:
-          name: 'curl-linux-musl-riscv64-daily'
           retention-days: 42
           path: |
             *-*-linux*.*

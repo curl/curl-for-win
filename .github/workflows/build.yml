@@ -69,7 +69,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux'
+          export CW_CONFIG='${{ github.ref_name }}-linux-a64-r64-x64'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -100,7 +100,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-gcc'
+          export CW_CONFIG='${{ github.ref_name }}-linux-a64-r64-x64-gcc'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
           export CW_GCCSUFFIX='-14'
@@ -189,72 +189,6 @@ jobs:
             *-*-linux*.*
             urls.txt
 
-  linux-glibc-debian-testing-llvm-riscv64:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '300'
-      - name: 'build'
-        run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-r64'
-          export CW_REVISION='${{ github.sha }}'
-          DOCKER_IMAGE='debian:testing-slim'
-          export CW_CCSUFFIX='-18'
-          export CW_GCCSUFFIX='-14'
-          docker trust inspect --pretty "${DOCKER_IMAGE}"
-          time docker pull "${DOCKER_IMAGE}"
-          docker images --digests
-          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
-            --env-file <(env | grep -a -E \
-              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
-            sh -c ./_ci-linux-debian.sh
-
-      - name: 'list dependencies'
-        run: cat urls.txt
-      - uses: actions/upload-artifact@v4
-        with:
-          name: 'curl-linux-glibc-debian-testing-llvm-riscv64'
-          retention-days: 5
-          path: |
-            *-*-linux*.*
-            urls.txt
-
-  linux-glibc-debian-testing-gcc-riscv64:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '300'
-      - name: 'build'
-        run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-gcc-r64'
-          export CW_REVISION='${{ github.sha }}'
-          DOCKER_IMAGE='debian:testing-slim'
-          export CW_CCSUFFIX='-18'
-          export CW_GCCSUFFIX='-14'
-          docker trust inspect --pretty "${DOCKER_IMAGE}"
-          time docker pull "${DOCKER_IMAGE}"
-          docker images --digests
-          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
-            --env-file <(env | grep -a -E \
-              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
-            sh -c ./_ci-linux-debian.sh
-
-      - name: 'list dependencies'
-        run: cat urls.txt
-      - uses: actions/upload-artifact@v4
-        with:
-          name: 'curl-linux-glibc-debian-testing-gcc-riscv64'
-          retention-days: 5
-          path: |
-            *-*-linux*.*
-            urls.txt
-
   linux-musl-debian-testing-llvm:
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -264,7 +198,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-musl'
+          export CW_CONFIG='${{ github.ref_name }}-linux-a64-r64-x64-musl'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -295,7 +229,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-musl-gcc'
+          export CW_CONFIG='${{ github.ref_name }}-linux-a64-r64-x64-musl-gcc'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -378,72 +312,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-debian-bookworm-gcc'
-          retention-days: 5
-          path: |
-            *-*-linux*.*
-            urls.txt
-
-  linux-musl-debian-testing-llvm-riscv64:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '300'
-      - name: 'build'
-        run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-musl-r64'
-          export CW_REVISION='${{ github.sha }}'
-          DOCKER_IMAGE='debian:testing-slim'
-          export CW_CCSUFFIX='-18'
-          export CW_GCCSUFFIX='-14'
-          docker trust inspect --pretty "${DOCKER_IMAGE}"
-          time docker pull "${DOCKER_IMAGE}"
-          docker images --digests
-          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
-            --env-file <(env | grep -a -E \
-              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
-            sh -c ./_ci-linux-debian.sh
-
-      - name: 'list dependencies'
-        run: cat urls.txt
-      - uses: actions/upload-artifact@v4
-        with:
-          name: 'curl-linux-musl-debian-testing-llvm-riscv64'
-          retention-days: 5
-          path: |
-            *-*-linux*.*
-            urls.txt
-
-  linux-musl-debian-testing-gcc-riscv64:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '300'
-      - name: 'build'
-        run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-musl-gcc-r64'
-          export CW_REVISION='${{ github.sha }}'
-          DOCKER_IMAGE='debian:testing-slim'
-          export CW_CCSUFFIX='-18'
-          export CW_GCCSUFFIX='-14'
-          docker trust inspect --pretty "${DOCKER_IMAGE}"
-          time docker pull "${DOCKER_IMAGE}"
-          docker images --digests
-          time docker run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
-            --env-file <(env | grep -a -E \
-              '^(CW_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
-            sh -c ./_ci-linux-debian.sh
-
-      - name: 'list dependencies'
-        run: cat urls.txt
-      - uses: actions/upload-artifact@v4
-        with:
-          name: 'curl-linux-musl-debian-testing-gcc-riscv64'
           retention-days: 5
           path: |
             *-*-linux*.*
