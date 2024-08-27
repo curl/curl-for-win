@@ -31,7 +31,7 @@ jobs:
         env:
           GITHUB_TOKEN: '${{ github.token }}'
         run: |
-          export CW_CONFIG='dev-linux-a64-r64-x64'
+          export CW_CONFIG='dev-linux'
           export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           DOCKER_IMAGE='debian:bookworm-slim'
           export CW_CCSUFFIX='-15'
