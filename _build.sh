@@ -1798,6 +1798,7 @@ rm -f "${SIGN_CODE_KEY}"
 
 # Leave "flat" layout for curl tool if requested
 if [ "${CW_PKG_FLATTEN:-}" = '1' ]; then
+  # TODO: omit the external CA bundle?: -a -not -name 'curl-ca-bundle.crt' \
   find \
     curl-*-*-*/bin \
     curl-*-*-*/lib -type f \( \
