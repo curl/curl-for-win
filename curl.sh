@@ -410,6 +410,20 @@ _VER="$1"
     fi
   fi
 
+  # `/dev/urandom` is only necessary for libcurl in limited cases,
+  # e.g. with Rustls, and mbedTLS without built-in random support.
+  # It is also not detected in cross-builds, making Linux binaries for
+  # non-native CPUs different. For MUSL builds in particular, there is no
+  # guarantee that the build machine's `/dev/urandom` is present at runtime.
+  # For macOS builds its likely there, but also unnecessary.
+  # Disable it for all Linux and macOS builds.
+  if [ "${CURL_VER_}" != '8.9.1' ] && \
+     [ "${CURL_VER_}" != '8.10.0' ]; then
+    if [ "${_OS}" = 'linux' ] || [ "${_OS}" = 'mac' ]; then
+      options+=' -DRANDOM_FILE=OFF'  # Pending https://github.com/curl/curl/pull/14743
+    fi
+  fi
+
   if [ "${CURL_VER_}" != '8.9.1' ]; then
     options+=' -DCURL_USE_PKGCONFIG=OFF'
   fi
