@@ -788,6 +788,7 @@ build_single_target() {
   export _LDFLAGS_CXX_GLOBAL=''  # CMake uses this
   export _CMAKE_GLOBAL='-Wno-dev'  # Suppress CMake warnings meant for upstream developers
   export _CMAKE_CXX_GLOBAL=''
+  export _CROSS=0
 
   if [[ "${_CONFIG}" =~ (small|zero) ]]; then
     _CFLAGS_GLOBAL_RAW+=' -Os'
@@ -807,6 +808,7 @@ build_single_target() {
     if [ "${_HOST}" != "${_OS}" ] || \
        [ "${unamem}" != "${_machine}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Windows ${_CMAKE_GLOBAL}"
+      _CROSS=1
     fi
 
     [ "${_CPU}" = 'x86' ] && _RCFLAGS_GLOBAL+=' --target=pe-i386'
@@ -834,6 +836,7 @@ build_single_target() {
   elif [ "${_OS}" = 'mac' ]; then
     if [ "${_HOST}" != "${_OS}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Darwin ${_CMAKE_GLOBAL}"
+      _CROSS=1
     fi
     # macOS 10.9 Mavericks 2013-10-22. Seems to work for arm64 builds,
     # though arm64 was released in macOS 11.0 Big Sur 2020-11-12.
@@ -855,6 +858,7 @@ build_single_target() {
     if [ "${_HOST}" != "${_OS}" ] || \
        [ "${unamem}" != "${_machine}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Linux ${_CMAKE_GLOBAL}"
+      _CROSS=1
     fi
 
     # Override defaults such as: 'lib/aarch64-linux-gnu'
