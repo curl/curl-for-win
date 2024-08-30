@@ -417,10 +417,9 @@ _VER="$1"
   # guarantee that the build machine's `/dev/urandom` is present at runtime.
   # For macOS builds its likely there, but also unnecessary.
   # Disable it for all Linux and macOS builds.
-  if [ "${CURL_VER_}" != '8.9.1' ] && \
-     [ "${CURL_VER_}" != '8.10.0' ]; then
+  if [ "${CURL_VER_}" != '8.9.1' ]; then
     if [ "${_OS}" = 'linux' ] || [ "${_OS}" = 'mac' ]; then
-      options+=' -DRANDOM_FILE=OFF'  # Pending https://github.com/curl/curl/pull/14743
+      options+=' -DRANDOM_FILE=OFF'
     fi
   fi
 
