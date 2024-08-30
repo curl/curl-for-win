@@ -919,6 +919,10 @@ build_single_target() {
     fi
   fi
 
+  if [ "${_CROSS}" = '1' ]; then
+    _CMAKE_GLOBAL+=" -DCMAKE_SYSTEM_PROCESSOR=${_machine}"
+  fi
+
   _CFLAGS_GLOBAL+=' -fno-omit-frame-pointer'
   _CXXFLAGS_GLOBAL+=' -fno-omit-frame-pointer'
 

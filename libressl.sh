@@ -92,7 +92,6 @@ _VER="$1"
 
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
-    "-DCMAKE_SYSTEM_PROCESSOR=${_TRIPLET}" \
     '-DBUILD_SHARED_LIBS=OFF' \
     '-DLIBRESSL_APPS=OFF' \
     '-DLIBRESSL_TESTS=OFF' \
