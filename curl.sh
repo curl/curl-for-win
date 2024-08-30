@@ -378,7 +378,7 @@ _VER="$1"
     if [[ "${_CONFIG}" = *'dev'* ]] && \
        [ "${CURL_VER_}" != '8.9.1' ] && \
        [ "${CURL_VER_}" != '8.10.0' ]; then
-      options+=' -DCURL_CA_SAFE_SEARCH=ON'
+      options+=' -DCURL_CA_SEARCH_SAFE=ON'
     fi
   else
     options+=' -DBUILD_CURL_EXE=OFF'
