@@ -405,7 +405,7 @@ _VER="$1"
     options+=' -DHAVE_WRITABLE_ARGV=1'
     if [ "${_CRT}" = 'musl' ]; then
       options+=' -DHAVE_POLL_FINE=1'
-    elif [ "${CURL_VER_}" != '8.9.1' ]; then
+    elif [ "${CURL_VER_}" = '8.9.1' ]; then
       options+=' -DHAVE_POLL_FINE=1'  # No longer needed after https://github.com/curl/curl/pull/14734
     fi
   fi
