@@ -399,6 +399,17 @@ _VER="$1"
     fi
   fi
 
+  if [ "${_OS}" = 'linux' ] && [ "${_CROSS}" = '1' ]; then
+    # Auto-detection is disabled for these features in cross-builds.
+    # Ensure they are set as in native builds.
+    options+=' -DHAVE_WRITABLE_ARGV=1'
+    if [ "${_CRT}" = 'musl' ]; then
+      options+=' -DHAVE_POLL_FINE=1'
+    elif [ "${CURL_VER_}" != '8.9.1' ]; then
+      options+=' -DHAVE_POLL_FINE=1'  # No longer needed after https://github.com/curl/curl/pull/14734
+    fi
+  fi
+
   if [ "${CURL_VER_}" != '8.9.1' ]; then
     options+=' -DCURL_USE_PKGCONFIG=OFF'
   fi
