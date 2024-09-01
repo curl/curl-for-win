@@ -32,9 +32,10 @@ cat <<EOF
   },
   {
     "name": "trurl",
-    "url": "https://github.com/curl/trurl/archive/refs/tags/trurl-{ver}.tar.gz",
-    "redir": "redir",
-    "ref_mask": "([0-9]+\\\\.[0-9]+)"
+    "url": "https://curl.se/trurl/dl/trurl-{ver}.tar.gz",
+    "mirror": "https://github.com/curl/trurl/releases/download/trurl-{ver}/trurl-{ver}.tar.gz",
+    "sig": ".asc",
+    "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
   },
   {
     "name": "cacert",
