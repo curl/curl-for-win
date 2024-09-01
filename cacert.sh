@@ -31,7 +31,7 @@ _VER="$1"
   url='https://www.mozilla.org/media/MPL/2.0/index.txt'
   if [ "${_OS}" = 'win' ]; then
     _fn="${_DST}/LICENSE.url"
-    cat <<EOF | sed 's/$/\x0d/' > "${_fn}"
+    cat <<EOF | sed 's/$/\r/' > "${_fn}"
 [InternetShortcut]
 URL=${url}
 EOF

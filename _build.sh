@@ -1712,7 +1712,7 @@ build_single_target() {
 
     if [ "${_OS}" = 'win' ]; then
       _fn="${_DST}/BUILD-README.url"
-      cat <<EOF | sed 's/$/\x0d/' > "${_fn}"
+      cat <<EOF | sed 's/$/\r/' > "${_fn}"
 [InternetShortcut]
 URL=${_URL_BASE}
 EOF
