@@ -40,7 +40,7 @@ mv -f hashes.txt.all hashes.txt
 # Create an artifact that includes all packages
 _ALL="all-${_PKGOS}-${CURL_VER_}${_REVSUFFIX}${_FLAV}.zip"
 {
-  find . -maxdepth 1 -type f -name "*-*-${_PKGOS}*.*" | sort
+  find . -maxdepth 1 -type f \( -name "*-*-${_PKGOS}*.*" -o -name "*-version-*.txt" \) | sort
   echo 'hashes.txt'
   echo "${_BLD}"
   echo "${_URLS}"

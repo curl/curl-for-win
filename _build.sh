@@ -578,6 +578,8 @@ build_single_target() {
   [ "${_CPU}" = 'a64' ] && _machine='aarch64'
   [ "${_CPU}" = 'r64' ] && _machine='riscv64'
 
+  export _CPUPUB="${_machine}"
+
   if [ "${_OS}" = 'mac' ] && [ "${_machine}" = 'aarch64' ] && [ "${_CC}" = 'llvm' ]; then
     # llvm-apple supports multiple archs separated by ';', e.g. 'arm64e;x86_64'
     # It also understands arm64e (vs arm64)
@@ -631,7 +633,7 @@ build_single_target() {
       fi
       _MAKE='mingw32-make'
 
-      _RUN_BIN='echo'
+      _RUN_BIN='true'
       # Skip ARM64 target on 64-bit Intel, run all targets on ARM64:
       if [ "${unamem}" = 'x86_64' ] && \
          [ "${_CPU}" != 'a64' ]; then
@@ -659,7 +661,7 @@ build_single_target() {
         fi
       fi
 
-      _RUN_BIN='echo'
+      _RUN_BIN='true'
       if [ "${_HOST}" = 'linux' ] || \
          [ "${_HOST}" = 'bsd' ]; then
         # Run x64 targets on same CPU:
@@ -724,7 +726,7 @@ build_single_target() {
         _CCPREFIX="${_TRIPLETSH}-"
       fi
 
-      _RUN_BIN='echo'
+      _RUN_BIN='true'
       if [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ]; then
         # Skip running non-native builds
         if [ "${unamem}" = "${_machine}" ]; then
@@ -736,7 +738,7 @@ build_single_target() {
     elif [ "${_OS}" = 'mac' ]; then
       _TRIPLET="${_machine}-apple-darwin"
 
-      _RUN_BIN='echo'
+      _RUN_BIN='true'
       if [ "${_HOST}" = 'mac' ]; then
         # Skip running arm64 on x86_64
         if [ "${_CPU}" = 'x64' ] || \

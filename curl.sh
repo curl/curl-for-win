@@ -555,7 +555,9 @@ _VER="$1"
     # directly from the binary as strings, but curl creates most of these
     # strings dynamically at runtime, so this is not possible
     # (as of curl 7.83.1).
-    ${_RUN_BIN} "${bin}" --disable --version | tee "curl-${_CPU}.txt" || true
+    out="../curl-version-${_CPUPUB}.txt"
+    ${_RUN_BIN} "${bin}" --disable --version | sed 's/\r//g' | tee "${out}" || true
+    [ -s "${out}" ] || rm -r -f "${out}"
   fi
 
   # Create package

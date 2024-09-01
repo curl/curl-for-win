@@ -46,7 +46,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-glibc-daily-tool'
@@ -85,7 +85,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-daily-tool'
@@ -118,7 +118,7 @@ jobs:
           sh -c ./_ci-mac-homebrew.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-macos-universal-daily-tool'
@@ -159,7 +159,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       # https://github.com/actions/upload-artifact
       - uses: actions/upload-artifact@v4
         with:

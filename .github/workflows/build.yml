@@ -82,7 +82,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-glibc-debian-testing-llvm'
@@ -114,7 +114,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-glibc-debian-testing-gcc'
@@ -147,7 +147,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-glibc-debian-bookworm-llvm'
@@ -180,7 +180,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-glibc-debian-bookworm-gcc'
@@ -211,7 +211,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-debian-testing-llvm'
@@ -242,7 +242,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-debian-testing-gcc'
@@ -275,7 +275,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-debian-bookworm-llvm'
@@ -308,7 +308,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-debian-bookworm-gcc'
@@ -339,7 +339,7 @@ jobs:
             sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-alpine-llvm-x86_64'
@@ -370,7 +370,7 @@ jobs:
             sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-alpine-gcc-x86_64'
@@ -395,7 +395,7 @@ jobs:
           sh -c ./_ci-mac-homebrew.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-linux-musl-from-mac'
@@ -422,7 +422,7 @@ jobs:
           sh -c ./_ci-mac-homebrew.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-macos-universal-clang'
@@ -449,7 +449,7 @@ jobs:
           sh -c ./_ci-mac-homebrew.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-macos-universal-llvm'
@@ -477,7 +477,7 @@ jobs:
           sh -c ./_ci-mac-homebrew.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-macos-gcc-arm64'
@@ -506,7 +506,7 @@ jobs:
           sh -c ./_ci-mac-homebrew.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-windows-llvm-from-mac'
@@ -540,7 +540,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-windows-llvm'
@@ -574,7 +574,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt
+        run: cat urls.txt *-version-*.txt || true
       - uses: actions/upload-artifact@v4
         with:
           name: 'curl-windows-gcc-noarm64'
