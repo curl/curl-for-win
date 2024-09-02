@@ -544,7 +544,7 @@ _VER="$1"
     # (as of curl 7.83.1).
     out="../curl-version-${_CPUPUB}.txt"
     ${_RUN_BIN} "${bin}" --disable --version | sed 's/\r//g' | tee "${out}" || true
-    [ -s "${out}" ] || rm -r -f "${out}"
+    [ -s "${out}" ] || rm -f "${out}"
   fi
 
   # Create package

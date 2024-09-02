@@ -119,7 +119,7 @@ _VER="$1"
   DYLD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" \
     ${_RUN_BIN} "${bin}" --version | sed 's/\r//g' | tee "${out}" || true
   unset LD_DEBUG
-  [ -s "${out}" ] || rm -r -f "${out}"
+  [ -s "${out}" ] || rm -f "${out}"
 
   if [ "${CW_TURL_TEST:-}" = '1' ] && \
      [ "${_RUN_BIN}" != 'true' ]; then
