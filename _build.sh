@@ -1785,8 +1785,8 @@ elif [ "${_OS}" = 'linux' ]; then
       build_single_target x64
     fi
   else
-    if [[ "${_CONFIG}" = *'r64'* ]]; then
-      build_single_target r64  # [EXPERIMENTAL]
+    if [[ "${_CONFIG}" = *'r64'* ]]; then  # TODO: Once trixie is out: || ! "${_CONFIG}" =~ (a64|x64)
+      build_single_target r64
     fi
     if [[ "${_CONFIG}" = *'a64'* || ! "${_CONFIG}" =~ (x64|r64) ]]; then
       build_single_target a64
