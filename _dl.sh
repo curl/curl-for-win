@@ -34,6 +34,7 @@ cat <<EOF
     "name": "trurl",
     "url": "https://curl.se/trurl/dl/trurl-{ver}.tar.gz",
     "mirror": "https://github.com/curl/trurl/releases/download/trurl-{ver}/trurl-{ver}.tar.gz",
+    "ref_url": "https://curl.se/trurl/",
     "sig": ".asc",
     "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
   },
