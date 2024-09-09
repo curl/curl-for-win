@@ -97,7 +97,7 @@ Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns lda
 Features:         AsynchDNS        CAcert HSTS             HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL SSPI threadsafe UnixSockets
 
 "pico", HTTP/1.1-only:
-Protocols:                                   http https            ipfs ipns
+Protocols:                                   http https
 Features:         AsynchDNS        CAcert HSTS             HTTPS-proxy     IPv6          Largefile libz      PSL        SSL      threadsafe
 ```
 </p></details>
