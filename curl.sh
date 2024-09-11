@@ -107,12 +107,9 @@ _VER="$1"
     options+=' -DCURL_DISABLE_BASIC_AUTH=ON -DCURL_DISABLE_BEARER_AUTH=ON -DCURL_DISABLE_DIGEST_AUTH=ON -DCURL_DISABLE_KERBEROS_AUTH=ON -DCURL_DISABLE_NEGOTIATE_AUTH=ON -DCURL_DISABLE_AWS=ON'
     options+=' -DCURL_DISABLE_HTTP_AUTH=ON'
     options+=' -DCURL_DISABLE_NTLM=ON'
-    if [ "${CURL_VER_}" != '8.9.1' ]; then
-      options+=' -DCURL_DISABLE_SHA512_256=ON'
-    fi
+    options+=' -DCURL_DISABLE_SHA512_256=ON'
     options+=' -DCURL_DISABLE_DICT=ON -DCURL_DISABLE_FILE=ON -DCURL_DISABLE_GOPHER=ON -DCURL_DISABLE_MQTT=ON -DCURL_DISABLE_RTSP=ON -DCURL_DISABLE_SMB=ON -DCURL_DISABLE_TELNET=ON -DCURL_DISABLE_TFTP=ON'
-    if [ "${CURL_VER_}" != '8.9.1' ] && \
-       [ "${CURL_VER_}" != '8.10.0' ]; then
+    if [ "${CURL_VER_}" != '8.10.0' ]; then
       options+=' -DCURL_DISABLE_IPFS=ON'  # Pending: https://github.com/curl/curl/pull/14827
     fi
     options+=' -DCURL_DISABLE_FTP=ON'
@@ -175,13 +172,8 @@ _VER="$1"
   fi
   if [[ "${_DEPS}" = *'zstd'* ]] && [ -d "../zstd/${_PP}" ]; then
     options+=' -DCURL_ZSTD=ON'
-    if [ "${CURL_VER_}" = '8.9.1' ]; then
-      options+=" -DZstd_INCLUDE_DIR=${_TOP}/zstd/${_PP}/include"
-      options+=" -DZstd_LIBRARY=${_TOP}/zstd/${_PP}/lib/libzstd.a"
-    else
-      options+=" -DZSTD_INCLUDE_DIR=${_TOP}/zstd/${_PP}/include"
-      options+=" -DZSTD_LIBRARY=${_TOP}/zstd/${_PP}/lib/libzstd.a"
-    fi
+    options+=" -DZSTD_INCLUDE_DIR=${_TOP}/zstd/${_PP}/include"
+    options+=" -DZSTD_LIBRARY=${_TOP}/zstd/${_PP}/lib/libzstd.a"
   else
     options+=' -DCURL_ZSTD=OFF'
   fi
@@ -259,24 +251,10 @@ _VER="$1"
   options+=' -DCURL_DISABLE_SRP=ON'
 
   if [[ "${_DEPS}" = *'libssh1'* ]] && [ -d "../libssh/${_PPS}" ]; then
-    if [ "${CURL_VER_}" = '8.9.1' ]; then
-      # Detection picks OS-native copy. Only a manual configuration worked
-      # to defeat CMake's wisdom.
-      options+=' -DCURL_USE_LIBSSH=OFF'
-      options+=' -DCURL_USE_LIBSSH2=OFF'
-      options+=' -DUSE_LIBSSH=ON'
-      CPPFLAGS+=" -I${_TOP}/libssh/${_PPS}/include"
-      LDFLAGS+=" -L${_TOP}/libssh/${_PPS}/lib"
-      LIBS+=' -lssh'
-      if [ "${_OS}" = 'win' ]; then
-        LIBS+=' -liphlpapi'  # for if_nametoindex
-      fi
-    else
-      options+=' -DCURL_USE_LIBSSH=ON'
-      options+=' -DCURL_USE_LIBSSH2=OFF'
-      options+=" -DLIBSSH_INCLUDE_DIR=${_TOP}/libssh/${_PPS}/include"
-      options+=" -DLIBSSH_LIBRARY=${_TOP}/libssh/${_PPS}/lib/libssh.a"
-    fi
+    options+=' -DCURL_USE_LIBSSH=ON'
+    options+=' -DCURL_USE_LIBSSH2=OFF'
+    options+=" -DLIBSSH_INCLUDE_DIR=${_TOP}/libssh/${_PPS}/include"
+    options+=" -DLIBSSH_LIBRARY=${_TOP}/libssh/${_PPS}/lib/libssh.a"
     CPPFLAGS+=' -DLIBSSH_STATIC'
   elif [[ "${_DEPS}" = *'libssh2'* ]] && [ -d "../libssh2/${_PPS}" ]; then
     options+=' -DCURL_USE_LIBSSH2=ON'
@@ -376,8 +354,7 @@ _VER="$1"
     options+=' -DBUILD_CURL_EXE=ON'
     options+=' -DBUILD_STATIC_CURL=ON'
 
-    if [[ "${_DEPS}" = *'cacert'* ]] && \
-       [ "${CURL_VER_}" != '8.9.1' ]; then
+    if [[ "${_DEPS}" = *'cacert'* ]]; then
       options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
     fi
 
@@ -385,7 +362,6 @@ _VER="$1"
     # Restrict to daily builds to avoid impacting the official distro.
     if [ "${_OS}" = 'win' ] && \
        [[ "${_CONFIG}" = *'dev'* ]] && \
-       [ "${CURL_VER_}" != '8.9.1' ] && \
        [ "${CURL_VER_}" != '8.10.0' ]; then
       options+=' -DCURL_CA_SEARCH_SAFE=ON'
     fi
@@ -414,14 +390,10 @@ _VER="$1"
     options+=' -DHAVE_WRITABLE_ARGV=1'
     if [ "${_CRT}" = 'musl' ]; then
       options+=' -DHAVE_POLL_FINE=1'
-    elif [ "${CURL_VER_}" = '8.9.1' ]; then
-      options+=' -DHAVE_POLL_FINE=1'  # No longer needed after https://github.com/curl/curl/pull/14734
     fi
   fi
 
-  if [ "${CURL_VER_}" != '8.9.1' ]; then
-    options+=' -DCURL_USE_PKGCONFIG=OFF'
-  fi
+  options+=' -DCURL_USE_PKGCONFIG=OFF'
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
     # shellcheck disable=SC2086
