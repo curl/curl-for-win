@@ -286,7 +286,7 @@ _VER="$1"
       options+=' -DUSE_NGTCP2=ON'
       options+=" -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PPS}/include"
       options+=" -DNGTCP2_LIBRARY=${_TOP}/ngtcp2/${_PPS}/lib/libngtcp2.a"
-      options+=" -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/${_PPS}/lib"
+      options+=" -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/${_PPS}/lib"  # FIXME: upstream, this hack should not be necessary
       CPPFLAGS+=' -DNGTCP2_STATICLIB'
     else
       options+=' -DUSE_NGTCP2=OFF'
