@@ -278,7 +278,6 @@ _VER="$1"
   if [[ "${h3}" = '1' && \
         "${_DEPS}" = *'nghttp3'* && -d "../nghttp3/${_PP}" && \
         (("${_DEPS}" = *'ngtcp2'* && -d "../ngtcp2/${_PPS}") || "${_OPENSSL}" = 'openssl') ]]; then
-    options+=' -DUSE_NGHTTP3=ON'
     options+=" -DNGHTTP3_INCLUDE_DIR=${_TOP}/nghttp3/${_PP}/include"
     options+=" -DNGHTTP3_LIBRARY=${_TOP}/nghttp3/${_PP}/lib/libnghttp3.a"
     CPPFLAGS+=' -DNGHTTP3_STATICLIB'
@@ -293,7 +292,6 @@ _VER="$1"
       options+=' -DUSE_NGTCP2=OFF'
     fi
   else
-    options+=' -DUSE_NGHTTP3=OFF'
     options+=' -DUSE_NGTCP2=OFF'
   fi
   if [[ "${_DEPS}" = *'cares'* ]] && [ -d "../cares/${_PP}" ]; then
