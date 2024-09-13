@@ -160,7 +160,7 @@ _VER="$1"
     options+=" -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
     options+=" -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
   else
-    options+=' -DZLIB_INCLUDE_DIR='
+    options+=' -DCURL_ZLIB=OFF'
   fi
   if [[ "${_DEPS}" = *'brotli'* ]] && [ -d "../brotli/${_PP}" ]; then
     options+=' -DCURL_BROTLI=ON'
