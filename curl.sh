@@ -93,6 +93,8 @@ _VER="$1"
     options+=' -DBUILD_TESTING=OFF'
   fi
 
+  options+=' -DBUILD_EXAMPLES=OFF'
+
   # for H2/H3
   if [[ "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
     options+=' -DCURL_DISABLE_ALTSVC=ON'
