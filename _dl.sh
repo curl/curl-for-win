@@ -119,7 +119,8 @@ cat <<EOF
     "tag": "^master$",
     "ref_url": "https://raw.githubusercontent.com/chromium/chromium/main/DEPS",
     "ref_expr": "boringssl_revision",
-    "ref_mask": "([0-9a-fA-F]{32,})"
+    "ref_mask": "([0-9a-fA-F]{32,})",
+    "pinned": true
   },
   {
     "name": "osslsigncode",
