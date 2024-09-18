@@ -111,8 +111,7 @@ _VER="$1"
     options+=' -DCURL_DISABLE_NTLM=ON'
     options+=' -DCURL_DISABLE_SHA512_256=ON'
     options+=' -DCURL_DISABLE_DICT=ON -DCURL_DISABLE_FILE=ON -DCURL_DISABLE_GOPHER=ON -DCURL_DISABLE_MQTT=ON -DCURL_DISABLE_RTSP=ON -DCURL_DISABLE_SMB=ON -DCURL_DISABLE_TELNET=ON -DCURL_DISABLE_TFTP=ON'
-    if [ "${CURL_VER_}" != '8.10.0' ] && \
-       [ "${CURL_VER_}" != '8.10.1' ]; then
+    if [ "${CURL_VER_}" != '8.10.1' ]; then
       options+=' -DCURL_DISABLE_IPFS=ON'  # Pending: https://github.com/curl/curl/pull/14827
     fi
     options+=' -DCURL_DISABLE_FTP=ON'
@@ -366,7 +365,6 @@ _VER="$1"
     # Restrict to daily builds to avoid impacting the official distro.
     if [ "${_OS}" = 'win' ] && \
        [[ "${_CONFIG}" = *'dev'* ]] && \
-       [ "${CURL_VER_}" != '8.10.0' ] && \
        [ "${CURL_VER_}" != '8.10.1' ]; then
       options+=' -DCURL_CA_SEARCH_SAFE=ON'
     fi
