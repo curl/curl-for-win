@@ -360,12 +360,9 @@ _VER="$1"
       options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
     fi
 
-    # Pending: https://github.com/curl/curl/pull/14582
-    # Restrict to daily builds to avoid impacting the official distro.
     if [ "${_OS}" = 'win' ] && \
-       [[ "${_CONFIG}" = *'dev'* ]] && \
        [ "${CURL_VER_}" != '8.10.1' ]; then
-      options+=' -DCURL_CA_SEARCH_SAFE=ON'
+      options+=' -DCURL_CA_SEARCH_SAFE=ON'  # Pending: https://github.com/curl/curl/pull/14582
     fi
   else
     options+=' -DBUILD_CURL_EXE=OFF'
