@@ -362,7 +362,7 @@ _VER="$1"
 
     if [ "${_OS}" = 'win' ] && \
        [ "${CURL_VER_}" != '8.10.1' ]; then
-      options+=' -DCURL_CA_SEARCH_SAFE=ON'  # Pending: https://github.com/curl/curl/pull/14582
+      options+=' -DCURL_CA_SEARCH_SAFE=ON'
     fi
   else
     options+=' -DBUILD_CURL_EXE=OFF'
