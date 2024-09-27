@@ -47,7 +47,7 @@ environment:
   DEPLOY_KEY_PASS:
     secure: 'CS5o1b7BhBEmoEq+RFaTmtWpAd3HqHLqnpJvkAjF+DmnlJVPLo34MeusmnJ56wAX'
   DO_NOT_TRACK: '1'
-  DOCKER_CONTENT_TRUST: '1'
+  DOCKER_CONTENT_TRUST: ''
 build_script:
   - sh: |
       export CW_CONFIG="${APPVEYOR_REPO_BRANCH}-win"

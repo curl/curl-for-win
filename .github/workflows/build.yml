@@ -21,7 +21,7 @@ env:
   CW_MAP: '1'
   CW_JOBS: '5'
   DO_NOT_TRACK: '1'
-  DOCKER_CONTENT_TRUST: '1'
+  DOCKER_CONTENT_TRUST: ''
 
 jobs:
   reuse-check:
@@ -126,6 +126,8 @@ jobs:
   linux-glibc-debian-bookworm-llvm:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      DOCKER_CONTENT_TRUST: '1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -159,6 +161,8 @@ jobs:
   linux-glibc-debian-bookworm-gcc:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      DOCKER_CONTENT_TRUST: '1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -254,6 +258,8 @@ jobs:
   linux-musl-debian-bookworm-llvm:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      DOCKER_CONTENT_TRUST: '1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -287,6 +293,8 @@ jobs:
   linux-musl-debian-bookworm-gcc:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      DOCKER_CONTENT_TRUST: '1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -320,6 +328,8 @@ jobs:
   linux-musl-alpine-llvm:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      DOCKER_CONTENT_TRUST: '1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -351,6 +361,8 @@ jobs:
   linux-musl-alpine-gcc:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      DOCKER_CONTENT_TRUST: '1'
     steps:
       - uses: actions/checkout@v4
         with:
