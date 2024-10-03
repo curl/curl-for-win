@@ -9,7 +9,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 extra=''
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go'
 if [[ "${CW_CONFIG:-}" != *'mac'* ]] || [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
-  extra+=' llvm'
+  extra+=' llvm lld'
 fi
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
