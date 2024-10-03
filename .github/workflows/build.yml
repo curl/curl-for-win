@@ -126,8 +126,6 @@ jobs:
   linux-glibc-debian-bookworm-llvm:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      DOCKER_CONTENT_TRUST: '1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -137,6 +135,7 @@ jobs:
           export CW_CONFIG='${{ github.ref_name }}-linux'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='debian:bookworm-slim'
+          DOCKER_CONTENT_TRUST=1
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -161,8 +160,6 @@ jobs:
   linux-glibc-debian-bookworm-gcc:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      DOCKER_CONTENT_TRUST: '1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -172,6 +169,7 @@ jobs:
           export CW_CONFIG='${{ github.ref_name }}-linux-gcc'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='debian:bookworm-slim'
+          DOCKER_CONTENT_TRUST=1
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -258,8 +256,6 @@ jobs:
   linux-musl-debian-bookworm-llvm:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      DOCKER_CONTENT_TRUST: '1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -269,6 +265,7 @@ jobs:
           export CW_CONFIG='${{ github.ref_name }}-linux-musl'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='debian:bookworm-slim'
+          DOCKER_CONTENT_TRUST=1
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -293,8 +290,6 @@ jobs:
   linux-musl-debian-bookworm-gcc:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      DOCKER_CONTENT_TRUST: '1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -304,6 +299,7 @@ jobs:
           export CW_CONFIG='${{ github.ref_name }}-linux-musl-gcc'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='debian:bookworm-slim'
+          DOCKER_CONTENT_TRUST=1
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -328,8 +324,6 @@ jobs:
   linux-musl-alpine-llvm:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      DOCKER_CONTENT_TRUST: '1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -339,6 +333,7 @@ jobs:
           export CW_CONFIG='${{ github.ref_name }}-linux'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='alpine:latest'
+          DOCKER_CONTENT_TRUST=1
           docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"
           docker images --digests
@@ -361,8 +356,6 @@ jobs:
   linux-musl-alpine-gcc:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      DOCKER_CONTENT_TRUST: '1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -372,6 +365,7 @@ jobs:
           export CW_CONFIG='${{ github.ref_name }}-linux-gcc'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='alpine:latest'
+          DOCKER_CONTENT_TRUST=1
           docker trust inspect --pretty "${DOCKER_IMAGE}"
           time docker pull "${DOCKER_IMAGE}"
           docker images --digests
