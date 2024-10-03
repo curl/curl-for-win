@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: MIT
 
 export DOCKER_IMAGE='debian:testing-20240926-slim'
+export DOCKER_CONTENT_TRUST=''
 
 export CURL_VER_='8.10.1'
 export CURL_HASH=73a4b0e99596a09fa5924a4fb7e4b995a85fda0d18a2c02ab9cf134bebce04ee

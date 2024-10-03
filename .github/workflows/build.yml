@@ -21,7 +21,6 @@ env:
   CW_MAP: '1'
   CW_JOBS: '5'
   DO_NOT_TRACK: '1'
-  DOCKER_CONTENT_TRUST: ''
 
 jobs:
   reuse-check:
@@ -31,8 +30,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: 'REUSE compliance check'
         uses: fsfe/reuse-action@v4
-        env:
-          DOCKER_CONTENT_TRUST: ''
 
   shellcheck:
     runs-on: ubuntu-latest
