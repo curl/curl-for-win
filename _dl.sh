@@ -114,13 +114,8 @@ cat <<EOF
   },
   {
     "name": "boringssl",
-    "url": "https://github.com/google/boringssl/archive/{ver}.tar.gz",
-    "redir": "redir",
-    "tag": "^master$",
-    "ref_url": "https://raw.githubusercontent.com/chromium/chromium/main/DEPS",
-    "ref_expr": "boringssl_revision",
-    "ref_mask": "([0-9a-fA-F]{32,})",
-    "pinned": true
+    "url": "https://github.com/google/boringssl/releases/download/{ver}/boringssl-{ver}.tar.gz",
+    "redir": "redir"
   },
   {
     "name": "osslsigncode",
