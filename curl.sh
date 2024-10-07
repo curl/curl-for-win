@@ -384,11 +384,13 @@ _VER="$1"
   fi
 
   if [ "${_OS}" = 'linux' ] && [ "${_CROSS}" = '1' ]; then
-    # Auto-detection is disabled for these features in cross-builds.
-    # Ensure they are set as in native builds.
+    # Auto-detection is disabled for this feature in cross-builds.
+    # Ensure it is set as in native builds.
     options+=' -DHAVE_WRITABLE_ARGV=1'
-    if [ "${_CRT}" = 'musl' ]; then
-      options+=' -DHAVE_POLL_FINE=1'
+    if [ "${CURL_VER_}" = '8.10.1' ]; then
+      if [ "${_CRT}" = 'musl' ]; then
+        options+=' -DHAVE_POLL_FINE=1'
+      fi
     fi
   fi
 
