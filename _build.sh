@@ -1232,7 +1232,7 @@ build_single_target() {
 
       if [ -d "${libgccdir}/include-fixed" ]; then
         # dump SDK major version used while building Homebrew gcc:
-        grep -a -h -r -E -o '.+[0-9.]+\.sdk/' "${libgccdir}/include-fixed" | sed -E 's/^\t+//g' | tr -d '"' | sort -u || true
+        "${_CCPREFIX}gcc${_CCSUFFIX}" --print-sysroot
 
         # Homebrew gcc (as of v14.1.0) ships with set of SDK header overrides.
         # These are compatible with the specific SDK version the Homebrew build
