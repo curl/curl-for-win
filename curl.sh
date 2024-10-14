@@ -229,7 +229,7 @@ _VER="$1"
     options+=' -DHAVE_STDATOMIC_H=1 -DHAVE_ATOMIC=1 -DHAVE_STRTOK_R=1 -DHAVE_FILE_OFFSET_BITS=1'
   fi
 
-  if [[ "${_CONFIG}" != *'osnotls'* && "${_CONFIG}" = *'noh3'* ]]; then
+  if [[ "${_CONFIG}" != *'osnotls'* && ("${h3}" = '0' || "${_CONFIG}" = *'noh3'*) ]]; then
     if [ "${_OS}" = 'win' ]; then
       options+=' -DCURL_USE_SCHANNEL=ON'
     elif [ "${_OS}" = 'mac' ] && [ "${_OSVER}" -lt '1015' ]; then
