@@ -8,7 +8,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 pacman --noconfirm --ask 20 --noprogressbar --sync --refresh --sysupgrade --sysupgrade
 pacman --noconfirm --ask 20 --noprogressbar --sync --refresh --sysupgrade --sysupgrade
 pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
-  mingw-w64-{x86_64,i686}-{clang,cmake,jq,python-pefile,rsync,gettext,osslsigncode} \
+  mingw-w64-{x86_64,i686}-{clang,cmake,ninja,jq,python-pefile,rsync,gettext,osslsigncode} \
   zip
 
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && \

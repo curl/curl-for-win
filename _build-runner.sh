@@ -24,7 +24,7 @@ if [ ! -f .cw-initialized ]; then
   case "$(uname)" in
     *_NT*)
       pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
-        mingw-w64-x86_64-{clang,cmake,jq,python-pefile,rsync,gettext,osslsigncode} \
+        mingw-w64-x86_64-{clang,cmake,ninja,jq,python-pefile,rsync,gettext,osslsigncode} \
         zip
       [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && \
       pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
@@ -44,7 +44,7 @@ if [ ! -f .cw-initialized ]; then
         fi
         # shellcheck disable=SC2086
         apt-get --quiet 2 --option Dpkg::Use-Pty=0 --yes install \
-          curl git gpg rsync python3-pefile make cmake \
+          curl git gpg rsync python3-pefile make cmake ninja-build \
           zip xz-utils time jq secure-delete ${extra}
       elif [ "${_DISTRO}" = 'alpine' ]; then
         [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go nasm'
@@ -52,7 +52,7 @@ if [ ! -f .cw-initialized ]; then
           apk add --no-cache checksec-rs --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing/
         fi
         # shellcheck disable=SC2086
-        apk add --no-cache curl git gpg rsync build-base cmake \
+        apk add --no-cache curl git gpg rsync build-base cmake ninja-build \
           zip tar xz jq openssl ${extra}
       fi
       ;;
@@ -61,7 +61,7 @@ if [ ! -f .cw-initialized ]; then
       [[ "${CW_CONFIG:-}" = *'linux'* ]] && extra+=' filosottile/musl-cross/musl-cross'
       # shellcheck disable=SC2086
       brew install \
-        xz gnu-tar gettext jq ${extra}
+        xz gnu-tar gettext jq ninja ${extra}
       ;;
   esac
   touch .cw-initialized
