@@ -10,28 +10,10 @@
 # - Not possible to hide most ASM symbols from shared lib exports in Linux, macOS.
 #   https://github.com/libressl/portable/issues/957
 #   Local patch exists for this, or ASM can be disabled.
-# - Non-namespaced functions are defined and exported from libcrypto. [FIXED IN 3.9.0?]
-#   This causes a list of issues, from mis-detection, mis-use, unhidden
-#   export from shared lib. Mostly affects macOS.
-#   https://github.com/libressl/portable/issues/928
 # - Still loads config from hardcoded prefix.
 # - Missing `SSL_set0_wbio()` function.
 #   https://github.com/libressl/portable/issues/838
 # - No obvious way to selectively disable obsolete protocols/APIs/features.
-# - `-Wattributes` warnings with gcc. Need to be silenced with `-Wno-attributes`: [FIXED IN https://github.com/openbsd/src/commit/65010fa90cde4d3844c77cb00c51b2485f66de52 2024-06-01]
-#   ```
-#   ../../crypto/chacha/chacha-merged.c:26:5: warning: 'bounded' attribute directive ignored [-Wattributes]
-#      26 |     __attribute__((__bounded__(__minbytes__, 2, CHACHA_MINKEYLEN)));
-#         |     ^~~~~~~~~~~~~
-#   ../../crypto/chacha/chacha-merged.c:30:5: warning: 'bounded' attribute directive ignored [-Wattributes]
-#      30 |     __attribute__((__bounded__(__minbytes__, 3, CHACHA_CTRLEN)));
-#         |     ^~~~~~~~~~~~~
-#   ../../crypto/chacha/chacha-merged.c:30:5: warning: 'bounded' attribute directive ignored [-Wattributes]
-#   ../../crypto/chacha/chacha-merged.c:34:5: warning: 'bounded' attribute directive ignored [-Wattributes]
-#      34 |     __attribute__((__bounded__(__buffer__, 3, 4)));
-#         |     ^~~~~~~~~~~~~
-#   ```
-#   Ref: https://github.com/libressl/portable/issues/910#issuecomment-1755219504
 
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
@@ -56,8 +38,6 @@ _VER="$1"
 
   if [ "${_CC}" = 'llvm' ]; then
     CFLAGS+=' -Wa,--noexecstack'
-  elif [ "${LIBRESSL_VER_}" = '3.9.2' ]; then
-    CFLAGS+=' -Wno-attributes'
   fi
 
   CPPFLAGS+=' -DS2N_BN_HIDE_SYMBOLS'
