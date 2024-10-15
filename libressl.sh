@@ -47,7 +47,7 @@ _VER="$1"
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   options=''
-  CFLAGS="-ffile-prefix-map=$(pwd)="
+  CFLAGS="-ffile-prefix-map=$(pwd)="  # Pending: https://github.com/libressl/portable/issues/761
   CPPFLAGS=''
 
   if [[ "${_CONFIG}" != *'debug'* ]]; then
