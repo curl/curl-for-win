@@ -34,16 +34,9 @@ _VER="$1"
     if [ "${_OS}" = 'win' ]; then
       # Silence useless libssh2 warning about missing runtime DLL
       touch "${_TOP}/${_OPENSSL}/${_PP}/crypto.dll"
-      if [ "${LIBSSH2_VER_}" = '1.11.0' ]; then
-        touch "${_TOP}/${_OPENSSL}/${_PP}/ssl.dll"
-      fi
     fi
   elif [ "${_OS}" = 'win' ]; then
     options+=' -DCRYPTO_BACKEND=WinCNG'
-  fi
-
-  if [ "${LIBSSH2_VER_}" != '1.11.0' ]; then
-    options+=' -DLIBSSH2_NO_DEPRECATED=ON'
   fi
 
   if [[ "${_CONFIG}" != *'nounity'* ]]; then
@@ -54,10 +47,6 @@ _VER="$1"
     options+=' -DHIDE_SYMBOLS=OFF'
   fi
 
-  if [ "${LIBSSH2_VER_}" = '1.11.0' ]; then
-    LIBSSH2_CPPFLAGS+=' -DLIBSSH2_NO_DSA'
-  fi
-
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
     # shellcheck disable=SC2086
     cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
@@ -65,6 +54,7 @@ _VER="$1"
       '-DBUILD_EXAMPLES=OFF' \
       '-DBUILD_TESTING=OFF' \
       '-DENABLE_DEBUG_LOGGING=OFF' \
+      '-DLIBSSH2_NO_DEPRECATED=ON' \
       "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${LIBSSH2_CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS}"  # --debug-trycompile
   fi
 
