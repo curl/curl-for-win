@@ -410,9 +410,11 @@ _VER="$1"
       "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}"  # --debug-find --debug-trycompile
   fi
 
-  TZ=UTC make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}" VERBOSE=1
+  TZ=UTC cmake --build "${_BLDDIR}" --verbose
+  TZ=UTC cmake --install "${_BLDDIR}" --prefix "${_PP}"
+
   if [[ "${_CONFIG}" = *'curltests'* ]]; then
-    make --directory="${_BLDDIR}" --jobs="${_JOBS}" testdeps
+    TZ=UTC cmake --build "${_BLDDIR}" --target testdeps
   fi
 
   # Manual copy to DESTDIR

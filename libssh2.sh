@@ -58,7 +58,8 @@ _VER="$1"
       "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${LIBSSH2_CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS}"  # --debug-trycompile
   fi
 
-  make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIRS}"
+  cmake --build "${_BLDDIR}"
+  cmake --install "${_BLDDIR}" --prefix "${_PPS}"
 
   # Delete .pc files
   rm -r -f "${_PPS}"/lib/pkgconfig

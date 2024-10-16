@@ -43,7 +43,7 @@ _VER="$1"
     # zlib's RC compilation is broken as of v1.3 (2023-08-18) with broken CMake
     # option to disable shared libs. `install` wants to build all targets.
     # Workaround: Build static only and install manually.
-    make --directory="${_BLDDIR}" --jobs="${_JOBS}" zlibstatic
+    cmake --build "${_BLDDIR}" --target zlibstatic
 
     mkdir -p "${_PP}/include"
     mkdir -p "${_PP}/lib"
@@ -52,7 +52,8 @@ _VER="$1"
     cp -f -p "${_BLDDIR}"/zconf.h "${_PP}/include/"
     cp -f -p "${_BLDDIR}"/*.a     "${_PP}/lib/"
   else
-    make --directory="${_BLDDIR}" --jobs="${_JOBS}" install "DESTDIR=$(pwd)/${_PKGDIR}"
+    cmake --build "${_BLDDIR}"
+    cmake --install "${_BLDDIR}" --prefix "${_PP}"
   fi
 
   ls -l "${_PP}"/lib/*.a

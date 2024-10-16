@@ -12,9 +12,11 @@ _VER="$1"
 (
   cd "${_NAM}" || exit 0
 
-  cmake -B _bld
+  _BLDDIR='_bld'
 
-  make --directory=_bld --jobs="${_JOBS}" install "DESTDIR=$(pwd)/install"
+  cmake -B "${_BLDDIR}"
+  cmake --build "${_BLDDIR}"
+  cmake --install "${_BLDDIR}" --prefix 'install'
 
-  cp -f -p "$(pwd)/install/usr/local/bin/osslsigncode" ../osslsigncode-local
+  cp -f -p 'install/usr/local/bin/osslsigncode' ../osslsigncode-local
 )
