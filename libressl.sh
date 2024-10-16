@@ -3,7 +3,7 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-# Caveats (as of 3.9.2):
+# Caveats (as of 4.0.0):
 # - CET not enabled in mingw-w64 x64 ASM functions.
 #   https://github.com/libressl/portable/pull/1032
 # - ASM support only for x64.
@@ -14,6 +14,7 @@
 # - Missing `SSL_set0_wbio()` function.
 #   https://github.com/libressl/portable/issues/838
 # - No obvious way to selectively disable obsolete protocols/APIs/features.
+# - `--prefix` ignore in `cmake --install` for /etc/ssl files.
 
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
@@ -79,7 +80,10 @@ _VER="$1"
     "-DCMAKE_ASM_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}"
 
   cmake --build "${_BLDDIR}"
-  cmake --install "${_BLDDIR}" --prefix "${_PP}"
+  # FIXME upstream:
+  #   cmake --install "${_BLDDIR}" --prefix "${_PP}"
+  # ignores --prefix for /etc/ssl config files and fails when writing them.
+  DESTDIR="${_PKGDIR}" cmake --install "${_BLDDIR}"
 
   # Delete .pc files
   rm -r -f "${_PP}"/lib/pkgconfig
