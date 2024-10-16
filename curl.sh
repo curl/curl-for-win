@@ -419,14 +419,23 @@ _VER="$1"
 
   # Manual copy to DESTDIR
 
+  # These custom outputs end up in different directories depending on make tool
+  if [ "${_MK}" = 'ninja' ]; then
+    _out_lib=''
+    _out_src=''
+  else
+    _out_lib='lib/'
+    _out_src='src/'
+  fi
+
   if [ "${_OS}" = 'win' ]; then
-    cp -p "${_BLDDIR}/lib/${_DEF_NAME}" "${_PP}"/bin/
+    cp -p "${_BLDDIR}/${_out_lib}${_DEF_NAME}" "${_PP}"/bin/
   fi
 
   if [ "${CW_MAP}" = '1' ]; then
-    cp -p "${_BLDDIR}/lib/${_MAP_NAME_LIB}" "${_PP}/${DYN_DIR}/"
+    cp -p "${_BLDDIR}/${_out_lib}${_MAP_NAME_LIB}" "${_PP}/${DYN_DIR}/"
     if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
-      cp -p "${_BLDDIR}/src/${_MAP_NAME_BIN}" "${_PP}"/bin/
+      cp -p "${_BLDDIR}/${_out_src}${_MAP_NAME_BIN}" "${_PP}"/bin/
     fi
   fi
 
