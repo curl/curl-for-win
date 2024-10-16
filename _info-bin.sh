@@ -73,7 +73,11 @@ while [ -n "${1:-}" ]; do
     if [ "${is_curl}" = '1' ] && [ "${filetype}" != 'exe' ]; then  # Verify exported curl symbols
       "${NM}" --extern-only --defined-only "${f}"  # -g -U
       "${NM}" --extern-only --defined-only "${f}" | grep -a -F ' _curl_' | sort || false  # -g -U
-    # "${NM}" --extern-only --defined-only "${f}" | grep -a -F 'Name: ' | grep -a -F -v ' curl_' && false  # should not export anything else except the libcurl API
+      # should not export anything else except the libcurl API
+      if "${NM}" --extern-only --defined-only "${f}" | grep -a -F -v ' T _curl_'; then
+        echo "! '${f}' exports non-curl symbols."
+        exit 1
+      fi
     fi
   elif [ "${_OS}" = 'linux' ]; then
     # NOTE: objdump -syms (-t) to show symbol visibility flags
@@ -111,7 +115,10 @@ while [ -n "${1:-}" ]; do
       if [ "${filetype}" != 'exe' ]; then  # Verify exported curl symbols
         "${NM}" --dynamic --defined-only "${f}"  # -D -U
         "${NM}" --dynamic --defined-only "${f}" | grep -a -F ' curl_' | sort || false  # -D -U
-      # "${NM}" --dynamic --defined-only "${f}" | grep -a -F 'Name: ' | grep -a -F -v ' curl_' && false  # should not export anything else except the libcurl API
+        # Allowlist:
+        # - MUSL: _fini, _init
+        # - ?: _start, _start_c
+        "${NM}" --dynamic --defined-only "${f}" | grep -a -E -v ' T (curl_|(_fini|_init|_start|_start_c)$)' || true  # FIXME: should not export anything else except the libcurl API
       fi
       # nm -D -g = --dynamic --extern-only
     fi
