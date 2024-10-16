@@ -562,6 +562,7 @@ build_single_target() {
   _CCPREFIX=
   _CCSUFFIX=
   export _MAKE='make'
+  export MAKEFLAGS="-j${_JOBS}"
   export _RUN_BIN=''
 
   if [ "${_TOOLCHAIN}" != 'llvm-mingw' ]; then
