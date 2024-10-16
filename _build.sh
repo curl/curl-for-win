@@ -794,6 +794,17 @@ build_single_target() {
   export _CMAKE_ASM_GLOBAL=''
   export _CROSS=0
 
+  export _MK
+  if command -v ninja >/dev/null 2>&1; then
+    _MK='ninja'
+  else
+    _MK='gnumake'
+  fi
+
+  if [ "${_MK}" = 'ninja' ]; then
+    _CMAKE_GLOBAL+=' -G Ninja'
+  fi
+
   if [[ "${_CONFIG}" =~ (small|zero) ]]; then
     _CFLAGS_GLOBAL_RAW+=' -Os'
     _CMAKE_GLOBAL+=' -DCMAKE_BUILD_TYPE=MinSizeRel'
