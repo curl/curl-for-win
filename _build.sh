@@ -791,6 +791,7 @@ build_single_target() {
   export _LDFLAGS_CXX_GLOBAL=''  # CMake uses this
   export _CMAKE_GLOBAL='-Wno-dev'  # Suppress CMake warnings meant for upstream developers
   export _CMAKE_CXX_GLOBAL=''
+  export _CMAKE_ASM_GLOBAL=''
   export _CROSS=0
 
   if [[ "${_CONFIG}" =~ (small|zero) ]]; then
@@ -1282,6 +1283,7 @@ build_single_target() {
 
   _CMAKE_GLOBAL+=" -DCMAKE_C_COMPILER_TARGET=${_TRIPLET}"
   _CMAKE_CXX_GLOBAL+=" -DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}"
+  _CMAKE_ASM_GLOBAL+=" -DCMAKE_ASM_COMPILER_TARGET=${_TRIPLET}"
 
   # Needed to exclude compiler info from objects, but for our Windows COFF
   # outputs this seems to be a no-op as of llvm/clang 13.x/14.x.
