@@ -24,7 +24,7 @@ env:
 
 jobs:
   reuse-check:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
@@ -32,7 +32,7 @@ jobs:
         uses: fsfe/reuse-action@v4
 
   shellcheck:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
@@ -58,7 +58,7 @@ jobs:
             $(git ls-files)
 
   linux-glibc-debian-testing-llvm:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -89,7 +89,7 @@ jobs:
             urls.txt
 
   linux-glibc-debian-testing-gcc:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -121,7 +121,7 @@ jobs:
             urls.txt
 
   linux-glibc-debian-bookworm-llvm:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -155,7 +155,7 @@ jobs:
             urls.txt
 
   linux-glibc-debian-bookworm-gcc:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -189,7 +189,7 @@ jobs:
             urls.txt
 
   linux-musl-debian-testing-llvm:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -220,7 +220,7 @@ jobs:
             urls.txt
 
   linux-musl-debian-testing-gcc:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -251,7 +251,7 @@ jobs:
             urls.txt
 
   linux-musl-debian-bookworm-llvm:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -285,7 +285,7 @@ jobs:
             urls.txt
 
   linux-musl-debian-bookworm-gcc:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -319,7 +319,7 @@ jobs:
             urls.txt
 
   linux-musl-alpine-llvm:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -351,7 +351,7 @@ jobs:
             urls.txt
 
   linux-musl-alpine-gcc:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -408,7 +408,7 @@ jobs:
             urls.txt
 
   mac-clang:
-    runs-on: macos-latest
+    runs-on: 'macos-latest'
     timeout-minutes: 30
     env:
       CW_JOBS: '4'
@@ -435,7 +435,7 @@ jobs:
             urls.txt
 
   mac-llvm:
-    runs-on: macos-latest
+    runs-on: 'macos-latest'
     timeout-minutes: 30
     env:
       CW_JOBS: '4'
@@ -462,7 +462,7 @@ jobs:
             urls.txt
 
   mac-gcc:
-    runs-on: macos-latest
+    runs-on: 'macos-latest'
     timeout-minutes: 30
     env:
       CW_JOBS: '4'
@@ -490,7 +490,7 @@ jobs:
             urls.txt
 
   win-llvm-from-mac:
-    runs-on: macos-latest
+    runs-on: 'macos-latest'
     timeout-minutes: 30
     env:
       CW_JOBS: '4'
@@ -519,7 +519,7 @@ jobs:
             urls.txt
 
   win-llvm:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -553,7 +553,7 @@ jobs:
             urls.txt
 
   win-gcc:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
