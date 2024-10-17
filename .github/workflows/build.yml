@@ -66,7 +66,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-a64-r64-x64'
+          export CW_CONFIG='${{ github.ref_name }}-linux-a64-x64'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
           docker trust inspect --pretty "${DOCKER_IMAGE}"
