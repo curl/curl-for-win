@@ -125,4 +125,7 @@ if [ -n "${dl}" ]; then
   find -L 'my-pkg/usr/lib/clang' | sort
 fi
 
+find /usr/riscv64-linux-gnu/lib || true
+find /usr/lib/gcc-cross/riscv64-linux-gnu || true
+
 ./_build.sh
