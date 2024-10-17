@@ -1468,8 +1468,10 @@ build_single_target() {
       if [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
         ccrsdir="$("clang${_CCSUFFIX}" -print-resource-dir)"                           # /usr/lib/llvm-13/lib/clang/13.0.1
         if [ "${unamem}" = "${_machine}" ]; then
-          ccrtdir="$("clang${_CCSUFFIX}" -print-runtime-dir)"                          # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux
+          # llvm-19 returns wrong value: /usr/lib/llvm-19/lib/clang/19/lib/x86_64-pc-linux-gnu (this directory is missing)
+        # ccrtdir="$("clang${_CCSUFFIX}" -print-runtime-dir)"                          # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux
           ccrtlib="$("clang${_CCSUFFIX}" -print-libgcc-file-name -rtlib=compiler-rt)"  # /usr/lib/llvm-13/lib/clang/13.0.1/lib/linux/libclang_rt.builtins-aarch64.a
+          ccrtdir="$(dirname "${ccrtlib}")"
           ccrtlib="$(basename "${ccrtlib}" | cut -c 4-)"  # delete 'lib' prefix
           ccrtlib="-Wl,-l${ccrtlib%.*}"  # clang_rt.builtins-aarch64 or gcc
         elif [ -d 'my-pkg/usr/lib/clang' ]; then  # cross
