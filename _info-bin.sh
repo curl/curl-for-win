@@ -75,7 +75,7 @@ while [ -n "${1:-}" ]; do
       "${NM}" --extern-only --defined-only "${f}" | grep -a -F ' _curl_' | sort || false  # -g -U
       # should not export anything else except the libcurl API
       if "${NM}" --extern-only --defined-only "${f}" | grep -a -F -v ' T _curl_'; then
-        echo "! '${f}' exports non-curl symbols."
+        echo "! Error: '${f}' exports non-curl symbols."
         exit 1
       fi
     fi
