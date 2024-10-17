@@ -786,7 +786,7 @@ build_single_target() {
   export _CPPFLAGS_GLOBAL=''
   export _CXXFLAGS_GLOBAL=''
   export _RCFLAGS_GLOBAL=''
-  export _LDFLAGS_GLOBAL=''
+  export _LDFLAGS_GLOBAL='-v'
   export _LDFLAGS_BIN_GLOBAL=''
   export _LDFLAGS_CXX_GLOBAL=''  # CMake uses this
   export _CMAKE_GLOBAL='-Wno-dev'  # Suppress CMake warnings meant for upstream developers
