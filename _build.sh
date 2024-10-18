@@ -801,6 +801,9 @@ build_single_target() {
     _MK='gnumake'
   fi
 
+  # avoid re-evaluating and sometimes rebuilding targets on `cmake --install`
+  _CMAKE_GLOBAL+=' -DCMAKE_SKIP_INSTALL_ALL_DEPENDENCY=ON'
+
   if [ "${_MK}" = 'ninja' ]; then
     _CMAKE_GLOBAL+=' -G Ninja'
   fi
