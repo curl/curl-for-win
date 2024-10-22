@@ -102,7 +102,7 @@ fi
 
 apt-get --option Dpkg::Use-Pty=0 --yes update
 # shellcheck disable=SC2086
-apt-get --option Dpkg::Use-Pty=0 --yes install \
+apt-get --option Dpkg::Use-Pty=0 --yes install --no-install-suggests --no-install-recommends \
   curl git gpg gpg-agent rsync python3-pefile make cmake ninja-build \
   libssl-dev zlib1g-dev \
   zip xz-utils time jq secure-delete ${extra}
