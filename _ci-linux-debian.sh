@@ -15,7 +15,7 @@ dl=''
 
 if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
   [ -n "${CW_CCSUFFIX:-}" ] || export CW_CCSUFFIX='-19'
-  extra+=" llvm${CW_CCSUFFIX} clang${CW_CCSUFFIX} lld${CW_CCSUFFIX}"
+  extra+=" llvm${CW_CCSUFFIX} clang${CW_CCSUFFIX} lld${CW_CCSUFFIX} libclang-rt${CW_CCSUFFIX}-dev"
 fi
 
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' golang'
@@ -49,7 +49,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
   else
     # These packages do not install due to dependency requirements.
-    # We download unpack them manually as a workaround.
+    # We download and unpack them manually as a workaround.
     if [ "${CW_CCSUFFIX}" = '-15' ]; then
       # ./my-pkg/usr/lib/clang/15/lib
       # ./my-pkg/usr/lib/llvm-15/lib/clang/15.0.6/lib/linux/libclang_rt.builtins-aarch64.a
