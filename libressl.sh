@@ -14,7 +14,8 @@
 # - Missing `SSL_set0_wbio()` function.
 #   https://github.com/libressl/portable/issues/838
 # - No obvious way to selectively disable obsolete protocols/APIs/features.
-# - `--prefix` ignore in `cmake --install` for /etc/ssl files.
+# - `--prefix` ignored in `cmake --install` for /etc/ssl files.
+#   https://github.com/libressl/portable/issues/1118
 
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
