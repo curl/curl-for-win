@@ -83,10 +83,6 @@ _VER="$1"
     options+=' -DCURL_WERROR=ON'
   fi
 
-  if [[ "${_CONFIG}" = *'debug'* ]]; then
-    options+=' -DENABLE_DEBUG=ON'
-  fi
-
   if [[ "${_CONFIG}" = *'curltests'* ]]; then
     options+=' -DBUILD_TESTING=ON'
   else
