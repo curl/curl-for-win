@@ -27,13 +27,6 @@
 #   17MB -> 79MB (for x64, with ASM and -gddb disabled).
 #   Disabling them requires patching ./CMakeList.txt.
 #   This is fixed in AWS-LC fork with a CMake option.
-# - A test object named trampoline-x86_64.asm.obj ends up in libcrypto.a.
-# - nasm includes the first 18 bytes of the HOME directory in its output.
-#   e.g. rdrand-x86_64.asm.obj. This only affects libcrypto.a.
-#   This is intentionally written into a `.file` record and --reproducible
-#   does not disable it. See nasm/output/outcoff.c/coff_write_symbols()
-#   PR: https://github.com/netwide-assembler/nasm/pull/33 [RELEASED in v2.16]
-#   binutils strip is able to delete it (llvm-strip is not, as of 14.0.6).
 # - Objects built on different OSes result in a few byte differences.
 #   e.g. windows.c.obj, a_utf8.c.obj. But not a_octet.c.obj.
 
