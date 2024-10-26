@@ -170,7 +170,7 @@ my_curl() {
   local opts
   opts=(--disable --user-agent '' --fail --silent --show-error --globoff \
     --remote-time --xattr \
-    --connect-timeout 15 --max-time 60 --retry 3 --max-redirs 10)
+    --connect-timeout 15 --max-time 80 --retry 3 --max-redirs 10)
   # >&2 echo "my_curl|${opts[*]} $*|"
   if [[ "$*" = *'https://api.github.com/'* && -n "${GITHUB_TOKEN:+1}" ]]; then
     opts+=(--header @/dev/stdin)
