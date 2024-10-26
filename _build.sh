@@ -983,7 +983,6 @@ build_single_target() {
   fi
 
   if [ "${_OPENSSL}" = 'boringssl' ]; then
-    _CFLAGS_GLOBAL+=' -fno-addrsig'  # to avoid (as of 4fe29ebc, root cause undiscovered): ld.lld: error: libcrypto.a({mem,err,...}.o): invalid symbol index in addrsig section
     _LDFLAGS_GLOBAL+=' -Wl,-Bstatic -lstdc++'
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       _LDFLAGS_GLOBAL+=' -stdlib=libc++'
