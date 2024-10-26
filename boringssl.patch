@@ -1,5 +1,5 @@
---- third_party/fiat/p256_64.h-ORI	2024-10-26 23:40:45.782762285 +0200
-+++ third_party/fiat/p256_64.h	2024-10-26 23:42:54.200451029 +0200
+--- a/third_party/fiat/p256_64.h
++++ b/third_party/fiat/p256_64.h
 @@ -1,6 +1,6 @@
  #include <openssl/base.h>
  #include "../../crypto/internal.h"
