@@ -59,12 +59,16 @@ _VER="$1"
 
   [ "${_CPU}" = 'r64' ] && exit 1  # No support as of 2023-10
 
-  if true; then
-    # to avoid (as of 4fe29ebc, root cause undiscovered):
+  if false; then
+    # to avoid (as of 4fe29ebc):
     #   ld.lld: error: undefined symbol: fiat_p256_adx_mul
     #   >>> referenced by libcrypto.a(bcm.o):(fiat_p256_mul)
     #   ld.lld: error: undefined symbol: fiat_p256_adx_sqr
     #   >>> referenced by libcrypto.a(bcm.o):(fiat_p256_square)
+    # This is caused by a missing nasm implementation for these,
+    # yet referencing them for gcc-based x64 builds, also on Windows,
+    # which always use nasm. mingw-w64 builds hit constellation.
+    # Fixed via a local patch.
     options+=' -DOPENSSL_NO_ASM=ON'
   else
     if [ "${_OS}" = 'win' ] && [ "${_CPU}" != 'a64' ]; then
