@@ -16,6 +16,7 @@
 # - No obvious way to selectively disable obsolete protocols/APIs/features.
 # - `--prefix` ignored in `cmake --install` for /etc/ssl files.
 #   https://github.com/libressl/portable/issues/1118
+#   https://github.com/libressl/portable/pull/1119 [MERGED. Expected in 4.0.1]
 
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
@@ -81,10 +82,14 @@ _VER="$1"
     "-DCMAKE_ASM_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}"
 
   cmake --build "${_BLDDIR}"
-  # FIXME upstream:
-  #   cmake --install "${_BLDDIR}" --prefix "${_PP}"
-  # ignores --prefix for /etc/ssl config files and fails when writing them.
-  DESTDIR="${_PKGDIR}" cmake --install "${_BLDDIR}"
+  if [ "${LIBRESSL_VER_}" = '4.0.0' ]; then
+    # FIXME upstream:
+    #   cmake --install "${_BLDDIR}" --prefix "${_PP}"
+    # ignores --prefix for /etc/ssl config files and fails when writing them.
+    DESTDIR="${_PKGDIR}" cmake --install "${_BLDDIR}"
+  else
+    cmake --install "${_BLDDIR}" --prefix "${_PP}"
+  fi
 
   # Delete .pc files
   rm -r -f "${_PP}"/lib/pkgconfig
