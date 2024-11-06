@@ -7,6 +7,9 @@
 
 # FIXME (upstream):
 # - x64 mingw-w64 pthread ucrt static linking bug -> requires llvm-mingw
+#   Likely fixed in mingw-w64 12.0.0.
+#   https://sourceforge.net/p/mingw-w64/mingw-w64/ci/ad2b46ca1e603872f62f83eaaff9e5ef77c99500/
+#   https://github.com/mirror/mingw-w64/commit/ad2b46ca1e603872f62f83eaaff9e5ef77c99500
 # - as of 4fe29ebc hacks are needed to avoid build issues. grep for the hash
 #   to find them.
 # - BoringSSL also supports native-Windows threading, but it uses
