@@ -33,7 +33,7 @@ _VER="$1"
     options+=' -DENABLE_OPENSSL=OFF'
     options+=' -DENABLE_BORINGSSL=ON'
     options+=" -DBORINGSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
-    options+=" -DBORINGSSL_LIBRARIES=${_TOP}/${_OPENSSL}/${_PP}/lib/libcrypto.a;${_TOP}/${_OPENSSL}/${_PP}/lib/libssl.a;-lpthread"; [ "${_OS}" = 'win' ] && options="${options};-lws2_32"
+    options+=" -DBORINGSSL_LIBRARIES=${_TOP}/${_OPENSSL}/${_PP}/lib/libssl.a;${_TOP}/${_OPENSSL}/${_PP}/lib/libcrypto.a;-lpthread"; [ "${_OS}" = 'win' ] && options="${options};-lws2_32"
     CPPFLAGS+=' -DNOCRYPT'
   elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ]; then
     options+=' -DENABLE_OPENSSL=ON'
