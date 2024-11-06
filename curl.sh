@@ -396,7 +396,9 @@ _VER="$1"
       "-DCMAKE_RC_FLAGS=${_RCFLAGS_GLOBAL}" \
       "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}" \
       "-DCMAKE_EXE_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_BIN} ${LIBS}" \
-      "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}"  # --debug-find --debug-trycompile
+      "-DCMAKE_SHARED_LINKER_FLAGS=${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}" \
+      || { cat "${_BLDDIR}"/CMakeFiles/CMake*.yaml; false; }
+    # --debug-find --debug-trycompile
   fi
 
   TZ=UTC cmake --build "${_BLDDIR}" --verbose
