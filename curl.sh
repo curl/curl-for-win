@@ -107,9 +107,7 @@ _VER="$1"
     options+=' -DCURL_DISABLE_NTLM=ON'
     options+=' -DCURL_DISABLE_SHA512_256=ON'
     options+=' -DCURL_DISABLE_DICT=ON -DCURL_DISABLE_FILE=ON -DCURL_DISABLE_GOPHER=ON -DCURL_DISABLE_MQTT=ON -DCURL_DISABLE_RTSP=ON -DCURL_DISABLE_SMB=ON -DCURL_DISABLE_TELNET=ON -DCURL_DISABLE_TFTP=ON'
-    if [ "${CURL_VER_}" != '8.10.1' ]; then
-      options+=' -DCURL_DISABLE_IPFS=ON'
-    fi
+    options+=' -DCURL_DISABLE_IPFS=ON'
     options+=' -DCURL_DISABLE_FTP=ON'
     options+=' -DCURL_DISABLE_POP3=ON -DCURL_DISABLE_SMTP=ON'
     [[ "${_CONFIG}" != *'imap'* ]] && options+=' -DCURL_DISABLE_IMAP=ON'
@@ -284,9 +282,6 @@ _VER="$1"
       options+=' -DUSE_NGTCP2=ON'
       options+=" -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PPS}/include"
       options+=" -DNGTCP2_LIBRARY=${_TOP}/ngtcp2/${_PPS}/lib/libngtcp2.a"
-      if [ "${CURL_VER_}" = '8.10.1' ]; then
-        options+=" -DCMAKE_LIBRARY_PATH=${_TOP}/ngtcp2/${_PPS}/lib"
-      fi
       CPPFLAGS+=' -DNGTCP2_STATICLIB'
     else
       options+=' -DUSE_NGTCP2=OFF'
@@ -356,8 +351,7 @@ _VER="$1"
       options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
     fi
 
-    if [ "${_OS}" = 'win' ] && \
-       [ "${CURL_VER_}" != '8.10.1' ]; then
+    if [ "${_OS}" = 'win' ]; then
       options+=' -DCURL_CA_SEARCH_SAFE=ON'
     fi
   else
@@ -383,11 +377,6 @@ _VER="$1"
     # Auto-detection is disabled for this feature in cross-builds.
     # Ensure it is set as in native builds.
     options+=' -DHAVE_WRITABLE_ARGV=1'
-    if [ "${CURL_VER_}" = '8.10.1' ]; then
-      if [ "${_CRT}" = 'musl' ]; then
-        options+=' -DHAVE_POLL_FINE=1'
-      fi
-    fi
   fi
 
   options+=' -DCURL_USE_PKGCONFIG=OFF'
