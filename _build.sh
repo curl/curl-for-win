@@ -991,13 +991,13 @@ build_single_target() {
   fi
 
   if [ "${boringssl}" = '1' ]; then
-    _LDFLAGS_GLOBAL+=' -Wl,-Bstatic -lstdc++'
+    _LDFLAGS_CXX_GLOBAL+=' -Wl,-Bstatic -lstdc++'
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-      _LDFLAGS_GLOBAL+=' -stdlib=libc++'
+      _LDFLAGS_CXX_GLOBAL+=' -stdlib=libc++'
       # to avoid:
       #   ld.lld: error: undefined symbol: _Unwind_Resume
       #   >>> referenced by objects.a(args.cc.obj):[...]
-      _LDFLAGS_GLOBAL+=' -lunwind'
+      _LDFLAGS_CXX_GLOBAL+=' -lunwind'
     fi
   fi
 
