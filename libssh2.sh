@@ -28,7 +28,7 @@ _VER="$1"
   if [ -n "${_OPENSSL}" ] && [ -d "../${_OPENSSL}/${_PP}" ]; then
     options+=' -DCRYPTO_BACKEND=OpenSSL'
     options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-    if [ "${_OPENSSL}" = 'boringssl' ]; then
+    if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
       LIBS+=' -lpthread'
     fi
     if [ "${_OS}" = 'win' ]; then

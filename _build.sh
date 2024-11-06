@@ -42,6 +42,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        nohttp     build without HTTP and proxy support
 #        nocookie   build without cookie support
 #        imap       build with IMAP protocol (for zero, bldtst or pico build)
+#        awslc      build with AWS-LC
 #        boringssl  build with BoringSSL
 #        libressl   build with LibreSSL
 #        quictls    build with quictls
@@ -177,7 +178,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   nghttp3          cmake
 #   ngtcp2           cmake
 #   openssl/quictls  proprietary
-#   boringssl        cmake
+#   boringssl/awslc  cmake
 #   libressl         cmake
 #   libssh           cmake
 #   libssh2          cmake-unity
@@ -515,6 +516,8 @@ build_single_target() {
   export _OPENSSL=''; boringssl=0
   if   [[ "${_DEPS}" = *'libressl'* ]]; then
     _OPENSSL='libressl'
+  elif [[ "${_DEPS}" = *'awslc'* ]]; then
+    _OPENSSL='awslc'; boringssl=1
   elif [[ "${_DEPS}" = *'boringssl'* ]]; then
     _OPENSSL='boringssl'; boringssl=1
   elif [[ "${_DEPS}" = *'quictls'* ]]; then
@@ -819,7 +822,11 @@ build_single_target() {
 
   if [ "${_OS}" = 'win' ]; then
 
-    _CPPFLAGS_GLOBAL+=' -D_WIN32_WINNT=0x0600'  # Windows Vista
+    if [ "${_OPENSSL}" = 'awslc' ]; then
+      _CPPFLAGS_GLOBAL+=' -D_WIN32_WINNT=0x0700'  # Windows 7
+    else
+      _CPPFLAGS_GLOBAL+=' -D_WIN32_WINNT=0x0600'  # Windows Vista
+    fi
 
     if [ "${_HOST}" != "${_OS}" ] || \
        [ "${unamem}" != "${_machine}" ]; then
@@ -983,7 +990,7 @@ build_single_target() {
     _CXXFLAGS_GLOBAL+=' -fvisibility=hidden'
   fi
 
-  if [ "${_OPENSSL}" = 'boringssl' ]; then
+  if [ "${boringssl}" = '1' ]; then
     _LDFLAGS_GLOBAL+=' -Wl,-Bstatic -lstdc++'
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       _LDFLAGS_GLOBAL+=' -stdlib=libc++'
@@ -1303,7 +1310,7 @@ build_single_target() {
     _CFLAGS_GLOBAL+=' -fno-ident'
   fi
 
-  # for boringssl
+  # for boringssl/awslc
   export _STRIP_BINUTILS=''
   if [ "${_OS}" = 'win' ] && [ "${_CC}" = 'llvm' ]; then
     if [ "${_CPU}" = 'x64' ] || \
@@ -1314,7 +1321,7 @@ build_single_target() {
       if command -v "${tmp}" >/dev/null 2>&1; then
         _STRIP_BINUTILS="$(PATH="${_ori_path}" command -v "${tmp}" 2>/dev/null)"
       else
-        echo "! Warning: binutils strip tool '${tmp}' not found. BoringSSL libs may not be reproducible."
+        echo "! Warning: binutils strip tool '${tmp}' not found. BoringSSL/AWC-LC libs may not be reproducible."
       fi
     fi
   fi
@@ -1452,7 +1459,7 @@ build_single_target() {
       fi
       ccrsdir="${ccrtdir}"
       ccrtlib="-Wl,-lgcc -Wl,-lgcc_eh"
-      if [ "${_OPENSSL}" != 'boringssl' ]; then
+      if [ "${boringssl}" != '1' ]; then
         _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
       fi
       ccridir="$("clang${_CCSUFFIX}" -print-resource-dir)"                             # /usr/lib/llvm-13/lib/clang/13.0.1
@@ -1536,7 +1543,7 @@ build_single_target() {
         fi
         _LDFLAGS_GLOBAL+=' -rtlib=compiler-rt'
       fi
-      if [ "${_OPENSSL}" != 'boringssl' ]; then
+      if [ "${boringssl}" != '1' ]; then
         _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
       fi
     fi
@@ -1689,6 +1696,7 @@ build_single_target() {
   bld cares               "${CARES_VER_}"
   bld libpsl             "${LIBPSL_VER_}"
   bld nghttp3           "${NGHTTP3_VER_}"
+  bld awslc               "${AWSLC_VER_}" boringssl
   bld boringssl       "${BORINGSSL_VER_}"
   bld libressl         "${LIBRESSL_VER_}"
   bld quictls           "${QUICTLS_VER_}" openssl

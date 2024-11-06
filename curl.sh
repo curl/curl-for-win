@@ -195,10 +195,14 @@ _VER="$1"
       fi
     fi
     options+=' -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON'
-    if [ "${_OPENSSL}" = 'boringssl' ]; then
-      CPPFLAGS+=" -DCURL_BORINGSSL_VERSION=\\\"${BORINGSSL_VER_}\\\""
-      options+=' -DUSE_HTTPSRR=ON -DUSE_ECH=ON'
-      options+=' -DHAVE_BORINGSSL=1 -DHAVE_AWSLC=0'  # fast-track configuration
+    if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
+      if [ "${_OPENSSL}" = 'boringssl' ]; then
+        CPPFLAGS+=" -DCURL_BORINGSSL_VERSION=\\\"${BORINGSSL_VER_}\\\""
+        options+=' -DUSE_HTTPSRR=ON -DUSE_ECH=ON'
+        options+=' -DHAVE_BORINGSSL=1 -DHAVE_AWSLC=0'  # fast-track configuration
+      else
+        options+=' -DHAVE_BORINGSSL=0 -DHAVE_AWSLC=1'  # fast-track configuration
+      fi
       LIBS+=' -lpthread'
       h3=1
     else

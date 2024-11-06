@@ -12,6 +12,7 @@
 #   https://github.com/mirror/mingw-w64/commit/ad2b46ca1e603872f62f83eaaff9e5ef77c99500
 # - as of 4fe29ebc hacks are needed to avoid build issues. grep for the hash
 #   to find them.
+#   Does not affect AWS-LC.
 # - BoringSSL also supports native-Windows threading, but it uses
 #   MSVC-specific hacks, thus cannot be enabled for MinGW:
 #     https://github.com/google/boringssl/blob/master/crypto/thread_win.c
@@ -32,6 +33,14 @@
 #   This is fixed in AWS-LC fork with a CMake option.
 # - Objects built on different OSes result in a few byte differences.
 #   e.g. windows.c.obj, a_utf8.c.obj. But not a_octet.c.obj.
+# - AWS-LC force-sets _WIN32_WINNT to _WIN32_WINNT_WIN7. The Windows target
+#   should be up to the builder and not something for the project to set
+#   unconditionally. If the selected version is too old, the build should
+#   bail out. Either way, AWS-LC requires Win7, which is higher than the
+#   Vista curl-for-win guarantees. But only for MinGW builds, as a way
+#   to bump up the default, possibly as a workaround.
+
+# https://github.com/aws/aws-lc
 
 # https://boringssl.googlesource.com/boringssl/
 # https://bugs.chromium.org/p/boringssl/issues/list
@@ -48,7 +57,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 export _NAM _VER _OUT _BAS _DST
 
-_NAM="$(basename "$0" | cut -f 1 -d '.')"
+_NAM="$(basename "$0" | cut -f 1 -d '.')"; [ -n "${2:-}" ] && _NAM="$2"
 _VER="$1"
 
 (
@@ -57,6 +66,7 @@ _VER="$1"
   [ "${CW_DEV_INCREMENTAL:-}" != '1' ] && rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   CFLAGS="-ffile-prefix-map=$(pwd)="
+  CPPFLAGS=''
   LIBS='-lpthread'  # for tests
   options=''
 
@@ -92,24 +102,39 @@ _VER="$1"
   fi
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
-    # Patch the build to omit debug info. This results in 50% smaller footprint
-    # for each ${_BLDDIR}. As of llvm 14.0.6, llvm-strip does an imperfect job
-    # when deleting -ggdb debug info and ends up having ~100 bytes of metadata
-    # different (e.g. in windows.c.obj, a_utf8.c.obj, but not a_octet.c.obj)
-    # across build host platforms. Fixed either by patching out this flag here,
-    # or by running binutils strip on the result. binutils strip do not support
-    # ARM64, so patch it out in that case.
-    # Enable it for all targets for consistency.
-    sed -i.bak 's/ -ggdb//g' ./CMakeLists.txt
+    if [ "${_NAM}" = 'awslc' ]; then
+      options+=' -DBUILD_TESTING=OFF'
+      options+=' -DBUILD_TOOL=OFF'
+      options+=' -DDISABLE_GO=ON'
+      options+=' -DDISABLE_PERL=ON'
 
-    # Skip building test components
-    echo 'set_target_properties(decrepit bssl_shim test_fips boringssl_gtest test_support_lib urandom_test crypto_test ssl_test decrepit_test all_tests pki pki_test run_tests PROPERTIES EXCLUDE_FROM_ALL TRUE)' >> ./CMakeLists.txt
+      if [ "${_OS}" = 'win' ]; then
+        # Avoid deprecation warning triggered by mingw-w64 inside clang 19
+        CPPFLAGS+=' -D_CLANG_DISABLE_CRT_DEPRECATION_WARNINGS'
+      fi
+
+      # Patch out to avoid redefinition errors
+      sed -i.bak 's/-D_WIN32_WINNT=_WIN32_WINNT_WIN7//g' ./CMakeLists.txt
+    else
+      # Patch the build to omit debug info. This results in 50% smaller footprint
+      # for each ${_BLDDIR}. As of llvm 14.0.6, llvm-strip does an imperfect job
+      # when deleting -ggdb debug info and ends up having ~100 bytes of metadata
+      # different (e.g. in windows.c.obj, a_utf8.c.obj, but not a_octet.c.obj)
+      # across build host platforms. Fixed either by patching out this flag here,
+      # or by running binutils strip on the result. binutils strip do not support
+      # ARM64, so patch it out in that case.
+      # Enable it for all targets for consistency.
+      sed -i.bak 's/ -ggdb//g' ./CMakeLists.txt
+
+      # Skip building test components
+      echo 'set_target_properties(decrepit bssl_shim test_fips boringssl_gtest test_support_lib urandom_test crypto_test ssl_test decrepit_test all_tests pki pki_test run_tests PROPERTIES EXCLUDE_FROM_ALL TRUE)' >> ./CMakeLists.txt
+    fi
 
     # shellcheck disable=SC2086
     cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
       '-DBUILD_SHARED_LIBS=OFF' \
-      "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS}" \
-      "-DCMAKE_CXX_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
+      "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS}" \
+      "-DCMAKE_CXX_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
   fi
 
   cmake --build "${_BLDDIR}"  # --verbose

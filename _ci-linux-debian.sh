@@ -27,7 +27,7 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   extra+=' mingw-w64 wine64'
   # https://tracker.debian.org/pkg/osslsigncode
   extra+=' osslsigncode'
-  if [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
+  if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
     extra+=' nasm'
   fi
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
