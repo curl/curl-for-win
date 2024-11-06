@@ -198,10 +198,14 @@ _VER="$1"
     if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
       if [ "${_OPENSSL}" = 'boringssl' ]; then
         CPPFLAGS+=" -DCURL_BORINGSSL_VERSION=\\\"${BORINGSSL_VER_}\\\""
-        options+=' -DUSE_HTTPSRR=ON -DUSE_ECH=ON'
         options+=' -DHAVE_BORINGSSL=1 -DHAVE_AWSLC=0'  # fast-track configuration
       else
         options+=' -DHAVE_BORINGSSL=0 -DHAVE_AWSLC=1'  # fast-track configuration
+      fi
+      if [ "${_OPENSSL}" = 'boringssl' ] || \
+         [ "${CURL_VER_}" != '8.11.0' ] || \
+         [[ "${_CONFIG}" = *'test'* ]]; then
+        options+=' -DUSE_HTTPSRR=ON -DUSE_ECH=ON'
       fi
       LIBS+=' -lpthread'
       h3=1
