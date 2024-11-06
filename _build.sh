@@ -183,6 +183,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   libssh2          cmake-unity
 #   curl             cmake-unity
 #   trurl            gnumake
+#   osslsigncode     cmake
 
 cd "$(dirname "$0")"
 
