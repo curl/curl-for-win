@@ -66,7 +66,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-a64-r64-x64'
+          export CW_CONFIG='awslc-${{ github.ref_name }}-linux-a64-r64-x64'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -97,7 +97,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-a64-r64-x64-gcc'
+          export CW_CONFIG='awslc-${{ github.ref_name }}-linux-a64-r64-x64-gcc'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
           export CW_GCCSUFFIX='-14'
@@ -129,7 +129,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux'
+          export CW_CONFIG='awslc-${{ github.ref_name }}-linux'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='debian:bookworm-slim'
           DOCKER_CONTENT_TRUST=1
@@ -163,7 +163,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-gcc'
+          export CW_CONFIG='awslc-${{ github.ref_name }}-linux-gcc'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='debian:bookworm-slim'
           DOCKER_CONTENT_TRUST=1
@@ -197,7 +197,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-a64-r64-x64-musl'
+          export CW_CONFIG='awslc-${{ github.ref_name }}-linux-a64-r64-x64-musl'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -228,7 +228,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-a64-r64-x64-musl-gcc'
+          export CW_CONFIG='awslc-${{ github.ref_name }}-linux-a64-r64-x64-musl-gcc'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -259,7 +259,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-musl'
+          export CW_CONFIG='awslc-${{ github.ref_name }}-linux-musl'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='debian:bookworm-slim'
           DOCKER_CONTENT_TRUST=1
@@ -293,7 +293,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-musl-gcc'
+          export CW_CONFIG='awslc-${{ github.ref_name }}-linux-musl-gcc'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='debian:bookworm-slim'
           DOCKER_CONTENT_TRUST=1
@@ -327,7 +327,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux'
+          export CW_CONFIG='awslc-${{ github.ref_name }}-linux'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='alpine:latest'
           DOCKER_CONTENT_TRUST=1
@@ -359,7 +359,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux-gcc'
+          export CW_CONFIG='awslc-${{ github.ref_name }}-linux-gcc'
           export CW_REVISION='${{ github.sha }}'
           DOCKER_IMAGE='alpine:latest'
           DOCKER_CONTENT_TRUST=1
@@ -393,7 +393,7 @@ jobs:
         env:
           GITHUB_TOKEN: '${{ github.token }}'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-linux'
+          export CW_CONFIG='awslc-${{ github.ref_name }}-linux'
           export CW_REVISION='${{ github.sha }}'
           sh -c ./_ci-mac-homebrew.sh
 
@@ -420,7 +420,7 @@ jobs:
         env:
           GITHUB_TOKEN: '${{ github.token }}'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-mac-macuni'
+          export CW_CONFIG='awslc-${{ github.ref_name }}-mac-macuni'
           export CW_REVISION='${{ github.sha }}'
           sh -c ./_ci-mac-homebrew.sh
 
@@ -447,7 +447,7 @@ jobs:
         env:
           GITHUB_TOKEN: '${{ github.token }}'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-mac-macuni-llvm'
+          export CW_CONFIG='awslc-${{ github.ref_name }}-mac-macuni-llvm'
           export CW_REVISION='${{ github.sha }}'
           sh -c ./_ci-mac-homebrew.sh
 
@@ -503,7 +503,7 @@ jobs:
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-win'
+          export CW_CONFIG='awslc-${{ github.ref_name }}-win'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
           sh -c ./_ci-mac-homebrew.sh
@@ -530,7 +530,7 @@ jobs:
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-win'
+          export CW_CONFIG='awslc-${{ github.ref_name }}-win'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
           docker trust inspect --pretty "${DOCKER_IMAGE}"
@@ -564,7 +564,7 @@ jobs:
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |
-          export CW_CONFIG='${{ github.ref_name }}-win-gcc'
+          export CW_CONFIG='awslc-${{ github.ref_name }}-win-gcc'
           export CW_REVISION='${{ github.sha }}'
           . ./_versions.sh
           docker trust inspect --pretty "${DOCKER_IMAGE}"
