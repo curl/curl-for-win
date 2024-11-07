@@ -28,7 +28,11 @@ if [ ! -f .cw-initialized ]; then
         zip
       [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && \
       pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
-        mingw-w64-x86_64-{go,nasm}
+        mingw-w64-x86_64-go
+      if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+        pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
+          mingw-w64-{x86_64,i686}-nasm
+      fi
       ;;
     Linux*)
       if [ -s /etc/os-release ]; then
@@ -37,7 +41,10 @@ if [ ! -f .cw-initialized ]; then
       fi
 
       if [ "${_DISTRO}" = 'debian' ]; then
-        [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' golang nasm'
+        [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' golang'
+        if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+          extra+=' nasm'
+        fi
         [[ "${CW_CONFIG:-}" = *'musl'* ]] && extra+=' musl musl-dev musl-tools'
         if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
           extra+=' checksec'
@@ -47,7 +54,10 @@ if [ ! -f .cw-initialized ]; then
           curl git gpg rsync python3-pefile make cmake ninja-build \
           zip xz-utils time jq secure-delete ${extra}
       elif [ "${_DISTRO}" = 'alpine' ]; then
-        [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go nasm'
+        [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go'
+        if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+          extra+=' nasm'
+        fi
         if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
           apk add --no-cache checksec-rs --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing/
         fi
@@ -57,7 +67,10 @@ if [ ! -f .cw-initialized ]; then
       fi
       ;;
     Darwin*)
-      [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go nasm'
+      [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go'
+      if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+        extra+=' nasm'
+      fi
       [[ "${CW_CONFIG:-}" = *'linux'* ]] && extra+=' filosottile/musl-cross/musl-cross'
       # shellcheck disable=SC2086
       brew install \
