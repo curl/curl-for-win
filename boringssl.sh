@@ -41,6 +41,7 @@
 #   to bump up the default, possibly as a workaround.
 # - AWS-LC: symbols are not hidden, making _info-bin.sh fail.
 # - AWS-LC: requires SSE2 for x86 builds with ASM enabled.
+# - AWS-LC: fails to build on mac-gcc-arm64.
 
 # https://github.com/aws/aws-lc
 
