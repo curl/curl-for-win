@@ -1000,10 +1000,12 @@ build_single_target() {
   fi
 
   if [ "${boringssl}" = '1' ]; then
-    if [ "${_OS}" = 'win' ]; then
-      _LDFLAGS_CXX_GLOBAL+=' -Wl,-Bstatic -lstdc++'
-    else
-      _LDFLAGS_CXX_GLOBAL+=' -lstdc++'
+    if [ "${_CC}" = 'gcc' ] || [ "${_OS}" != 'linux' ]; then
+      if [ "${_OS}" = 'win' ]; then
+        _LDFLAGS_CXX_GLOBAL+=' -Wl,-Bstatic -lstdc++'
+      else
+        _LDFLAGS_CXX_GLOBAL+=' -lstdc++'
+      fi
     fi
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       _LDFLAGS_CXX_GLOBAL+=' -stdlib=libc++'
