@@ -10,6 +10,7 @@
 #   Likely fixed in mingw-w64 12.0.0.
 #   https://sourceforge.net/p/mingw-w64/mingw-w64/ci/ad2b46ca1e603872f62f83eaaff9e5ef77c99500/
 #   https://github.com/mirror/mingw-w64/commit/ad2b46ca1e603872f62f83eaaff9e5ef77c99500
+#   edit: it is still happening with mingw-w64 12.0.0 + gcc 13 on debian testing.
 # - as of 4fe29ebc hacks are needed to avoid build issues. grep for the hash
 #   to find them.
 #   Does not affect AWS-LC.
