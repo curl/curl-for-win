@@ -25,6 +25,11 @@ _VER="$1"
     CPPFLAGS+=' -DNDEBUG'
   fi
 
+  if [ "${_OS}" = 'win' ]; then
+    # Avoid deprecation warning triggered by mingw-w64 inside clang 19
+    CPPFLAGS+=' -D_CLANG_DISABLE_CRT_DEPRECATION_WARNINGS'
+  fi
+
   # Avoid finding unnecessary system (Homebrew) package. This avoids log noise and
   # prevents building examples, which may fail for reasons or just take extra time.
   options+=' -DLIBEV_INCLUDE_DIR='

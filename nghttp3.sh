@@ -22,6 +22,11 @@ _VER="$1"
     CPPFLAGS+=' -DNDEBUG'
   fi
 
+  if [ "${_OS}" = 'win' ]; then
+    # Avoid deprecation warning triggered by mingw-w64 inside clang 19
+    CPPFLAGS+=' -D_CLANG_DISABLE_CRT_DEPRECATION_WARNINGS'
+  fi
+
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} \
     '-DENABLE_LIB_ONLY=ON' \
