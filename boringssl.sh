@@ -70,9 +70,7 @@ _VER="$1"
   LIBS='-lpthread'  # for tests
   options=''
 
-  [ "${_CPU}" = 'r64' ] && exit 1  # No support as of 2023-10
-
-  if false; then
+  if false || [ "${_CPU}" = 'r64' ]; then
     # to avoid (as of 4fe29ebc):
     #   ld.lld: error: undefined symbol: fiat_p256_adx_mul
     #   >>> referenced by libcrypto.a(bcm.o):(fiat_p256_mul)
