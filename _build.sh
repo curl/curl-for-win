@@ -1245,38 +1245,15 @@ build_single_target() {
 
     # Installed/selected Xcode version and SDK version:
     xcodebuild -version || true
-    echo "${_SYSROOT}"
+    echo "Default sysroot: ${_SYSROOT}"
     echo "macOS SDK version: ${_SDKVER}"
     echo "Xcode version: ${_XCODEVERFULL}"
 
     if [ "${_CC}" = 'gcc' ]; then
-
-      libgccdir="$(dirname \
-        "$("${_CCPREFIX}gcc${_CCSUFFIX}" -print-libgcc-file-name)")"
-
-      if [ -d "${libgccdir}/include-fixed" ]; then
-        # dump SDK major version used while building Homebrew gcc:
-        "${_CCPREFIX}gcc${_CCSUFFIX}" --print-sysroot
-
-        # Homebrew gcc (as of v14.1.0) ships with set of SDK header overrides.
-        # These are compatible with the specific SDK version the Homebrew build
-        # machines used at build-time. We only know the major version number of
-        # that SDK, and there is no guarantee that ours (or the CI machine) has
-        # the same versions installed or selected. To make it work anyway, we
-        # zap known to be incompatible/problematic parts of the gcc hacks.
-
-        # Unbreak Homebrew gcc builds by moving problematic SDK header overlay
-        # directories/files out of the way:
-        find "${libgccdir}/include-fixed" | sort
-        patch_out='dispatch os AvailabilityInternal.h'
-        patch_out+=' stdio.h'  # for Xcode 16 error: unknown type name 'FILE'
-        for f in ${patch_out}; do
-          if [ -r "${libgccdir}/include-fixed/${f}" ]; then
-            echo "! Zap gcc hack: '${libgccdir}/include-fixed/${f}'"
-            mv "${libgccdir}/include-fixed/${f}" "${libgccdir}/include-fixed/${f}-BAK"
-          fi
-        done
-      fi
+      # Show and select SDK major version used while building Homebrew gcc.
+      # We must stick to this to have its SDK hack-layer match with the actual SDK:
+      _SYSROOT="$("${_CCPREFIX}gcc${_CCSUFFIX}" --print-sysroot)"
+      echo "Overriding default sysroot for gcc: ${_SYSROOT}"
     fi
 
     if [ -n "${_SYSROOT}" ]; then
