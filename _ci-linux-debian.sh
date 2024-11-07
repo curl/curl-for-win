@@ -101,6 +101,14 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     fi
     [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra+=' libc6-dev-riscv64-cross'
   fi
+  if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+    if [ "$(uname -m)" = 'aarch64' ]; then
+      extra+=" libstdc++${CW_GCCSUFFIX}-dev:amd64"
+    else
+      extra+=" libstdc++${CW_GCCSUFFIX}-dev:arm64"
+    fi
+    [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra+=" libstdc++${CW_GCCSUFFIX}-dev:riscv64"
+  fi
 fi
 
 apt-get --option Dpkg::Use-Pty=0 --yes update
