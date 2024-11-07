@@ -1048,7 +1048,9 @@ build_single_target() {
   fi
 
   if [ "${_CC}" = 'llvm' ] && [ "${_TOOLCHAIN}" != 'llvm-apple' ]; then
-    _LDFLAGS_GLOBAL+=' -Wl,--icf=all'
+    if [ "${_OPENSSL}" != 'awslc' ] || [ "${_OS}" != 'win' ]; then
+      _LDFLAGS_GLOBAL+=' -Wl,--icf=all'
+    fi
   fi
 
   _CCRT='libgcc'  # compiler runtime, 'libgcc' (for libgcc and libstdc++) or 'clang-rt' (for compiler-rt and libc++)
