@@ -143,7 +143,7 @@ _VER="$1"
       -DCMAKE_CXX_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
   fi
 
-  cmake --build "${_BLDDIR}"  # --verbose
+  cmake --build "${_BLDDIR}" --verbose
   cmake --install "${_BLDDIR}" --prefix "${_PP}"
 
   # List files created
