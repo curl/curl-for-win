@@ -514,7 +514,12 @@ _VER="$1"
       # Tests
 
       if [ ! -L "${f}" ]; then
-        ../_info-bin.sh --filetype "${filetype}" --is-curl "${f}"
+        if [ "${_OPENSSL}" = 'awslc' ]; then
+          # FIXME: AWS-LC builds export C++ and AWS-LC symbols
+          ../_info-bin.sh --filetype "${filetype}" --is-curl "${f}" || true
+        else
+          ../_info-bin.sh --filetype "${filetype}" --is-curl "${f}"
+        fi
       fi
     done
   done

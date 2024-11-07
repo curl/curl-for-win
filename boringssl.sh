@@ -39,6 +39,7 @@
 #   bail out. Either way, AWS-LC requires Win7, which is higher than the
 #   Vista curl-for-win guarantees. But only for MinGW builds, as a way
 #   to bump up the default, possibly as a workaround.
+# - AWS-LC: symbols are not hidden, making _info-bin.sh fail.
 
 # https://github.com/aws/aws-lc
 
