@@ -40,6 +40,7 @@
 #   Vista curl-for-win guarantees. But only for MinGW builds, as a way
 #   to bump up the default, possibly as a workaround.
 # - AWS-LC: symbols are not hidden, making _info-bin.sh fail.
+# - AWS-LC: requires SSE2 for x86 builds with ASM enabled.
 
 # https://github.com/aws/aws-lc
 
@@ -86,6 +87,9 @@ _VER="$1"
     if [ "${_OS}" = 'win' ] && [ "${_CPU}" != 'a64' ]; then
       # nasm is used for Windows x64 and x86
       options+=' -DCMAKE_ASM_NASM_FLAGS=--reproducible'
+    fi
+    if [ "${_NAM}" = 'awslc' ] && [ "${_CPU}" = 'x86' ]; then
+      CFLAGS+=' -msse2'
     fi
   fi
 
