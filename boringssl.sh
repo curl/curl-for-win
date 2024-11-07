@@ -42,6 +42,7 @@
 # - AWS-LC: symbols are not hidden, making _info-bin.sh fail.
 # - AWS-LC: requires SSE2 for x86 builds with ASM enabled.
 # - AWS-LC: fails to build on mac-gcc-arm64.
+# - AWS-LC: crashes the same as BoringSSL: curl.exe https://example.net/
 
 # https://github.com/aws/aws-lc
 
