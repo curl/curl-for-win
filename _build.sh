@@ -1161,6 +1161,7 @@ build_single_target() {
     fi
     _CMAKE_GLOBAL+=" -DCMAKE_C_COMPILER=clang${_CCSUFFIX}"
     _CMAKE_CXX_GLOBAL+=" -DCMAKE_CXX_COMPILER=clang++${_CCSUFFIX}"
+    _CMAKE_ASM_GLOBAL+=" -DCMAKE_ASM_COMPILER=clang${_CCSUFFIX}"
 
     if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
       _LD='ld-apple'
@@ -1287,7 +1288,9 @@ build_single_target() {
 
   _CMAKE_GLOBAL+=" -DCMAKE_C_COMPILER_TARGET=${_TRIPLET}"
   _CMAKE_CXX_GLOBAL+=" -DCMAKE_CXX_COMPILER_TARGET=${_TRIPLET}"
-  _CMAKE_ASM_GLOBAL+=" -DCMAKE_ASM_COMPILER_TARGET=${_TRIPLET}"
+  if [ "${_CC}" = 'llvm' ]; then
+    _CMAKE_ASM_GLOBAL+=" -DCMAKE_ASM_COMPILER_TARGET=${_TRIPLET}"
+  fi
 
   # Needed to exclude compiler info from objects, but for our Windows COFF
   # outputs this seems to be a no-op as of llvm/clang 13.x/14.x.
