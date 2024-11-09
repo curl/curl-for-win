@@ -100,6 +100,13 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
       extra+=' libc6-dev-arm64-cross'
     fi
     [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra+=' libc6-dev-riscv64-cross'
+
+    if [ "$(uname -m)" = 'aarch64' ]; then
+      extra+=" libc6-dev-amd64-cross libstdc++${CW_GCCSUFFIX}-dev-amd64-cross"
+    else
+      extra+=" libc6-dev-arm64-cross libstdc++${CW_GCCSUFFIX}-dev-arm64-cross"
+    fi
+    [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra+=" libc6-dev-riscv64-cross libstdc++${CW_GCCSUFFIX}-dev-riscv64-cross"
   fi
   if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
     if [ "$(uname -m)" = 'aarch64' ]; then
