@@ -1132,32 +1132,6 @@ build_single_target() {
       fi
     fi
 
-    if [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [ "${unamem}" != "${_machine}" ] && [ "${_DISTRO}" = 'debian' ]; then
-      # https://packages.debian.org/testing/all/libstdc++-13-dev-arm64-cross/filelist
-      # /usr/aarch64-linux-gnu/include/c++/13/
-      tmp="$(find "/usr/${_TRIPLETSH}/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
-      if [ -n "${tmp}" ]; then
-        _CXXFLAGS_GLOBAL+=" -I${tmp}"
-        _CXXFLAGS_GLOBAL+=" -I${tmp}/${_TRIPLETSH}"
-        _CXXFLAGS_GLOBAL+=" -I${tmp}/backward"
-      else
-        # https://packages.debian.org/trixie/arm64/libstdc++-12-dev/filelist
-        # /usr/include/c++/12/algorithm
-        # /usr/include/aarch64-linux-gnu/c++/12/ext/opt_random.h
-        tmp1="$(find "/usr/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
-        tmp2="$(find "/usr/include/${_TRIPLETSH}/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
-        if [ -n "${tmp1}" ] && \
-           [ -n "${tmp2}" ]; then
-          _CXXFLAGS_GLOBAL+=" -I${tmp1}"
-          _CXXFLAGS_GLOBAL+=" -I${tmp2}"
-          _CXXFLAGS_GLOBAL+=" -I${tmp1}/backward"
-        else
-          >&2 echo '! Error: Failed to detect g++-cross env root.'
-          exit 1
-        fi
-      fi
-    fi
-
     # TODO: enable it for platform native compiler + mingw-w64 when support reaches them.
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       # Requires llvm v16 and mingw-w64 v11 built with `--enable-cfguard`.
@@ -1246,6 +1220,32 @@ build_single_target() {
     fi
 
     _BINUTILS_SUFFIX="${_CCSUFFIX}"
+  fi
+
+  if [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [ "${unamem}" != "${_machine}" ] && [ "${_DISTRO}" = 'debian' ]; then
+    # https://packages.debian.org/testing/all/libstdc++-13-dev-arm64-cross/filelist
+    # /usr/aarch64-linux-gnu/include/c++/13/
+    tmp="$(find "/usr/${_TRIPLETSH}/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
+    if [ -n "${tmp}" ]; then
+      _CXXFLAGS_GLOBAL+=" -I${tmp}"
+      _CXXFLAGS_GLOBAL+=" -I${tmp}/${_TRIPLETSH}"
+      _CXXFLAGS_GLOBAL+=" -I${tmp}/backward"
+    else
+      # https://packages.debian.org/trixie/arm64/libstdc++-12-dev/filelist
+      # /usr/include/c++/12/algorithm
+      # /usr/include/aarch64-linux-gnu/c++/12/ext/opt_random.h
+      tmp1="$(find "/usr/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
+      tmp2="$(find "/usr/include/${_TRIPLETSH}/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
+      if [ -n "${tmp1}" ] && \
+         [ -n "${tmp2}" ]; then
+        _CXXFLAGS_GLOBAL+=" -I${tmp1}"
+        _CXXFLAGS_GLOBAL+=" -I${tmp2}"
+        _CXXFLAGS_GLOBAL+=" -I${tmp1}/backward"
+      else
+        >&2 echo '! Error: Failed to detect g++-cross env root.'
+        exit 1
+      fi
+    fi
   fi
 
   # Avoid picking up dependencies from system locations
