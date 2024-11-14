@@ -55,8 +55,8 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   [build log](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main).
 - Packages built across host platforms do not have identical hashes due to
   slightly different build options and toolchain builds/versions. Except
-  `llvm-mingw` builds, which are reproducible across platforms. ARM64 and
-  BoringSSL builds are such by default.
+  `llvm-mingw` builds, which are reproducible across platforms. ARM64 builds
+  are such by default.
 - We code-sign with a self-signed certificate on Windows, and avoid trusted
   timestamps for reproducibility.
 
