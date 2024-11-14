@@ -135,6 +135,11 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #       https://github.com/chocolatey/choco/issues/2172
 #     winget and scoop both support native ARM64.
 
+# Distros:
+#   - https://github.com/chocolatey-community/chocolatey-packages/tree/master/automatic/curl
+#   - https://github.com/ScoopInstaller/Main/blob/master/bucket/curl.json
+#   - https://github.com/microsoft/winget-pkgs/tree/master/manifests/c/cURL/cURL
+
 # Resources:
 #   - https://clang.llvm.org/docs/Toolchain.html
 #   - https://blog.llvm.org/2019/11/deterministic-builds-with-clang-and-lld.html
