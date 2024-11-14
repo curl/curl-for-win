@@ -53,8 +53,9 @@ EOF
   fi
   touch -c -r "${_ref}" "${_fn}"
 
-  # TODO: Omit external CA bundle from distro?
-  cp -f -p "${_CACERT}" "${_DST}/bin/curl-ca-bundle.crt"
+  if [ "${CURL_VER_}" != '8.12.0' ]; then
+    cp -f -p "${_CACERT}" "${_DST}/bin/curl-ca-bundle.crt"
+  fi
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )
