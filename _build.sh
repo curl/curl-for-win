@@ -1111,7 +1111,7 @@ build_single_target() {
         _CXXFLAGS_GLOBAL+=" -I${tmp}/include/c++/${_TRIPLET}"
         _CXXFLAGS_GLOBAL+=" -I${tmp}/include/c++/backward"
       fi
-    elif [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [ "${unamem}" != "${_machine}" ] && [ "${_CC}" = 'llvm' ] && [ "${_CRT}" != 'musl' ]; then
+    elif [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [ "${unamem}" != "${_machine}" ] && [ "${_CRT}" != 'musl' ]; then
       _CFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include"
       _LDFLAGS_GLOBAL+=" -L/usr/${_TRIPLETSH}/lib"
       if [ "${_CCRT}" = 'libgcc' ]; then
