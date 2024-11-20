@@ -367,7 +367,7 @@ _VER="$1"
   fi
 
   patch="${_NAM}${_PATCHSUFFIX}.patch"
-  if [ -f "../${patch}" ]; then
+  if [ -f "../${patch}" ] && false; then
     # This command requires a git clone deep enough to contain all
     # curl-for-win repo versions pointing the current latest curl release.
     # To retrieve the hash for the commit adding or updating the .patch
