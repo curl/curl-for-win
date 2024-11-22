@@ -108,7 +108,7 @@ cat <<EOF
   {
     "name": "libressl",
     "url": "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-{ver}.tar.gz",
-    "curlopt": "--ipv4",
+    "mirror": "https://github.com/libressl/portable/releases/download/v{ver}/libressl-{ver}.tar.gz",
     "sig": ".asc",
     "keys": "A1EB079B8D3EB92B4EBD3139663AF51BD5E4D8D5"
   },
