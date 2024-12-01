@@ -22,9 +22,7 @@ _VER="$1"
     options+=' -DZLIB_COMPAT=ON'
     options+=' -DZLIB_ENABLE_TESTS=OFF'
   else
-    if [ "${ZLIB_VER_}" != '1.3' ]; then
-      options+=' -DZLIB_BUILD_EXAMPLES=OFF'
-    fi
+    options+=' -DZLIB_BUILD_EXAMPLES=OFF'
   fi
 
   # `BUILD_SHARED_LIBS=OFF` broken as of zlib v1.3.
