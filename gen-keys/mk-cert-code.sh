@@ -100,7 +100,7 @@ if [ "${3:-}" = 'rsa' ]; then
   cryptopt='-algorithm RSA -pkeyopt rsa_keygen_bits:4096'
 else
   # TODO:
-  #   https://github.com/openssl/openssl/pull/18809
+  #   https://github.com/openssl/openssl/pull/18809 [MERGED]
   #   https://github.com/openssl/openssl/pull/9223
   #     -pkeyopt ecdsa_nonce_type:deterministic
   #     or? -sigopt ecdsa_nonce_type:deterministic
