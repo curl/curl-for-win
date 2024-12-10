@@ -202,11 +202,7 @@ _VER="$1"
       else
         options+=' -DHAVE_BORINGSSL=0 -DHAVE_AWSLC=1'  # fast-track configuration
       fi
-      if [ "${_OPENSSL}" = 'boringssl' ] || \
-         [ "${CURL_VER_}" != '8.11.0' ] || \
-         [[ "${_CONFIG}" = *'test'* ]]; then
-        options+=' -DUSE_HTTPSRR=ON -DUSE_ECH=ON'
-      fi
+      options+=' -DUSE_ECH=ON'
       LIBS+=' -lpthread'
       h3=1
     else
