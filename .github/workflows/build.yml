@@ -28,6 +28,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: 'REUSE compliance check'
         uses: fsfe/reuse-action@v5
 
@@ -36,6 +38,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: 'shellcheck'
         run: |
           shellcheck --version
@@ -48,6 +52,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: 'install tools'
         run: pip install --break-system-packages -U codespell
       - name: 'spellcheck'
@@ -63,6 +69,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         run: |
@@ -94,6 +101,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         run: |
@@ -126,6 +134,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         run: |
@@ -160,6 +169,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         run: |
@@ -194,6 +204,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         run: |
@@ -225,6 +236,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         run: |
@@ -256,6 +268,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         run: |
@@ -290,6 +303,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         run: |
@@ -324,6 +338,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         run: |
@@ -356,6 +371,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         run: |
@@ -388,6 +404,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         env:
@@ -415,6 +432,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         env:
@@ -442,6 +460,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         env:
@@ -469,6 +488,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         env:
@@ -497,6 +517,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         env:
@@ -524,6 +545,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         env:
@@ -558,6 +580,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
         env:
