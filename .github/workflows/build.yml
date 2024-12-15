@@ -27,7 +27,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
       - name: 'REUSE compliance check'
@@ -37,7 +37,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
       - name: 'shellcheck'
@@ -51,7 +51,7 @@ jobs:
     runs-on: 'ubuntu-24.04'
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
       - name: 'install tools'
@@ -67,7 +67,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -99,7 +99,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -132,7 +132,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -167,7 +167,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -202,7 +202,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -234,7 +234,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -266,7 +266,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -301,7 +301,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -336,7 +336,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -369,7 +369,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -402,7 +402,7 @@ jobs:
     runs-on: macos-13
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -430,7 +430,7 @@ jobs:
     env:
       CW_JOBS: '4'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -458,7 +458,7 @@ jobs:
     env:
       CW_JOBS: '4'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -486,7 +486,7 @@ jobs:
     env:
       CW_JOBS: '4'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -515,7 +515,7 @@ jobs:
     env:
       CW_JOBS: '4'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -543,7 +543,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -578,7 +578,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           persist-credentials: false
           fetch-depth: '300'
