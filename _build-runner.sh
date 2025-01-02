@@ -74,7 +74,7 @@ if [ ! -f .cw-initialized ]; then
       [[ "${CW_CONFIG:-}" = *'linux'* ]] && extra+=' filosottile/musl-cross/musl-cross'
       # shellcheck disable=SC2086
       brew install \
-        xz gnu-tar gettext jq ninja ${extra}
+        xz gnu-tar gettext jq ninja gnupg ${extra}
       ;;
   esac
   touch .cw-initialized
