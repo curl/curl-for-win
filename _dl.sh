@@ -715,7 +715,7 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
   fi
 fi
 
-if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro) ]]; then
+if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro) || "${_CONFIG}" = *'libssh1'* ]]; then
   if [[ "${_CONFIG}" = *'libssh1'* ]]; then
     _DEPS+=' libssh1'
   else
