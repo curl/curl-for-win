@@ -682,7 +682,7 @@ fi
 
 need_cacert=0
 
-if [[ ! "${_CONFIG}" =~ (zero|bldtst) ]]; then
+if [[ ! "${_CONFIG}" =~ (zero|bldtst) || "${_CONFIG}" = *'libssh1'* ]]; then
   if   [[ "${_CONFIG}" = *'libressl'* ]]; then
     _DEPS+=' libressl'
     need_cacert=1
