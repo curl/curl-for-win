@@ -49,7 +49,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        openssl    build with OpenSSL
 #        ostls      build with OS-supplied TLS backend-only (Schannel or SecureTransport)
 #        osnotls    build without OS-supplied TLS backends
-#        libssh     build with libssh
+#        libssh1    build with libssh
 #        mini       build with less features, see README.md
 #        micro      build with less features, see README.md
 #        nano       build with less features, see README.md
