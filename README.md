@@ -107,7 +107,7 @@ SSPI          | ✓       | -       | -       | ✓¹      | ✓¹      | ✓¹ 
 SSLS-EXPORT   |         |         |         |         |         |         |         |         |
 TLS-SRP       |         |         |         |         |         |         |         |         |
 threadsafe    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
-Unicode       |         | -       | -       |         |         |         |         |         |
+Unicode       | ✓       | -       | -       | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
 UnixSockets   | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 zstd          | ✓       | ✓       | ✓       | ✓       |         |         |         |         |
 
