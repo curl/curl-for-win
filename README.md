@@ -95,6 +95,7 @@ SSL           | x       | x       | x       | x       | x       | x       | x   
 SSPI          | x       |         |         | .       | .       | .       | .       |         |
 SSLS-EXPORT   | x       | x       | x       | x       |         |         |         |         |
 threadsafe    | x       | x       | x       | x       | x       | x       | x       | x       |
+Unicode       | x       |         |         | .       | .       | .       | .       | .       |
 UnixSockets   | x       | x       | x       | x       | x       | x       | x       |         |
 zstd          | x       | x       | x       | x       |         |         |         |         |
 
