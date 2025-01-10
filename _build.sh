@@ -79,7 +79,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        curldocs   include curl Markdown manual pages in the package
 #        msvcrt     build against msvcrt instead of UCRT (for win target)
 #        gcc        build with GCC (including Apple clang aliased to gcc) (defaults to llvm, and "gcc" (= Apple clang) for mac target)
-#        unicode    build curl in UNICODE mode (for win target) [EXPERIMENTAL]
+#        nounicode  build curl without [EXPERIMENTAL] UNICODE mode (for win target)
 #        osnoidn    build curl without OS-supplied IDN support
 #        werror     turn compiler warnings into errors
 #        nodumpconf do not dump curl_config.h
