@@ -195,8 +195,8 @@ _VER="$1"
       no-dsa \
       no-tests \
       no-makedepend \
-      "--prefix=${_my_prefix}" \
-      "--openssldir=${_ssldir}"
+      --prefix="${_my_prefix}" \
+      --openssldir="${_ssldir}"
   )
 
   SOURCE_DATE_EPOCH="${unixts}" TZ=UTC make --directory="${_BLDDIR}" --jobs="${_JOBS}"

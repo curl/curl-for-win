@@ -50,12 +50,12 @@ _VER="$1"
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
     # shellcheck disable=SC2086
     cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
-      '-DBUILD_SHARED_LIBS=OFF' \
-      '-DBUILD_EXAMPLES=OFF' \
-      '-DBUILD_TESTING=OFF' \
-      '-DENABLE_DEBUG_LOGGING=OFF' \
-      '-DLIBSSH2_NO_DEPRECATED=ON' \
-      "-DCMAKE_C_FLAGS=${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${LIBSSH2_CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS}"  # --debug-trycompile
+      -DBUILD_SHARED_LIBS=OFF \
+      -DBUILD_EXAMPLES=OFF \
+      -DBUILD_TESTING=OFF \
+      -DENABLE_DEBUG_LOGGING=OFF \
+      -DLIBSSH2_NO_DEPRECATED=ON \
+      -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${LIBSSH2_CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS}"  # --debug-trycompile
   fi
 
   cmake --build "${_BLDDIR}"
