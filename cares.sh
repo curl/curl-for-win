@@ -34,7 +34,7 @@ _VER="$1"
 
   # Make steps for determinism
 
-  readonly _ref='RELEASE-NOTES'
+  readonly _ref='RELEASE-NOTES.md'
 
   # shellcheck disable=SC2086
   "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/*.a
@@ -54,8 +54,7 @@ _VER="$1"
   cp -f -p "${_PP}"/include/*.h "${_DST}/include/"
   cp -f -p "${_PP}"/lib/*.a     "${_DST}/lib/"
   cp -f -p README.md            "${_DST}/"
-  cp -f -p CHANGES              "${_DST}/CHANGES.txt"
-  cp -f -p RELEASE-NOTES        "${_DST}/RELEASE-NOTES.txt"
+  cp -f -p RELEASE-NOTES.md     "${_DST}/"
   cp -f -p LICENSE.md           "${_DST}/"
 
   ../_pkg.sh "$(pwd)/${_ref}"
