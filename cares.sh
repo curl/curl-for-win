@@ -25,6 +25,7 @@ _VER="$1"
 
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
+    -DCARES_SYMBOL_HIDING=ON \
     -DCARES_STATIC=ON \
     -DCARES_STATIC_PIC=ON \
     -DCARES_SHARED=OFF \
