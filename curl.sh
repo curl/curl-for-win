@@ -91,6 +91,12 @@ _VER="$1"
 
   options+=' -DBUILD_EXAMPLES=OFF'
 
+  if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro|mini) ]]; then
+    if [ "${CURL_VER_}" != '8.11.1' ]; then
+      options+=' -DUSE_SSLS_EXPORT=ON'
+    fi
+  fi
+
   # for H2/H3
   if [[ "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
     options+=' -DCURL_DISABLE_ALTSVC=ON'
