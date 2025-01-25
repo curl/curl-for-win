@@ -16,8 +16,15 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
+  options=''
+
+  if [ "${_OS}" = 'mac' ] && [ "${_OSVER}" -lt '1011' ]; then
+    # connectx() requires 10.11
+    options+=' -DHAVE_CONNECTX=0'
+  fi
+
   # shellcheck disable=SC2086
-  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
+  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
     -DCARES_STATIC=ON \
     -DCARES_STATIC_PIC=ON \
     -DCARES_SHARED=OFF \
