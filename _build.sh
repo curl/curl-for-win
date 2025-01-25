@@ -42,6 +42,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        nozstd     build without zstd
 #        nozlib     build without zlib
 #        zlibold    build with zlib (classic) instead of zlib-ng
+#        nocares    build without c-ares
 #        noftp      build without FTP/FTPS support
 #        nohttp     build without HTTP and proxy support
 #        nocookie   build without cookie support
