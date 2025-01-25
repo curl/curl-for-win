@@ -222,7 +222,11 @@ _VER="$1"
     if [ "${_OPENSSL}" != 'libressl' ]; then
       options+=' -DHAVE_SSL_SET0_WBIO=1'  # fast-track configuration
     fi
-    [ "${h3}" = '1' ] && options+=' -DHAVE_SSL_CTX_SET_QUIC_METHOD=1'  # fast-track configuration
+    if [ "${CURL_VER_}" = '8.11.1' ]; then
+      [ "${h3}" = '1' ] && options+=' -DHAVE_SSL_CTX_SET_QUIC_METHOD=1'  # fast-track configuration
+    else
+      [ "${h3}" = '1' ] && options+=' -DHAVE_SSL_SET_QUIC_USE_LEGACY_CODEPOINT=1'  # fast-track configuration
+    fi
   else
     options+=' -DCURL_USE_OPENSSL=OFF'
   fi
