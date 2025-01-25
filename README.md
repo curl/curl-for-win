@@ -74,6 +74,7 @@ feature       | Windows | Linux   | macOS   | noh3    | mini    | micro   | nano
 --------------| --------| --------| --------| --------| --------| --------| --------| --------|
 alt-svc       | x       | x       | x       | x       | x       | x       |         |         |
 AppleSecTrust |         |         | x       | .       | .       | .       | .       | .       |
+asyn-rr       | x       | x       | x       |         |         |         |         |         |
 AsynchDNS     | x       | x       | x       | x       | x       | x       | x       | x       |
 brotli        | x       | x       | x       | x       |         |         |         |         |
 CAcert        | x       | x       |         | .       | .       | .       | .       | .       |
