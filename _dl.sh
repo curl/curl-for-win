@@ -672,8 +672,16 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro|mini) ]]; then
   fi
 fi
 
-if [[ "${_CONFIG}" = *'cares'* ]]; then
-  _DEPS+=' cares'
+if [[ "${_CONFIG}" = *'dev'* ]]; then
+  if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro|mini) || "${_CONFIG}" = *'cares'* ]]; then
+    if [[ "${_CONFIG}" != *'nocares'* ]]; then
+      _DEPS+=' cares'
+    fi
+  fi
+else
+  if [[ "${_CONFIG}" = *'cares'* ]]; then
+    _DEPS+=' cares'
+  fi
 fi
 
 if [[ ! "${_CONFIG}" =~ (zero|bldtst|nocookie) ]]; then
