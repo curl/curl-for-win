@@ -121,7 +121,6 @@ _VER="$1"
     options+=' -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON'
   else
     [[ "${_CONFIG}" = *'noftp'* ]] && options+=' -DCURL_DISABLE_FTP=ON'
-    options+=' -DENABLE_WEBSOCKETS=ON'
     if [ "${_OS}" = 'win' ]; then
       options+=' -DCURL_WINDOWS_SSPI=ON'
     elif [ "${_OS}" != 'mac' ] || [ "${_OSVER}" -ge '1010' ]; then  # On macOS we use the built-in LDAP lib
