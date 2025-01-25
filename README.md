@@ -88,11 +88,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 
 Uses [LibreSSL](https://www.libressl.org/) TLS backend.
 
-feature       | Windows | Linux   | macOS   | noh3    | mini    | micro   | nano    | pico    |
+feature       | Windows | Linux   | macOS   | nocares | mini    | micro   | nano    | pico    |
 --------------|---------|---------|---------|---------|---------|---------|---------|---------|
 alt-svc       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |         |
 AppleSecTrust | -       | -       | ✓       | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
-asyn-rr       |         |         |         |         |         |         |         |         |
+asyn-rr       | ✓       | ✓       | ✓       |         |         |         |         |         |
 AsynchDNS     | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 brotli        | ✓       | ✓       | ✓       | ✓       |         |         |         |         |
 CAcert        |         | ✓       |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
@@ -101,7 +101,7 @@ gsasl         |         |         |         |         |         |         |     
 GSS-API       |         |         | ✓       | ✓¹      |         |         |         |         |
 HSTS          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 HTTP2         | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |         |
-HTTP3         | ✓       | ✓       | ✓       |         |         |         |         |         |
+HTTP3         | ✓       | ✓       | ✓       | ✓       |         |         |         |         |
 HTTPS-proxy   | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 HTTPSRR       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 IDN           | ✓       |         | ✓       | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
@@ -123,7 +123,7 @@ Unicode       |         | -       | -       |         |         |         |     
 UnixSockets   | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 zstd          | ✓       | ✓       | ✓       | ✓       |         |         |         |         |
 
-protocol      | Windows | Linux   | macOS   | noh3    | mini    | micro   | nano    | pico    |
+protocol      | Windows | Linux   | macOS   | nocares | mini    | micro   | nano    | pico    |
 --------------|---------|---------|---------|---------|---------|---------|---------|---------|
 dict          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 file          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
