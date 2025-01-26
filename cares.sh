@@ -3,6 +3,13 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
+# Issues (as of 1.34.4):
+# - Windows build stomps to the `_WIN32_WINNT` value set via `CPPFLAGS`.
+#   Projects are not supposed to override a value set by the builder.
+#   Instead it should either fail or resolve the new calls/functionality
+#   dynamically or by other means.
+# - `-DCARES_SYMBOL_HIDING=ON` does not seem to work on macOS.
+
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
