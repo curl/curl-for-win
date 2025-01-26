@@ -82,6 +82,7 @@ HSTS          | x       | x       | x       | x       | x       | x       | x   
 HTTP2         | x       | x       | x       | x       | x       | x       |         |         |
 HTTP3         | x       | x       | x       |         |         |         |         |         |
 HTTPS-proxy   | x       | x       | x       | x       | x       | x       | x       | x       |
+HTTPSRR       | x       | x       | x       |         |         |         |         |         |
 IDN           | x       |         | x       | .       | .       | .       | .       |         |
 IPv6          | x       | x       | x       | x       | x       | x       | x       | x       |
 Kerberos      | x       |         |         | .       | .       | .       | .       |         |

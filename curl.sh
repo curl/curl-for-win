@@ -269,6 +269,7 @@ _VER="$1"
     options+=" -DCARES_INCLUDE_DIR=${_TOP}/cares/${_PP}/include"
     options+=" -DCARES_LIBRARY=${_TOP}/cares/${_PP}/lib/libcares.a"
     CPPFLAGS+=' -DCARES_STATICLIB'
+    options+=' -DUSE_HTTPSRR=ON'
   fi
   if [ "${_OS}" = 'mac' ]; then
     # GSS API deprecated in 2012-2013 (OS X 10.8 Mountain Lion / 10.9 Mavericks, iOS 7.0)
