@@ -8,7 +8,9 @@
 #   Projects are not supposed to override a value set by the builder.
 #   Instead it should either fail or resolve the new calls/functionality
 #   dynamically or by other means.
-# - `-DCARES_SYMBOL_HIDING=ON` does not seem to work on macOS.
+# - `-DCARES_SYMBOL_HIDING=ON` does not seem to work on macOS with clang for
+#   example. The issue seems to be that CARES_EXTERN is set unconditionally
+#   to default visibility and -fvisibility=hidden does not override that.
 
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail

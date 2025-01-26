@@ -1,0 +1,13 @@
+diff --git a/include/ares.h b/include/ares.h
+index 7fe3ec78..ac417245 100644
+--- a/include/ares.h
++++ b/include/ares.h
+@@ -117,7 +117,7 @@ extern "C" {
+ #  endif
+ #else
+ #  if defined(__GNUC__) && __GNUC__ >= 4
+-#    define CARES_EXTERN __attribute__((visibility("default")))
++#    define CARES_EXTERN
+ #  elif defined(__INTEL_COMPILER) && __INTEL_COMPILER >= 900
+ #    define CARES_EXTERN __attribute__((visibility("default")))
+ #  elif defined(__SUNPRO_C)
