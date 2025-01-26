@@ -11,6 +11,7 @@
 # - `-DCARES_SYMBOL_HIDING=ON` does not seem to work on macOS with clang for
 #   example. The issue seems to be that CARES_EXTERN is set unconditionally
 #   to default visibility and -fvisibility=hidden does not override that.
+# - Compiler warnings when building for macOS with GCC.
 
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
@@ -27,9 +28,13 @@ _VER="$1"
 
   options=''
 
-  if [ "${_OS}" = 'mac' ] && [ "${_OSVER}" -lt '1011' ]; then
-    # connectx() requires 10.11
-    options+=' -DHAVE_CONNECTX=0'
+  if [ "${_OS}" = 'mac' ]; then
+    if [ "${_CC}" = 'gcc' ]; then
+      options+=' -DHAVE__Wpedantic=0 -DHAVE__Wsign_conversion=0 -DHAVE__Wconversion=0'
+    fi
+    if [ "${_OSVER}" -lt '1011' ]; then
+      options+=' -DHAVE_CONNECTX=0'  # connectx() requires 10.11
+    fi
   fi
 
   # shellcheck disable=SC2086
