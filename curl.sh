@@ -307,7 +307,7 @@ _VER="$1"
     options+=" -DCARES_INCLUDE_DIR=${_TOP}/cares/${_PP}/include"
     options+=" -DCARES_LIBRARY=${_TOP}/cares/${_PP}/lib/libcares.a"
     CPPFLAGS+=' -DCARES_STATICLIB'
-    if [ "${_OS}" = 'win' ]; then
+    if [ "${CURL_VER_}" = '8.11.1' ] && [ "${_OS}" = 'win' ]; then
       LIBS+=' -liphlpapi'
     fi
   fi
