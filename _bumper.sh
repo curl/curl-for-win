@@ -12,7 +12,7 @@ if ! command -v hxclean >/dev/null 2>&1; then
   case "$(uname)" in
     Linux*)
       apt-get --quiet 2 --option Dpkg::Use-Pty=0 --yes update
-      apt-get --quiet 2 --option Dpkg::Use-Pty=0 --yes install \
+      apt-get --quiet 2 --option Dpkg::Use-Pty=0 --yes install --no-install-suggests --no-install-recommends \
         curl git gpg zip jq html-xml-utils;;
     Darwin*)
       brew install \
