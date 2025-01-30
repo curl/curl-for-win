@@ -50,7 +50,7 @@ if [ ! -f .cw-initialized ]; then
           extra+=' checksec'
         fi
         # shellcheck disable=SC2086
-        apt-get --quiet 2 --option Dpkg::Use-Pty=0 --yes install --no-install-suggests --no-install-recommends \
+        apt-get --option Dpkg::Use-Pty=0 --yes install --no-install-suggests --no-install-recommends \
           curl git gpg rsync python3-pefile make cmake ninja-build \
           zip xz-utils time jq secure-delete ${extra}
       elif [ "${_DISTRO}" = 'alpine' ]; then
