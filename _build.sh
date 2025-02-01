@@ -917,8 +917,8 @@ build_single_target() {
       _CXXFLAGS_GLOBAL+=' -fhardened'
     else
       # https://en.wikipedia.org/wiki/Position-independent_code#PIE
-      _CFLAGS_GLOBAL+=' -fPIC'
-      _CXXFLAGS_GLOBAL+=' -fPIC'
+      _CFLAGS_GLOBAL_RAW+=' -fPIC'
+      _CMAKE_GLOBAL+=' -DCMAKE_POSITION_INDEPENDENT_CODE=ON'
 
       # With musl, this relies on package `fortify-headers` (Alpine)
       _CPPFLAGS_GLOBAL+=' -D_FORTIFY_SOURCE=2'
