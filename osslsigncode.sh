@@ -16,7 +16,7 @@ _VER="$1"
 
   cmake -B "${_BLDDIR}"
   cmake --build "${_BLDDIR}"
-  cmake --install "${_BLDDIR}" --prefix 'install'
+  cmake --install "${_BLDDIR}" --prefix '_pkg'
 
-  cp -f -p 'install/usr/local/bin/osslsigncode' ../osslsigncode-local
+  cp -f -p '_pkg/usr/local/bin/osslsigncode' ../osslsigncode-local
 )
