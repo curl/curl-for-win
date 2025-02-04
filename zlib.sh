@@ -24,7 +24,13 @@ _VER="$1"
     options+=' -DZLIBNG_ENABLE_TESTS=OFF'
     options+=' -DWITH_GTEST=OFF'
   else
-    options+=' -DZLIB_BUILD_EXAMPLES=OFF'
+    if [ "${_VER}" = '1.3.1' ]; then
+      options+=' -DZLIB_BUILD_EXAMPLES=OFF'
+    else
+      options+=' -DZLIB_BUILD_TESTING=OFF'
+      options+=' -DZLIB_BUILD_SHARED=OFF'
+      options+=' -DZLIB_BUILD_MINIZIP=OFF'
+    fi
   fi
 
   # `BUILD_SHARED_LIBS=OFF` broken as of zlib v1.3.
