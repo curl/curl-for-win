@@ -54,7 +54,8 @@ EOF
   touch -c -r "${_ref}" "${_fn}"
 
   if [ -n "${_OPENSSL}" ] && \
-     [ "${_OS}" != 'mac' ]; then
+     [ "${_OS}" != 'mac' ] && \
+     [ "${_OS}" != 'win' ]; then
     cp -f -p "${_CACERT}" "${_DST}"/bin/curl-ca-bundle.crt
   fi
 
