@@ -342,12 +342,11 @@ _VER="$1"
     options+=' -DBUILD_CURL_EXE=ON'
     options+=' -DBUILD_STATIC_CURL=ON'
 
-    if [[ "${_DEPS}" = *'cacert'* ]]; then
-      options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
-    fi
-
     if [ "${_OS}" = 'win' ]; then
-      options+=' -DCURL_CA_SEARCH_SAFE=ON'
+      options+=' -DCURL_CA_NATIVE_BY_DEFAULT=ON'
+      options+=' -DCURL_DISABLE_CA_SEARCH=ON'
+    elif [[ "${_DEPS}" = *'cacert'* ]]; then
+      options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
     fi
   else
     options+=' -DBUILD_CURL_EXE=OFF'
