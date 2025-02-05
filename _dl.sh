@@ -825,6 +825,7 @@ fi
 
 if [ "${need_certdata}" = '1' ] && \
    [ "${_OS}" != 'mac' ] && \
+   [ "${_OS}" != 'win' ] && \
    [[ "${_CONFIG}" != *'nocertdata'* ]]; then
   _DEPS+=' certdata'
 fi
