@@ -32,6 +32,9 @@ _VER="$1"
   #   -DCMAKE_USE_WIN32_THREADS_INIT=ON
   CPPFLAGS+=' -Dpthread_create=func_not_existing'
 
+  # Silence libssh API deprecation warnings when building libssh itself.
+  CPPFLAGS+=' -DSSH_SUPPRESS_DEPRECATED'
+
   if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
     options+=" -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
     options+=" -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
