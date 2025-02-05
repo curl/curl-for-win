@@ -115,7 +115,7 @@ _VER="$1"
 
   # Make steps for determinism
 
-  readonly _ref='ChangeLog'
+  readonly _ref='CHANGELOG'
 
   # shellcheck disable=SC2086
   "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PPS}"/lib/*.a
@@ -134,10 +134,10 @@ _VER="$1"
 
   cp -f -p "${_PPS}"/include/libssh/*.h "${_DST}/include/libssh/"
   cp -f -p "${_PPS}"/lib/*.a            "${_DST}/lib/"
-  cp -f -p ChangeLog                    "${_DST}/ChangeLog.txt"
+  cp -f -p CHANGELOG                    "${_DST}/CHANGELOG.txt"
   cp -f -p AUTHORS                      "${_DST}/AUTHORS.txt"
   cp -f -p COPYING                      "${_DST}/COPYING.txt"
-  cp -f -p README                       "${_DST}/README.txt"
+  cp -f -p README.md                    "${_DST}/"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )
