@@ -1,0 +1,65 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 30c0154be7..4c12fe1cec 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -765,6 +765,8 @@ if(CURL_USE_OPENSSL)
+       list(APPEND CURL_LIBS "stdc++")
+       list(APPEND CMAKE_REQUIRED_LIBRARIES "stdc++")
+     endif()
++  elseif(WIN32 AND CMAKE_COMPILER_IS_GNUCC AND HAVE_LIBRESSL)
++    list(APPEND CURL_LIBS "ws2_32")  # Add a duplicate to make binutils ld resolve symbols
+   endif()
+ 
+   if(HAVE_BORINGSSL)
+@@ -1472,6 +1474,8 @@ endif()
+ #
+ # CA handling
+ #
++option(CURL_CA_NATIVE_BY_DEFAULT "Use native CA store by default in the curl tool" OFF)
++
+ if(_curl_ca_bundle_supported)
+   set(CURL_CA_BUNDLE "auto" CACHE
+     STRING "Path to the CA bundle. Set 'none' to disable or 'auto' for auto-detection. Defaults to 'auto'.")
+diff --git a/docs/INSTALL-CMAKE.md b/docs/INSTALL-CMAKE.md
+index 893f4b57f8..6421628f69 100644
+--- a/docs/INSTALL-CMAKE.md
++++ b/docs/INSTALL-CMAKE.md
+@@ -177,6 +177,8 @@ assumes that CMake generates `Makefile`:
+ - `CURL_CA_BUNDLE`:                         Path to the CA bundle. Set `none` to disable or `auto` for auto-detection. Default: `auto`
+ - `CURL_CA_EMBED`:                          Path to the CA bundle to embed in the curl tool. Default: (disabled)
+ - `CURL_CA_FALLBACK`:                       Use built-in CA store of TLS backend. Default: `OFF`
++- `CURL_CA_NATIVE_BY_DEFAULT`:              Use native CA store by default in the curl tool. Default: `OFF`
++                                            Supported by GnuTLS, OpenSSL (including forks) on Windows, wolfSSL.
+ - `CURL_CA_PATH`:                           Location of default CA path. Set `none` to disable or `auto` for auto-detection. Default: `auto`
+ - `CURL_CA_SEARCH_SAFE`:                    Enable safe CA bundle search (within the curl tool directory) on Windows. Default: `OFF`
+ 
+diff --git a/lib/curl_config.h.cmake b/lib/curl_config.h.cmake
+index a41af0c982..e31e7e4514 100644
+--- a/lib/curl_config.h.cmake
++++ b/lib/curl_config.h.cmake
+@@ -34,6 +34,9 @@
+ /* Default SSL backend */
+ #cmakedefine CURL_DEFAULT_SSL_BACKEND "${CURL_DEFAULT_SSL_BACKEND}"
+ 
++/* Use native CA store by default in curl tool */
++#cmakedefine CURL_CA_NATIVE_BY_DEFAULT 1
++
+ /* disables alt-svc */
+ #cmakedefine CURL_DISABLE_ALTSVC 1
+ 
+diff --git a/src/tool_cfgable.c b/src/tool_cfgable.c
+index d7ee7b1b22..5cb0ce2d30 100644
+--- a/src/tool_cfgable.c
++++ b/src/tool_cfgable.c
+@@ -46,6 +46,11 @@ void config_init(struct OperationConfig *config)
+   config->ftp_skip_ip = TRUE;
+   config->file_clobber_mode = CLOBBER_DEFAULT;
+   curlx_dyn_init(&config->postdata, MAX_FILE2MEMORY);
++
++#ifdef CURL_CA_NATIVE_BY_DEFAULT
++  config->native_ca_store = TRUE;
++  config->proxy_native_ca_store = TRUE;
++#endif
+ }
+ 
+ static void free_config_fields(struct OperationConfig *config)
