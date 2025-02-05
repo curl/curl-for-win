@@ -344,14 +344,11 @@ _VER="$1"
     if [ -n "${_OPENSSL}" ]; then
       if [ "${_OS}" = 'mac' ] && [ "${CURL_VER_}" != '8.16.0' ]; then
         options+=' -DUSE_APPLE_SECTRUST=ON'
-      else
-        if [[ "${_DEPS}" = *'cacert'* ]]; then
-          options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
-        fi
-
-        if [ "${_OS}" = 'win' ]; then
-          options+=' -DCURL_CA_SEARCH_SAFE=ON'
-        fi
+      elif [ "${_OS}" = 'win' ]; then
+        options+=' -DCURL_CA_NATIVE_BY_DEFAULT=ON'
+        options+=' -DCURL_DISABLE_CA_SEARCH=ON'
+      elif [[ "${_DEPS}" = *'cacert'* ]]; then
+        options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
       fi
     fi
   else
