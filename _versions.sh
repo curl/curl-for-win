@@ -6,12 +6,12 @@
 export DOCKER_IMAGE='debian:testing-20250203-slim'
 export DOCKER_CONTENT_TRUST='1'
 
-export CURL_VER_='8.11.1'
-export CURL_HASH=c7ca7db48b0909743eaef34250da02c19bc61d4f1dcedd6603f109409536ab56
+export CURL_VER_='8.12.0'
+export CURL_HASH=9a4628c764be6b1a9909567c13e8e771041609df43b2158fcac4e05ea7097e5d
 # Create revision string
 # NOTE: Set _REV to 1 after bumping CURL_VER_, then increment for each
 #       CI rebuild via `main` branch push (e.g. after bumping a dependency).
-export _REV="${CW_REVISION:-3}"
+export _REV="${CW_REVISION:-1}"
 
 export TRURL_VER_='0.16'
 export TRURL_HASH=2c26e3016f591f06234838bbe1dd4b165dce2c871c82ca6a32222d19696588d6
