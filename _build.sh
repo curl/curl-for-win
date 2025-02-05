@@ -112,6 +112,8 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Optional. Skipping any operation missing a secret.
 
 # TODO:
+#   - consider replacing `CURL_CA_SEARCH_SAFE=ON` with `CURL_DISABLE_CA_SEARCH=ON`
+#     on Windows.
 #   - switch to git tags / auto-generated tarballs.
 #     How to verify integrity / signature? Also, Git hash is still SHA1.
 #     Some Git servers do not provide stable tarballs, e.g. googlesource.com.
