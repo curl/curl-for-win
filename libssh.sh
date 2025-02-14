@@ -110,11 +110,12 @@ _VER="$1"
     -DWITH_SERVER=OFF \
     -DWITH_EXAMPLES=OFF \
     -DUNIT_TESTING=OFF \
+    -DCMAKE_INSTALL_PREFIX="${PWD}/${_PPS}" \
     -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS}" \
     -DCMAKE_CXX_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
 
   cmake --build "${_BLDDIR}"
-  cmake --install "${_BLDDIR}" --prefix "${_PPS}"
+  cmake --install "${_BLDDIR}"
 
   # Make steps for determinism
 
