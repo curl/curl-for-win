@@ -20,10 +20,11 @@ _VER="$1"
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
     -DBUILD_SHARED_LIBS=OFF \
     -DBROTLI_DISABLE_TESTS=ON \
+    -DCMAKE_INSTALL_PREFIX="${PWD}/${_PP}" \
     -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL}"
 
   cmake --build "${_BLDDIR}"
-  cmake --install "${_BLDDIR}" --prefix "${_PP}"
+  cmake --install "${_BLDDIR}"
 
   # libcurl does not need the encoding functionality
   rm -f "${_PP}"/include/encode.h

@@ -52,11 +52,12 @@ _VER="$1"
     -DENABLE_STATIC_LIB=ON \
     -DENABLE_SHARED_LIB=OFF \
     -DBUILD_TESTING=OFF \
+    -DCMAKE_INSTALL_PREFIX="${PWD}/${_PPS}" \
     -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LDFLAGS} ${LIBS}" \
     -DCMAKE_CXX_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LDFLAGS} ${LIBS} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
 
   cmake --build "${_BLDDIR}"
-  cmake --install "${_BLDDIR}" --prefix "${_PPS}"
+  cmake --install "${_BLDDIR}"
 
   # PR: https://github.com/ngtcp2/ngtcp2/pull/1752
   [ "${_VER}" = '1.15.0' ] && cp -p crypto/includes/ngtcp2/ngtcp2_crypto_quictls.h "${_PPS}"/include/ngtcp2/
