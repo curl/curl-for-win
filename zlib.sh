@@ -41,6 +41,7 @@ _VER="$1"
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
     -DBUILD_SHARED_LIBS=OFF \
+    -DCMAKE_INSTALL_PREFIX="${PWD}/${_PP}" \
     -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL}"
 
   if [ "${_NAM}" = 'zlib' ]; then
@@ -57,7 +58,7 @@ _VER="$1"
     cp -f -p "${_BLDDIR}"/*.a     "${_PP}/lib/"
   else
     cmake --build "${_BLDDIR}"
-    cmake --install "${_BLDDIR}" --prefix "${_PP}"
+    cmake --install "${_BLDDIR}"
   fi
 
   ls -l "${_PP}"/lib/*.a

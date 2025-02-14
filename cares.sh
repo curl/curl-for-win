@@ -48,10 +48,11 @@ _VER="$1"
     -DCARES_BUILD_TESTS=OFF \
     -DCARES_BUILD_CONTAINER_TESTS=OFF \
     -DCARES_BUILD_TOOLS=OFF \
+    -DCMAKE_INSTALL_PREFIX="${PWD}/${_PP}" \
     -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL}"
 
   cmake --build "${_BLDDIR}"
-  cmake --install "${_BLDDIR}" --prefix "${_PP}"
+  cmake --install "${_BLDDIR}"
 
   # Delete .pc files
   rm -r -f "${_PP}"/lib/pkgconfig

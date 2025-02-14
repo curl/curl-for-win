@@ -386,6 +386,7 @@ _VER="$1"
       -DBUILD_SHARED_LIBS=ON \
       -DBUILD_STATIC_LIBS=ON \
       -DCURL_HIDDEN_SYMBOLS=ON \
+      -DCMAKE_INSTALL_PREFIX="${PWD}/${_PP}" \
       -DCMAKE_RC_FLAGS="${_RCFLAGS_GLOBAL}" \
       -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}" \
       -DCMAKE_EXE_LINKER_FLAGS="${LDFLAGS} ${LDFLAGS_BIN} ${LIBS}" \
@@ -399,7 +400,7 @@ _VER="$1"
   fi
 
   TZ=UTC cmake --build "${_BLDDIR}" --verbose
-  TZ=UTC cmake --install "${_BLDDIR}" --prefix "${_PP}"
+  TZ=UTC cmake --install "${_BLDDIR}"
 
   if [[ "${_CONFIG}" = *'curltests'* ]]; then
     TZ=UTC cmake --build "${_BLDDIR}" --target testdeps

@@ -139,12 +139,13 @@ _VER="$1"
     # shellcheck disable=SC2086
     cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${_CMAKE_ASM_GLOBAL} ${options} \
       -DBUILD_SHARED_LIBS=OFF \
+      -DCMAKE_INSTALL_PREFIX="${PWD}/${_PP}" \
       -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS}" \
       -DCMAKE_CXX_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
   fi
 
   cmake --build "${_BLDDIR}"  # --verbose
-  cmake --install "${_BLDDIR}" --prefix "${_PP}"
+  cmake --install "${_BLDDIR}"
 
   # List files created
   find "${_PP}"
