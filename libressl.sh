@@ -86,12 +86,18 @@ _VER="$1"
     -DBUILD_SHARED_LIBS=OFF \
     -DLIBRESSL_APPS=OFF \
     -DLIBRESSL_TESTS=OFF \
-    -DCMAKE_INSTALL_PREFIX="${PWD}/${_PP}" \
     -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}" \
     -DCMAKE_ASM_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}"
 
   cmake --build "${_BLDDIR}"
-  cmake --install "${_BLDDIR}"
+  if [ "${LIBRESSL_VER_}" = '4.0.0' ]; then
+    # FIXME upstream:
+    #   cmake --install "${_BLDDIR}" --prefix "${_PP}"
+    # ignores --prefix for /etc/ssl config files and fails when writing them.
+    DESTDIR="${_PKGDIR}" cmake --install "${_BLDDIR}"
+  else
+    cmake --install "${_BLDDIR}"
+  fi
 
   # Delete .pc files
   rm -r -f "${_PP}"/lib/pkgconfig
