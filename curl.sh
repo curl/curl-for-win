@@ -202,9 +202,7 @@ _VER="$1"
       h3=1
     else
       options+=' -DHAVE_BORINGSSL=0 -DHAVE_AWSLC=0'  # fast-track configuration
-      if [ "${_OPENSSL}" = 'libressl' ]; then
-        h3=1
-      elif [ "${_OPENSSL}" = 'quictls' ]; then
+      if [ "${_OPENSSL}" = 'libressl' ] || [ "${_OPENSSL}" = 'quictls' ]; then
         h3=1
       fi
     fi
