@@ -399,8 +399,8 @@ _VER="$1"
   fi
 
   if [[ "${_CONFIG}" = *'dumpconfig'* ]]; then
-    echo '::group::raw'; cat "${_BLDDIR}/lib/curl_config.h" || true; echo '::endgroup::'
-    grep -F '#define' "${_BLDDIR}/lib/curl_config.h" | sort || true
+    cat "${_BLDDIR}/lib/curl_config.h" || true
+    grep -a -F '#define' "${_BLDDIR}/lib/curl_config.h" | sort || true
   fi
 
   TZ=UTC cmake --build "${_BLDDIR}" --verbose
