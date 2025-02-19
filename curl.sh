@@ -399,7 +399,6 @@ _VER="$1"
   fi
 
   if [[ "${_CONFIG}" = *'dumpconfig'* ]]; then
-    cat "${_BLDDIR}/lib/curl_config.h" || true
     grep -a -F '#define' "${_BLDDIR}/lib/curl_config.h" | sort || true
   fi
 
