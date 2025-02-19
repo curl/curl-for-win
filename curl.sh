@@ -396,7 +396,7 @@ _VER="$1"
     # --debug-find --debug-trycompile
   fi
 
-  if [[ "${_CONFIG}" = *'dumpconfig'* || "${_CONFIG}" != *'main'* ]]; then
+  if [[ "${_CONFIG}" != *'nodumpconf'* ]]; then
     grep -a -F '#define' "${_BLDDIR}/lib/curl_config.h" | sort || true
   fi
 
