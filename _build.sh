@@ -73,6 +73,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        unicode    build curl in UNICODE mode (for win target) [EXPERIMENTAL]
 #        osnoidn    build curl without OS-supplied IDN support
 #        werror     turn compiler warnings into errors
+#        dumpconfig dump curl_config.h
 #        debug      debug build
 #        curltests  build curl tests
 #        win        build Windows target (default)

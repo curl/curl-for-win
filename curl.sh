@@ -398,6 +398,11 @@ _VER="$1"
     # --debug-find --debug-trycompile
   fi
 
+  if [[ "${_CONFIG}" = *'dumpconfig'* ]]; then
+    echo '::group::raw'; cat "${_BLDDIR}/lib/curl_config.h" || true; echo '::endgroup::'
+    grep -F '#define' "${_BLDDIR}/lib/curl_config.h" | sort || true
+  fi
+
   TZ=UTC cmake --build "${_BLDDIR}" --verbose
   TZ=UTC cmake --install "${_BLDDIR}" --prefix "${_PP}"
 
