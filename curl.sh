@@ -203,9 +203,6 @@ _VER="$1"
     else
       options+=' -DHAVE_BORINGSSL=0 -DHAVE_AWSLC=0'  # fast-track configuration
       if [ "${_OPENSSL}" = 'libressl' ]; then
-        if [ "${CURL_VER_}" = '8.12.0' ]; then
-          [ "${_OS}" = 'win' ] && CPPFLAGS+=' -DLIBRESSL_DISABLE_OVERRIDE_WINCRYPT_DEFINES_WARNING'
-        fi
         h3=1
       elif [ "${_OPENSSL}" = 'quictls' ]; then
         h3=1
