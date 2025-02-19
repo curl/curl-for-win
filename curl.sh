@@ -216,7 +216,10 @@ _VER="$1"
 
   # fast-track configuration
   if [ "${_OS}" = 'win' ]; then
-    options+=' -DHAVE_STRTOK_R=1 -DHAVE_FILE_OFFSET_BITS=1'
+    if [ "${CURL_VER_}" = '8.12.1' ]; then
+      options+=' -DHAVE_STRTOK_R=1'
+    fi
+    options+=' -DHAVE_FILE_OFFSET_BITS=1'
   fi
 
   if [[ "${_CONFIG}" != *'osnotls'* && ("${h3}" = '0' || "${_CONFIG}" = *'noh3'*) ]]; then
