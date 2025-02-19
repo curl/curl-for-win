@@ -207,7 +207,7 @@ _VER="$1"
       fi
     fi
     if [ "${_OPENSSL}" != 'libressl' ]; then
-      options+=' -DHAVE_LIBRESSL=1 -DHAVE_SSL_SET0_WBIO=1'  # fast-track configuration
+      options+=' -DHAVE_LIBRESSL=0 -DHAVE_SSL_SET0_WBIO=1'  # fast-track configuration
     fi
     [ "${h3}" = '1' ] && options+=' -DHAVE_SSL_SET_QUIC_USE_LEGACY_CODEPOINT=1'  # fast-track configuration
   else
