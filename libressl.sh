@@ -35,8 +35,13 @@ _VER="$1"
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
   options=''
-  CFLAGS="-ffile-prefix-map=$(pwd)="  # Pending: https://github.com/libressl/portable/issues/761
+  CFLAGS=''
   CPPFLAGS=''
+  if [ "${LIBRESSL_VER_}" = '4.0.0' ]; then
+    CFLAGS+=" -ffile-prefix-map=$(pwd)="  # MERGED: https://github.com/libressl/portable/issues/761
+  else
+    CPPFLAGS+=' -DOPENSSL_NO_FILENAMES'
+  fi
 
   if [[ "${_CONFIG}" != *'debug'* ]]; then
     CPPFLAGS+=' -DNDEBUG'
