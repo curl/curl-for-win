@@ -17,6 +17,9 @@
 # - `--prefix` ignored in `cmake --install` for /etc/ssl files.
 #   https://github.com/libressl/portable/issues/1118
 #   https://github.com/libressl/portable/pull/1119 [MERGED. Expected in 4.0.1]
+# - server signatures signed with ED25519 do not work
+#   https://github.com/curl/curl-for-win/discussions/78 https://github.com/libressl/portable/issues/821
+# - ECH support: https://github.com/libressl/portable/issues/546
 
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
