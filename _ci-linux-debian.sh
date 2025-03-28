@@ -104,21 +104,20 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
 fi
 
 apt-get --option Dpkg::Use-Pty=0 --yes update
-apt-get --option Dpkg::Use-Pty=0 --yes install --no-install-suggests --no-install-recommends eatmydata
 # shellcheck disable=SC2086
-eatmydata apt-get --option Dpkg::Use-Pty=0 --yes install --no-install-suggests --no-install-recommends \
+apt-get --option Dpkg::Use-Pty=0 --yes install --no-install-suggests --no-install-recommends \
   curl ca-certificates git gpg gpg-agent patch ssh rsync python3-pefile make cmake ninja-build \
   libssl-dev zlib1g-dev \
   zip xz-utils time jq secure-delete ${extra}
 
 if [ -n "${dl}" ]; then
   # shellcheck disable=SC2086
-  eatmydata apt-get --option Dpkg::Use-Pty=0 --yes download ${dl}
+  apt-get --option Dpkg::Use-Pty=0 --yes download ${dl}
   # https://deb.debian.org/debian/pool/main/l/llvm-toolchain-17/libclang-rt-17-dev_17.0.5-1_arm64.deb -> libclang-rt-17-dev_1%3a17.0.5-1_arm64.deb
   # libclang-common-15-dev_1%3a15.0.6-4+b1_amd64.deb
   for f in ./*.deb; do
-    eatmydata dpkg-deb --contents "${f}"
-    eatmydata dpkg-deb --extract --verbose "${f}" my-pkg
+    dpkg-deb --contents "${f}"
+    dpkg-deb --extract --verbose "${f}" my-pkg
   done
   if [ ! -d 'my-pkg/usr/lib/clang' ]; then
     ln -s -f "llvm${CW_CCSUFFIX}/lib/clang" 'my-pkg/usr/lib/clang'
