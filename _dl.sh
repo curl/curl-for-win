@@ -116,7 +116,8 @@ cat <<EOF
     "name": "awslc",
     "url": "https://github.com/aws/aws-lc/archive/refs/tags/v{ver}.tar.gz",
     "redir": "redir",
-    "tag": "v\\\\d+\\\\.\\\\d+\\\\.\\\\d+$"
+    "tag": "v\\\\d+\\\\.\\\\d+\\\\.\\\\d+$",
+    "pinned": true
   },
   {
     "name": "boringssl",
