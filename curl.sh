@@ -336,7 +336,7 @@ _VER="$1"
   fi
 
   if [[ "${_CONFIG}" != *'nounity'* ]]; then
-    options+=' -DCMAKE_UNITY_BUILD=ON'
+    options+=' -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=30'
   fi
 
   if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
