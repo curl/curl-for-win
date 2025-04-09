@@ -73,17 +73,15 @@ _VER="$1"
       options+=" --with-zlib-include=${_TOP}/${_ZLIB}/${_PP}/include"
       options+=' zlib'
     fi
-    if [ "${_VER}" != '3.1.5' ]; then
-      if [[ "${_DEPS}" = *'brotli'* ]] && [ -d "../brotli/${_PP}" ]; then
-        options+=" --with-brotli-lib=${_TOP}/brotli/${_PP}/lib"
-        options+=" --with-brotli-include=${_TOP}/brotli/${_PP}/include"
-        options+=' brotli'
-      fi
-      if [[ "${_DEPS}" = *'zstd'* ]] && [ -d "../zstd/${_PP}" ]; then
-        options+=" --with-zstd-lib=${_TOP}/zstd/${_PP}/lib"
-        options+=" --with-zstd-include=${_TOP}/zstd/${_PP}/include"
-        options+=' zstd'
-      fi
+    if [[ "${_DEPS}" = *'brotli'* ]] && [ -d "../brotli/${_PP}" ]; then
+      options+=" --with-brotli-lib=${_TOP}/brotli/${_PP}/lib"
+      options+=" --with-brotli-include=${_TOP}/brotli/${_PP}/include"
+      options+=' brotli'
+    fi
+    if [[ "${_DEPS}" = *'zstd'* ]] && [ -d "../zstd/${_PP}" ]; then
+      options+=" --with-zstd-lib=${_TOP}/zstd/${_PP}/lib"
+      options+=" --with-zstd-include=${_TOP}/zstd/${_PP}/include"
+      options+=' zstd'
     fi
   else
     options+=' no-comp'
@@ -99,7 +97,7 @@ _VER="$1"
   fi
 
   # Enabling `no-deprecated` requires walking a fine line. It needs:
-  # - libssh2 1.11.1-DEV
+  # - libssh2 1.11.1
   # - curl with an alternate system TLS-backend, it means macOS and Windows
   #   builds with Schannel or SecureTransport enabled, respectively.
   #   or, curl without NTLM support if there is no alternate TLS-backend, e.g. on Linux.
@@ -107,7 +105,6 @@ _VER="$1"
   # - other OpenSSL dependents playing well with `no-deprecated`: ngtcp2
   # - other OpenSSL dependents broken with `no-deprecated`: libssh
   if [[ "${_DEPS}" != *'libssh1'* && \
-        ( "${_DEPS}" != *'libssh2'* || "${LIBSSH2_VER_}" != '1.11.0' ) && \
         ( \
           "${_OS}" = 'win' || \
         ( "${_OS}" = 'mac' && "${_OSVER}" -lt '1015' ) || \
@@ -125,23 +122,6 @@ _VER="$1"
   # Patch OpenSSL to omit build options from its binary:
   sed -i.bak -E '/mkbuildinf/s/".+/""/' crypto/build.info
 
-  if [ "${_VER}" = '3.1.5' ]; then
-    # Patch OpenSSL ./Configure to:
-    # - make it accept Windows-style absolute paths as --prefix. Without the
-    #   patch it misidentifies all such absolute paths as relative ones and
-    #   aborts.
-    #   Reported: https://github.com/openssl/openssl/issues/9520
-    #   Fixed in OpenSSL 3.2.0.
-    # - allow no-apps option to save time building openssl command-line tool.
-    #   Fixed in OpenSSL 3.2.0.
-    sed \
-      -e 's/die "Directory given with --prefix/print "Directory given with --prefix/g' \
-      -e 's/"aria",$/"apps", "aria",/g' \
-      < ./Configure > ./Configure-patched
-    chmod a+x ./Configure-patched
-    mv ./Configure-patched ./Configure
-  fi
-
   if [ "${_OS}" = 'win' ]; then
     # Space or backslash not allowed. Needs to be a folder restricted
     # to Administrators across Windows installations, versions and
@@ -153,7 +133,7 @@ _VER="$1"
     # paths and preferably to detect OS location at runtime and adjust config
     # paths accordingly; none supported by OpenSSL.
     _my_prefix='C:/Windows/System32/OpenSSL'
-    if [ "${_OS}" != "${_HOST}" ] && [ "${_VER}" != '3.1.5' ]; then
+    if [ "${_OS}" != "${_HOST}" ]; then
       # Hack to skip (mis-)checking for an absolute prefix using unixy rules
       # while cross-building on a *nix host for Windows. For that, we must
       # pass a non-empty CROSS_COMPILE value while making sure that
@@ -167,12 +147,10 @@ _VER="$1"
   fi
   _ssldir='ssl'
 
-  if [ "${_VER}" != '3.1.5' ]; then
-    # no-sm2-precomp: avoid a 3.2.0 optimization that makes libcrypto 0.5MB larger.
-    options+=' no-docs no-sm2-precomp'
-    if [[ "${_CONFIG}" = *'noh3'* ]]; then
-      options+=' no-quic'
-    fi
+  # no-sm2-precomp: avoid a 3.2.0 optimization that makes libcrypto 0.5MB larger.
+  options+=' no-docs no-sm2-precomp'
+  if [[ "${_CONFIG}" = *'noh3'* ]]; then
+    options+=' no-quic'
   fi
 
   # 'no-dso' implies 'no-dynamic-engine' which in turn compiles in these
