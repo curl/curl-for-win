@@ -236,8 +236,6 @@ _VER="$1"
     fi
   fi
 
-  CPPFLAGS+=' -DHAS_ALPN'  # for OpenSSL, Schannel when enabled
-
 # options+=' -DCURL_CA_FALLBACK=ON'
 
   options+=' -DCURL_DISABLE_SRP=ON'
