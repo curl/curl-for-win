@@ -81,6 +81,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        linux      build Linux target (requires Linux host)
 #        musl       build Linux target with musl CRT (for linux target) (default for Alpine)
 #        macuni     build macOS universal (arm64 + x86_64) package (for mac target)
+#        nolibgroup build without the `--start-group` hack [DEBUG]
 #
 # CW_JOBS
 #      Number of parallel make jobs. Default: 2

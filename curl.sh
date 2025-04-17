@@ -65,6 +65,14 @@ _VER="$1"
     fi
   fi
 
+  # Ugly hack. Everything breaks without this due to the accidental ordering
+  # of libs and objects, and offering no universal way to (re)insert libs at
+  # specific positions. Linker complains about a missing --end-group, then
+  # adds it automatically anyway.
+  if [[ "${_CONFIG}" != *'nolibgroup'* ]] && [ "${_LD}" = 'ld' ]; then
+    LDFLAGS+=' -Wl,--start-group'
+  fi
+
   if [ "${_OS}" = 'win' ]; then
     # Link lib dependencies in static mode. Implied by `-static` for curl,
     # but required for libcurl, which would link to shared libs by default.
