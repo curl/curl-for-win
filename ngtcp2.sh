@@ -40,7 +40,7 @@ _VER="$1"
     options+=" -DBORINGSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
     options+=" -DBORINGSSL_LIBRARIES=${_TOP}/${_OPENSSL}/${_PP}/lib/libssl.a;${_TOP}/${_OPENSSL}/${_PP}/lib/libcrypto.a;-lpthread"; [ "${_OS}" = 'win' ] && options="${options};-lws2_32"
     CPPFLAGS+=' -DNOCRYPT'
-  elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'libressl' ]; then
+  else
     options+=' -DENABLE_OPENSSL=ON'
     options+=" -DOPENSSL_ROOT_DIR=../${_OPENSSL}/${_PP}"
     # FIXME: This is not enough for picky ld linker (with gcc)

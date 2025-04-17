@@ -188,14 +188,8 @@ _VER="$1"
     [ -n "${mainssl}" ] || mainssl='openssl'
     options+=' -DCURL_USE_OPENSSL=ON'
     options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-    if [ "${_OPENSSL}" = 'openssl' ]; then
-      if [ "${_OS}" = 'win' ]; then
-        LIBS+=' -lcrypt32'
-      fi
-      if [[ "${_CONFIG}" != *'noh3'* ]]; then
-        options+=' -DUSE_OPENSSL_QUIC=ON'
-        h3=1
-      fi
+    if [ "${_OPENSSL}" = 'openssl' ] && [ "${_OS}" = 'win' ]; then
+      LIBS+=' -lcrypt32'
     fi
     options+=' -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON'
     if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
@@ -207,17 +201,14 @@ _VER="$1"
       fi
       options+=' -DUSE_ECH=ON'
       LIBS+=' -lpthread'
-      h3=1
     else
       options+=' -DHAVE_BORINGSSL=0 -DHAVE_AWSLC=0'  # fast-track configuration
-      if [ "${_OPENSSL}" = 'libressl' ] || [ "${_OPENSSL}" = 'quictls' ]; then
-        h3=1
-      fi
     fi
+    h3=1
     if [ "${_OPENSSL}" != 'libressl' ]; then
       options+=' -DHAVE_LIBRESSL=0 -DHAVE_SSL_SET0_WBIO=1'  # fast-track configuration
     fi
-    [ "${h3}" = '1' ] && options+=' -DHAVE_SSL_SET_QUIC_USE_LEGACY_CODEPOINT=1'  # fast-track configuration
+    options+=' -DHAVE_SSL_SET_QUIC_USE_LEGACY_CODEPOINT=1'  # fast-track configuration
   else
     options+=' -DCURL_USE_OPENSSL=OFF'
   fi
@@ -275,19 +266,15 @@ _VER="$1"
 
   if [[ "${h3}" = '1' && \
         "${_DEPS}" = *'nghttp3'* && -d "../nghttp3/${_PP}" && \
-        (("${_DEPS}" = *'ngtcp2'* && -d "../ngtcp2/${_PPS}") || "${_OPENSSL}" = 'openssl') ]]; then
+        "${_DEPS}" = *'ngtcp2'* && -d "../ngtcp2/${_PPS}" ]]; then
     options+=" -DNGHTTP3_INCLUDE_DIR=${_TOP}/nghttp3/${_PP}/include"
     options+=" -DNGHTTP3_LIBRARY=${_TOP}/nghttp3/${_PP}/lib/libnghttp3.a"
     CPPFLAGS+=' -DNGHTTP3_STATICLIB'
 
-    if [ "${_OPENSSL}" != 'openssl' ]; then
-      options+=' -DUSE_NGTCP2=ON'
-      options+=" -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PPS}/include"
-      options+=" -DNGTCP2_LIBRARY=${_TOP}/ngtcp2/${_PPS}/lib/libngtcp2.a"
-      CPPFLAGS+=' -DNGTCP2_STATICLIB'
-    else
-      options+=' -DUSE_NGTCP2=OFF'
-    fi
+    options+=' -DUSE_NGTCP2=ON'
+    options+=" -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PPS}/include"
+    options+=" -DNGTCP2_LIBRARY=${_TOP}/ngtcp2/${_PPS}/lib/libngtcp2.a"
+    CPPFLAGS+=' -DNGTCP2_STATICLIB'
   else
     options+=' -DUSE_NGTCP2=OFF'
   fi

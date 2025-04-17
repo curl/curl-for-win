@@ -710,9 +710,7 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano) ]]; then
   _DEPS+=' nghttp2'
   if [[ "${_CONFIG}" != *'noh3'* ]]; then
     _DEPS+=' nghttp3'
-    if [[ "${_CONFIG}" != *'openssl'* ]]; then
-      _DEPS+=' ngtcp2'
-    fi
+    _DEPS+=' ngtcp2'
   fi
 fi
 
