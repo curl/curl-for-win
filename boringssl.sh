@@ -27,11 +27,6 @@
 #   using llvm-mingw, pthreads is necessary again, but it does not trigger
 #   the static pthreads linking bug (undefined reference to `_setjmp') we
 #   hit earlier.
-# - Building tests takes 3x time per target (on AppVeyor CI, at the time
-#   of this writing) and consumes 5x the disk space for ${_BLDDIR}, that is
-#   17MB -> 79MB (for x64, with ASM and -gddb disabled).
-#   Disabling them requires patching ./CMakeList.txt.
-#   This is fixed in AWS-LC fork with a CMake option.
 # - Objects built on different OSes result in a few byte differences.
 #   e.g. windows.c.obj, a_utf8.c.obj. But not a_octet.c.obj.
 # - AWS-LC force-sets _WIN32_WINNT to _WIN32_WINNT_WIN7. The Windows target
@@ -109,7 +104,6 @@ _VER="$1"
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
     if [ "${_NAM}" = 'awslc' ]; then
-      options+=' -DBUILD_TESTING=OFF'
       options+=' -DBUILD_TOOL=OFF'
       options+=' -DDISABLE_GO=ON'
       options+=' -DDISABLE_PERL=ON'
@@ -131,13 +125,11 @@ _VER="$1"
       # ARM64, so patch it out in that case.
       # Enable it for all targets for consistency.
       sed -i.bak 's/ -ggdb//g' ./CMakeLists.txt
-
-      # Skip building test components
-      echo 'set_target_properties(decrepit bssl_shim test_fips boringssl_gtest test_support_lib urandom_test crypto_test ssl_test decrepit_test all_tests pki pki_test run_tests PROPERTIES EXCLUDE_FROM_ALL TRUE)' >> ./CMakeLists.txt
     fi
 
     # shellcheck disable=SC2086
     cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${_CMAKE_ASM_GLOBAL} ${options} \
+      -DBUILD_TESTING=OFF \
       -DBUILD_SHARED_LIBS=OFF \
       -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS}" \
       -DCMAKE_CXX_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
