@@ -221,7 +221,6 @@ _VER="$1"
   cp -f -p CHANGES.md                   "${_DST}/"
   cp -f -p LICENSE.txt                  "${_DST}/"
   cp -f -p README.md                    "${_DST}/"
-  cp -f -p FAQ.md                       "${_DST}/"
   cp -f -p NEWS.md                      "${_DST}/"
 
   [ "${_NAM}" = 'quictls' ] && cp -f -p README-OpenSSL.md "${_DST}/"
