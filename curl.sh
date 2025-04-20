@@ -188,7 +188,7 @@ _VER="$1"
     [ -n "${mainssl}" ] || mainssl='openssl'
     options+=' -DCURL_USE_OPENSSL=ON'
     options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-    if [ "${_OPENSSL}" = 'openssl' ] && [ "${_OS}" = 'win' ]; then
+    if [ "${CURL_VER_}" = '8.13.0' ] && [ "${_OPENSSL}" = 'openssl' ] && [ "${_OS}" = 'win' ]; then
       LIBS+=' -lcrypt32'
     fi
     options+=' -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON'
