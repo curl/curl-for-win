@@ -208,7 +208,15 @@ _VER="$1"
     if [ "${_OPENSSL}" != 'libressl' ]; then
       options+=' -DHAVE_LIBRESSL=0 -DHAVE_SSL_SET0_WBIO=1'  # fast-track configuration
     fi
-    options+=' -DHAVE_SSL_SET_QUIC_USE_LEGACY_CODEPOINT=1'  # fast-track configuration
+    if [ "${CURL_VER_}" = '8.13.0' ]; then
+      options+=' -DHAVE_SSL_SET_QUIC_USE_LEGACY_CODEPOINT=1'  # fast-track configuration
+    else
+      if [ "${_OPENSSL}" = 'openssl' ]; then
+        options+=' -DHAVE_SSL_SET_QUIC_TLS_CBS=1'  # fast-track configuration
+      else
+        options+=' -DHAVE_SSL_SET_QUIC_USE_LEGACY_CODEPOINT=1'  # fast-track configuration
+      fi
+    fi
   else
     options+=' -DCURL_USE_OPENSSL=OFF'
   fi
