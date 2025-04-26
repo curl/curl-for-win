@@ -570,7 +570,7 @@ live_dl() {
     keys="$(   printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
     curlopt="$(printf '%s' "${jp}" | jq --raw-output '.curlopt' | sed 's/^null$//')"
 
-    options=()
+    options=(--retry-all-errors)
     [ -n "${curlopt}" ] && options+=("${curlopt}")
     [ "${redir}" = 'redir' ] && options+=(--location --proto-redir '=https')
     options+=(--output pkg.bin "${url}")
@@ -582,7 +582,7 @@ live_dl() {
     set -x
     if ! my_curl "${options[@]}"; then
       if [ -n "${mirror}" ]; then
-        options=()
+        options=(--retry-all-errors)
         if [[ "${mirror}" = 'https://github.com/'* ]]; then
           options+=(--location --proto-redir '=https')
         fi
