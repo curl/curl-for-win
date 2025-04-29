@@ -9,11 +9,11 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # Build configuration environment variables:
 #
 # CW_BLD
-#      List of components to build. E.g. 'curl' or 'zlib libssh2 curl' or 'none'.
+#      List of components to build. E.g. 'curl' or 'zlibng libssh2 curl' or 'none'.
 #      Optional. Default: (all)
 #
 # CW_GET
-#      List of components to (re-)download. E.g. 'zlib curl' or 'none'.
+#      List of components to (re-)download. E.g. 'zlibng curl' or 'none'.
 #      Optional. Default: (all)
 #
 # CW_NOGET
@@ -38,7 +38,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        nobrotli   build without brotli
 #        nozstd     build without zstd
 #        nozlib     build without zlib
-#        zlibng     build with zlib-ng instead of zlib
+#        zlibold    build with zlib (classic) instead of zlib-ng
 #        noftp      build without FTP/FTPS support
 #        nohttp     build without HTTP and proxy support
 #        nocookie   build without cookie support
