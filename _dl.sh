@@ -657,10 +657,10 @@ fi
 export _DEPS='curl'
 
 if [[ ! "${_CONFIG}" =~ (zero|nozlib) ]]; then
-  if [[ "${_CONFIG}" = *'zlibng'* ]]; then
-    _DEPS+=' zlibng'
-  else
+  if [[ "${_CONFIG}" = *'zlibold'* ]]; then
     _DEPS+=' zlibold'
+  else
+    _DEPS+=' zlibng'
   fi
 fi
 
