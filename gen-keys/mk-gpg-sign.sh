@@ -8,6 +8,7 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 # Requires:
 #   brew install gnupg pgpdump
+#   pip install base58
 
 # Redirect stdout securely to non-world-readable files
 privout() {
@@ -19,7 +20,7 @@ privout() {
 
 case "$(uname)" in
   *Darwin*)
-    MY_GPG='/usr/local/opt/gnupg/bin/gpg';;
+    MY_GPG="$(brew --prefix)/opt/gnupg/bin/gpg";;
   *)
     MY_GPG='gpg';;
 esac

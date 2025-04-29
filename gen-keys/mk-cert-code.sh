@@ -13,11 +13,12 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 # those signature using osslsigncode and sigcheck.exe (on Windows only).
 
 # Requires:
-#   openssl 1.1.x+, gpg, osslsigncode 2.1.0+, GNU tail, base58
+#   openssl 1.1.x+, gpg, osslsigncode 2.1.0+, GNU tail
 # Debian:
 #   apt install osslsigncode base58
 # Mac:
 #   brew install openssl gnupg osslsigncode coreutils diffutils
+#   pip install base58
 # Windows:
 #   pacman --sync openssl gnupg mingw-w64-{i686,x86_64}-osslsigncode
 #   sigcheck64.exe:
@@ -48,7 +49,7 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 case "$(uname)" in
   *Darwin*)
-    alias openssl=/usr/local/opt/openssl/bin/openssl
+    alias openssl="$(brew --prefix)/opt/openssl/bin/openssl"
     readonly os='mac';;
   *_NT*)
     # To find osslsigncode

@@ -8,6 +8,7 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 # Requires:
 #   brew install diffutils  # for cmp
+#   pip install base58
 
 # GPG-encrypted key for distribution (ASCII)
 # Show default --s2k-count rounds:
