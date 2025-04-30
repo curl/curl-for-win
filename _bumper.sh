@@ -16,7 +16,7 @@ if ! command -v hxclean >/dev/null 2>&1; then
         curl git gpg zip jq html-xml-utils;;
     Darwin*)
       brew install \
-        curl git gpg zip jq html-xml-utils;;
+        curl git gpg jq html-xml-utils;;
   esac
 fi
 
