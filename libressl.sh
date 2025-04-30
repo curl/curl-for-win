@@ -36,12 +36,7 @@ _VER="$1"
 
   options=''
   CFLAGS=''
-  CPPFLAGS=''
-  if [ "${LIBRESSL_VER_}" = '4.0.0' ]; then
-    CFLAGS+=" -ffile-prefix-map=$(pwd)="  # MERGED: https://github.com/libressl/portable/issues/761
-  else
-    CPPFLAGS+=' -DOPENSSL_NO_FILENAMES'
-  fi
+  CPPFLAGS='-DOPENSSL_NO_FILENAMES'
 
   if [[ "${_CONFIG}" != *'debug'* ]]; then
     CPPFLAGS+=' -DNDEBUG'
@@ -90,14 +85,7 @@ _VER="$1"
     -DCMAKE_ASM_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}"
 
   cmake --build "${_BLDDIR}"
-  if [ "${LIBRESSL_VER_}" = '4.0.0' ]; then
-    # FIXME upstream:
-    #   cmake --install "${_BLDDIR}" --prefix "${_PP}"
-    # ignores --prefix for /etc/ssl config files and fails when writing them.
-    DESTDIR="${_PKGDIR}" cmake --install "${_BLDDIR}"
-  else
-    cmake --install "${_BLDDIR}" --prefix "${_PP}"
-  fi
+  cmake --install "${_BLDDIR}" --prefix "${_PP}"
 
   # Delete .pc files
   rm -r -f "${_PP}"/lib/pkgconfig
