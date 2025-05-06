@@ -33,24 +33,26 @@ _VER="$1"
   if [ "${_OS}" = 'win' ]; then
     [ "${_CPU}" = 'x86' ] && options+=' mingw'
     [ "${_CPU}" = 'x64' ] && options+=' mingw64'
-    if [ "${_CPU}" = 'a64' ]; then
-      # Sources:
+    [ "${_CPU}" = 'a64' ] && options+=' mingwarm64'
+    if [[ "${_VER}" = '3.5.'* ]]; then
+      # Source:
       # - https://github.com/openssl/openssl/issues/10533
-      # - https://github.com/msys2/MINGW-packages/blob/62d5a14c6847bc6c61d7a030c791affc5316842b/mingw-w64-openssl/001-support-aarch64.patch via
-      #   https://github.com/msys2/MINGW-packages/commit/f146b20066ff1a357d82866dc0fc2f4b1f4c1648 via
-      #   https://github.com/openssl/openssl/commit/b863e1e4c69068e4166bdfbbf9f04bb07991dd40
+      # - https://github.com/openssl/openssl/pull/26605
+      # - https://github.com/openssl/openssl/commit/9da1a9c30e105571dc09ad7bcf756872a99027a7
       echo '## -*- mode: perl; -*-
         my %targets = (
-          "mingw-arm64" => {
+          "mingwarm64" => {
             inherit_from     => [ "mingw-common" ],
+            cflags           => "",
+            sys_id           => "MINGWARM64",
             bn_ops           => add("SIXTY_FOUR_BIT"),
             asm_arch         => "aarch64",
+            uplink_arch      => "armv8",
             perlasm_scheme   => "win64",
-            multilib         => "64",
+            shared_rcflag    => "",
+            multilib         => "-arm64",
           }
         );' > Configurations/11-curl-for-win-mingw-arm64.conf
-
-      options+=' mingw-arm64'
     fi
   elif [ "${_OS}" = 'mac' ]; then
     [ "${_CPU}" = 'x64' ] && options+=' darwin64-x86_64'
@@ -186,11 +188,13 @@ _VER="$1"
   mkdir -p "./${_PP}"
   mv "${_PKGDIR}/${_my_prefix}"/* "${_PP:?}"
 
-  # Rename 'lib64' to 'lib'. This is what most packages expect.
+  # Rename 'lib64'/'lib-arm64' to 'lib'. This is what most packages expect.
   # Not using '--libdir=lib' because that also changes the paths hardwired
   # into the binaries, making them different from default builds at runtime.
   if [ -d "${_PP}/lib64" ]; then
     mv "${_PP}/lib64" "${_PP}/lib"
+  elif [ -d "${_PP}/lib-arm64" ]; then
+    mv "${_PP}/lib-arm64" "${_PP}/lib"
   fi
 
   # Delete .pc files
