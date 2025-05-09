@@ -51,9 +51,6 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt *-version-*.txt || true
-      - uses: actions/attest-build-provenance@db473fddc028af60658334401dc6fa3ffd8669fd # v2
-        with:
-          subject-path: 'curl-*-*-*/curl*, *-*-linux*.*, urls.txt'
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
           name: 'curl-linux-glibc-daily-tool'
@@ -66,6 +63,10 @@ jobs:
           path: |
             *-*-linux*.*
             urls.txt
+
+      - uses: actions/attest-build-provenance@db473fddc028af60658334401dc6fa3ffd8669fd # v2
+        with:
+          subject-path: 'curl-*-*-*/curl*, *-*-linux*.*, urls.txt'
 
   linux-musl:
     if: ${{ github.repository_owner == 'curl' }}
@@ -98,9 +99,6 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt *-version-*.txt || true
-      - uses: actions/attest-build-provenance@db473fddc028af60658334401dc6fa3ffd8669fd # v2
-        with:
-          subject-path: 'curl-*-*-*/curl*, *-*-linux*.*, urls.txt'
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
           name: 'curl-linux-musl-daily-tool'
@@ -113,6 +111,10 @@ jobs:
           path: |
             *-*-linux*.*
             urls.txt
+
+      - uses: actions/attest-build-provenance@db473fddc028af60658334401dc6fa3ffd8669fd # v2
+        with:
+          subject-path: 'curl-*-*-*/curl*, *-*-linux*.*, urls.txt'
 
   mac:
     if: ${{ github.repository_owner == 'curl' }}
@@ -138,9 +140,6 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt *-version-*.txt || true
-      - uses: actions/attest-build-provenance@db473fddc028af60658334401dc6fa3ffd8669fd # v2
-        with:
-          subject-path: 'curl-*-universal-*/curl*, *-*-macos*.*, urls.txt'
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
           name: 'curl-macos-universal-daily-tool'
@@ -153,6 +152,10 @@ jobs:
           path: |
             *-*-macos*.*
             urls.txt
+
+      - uses: actions/attest-build-provenance@db473fddc028af60658334401dc6fa3ffd8669fd # v2
+        with:
+          subject-path: 'curl-*-universal-*/curl*, *-*-macos*.*, urls.txt'
 
   win:
     if: ${{ github.repository_owner == 'curl' }}
@@ -187,9 +190,6 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt *-version-*.txt || true
-      - uses: actions/attest-build-provenance@db473fddc028af60658334401dc6fa3ffd8669fd # v2
-        with:
-          subject-path: 'curl-*-*-*/curl*, *-*-mingw*.*, urls.txt'
       # https://github.com/actions/upload-artifact
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
@@ -203,3 +203,7 @@ jobs:
           path: |
             *-*-mingw*.*
             urls.txt
+
+      - uses: actions/attest-build-provenance@db473fddc028af60658334401dc6fa3ffd8669fd # v2
+        with:
+          subject-path: 'curl-*-*-*/curl*, *-*-mingw*.*, urls.txt'
