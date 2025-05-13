@@ -30,7 +30,15 @@ mkdir -m 700 workdir
   cp -p "${mail}-sign-public.asc"      ../sign-pkg-public.asc
   cp -p "${mail}-sign-private_gpg.asc" ../sign-pkg.gpg.asc
 
-  # 3. SSH deploy key
+  # 3. package blob cosign key pair
+
+  name='curl-for-win'
+  year='2025'
+  ../mk-cosign.sh "${name}" "${year}"
+
+  mv cosign.* ..
+
+  # 4. SSH deploy key
 
   ../mk-ssh-curl-for-win.sh
 
