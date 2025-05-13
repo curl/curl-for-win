@@ -53,6 +53,7 @@ openssl dgst -sha256 "${_ALL}" | sed 's/^SHA256/SHA2-256/g' | tee "${_ALL}.txt"
 touch -c -r "${_ALL}" "${_ALL}.txt"
 
 ./_sign-pkg.sh "${_ALL}"
+./_sign-pkg-cosign.sh "${_ALL}"
 
 # Official deploy
 DEPLOY_KEY="$(pwd)/deploy.key"

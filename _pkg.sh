@@ -104,6 +104,7 @@ create_pkg() {
   # Sign releases only
   if [ -z "${_suf}" ]; then
     ./_sign-pkg.sh "${_pkg}"
+    ./_sign-pkg-cosign.sh "${_pkg}"
   fi
 }
 

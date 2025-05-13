@@ -45,6 +45,10 @@ environment:
     secure: '691Ykt37/bFaTvxSafrjxGf9Y0konF/jLO3DbglIjMeaHW6FwIqsi8r6KASIjdGU'
   SIGN_PKG_KEY_PASS:
     secure: 'hPd2pmh39DzHjaINLeLKHl3VGVuAuRlLt05nhU7fph55KBeTBjtkHNaKUxBu+3Ev'
+  COSIGN_PKG_GPG_PASS:
+    secure: '0AlxGMXJEu3ikha//wne+e1L0kvDNqbYg62QuVn/JDoz94b+P6ilrVQH2h9QiFp4'
+  COSIGN_PKG_KEY_PASS:
+    secure: 'OnmQRlYaVGvoXGqjCW72gmWCGh89KxjCCpNRwC7Gqbr2CVRBeLgTem558dmbgeJW'
   DEPLOY_GPG_PASS:
     secure: 'zb5hAQukLzixNEtXf2rM4gozjsa1jdxzc+Dq+XzEvu19wn/YRplfvM2euY4N5t3g'
   DEPLOY_KEY_PASS:
@@ -59,7 +63,7 @@ build_script:
       docker images --digests
       time docker run --volume="$(pwd):$(pwd)" --workdir="$(pwd)" \
         --env-file=<(env | grep -a -E \
-          '^(CW_|SIGN_|DEPLOY_|APPVEYOR_|CI_|DO_NOT_TRACK)') \
+          '^(CW_|SIGN_|COSIGN_|DEPLOY_|APPVEYOR_|CI_|DO_NOT_TRACK)') \
         "${DOCKER_IMAGE}" \
         sh -c ./_ci-linux-debian.sh
 

@@ -450,6 +450,20 @@ ${SIGN_PKG_GPG_PASS}
 EOF
 fi
 
+# Decrypt package signing cosign key
+if command -v cosign >/dev/null 2>&1; then
+  export COSIGN_PKG_KEY; COSIGN_PKG_KEY='cosign.key'
+  if [ -s "${COSIGN_PKG_KEY}.asc" ] && \
+     [ -n "${COSIGN_PKG_GPG_PASS:+1}" ]; then
+    install -m 600 /dev/null "${COSIGN_PKG_KEY}"
+    gpg --batch --yes --no-tty --quiet \
+      --pinentry-mode loopback --passphrase-fd 0 \
+      --decrypt "${COSIGN_PKG_KEY}.asc" 2>/dev/null >> "${COSIGN_PKG_KEY}" <<EOF || true
+${COSIGN_PKG_GPG_PASS}
+EOF
+  fi
+fi
+
 # decrypt code signing key
 export SIGN_CODE_KEY; SIGN_CODE_KEY="$(pwd)/sign-code.p12"
 if [ -s "${SIGN_CODE_KEY}.asc" ] && \
@@ -1829,6 +1843,14 @@ rm -f "${SIGN_CODE_KEY}"
 
 # Upload/deploy binaries
 . ./_ul.sh
+
+if [ -n "${COSIGN_PKG_KEY:-}" ]; then
+  case "${_HOST}" in
+    mac)   rm -f -P "${COSIGN_PKG_KEY}";;
+    linux) [ -w "${COSIGN_PKG_KEY}" ] && command -v srm >/dev/null 2>&1 && srm "${COSIGN_PKG_KEY}";;
+  esac
+  rm -f "${COSIGN_PKG_KEY}"
+fi
 
 # Leave "flat" layout for curl tool if requested
 if [ "${CW_PKG_FLATTEN:-}" = '1' ]; then
