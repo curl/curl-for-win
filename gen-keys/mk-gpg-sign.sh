@@ -7,7 +7,7 @@
 set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 # Requires:
-#   brew install gnupg pgpdump
+#   brew install gnupg optipng pgpdump scour
 #   pip install base58
 
 # Redirect stdout securely to non-world-readable files
@@ -83,9 +83,9 @@ echo "MY_GPG_SIGN_KEY=${fp}"
 cp -p "${GNUPGHOME}/openpgp-revocs.d/${fp}.rev" "${master}-revocation.asc"
 
 qrencode --type png "OPENPGP4FPR:${fp}" --output "${master}-public-qr-fingerprint.png"
-  optipng -silent -preserve -fix -strip all -o3 "${master}-public-qr-fingerprint.png"
+optipng -silent -preserve -fix -strip all -o3 "${master}-public-qr-fingerprint.png"
 qrencode --type svg --inline --svg-path --rle "OPENPGP4FPR:${fp}" | \
-  svgcleaner --indent 1 --stdout - > "${master}-public-qr-fingerprint.svg"
+  scour --strip-xml-prolog --enable-comment-stripping --enable-id-stripping --enable-viewboxing --remove-metadata > "${master}-public-qr-fingerprint.svg"
 
 id="${mail}"
 
@@ -112,9 +112,9 @@ my_gpg --list-packets --verbose --debug 0x02 2>/dev/null \
   > "${master}-public.asc.pkt.txt"
 
 my_gpg --batch --dearmor < "${master}-public.asc" | qrencode --type png --output "${master}-public-qr.png"
-  optipng -silent -preserve -fix -strip all -o3 "${master}-public-qr.png"
+optipng -silent -preserve -fix -strip all -o3 "${master}-public-qr.png"
 my_gpg --batch --dearmor < "${master}-public.asc" | qrencode --type svg --inline --svg-path --rle | \
-  svgcleaner --indent 1 --stdout - > "${master}-public-qr.svg"
+  scour --strip-xml-prolog --enable-comment-stripping --enable-id-stripping --enable-viewboxing --remove-metadata > "${master}-public-qr.svg"
 
 # Export private key (encrypted)
 echo "${pass}" | my_gpg \
