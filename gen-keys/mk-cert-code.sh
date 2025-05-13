@@ -13,7 +13,7 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 # those signature using osslsigncode and sigcheck.exe (on Windows only).
 
 # Requires:
-#   openssl 1.1.x+, gpg, osslsigncode 2.1.0+, GNU tail
+#   openssl 1.1.x+, gpg, osslsigncode 2.1.0+, GNU tail, base58
 # Debian:
 #   apt install osslsigncode base58
 # Mac:
@@ -280,13 +280,7 @@ echo "${encr_pass}" | gpg --batch --verbose --yes --no-tty \
   --symmetric --no-symkey-cache --output "${code}.p12.asc" --armor \
   --set-filename '' "${code}.p12"
 
-echo "${encr_pass}" | gpg --batch --verbose --yes --no-tty \
-  --pinentry-mode loopback --passphrase-fd 0 \
-  --force-ocb \
-  --cipher-algo aes256 --digest-algo sha512 --compress-algo none \
-  --s2k-cipher-algo aes256 --s2k-digest-algo sha512 \
-  --symmetric --no-symkey-cache --output "${code}.p12.gpg" \
-  --set-filename '' "${code}.p12"
+gpg --batch --dearmor < "${code}.p12.asc" > "${code}.p12.gpg"
 
 echo '! Test signing an executable...'
 
