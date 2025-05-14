@@ -42,10 +42,13 @@ jobs:
           persist-credentials: false
       - name: 'shellcheck'
         env:
-          TEST_SECRET_ENV: ${{ secrets.TEST_SECRET }}
+          TEST_SECRET_ENV: '${{ secrets.TEST_SECRET }}'
+          TEST_ENVVAR_ENV: '${{ vars.TEST_ENVVAR }}'
         run: |
           echo "TEST_SECRET|${TEST_SECRET}|"
           echo "TEST_SECRET_ENV|${TEST_SECRET_ENV}|"
+          echo "TEST_ENVVAR|${TEST_ENVVAR}|"
+          echo "TEST_ENVVAR_ENV|${TEST_ENVVAR_ENV}|"
           shellcheck --version
           shellcheck --exclude=1091 \
             --enable=avoid-nullary-conditions,deprecate-which,quote-safe-variables,require-variable-braces \
