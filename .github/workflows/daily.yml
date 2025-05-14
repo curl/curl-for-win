@@ -30,8 +30,8 @@ jobs:
       - name: 'build'
         env:
           GITHUB_TOKEN: '${{ github.token }}'
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG='dev-linux'
           export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
@@ -75,8 +75,8 @@ jobs:
       - name: 'build'
         env:
           GITHUB_TOKEN: '${{ github.token }}'
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG='dev-linux-a64-r64-x64-musl'
           export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
@@ -120,8 +120,8 @@ jobs:
       - name: 'build'
         env:
           GITHUB_TOKEN: '${{ github.token }}'
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG='dev-mac-macuni'
           export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
@@ -154,8 +154,8 @@ jobs:
       - name: 'build'
         env:
           GITHUB_TOKEN: '${{ github.token }}'
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |

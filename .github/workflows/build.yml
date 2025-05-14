@@ -73,8 +73,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux-a64-x64"
           export CW_REVISION='${{ github.sha }}'
@@ -109,8 +109,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux-a64-r64-x64-gcc"
           export CW_REVISION='${{ github.sha }}'
@@ -146,8 +146,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux"
           export CW_REVISION='${{ github.sha }}'
@@ -184,8 +184,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux-gcc"
           export CW_REVISION='${{ github.sha }}'
@@ -222,8 +222,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux-a64-r64-x64-musl"
           export CW_REVISION='${{ github.sha }}'
@@ -258,8 +258,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux-a64-r64-x64-musl-gcc"
           export CW_REVISION='${{ github.sha }}'
@@ -294,8 +294,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux-musl"
           export CW_REVISION='${{ github.sha }}'
@@ -332,8 +332,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux-musl-gcc"
           export CW_REVISION='${{ github.sha }}'
@@ -370,8 +370,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux"
           export CW_REVISION='${{ github.sha }}'
@@ -406,8 +406,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux-gcc"
           export CW_REVISION='${{ github.sha }}'
@@ -443,8 +443,8 @@ jobs:
       - name: 'build'
         env:
           GITHUB_TOKEN: '${{ github.token }}'
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux"
           export CW_REVISION='${{ github.sha }}'
@@ -473,8 +473,8 @@ jobs:
       - name: 'build'
         env:
           GITHUB_TOKEN: '${{ github.token }}'
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-mac-macuni"
           export CW_REVISION='${{ github.sha }}'
@@ -503,8 +503,8 @@ jobs:
       - name: 'build'
         env:
           GITHUB_TOKEN: '${{ github.token }}'
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-mac-macuni-llvm"
           export CW_REVISION='${{ github.sha }}'
@@ -533,8 +533,8 @@ jobs:
       - name: 'build'
         env:
           GITHUB_TOKEN: '${{ github.token }}'
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CCSUFFIX='-14'
           export CW_CONFIG="${GITHUB_REF_NAME}-mac-gcc-a64"
@@ -563,8 +563,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |
@@ -593,8 +593,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |
@@ -631,8 +631,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: ${{ secrets.COSIGN_PKG_GPG_PASS }}
-          COSIGN_PKG_KEY_PASS: ${{ secrets.COSIGN_PKG_KEY_PASS }}
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |
