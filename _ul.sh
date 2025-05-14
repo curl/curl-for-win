@@ -109,7 +109,7 @@ EOF
 
   case "${_HOST}" in
     mac)   rm -f -P "${DEPLOY_KEY}";;
-    linux) [ -w "${DEPLOY_KEY}" ] && srm "${DEPLOY_KEY}";;
+    linux) [ -w "${DEPLOY_KEY}" ] && command -v srm >/dev/null 2>&1 && srm "${DEPLOY_KEY}";;
   esac
   rm -f "${DEPLOY_KEY}"
 fi

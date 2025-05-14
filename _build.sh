@@ -1823,7 +1823,7 @@ fi
 
 case "${_HOST}" in
   mac)   rm -f -P "${SIGN_CODE_KEY}";;
-  linux) [ -w "${SIGN_CODE_KEY}" ] && srm "${SIGN_CODE_KEY}";;
+  linux) [ -w "${SIGN_CODE_KEY}" ] && command -v srm >/dev/null 2>&1 && srm "${SIGN_CODE_KEY}";;
 esac
 rm -f "${SIGN_CODE_KEY}"
 
