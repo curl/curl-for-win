@@ -41,7 +41,11 @@ jobs:
         with:
           persist-credentials: false
       - name: 'shellcheck'
+        env:
+          TEST_SECRET_ENV: ${{ secrets.TEST_SECRET }}
         run: |
+          echo "TEST_SECRET|${TEST_SECRET}|"
+          echo "TEST_SECRET_ENV|${TEST_SECRET_ENV}|"
           shellcheck --version
           shellcheck --exclude=1091 \
             --enable=avoid-nullary-conditions,deprecate-which,quote-safe-variables,require-variable-braces \
