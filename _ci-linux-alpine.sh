@@ -36,6 +36,6 @@ fi
 # https://pkgs.alpinelinux.org/packages
 # shellcheck disable=SC2086
 apk add --no-cache curl git gpg gpg-agent rsync build-base cmake samurai python3 \
-  zip tar xz jq openssl sed ${extra}
+  zip tar xz jq openssl sed perl ${extra}
 
 ./_build.sh
