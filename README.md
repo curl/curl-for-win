@@ -17,7 +17,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   `.tar.xz` or `.zip` packages,<br>PGP signed with:
   [`BDCF 067D 3908 B272 7A4A 9487 67C1 0037 40BF 8DC2`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
   <br>Also in [sigstore](https://sigstore.dev) with `cosign`, with
-  [public key](https://raw.githubusercontent.com/curl/curl-for-win/refs/heads/main/cosign.pub.asc):
+  [public key](https://raw.githubusercontent.com/curl/curl-for-win/main/cosign.pub.asc):
   ```
   -----BEGIN PUBLIC KEY-----
   MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEOhipUjZMIlG0slqjGgJugAyA3E0v
