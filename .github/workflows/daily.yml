@@ -17,6 +17,7 @@ env:
   CW_PKG_NODELETE: '1'
   CW_PKG_FLATTEN: '1'
   DO_NOT_TRACK: '1'
+  SIGN_PKG_KEY_ID: 'BDCF067D3908B2727A4A948767C1003740BF8DC2'
 
 jobs:
   linux-glibc:
@@ -33,6 +34,8 @@ jobs:
           GITHUB_TOKEN: '${{ github.token }}'
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
+          SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG='dev-linux'
           export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
@@ -45,7 +48,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CW_|SIGN_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${DOCKER_IMAGE}" \
             sh -c ./_ci-linux-debian.sh
 
@@ -78,6 +81,8 @@ jobs:
           GITHUB_TOKEN: '${{ github.token }}'
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
+          SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG='dev-linux-a64-r64-x64-musl'
           export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
@@ -88,7 +93,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CW_|SIGN_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${DOCKER_IMAGE}" \
             sh -c ./_ci-linux-debian.sh
 
@@ -123,6 +128,8 @@ jobs:
           GITHUB_TOKEN: '${{ github.token }}'
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
+          SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG='dev-mac-macuni'
           export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
@@ -157,6 +164,8 @@ jobs:
           GITHUB_TOKEN: '${{ github.token }}'
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
+          SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |
@@ -169,7 +178,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CW_|SIGN_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${DOCKER_IMAGE}" \
             sh -c ./_ci-linux-debian.sh
 
