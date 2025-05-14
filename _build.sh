@@ -108,6 +108,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # CW_PKG_FLATTEN
 #      Flatten unified package dir layout for executables. Default: 0
 #
+# CW_PKG_SIGN
+#      Enable package signing. Default: 1 for the 'main' branch, 0 otherwise
+#
 # SIGN_CODE_GPG_PASS, SIGN_CODE_KEY_PASS: for code signing
 # SIGN_PKG_KEY_ID, SIGN_PKG_GPG_PASS, SIGN_PKG_KEY_PASS: for package signing
 # DEPLOY_GPG_PASS, DEPLOY_KEY_PASS: for publishing results

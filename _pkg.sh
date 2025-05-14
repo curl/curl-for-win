@@ -101,8 +101,9 @@ create_pkg() {
 
   openssl dgst -sha256 "${_pkg}" | sed 's/^SHA256/SHA2-256/g' | tee "${_pkg}.txt" | tee -a hashes.txt
 
-  # Sign releases only
-  if [ -z "${_suf}" ]; then
+  # Sign production releases, or when explicitly asked to do so (e.g. daily builds)
+  if [ -z "${_suf}" ] || \
+     [ "${CW_PKG_SIGN:-}" = '1' ]; then
     ./_sign-pkg.sh "${_pkg}"
     ./_sign-pkg-cosign.sh "${_pkg}"
   fi
