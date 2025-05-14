@@ -32,8 +32,7 @@ if [ -n "${extra}" ]; then
   # shellcheck disable=SC2086
   # - Using `|| true` to avoid failing due to preinstalled non-Homebrew
   #   python3: `Could not symlink bin/2to3`
-  # - Do not call brew install for ninja alone, it can take more time than it saves.
-  brew install ninja ${extra} || true
+  brew install ${extra} || true
 fi
 
 [[ "${CW_CONFIG:-}" = *'win'* ]] && wineboot --init
