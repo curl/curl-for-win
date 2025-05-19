@@ -1127,7 +1127,8 @@ build_single_target() {
         # /usr/lib/gcc/x86_64-w64-mingw32/10-posix/
         # /usr/lib/gcc/x86_64-w64-mingw32/10-win32/
         # /usr/lib/gcc/x86_64-w64-mingw32/12/
-        tmp="$(find "/usr/lib/gcc/${_TRIPLET}" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
+        # Sort and pick last to try landing on 'win32' (vs. 'posix')
+        tmp="$(find "/usr/lib/gcc/${_TRIPLET}" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1 || true)"
         if [ -z "${tmp}" ]; then
           >&2 echo '! Error: Failed to detect mingw-w64 dev env root.'
           exit 1
