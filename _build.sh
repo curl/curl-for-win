@@ -1319,6 +1319,8 @@ build_single_target() {
     _CMAKE_ASM_GLOBAL+=" -DCMAKE_ASM_COMPILER_TARGET=${_TRIPLET}"
   fi
 
+  _CMAKE_GLOBAL+=' CMAKE_LINK_WARNING_AS_ERROR=ON'
+
   # Needed to exclude compiler info from objects, but for our Windows COFF
   # outputs this seems to be a no-op as of llvm/clang 13.x/14.x.
   # Still necessary with GCC 12.1.0 though.
