@@ -1636,7 +1636,7 @@ build_single_target() {
         # Terrible hack to retrieve musl version
         libcver="$(grep -a -m1 -o -E '\x00[0-9]+\.[0-9]+\.[0-9]+\x00' "${brew_root}/opt/musl-cross/libexec/${_machine}-linux-musl/lib/libc.so" | head -n 1 || true)"
       fi
-      [ -n "${libcver}" ] || libcver="$(dpkg-query --showformat='${Version}\n' --show musl | head -n -1 || true)"
+      [ -n "${libcver}" ] || libcver="$(dpkg-query --showformat='${Version}\n' --show musl | head -n 1 || true)"
       [ -n "${libcver}" ] || libcver="$(rpm --query --queryformat '.%{VERSION}' musl-devel || true)"
       if [ -z "${libcver}" ]; then
         [ -n "${libcver}" ] || libcver="$(pacman --query --info musl || true)"
