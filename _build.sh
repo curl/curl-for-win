@@ -1091,16 +1091,7 @@ build_single_target() {
     # it requires manually installing package `libclang-rt-17-dev` (or `libclang-common-15-dev` on bookworm).
     elif [ "${_OS}" = 'linux' ] && [ "${_DISTRO}" = 'debian' ]; then
       if [ "${unamem}" = "${_machine}" ] || [ -d 'my-pkg/usr/lib/clang' ]; then
-        # FIXME: This combination fails to link with clang-rt, due to:
-        #        ld.lld-17: error: relocation R_RISCV_PCREL_HI20 cannot be used against symbol '__global_pointer$'; recompile with -fPIC
-        #        >>> defined in /usr/riscv64-linux-gnu/lib/Scrt1.o
-        #        >>> referenced by /usr/riscv64-linux-gnu/lib/Scrt1.o:(.text+0x2C)
-        #        Our workaround is to fall back to gcc parts for this.
-        if [ "${_CRT}" = 'gnu' ] && [ "${_CPU}" = 'r64' ]; then
-          :
-        else
-          _CCRT='clang-rt'
-        fi
+        _CCRT='clang-rt'
       fi
     fi
   fi
