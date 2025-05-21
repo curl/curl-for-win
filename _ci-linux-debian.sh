@@ -16,9 +16,6 @@ dl=''
 if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
   [ -n "${CW_CCSUFFIX:-}" ] || export CW_CCSUFFIX='-19'
   extra+=" llvm${CW_CCSUFFIX} clang${CW_CCSUFFIX} lld${CW_CCSUFFIX}"
-  if [ "${CW_CCSUFFIX}" != '-15' ]; then
-    extra+=" libclang-rt${CW_CCSUFFIX}-dev"
-  fi
 fi
 
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' golang'
