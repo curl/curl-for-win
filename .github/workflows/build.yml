@@ -536,7 +536,7 @@ jobs:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
-          export CW_CCSUFFIX='-14'
+          export CW_CCSUFFIX='-15'
           export CW_CONFIG="${GITHUB_REF_NAME}-mac-gcc-a64"
           export CW_REVISION='${{ github.sha }}'
           sh -c ./_ci-mac-homebrew.sh
