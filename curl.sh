@@ -188,9 +188,6 @@ _VER="$1"
     [ -n "${mainssl}" ] || mainssl='openssl'
     options+=' -DCURL_USE_OPENSSL=ON'
     options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
-    if [ "${CURL_VER_}" = '8.13.0' ] && [ "${_OPENSSL}" = 'openssl' ] && [ "${_OS}" = 'win' ]; then
-      LIBS+=' -lcrypt32'
-    fi
     options+=' -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON'
     if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
       if [ "${_OPENSSL}" = 'boringssl' ]; then
@@ -210,14 +207,10 @@ _VER="$1"
     else
       options+=' -DHAVE_LIBRESSL=0 -DHAVE_SSL_SET0_WBIO=1'  # fast-track configuration
     fi
-    if [ "${CURL_VER_}" = '8.13.0' ]; then
-      options+=' -DHAVE_SSL_SET_QUIC_USE_LEGACY_CODEPOINT=1'  # fast-track configuration
+    if [ "${_OPENSSL}" = 'openssl' ]; then
+      options+=' -DHAVE_SSL_SET_QUIC_TLS_CBS=1'  # fast-track configuration
     else
-      if [ "${_OPENSSL}" = 'openssl' ]; then
-        options+=' -DHAVE_SSL_SET_QUIC_TLS_CBS=1'  # fast-track configuration
-      else
-        options+=' -DHAVE_SSL_SET_QUIC_USE_LEGACY_CODEPOINT=1'  # fast-track configuration
-      fi
+      options+=' -DHAVE_SSL_SET_QUIC_USE_LEGACY_CODEPOINT=1'  # fast-track configuration
     fi
   else
     options+=' -DCURL_USE_OPENSSL=OFF'
