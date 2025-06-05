@@ -77,7 +77,7 @@ jobs:
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux-a64-x64"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
@@ -113,7 +113,7 @@ jobs:
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux-a64-r64-x64-gcc"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           export CW_GCCSUFFIX='-14'
           sudo podman image trust set --type reject default
@@ -150,7 +150,7 @@ jobs:
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           DOCKER_IMAGE='debian:bookworm-slim'
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
@@ -188,7 +188,7 @@ jobs:
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux-gcc"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           DOCKER_IMAGE='debian:bookworm-slim'
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
@@ -226,7 +226,7 @@ jobs:
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux-a64-r64-x64-musl"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
@@ -262,7 +262,7 @@ jobs:
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux-a64-r64-x64-musl-gcc"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
@@ -298,7 +298,7 @@ jobs:
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux-musl"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           DOCKER_IMAGE='debian:bookworm-slim'
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
@@ -336,7 +336,7 @@ jobs:
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux-musl-gcc"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           DOCKER_IMAGE='debian:bookworm-slim'
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
@@ -374,7 +374,7 @@ jobs:
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           DOCKER_IMAGE='alpine:latest'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
@@ -410,7 +410,7 @@ jobs:
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux-gcc"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           DOCKER_IMAGE='alpine:latest'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
@@ -447,7 +447,7 @@ jobs:
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-linux"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           sh -c ./_ci-mac-homebrew.sh
 
       - name: 'list dependencies'
@@ -477,7 +477,7 @@ jobs:
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-mac-macuni"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           sh -c ./_ci-mac-homebrew.sh
 
       - name: 'list dependencies'
@@ -507,7 +507,7 @@ jobs:
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-mac-macuni-llvm"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           sh -c ./_ci-mac-homebrew.sh
 
       - name: 'list dependencies'
@@ -538,7 +538,7 @@ jobs:
         run: |
           export CW_CCSUFFIX='-15'
           export CW_CONFIG="${GITHUB_REF_NAME}-mac-gcc-a64"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           sh -c ./_ci-mac-homebrew.sh
 
       - name: 'list dependencies'
@@ -569,7 +569,7 @@ jobs:
           CW_LLVM_MINGW_ONLY: '0'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-win"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sh -c ./_ci-mac-homebrew.sh
 
@@ -599,7 +599,7 @@ jobs:
           CW_LLVM_MINGW_ONLY: '0'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-win"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
@@ -637,7 +637,7 @@ jobs:
           CW_LLVM_MINGW_ONLY: '0'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-win-gcc"
-          export CW_REVISION='${{ github.sha }}'
+          export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
