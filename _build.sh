@@ -227,7 +227,7 @@ if [ -n "${APPVEYOR_ACCOUNT_NAME:-}" ]; then
   _COMMIT="${APPVEYOR_REPO_COMMIT}"
   _COMMIT_SHORT="$(printf '%.8s' "${_COMMIT}")"
 elif [ -n "${GITHUB_RUN_ID:-}" ]; then
-  # https://docs.github.com/actions/learn-github-actions/environment-variables
+  # https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
   _SLUG="${GITHUB_REPOSITORY}"
   _LOGURL="${GITHUB_SERVER_URL}/${_SLUG}/actions/runs/${GITHUB_RUN_ID}"
   _COMMIT="${GITHUB_SHA}"
