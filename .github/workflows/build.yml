@@ -34,7 +34,7 @@ jobs:
         uses: fsfe/reuse-action@bb774aa972c2a89ff34781233d275075cbddf542  # v5
 
   spellcheck:
-    runs-on: 'ubuntu-24.04'
+    runs-on: 'ubuntu-latest'
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
