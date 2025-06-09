@@ -38,7 +38,7 @@ jobs:
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG='dev-linux'
-          export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
+          export CW_REVISION; CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           DOCKER_IMAGE='debian:bookworm-slim'
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
@@ -53,7 +53,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-linux-glibc-daily-tool'
@@ -85,7 +85,7 @@ jobs:
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG='dev-linux-a64-r64-x64-musl'
-          export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
+          export CW_REVISION; CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
@@ -98,7 +98,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-linux-musl-daily-tool'
@@ -132,11 +132,11 @@ jobs:
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG='dev-mac-macuni'
-          export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
+          export CW_REVISION; CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           sh -c ./_ci-mac-homebrew.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-macos-universal-daily-tool'
@@ -170,7 +170,7 @@ jobs:
           CW_LLVM_MINGW_ONLY: '0'
         run: |
           export CW_CONFIG='dev-win'
-          export CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
+          export CW_REVISION; CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
@@ -183,7 +183,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       # https://github.com/actions/upload-artifact
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:

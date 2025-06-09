@@ -33,6 +33,23 @@ jobs:
       - name: 'REUSE compliance check'
         uses: fsfe/reuse-action@bb774aa972c2a89ff34781233d275075cbddf542  # v5
 
+  spellcheck:
+    runs-on: 'ubuntu-24.04'
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
+        with:
+          persist-credentials: false
+      - name: 'install tools'
+        run: pip install --break-system-packages -U codespell
+      - name: 'spellcheck'
+        run: |
+          codespell --version
+          # shellcheck disable=SC2046
+          codespell --skip='*.asc,*.patch,*.pem' \
+            --ignore-words '.github/workflows/codespell-ignore.txt' \
+            $(git ls-files)
+
   shellcheck:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 5
@@ -47,21 +64,29 @@ jobs:
             --enable=avoid-nullary-conditions,deprecate-which,quote-safe-variables,require-variable-braces \
             ./*.sh
 
-  spellcheck:
-    runs-on: 'ubuntu-24.04'
-    timeout-minutes: 5
+  cicheck:
+    runs-on: macos-latest
+    timeout-minutes: 1
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
         with:
           persist-credentials: false
-      - name: 'install tools'
-        run: pip install --break-system-packages -U codespell
-      - name: 'spellcheck'
+      - name: 'install prereqs'
+        run: brew install shellcheck zizmor
+      - name: 'zizmor GHA'
+        run: zizmor --pedantic .github/workflows/*.yml
+      - name: 'shellcheck'
         run: |
-          codespell --version
-          codespell --skip='*.asc,*.patch,*.pem' \
-            --ignore-words '.github/workflows/codespell-ignore.txt' \
-            $(git ls-files)
+          shellcheck --version
+          export SHELLCHECK_OPTS='--exclude=1090,1091,2086,2153 --enable=avoid-nullary-conditions,deprecate-which'
+          git ls-files '.github/workflows/*.yml' | while read -r f; do
+            echo "Verifying ${f}..."
+            {
+              echo '#!/usr/bin/env bash'
+              echo 'set -eu'
+              yq eval '.. | select(has("run") and (.run | type == "!!str")) | .run + "\ntrue\n"' "${f}"
+            } | sed -E 's|\$\{\{ .+ \}\}|GHA_EXPRESSION|g' | shellcheck -
+          done
 
   linux-glibc-debian-testing-llvm:
     runs-on: 'ubuntu-latest'
@@ -90,7 +115,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-linux-glibc-debian-testing-llvm'
@@ -127,7 +152,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-linux-glibc-debian-testing-gcc'
@@ -165,7 +190,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-linux-glibc-debian-bookworm-llvm'
@@ -203,7 +228,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-linux-glibc-debian-bookworm-gcc'
@@ -239,7 +264,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-linux-musl-debian-testing-llvm'
@@ -275,7 +300,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-linux-musl-debian-testing-gcc'
@@ -313,7 +338,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-linux-musl-debian-bookworm-llvm'
@@ -351,7 +376,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-linux-musl-debian-bookworm-gcc'
@@ -387,7 +412,7 @@ jobs:
             sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-linux-musl-alpine-llvm-x86_64'
@@ -423,7 +448,7 @@ jobs:
             sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-linux-musl-alpine-gcc-x86_64'
@@ -451,7 +476,7 @@ jobs:
           sh -c ./_ci-mac-homebrew.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-linux-musl-from-mac'
@@ -481,7 +506,7 @@ jobs:
           sh -c ./_ci-mac-homebrew.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-macos-universal-clang'
@@ -511,7 +536,7 @@ jobs:
           sh -c ./_ci-mac-homebrew.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-macos-universal-llvm'
@@ -542,7 +567,7 @@ jobs:
           sh -c ./_ci-mac-homebrew.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-macos-gcc-arm64'
@@ -574,7 +599,7 @@ jobs:
           sh -c ./_ci-mac-homebrew.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-windows-llvm-from-mac'
@@ -612,7 +637,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-windows-llvm'
@@ -650,7 +675,7 @@ jobs:
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
-        run: cat urls.txt *-version-*.txt || true
+        run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4
         with:
           name: 'curl-windows-gcc-noarm64'
