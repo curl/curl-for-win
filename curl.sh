@@ -179,13 +179,10 @@ _VER="$1"
 
   h3=0
 
-  mainssl=''  # openssl, mbedtls, schannel, gnutls, rustls
-
   if [ -n "${_OPENSSL}" ] && [ -d "../${_OPENSSL}/${_PP}" ]; then
     # ECH feature requests:
     #   https://github.com/libressl/portable/issues/546
     #   https://github.com/openssl/openssl/pull/22938
-    [ -n "${mainssl}" ] || mainssl='openssl'
     options+=' -DCURL_USE_OPENSSL=ON'
     options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     options+=' -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON'
