@@ -885,7 +885,7 @@ build_single_target() {
       fi
     fi
 
-    _CPPFLAGS_GLOBAL+=' -D_FORTIFY_SOURCE=3'
+    _CPPFLAGS_GLOBAL+=' -D_FORTIFY_SOURCE=3'  # Requires mingw-w64 11.0.0
 
   elif [ "${_OS}" = 'mac' ]; then
     if [ "${_HOST}" != "${_OS}" ]; then
