@@ -24,16 +24,18 @@ env:
 
 jobs:
   reuse-check:
+    name: 'REUSE check'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
         with:
           persist-credentials: false
-      - name: 'REUSE compliance check'
+      - name: 'check'
         uses: fsfe/reuse-action@bb774aa972c2a89ff34781233d275075cbddf542  # v5
 
   spellcheck:
+    name: 'spellcheck'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 5
     steps:
@@ -51,6 +53,7 @@ jobs:
             $(git ls-files)
 
   shellcheck:
+    name: 'shellcheck'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 5
     steps:
@@ -65,6 +68,7 @@ jobs:
             ./*.sh
 
   cicheck:
+    name: 'CI checks'
     runs-on: macos-latest
     timeout-minutes: 1
     steps:
@@ -89,6 +93,7 @@ jobs:
           done
 
   linux-glibc-debian-testing-llvm:
+    name: 'linux-glibc-debian-testing-llvm'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -125,6 +130,7 @@ jobs:
             urls.txt
 
   linux-glibc-debian-testing-gcc:
+    name: 'linux-glibc-debian-testing-gcc'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -162,6 +168,7 @@ jobs:
             urls.txt
 
   linux-glibc-debian-bookworm-llvm:
+    name: 'linux-glibc-debian-bookworm-llvm'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -200,6 +207,7 @@ jobs:
             urls.txt
 
   linux-glibc-debian-bookworm-gcc:
+    name: 'linux-glibc-debian-bookworm-gcc'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -238,6 +246,7 @@ jobs:
             urls.txt
 
   linux-musl-debian-testing-llvm:
+    name: 'linux-musl-debian-testing-llvm'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -274,6 +283,7 @@ jobs:
             urls.txt
 
   linux-musl-debian-testing-gcc:
+    name: 'linux-musl-debian-testing-gcc'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -310,6 +320,7 @@ jobs:
             urls.txt
 
   linux-musl-debian-bookworm-llvm:
+    name: 'linux-musl-debian-bookworm-llvm'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -348,6 +359,7 @@ jobs:
             urls.txt
 
   linux-musl-debian-bookworm-gcc:
+    name: 'linux-musl-debian-bookworm-gcc'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -386,6 +398,7 @@ jobs:
             urls.txt
 
   linux-musl-alpine-llvm:
+    name: 'linux-musl-alpine-llvm'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -422,6 +435,7 @@ jobs:
             urls.txt
 
   linux-musl-alpine-gcc:
+    name: 'linux-musl-alpine-gcc'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -458,6 +472,7 @@ jobs:
             urls.txt
 
   linux-musl-from-mac:
+    name: 'linux-musl-from-mac'
     runs-on: macos-13
     timeout-minutes: 30
     steps:
@@ -486,6 +501,7 @@ jobs:
             urls.txt
 
   mac-clang:
+    name: 'mac-clang'
     runs-on: 'macos-latest'
     timeout-minutes: 30
     env:
@@ -516,6 +532,7 @@ jobs:
             urls.txt
 
   mac-llvm:
+    name: 'mac-llvm'
     runs-on: 'macos-latest'
     timeout-minutes: 30
     env:
@@ -546,6 +563,7 @@ jobs:
             urls.txt
 
   mac-gcc:
+    name: 'mac-gcc'
     runs-on: 'macos-latest'
     timeout-minutes: 30
     env:
@@ -577,6 +595,7 @@ jobs:
             urls.txt
 
   win-llvm-from-mac:
+    name: 'win-llvm-from-mac'
     runs-on: 'macos-latest'
     timeout-minutes: 30
     env:
@@ -609,6 +628,7 @@ jobs:
             urls.txt
 
   win-llvm:
+    name: 'win-llvm'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -647,6 +667,7 @@ jobs:
             urls.txt
 
   win-gcc:
+    name: 'win-gcc'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
