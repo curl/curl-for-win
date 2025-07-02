@@ -67,7 +67,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        r64        build riscv64 target only [EXPERIMENTAL]
 #        a64        build arm64 target only
 #        x64        build x86_64 target only
-#        x86        build i686 target only (for win target)
+#        x86        build i686 target only (i686 not built by default) (for win target)
 #        nounity    build without CMake UNITY mode (slower builds for slightly smaller binaries)
 #        unitybatch enable UNITY batching (default for 'dev' config)
 #        nocurltool do not build the curl tool (requires cmake)
@@ -139,15 +139,12 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #     they require '/lib/ld-musl-x86_64.so.1' / '/lib/ld-musl-aarch64.so.1' now.
 #     meaning e.g.: `apt install musl; LD_LIBRARY_PATH=. ./trurl`
 #   - merge _ci-*.sh scripts into one.
-#   - win: Drop x86 builds.
+#   - win: Drop x86 support.
 #       https://data.firefox.com/dashboard/hardware#operating-system-metric-overview-2
-#     A hidden aspect of x86: The Chocolatey package manager installs x86
-#     binaries on ARM systems to run them in emulated mode. Windows as of ~2021
-#     got the ability to run x64 in emulated mode, but tooling support is
-#     missing, just like support for native ARM binaries:
-#       https://github.com/chocolatey/choco/issues/1803
-#       https://github.com/chocolatey/choco/issues/2172
-#     winget and scoop both support native ARM64.
+#     A hidden aspect of x86 support: For legacy x86 binaries (or possibly legacy
+#     source code with no prospect of porting to 64-bit), 32-bit binaries is sometimes
+#     the only method that integrate well. Other methods might be calling the 64-bit
+#     curl tool as an external app, or RPC between components of different archs.
 
 # Distros:
 #   - https://github.com/chocolatey-community/chocolatey-packages/tree/master/automatic/curl
@@ -1785,7 +1782,7 @@ if [ "${_OS}" = 'win' ]; then
   if [[ "${_CONFIG}" = *'a64'* || ! "${_CONFIG}" =~ (x64|x86) ]]; then
     build_single_target a64
   fi
-  if [[ "${_CONFIG}" = *'x86'* || ! "${_CONFIG}" =~ (x64|a64) ]]; then
+  if [[ "${_CONFIG}" = *'x86'* ]]; then
     build_single_target x86
   fi
 elif [ "${_OS}" = 'mac' ]; then

@@ -7,12 +7,6 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 
 # Reproducible, static, curl binaries for Linux, macOS and Windows
 
-- **We
-  [plan](https://github.com/curl/curl-for-win/discussions/68) to stop
-  building and distributing 32-bit Windows binaries on 2025-Aug-20.
-  Custom 32-bit builds remain available with a deprecated,
-  community-supported status. We recommend migrating to 64-bit Intel
-  or ARM binaries.**
 - [Download](https://curl.se/windows/) our
   `.tar.xz` or `.zip` packages,<br>PGP signed with:
   [`BDCF 067D 3908 B272 7A4A 9487 67C1 0037 40BF 8DC2`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
@@ -31,7 +25,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 - Standalone `curl` tool and `libcurl` DLL. Static libraries included.
 - Required: Windows Vista with
   [Universal CRT](https://support.microsoft.com/topic/update-for-universal-c-runtime-in-windows-322bf30f-4735-bb94-3949-49f5c49f4732)
-  (x64, ARM64 or x86), macOS 10.9 Mavericks (Intel or ARM),
+  (64-bit Intel or ARM), macOS 10.9 Mavericks (Intel or ARM),
   any Linux (amd64, arm64, RISC-V 64) with
   [MUSL](https://en.wikipedia.org/wiki/Musl) builds.
 - [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3),

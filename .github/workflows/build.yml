@@ -695,7 +695,7 @@ jobs:
         run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
-          name: 'curl-windows-gcc-noarm64'
+          name: 'curl-windows-gcc-x64'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
           path: |
             *-*-mingw*.*
