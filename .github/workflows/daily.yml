@@ -170,7 +170,7 @@ jobs:
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |
-          export CW_CONFIG='werror-dev-win-x64-a64'
+          export CW_CONFIG='werror-dev-win'
           export CW_REVISION; CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           . ./_versions.sh
           sudo podman image trust set --type reject default
