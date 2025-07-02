@@ -20,7 +20,7 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 #   brew install openssl gnupg osslsigncode coreutils diffutils
 #   pip install base58
 # Windows:
-#   pacman --sync openssl gnupg mingw-w64-{x86_64,i686}-osslsigncode
+#   pacman --sync openssl gnupg mingw-w64-x86_64-osslsigncode
 #   sigcheck64.exe:
 #     curl --user-agent '' --remote-name --remote-time --xattr https://live.sysinternals.com/tools/sigcheck64.exe
 #   signtool.exe:
