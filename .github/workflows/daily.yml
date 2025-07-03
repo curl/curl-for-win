@@ -22,7 +22,7 @@ env:
 jobs:
   linux-glibc:
     if: ${{ github.repository_owner == 'curl' }}
-    name: 'Linux (2 archs)'
+    name: 'Linux glibc (arm64 x64)'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -70,7 +70,7 @@ jobs:
 
   linux-musl:
     if: ${{ github.repository_owner == 'curl' }}
-    name: 'Linux MUSL (3 archs)'
+    name: 'Linux MUSL (arm64 riscv64 x64)'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -116,7 +116,7 @@ jobs:
 
   mac:
     if: ${{ github.repository_owner == 'curl' }}
-    name: 'macOS (2 archs)'
+    name: 'macOS (arm64 x64)'
     runs-on: 'macos-latest'
     timeout-minutes: 30
     env:
@@ -155,7 +155,7 @@ jobs:
 
   win:
     if: ${{ github.repository_owner == 'curl' }}
-    name: 'Windows (2 archs)'
+    name: 'Windows (arm64 x64)'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
