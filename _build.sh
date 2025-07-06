@@ -1157,11 +1157,7 @@ build_single_target() {
       fi
     fi
 
-    # TODO: enable it for platform native compiler + mingw-w64 when support reaches them.
-    if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-      # Requires llvm v16 and mingw-w64 v11 built with `--enable-cfguard`.
-      # As of 2023-08, only llvm-mingw satisfies this.
-      #
+    if [ "${_OS}" = 'win' ]; then  # Requires llvm v16 and mingw-w64 v11 built with `--enable-cfguard`.
       # Refs:
       #   https://github.com/mstorsjo/llvm-mingw/issues/301
       #   https://gist.github.com/alvinhochun/a65e4177e2b34d551d7ecb02b55a4b0a
