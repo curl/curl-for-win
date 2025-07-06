@@ -330,7 +330,7 @@ _VER="$1"
 
   if [[ "${_CONFIG}" != *'nounity'* ]]; then
     options+=' -DCMAKE_UNITY_BUILD=ON'
-    if [[ "${_CONFIG}" = *'dev'* ]]; then
+    if [[ "${_CONFIG}" =~ (dev|unitybatch) ]]; then
       options+=' -DCMAKE_UNITY_BUILD_BATCH_SIZE=30'
     fi
   fi

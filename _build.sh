@@ -66,6 +66,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        x64        build x86_64 target only
 #        x86        build i686 target only (for win target)
 #        nounity    build without CMake UNITY mode (slower builds for slightly smaller binaries)
+#        unitybatch enable UNITY batching (default for 'dev' config)
 #        nocurltool do not build the curl tool (requires cmake)
 #        curldocs   include curl Markdown manual pages in the package
 #        msvcrt     build against msvcrt instead of UCRT (for win target)
