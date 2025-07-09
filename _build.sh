@@ -121,7 +121,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # TODO:
 #   - consider replacing `CURL_CA_SEARCH_SAFE=ON` with `CURL_DISABLE_CA_SEARCH=ON`
 #     on Windows.
-#   - switch to git tags / auto-generated tarballs.
+#   - switch to git tags / auto-generated tarballs to retrieve dependency sources.
 #     How to verify integrity / signature? Also, Git hash is still SHA1.
 #     Some Git servers do not provide stable tarballs, e.g. googlesource.com.
 #     A stable reference release date can be difficult to obtain when using
