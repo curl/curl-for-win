@@ -52,35 +52,26 @@ jobs:
             --ignore-words '.github/workflows/codespell-ignore.txt' \
             $(git ls-files)
 
-  shellcheck:
-    name: 'shellcheck'
+  miscchecks:
+    name: 'misc checks'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-        with:
-          persist-credentials: false
-      - name: 'shellcheck'
-        run: |
-          shellcheck --version
-          shellcheck --exclude=1091 \
-            --enable=avoid-nullary-conditions,deprecate-which,quote-safe-variables,require-variable-braces \
-            ./*.sh
-
-  cicheck:
-    name: 'CI checks'
-    runs-on: macos-latest
-    timeout-minutes: 1
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-        with:
-          persist-credentials: false
       - name: 'install prereqs'
-        run: brew install shellcheck zizmor
+        run: /home/linuxbrew/.linuxbrew/bin/brew install shellcheck zizmor
+
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
+
       - name: 'zizmor GHA'
-        run: zizmor --pedantic .github/workflows/*.yml
-      - name: 'shellcheck'
         run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          zizmor --pedantic .github/workflows/*.yml
+
+      - name: 'shellcheck GHA'
+        run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           shellcheck --version
           export SHELLCHECK_OPTS='--exclude=1090,1091,2086,2153 --enable=avoid-nullary-conditions,deprecate-which'
           git ls-files '.github/workflows/*.yml' | while read -r f; do
@@ -91,6 +82,14 @@ jobs:
               yq eval '.. | select(has("run") and (.run | type == "!!str")) | .run + "\ntrue\n"' "${f}"
             } | sed -E 's|\$\{\{ .+ \}\}|GHA_EXPRESSION|g' | shellcheck -
           done
+
+      - name: 'shellcheck'
+        run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          shellcheck --version
+          shellcheck --exclude=1091 \
+            --enable=avoid-nullary-conditions,deprecate-which,quote-safe-variables,require-variable-braces \
+            ./*.sh
 
   linux-glibc-debian-testing-llvm:
     name: 'linux-glibc-debian-testing-llvm'
