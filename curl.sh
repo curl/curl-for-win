@@ -218,20 +218,11 @@ _VER="$1"
     options+=' -DHAVE_FILE_OFFSET_BITS=1'
   fi
 
-  if [[ "${_CONFIG}" != *'osnotls'* && ("${h3}" = '0' || "${_CONFIG}" = *'noh3'*) ]]; then
-    if [ "${_OS}" = 'win' ]; then
+  if [ "${_OS}" = 'win' ]; then
+    if [[ "${_CONFIG}" != *'osnotls'* && ("${h3}" = '0' || "${_CONFIG}" = *'noh3'*) ]]; then
       options+=' -DCURL_USE_SCHANNEL=ON'
-    elif [ "${_OS}" = 'mac' ] && [ "${_OSVER}" -lt '1015' ] && [ "${CURL_VER_}" != '8.14.1' ]; then
-      # SecureTransport deprecated in 2019 (macOS 10.15 Catalina, iOS 13.0)
-      # Another known deprecation issue:
-      #   curl/lib/vtls/sectransp.c:1206:7: warning: 'CFURLCreateDataAndPropertiesFromResource' is deprecated: first deprecated in macOS 10.9 - For resource data, use the CFReadStream API. For file resource properties, use CFURLCopyResourcePropertiesForKeys. [-Wdeprecated-declarations]
-      options+=' -DCURL_USE_SECTRANSP=ON'
-    fi
-  else
-    if [ "${_OS}" = 'win' ]; then
+    else
       options+=' -DCURL_USE_SCHANNEL=OFF'
-    elif [ "${_OS}" = 'mac' ] && [ "${CURL_VER_}" != '8.14.1' ]; then
-      options+=' -DCURL_USE_SECTRANSP=OFF'
     fi
   fi
 
