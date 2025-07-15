@@ -48,7 +48,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        libressl   build with LibreSSL
 #        quictls    build with quictls
 #        openssl    build with OpenSSL
-#        ostls      build with OS-supplied TLS backend-only (Schannel or SecureTransport)
+#        ostls      build with OS-supplied TLS backend-only (Schannel)
 #        osnotls    build without OS-supplied TLS backends
 #        libssh1    build with libssh
 #        libssh2    build with libssh2

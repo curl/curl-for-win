@@ -96,7 +96,7 @@ Features: alt-svc AsynchDNS brotli CAcert HSTS HTTP2 HTTP3 HTTPS-proxy     IPv6 
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
 Features: alt-svc AsynchDNS brotli CAcert HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL SSPI SSLS-EXPORT threadsafe UnixSockets zstd
 
-"mini", without brotli and zstd, with OS TLS backend (Schannel, SecureTransport) if available:
+"mini", without brotli and zstd, with OS TLS backend (Schannel) if available:
 Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
 Features: alt-svc AsynchDNS        CAcert HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL SSPI             threadsafe UnixSockets
 
