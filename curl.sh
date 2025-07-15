@@ -213,12 +213,10 @@ _VER="$1"
     options+=' -DCURL_USE_OPENSSL=OFF'
   fi
 
-  # fast-track configuration
   if [ "${_OS}" = 'win' ]; then
+    # fast-track configuration
     options+=' -DHAVE_FILE_OFFSET_BITS=1'
-  fi
 
-  if [ "${_OS}" = 'win' ]; then
     if [[ "${_CONFIG}" != *'osnotls'* && ("${h3}" = '0' || "${_CONFIG}" = *'noh3'*) ]]; then
       options+=' -DCURL_USE_SCHANNEL=ON'
     else
