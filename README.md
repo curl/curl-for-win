@@ -37,7 +37,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 - [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3),
   [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support,
   and [more](#features).
-- ARM64 Windows builds are
+- Windows builds are
   [Control Flow Guard](https://learn.microsoft.com/windows/win32/secbp/control-flow-guard)
   enabled. Intel builds have
   [CET](https://www.intel.com/content/www/us/en/developer/articles/technical/technical-look-control-flow-enforcement-technology.html)
