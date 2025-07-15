@@ -23,17 +23,18 @@ if [ ! -f .cw-initialized ]; then
   extra=''
   case "$(uname)" in
     *_NT*)
-      env='x86_64'
-      pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
-        mingw-w64-"${env}"-{clang,cmake,ninja,jq,python-pefile,rsync,gettext,osslsigncode} \
-        zip
-      [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && \
-      pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
-        mingw-w64-"${env}"-go
-      if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+      for env in 'x86_64' 'clang-aarch64'; do
         pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
-          mingw-w64-"${env}"-nasm
-      fi
+          mingw-w64-"${env}"-{clang,cmake,ninja,jq,python-pefile,rsync,gettext,osslsigncode} \
+          zip
+        [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && \
+        pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
+          mingw-w64-"${env}"-go
+        if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+          pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
+            mingw-w64-"${env}"-nasm
+        fi
+      done
       ;;
     Linux*)
       if [ -s /etc/os-release ]; then
