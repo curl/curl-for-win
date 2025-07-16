@@ -1157,7 +1157,8 @@ build_single_target() {
       fi
     fi
 
-    if [ "${_OS}" = 'win' ]; then  # Requires llvm v16 and mingw-w64 v11 built with `--enable-cfguard`.
+    # Requires llvm v16 and mingw-w64 v11 built with `--enable-cfguard`.
+    if [ "${_OS}" = 'win' ] && [ "${_CPU}" != 'x86' ]; then
       # Refs:
       #   https://github.com/mstorsjo/llvm-mingw/issues/301
       #   https://gist.github.com/alvinhochun/a65e4177e2b34d551d7ecb02b55a4b0a
