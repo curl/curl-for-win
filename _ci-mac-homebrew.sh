@@ -13,7 +13,7 @@ if [[ "${CW_CONFIG:-}" != *'mac'* ]] || [[ "${CW_CONFIG:-}" = *'llvm'* ]]; then
 fi
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
-  extra+=' mingw-w64 osslsigncode wine-stable openssh'
+  extra+=' mingw-w64 osslsigncode wine-stable winetricks openssh'
   if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
     extra+=' nasm'
   fi
@@ -35,6 +35,9 @@ if [ -n "${extra}" ]; then
   brew install ${extra} || true
 fi
 
-[[ "${CW_CONFIG:-}" = *'win'* ]] && wineboot --init
+if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
+  wineboot --init
+  winetricks nocrashdialog
+fi
 
 ./_build.sh
