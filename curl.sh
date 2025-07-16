@@ -509,7 +509,7 @@ _VER="$1"
     # strings dynamically at runtime, so this is not possible
     # (as of curl 7.83.1).
     out="../curl-version-${_CPUPUB}.txt"
-    ${_RUN_BIN} "${bin}" --disable --version | sed 's/\r//g' | tee "${out}" || true
+    ${_RUN_BIN} "${bin}" --disable --version | sed 's/\r//g' | tee "${out}"
     [ -s "${out}" ] || rm -f "${out}"
   fi
 
