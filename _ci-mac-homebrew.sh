@@ -13,7 +13,7 @@ if [[ "${CW_CONFIG:-}" != *'mac'* ]] || [[ "${CW_CONFIG:-}" = *'llvm'* ]]; then
 fi
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
-  extra+=' mingw-w64 osslsigncode wine-stable winetricks openssh'
+  extra+=' mingw-w64 osslsigncode wine-stable openssh'
   if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
     extra+=' nasm'
   fi
@@ -36,10 +36,8 @@ if [ -n "${extra}" ]; then
 fi
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
-  wineboot --init
-  winetricks nocrashdialog
   # https://gitlab.winehq.org/wine/wine/-/wikis/FAQ#how-do-i-disable-the-gui-crash-dialog
-  #wine reg add HKCU\Software\Wine\WineDbg -v ShowCrashDialog -t REG_DWORD -d 0 -f
+  wine reg add HKCU\Software\Wine\WineDbg -v ShowCrashDialog -t REG_DWORD -d 0 -f
 fi
 
 ./_build.sh
