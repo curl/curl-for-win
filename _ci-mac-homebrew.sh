@@ -35,6 +35,9 @@ if [ -n "${extra}" ]; then
   brew install ${extra} || true
 fi
 
-[[ "${CW_CONFIG:-}" = *'win'* ]] && wineboot --init
+if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
+  # https://gitlab.winehq.org/wine/wine/-/wikis/FAQ#how-do-i-disable-the-gui-crash-dialog
+  wine reg add 'HKCU\Software\Wine\WineDbg' -v 'ShowCrashDialog' -t REG_DWORD -d 0 -f
+fi
 
 ./_build.sh
