@@ -1785,7 +1785,7 @@ if [ "${_OS}" = 'win' ]; then
   if [[ "${_CONFIG}" = *'a64'* || ! "${_CONFIG}" =~ (x64|x86) ]]; then
     build_single_target a64
   fi
-  if [[ "${_CONFIG}" = *'x86'* ]]; then
+  if [[ "${_CONFIG}" = *'x86'* || ! "${_CONFIG}" =~ (x64|a64) ]]; then
     build_single_target x86
   fi
 elif [ "${_OS}" = 'mac' ]; then
