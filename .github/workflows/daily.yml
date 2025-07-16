@@ -11,6 +11,7 @@ name: daily
 permissions: {}
 
 env:
+  GITHUB_TOKEN: '${{ github.token }}'
   CW_MAP: '1'
   CW_JOBS: '5'
   CW_PKG_SIGN: '1'
@@ -32,7 +33,6 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          GITHUB_TOKEN: '${{ github.token }}'
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
           SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
@@ -80,7 +80,6 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          GITHUB_TOKEN: '${{ github.token }}'
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
           SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
@@ -128,7 +127,6 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          GITHUB_TOKEN: '${{ github.token }}'
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
           SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
@@ -165,7 +163,6 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          GITHUB_TOKEN: '${{ github.token }}'
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
           SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
