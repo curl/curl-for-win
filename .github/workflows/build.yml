@@ -606,6 +606,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
+          GITHUB_TOKEN: '${{ github.token }}'
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'
