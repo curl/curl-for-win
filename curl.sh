@@ -324,6 +324,10 @@ _VER="$1"
     fi
   fi
 
+  if [[ "${_CONFIG}" = *'prefill'* ]]; then
+    options+=' -D_CURL_PREFILL=ON'
+  fi
+
   if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
     options+=' -DBUILD_CURL_EXE=ON'
     options+=' -DBUILD_STATIC_CURL=ON'

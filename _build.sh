@@ -68,6 +68,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        nounity    build without CMake UNITY mode (slower builds for slightly smaller binaries)
 #        unitybatch enable UNITY batching (default for 'dev' config)
 #        nocurltool do not build the curl tool (requires cmake)
+#        prefill    pre-fill curl auto-detection results on well-known *nix targets (not recommended for production)
 #        curldocs   include curl Markdown manual pages in the package
 #        msvcrt     build against msvcrt instead of UCRT (for win target)
 #        gcc        build with GCC (including Apple clang aliased to gcc) (defaults to llvm, and "gcc" (= Apple clang) for mac target)
