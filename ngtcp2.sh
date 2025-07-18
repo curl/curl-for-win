@@ -30,8 +30,8 @@ _VER="$1"
     CPPFLAGS+=' -D_CLANG_DISABLE_CRT_DEPRECATION_WARNINGS'
   fi
 
-  # Avoid finding unnecessary system (Homebrew) package. This avoids log noise and
-  # prevents building examples, which may fail for reasons or just take extra time.
+  # Avoid finding unnecessary system (Homebrew) package. This avoids log noise
+  # and saves time.
   options+=' -DLIBEV_INCLUDE_DIR='
 
   if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
@@ -63,6 +63,7 @@ _VER="$1"
 
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
+    -DENABLE_LIB_ONLY=ON \
     -DENABLE_STATIC_LIB=ON \
     -DENABLE_SHARED_LIB=OFF \
     -DBUILD_TESTING=OFF \
