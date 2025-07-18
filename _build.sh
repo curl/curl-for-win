@@ -26,6 +26,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # CW_LLVM_MINGW_ONLY
 #      Use llvm-mingw for all Windows builds. Default: 0
 #
+# CW_LLVM_MINGW_DL
+#      Download and install llvm-mingw. Default: 0
+#
 # CW_CONFIG
 #      Build configuration. Certain keywords select certain configurations. E.g.: 'main-micro'.
 #      Optional. Default: 'main' (inherited from the active repo branch name)
