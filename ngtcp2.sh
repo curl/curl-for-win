@@ -30,10 +30,6 @@ _VER="$1"
     CPPFLAGS+=' -D_CLANG_DISABLE_CRT_DEPRECATION_WARNINGS'
   fi
 
-  # Avoid finding unnecessary system (Homebrew) package. This avoids log noise
-  # and saves time.
-  options+=' -DLIBEV_INCLUDE_DIR='
-
   if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
     options+=' -DENABLE_OPENSSL=OFF'
     options+=' -DENABLE_BORINGSSL=ON'
