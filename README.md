@@ -125,7 +125,7 @@ Features:         AsynchDNS        CAcert HSTS             HTTPS-proxy     IPv6 
 
 # Build logs
 
-<https://ci.appveyor.com/project/curlorg/curl-for-win/history>
+<https://ci.appveyor.com/project/curlorg/curl-for-win/history?branch=main>
 
 # Unstable/development daily builds
 
