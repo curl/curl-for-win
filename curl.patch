@@ -11,3 +11,31 @@ index 2ceca242b651..8268d0a1a3c6 100644
  #if defined(_WIN32) && !defined(CURL_WINDOWS_UWP) && !defined(UNDER_CE)
      rc = recv(per->infd, buffer, curlx_uztosi(sz * nmemb), 0);
      if(rc < 0) {
+diff --git a/lib/vquic/curl_ngtcp2.c b/lib/vquic/curl_ngtcp2.c
+index 2cda65aa03f1..052f280afc15 100644
+--- a/lib/vquic/curl_ngtcp2.c
++++ b/lib/vquic/curl_ngtcp2.c
+@@ -833,6 +833,9 @@ static ngtcp2_callbacks ng_callbacks = {
+   cb_recv_rx_key,
+   NULL, /* recv_tx_key */
+   NULL, /* early_data_rejected */
++#ifdef NGTCP2_CALLBACKS_V2
++  NULL, /* begin_path_validation */
++#endif
+ };
+ 
+ #if defined(_MSC_VER) && defined(_DLL)
+@@ -1182,7 +1185,12 @@ static nghttp3_callbacks ngh3_callbacks = {
+   NULL, /* end_stream */
+   cb_h3_reset_stream,
+   NULL, /* shutdown */
+-  NULL /* recv_settings */
++  NULL, /* recv_settings */
++#ifdef NGHTTP3_CALLBACKS_V2
++  NULL, /* recv_origin */
++  NULL, /* end_origin */
++  NULL, /* rand */
++#endif
+ };
+ 
+ static CURLcode init_ngh3_conn(struct Curl_cfilter *cf,
