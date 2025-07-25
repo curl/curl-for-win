@@ -56,7 +56,7 @@ environment:
   DO_NOT_TRACK: '1'
 build_script:
   - sh: |
-      export CW_CONFIG="${APPVEYOR_REPO_BRANCH}-win"
+      export CW_CONFIG="${APPVEYOR_REPO_BRANCH}-werror-win"
       . ./_versions.sh
       docker trust inspect --pretty "${DOCKER_IMAGE}"
       time docker pull "${DOCKER_IMAGE}"

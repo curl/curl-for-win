@@ -38,7 +38,7 @@ jobs:
           SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
-          export CW_CONFIG='dev-linux'
+          export CW_CONFIG='werror-dev-linux'
           export CW_REVISION; CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           DOCKER_IMAGE='debian:bookworm-slim'
           export CW_CCSUFFIX='-15'
@@ -85,7 +85,7 @@ jobs:
           SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
-          export CW_CONFIG='dev-linux-a64-r64-x64-musl'
+          export CW_CONFIG='werror-dev-linux-a64-r64-x64-musl'
           export CW_REVISION; CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           . ./_versions.sh
           sudo podman image trust set --type reject default
@@ -132,7 +132,7 @@ jobs:
           SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
-          export CW_CONFIG='dev-mac-macuni'
+          export CW_CONFIG='werror-dev-mac-macuni'
           export CW_REVISION; CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           sh -c ./_ci-mac-homebrew.sh
 
@@ -170,7 +170,7 @@ jobs:
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |
-          export CW_CONFIG='dev-win-x64-a64'
+          export CW_CONFIG='werror-dev-win-x64-a64'
           export CW_REVISION; CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           . ./_versions.sh
           sudo podman image trust set --type reject default
