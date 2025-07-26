@@ -319,7 +319,7 @@ _VER="$1"
 
   if [[ "${_CONFIG}" != *'nounity'* ]]; then
     options+=' -DCMAKE_UNITY_BUILD=ON'
-    if [[ "${_CONFIG}" =~ (dev|unitybatch) ]]; then
+    if [[ "${_CONFIG}" =~ (dev|unitybatch) ]] && false; then
       options+=' -DCMAKE_UNITY_BUILD_BATCH_SIZE=30'
     else
       # Silence false positive compiler warnings when building for linux on mac
@@ -329,7 +329,7 @@ _VER="$1"
          [ "${_OS}" = 'linux' ] && \
          [ "${_CC}" = 'gcc' ] && \
          [ "${_CRT}" = 'musl' ]; then
-        CFLAGS+=' -Wno-null-dereference'
+        CFLAGS+=' -Wno-error=null-dereference'
       fi
     fi
   fi
