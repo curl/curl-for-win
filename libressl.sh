@@ -3,7 +3,7 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-# Caveats (as of 4.0.0):
+# Caveats (as of 4.1.0):
 # - CET not enabled in mingw-w64 x64 ASM functions.
 #   https://github.com/libressl/portable/pull/1032
 # - ASM support only for x64.
@@ -14,12 +14,16 @@
 # - Missing `SSL_set0_wbio()` function.
 #   https://github.com/libressl/portable/issues/838
 # - No obvious way to selectively disable obsolete protocols/APIs/features.
-# - `--prefix` ignored in `cmake --install` for /etc/ssl files.
-#   https://github.com/libressl/portable/issues/1118
-#   https://github.com/libressl/portable/pull/1119 [MERGED. Expected in 4.0.1]
 # - server signatures signed with ED25519 do not work
 #   https://github.com/curl/curl-for-win/discussions/78 https://github.com/libressl/portable/issues/821
 # - ECH support: https://github.com/libressl/portable/issues/546
+# - No support for TLSv1.3 session tickets.
+#   https://github.com/libressl/portable/issues/719
+#   https://github.com/curl/curl/issues/18031#issuecomment-3144406973
+# - No `SSLKEYLOGFILE` support.
+#   https://github.com/curl/curl/issues/13672
+#   https://marc.info/?l=libressl&m=158908819814107
+#   https://superuser.com/questions/1871314/curl-for-windows-sslkeylog-file-always-empty-when-running-from-powershell
 
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
