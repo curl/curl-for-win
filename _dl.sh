@@ -90,7 +90,7 @@ cat <<EOF
   },
   {
     "name": "quictls",
-    "url": "https://github.com/quictls/openssl/archive/refs/heads/openssl-{ver}+quic.tar.gz",
+    "url": "https://github.com/quictls/openssl/archive/refs/tags/openssl-{ver}-quic1.tar.gz",
     "redir": "redir",
     "tag": "openssl-\\\\d+\\\\.\\\\d+\\\\.\\\\d+\\\\+quic$",
     "hasfile": "README-OpenSSL.md"
