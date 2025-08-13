@@ -6,7 +6,7 @@
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
-extra='cosign'
+extra='cosign gnu-tar jq'
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go'
 if [[ "${CW_CONFIG:-}" != *'mac'* ]] || [[ "${CW_CONFIG:-}" = *'llvm'* ]]; then
   extra+=' llvm lld'
