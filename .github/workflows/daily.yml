@@ -33,10 +33,10 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
-          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
           SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
+          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
+          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG='werror-dev-linux'
           export CW_REVISION; CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
