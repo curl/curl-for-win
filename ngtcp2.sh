@@ -52,11 +52,6 @@ _VER="$1"
     fi
   fi
 
-  if [[ "${_DEPS}" = *'nghttp3'* ]] && [ -d "../nghttp3/${_PP}" ]; then
-    options+=" -DLIBNGHTTP3_INCLUDE_DIR=../nghttp3/${_PP}/include"
-    options+=" -DLIBNGHTTP3_LIBRARY=../nghttp3/${_PP}/lib"
-  fi
-
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
     -DENABLE_LIB_ONLY=ON \
