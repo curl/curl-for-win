@@ -13,7 +13,11 @@ if [[ "${CW_CONFIG:-}" != *'mac'* ]] || [[ "${CW_CONFIG:-}" = *'llvm'* ]]; then
 fi
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
-  extra+=' mingw-w64 osslsigncode wine-stable openssh'
+  extra+=' mingw-w64 osslsigncode openssh'
+  # On AppVeyor CI macos-sonoma runner wine stalls for 5 minutes 5 times with
+  # this error on first invocation (from this script). Then on a next invocation
+  # it repeats the 5-minute stalls indefinitely. Skip wine as a workaround:
+  [ -z "${APPVEYOR_ACCOUNT_NAME:-}" ] && extra+=' wine-stable'
   if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
     extra+=' nasm'
   fi
@@ -35,7 +39,7 @@ if [ -n "${extra}" ]; then
   brew install ${extra} || true
 fi
 
-if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
+if [[ "${CW_CONFIG:-}" = *'win'* ]] && command -v wine >/dev/null 2>&1; then
   # https://gitlab.winehq.org/wine/wine/-/wikis/FAQ#how-do-i-disable-the-gui-crash-dialog
   wine reg add 'HKCU\Software\Wine\WineDbg' -v 'ShowCrashDialog' -t REG_DWORD -d 0 -f
 fi
