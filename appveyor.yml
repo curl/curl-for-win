@@ -25,7 +25,9 @@ branches:
     - 'test-mini'
 # https://www.appveyor.com/docs/build-environment/#build-worker-images
 # https://www.appveyor.com/docs/linux-images-software/
-image: 'macos-sonoma'
+image: 'Ubuntu2204'
+services:
+  - 'docker'
 clone_depth: 8
 build:
   verbosity: 'detailed'
@@ -56,7 +58,12 @@ build_script:
   - sh: |
       export CW_CONFIG="${APPVEYOR_REPO_BRANCH}-werror-win"
       . ./_versions.sh
-      sh -c ./_ci-mac-homebrew.sh
+      time docker pull "${DOCKER_IMAGE}"
+      time docker run --volume="$(pwd):$(pwd)" --workdir="$(pwd)" \
+        --env-file=<(env | grep -a -E \
+          '^(CW_|SIGN_|COSIGN_|DEPLOY_|APPVEYOR_|CI_|DO_NOT_TRACK)') \
+        "${DOCKER_IMAGE}" \
+        sh -c ./_ci-linux-debian.sh
 
 artifacts:
   - path: '*-*-mingw*.*'
