@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: MIT
 
 export DOCKER_IMAGE='debian:testing-20250908-slim@sha256:f698e6243e87c0d6b727daae959c3f15a64a3a39cc280a2dd1305d007b3d5f27'  # amd64
-export DOCKER_IMAGE_STABLE='debian:bookworm-20250908-slim@sha256:acd98e6cfc42813a4db9ca54ed79b6f702830bfc2fa43a2c2e87517371d82edb'  # amd64
+export DOCKER_IMAGE_STABLE='debian:trixie-20250908-slim@sha256:00fd5b3f095295078883b0fcab782b4db0b8f23c5e43cdb4a5d018c2579c838e'  # amd64
 
 export CURL_VER_='8.16.0'
 export CURL_HASH=40c8cddbcb6cc6251c03dea423a472a6cea4037be654ba5cf5dec6eb2d22ff1d

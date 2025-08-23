@@ -32,7 +32,7 @@ name='debian'
 cpu='amd64'
 
 echo
-for release in 'testing' 'bookworm'; do
+for release in 'testing' 'trixie'; do
 
   # https://docs.docker.com/reference/api/registry/latest/
   token="$(curl --disable --user-agent '' --silent --fail --show-error \

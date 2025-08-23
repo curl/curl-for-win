@@ -106,7 +106,7 @@ jobs:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-x64"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
@@ -143,7 +143,7 @@ jobs:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-r64-x64-gcc"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-gcc"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           export CW_GCCSUFFIX='-14'
@@ -259,7 +259,7 @@ jobs:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-r64-x64-musl"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
@@ -296,9 +296,10 @@ jobs:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-r64-x64-musl-gcc"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl-gcc"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
+          export CW_GCCSUFFIX='-14'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
           time podman pull "${DOCKER_IMAGE}"
