@@ -44,12 +44,6 @@ _VER="$1"
       LDFLAGS+=" -L${_TOP}/${_ZLIB}/${_PP}/lib"
       LIBS+=' -lz'
     fi
-    if [ "${_VER}" = '1.12.0' ] && [ "${_OPENSSL}" = 'openssl' ]; then
-      if [ "${_LD}" = 'ld' ]; then
-        LIBS+=' -Wl,--start-group'
-      fi
-      LIBS+=' -lcrypt32'
-    fi
   fi
 
   # shellcheck disable=SC2086
