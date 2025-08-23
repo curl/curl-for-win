@@ -16,10 +16,7 @@ dl=''
 
 if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
   [ -n "${CW_CCSUFFIX:-}" ] || export CW_CCSUFFIX='-19'
-  extra+=" llvm${CW_CCSUFFIX} clang${CW_CCSUFFIX} lld${CW_CCSUFFIX}"
-  if [ "${CW_CCSUFFIX}" != '-15' ]; then
-    extra+=" libclang-rt${CW_CCSUFFIX}-dev"
-  fi
+  extra+=" llvm${CW_CCSUFFIX} clang${CW_CCSUFFIX} lld${CW_CCSUFFIX} libclang-rt${CW_CCSUFFIX}-dev"
 fi
 
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' golang'
@@ -42,7 +39,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     else
       ${sudo} dpkg --add-architecture arm64
     fi
-    [[ "${CW_CONFIG:-}" = *'r64'* ]] && ${sudo} dpkg --add-architecture riscv64
+    ${sudo} dpkg --add-architecture riscv64
   fi
   if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
     extra+=" gcc${CW_GCCSUFFIX} g++${CW_GCCSUFFIX}"
@@ -52,28 +49,15 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     else
       extra+=" gcc${CW_GCCSUFFIX}-aarch64-linux-gnu g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
     fi
-    [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
+    extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
   else
-    # These packages do not install due to dependency requirements.
-    # We download and unpack them manually as a workaround.
-    if [ "${CW_CCSUFFIX}" = '-15' ]; then
-      # ./my-pkg/usr/lib/clang/15/lib
-      # ./my-pkg/usr/lib/llvm-15/lib/clang/15.0.6/lib/linux/libclang_rt.builtins-aarch64.a
-      if [ "$(uname -m)" = 'aarch64' ]; then
-        dl+=" libclang-common${CW_CCSUFFIX}-dev:amd64"
-      else
-        dl+=" libclang-common${CW_CCSUFFIX}-dev:arm64"
-      fi
-      [[ "${CW_CONFIG:-}" = *'r64'* ]] && dl+=" libclang-common${CW_CCSUFFIX}-dev:riscv64"
+    # ./my-pkg/usr/lib/llvm-17/lib/clang/17/lib/linux/libclang_rt.builtins-aarch64.a
+    if [ "$(uname -m)" = 'aarch64' ]; then
+      dl+=" libclang-rt${CW_CCSUFFIX}-dev:amd64"
     else
-      # ./my-pkg/usr/lib/llvm-17/lib/clang/17/lib/linux/libclang_rt.builtins-aarch64.a
-      if [ "$(uname -m)" = 'aarch64' ]; then
-        dl+=" libclang-rt${CW_CCSUFFIX}-dev:amd64"
-      else
-        dl+=" libclang-rt${CW_CCSUFFIX}-dev:arm64"
-      fi
-      [[ "${CW_CONFIG:-}" = *'r64'* ]] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:riscv64"
+      dl+=" libclang-rt${CW_CCSUFFIX}-dev:arm64"
     fi
+    dl+=" libclang-rt${CW_CCSUFFIX}-dev:riscv64"
   fi
   if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
     extra+=' musl musl-dev'
@@ -82,10 +66,8 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     else
       extra+=' musl:arm64 musl-dev:arm64'
     fi
-    [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra+=' musl:riscv64 musl-dev:riscv64'
-    if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
-      extra+=" libgcc${CW_GCCSUFFIX}-dev"
-    fi
+    extra+=' musl:riscv64 musl-dev:riscv64'
+    [[ "${CW_CONFIG:-}" = *'gcc'* ]] && extra+=" libgcc${CW_GCCSUFFIX}-dev"
     if [[ "${CW_CONFIG:-}" =~ (quictls|openssl) ]]; then
       # for openssl 'secure-memory' feature
       if [ "$(uname -m)" = 'aarch64' ]; then
@@ -93,21 +75,18 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
       elif [ "$(uname -m)" = 'x86_64' ]; then
         extra+=' linux-headers-amd64'
       fi
+      extra+=' linux-headers-riscv64'
     fi
   else
     # FIXME: workaround for glibc-llvm-riscv64 builds:
-    [[ "${CW_CONFIG:-}" != *'gcc'* ]] && [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
+    [[ "${CW_CONFIG:-}" != *'gcc'* ]] && extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
     if [ "$(uname -m)" = 'aarch64' ]; then
       extra+=' libc6-dev-amd64-cross'
     else
       extra+=' libc6-dev-arm64-cross'
     fi
-    [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra+=' libc6-dev-riscv64-cross'
+    extra+=' libc6-dev-riscv64-cross'
   fi
-fi
-
-if ! grep -q -a -F 'bookworm' -- /etc/*-release; then
-  extra+=' cosign'  # cosign appeared in trixie
 fi
 
 ${sudo} apt-get --option Dpkg::Use-Pty=0 --yes update
@@ -115,22 +94,12 @@ ${sudo} apt-get --option Dpkg::Use-Pty=0 --yes update
 ${sudo} apt-get --option Dpkg::Use-Pty=0 --yes install --no-install-suggests --no-install-recommends \
   curl ca-certificates git gpg gpg-agent patch ssh rsync python3-pip python3-venv make cmake ninja-build \
   libssl-dev zlib1g-dev \
-  zip xz-utils time jq secure-delete ${extra}
-
-if grep -q -a -F 'bookworm' -- /etc/*-release; then
-  cosign_version='2.5.0'
-  curl --disable --fail --silent --show-error --connect-timeout 15 --max-time 60 --retry 3 \
-    --location "https://github.com/sigstore/cosign/releases/download/v${cosign_version}/cosign_${cosign_version}_amd64.deb" \
-    --output cosign.deb
-  ${sudo} dpkg --install cosign.deb
-  rm -f cosign.deb
-fi
+  zip xz-utils time jq secure-delete cosign ${extra}
 
 if [ -n "${dl}" ]; then
   # shellcheck disable=SC2086
   apt-get --option Dpkg::Use-Pty=0 --yes download ${dl}
   # https://deb.debian.org/debian/pool/main/l/llvm-toolchain-17/libclang-rt-17-dev_17.0.5-1_arm64.deb -> libclang-rt-17-dev_1%3a17.0.5-1_arm64.deb
-  # libclang-common-15-dev_1%3a15.0.6-4+b1_amd64.deb
   for f in ./*.deb; do
     dpkg-deb --contents "${f}"
     dpkg-deb --extract --verbose "${f}" my-pkg

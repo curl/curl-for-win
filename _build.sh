@@ -1095,7 +1095,7 @@ build_single_target() {
     if [ "${_DISTRO}" = 'alpine' ]; then
       _CCRT='clang-rt'
     # Debian does not support clang-rt for cross-builds easily,
-    # it requires manually installing package `libclang-rt-17-dev` (or `libclang-common-15-dev` on bookworm).
+    # it requires manually installing package `libclang-rt-17-dev`.
     elif [ "${_OS}" = 'linux' ] && [ "${_DISTRO}" = 'debian' ]; then
       if [ "${unamem}" = "${_machine}" ] || [ -d 'my-pkg/usr/lib/clang' ]; then
         _CCRT='clang-rt'
@@ -1824,7 +1824,7 @@ elif [ "${_OS}" = 'linux' ]; then
       build_single_target x64
     fi
   else
-    if [[ "${_CONFIG}" = *'r64'* ]]; then  # TODO: Once trixie is out: || ! "${_CONFIG}" =~ (a64|x64)
+    if [[ "${_CONFIG}" = *'r64'* || ! "${_CONFIG}" =~ (a64|x64) ]]; then
       build_single_target r64
     fi
     if [[ "${_CONFIG}" = *'a64'* || ! "${_CONFIG}" =~ (x64|r64) ]]; then
