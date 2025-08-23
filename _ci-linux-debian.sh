@@ -40,7 +40,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     else
       ${sudo} dpkg --add-architecture arm64
     fi
-    [[ "${CW_CONFIG:-}" = *'r64'* ]] && ${sudo} dpkg --add-architecture riscv64
+    ${sudo} dpkg --add-architecture riscv64
   fi
   if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
     extra+=" gcc${CW_GCCSUFFIX} g++${CW_GCCSUFFIX}"
@@ -50,7 +50,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     else
       extra+=" gcc${CW_GCCSUFFIX}-aarch64-linux-gnu g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
     fi
-    [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
+    extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
   else
     # ./my-pkg/usr/lib/llvm-17/lib/clang/17/lib/linux/libclang_rt.builtins-aarch64.a
     if [ "$(uname -m)" = 'aarch64' ]; then
@@ -58,7 +58,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     else
       dl+=" libclang-rt${CW_CCSUFFIX}-dev:arm64"
     fi
-    [[ "${CW_CONFIG:-}" = *'r64'* ]] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:riscv64"
+    dl+=" libclang-rt${CW_CCSUFFIX}-dev:riscv64"
   fi
   if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
     extra+=' musl musl-dev'
@@ -67,7 +67,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     else
       extra+=' musl:arm64 musl-dev:arm64'
     fi
-    [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra+=' musl:riscv64 musl-dev:riscv64'
+    extra+=' musl:riscv64 musl-dev:riscv64'
     if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
       extra+=" libgcc${CW_GCCSUFFIX}-dev"
     fi
@@ -81,13 +81,13 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     fi
   else
     # FIXME: workaround for glibc-llvm-riscv64 builds:
-    [[ "${CW_CONFIG:-}" != *'gcc'* ]] && [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
+    [[ "${CW_CONFIG:-}" != *'gcc'* ]] && extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
     if [ "$(uname -m)" = 'aarch64' ]; then
       extra+=' libc6-dev-amd64-cross'
     else
       extra+=' libc6-dev-arm64-cross'
     fi
-    [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra+=' libc6-dev-riscv64-cross'
+    extra+=' libc6-dev-riscv64-cross'
   fi
 fi
 
