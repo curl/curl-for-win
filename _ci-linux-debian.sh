@@ -67,9 +67,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
       extra+=' musl:arm64 musl-dev:arm64'
     fi
     extra+=' musl:riscv64 musl-dev:riscv64'
-    if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
-      extra+=" libgcc${CW_GCCSUFFIX}-dev"
-    fi
+    [[ "${CW_CONFIG:-}" = *'gcc'* ]] && extra+=" libgcc${CW_GCCSUFFIX}-dev"
     if [[ "${CW_CONFIG:-}" =~ (quictls|openssl) ]]; then
       # for openssl 'secure-memory' feature
       if [ "$(uname -m)" = 'aarch64' ]; then
