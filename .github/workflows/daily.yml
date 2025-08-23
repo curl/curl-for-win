@@ -40,9 +40,7 @@ jobs:
         run: |
           export CW_CONFIG='werror-dev-linux'
           export CW_REVISION; CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
-          DOCKER_IMAGE='debian:bookworm-slim'
-          export CW_CCSUFFIX='-15'
-          export CW_GCCSUFFIX='-12'
+          DOCKER_IMAGE='debian:trixie-slim'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
           time podman pull "${DOCKER_IMAGE}"
