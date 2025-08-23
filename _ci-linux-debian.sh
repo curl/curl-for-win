@@ -54,26 +54,13 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     fi
     [[ "${CW_CONFIG:-}" = *'r64'* ]] && extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
   else
-    # These packages do not install due to dependency requirements.
-    # We download and unpack them manually as a workaround.
-    if [ "${CW_CCSUFFIX}" = '-15' ]; then
-      # ./my-pkg/usr/lib/clang/15/lib
-      # ./my-pkg/usr/lib/llvm-15/lib/clang/15.0.6/lib/linux/libclang_rt.builtins-aarch64.a
-      if [ "$(uname -m)" = 'aarch64' ]; then
-        dl+=" libclang-common${CW_CCSUFFIX}-dev:amd64"
-      else
-        dl+=" libclang-common${CW_CCSUFFIX}-dev:arm64"
-      fi
-      [[ "${CW_CONFIG:-}" = *'r64'* ]] && dl+=" libclang-common${CW_CCSUFFIX}-dev:riscv64"
+    # ./my-pkg/usr/lib/llvm-17/lib/clang/17/lib/linux/libclang_rt.builtins-aarch64.a
+    if [ "$(uname -m)" = 'aarch64' ]; then
+      dl+=" libclang-rt${CW_CCSUFFIX}-dev:amd64"
     else
-      # ./my-pkg/usr/lib/llvm-17/lib/clang/17/lib/linux/libclang_rt.builtins-aarch64.a
-      if [ "$(uname -m)" = 'aarch64' ]; then
-        dl+=" libclang-rt${CW_CCSUFFIX}-dev:amd64"
-      else
-        dl+=" libclang-rt${CW_CCSUFFIX}-dev:arm64"
-      fi
-      [[ "${CW_CONFIG:-}" = *'r64'* ]] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:riscv64"
+      dl+=" libclang-rt${CW_CCSUFFIX}-dev:arm64"
     fi
+    [[ "${CW_CONFIG:-}" = *'r64'* ]] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:riscv64"
   fi
   if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
     extra+=' musl musl-dev'
@@ -106,31 +93,17 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   fi
 fi
 
-if ! grep -q -a -F 'bookworm' -- /etc/*-release; then
-  extra+=' cosign'  # cosign appeared in trixie
-fi
-
 ${sudo} apt-get --option Dpkg::Use-Pty=0 --yes update
 # shellcheck disable=SC2086
 ${sudo} apt-get --option Dpkg::Use-Pty=0 --yes install --no-install-suggests --no-install-recommends \
   curl ca-certificates git gpg gpg-agent patch ssh rsync python3-pefile make cmake ninja-build \
   libssl-dev zlib1g-dev \
-  zip xz-utils time jq secure-delete ${extra}
-
-if grep -q -a -F 'bookworm' -- /etc/*-release; then
-  cosign_version='2.5.0'
-  curl --disable --fail --silent --show-error --connect-timeout 15 --max-time 60 --retry 3 \
-    --location "https://github.com/sigstore/cosign/releases/download/v${cosign_version}/cosign_${cosign_version}_amd64.deb" \
-    --output cosign.deb
-  ${sudo} dpkg --install cosign.deb
-  rm -f cosign.deb
-fi
+  zip xz-utils time jq secure-delete cosign ${extra}
 
 if [ -n "${dl}" ]; then
   # shellcheck disable=SC2086
   apt-get --option Dpkg::Use-Pty=0 --yes download ${dl}
   # https://deb.debian.org/debian/pool/main/l/llvm-toolchain-17/libclang-rt-17-dev_17.0.5-1_arm64.deb -> libclang-rt-17-dev_1%3a17.0.5-1_arm64.deb
-  # libclang-common-15-dev_1%3a15.0.6-4+b1_amd64.deb
   for f in ./*.deb; do
     dpkg-deb --contents "${f}"
     dpkg-deb --extract --verbose "${f}" my-pkg
