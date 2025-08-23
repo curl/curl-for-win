@@ -135,3 +135,25 @@ index a1bc875285..81287f61aa 100644
      endif()
      curl_openssl_check_quic()
    elseif(USE_GNUTLS)
+diff --git a/lib/http.c b/lib/http.c
+index 890b0fb5a1..71a4857249 100644
+--- a/lib/http.c
++++ b/lib/http.c
+@@ -4370,7 +4370,17 @@ CURLcode Curl_http_req_make(struct httpreq **preq,
+   req = calloc(1, sizeof(*req) + m_len);
+   if(!req)
+     goto out;
++#if defined(__GNUC__) && __GNUC__ >= 13
++#pragma GCC diagnostic push
++/* error: 'memcpy' offset [137, 142] from the object at 'req' is out of
++   the bounds of referenced subobject 'method' with type 'char[1]' at
++   offset 136 */
++#pragma GCC diagnostic ignored "-Warray-bounds"
++#endif
+   memcpy(req->method, method, m_len);
++#if defined(__GNUC__) && __GNUC__ >= 13
++#pragma GCC diagnostic pop
++#endif
+   if(scheme) {
+     req->scheme = Curl_memdup0(scheme, s_len);
+     if(!req->scheme)
