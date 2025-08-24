@@ -10,6 +10,7 @@ cat /etc/*-release
 
 export DEBIAN_FRONTEND='noninteractive'
 
+sudo=''
 extra=''
 dl=''
 
@@ -35,11 +36,11 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   extra+=' checksec qemu-user-static'
   if [[ "${CW_CONFIG:-}" != *'gcc'* ]] || [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
     if [ "$(uname -m)" = 'aarch64' ]; then
-      dpkg --add-architecture amd64
+      ${sudo} dpkg --add-architecture amd64
     else
-      dpkg --add-architecture arm64
+      ${sudo} dpkg --add-architecture arm64
     fi
-    [[ "${CW_CONFIG:-}" = *'r64'* ]] && dpkg --add-architecture riscv64
+    [[ "${CW_CONFIG:-}" = *'r64'* ]] && ${sudo} dpkg --add-architecture riscv64
   fi
   if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
     extra+=" gcc${CW_GCCSUFFIX} g++${CW_GCCSUFFIX}"
@@ -107,9 +108,9 @@ if ! grep -q -a -F 'bookworm' -- /etc/*-release; then
   extra+=' cosign'  # cosign appeared in trixie
 fi
 
-apt-get --option Dpkg::Use-Pty=0 --yes update
+${sudo} apt-get --option Dpkg::Use-Pty=0 --yes update
 # shellcheck disable=SC2086
-apt-get --option Dpkg::Use-Pty=0 --yes install --no-install-suggests --no-install-recommends \
+${sudo} apt-get --option Dpkg::Use-Pty=0 --yes install --no-install-suggests --no-install-recommends \
   curl ca-certificates git gpg gpg-agent patch ssh rsync python3-pefile make cmake ninja-build \
   libssl-dev zlib1g-dev \
   zip xz-utils time jq secure-delete ${extra}
@@ -119,7 +120,7 @@ if grep -q -a -F 'bookworm' -- /etc/*-release; then
   curl --disable --fail --silent --show-error --connect-timeout 15 --max-time 60 --retry 3 \
     --location "https://github.com/sigstore/cosign/releases/download/v${cosign_version}/cosign_${cosign_version}_amd64.deb" \
     --output cosign.deb
-  dpkg --install cosign.deb
+  ${sudo} dpkg --install cosign.deb
   rm -f cosign.deb
 fi
 
