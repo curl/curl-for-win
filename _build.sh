@@ -772,7 +772,7 @@ build_single_target() {
         # Skip running non-native builds
         if [ "${unamem}" = "${_machine}" ]; then
           _RUN_BIN=''
-        elif [ "${_DISTRO}" = 'debian' ] && [ "${_CRT}" != 'gnu' ]; then
+        elif [ "${_DISTRO}" = 'debian' ] && [ "${_CRT}" != 'gnu' ] && command -v "qemu-${_machine}-static" >/dev/null 2>&1; then
           _RUN_BIN="qemu-${_machine}-static"
         fi
       fi
