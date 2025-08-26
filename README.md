@@ -20,7 +20,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   ```
   Verify using:
   ```
-  cosign verify-blob --key cosign.pub.asc --signature curl-8.14.0-win64a-mingw.tar.xz.cosign curl-8.14.0-win64a-mingw.tar.xz
+  cosign verify-blob --key cosign.pub.asc --signature curl-8.14.0-win64-mingw.tar.xz.cosign curl-8.14.0-win64-mingw.tar.xz
   ```
 - Standalone `curl` tool and `libcurl` DLL. Static libraries included.
 - Required: Windows Vista with
