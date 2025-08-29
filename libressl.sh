@@ -4,8 +4,6 @@
 # SPDX-License-Identifier: MIT
 
 # Caveats (as of 4.1.0):
-# - CET not enabled in mingw-w64 x64 ASM functions.
-#   https://github.com/libressl/portable/pull/1032
 # - ASM support only for x64.
 # - Not possible to hide most ASM symbols from shared lib exports in Linux, macOS.
 #   https://github.com/libressl/portable/issues/957
