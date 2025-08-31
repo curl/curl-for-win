@@ -157,3 +157,16 @@ index 890b0fb5a1..71a4857249 100644
    if(scheme) {
      req->scheme = Curl_memdup0(scheme, s_len);
      if(!req->scheme)
+diff --git a/lib/request.c b/lib/request.c
+index 733e3e9294..8751ada559 100644
+--- a/lib/request.c
++++ b/lib/request.c
+@@ -308,7 +308,7 @@ static CURLcode req_flush(struct Curl_easy *data)
+   }
+ 
+   if(data->req.eos_read && !data->req.eos_sent) {
+-    char tmp;
++    char tmp = 0;
+     size_t nwritten;
+     result = xfer_send(data, &tmp, 0, 0, &nwritten);
+     if(result)
