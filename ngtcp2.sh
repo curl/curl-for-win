@@ -58,9 +58,6 @@ _VER="$1"
   cmake --build "${_BLDDIR}"
   cmake --install "${_BLDDIR}" --prefix "${_PPS}"
 
-  # PR: https://github.com/ngtcp2/ngtcp2/pull/1752
-  [ "${_VER}" = '1.15.0' ] && cp -p crypto/includes/ngtcp2/ngtcp2_crypto_quictls.h "${_PPS}"/include/ngtcp2/
-
   # Delete .pc files
   rm -r -f "${_PPS}"/lib/pkgconfig
 
