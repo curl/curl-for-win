@@ -25,7 +25,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 - Standalone `curl` tool and `libcurl` DLL. Static libraries included.
 - Required: Windows Vista with
   [Universal CRT](https://support.microsoft.com/topic/update-for-universal-c-runtime-in-windows-322bf30f-4735-bb94-3949-49f5c49f4732)
-  (64-bit Intel or ARM), macOS 10.9 Mavericks (Intel or ARM),
+  (64-bit ARM or Intel), macOS 10.9 Mavericks (ARM or Intel),
   any Linux (amd64, arm64, RISC-V 64) with
   [MUSL](https://en.wikipedia.org/wiki/Musl) builds.
 - [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3),
@@ -61,8 +61,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   [build log](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main).
 - Packages built across host platforms do not have identical hashes due to
   slightly different build options and toolchain builds/versions. Except
-  `llvm-mingw` builds, which are reproducible across platforms. ARM64 builds
-  are such by default.
+  `llvm-mingw` builds used for ARM64, which are reproducible across platforms.
 - We code-sign with a self-signed certificate on Windows, and avoid trusted
   timestamps for reproducibility.
 
