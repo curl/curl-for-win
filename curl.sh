@@ -225,8 +225,6 @@ _VER="$1"
     fi
   fi
 
-# options+=' -DCURL_CA_FALLBACK=ON'
-
   options+=' -DCURL_DISABLE_SRP=ON'
 
   if [[ "${_DEPS}" = *'libssh1'* ]] && [ -d "../libssh/${_PPS}" ]; then
