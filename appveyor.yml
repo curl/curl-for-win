@@ -64,11 +64,11 @@ build_script:
       sudo apt-get -o Dpkg::Use-Pty=0 install -y --no-install-suggests --no-install-recommends podman uidmap
       export CW_CONFIG="${APPVEYOR_REPO_BRANCH}-werror-win"
       . ./_versions.sh
-      podman image trust set --type reject default
-      podman image trust set --type accept docker.io/library
+      sudo podman image trust set --type reject default
+      sudo podman image trust set --type accept docker.io/library
       time podman pull "${DOCKER_IMAGE}"
+      chmod -R 0777
       time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
-        --userns=keep-id:uid=100,gid=101 \
         --env-file <(env | grep -a -E \
           '^(CW_|SIGN_|COSIGN_|DEPLOY_|APPVEYOR_|CI_|DO_NOT_TRACK)') \
         "${DOCKER_IMAGE}" \
