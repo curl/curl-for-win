@@ -539,7 +539,7 @@ live_xt() {
     if [ "${pkg}" = 'cacert' ]; then
       mv pkg.bin "${pkg}/${_CACERT}"
     else
-      tar --strip-components="${3:-1}" -xf pkg.bin --directory="${pkg}"
+      tar --no-same-owner --no-same-permissions --strip-components="${3:-1}" -xf pkg.bin --directory="${pkg}"
       [ -f "${pkg}${_PATCHSUFFIX}.patch" ] && patch --forward --strip=1 --directory="${pkg}" < "${pkg}${_PATCHSUFFIX}.patch"
     fi
     rm -f pkg.bin pkg.sig
