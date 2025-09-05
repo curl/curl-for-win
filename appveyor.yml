@@ -26,8 +26,6 @@ branches:
 # https://www.appveyor.com/docs/build-environment/#build-worker-images
 # https://www.appveyor.com/docs/linux-images-software/
 image: 'Ubuntu2204'
-services:
-  - 'docker'
 clone_depth: 8
 build:
   verbosity: 'detailed'
@@ -56,11 +54,15 @@ environment:
   DO_NOT_TRACK: '1'
 build_script:
   - sh: |
+      apt-get -o Dpkg::Use-Pty=0 update
+      apt-get -o Dpkg::Use-Pty=0 install -y --no-install-suggests --no-install-recommends podman
       export CW_CONFIG="${APPVEYOR_REPO_BRANCH}-werror-win"
       . ./_versions.sh
-      time docker pull "${DOCKER_IMAGE}"
-      time docker run --volume="$(pwd):$(pwd)" --workdir="$(pwd)" \
-        --env-file=<(env | grep -a -E \
+      podman image trust set --type reject default
+      podman image trust set --type accept docker.io/library
+      time podman pull "${DOCKER_IMAGE}"
+      time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+        --env-file <(env | grep -a -E \
           '^(CW_|SIGN_|COSIGN_|DEPLOY_|APPVEYOR_|CI_|DO_NOT_TRACK)') \
         "${DOCKER_IMAGE}" \
         sh -c ./_ci-linux-debian.sh
