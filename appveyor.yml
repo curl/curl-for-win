@@ -69,7 +69,7 @@ build_script:
       sudo podman image trust set --type accept docker.io/library
       time podman pull "${DOCKER_IMAGE}"
       sudo chmod -R 0777 .
-      time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
+      time sudo podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
         --env-file <(env | grep -a -E \
           '^(CW_|SIGN_|COSIGN_|DEPLOY_|APPVEYOR_|CI_|DO_NOT_TRACK)') \
         "${DOCKER_IMAGE}" \
