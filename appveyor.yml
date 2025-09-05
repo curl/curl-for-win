@@ -54,8 +54,8 @@ environment:
   DO_NOT_TRACK: '1'
 build_script:
   - sh: |
-      apt-get -o Dpkg::Use-Pty=0 update
-      apt-get -o Dpkg::Use-Pty=0 install -y --no-install-suggests --no-install-recommends podman
+      sudo apt-get -o Dpkg::Use-Pty=0 update
+      sudo apt-get -o Dpkg::Use-Pty=0 install -y --no-install-suggests --no-install-recommends podman
       export CW_CONFIG="${APPVEYOR_REPO_BRANCH}-werror-win"
       . ./_versions.sh
       podman image trust set --type reject default
