@@ -54,12 +54,12 @@ environment:
   DO_NOT_TRACK: '1'
 build_script:
   - sh: |
-      rm -rf /etc/apt/sources.list.d/archive_uri-*.list
-      rm -rf /etc/apt/sources.list.d/azure-cli.list
-      rm -rf /etc/apt/sources.list.d/dotnet-ubuntu-backports-*.list
-      rm -rf /etc/apt/sources.list.d/git-core-ubuntu-ppa-*.list
-      rm -rf /etc/apt/sources.list.d/google-chrome.list
-      rm -rf /etc/apt/sources.list.d/ubuntu-toolchain-*.list
+      sudo rm -rf /etc/apt/sources.list.d/archive_uri-*.list
+      sudo rm -rf /etc/apt/sources.list.d/azure-cli.list
+      sudo rm -rf /etc/apt/sources.list.d/dotnet-ubuntu-backports-*.list
+      sudo rm -rf /etc/apt/sources.list.d/git-core-ubuntu-ppa-*.list
+      sudo rm -rf /etc/apt/sources.list.d/google-chrome.list
+      sudo rm -rf /etc/apt/sources.list.d/ubuntu-toolchain-*.list
       sudo apt-get -o Dpkg::Use-Pty=0 update
       sudo apt-get -o Dpkg::Use-Pty=0 install -y --no-install-suggests --no-install-recommends podman uidmap
       export CW_CONFIG="${APPVEYOR_REPO_BRANCH}-werror-win"
