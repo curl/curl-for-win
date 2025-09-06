@@ -68,6 +68,8 @@ build_script:
       whoami
       id
       ls -l
+      chmod -R go+rw .
+      ls -l
       sudo loginctl enable-linger 1000
       sudo podman image trust set --type reject default
       sudo podman image trust set --type accept docker.io/library
