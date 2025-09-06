@@ -10,7 +10,7 @@ cat /etc/*-release
 
 export DEBIAN_FRONTEND='noninteractive'
 
-sudo=''
+[ "${1:-}" = '--sudo' ] && sudo='sudo' || sudo=''
 extra=''
 dl=''
 
