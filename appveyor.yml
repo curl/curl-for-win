@@ -65,6 +65,8 @@ build_script:
       sudo apt-get -o Dpkg::Use-Pty=0 install -y --no-install-suggests --no-install-recommends podman uidmap fuse-overlayfs dbus-user-session
       export CW_CONFIG="${APPVEYOR_REPO_BRANCH}-werror-win"
       . ./_versions.sh
+      whoami
+      id
       ls -l
       sudo loginctl enable-linger 1000
       sudo podman image trust set --type reject default
