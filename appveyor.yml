@@ -65,20 +65,16 @@ build_script:
       sudo apt-get -o Dpkg::Use-Pty=0 install -y --no-install-suggests --no-install-recommends podman uidmap
       export CW_CONFIG="${APPVEYOR_REPO_BRANCH}-werror-win"
       . ./_versions.sh
-      sudo rm -rf ~/.local/share/containers/
-      echo '------------'
       sudo podman image trust set --type reject default
-      echo '------------'
       sudo podman image trust set --type accept docker.io/library
-      echo '------------'
       time podman pull "${DOCKER_IMAGE}"
-      echo '------------'
       sudo chmod -R 0777 .
       whoami
       id
       ls -lA
-      time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
-        --env-file <(env | grep -a -E \
+      sudo rm -rf ~/.local/share/containers/
+      time podman run --volume="$(pwd):$(pwd):O" --workdir="$(pwd)" \
+        --env-file=<(env | grep -a -E \
           '^(CW_|SIGN_|COSIGN_|DEPLOY_|APPVEYOR_|CI_|DO_NOT_TRACK)') \
         "${DOCKER_IMAGE}" \
         sh -c ./_ci-linux-debian.sh
