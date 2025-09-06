@@ -536,10 +536,18 @@ live_xt() {
     echo "${hash}"
     echo "${hash}" | grep -q -a -F -- "${2:-}" || exit 1
     rm -r -f "${pkg:?}"; mkdir "${pkg}"
+    ls -l
     if [ "${pkg}" = 'cacert' ]; then
       mv pkg.bin "${pkg}/${_CACERT}"
     else
-      tar --no-same-owner --no-same-permissions --strip-components="${3:-1}" -xf pkg.bin --directory="${pkg}"
+      tar --no-same-owner --no-same-permissions --strip-components="${3:-1}" -xf pkg.bin --directory="${pkg}" || true
+      if [ "${pkg}" = 'llvm-mingw-linux-x86-64' ]; then
+        (
+          cd llvm-mingw-linux-x86-64
+          chmod +x bin/* || true
+          chmod +x lib/*.so* || true
+        )
+      fi
       [ -f "${pkg}${_PATCHSUFFIX}.patch" ] && patch --forward --strip=1 --directory="${pkg}" < "${pkg}${_PATCHSUFFIX}.patch"
     fi
     rm -f pkg.bin pkg.sig
