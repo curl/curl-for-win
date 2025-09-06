@@ -11,9 +11,10 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
       mkdir testing-1
       touch testing-2
       ls -l
-      chmod testing-2  +X || true
-      chmod testing-2 u+x || true
-      chmod testing-2 a+x || true
+      chmod  +X testing-2 || true
+      chmod u+x testing-2 || true
+      chmod a+x testing-2 || true
+      ls -l
 
 # Build configuration environment variables:
 #
