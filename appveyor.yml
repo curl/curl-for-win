@@ -60,9 +60,7 @@ build_script:
       sudo rm -rf /etc/apt/sources.list.d/git-core-ubuntu-ppa-*.list
       sudo rm -rf /etc/apt/sources.list.d/google-chrome.list
       sudo rm -rf /etc/apt/sources.list.d/ubuntu-toolchain-*.list
-      rm -rf ~/.local/share/containers/
-      echo '[engine]' >> ~/.local/share/containers/
-      echo 'cgroup_manager = "cgroupfs"' >> ~/.local/share/containers/
+      sudo loginctl enable-linger 1000
       sudo apt-get -o Dpkg::Use-Pty=0 update
       sudo rm -f /var/lib/man-db/auto-update
       sudo apt-get -o Dpkg::Use-Pty=0 install -y --no-install-suggests --no-install-recommends podman uidmap fuse-overlayfs dbus-user-session
