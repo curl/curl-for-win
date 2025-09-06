@@ -9,11 +9,14 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
       whoami
       id
       mkdir testing-1
+      touch testing-1/testing-3
       touch testing-2
       ls -l
-      chmod  +X testing-2 || true
-      chmod u+x testing-2 || true
-      chmod a+x testing-2 || true
+      chmod a+rw-s,go-w testing-2 || true
+      chmod a+rw-s,go-w testing-1/testing-3 || true
+#      chmod  +X testing-2 || true
+#      chmod u+x testing-2 || true
+#      chmod a+x testing-2 || true
       ls -l
 
 # Build configuration environment variables:
