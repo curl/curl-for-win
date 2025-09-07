@@ -112,7 +112,7 @@ Features:         AsynchDNS        CAcert HSTS             HTTPS-proxy     IPv6 
 * Latest version for Windows:
   <br><https://curl.se/windows/>
 * Specific versions for Windows, back to 8.2.0:<br>
-  `https://curl.se/windows/dl-<curl-version>_<build-1-to-N>/curl-<curl-version>_<build-1-to-N>-{win64,win64a,win32}-mingw.zip`
+  `https://curl.se/windows/dl-<curl-version>_<build-1-to-N>/curl-<curl-version>_<build-1-to-N>-{win64,win64a}-mingw.zip`
   <br>Example:
   <br><https://curl.se/windows/dl-8.2.0_1/curl-8.2.0_1-win64-mingw.zip>
 
