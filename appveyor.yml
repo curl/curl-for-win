@@ -64,6 +64,7 @@ build_script:
       sudo podman image trust set --type reject default
       sudo podman image trust set --type accept docker.io/library
       time podman pull "${DOCKER_IMAGE}"
+      podman info
       time podman run --security-opt seccomp=unconfined --volume="$(pwd):$(pwd)" --workdir="$(pwd)" \
         --env-file=<(env | grep -a -E \
           '^(CW_|SIGN_|COSIGN_|DEPLOY_|APPVEYOR_|CI_|DO_NOT_TRACK)') \
