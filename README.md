@@ -47,9 +47,9 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   [`llvm-mingw`](https://github.com/mstorsjo/llvm-mingw) for ARM64.
 - Windows cross-built and published via
   [AppVeyor CI](https://www.appveyor.com/). Linux built via GHA.
-  Using reproducible OS image
+  Using reproducible [Debian](https://docker.debian.net/) image
   [`debian:testing-slim`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing/slim)
-  via [Docker](https://docker.debian.net/). macOS built via GHA.
+  via rootless [podman](https://podman.io/). macOS built via GHA.
 - Linux and macOS builds are *not* official curl builds.
 - We verify components using SHA-256, and PGP where provided.
 - We build [reproducible](https://reproducible-builds.org/) binaries,
