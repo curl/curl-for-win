@@ -25,7 +25,7 @@ fi
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' golang'
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
-  # g++ necessary for stdc++ in aws-lc/boringssl/zstd
+  # g++ necessary for stdc++ in aws-lc/boringssl
   extra+=' gcc-mingw-w64-x86-64-win32 g++-mingw-w64-x86-64-win32 wine64 wine'
   # https://tracker.debian.org/pkg/osslsigncode
   extra+=' osslsigncode'

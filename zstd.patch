@@ -1,0 +1,180 @@
+commit 769723aee2540aaff8951ac432a1babed358aa71
+Date:   2025-04-01 22:47:45 +0200
+
+diff --git a/build/cmake/CMakeLists.txt b/build/cmake/CMakeLists.txt
+index 347d41c0..f0890534 100644
+--- a/build/cmake/CMakeLists.txt
++++ b/build/cmake/CMakeLists.txt
+@@ -37,7 +37,6 @@ project(zstd
+   VERSION "${ZSTD_FULL_VERSION}"
+   LANGUAGES C   # Main library is in C
+             ASM # And ASM
+-            CXX # Testing contributed code also utilizes CXX
+   )
+ 
+ message(STATUS "ZSTD VERSION: ${zstd_VERSION}")
+@@ -54,12 +53,6 @@ endif()
+ 
+ include(GNUInstallDirs)
+ 
+-#-----------------------------------------------------------------------------
+-# Add extra compilation flags
+-#-----------------------------------------------------------------------------
+-include(AddZstdCompilationFlags)
+-ADD_ZSTD_COMPILATION_FLAGS()
+-
+ # Always hide XXHash symbols
+ add_definitions(-DXXH_NAMESPACE=ZSTD_)
+ 
+@@ -123,6 +116,19 @@ if (MSVC)
+     option(ZSTD_USE_STATIC_RUNTIME "LINK TO STATIC RUN-TIME LIBRARIES" OFF)
+ endif ()
+ 
++# Enable C++ support for testing.
++set(ZSTD_ENABLE_CXX ${ZSTD_BUILD_TESTS})
++
++if(ZSTD_ENABLE_CXX)
++    enable_language(CXX)
++endif()
++
++#-----------------------------------------------------------------------------
++# Add extra compilation flags
++#-----------------------------------------------------------------------------
++include(AddZstdCompilationFlags)
++ADD_ZSTD_COMPILATION_FLAGS(ON ZSTD_ENABLE_CXX ON) # C CXX LD
++
+ #-----------------------------------------------------------------------------
+ # External dependencies
+ #-----------------------------------------------------------------------------
+diff --git a/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake b/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake
+index 5f381c65..25231b5e 100644
+--- a/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake
++++ b/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake
+@@ -49,7 +49,7 @@ function(EnableCompilerFlag _flag _C _CXX _LD)
+     endif ()
+ endfunction()
+ 
+-macro(ADD_ZSTD_COMPILATION_FLAGS)
++macro(ADD_ZSTD_COMPILATION_FLAGS _C _CXX _LD)
+     # We set ZSTD_HAS_NOEXECSTACK if we are certain we've set all the required
+     # compiler flags to mark the stack as non-executable.
+     set(ZSTD_HAS_NOEXECSTACK false)
+@@ -63,26 +63,26 @@ macro(ADD_ZSTD_COMPILATION_FLAGS)
+         # EnableCompilerFlag("-std=c99" true false)   # Set C compilation to c99 standard
+         if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND MSVC)
+             # clang-cl normally maps -Wall to -Weverything.
+-            EnableCompilerFlag("/clang:-Wall" true true false)
++            EnableCompilerFlag("/clang:-Wall" _C _CXX false)
+         else ()
+-            EnableCompilerFlag("-Wall" true true false)
++            EnableCompilerFlag("-Wall" _C _CXX false)
+         endif ()
+-        EnableCompilerFlag("-Wextra" true true false)
+-        EnableCompilerFlag("-Wundef" true true false)
+-        EnableCompilerFlag("-Wshadow" true true false)
+-        EnableCompilerFlag("-Wcast-align" true true false)
+-        EnableCompilerFlag("-Wcast-qual" true true false)
+-        EnableCompilerFlag("-Wstrict-prototypes" true false false)
++        EnableCompilerFlag("-Wextra" _C _CXX false)
++        EnableCompilerFlag("-Wundef" _C _CXX false)
++        EnableCompilerFlag("-Wshadow" _C _CXX false)
++        EnableCompilerFlag("-Wcast-align" _C _CXX false)
++        EnableCompilerFlag("-Wcast-qual" _C _CXX false)
++        EnableCompilerFlag("-Wstrict-prototypes" _C false false)
+         # Enable asserts in Debug mode
+         if (CMAKE_BUILD_TYPE MATCHES "Debug")
+-            EnableCompilerFlag("-DDEBUGLEVEL=1" true true false)
++            EnableCompilerFlag("-DDEBUGLEVEL=1" _C _CXX false)
+         endif ()
+         # Add noexecstack flags
+         # LDFLAGS
+-        EnableCompilerFlag("-Wl,-z,noexecstack" false false true)
++        EnableCompilerFlag("-Wl,-z,noexecstack" false false _LD)
+         # CFLAGS & CXXFLAGS
+-        EnableCompilerFlag("-Qunused-arguments" true true false)
+-        EnableCompilerFlag("-Wa,--noexecstack" true true false)
++        EnableCompilerFlag("-Qunused-arguments" _C _CXX false)
++        EnableCompilerFlag("-Wa,--noexecstack" _C _CXX false)
+         # NOTE: Using 3 nested ifs because the variables are sometimes
+         # empty if the condition is false, and sometimes equal to false.
+         # This implicitly converts them to truthy values. There may be
+@@ -99,15 +99,15 @@ macro(ADD_ZSTD_COMPILATION_FLAGS)
+ 
+         set(ACTIVATE_MULTITHREADED_COMPILATION "ON" CACHE BOOL "activate multi-threaded compilation (/MP flag)")
+         if (CMAKE_GENERATOR MATCHES "Visual Studio" AND ACTIVATE_MULTITHREADED_COMPILATION)
+-            EnableCompilerFlag("/MP" true true false)
++            EnableCompilerFlag("/MP" _C _CXX false)
+         endif ()
+ 
+         # UNICODE SUPPORT
+-        EnableCompilerFlag("/D_UNICODE" true true false)
+-        EnableCompilerFlag("/DUNICODE" true true false)
++        EnableCompilerFlag("/D_UNICODE" _C _CXX false)
++        EnableCompilerFlag("/DUNICODE" _C _CXX false)
+         # Enable asserts in Debug mode
+         if (CMAKE_BUILD_TYPE MATCHES "Debug")
+-            EnableCompilerFlag("/DDEBUGLEVEL=1" true true false)
++            EnableCompilerFlag("/DDEBUGLEVEL=1" _C _CXX false)
+         endif ()
+     endif ()
+ 
+commit 472acf5d83e0f059c0d5938dea6556e21385a71c
+Date:   2025-06-09 07:24:03 +0000
+
+    fix #4405
+
+diff --git a/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake b/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake
+index 25231b5e..dbe4118e 100644
+--- a/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake
++++ b/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake
+@@ -1,5 +1,10 @@
+-include(CheckCXXCompilerFlag)
+ include(CheckCCompilerFlag)
++if(CMAKE_CXX_COMPILER)
++    include(CheckCXXCompilerFlag)
++    set(ZSTD_CXX_ENABLED TRUE)
++else()
++    set(ZSTD_CXX_ENABLED FALSE)
++endif()
+ 
+ if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.18)
+     set(ZSTD_HAVE_CHECK_LINKER_FLAG true)
+@@ -21,7 +26,7 @@ function(EnableCompilerFlag _flag _C _CXX _LD)
+             set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${_flag}" PARENT_SCOPE)
+         endif ()
+     endif ()
+-    if (_CXX)
++    if (_CXX AND ZSTD_CXX_ENABLED)
+         CHECK_CXX_COMPILER_FLAG(${_flag} CXX_FLAG_${varname})
+         if (CXX_FLAG_${varname})
+             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${_flag}" PARENT_SCOPE)
+commit 9a6fe9a428751b82be76cdf010cf89aae64897ce
+Date:   2025-06-09 21:55:06 +0000
+
+    remove global variable
+    
+    overkill and leaky to transport a test result just in one place.
+
+diff --git a/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake b/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake
+index dbe4118e..3e7bcce5 100644
+--- a/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake
++++ b/build/cmake/CMakeModules/AddZstdCompilationFlags.cmake
+@@ -1,9 +1,6 @@
+ include(CheckCCompilerFlag)
+ if(CMAKE_CXX_COMPILER)
+     include(CheckCXXCompilerFlag)
+-    set(ZSTD_CXX_ENABLED TRUE)
+-else()
+-    set(ZSTD_CXX_ENABLED FALSE)
+ endif()
+ 
+ if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.18)
+@@ -26,7 +23,7 @@ function(EnableCompilerFlag _flag _C _CXX _LD)
+             set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${_flag}" PARENT_SCOPE)
+         endif ()
+     endif ()
+-    if (_CXX AND ZSTD_CXX_ENABLED)
++    if (_CXX AND CMAKE_CXX_COMPILER)
+         CHECK_CXX_COMPILER_FLAG(${_flag} CXX_FLAG_${varname})
+         if (CXX_FLAG_${varname})
+             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${_flag}" PARENT_SCOPE)
