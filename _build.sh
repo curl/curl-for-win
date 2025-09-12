@@ -700,12 +700,17 @@ build_single_target() {
       if [ "${_HOST}" = 'linux' ] || \
          [ "${_HOST}" = 'bsd' ]; then
         # Run x64 targets on same CPU:
-        if [ "${_CPU}" = 'x64' ] && \
-           [ "${unamem}" = 'x86_64' ]; then
-          if command -v wine64 >/dev/null 2>&1; then
-            _RUN_BIN='wine64'
-          elif command -v wine >/dev/null 2>&1; then
-            _RUN_BIN='wine'
+        if [ "${unamem}" = 'x86_64' ]; then
+          if [ "${_CPU}" = 'x64' ]; then
+            if command -v wine64 >/dev/null 2>&1; then
+              _RUN_BIN='wine64'
+            elif command -v wine >/dev/null 2>&1; then
+              _RUN_BIN='wine'
+            fi
+          elif [ "${_CPU}" = 'x86' ]; then
+            if command -v wine32 >/dev/null 2>&1; then
+              _RUN_BIN='wine32'
+            fi
           fi
         fi
       elif [ "${_HOST}" = 'mac' ]; then
