@@ -26,10 +26,12 @@ fi
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   extra+=' gcc-mingw-w64-x86-64-win32 wine64 wine'
+  [[ "${CW_CONFIG:-}" = *'x86'* ]] && extra+=' gcc-mingw-w64-i686-win32'
   # https://tracker.debian.org/pkg/osslsigncode
   extra+=' osslsigncode'
   if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
     extra+=' g++-mingw-w64-x86-64-win32 nasm'
+    [[ "${CW_CONFIG:-}" = *'x86'* ]] && extra+=' g++-mingw-w64-i686-win32'
   fi
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   [ -n "${CW_GCCSUFFIX:-}" ] || CW_GCCSUFFIX='-14'
