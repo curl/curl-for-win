@@ -113,7 +113,7 @@ fi
 ${sudo} apt-get --option Dpkg::Use-Pty=0 --yes update
 # shellcheck disable=SC2086
 ${sudo} apt-get --option Dpkg::Use-Pty=0 --yes install --no-install-suggests --no-install-recommends \
-  curl ca-certificates git gpg gpg-agent patch ssh rsync python3-pefile make cmake ninja-build \
+  curl ca-certificates git gpg gpg-agent patch ssh rsync python3-pip python3-venv make cmake ninja-build \
   libssl-dev zlib1g-dev \
   zip xz-utils time jq secure-delete ${extra}
 

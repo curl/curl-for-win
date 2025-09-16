@@ -10,7 +10,7 @@ env='x86_64'
 pacman --noconfirm --ask 20 --noprogressbar --sync --refresh --sysupgrade --sysupgrade
 pacman --noconfirm --ask 20 --noprogressbar --sync --refresh --sysupgrade --sysupgrade
 pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
-  mingw-w64-"${env}"-{clang,cmake,ninja,jq,python-pefile,rsync,gettext,osslsigncode} \
+  mingw-w64-"${env}"-{clang,cmake,ninja,jq,python-pip,rsync,gettext,osslsigncode} \
   zip
 
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && \

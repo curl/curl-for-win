@@ -25,7 +25,7 @@ if [ ! -f .cw-initialized ]; then
     *_NT*)
       env='x86_64'
       pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
-        mingw-w64-"${env}"-{clang,cmake,ninja,jq,python-pefile,rsync,gettext,osslsigncode} \
+        mingw-w64-"${env}"-{clang,cmake,ninja,jq,python-pip,rsync,gettext,osslsigncode} \
         zip
       [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && \
       pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
@@ -52,7 +52,7 @@ if [ ! -f .cw-initialized ]; then
         fi
         # shellcheck disable=SC2086
         apt-get --option Dpkg::Use-Pty=0 --yes install --no-install-suggests --no-install-recommends \
-          curl git gpg rsync python3-pefile make cmake ninja-build \
+          curl git gpg rsync python3-pip python3-venv make cmake ninja-build \
           zip xz-utils time jq secure-delete ${extra}
       elif [ "${_DISTRO}" = 'alpine' ]; then
         [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go'
