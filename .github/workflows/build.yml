@@ -167,8 +167,8 @@ jobs:
             *-*-linux*.*
             urls.txt
 
-  linux-glibc-debian-bookworm-llvm:
-    name: 'linux-glibc-debian-bookworm-llvm'
+  linux-glibc-debian-stable-llvm:
+    name: 'linux-glibc-debian-stable-llvm'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -183,31 +183,31 @@ jobs:
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux"
           export CW_REVISION="${GITHUB_SHA}"
-          DOCKER_IMAGE='debian:bookworm-slim'
+          . ./_versions.sh
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE}"
+          time podman pull "${DOCKER_IMAGE_STABLE}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
+            "${DOCKER_IMAGE_STABLE}" \
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: 'curl-linux-glibc-debian-bookworm-llvm'
+          name: 'curl-linux-glibc-debian-stable-llvm'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
           path: |
             *-*-linux*.*
             urls.txt
 
-  linux-glibc-debian-bookworm-gcc:
-    name: 'linux-glibc-debian-bookworm-gcc'
+  linux-glibc-debian-stable-gcc:
+    name: 'linux-glibc-debian-stable-gcc'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -222,24 +222,24 @@ jobs:
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-gcc"
           export CW_REVISION="${GITHUB_SHA}"
-          DOCKER_IMAGE='debian:bookworm-slim'
+          . ./_versions.sh
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE}"
+          time podman pull "${DOCKER_IMAGE_STABLE}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
+            "${DOCKER_IMAGE_STABLE}" \
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: 'curl-linux-glibc-debian-bookworm-gcc'
+          name: 'curl-linux-glibc-debian-stable-gcc'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
           path: |
             *-*-linux*.*
@@ -319,8 +319,8 @@ jobs:
             *-*-linux*.*
             urls.txt
 
-  linux-musl-debian-bookworm-llvm:
-    name: 'linux-musl-debian-bookworm-llvm'
+  linux-musl-debian-stable-llvm:
+    name: 'linux-musl-debian-stable-llvm'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -335,31 +335,31 @@ jobs:
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl"
           export CW_REVISION="${GITHUB_SHA}"
-          DOCKER_IMAGE='debian:bookworm-slim'
+          . ./_versions.sh
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE}"
+          time podman pull "${DOCKER_IMAGE_STABLE}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
+            "${DOCKER_IMAGE_STABLE}" \
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: 'curl-linux-musl-debian-bookworm-llvm'
+          name: 'curl-linux-musl-debian-stable-llvm'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
           path: |
             *-*-linux*.*
             urls.txt
 
-  linux-musl-debian-bookworm-gcc:
-    name: 'linux-musl-debian-bookworm-gcc'
+  linux-musl-debian-stable-gcc:
+    name: 'linux-musl-debian-stable-gcc'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
     steps:
@@ -374,24 +374,24 @@ jobs:
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl-gcc"
           export CW_REVISION="${GITHUB_SHA}"
-          DOCKER_IMAGE='debian:bookworm-slim'
+          . ./_versions.sh
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE}"
+          time podman pull "${DOCKER_IMAGE_STABLE}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
+            "${DOCKER_IMAGE_STABLE}" \
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: 'curl-linux-musl-debian-bookworm-gcc'
+          name: 'curl-linux-musl-debian-stable-gcc'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
           path: |
             *-*-linux*.*

@@ -29,32 +29,38 @@ export _CONFIG="${1:-}"
 # Find out the latest docker image release:
 
 name='debian'
-
-# https://docs.docker.com/reference/api/registry/latest/
-token="$(curl --disable --user-agent '' --silent --fail --show-error \
-    "https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/${name}:pull" \
-  | jq --raw-output '.token')"
-
-tag="$(curl --disable --user-agent '' --silent --fail --show-error \
-    --header 'Accept: application/json' \
-    --header @/dev/stdin \
-    "https://registry-1.docker.io/v2/library/${name}/tags/list" <<EOF \
-  | jq --raw-output '.tags[]' | grep -E '^testing-[0-9]{8}-slim$' | sort | tail -n -1
-Authorization: Bearer ${token}
-EOF
-)"
-
 cpu='amd64'
-digest="$(curl --disable --user-agent '' --silent --fail --show-error \
-    --header 'Accept: application/json' \
-    --header @/dev/stdin \
-    "https://registry-1.docker.io/v2/library/${name}/manifests/${tag}" <<EOF \
-  | jq --raw-output --arg cpu "${cpu}" '.manifests[] | select(.platform.architecture == $cpu and .platform.os == "linux") | .digest'
+
+echo
+for release in 'testing' 'bookworm'; do
+
+  # https://docs.docker.com/reference/api/registry/latest/
+  token="$(curl --disable --user-agent '' --silent --fail --show-error \
+      "https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/${name}:pull" \
+    | jq --raw-output '.token')"
+
+  tag="$(curl --disable --user-agent '' --silent --fail --show-error \
+      --header 'Accept: application/json' \
+      --header @/dev/stdin \
+      "https://registry-1.docker.io/v2/library/${name}/tags/list" <<EOF \
+    | jq --raw-output '.tags[]' | grep -E "^${release}-[0-9]{8}-slim\$" | sort | tail -n -1
 Authorization: Bearer ${token}
 EOF
 )"
 
-echo; echo "export DOCKER_IMAGE='${name}:${tag}@${digest}'  # ${cpu}"
+  digest="$(curl --disable --user-agent '' --silent --fail --show-error \
+      --header 'Accept: application/json' \
+      --header @/dev/stdin \
+      "https://registry-1.docker.io/v2/library/${name}/manifests/${tag}" <<EOF \
+    | jq --raw-output --arg cpu "${cpu}" '.manifests[] | select(.platform.architecture == $cpu and .platform.os == "linux") | .digest'
+Authorization: Bearer ${token}
+EOF
+)"
+
+  env_suffix=''
+  [ "${release}" != 'testing' ] && env_suffix='_STABLE'
+  echo "export DOCKER_IMAGE${env_suffix}='${name}:${tag}@${digest}'  # ${cpu}"
+done
 
 # Find out the latest AppVeyor CI Ubuntu worker image
 
