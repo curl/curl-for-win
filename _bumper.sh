@@ -44,7 +44,17 @@ Authorization: Bearer ${token}
 EOF
 )"
 
-echo; echo "export DOCKER_IMAGE='${name}:${tag}'"
+cpu='amd64'
+digest="$(curl --disable --user-agent '' --silent --fail --show-error \
+    --header 'Accept: application/json' \
+    --header @/dev/stdin \
+    "https://registry-1.docker.io/v2/library/${name}/manifests/${tag}" <<EOF \
+  | jq --raw-output --arg cpu "${cpu}" '.manifests[] | select(.platform.architecture == $cpu and .platform.os == "linux") | .digest'
+Authorization: Bearer ${token}
+EOF
+)"
+
+echo; echo "export DOCKER_IMAGE='${name}@${digest}'  # ${tag} ${cpu}"
 
 # Find out the latest AppVeyor CI Ubuntu worker image
 
