@@ -30,7 +30,7 @@ export _CONFIG="${1:-}"
 
 name='debian'
 
-# https://docs.docker.com/registry/spec/api/
+# https://docs.docker.com/reference/api/registry/latest/
 token="$(curl --disable --user-agent '' --silent --fail --show-error \
     "https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/${name}:pull" \
   | jq --raw-output '.token')"
