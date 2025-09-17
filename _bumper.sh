@@ -54,7 +54,7 @@ Authorization: Bearer ${token}
 EOF
 )"
 
-echo; echo "export DOCKER_IMAGE='${name}@${digest}'  # ${tag} ${cpu}"
+echo; echo "export DOCKER_IMAGE='${name}:${tag}@${digest}'  # ${cpu}"
 
 # Find out the latest AppVeyor CI Ubuntu worker image
 
