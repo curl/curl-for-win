@@ -40,17 +40,17 @@ jobs:
         run: |
           export CW_CONFIG='werror-dev-linux'
           export CW_REVISION; CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
-          DOCKER_IMAGE='debian:bookworm-slim'
+          . ./_versions.sh
           export CW_CCSUFFIX='-15'
           export CW_GCCSUFFIX='-12'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE}"
+          time podman pull "${DOCKER_IMAGE_STABLE}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|SIGN_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
+            "${DOCKER_IMAGE_STABLE}" \
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
