@@ -152,6 +152,8 @@ _VER="$1"
   # no-sm2-precomp: avoid a 3.2.0 optimization that makes libcrypto 0.5MB larger.
   options+=' no-docs no-sm2-precomp no-quic'
 
+  export OPENSSL_LOCAL_CONFIG_DIR=''
+
   # 'no-dso' implies 'no-dynamic-engine' which in turn compiles in these
   # engines non-dynamically. To avoid them, also set `no-engine`.
   (
