@@ -43,10 +43,11 @@ jobs:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           persist-credentials: false
-      - name: 'install tools'
-        run: pip install --break-system-packages -U codespell
       - name: 'spellcheck'
         run: |
+          python3 -m venv ~/venv
+          ~/venv/bin/pip --disable-pip-version-check --no-input --no-cache-dir install --progress-bar off --prefer-binary -r .github/workflows/requirements.txt
+          source ~/venv/bin/activate
           codespell --version
           # shellcheck disable=SC2046
           codespell --skip='*.asc,*.patch,*.pem' \
