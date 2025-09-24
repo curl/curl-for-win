@@ -41,8 +41,8 @@ jobs:
           export CW_CONFIG='werror-dev-linux'
           export CW_REVISION; CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           . ./_versions.sh
-          export CW_CCSUFFIX='-15'
-          export CW_GCCSUFFIX='-12'
+          export CW_CCSUFFIX='-19'
+          export CW_GCCSUFFIX='-14'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
           time podman pull "${DOCKER_IMAGE_STABLE}"
