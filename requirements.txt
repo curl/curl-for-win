@@ -1,4 +1,4 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-pefile == 2024.8.26
+pefile==2024.8.26
