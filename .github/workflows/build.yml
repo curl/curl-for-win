@@ -24,20 +24,20 @@ env:
   DO_NOT_TRACK: '1'
 
 jobs:
-  miscchecks:
-    name: 'misc checks'
+  linters:
+    name: 'linters'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 5
     steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+        with:
+          persist-credentials: false
+
       - name: 'install prereqs'
         run: |
           /home/linuxbrew/.linuxbrew/bin/brew install shellcheck zizmor
           python3 -m venv ~/venv
           ~/venv/bin/pip --disable-pip-version-check --no-input --no-cache-dir install --progress-bar off --prefer-binary -r .github/workflows/requirements.txt
-
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-        with:
-          persist-credentials: false
 
       - name: 'REUSE check'
         run: |
