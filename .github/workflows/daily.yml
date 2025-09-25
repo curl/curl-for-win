@@ -38,7 +38,7 @@ jobs:
           SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
-          export CW_CONFIG='werror-dev-linux'
+          export CW_CONFIG='werror-dev-linux-a64-x64'
           export CW_REVISION; CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           . ./_versions.sh
           export CW_CCSUFFIX='-19'
