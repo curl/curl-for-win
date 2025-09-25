@@ -24,47 +24,25 @@ env:
   DO_NOT_TRACK: '1'
 
 jobs:
-  reuse-check:
-    name: 'REUSE check'
+  linters:
+    name: 'linters'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           persist-credentials: false
-      - name: 'check'
-        uses: fsfe/reuse-action@bb774aa972c2a89ff34781233d275075cbddf542 # v5
 
-  spellcheck:
-    name: 'spellcheck'
-    runs-on: 'ubuntu-latest'
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-        with:
-          persist-credentials: false
-      - name: 'spellcheck'
+      - name: 'install prereqs'
         run: |
+          /home/linuxbrew/.linuxbrew/bin/brew install shellcheck zizmor
           python3 -m venv ~/venv
           ~/venv/bin/pip --disable-pip-version-check --no-input --no-cache-dir install --progress-bar off --prefer-binary -r .github/workflows/requirements.txt
+
+      - name: 'REUSE check'
+        run: |
           source ~/venv/bin/activate
-          codespell --version
-          # shellcheck disable=SC2046
-          codespell --skip='*.asc,*.patch,*.pem' \
-            --ignore-words '.github/workflows/codespell-ignore.txt' \
-            $(git ls-files)
-
-  miscchecks:
-    name: 'misc checks'
-    runs-on: 'ubuntu-latest'
-    timeout-minutes: 5
-    steps:
-      - name: 'install prereqs'
-        run: /home/linuxbrew/.linuxbrew/bin/brew install shellcheck zizmor
-
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-        with:
-          persist-credentials: false
+          reuse lint
 
       - name: 'zizmor GHA'
         run: |
@@ -92,6 +70,15 @@ jobs:
           shellcheck --exclude=1091 \
             --enable=avoid-nullary-conditions,deprecate-which,quote-safe-variables,require-variable-braces \
             ./*.sh
+
+      - name: 'spellcheck'
+        run: |
+          source ~/venv/bin/activate
+          codespell --version
+          # shellcheck disable=SC2046
+          codespell --skip='*.asc,*.patch,*.pem' \
+            --ignore-words '.github/workflows/codespell-ignore.txt' \
+            $(git ls-files)
 
   linux-glibc-debian-testing-llvm:
     name: 'linux-glibc-debian-testing-llvm'
