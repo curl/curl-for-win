@@ -26,8 +26,9 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 - Required: Windows Vista with
   [Universal CRT](https://support.microsoft.com/topic/update-for-universal-c-runtime-in-windows-322bf30f-4735-bb94-3949-49f5c49f4732)
   (64-bit ARM or Intel), macOS 10.9 Mavericks (ARM or Intel),
-  any Linux (amd64, arm64, RISC-V 64) with
-  [MUSL](https://en.wikipedia.org/wiki/Musl) builds.
+  Linux [kernel](https://wiki.musl-libc.org/supported-platforms) >=2.6.39
+  (amd64, arm64, RISC-V 64) with [MUSL](https://en.wikipedia.org/wiki/Musl)
+  builds.
 - [HTTP/3](https://en.wikipedia.org/wiki/HTTP/3),
   [HTTP/2](https://en.wikipedia.org/wiki/HTTP/2) support,
   and [more](#features).
