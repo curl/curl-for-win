@@ -6,6 +6,14 @@
 # shellcheck disable=SC3040,SC2039
 set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
+if [ -z "${_PKGOS:-}" ] || \
+   [ -z "${_BLD:-}" ] || \
+   [ -z "${_URLS:-}" ] || \
+   [ -z "${_LOG:-}" ]; then
+  echo '! ERROR: A required env is not set.'
+  exit 1
+fi
+
 sort -u "${_BLD}" > "${_BLD}.sorted"
 mv -f "${_BLD}.sorted" "${_BLD}"
 
@@ -18,6 +26,10 @@ if ! ls ./*-*-"${_PKGOS}"*.* >/dev/null 2>&1; then
 fi
 
 # Use the newest package timestamp for supplementary files
+if ! ls -1 -t ./*-*-"${_PKGOS}"*.*; then
+  echo '! ERROR: timestamp reference not found.'
+  exit 1
+fi
 # shellcheck disable=SC2012
 touch -r "$(ls -1 -t ./*-*-"${_PKGOS}"*.* | head -n 1)" hashes.txt "${_BLD}" "${_URLS}" "${_LOG}"
 
