@@ -7,9 +7,9 @@ SPDX-PackageDownloadLocation = "https://github.com/curl/curl-for-win"
 
 [[annotations]]
 path = [
-  "curl-for-win-ca-cert*.pem",
   "*.asc",
   "*.patch",
+  "curl-for-win-ca-cert*.pem",
 ]
 SPDX-FileCopyrightText = "The curl-for-win project and its contributors."
 SPDX-License-Identifier = "MIT"
