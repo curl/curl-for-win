@@ -34,26 +34,6 @@ _VER="$1"
     [ "${_CPU}" = 'x86' ] && options+=' mingw'
     [ "${_CPU}" = 'x64' ] && options+=' mingw64'
     [ "${_CPU}" = 'a64' ] && options+=' mingwarm64'
-    if [[ "${_VER}" = '3.5.'* ]]; then
-      # Source:
-      # - https://github.com/openssl/openssl/issues/10533
-      # - https://github.com/openssl/openssl/pull/26605
-      # - https://github.com/openssl/openssl/commit/9da1a9c30e105571dc09ad7bcf756872a99027a7
-      echo '## -*- mode: perl; -*-
-        my %targets = (
-          "mingwarm64" => {
-            inherit_from     => [ "mingw-common" ],
-            cflags           => "",
-            sys_id           => "MINGWARM64",
-            bn_ops           => add("SIXTY_FOUR_BIT"),
-            asm_arch         => "aarch64",
-            uplink_arch      => "armv8",
-            perlasm_scheme   => "win64",
-            shared_rcflag    => "",
-            multilib         => "-arm64",
-          }
-        );' > Configurations/11-curl-for-win-mingw-arm64.conf
-    fi
   elif [ "${_OS}" = 'mac' ]; then
     [ "${_CPU}" = 'x64' ] && options+=' darwin64-x86_64'
     [ "${_CPU}" = 'a64' ] && options+=' darwin64-arm64'
