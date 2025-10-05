@@ -18,7 +18,7 @@ concurrency:
 permissions: {}
 
 env:
-  GITHUB_TOKEN: '${{ github.token }}'
+  GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
   CW_MAP: '1'
   CW_JOBS: '5'
   DO_NOT_TRACK: '1'
