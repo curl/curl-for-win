@@ -85,7 +85,7 @@ _VER="$1"
         LIBS+=' -lbcrypt'
         LIBS+=' -lws2_32'  # to detect EVP_aes_128_*
       fi
-    elif [ "${_OPENSSL}" = 'quictls' ] || [ "${_OPENSSL}" = 'openssl' ]; then
+    elif [ "${_OPENSSL}" = 'openssl' ]; then
       CPPFLAGS+=' -DOPENSSL_SUPPRESS_DEPRECATED'
       if [ "${_OS}" = 'win' ]; then
         LIBS+=' -lbcrypt'

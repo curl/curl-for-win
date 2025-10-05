@@ -49,7 +49,6 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        awslc      build with AWS-LC [EXPERIMENTAL]
 #        boringssl  build with BoringSSL [EXPERIMENTAL]
 #        libressl   build with LibreSSL
-#        quictls    build with quictls
 #        openssl    build with OpenSSL
 #        ostls      build with OS-supplied TLS backend-only (Schannel)
 #        osnotls    build without OS-supplied TLS backends
@@ -193,7 +192,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   nghttp2          cmake
 #   nghttp3          cmake
 #   ngtcp2           cmake
-#   openssl/quictls  proprietary
+#   openssl          proprietary
 #   boringssl/awslc  cmake
 #   libressl         cmake
 #   libssh           cmake
@@ -550,8 +549,6 @@ build_single_target() {
     _OPENSSL='awslc'; boringssl=1
   elif [[ "${_DEPS}" = *'boringssl'* ]]; then
     _OPENSSL='boringssl'; boringssl=1
-  elif [[ "${_DEPS}" = *'quictls'* ]]; then
-    _OPENSSL='quictls'
   elif [[ "${_DEPS}" = *'openssl'* ]]; then
     _OPENSSL='openssl'
   fi
@@ -1299,8 +1296,7 @@ build_single_target() {
   fi
 
   if [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
-    if [ "${_OPENSSL}" = 'quictls' ] || \
-       [ "${_OPENSSL}" = 'openssl' ]; then
+    if [ "${_OPENSSL}" = 'openssl' ]; then
       # Workaround for:
       #   ../crypto/mem_sec.c:60:13: fatal error: linux/mman.h: No such file or directory
       # Based on: https://github.com/openssl/openssl/issues/7207#issuecomment-880121450
@@ -1382,7 +1378,7 @@ build_single_target() {
       # Apple's own strip tool chokes on arm64 static libs, with error
       #   strip: error: symbols referenced by relocation entries that can't be stripped in: [...]/usr/lib/liba.a(libcommon-lib-tls_pad.o) (for architecture arm64)
       # and then tens of thousands of lines of bogus output.
-      # This was only seen on arm64 (only tested cross-builds) and quictls.
+      # This was only seen on arm64 (only tested cross-builds) and openssl.
       # Replacing `strip -D` with `strip -S` fixes it, however, this does not
       # strip timestamps and other info, so we must also call `libtool -D` on
       # that. Then it turns out that `libtool -D` does a shoddy job and strips
@@ -1714,7 +1710,6 @@ build_single_target() {
   bld awslc               "${AWSLC_VER_}" boringssl
   bld boringssl       "${BORINGSSL_VER_}"
   bld libressl         "${LIBRESSL_VER_}"
-  bld quictls           "${QUICTLS_VER_}" openssl
   bld openssl           "${OPENSSL_VER_}"
   bld ngtcp2             "${NGTCP2_VER_}"
   bld nghttp2           "${NGHTTP2_VER_}"

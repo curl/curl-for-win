@@ -8,7 +8,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 export _NAM _VER _OUT _BAS _DST
 
-_NAM="$(basename "$0" | cut -f 1 -d '.')"; [ -n "${2:-}" ] && _NAM="$2"
+_NAM="$(basename "$0" | cut -f 1 -d '.')"
 _VER="$1"
 
 (
@@ -208,8 +208,6 @@ _VER="$1"
   cp -f -p LICENSE.txt                  "${_DST}/"
   cp -f -p README.md                    "${_DST}/"
   cp -f -p NEWS.md                      "${_DST}/"
-
-  [ "${_NAM}" = 'quictls' ] && cp -f -p README-OpenSSL.md "${_DST}/"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

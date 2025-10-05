@@ -89,13 +89,6 @@ cat <<EOF
     "keys": "516B622918D15C478AB1EA3A5339A2BE82E07DEC"
   },
   {
-    "name": "quictls",
-    "url": "https://github.com/quictls/openssl/archive/refs/tags/openssl-{ver}-quic1.tar.gz",
-    "redir": "redir",
-    "tag": "openssl-\\\\d+\\\\.\\\\d+\\\\.\\\\d+\\\\+quic$",
-    "hasfile": "README-OpenSSL.md"
-  },
-  {
     "name": "openssl",
     "url": "https://github.com/openssl/openssl/releases/download/openssl-{ver}/openssl-{ver}.tar.gz",
     "sig": ".asc",
@@ -696,9 +689,6 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst) || "${_CONFIG}" = *'libssh1'* ]]; then
   elif [[ "${_CONFIG}" = *'openssl'* ]]; then
     _DEPS+=' openssl'
     need_cacert=1
-  elif [[ "${_CONFIG}" = *'quictls'* ]]; then
-    _DEPS+=' quictls'
-    need_cacert=1
   elif [[ "${_OS}" = 'linux' ]] || \
        [[ ! "${_CONFIG}" =~ (pico|nano|micro|mini|ostls) ]]; then
     _DEPS+=' libressl'
@@ -791,10 +781,6 @@ if [[ "${_DEPS}" = *'openssl'* ]]; then
   fi
   live_dl openssl "${OPENSSL_VER_}"
   live_xt openssl "${OPENSSL_HASH}"
-fi
-if [[ "${_DEPS}" = *'quictls'* ]]; then
-  live_dl quictls "${QUICTLS_VER_}"
-  live_xt quictls "${QUICTLS_HASH}"
 fi
 if [[ "${_DEPS}" = *'libssh1'* ]]; then
   # shellcheck disable=SC2153
