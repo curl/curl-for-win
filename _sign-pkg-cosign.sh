@@ -15,8 +15,8 @@ if [ -n "${COSIGN_PKG_KEY:-}" ] && \
   file="$1"
   echo "Package signing with cosign: '${file}'"
   tr -d '\n' <<EOF | \
-  cosign sign-blob -y --key="${COSIGN_PKG_KEY}" --output-signature="${file}.cosign" "${file}"
+  cosign sign-blob -y --key="${COSIGN_PKG_KEY}" --new-bundle-format=true --bundle="${file}".sigstore "${file}"
 ${COSIGN_PKG_KEY_PASS}
 EOF
-  chmod 0644 "${file}.cosign"  # cosign creates it with 0600
+  chmod 0644 "${file}".sigstore  # cosign creates it with 0600
 fi
