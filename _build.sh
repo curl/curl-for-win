@@ -937,6 +937,28 @@ build_single_target() {
     _CFLAGS_GLOBAL+=' -fstack-protector-all'
     _CXXFLAGS_GLOBAL+=' -fstack-protector-all'
 
+    _CFLAGS_GLOBAL+=' -fno-delete-null-pointer-checks'
+    _CXXFLAGS_GLOBAL+=' -fno-delete-null-pointer-checks'
+    if [ "${_CC}" = 'llvm' ]; then
+      _CFLAGS_GLOBAL+=' -ftrivial-auto-var-init=zero'
+      _CXXFLAGS_GLOBAL+=' -ftrivial-auto-var-init=zero'
+      if [ "${_CCVER}" -ge '18' ]; then
+        _CFLAGS_GLOBAL+=' -fno-strict-aliasing'
+        _CXXFLAGS_GLOBAL+=' -fno-strict-aliasing'
+      fi
+    elif [ "${_CC}" = 'gcc' ]; then
+      _CFLAGS_GLOBAL+=' -fno-strict-aliasing -fno-strict-overflow'
+      _CXXFLAGS_GLOBAL+=' -fno-strict-aliasing -fno-strict-overflow'
+      if [ "${_CCVER}" -ge '12' ]; then
+        _CFLAGS_GLOBAL+=' -ftrivial-auto-var-init=zero'
+        _CXXFLAGS_GLOBAL+=' -ftrivial-auto-var-init=zero'
+      fi
+      if [ "${_CCVER}" -ge '15' ]; then
+        _CFLAGS_GLOBAL+=' -fzero-init-padding-bits=all'
+        _CXXFLAGS_GLOBAL+=' -fzero-init-padding-bits=all'
+      fi
+    fi
+
     if false && [ "${_CC}" = 'gcc' ] && [ "${_CCVER}" -ge '14' ]; then
       # https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html#index-fhardened
       _CFLAGS_GLOBAL+=' -fhardened'
