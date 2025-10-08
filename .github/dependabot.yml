@@ -8,11 +8,11 @@ updates:
     schedule:
       interval: 'monthly'
     commit-message:
-      prefix: "[ci skip]"
+      prefix: '[ci skip]'
 
   - package-ecosystem: 'pip'
     directory: '/'
     schedule:
       interval: 'monthly'
     commit-message:
-      prefix: "[ci skip]"
+      prefix: '[ci skip]'
