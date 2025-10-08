@@ -1,6 +1,8 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
+# https://docs.github.com/code-security/dependabot/working-with-dependabot/dependabot-options-reference
+
 version: 2
 updates:
   - package-ecosystem: 'github-actions'
@@ -9,10 +11,19 @@ updates:
       interval: 'monthly'
     commit-message:
       prefix: '[ci skip]'
+    groups:
+      actions-deps:
+        patterns:
+          - '*'
 
   - package-ecosystem: 'pip'
     directory: '/'
     schedule:
       interval: 'monthly'
+    cooldown:
+      default-days: 7
+      semver-major-days: 15
+      semver-minor-days: 7
+      semver-patch-days: 3
     commit-message:
       prefix: '[ci skip]'
