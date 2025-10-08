@@ -21,7 +21,7 @@ updates:
   - package-ecosystem: 'pip'
     directories:
       - '/'
-      - '/.github/workflows'
+      - '.github/workflows'
     schedule:
       interval: 'monthly'
     cooldown:
