@@ -9,14 +9,14 @@ updates:
     directory: '/'
     schedule:
       interval: 'monthly'
-    commit-message:
-      prefix: '[ci skip]'
     cooldown:
       default-days: 30
     groups:
       actions-deps:
         patterns:
           - '*'
+    commit-message:
+      prefix: '[ci skip]'
 
   - package-ecosystem: 'pip'
     directories:
