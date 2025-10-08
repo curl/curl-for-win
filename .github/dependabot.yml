@@ -13,9 +13,6 @@ updates:
       prefix: '[ci skip]'
     cooldown:
       default-days: 30
-      semver-major-days: 30
-      semver-minor-days: 30
-      semver-patch-days: 30
     groups:
       actions-deps:
         patterns:
