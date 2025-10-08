@@ -19,7 +19,9 @@ updates:
           - '*'
 
   - package-ecosystem: 'pip'
-    directory: '/'
+    directories:
+      - '/'
+      - '/.github/workflows'
     schedule:
       interval: 'monthly'
     cooldown:
