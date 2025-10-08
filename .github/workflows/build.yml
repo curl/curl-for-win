@@ -79,7 +79,7 @@ jobs:
           codespell --version
           # shellcheck disable=SC2046
           codespell --skip='*.asc,*.patch,*.pem' \
-            --ignore-words '.github/workflows/codespell-ignore.txt' \
+            --ignore-words '.github/workflows/codespell-ignore' \
             $(git ls-files)
 
   linux-glibc-debian-testing-llvm:
