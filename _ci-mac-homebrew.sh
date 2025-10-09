@@ -29,7 +29,6 @@ fi
 
 if [ -n "${extra}" ]; then
   export HOMEBREW_NO_AUTO_UPDATE=1
-  export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
   export HOMEBREW_NO_ANALYTICS=1
   export HOMEBREW_NO_ANALYTICS_MESSAGE_OUTPUT=1
   brew update >/dev/null || true
