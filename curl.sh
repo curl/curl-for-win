@@ -544,6 +544,7 @@ _VER="$1"
 
   (
     set +x
+    # Copy suffix-less files (not directories), with a .txt suffix added to them
     for file in docs/*; do
       if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -F '.'; then
         cp -f -p "${file}" "${_DST}/${file}.txt"
