@@ -554,12 +554,9 @@ _VER="$1"
         cp -f -p "${file}" "${_DST}/${file}.txt"
       fi
     done
-    # Copy simple examples
-    tr -d '\r' < docs/examples/Makefile.inc | tr '\n' '^' | sed 's/\\^//g' | tr '^' '\n' \
-      | grep 'check_PROGRAMS' | grep -a -o -E '=.+$' | cut -c 2- \
-      | sed -E 's/ +/ /g' | tr ' ' '\n' | while read -r f; do
-      [ -n "${f}" ] && cp -f -p "docs/examples/${f}.c" "${_DST}/docs/examples/"
-    done
+    # Copy examples
+    cp -f -p docs/examples/*.c                  "${_DST}/docs/examples/"
+    cp -f -p docs/examples/Makefile.example     "${_DST}/docs/examples/"
   )
   cp -f -p "${_PP}"/include/curl/*.h          "${_DST}/include/curl/"
   cp -f -a "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"  "${_DST}/${DYN_DIR}/"  # we must not pick up *.dll.a here
