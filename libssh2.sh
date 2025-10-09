@@ -88,11 +88,15 @@ _VER="$1"
 
   (
     set +x
-    for file in docs/*; do
-      if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -E '(\.|/Makefile$)'; then
-        cp -f -p "${file}" "${_DST}/${file}.txt"
-      fi
-    done
+    if [ "${LIBSSH2_VER_}" != '1.11.1' ]; then
+      cp -f -p docs/*.md "${_DST}/"
+    else
+      for file in docs/*; do
+        if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -E '(\.|/Makefile$)'; then
+          cp -f -p "${file}" "${_DST}/${file}.txt"
+        fi
+      done
+    fi
   )
   cp -f -p "${_PPS}"/include/*.h "${_DST}/include/"
   cp -f -p "${_PPS}"/lib/*.a     "${_DST}/lib/"
