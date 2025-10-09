@@ -27,8 +27,10 @@ _VER="$1"
   mkdir -p "${_BLDDIR}"
   (
     cd "${_BLDDIR}"
+    CPPFLAGS=''
+    [ "${_OS}" = 'win' ] && CPPFLAGS+=' -D_FILE_OFFSET_BITS=64'  # for stat()
     # shellcheck disable=SC2046,SC2086
-    ${_CC_GLOBAL} ${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_RAW} ${_CPPFLAGS_GLOBAL} \
+    ${_CC_GLOBAL} ${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_RAW} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} \
       -DENABLE_BUILTIN -DPACKAGE_VERSION="\"${LIBPSL_VER_}\"" \
       -I. -I.. -I../include -c $(find ../src -name '*.c' | sort)
     # shellcheck disable=SC2046
