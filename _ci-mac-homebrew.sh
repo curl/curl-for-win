@@ -34,9 +34,7 @@ if [ -n "${extra}" ]; then
   export HOMEBREW_NO_ANALYTICS_MESSAGE_OUTPUT=1
   brew update >/dev/null || true
   # shellcheck disable=SC2086
-  # - Using `|| true` to avoid failing due to preinstalled non-Homebrew
-  #   python3: `Could not symlink bin/2to3`
-  brew install --quiet ${extra} || true
+  brew install --quiet ${extra}
 fi
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]] && command -v wine >/dev/null 2>&1; then
