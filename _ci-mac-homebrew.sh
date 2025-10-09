@@ -36,7 +36,7 @@ if [ -n "${extra}" ]; then
   # shellcheck disable=SC2086
   # - Using `|| true` to avoid failing due to preinstalled non-Homebrew
   #   python3: `Could not symlink bin/2to3`
-  brew install ${extra} || true
+  brew install --quiet ${extra} || true
 fi
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]] && command -v wine >/dev/null 2>&1; then
