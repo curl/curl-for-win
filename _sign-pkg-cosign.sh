@@ -19,4 +19,5 @@ if [ -n "${COSIGN_PKG_KEY:-}" ] && \
 ${COSIGN_PKG_KEY_PASS}
 EOF
   chmod 0644 "${file}".cosign  # cosign creates it with 0600
+  cat "${file}".cosign
 fi
