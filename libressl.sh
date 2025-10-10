@@ -50,8 +50,6 @@ _VER="$1"
 
   CPPFLAGS+=' -DS2N_BN_HIDE_SYMBOLS'
 
-  [ "${_OS}" = 'win' ] && CPPFLAGS+=' -D_FILE_OFFSET_BITS=64'
-
   if [ "${_OS}" = 'mac' ]; then
     CPPFLAGS+=' -Dglobl=private_extern'  # make assembly symbols hidden
 

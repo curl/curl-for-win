@@ -891,6 +891,8 @@ build_single_target() {
 
     _CPPFLAGS_GLOBAL+=' -D_FORTIFY_SOURCE=3'  # Requires mingw-w64 11.0.0
 
+    _CPPFLAGS_GLOBAL+=' -D_FILE_OFFSET_BITS=64'
+
   elif [ "${_OS}" = 'mac' ]; then
     if [ "${_HOST}" != "${_OS}" ]; then
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Darwin ${_CMAKE_GLOBAL}"
