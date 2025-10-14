@@ -74,7 +74,7 @@ fi
 
 # Find out the latest llvm version offered by Debian testing
 
-llvm_latest="$(curl --disable --user-agent '' --silent --fail --show-error \
+llvm_latest="$(curl --disable --user-agent 'curl' --silent --fail --show-error \
   'https://packages.debian.org/search?keywords=llvm&searchon=names&suite=testing&section=all' \
   | hxclean | hxselect -i -c -s '\n' 'h3' \
   | grep -a -o -E 'llvm-[0-9]+' | sort -u | tail -n -1)"
