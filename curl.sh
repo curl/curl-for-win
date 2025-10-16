@@ -200,9 +200,7 @@ _VER="$1"
       options+=' -DHAVE_BORINGSSL=0 -DHAVE_AWSLC=0'  # fast-track configuration
     fi
     h3=1
-    if [ "${_OPENSSL}" = 'libressl' ]; then
-      CPPFLAGS+=' -DOPENSSL_NO_FILENAMES'  # workaround for LibreSSL 4.1.0 public header info-leak https://github.com/libressl/portable/issues/1154
-    else
+    if [ "${_OPENSSL}" != 'libressl' ]; then
       options+=' -DHAVE_LIBRESSL=0 -DHAVE_SSL_SET0_WBIO=1'  # fast-track configuration
     fi
     if [ "${_OPENSSL}" = 'openssl' ]; then
