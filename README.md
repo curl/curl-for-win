@@ -70,18 +70,18 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 
 Uses [LibreSSL](https://www.libressl.org/) TLS backend.
 
-feature       | Windows | macOS   | Linux   | noh3    | mini    | micro   | nano    | pico    |
+feature       | Windows | Linux   | macOS   | noh3    | mini    | micro   | nano    | pico    |
 --------------| --------| --------| --------| --------| --------| --------| --------| --------|
 alt-svc       | x       | x       | x       | x       | x       | x       |         |         |
-AppleSecTrust |         | x       |         | .       | .       | .       | .       | .       |
+AppleSecTrust |         |         | x       | .       | .       | .       | .       | .       |
 AsynchDNS     | x       | x       | x       | x       | x       | x       | x       | x       |
 brotli        | x       | x       | x       | x       |         |         |         |         |
-CAcert        | x       |         | x       | .       | .       | .       | .       | .       |
+CAcert        | x       | x       |         | .       | .       | .       | .       | .       |
 HSTS          | x       | x       | x       | x       | x       | x       | x       | x       |
 HTTP2         | x       | x       | x       | x       | x       | x       |         |         |
 HTTP3         | x       | x       | x       |         |         |         |         |         |
 HTTPS-proxy   | x       | x       | x       | x       | x       | x       | x       | x       |
-IDN           | x       | x       |         | .       | .       | .       | .       |         |
+IDN           | x       |         | x       | .       | .       | .       | .       |         |
 IPv6          | x       | x       | x       | x       | x       | x       | x       | x       |
 Kerberos      | x       |         |         | .       | .       | .       | .       |         |
 Largefile     | x       | x       | x       | x       | x       | x       | x       | x       |
@@ -96,7 +96,7 @@ threadsafe    | x       | x       | x       | x       | x       | x       | x   
 UnixSockets   | x       | x       | x       | x       | x       | x       | x       |         |
 zstd          | x       | x       | x       | x       |         |         |         |         |
 
-protocol      | Windows | macOS   | Linux   | noh3    | mini    | micro   | nano    | pico    |
+protocol      | Windows | Linux   | macOS   | noh3    | mini    | micro   | nano    | pico    |
 --------------| --------| --------| --------| --------| --------| --------| --------| --------|
 dict          | x       | x       | x       | x       | x       | x       | x       |         |
 file          | x       | x       | x       | x       | x       | x       | x       |         |
@@ -105,7 +105,7 @@ gophers/gopher| x       | x       | x       | x       | x       | x       | x   
 https/http    | x       | x       | x       | x       | x       | x       | x       | x       |
 imaps/imap    | x       | x       | x       | x       | x       | x       | x       |         |
 ipfs/ipns     | x       | x       | x       | x       | x       | x       | x       |         |
-ldaps/ldap    | x       | x       |         | x       | x       | x       | x       |         |
+ldaps/ldap    | x       |         | x       | x       | x       | x       | x       |         |
 mqtt          | x       | x       | x       | x       | x       | x       | x       |         |
 pop3s/pop3    | x       | x       | x       | x       | x       | x       | x       |         |
 rtsp          | x       | x       | x       | x       | x       | x       | x       |         |
@@ -116,11 +116,11 @@ telnet        | x       | x       | x       | x       | x       | x       | x   
 tftp          | x       | x       | x       | x       | x       | x       | x       |         |
 wss/ws        | x       | x       | x       | x       | x       | x       | x       |         |
 
-noh3: HTTP/2
-mini: without brotli and zstd, with OS TLS backend (Schannel) if available
-micro: without libssh2
-nano: HTTP/1.1
-pico: HTTP/1.1-only
+- noh3: HTTP/2
+- mini: without brotli and zstd, with OS TLS backend (Schannel) if available
+- micro: without libssh2
+- nano: HTTP/1.1
+- pico: HTTP/1.1-only
 
 # Downloads
 
