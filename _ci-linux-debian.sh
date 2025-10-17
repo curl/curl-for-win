@@ -81,12 +81,9 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     [[ "${CW_CONFIG:-}" = *'gcc'* ]] && extra+=" libgcc${CW_GCCSUFFIX}-dev"
     if [[ "${CW_CONFIG:-}" = *'openssl'* ]]; then
       # for openssl 'secure-memory' feature
-      if [ "$(uname -m)" = 'aarch64' ]; then
-        [ "${a64}" = 1 ] && extra+=' linux-headers-arm64'
-      elif [ "$(uname -m)" = 'x86_64' ]; then
-        [ "${x64}" = 1 ] && extra+=' linux-headers-amd64'
-      elif [ "$(uname -m)" = 'riscv64' ]; then
-        [ "${r64}" = 1 ] && extra+=' linux-headers-riscv64'
+      if   [ "$(uname -m)" = 'aarch64' ]; then [ "${a64}" = 1 ] && extra+=' linux-headers-arm64'
+      elif [ "$(uname -m)" = 'riscv64' ]; then [ "${r64}" = 1 ] && extra+=' linux-headers-riscv64'
+      elif [ "$(uname -m)" = 'x86_64'  ]; then [ "${x64}" = 1 ] && extra+=' linux-headers-amd64'
       fi
     fi
   else
