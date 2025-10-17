@@ -36,63 +36,48 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   extra+=' checksec'
 
   x64=0; a64=0; r64=0
-  [[ "${CW_CONFIG}" = *'r64'* || ! "${CW_CONFIG}" =~ (a64|x64) ]] && r64=1
   [[ "${CW_CONFIG}" = *'a64'* || ! "${CW_CONFIG}" =~ (x64|r64) ]] && a64=1
+  [[ "${CW_CONFIG}" = *'r64'* || ! "${CW_CONFIG}" =~ (a64|x64) ]] && r64=1
   [[ "${CW_CONFIG}" = *'x64'* || ! "${CW_CONFIG}" =~ (a64|r64) ]] && x64=1
 
   if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
     anycross=0
-    [ "${r64}" = 1 ] && anycross=1
-    [[ "$(uname -m)" = 'aarch64' && "${x64}" = 1 ]] && anycross=1
-    [[ "$(uname -m)" = 'x86_64'  && "${a64}" = 1 ]] && anycross=1
-
+    [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && anycross=1
+    [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && anycross=1
+    [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && anycross=1
     [ "${anycross}" = 1 ] && extra+=' qemu-user-static'
   fi
 
   if [[ "${CW_CONFIG:-}" != *'gcc'* ]] || [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
-    if [ "$(uname -m)" = 'aarch64' ]; then
-      [ "${x64}" = 1 ] && ${sudo} dpkg --add-architecture amd64
-    else
-      [ "${a64}" = 1 ] && ${sudo} dpkg --add-architecture arm64
-    fi
-    [ "${r64}" = 1 ] && ${sudo} dpkg --add-architecture riscv64
+    [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && ${sudo} dpkg --add-architecture arm64
+    [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && ${sudo} dpkg --add-architecture riscv64
+    [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && ${sudo} dpkg --add-architecture amd64
   fi
 
   if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
     export CW_CCSUFFIX="${CW_GCCSUFFIX}"
     extra+=" gcc${CW_GCCSUFFIX}"
-    if [ "$(uname -m)" = 'aarch64' ]; then
-      [ "${x64}" = 1 ] && extra+=" gcc${CW_GCCSUFFIX}-x86-64-linux-gnu"
-    else
-      [ "${a64}" = 1 ] && extra+=" gcc${CW_GCCSUFFIX}-aarch64-linux-gnu"
-    fi
-    [ "${r64}" = 1 ] && extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu"
+    [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && extra+=" gcc${CW_GCCSUFFIX}-aarch64-linux-gnu"
+    [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu"
+    [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && extra+=" gcc${CW_GCCSUFFIX}-x86-64-linux-gnu"
     if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
       extra+=" g++${CW_GCCSUFFIX}"
-      if [ "$(uname -m)" = 'aarch64' ]; then
-        [ "${x64}" = 1 ] && extra+=" g++${CW_GCCSUFFIX}-x86-64-linux-gnu"
-      else
-        [ "${a64}" = 1 ] && extra+=" g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
-      fi
-      [ "${r64}" = 1 ] && extra+=" g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
+      [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && extra+=" g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
+      [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && extra+=" g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
+      [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && extra+=" g++${CW_GCCSUFFIX}-x86-64-linux-gnu"
     fi
   else
     # ./my-pkg/usr/lib/llvm-17/lib/clang/17/lib/linux/libclang_rt.builtins-aarch64.a
-    if [ "$(uname -m)" = 'aarch64' ]; then
-      [ "${x64}" = 1 ] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:amd64"
-    else
-      [ "${a64}" = 1 ] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:arm64"
-    fi
-    [ "${r64}" = 1 ] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:riscv64"
+    [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:arm64"
+    [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:riscv64"
+    [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:amd64"
   fi
   if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
     extra+=' musl musl-dev'
-    if [ "$(uname -m)" = 'aarch64' ]; then
-      [ "${x64}" = 1 ] && extra+=' musl:amd64 musl-dev:amd64'
-    else
-      [ "${a64}" = 1 ] && extra+=' musl:arm64 musl-dev:arm64'
-    fi
-    [ "${r64}" = 1 ] && extra+=' musl:riscv64 musl-dev:riscv64'
+    [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && extra+=' musl:arm64 musl-dev:arm64'
+    [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && extra+=' musl:riscv64 musl-dev:riscv64'
+    [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && extra+=' musl:amd64 musl-dev:amd64'
+
     [[ "${CW_CONFIG:-}" = *'gcc'* ]] && extra+=" libgcc${CW_GCCSUFFIX}-dev"
     if [[ "${CW_CONFIG:-}" = *'openssl'* ]]; then
       # for openssl 'secure-memory' feature
@@ -105,18 +90,15 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     fi
   else
     # FIXME: workaround for glibc-llvm-riscv64 builds:
-    if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
-      [ "${r64}" = 1 ] && extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu"
+    if [[ "${CW_CONFIG:-}" != *'gcc'* && "${r64}" = 1 ]]; then
+      extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu"
       if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
-        [ "${r64}" = 1 ] && extra+=" g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
+        extra+=" g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
       fi
     fi
-    if [ "$(uname -m)" = 'aarch64' ]; then
-      [ "${x64}" = 1 ] && extra+=' libc6-dev-amd64-cross'
-    else
-      [ "${a64}" = 1 ] && extra+=' libc6-dev-arm64-cross'
-    fi
-    [ "${r64}" = 1 ] && extra+=' libc6-dev-riscv64-cross'
+    [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && extra+=' libc6-dev-arm64-cross'
+    [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && extra+=' libc6-dev-riscv64-cross'
+    [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && extra+=' libc6-dev-amd64-cross'
   fi
 fi
 
