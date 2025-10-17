@@ -70,43 +70,57 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 
 Uses [LibreSSL](https://www.libressl.org/) TLS backend.
 
-```
-Windows:
-Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
-Features: alt-svc               AsynchDNS brotli CAcert HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL SSPI SSLS-EXPORT threadsafe UnixSockets zstd
+feature       | Windows | macOS   | Linux   | noh3    | mini    | micro   | nano    | pico    |
+--------------| --------| --------| --------| --------| --------| --------| --------| --------|
+alt-svc       | x       | x       | x       | x       | x       | x       |         |         |
+AppleSecTrust |         | x       |         | .       | .       | .       | .       | .       |
+AsynchDNS     | x       | x       | x       | x       | x       | x       | x       | x       |
+brotli        | x       | x       | x       | x       |         |         |         |         |
+CAcert        | x       |         | x       | .       | .       | .       | .       | .       |
+HSTS          | x       | x       | x       | x       | x       | x       | x       | x       |
+HTTP2         | x       | x       | x       | x       | x       | x       |         |         |
+HTTP3         | x       | x       | x       |         |         |         |         |         |
+HTTPS-proxy   | x       | x       | x       | x       | x       | x       | x       | x       |
+IDN           | x       | x       |         | .       | .       | .       | .       |         |
+IPv6          | x       | x       | x       | x       | x       | x       | x       | x       |
+Kerberos      | x       |         |         | .       | .       | .       | .       |         |
+Largefile     | x       | x       | x       | x       | x       | x       | x       | x       |
+libz          | x       | x       | x       | x       | x       | x       | x       | x       |
+NTLM          | x       | x       | x       | x       | x       | x       | x       |         |
+PSL           | x       | x       | x       | x       | x       | x       | x       | x       |
+SPNEGO        | x       |         |         | .       | .       | .       | .       |         |
+SSL           | x       | x       | x       | x       | x       | x       | x       | x       |
+SSPI          | x       |         |         | .       | .       | .       | .       |         |
+SSLS-EXPORT   | x       | x       | x       | x       |         |         |         |         |
+threadsafe    | x       | x       | x       | x       | x       | x       | x       | x       |
+UnixSockets   | x       | x       | x       | x       | x       | x       | x       |         |
+zstd          | x       | x       | x       | x       |         |         |         |         |
 
-macOS:
-Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
-Features: alt-svc AppleSecTrust AsynchDNS brotli        HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6          Largefile libz NTLM PSL        SSL      SSLS-EXPORT threadsafe UnixSockets zstd
+protocol      | Windows | macOS   | Linux   | noh3    | mini    | micro   | nano    | pico    |
+--------------| --------| --------| --------| --------| --------| --------| --------| --------|
+dict          | x       | x       | x       | x       | x       | x       | x       |         |
+file          | x       | x       | x       | x       | x       | x       | x       |         |
+ftps/ftp      | x       | x       | x       | x       | x       | x       | x       |         |
+gophers/gopher| x       | x       | x       | x       | x       | x       | x       |         |
+https/http    | x       | x       | x       | x       | x       | x       | x       | x       |
+imaps/imap    | x       | x       | x       | x       | x       | x       | x       |         |
+ipfs/ipns     | x       | x       | x       | x       | x       | x       | x       |         |
+ldaps/ldap    | x       | x       |         | x       | x       | x       | x       |         |
+mqtt          | x       | x       | x       | x       | x       | x       | x       |         |
+pop3s/pop3    | x       | x       | x       | x       | x       | x       | x       |         |
+rtsp          | x       | x       | x       | x       | x       | x       | x       |         |
+scp/sftp      | x       | x       | x       | x       | x       |         |         |         |
+smbs/smb      | x       | x       | x       | x       | x       | x       | x       |         |
+smtps/smtp    | x       | x       | x       | x       | x       | x       | x       |         |
+telnet        | x       | x       | x       | x       | x       | x       | x       |         |
+tftp          | x       | x       | x       | x       | x       | x       | x       |         |
+wss/ws        | x       | x       | x       | x       | x       | x       | x       |         |
 
-Linux:
-Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns            mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
-Features: alt-svc               AsynchDNS brotli CAcert HSTS HTTP2 HTTP3 HTTPS-proxy     IPv6          Largefile libz NTLM PSL        SSL      SSLS-EXPORT threadsafe UnixSockets zstd
-```
-<details><summary>Alternate configurations:</summary><p>
-
-```
-"noh3", HTTP/2:
-Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
-Features: alt-svc               AsynchDNS brotli CAcert HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL SSPI SSLS-EXPORT threadsafe UnixSockets zstd
-
-"mini", without brotli and zstd, with OS TLS backend (Schannel) if available:
-Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp scp sftp smb smbs smtp smtps telnet tftp ws wss
-Features: alt-svc               AsynchDNS        CAcert HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL SSPI             threadsafe UnixSockets
-
-"micro", without libssh2:
-Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp ws wss
-Features: alt-svc               AsynchDNS        CAcert HSTS HTTP2       HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL SSPI             threadsafe UnixSockets
-
-"nano", HTTP/1.1:
-Protocols: dict file ftp ftps gopher gophers http https imap imaps ipfs ipns ldap ldaps mqtt pop3 pop3s rtsp          smb smbs smtp smtps telnet tftp ws wss
-Features:                       AsynchDNS        CAcert HSTS             HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM PSL SPNEGO SSL SSPI             threadsafe UnixSockets
-
-"pico", HTTP/1.1-only:
-Protocols:                                   http https
-Features:                       AsynchDNS        CAcert HSTS             HTTPS-proxy     IPv6          Largefile libz      PSL        SSL                  threadsafe
-```
-</p></details>
+noh3: HTTP/2
+mini: without brotli and zstd, with OS TLS backend (Schannel) if available
+micro: without libssh2
+nano: HTTP/1.1
+pico: HTTP/1.1-only
 
 # Downloads
 
