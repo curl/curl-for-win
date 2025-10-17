@@ -3,8 +3,8 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-export DOCKER_IMAGE='debian:testing-20250929-slim@sha256:9250c0fe1dbaca65828b7a9eda0c1decc7e5e04c3f8713c1116c5f98b429be8e'  # amd64
-export DOCKER_IMAGE_STABLE='debian:trixie-20250929-slim@sha256:c99c73388e005d98f2f131b15fa9389f2a8eec2888a35dc30455e5936467803b'  # amd64
+export DOCKER_IMAGE='debian:testing-20250929-slim@sha256:21c02c216f921ccd2cd1a95cd64499c52e5699c6b04029b5ad4ca68f0b6f1121'
+export DOCKER_IMAGE_STABLE='debian:trixie-20250929-slim@sha256:1caf1c703c8f7e15dcf2e7769b35000c764e6f50e4d7401c355fb0248f3ddfdb'
 
 export CURL_VER_='8.16.0'
 export CURL_HASH=40c8cddbcb6cc6251c03dea423a472a6cea4037be654ba5cf5dec6eb2d22ff1d

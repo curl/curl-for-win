@@ -29,10 +29,7 @@ export _CONFIG="${1:-}"
 # Find out the latest docker image release:
 
 name='debian'
-cpu='amd64'
 
-# Same via https://github.com/regclient/regclient:
-# $ regctl image digest debian:trixie-slim --platform "linux/${cpu}"
 # Architecture-agnostic image hash:
 # $ regctl image digest debian:trixie-slim
 
@@ -53,30 +50,18 @@ Authorization: Bearer ${token}
 EOF
 )"
 
-  digest="$(curl --disable --user-agent '' --silent --fail --show-error \
-      --header 'Accept: application/json' \
-      --header @/dev/stdin \
-      "https://registry-1.docker.io/v2/library/${name}/manifests/${tag}" <<EOF \
-    | jq --raw-output --arg cpu "${cpu}" '.manifests[] | select(.platform.architecture == $cpu and .platform.os == "linux") | .digest'
-Authorization: Bearer ${token}
-EOF
-)"
-
   # Architecture-agnostic image hash:
-  if false; then
-  # shellcheck disable=SC2034
-  digest_noarch="$(curl --disable --user-agent '' --silent --fail --show-error --head --write-out '%header{docker-content-digest}' --output /dev/null \
+  digest="$(curl --disable --user-agent '' --silent --fail --show-error --head --write-out '%header{docker-content-digest}' --output /dev/null \
       --header 'Accept: application/json' \
       --header @/dev/stdin \
       "https://registry-1.docker.io/v2/library/${name}/manifests/${tag}" <<EOF
 Authorization: Bearer ${token}
 EOF
 )"
-  fi
 
   env_suffix=''
   [ "${release}" != 'testing' ] && env_suffix='_STABLE'
-  echo "export DOCKER_IMAGE${env_suffix}='${name}:${tag}@${digest}'  # ${cpu}"
+  echo "export DOCKER_IMAGE${env_suffix}='${name}:${tag}@${digest}'"
 done
 
 # Find out the latest AppVeyor CI Ubuntu worker image
