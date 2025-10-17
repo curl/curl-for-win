@@ -100,18 +100,18 @@ protocol      | Windows | Linux   | macOS   | noh3    | mini    | micro   | nano
 --------------| --------| --------| --------| --------| --------| --------| --------| --------|
 dict          | x       | x       | x       | x       | x       | x       | x       |         |
 file          | x       | x       | x       | x       | x       | x       | x       |         |
-ftps/ftp      | x       | x       | x       | x       | x       | x       | x       |         |
-gophers/gopher| x       | x       | x       | x       | x       | x       | x       |         |
-https/http    | x       | x       | x       | x       | x       | x       | x       | x       |
-imaps/imap    | x       | x       | x       | x       | x       | x       | x       |         |
+ftp/ftps      | x       | x       | x       | x       | x       | x       | x       |         |
+gopher/gophers| x       | x       | x       | x       | x       | x       | x       |         |
+http/https    | x       | x       | x       | x       | x       | x       | x       | x       |
+imap/imaps    | x       | x       | x       | x       | x       | x       | x       |         |
 ipfs/ipns     | x       | x       | x       | x       | x       | x       | x       |         |
-ldaps/ldap    | x       |         | x       | x       | x       | x       | x       |         |
+ldap/ldaps    | x       |         | x       | x       | x       | x       | x       |         |
 mqtt          | x       | x       | x       | x       | x       | x       | x       |         |
-pop3s/pop3    | x       | x       | x       | x       | x       | x       | x       |         |
+pop3/pop3s    | x       | x       | x       | x       | x       | x       | x       |         |
 rtsp          | x       | x       | x       | x       | x       | x       | x       |         |
 scp/sftp      | x       | x       | x       | x       | x       |         |         |         |
-smbs/smb      | x       | x       | x       | x       | x       | x       | x       |         |
-smtps/smtp    | x       | x       | x       | x       | x       | x       | x       |         |
+smb/smbs      | x       | x       | x       | x       | x       | x       | x       |         |
+smtp/smtps    | x       | x       | x       | x       | x       | x       | x       |         |
 telnet        | x       | x       | x       | x       | x       | x       | x       |         |
 tftp          | x       | x       | x       | x       | x       | x       | x       |         |
 wss/ws        | x       | x       | x       | x       | x       | x       | x       |         |
