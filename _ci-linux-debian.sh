@@ -42,14 +42,23 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     ${sudo} dpkg --add-architecture riscv64
   fi
   if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
-    extra+=" gcc${CW_GCCSUFFIX} g++${CW_GCCSUFFIX}"
     export CW_CCSUFFIX="${CW_GCCSUFFIX}"
+    extra+=" gcc${CW_GCCSUFFIX}"
     if [ "$(uname -m)" = 'aarch64' ]; then
-      extra+=" gcc${CW_GCCSUFFIX}-x86-64-linux-gnu g++${CW_GCCSUFFIX}-x86-64-linux-gnu"
+      extra+=" gcc${CW_GCCSUFFIX}-x86-64-linux-gnu"
     else
-      extra+=" gcc${CW_GCCSUFFIX}-aarch64-linux-gnu g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
+      extra+=" gcc${CW_GCCSUFFIX}-aarch64-linux-gnu"
     fi
-    extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
+    extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu"
+    if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+      extra+=" g++${CW_GCCSUFFIX}"
+      if [ "$(uname -m)" = 'aarch64' ]; then
+        extra+=" g++${CW_GCCSUFFIX}-x86-64-linux-gnu"
+      else
+        extra+=" g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
+      fi
+      extra+=" g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
+    fi
   else
     # ./my-pkg/usr/lib/llvm-17/lib/clang/17/lib/linux/libclang_rt.builtins-aarch64.a
     if [ "$(uname -m)" = 'aarch64' ]; then
@@ -79,7 +88,12 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     fi
   else
     # FIXME: workaround for glibc-llvm-riscv64 builds:
-    [[ "${CW_CONFIG:-}" != *'gcc'* ]] && extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
+    if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
+      extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu"
+      if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+        extra+=" g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
+      fi
+    fi
     if [ "$(uname -m)" = 'aarch64' ]; then
       extra+=' libc6-dev-amd64-cross'
     else
