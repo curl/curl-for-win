@@ -40,6 +40,15 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   [[ "${CW_CONFIG}" = *'a64'* || ! "${CW_CONFIG}" =~ (x64|r64) ]] && a64=1
   [[ "${CW_CONFIG}" = *'x64'* || ! "${CW_CONFIG}" =~ (a64|r64) ]] && x64=1
 
+  if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
+    anycross=0
+    [ "${r64}" = 1 ] && anycross=1
+    [[ "$(uname -m)" = 'aarch64' && "${x64}" = 1 ]] && anycross=1
+    [[ "$(uname -m)" = 'x86_64'  && "${a64}" = 1 ]] && anycross=1
+
+    [ "${anycross}" = 1 ] && extra+=' qemu-user-static'
+  fi
+
   if [[ "${CW_CONFIG:-}" != *'gcc'* ]] || [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
     if [ "$(uname -m)" = 'aarch64' ]; then
       [ "${x64}" = 1 ] && ${sudo} dpkg --add-architecture amd64
@@ -48,8 +57,6 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     fi
     [ "${r64}" = 1 ] && ${sudo} dpkg --add-architecture riscv64
   fi
-
-  extra+=' qemu-user-static'
 
   if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
     export CW_CCSUFFIX="${CW_GCCSUFFIX}"
