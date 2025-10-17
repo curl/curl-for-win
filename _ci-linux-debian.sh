@@ -46,7 +46,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     else
       [ "${a64}" = 1 ] && ${sudo} dpkg --add-architecture arm64
     fi
-    [ "${a64}" = 1 ] && ${sudo} dpkg --add-architecture riscv64
+    [ "${r64}" = 1 ] && ${sudo} dpkg --add-architecture riscv64
   fi
 
   extra+=' qemu-user-static'
