@@ -85,8 +85,9 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
         [ "${a64}" = 1 ] && extra+=' linux-headers-arm64'
       elif [ "$(uname -m)" = 'x86_64' ]; then
         [ "${x64}" = 1 ] && extra+=' linux-headers-amd64'
+      elif [ "$(uname -m)" = 'riscv64' ]; then
+        [ "${r64}" = 1 ] && extra+=' linux-headers-riscv64'
       fi
-      [ "${r64}" = 1 ] && extra+=' linux-headers-riscv64'
     fi
   else
     # FIXME: workaround for glibc-llvm-riscv64 builds:
