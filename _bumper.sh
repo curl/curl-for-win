@@ -33,14 +33,13 @@ name='debian'
 # Architecture-agnostic image hash:
 # $ regctl image digest debian:trixie-slim
 
+# https://docs.docker.com/reference/api/registry/latest/
+token="$(curl --disable --user-agent '' --silent --fail --show-error \
+    "https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/${name}:pull" \
+  | jq --raw-output '.token')"
+
 echo
 for release in 'testing' 'trixie'; do
-
-  # https://docs.docker.com/reference/api/registry/latest/
-  token="$(curl --disable --user-agent '' --silent --fail --show-error \
-      "https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/${name}:pull" \
-    | jq --raw-output '.token')"
-
   tag="$(curl --disable --user-agent '' --silent --fail --show-error \
       --header 'Accept: application/json' \
       --header @/dev/stdin \
