@@ -32,6 +32,8 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   fi
 fi
 
+[[ ! "${CW_CONFIG}" =~ (zero|bldtst|nocookie) ]] && extra+=' python3'  # for libpsl
+
 if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
   extra+=" llvm${LLVM} clang${LLVM} lld"
 fi
@@ -40,7 +42,7 @@ fi
 
 # https://pkgs.alpinelinux.org/packages
 # shellcheck disable=SC2086
-apk add --no-cache curl git gpg gpg-agent rsync build-base cmake samurai python3 \
+apk add --no-cache curl git gpg gpg-agent rsync build-base cmake samurai \
   zip tar xz jq openssl sed perl ${extra}
 
 ./_build.sh
