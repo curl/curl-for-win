@@ -28,17 +28,22 @@ export _CONFIG="${1:-}"
 
 # Find out the latest docker image release:
 
+echo
+
 name='debian'
 
 # Architecture-agnostic image hash:
 # $ regctl image digest debian:trixie-slim
 
-# https://docs.docker.com/reference/api/registry/latest/
-token="$(curl --disable --user-agent '' --silent --fail --show-error \
-    "https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/${name}:pull" \
-  | jq --raw-output '.token')"
+dockerhub_token() {
+  # https://docs.docker.com/reference/api/registry/latest/
+  curl --disable --user-agent '' --silent --fail --show-error \
+      "https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/$1:pull" \
+    | jq --raw-output '.token'
+}
 
-echo
+token="$(dockerhub_token "${name}")"
+
 for release in 'testing' 'trixie'; do
   tag="$(curl --disable --user-agent '' --silent --fail --show-error \
       --header 'Accept: application/json' \
@@ -62,6 +67,19 @@ EOF
   [ "${release}" != 'testing' ] && env_suffix='_STABLE'
   echo "export DOCKER_IMAGE${env_suffix}='${name}:${tag}@${digest}'"
 done
+
+name='alpine'
+tag='latest'
+token="$(dockerhub_token "${name}")"
+# Architecture-agnostic image hash:
+digest="$(curl --disable --user-agent '' --silent --fail --show-error --head --write-out '%header{docker-content-digest}' --output /dev/null \
+    --header 'Accept: application/json' \
+    --header @/dev/stdin \
+    "https://registry-1.docker.io/v2/library/${name}/manifests/${tag}" <<EOF
+Authorization: Bearer ${token}
+EOF
+)"
+echo "export DOCKER_IMAGE_ALPINE='${name}:${tag}@${digest}'"
 
 # Find out the latest AppVeyor CI Ubuntu worker image
 
