@@ -65,7 +65,7 @@ EOF
 
   env_suffix=''
   [ "${release}" != 'testing' ] && env_suffix='_STABLE'
-  echo "export DOCKER_IMAGE${env_suffix}='${name}:${tag}@${digest}'"
+  echo "export OCI_IMAGE_DEBIAN${env_suffix}='${name}:${tag}@${digest}'"
 done
 
 name='alpine'
