@@ -5,6 +5,7 @@
 
 export DOCKER_IMAGE='debian:testing-20250929-slim@sha256:21c02c216f921ccd2cd1a95cd64499c52e5699c6b04029b5ad4ca68f0b6f1121'
 export DOCKER_IMAGE_STABLE='debian:trixie-20250929-slim@sha256:1caf1c703c8f7e15dcf2e7769b35000c764e6f50e4d7401c355fb0248f3ddfdb'
+export DOCKER_IMAGE_ALPINE='alpine:latest'
 
 export CURL_VER_='8.16.0'
 export CURL_HASH=40c8cddbcb6cc6251c03dea423a472a6cea4037be654ba5cf5dec6eb2d22ff1d
