@@ -79,7 +79,7 @@ digest="$(curl --disable --user-agent '' --silent --fail --show-error --head --w
 Authorization: Bearer ${token}
 EOF
 )"
-echo "export DOCKER_IMAGE_ALPINE='${name}:${tag}@${digest}'"
+echo "export OCI_IMAGE_ALPINE_LATEST='${name}:${tag}@${digest}'"
 
 # Find out the latest AppVeyor CI Ubuntu worker image
 

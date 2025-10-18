@@ -433,12 +433,12 @@ jobs:
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE_ALPINE}"
+          time podman pull "${OCI_IMAGE_ALPINE_LATEST}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE_ALPINE}" \
+            "${OCI_IMAGE_ALPINE_LATEST}" \
             sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
 
       - name: 'list dependencies'
@@ -470,12 +470,12 @@ jobs:
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE_ALPINE}"
+          time podman pull "${OCI_IMAGE_ALPINE_LATEST}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE_ALPINE}" \
+            "${OCI_IMAGE_ALPINE_LATEST}" \
             sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
 
   linux-musl-alpine-gcc:
@@ -497,12 +497,12 @@ jobs:
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE_ALPINE}"
+          time podman pull "${OCI_IMAGE_ALPINE_LATEST}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE_ALPINE}" \
+            "${OCI_IMAGE_ALPINE_LATEST}" \
             sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
 
       - name: 'list dependencies'
