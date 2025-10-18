@@ -18,6 +18,7 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
     extra+=' nasm'
   fi
+  [ -n "${DEPLOY_GPG_PASS:+1}" ] && extra+=' openssh-client-default'
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   apk add --no-cache checksec-rs --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community/
   extra+=' compiler-rt'  # for llvm
