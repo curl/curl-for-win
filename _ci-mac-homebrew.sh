@@ -6,7 +6,7 @@
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
-extra='cosign gnu-tar jq'
+extra='gnu-tar jq'
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go'
 if [[ "${CW_CONFIG:-}" != *'mac'* ]] || [[ "${CW_CONFIG:-}" = *'llvm'* ]]; then
   extra+=' llvm lld'
@@ -26,6 +26,8 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
 elif [[ "${CW_CONFIG:-}" = *'mac'* ]] && [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
   extra+=' gcc'
 fi
+
+[ -n "${COSIGN_PKG_GPG_PASS:+1}" ] && extra+=' cosign'
 
 if [ -n "${extra}" ]; then
   export HOMEBREW_NO_AUTO_UPDATE=1
