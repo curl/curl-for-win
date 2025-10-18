@@ -402,15 +402,15 @@ jobs:
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux"
           export CW_REVISION="${GITHUB_SHA}"
-          DOCKER_IMAGE='alpine:latest'
+          . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE}"
+          time podman pull "${DOCKER_IMAGE_ALPINE}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
+            "${DOCKER_IMAGE_ALPINE}" \
             sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
 
       - name: 'list dependencies'
@@ -439,15 +439,15 @@ jobs:
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-gcc"
           export CW_REVISION="${GITHUB_SHA}"
-          DOCKER_IMAGE='alpine:latest'
+          . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE}"
+          time podman pull "${DOCKER_IMAGE_ALPINE}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
+            "${DOCKER_IMAGE_ALPINE}" \
             sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
 
       - name: 'list dependencies'
