@@ -83,12 +83,11 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && extra+=' musl:amd64 musl-dev:amd64'
 
     [[ "${CW_CONFIG:-}" = *'gcc'* ]] && extra+=" libgcc${CW_GCCSUFFIX}-dev"
-    if [[ "${CW_CONFIG:-}" = *'openssl'* ]]; then
-      # for openssl 'secure-memory' feature
-      if   [ "$(uname -m)" = 'aarch64' ]; then [ "${a64}" = 1 ] && extra+=' linux-headers-arm64'
-      elif [ "$(uname -m)" = 'riscv64' ]; then [ "${r64}" = 1 ] && extra+=' linux-headers-riscv64'
-      elif [ "$(uname -m)" = 'x86_64'  ]; then [ "${x64}" = 1 ] && extra+=' linux-headers-amd64'
-      fi
+
+    # for curl 'linux/tcp.h' and openssl 'secure-memory' feature
+    if   [ "$(uname -m)" = 'aarch64' ]; then [ "${a64}" = 1 ] && extra+=' linux-headers-arm64'
+    elif [ "$(uname -m)" = 'riscv64' ]; then [ "${r64}" = 1 ] && extra+=' linux-headers-riscv64'
+    elif [ "$(uname -m)" = 'x86_64'  ]; then [ "${x64}" = 1 ] && extra+=' linux-headers-amd64'
     fi
   else  # glibc
     # FIXME: workaround for glibc-llvm-riscv64 builds:
