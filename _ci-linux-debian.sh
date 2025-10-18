@@ -30,12 +30,13 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
     extra+=' g++-mingw-w64-x86-64-win32 nasm'
     [[ "${CW_CONFIG:-}" = *'x86'* ]] && extra+=' g++-mingw-w64-i686-win32'
   fi
-  extra+=' python3-pip python3-venv'
+  extra+=' python3-pip python3-venv'  # for pefile and libpsl
   [ -n "${DEPLOY_GPG_PASS:+1}" ] && extra+=' openssh-client'
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   [ -n "${CW_GCCSUFFIX:-}" ] || CW_GCCSUFFIX='-14'
 
   extra+=' checksec'
+  extra+=' python3'  # for libpsl
 
   x64=0; a64=0; r64=0
   [[ "${CW_CONFIG}" = *'a64'* || ! "${CW_CONFIG}" =~ (x64|r64) ]] && a64=1
@@ -113,7 +114,7 @@ fi
 ${sudo} apt-get --option Dpkg::Use-Pty=0 --yes update
 # shellcheck disable=SC2086
 ${sudo} apt-get --option Dpkg::Use-Pty=0 --yes install --no-install-suggests --no-install-recommends \
-  curl ca-certificates git gpg gpg-agent patch rsync python3 make cmake ninja-build \
+  curl ca-certificates git gpg gpg-agent patch rsync make cmake ninja-build \
   zip xz-utils time jq secure-delete ${extra}
 
 if [ -n "${dl}" ]; then
