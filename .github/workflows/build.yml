@@ -73,7 +73,7 @@ jobs:
             --enable=avoid-nullary-conditions,deprecate-which,quote-safe-variables,require-variable-braces \
             ./*.sh
 
-      - name: 'spellcheck'
+      - name: 'codespell'
         run: |
           source ~/venv/bin/activate
           codespell --version
