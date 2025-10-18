@@ -36,9 +36,11 @@ if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
   extra+=" llvm${LLVM} clang${LLVM} lld"
 fi
 
+[ -n "${COSIGN_PKG_GPG_PASS:+1}" ] && extra+=' cosign'
+
 # https://pkgs.alpinelinux.org/packages
 # shellcheck disable=SC2086
 apk add --no-cache curl git gpg gpg-agent rsync build-base cmake samurai python3 \
-  zip tar xz jq openssl sed perl cosign ${extra}
+  zip tar xz jq openssl sed perl ${extra}
 
 ./_build.sh
