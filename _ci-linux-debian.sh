@@ -87,7 +87,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
       elif [ "$(uname -m)" = 'x86_64'  ]; then [ "${x64}" = 1 ] && extra+=' linux-headers-amd64'
       fi
     fi
-  else
+  else  # glibc
     # FIXME: workaround for glibc-llvm-riscv64 builds:
     if [[ "${CW_CONFIG:-}" != *'gcc'* && "${r64}" = 1 ]]; then
       extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu"
@@ -98,6 +98,12 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && extra+=' libc6-dev-arm64-cross'
     [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && extra+=' libc6-dev-riscv64-cross'
     [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && extra+=' libc6-dev-amd64-cross'
+
+    anynoncross=0
+    [[ "$(uname -m)" = 'aarch64' && "${a64}" = 1 ]] && anynoncross=1
+    [[ "$(uname -m)" = 'riscv64' && "${r64}" = 1 ]] && anynoncross=1
+    [[ "$(uname -m)" = 'x86_64'  && "${x64}" = 1 ]] && anynoncross=1
+    [ "${anynoncross}" = 1 ] && extra+=' libc6-dev'
   fi
 fi
 
@@ -107,7 +113,6 @@ ${sudo} apt-get --option Dpkg::Use-Pty=0 --yes update
 # shellcheck disable=SC2086
 ${sudo} apt-get --option Dpkg::Use-Pty=0 --yes install --no-install-suggests --no-install-recommends \
   curl ca-certificates git gpg gpg-agent patch ssh rsync python3 make cmake ninja-build \
-  libssl-dev zlib1g-dev \
   zip xz-utils time jq secure-delete ${extra}
 
 if [ -n "${dl}" ]; then
