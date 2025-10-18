@@ -63,9 +63,12 @@ Authorization: Bearer ${token}
 EOF
 )"
 
-  env_suffix=''
-  [ "${release}" != 'testing' ] && env_suffix='_STABLE'
-  echo "export DOCKER_IMAGE${env_suffix}='${name}:${tag}@${digest}'"
+  if [ "${release}" = 'testing' ]; then
+    oci='OCI_IMAGE_DEBIAN_TESTING'
+  else
+    oci='OCI_IMAGE_DEBIAN_STABLE'
+  fi
+  echo "export ${oci}='${name}:${tag}@${digest}'"
 done
 
 name='alpine'
@@ -79,7 +82,7 @@ digest="$(curl --disable --user-agent '' --silent --fail --show-error --head --w
 Authorization: Bearer ${token}
 EOF
 )"
-echo "export DOCKER_IMAGE_ALPINE='${name}:${tag}@${digest}'"
+echo "export OCI_IMAGE_ALPINE_LATEST='${name}:${tag}@${digest}'"
 
 # Find out the latest AppVeyor CI Ubuntu worker image
 

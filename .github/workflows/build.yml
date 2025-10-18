@@ -101,12 +101,12 @@ jobs:
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE}"
+          time podman pull "${OCI_IMAGE_DEBIAN_TESTING}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
+            "${OCI_IMAGE_DEBIAN_TESTING}" \
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
@@ -139,12 +139,12 @@ jobs:
           export CW_GCCSUFFIX='-14'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE}"
+          time podman pull "${OCI_IMAGE_DEBIAN_TESTING}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
+            "${OCI_IMAGE_DEBIAN_TESTING}" \
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
@@ -177,12 +177,12 @@ jobs:
           export CW_GCCSUFFIX='-14'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE}"
+          time podman pull "${OCI_IMAGE_DEBIAN_TESTING}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
+            "${OCI_IMAGE_DEBIAN_TESTING}" \
             sh -c ./_ci-linux-debian.sh
 
   linux-glibc-debian-stable-llvm:
@@ -206,12 +206,12 @@ jobs:
           export CW_GCCSUFFIX='-14'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE_STABLE}"
+          time podman pull "${OCI_IMAGE_DEBIAN_STABLE}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE_STABLE}" \
+            "${OCI_IMAGE_DEBIAN_STABLE}" \
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
@@ -244,12 +244,12 @@ jobs:
           export CW_GCCSUFFIX='-14'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE_STABLE}"
+          time podman pull "${OCI_IMAGE_DEBIAN_STABLE}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE_STABLE}" \
+            "${OCI_IMAGE_DEBIAN_STABLE}" \
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
@@ -281,12 +281,12 @@ jobs:
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE}"
+          time podman pull "${OCI_IMAGE_DEBIAN_TESTING}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
+            "${OCI_IMAGE_DEBIAN_TESTING}" \
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
@@ -319,12 +319,12 @@ jobs:
           export CW_GCCSUFFIX='-14'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE}"
+          time podman pull "${OCI_IMAGE_DEBIAN_TESTING}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
+            "${OCI_IMAGE_DEBIAN_TESTING}" \
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
@@ -358,12 +358,12 @@ jobs:
           export CW_GCCSUFFIX='-14'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE_STABLE}"
+          time podman pull "${OCI_IMAGE_DEBIAN_STABLE}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE_STABLE}" \
+            "${OCI_IMAGE_DEBIAN_STABLE}" \
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
@@ -396,12 +396,12 @@ jobs:
           export CW_GCCSUFFIX='-14'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE_STABLE}"
+          time podman pull "${OCI_IMAGE_DEBIAN_STABLE}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE_STABLE}" \
+            "${OCI_IMAGE_DEBIAN_STABLE}" \
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
@@ -433,12 +433,12 @@ jobs:
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE_ALPINE}"
+          time podman pull "${OCI_IMAGE_ALPINE_LATEST}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE_ALPINE}" \
+            "${OCI_IMAGE_ALPINE_LATEST}" \
             sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
 
       - name: 'list dependencies'
@@ -470,12 +470,12 @@ jobs:
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE_ALPINE}"
+          time podman pull "${OCI_IMAGE_ALPINE_LATEST}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE_ALPINE}" \
+            "${OCI_IMAGE_ALPINE_LATEST}" \
             sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
 
   linux-musl-alpine-gcc:
@@ -497,12 +497,12 @@ jobs:
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE_ALPINE}"
+          time podman pull "${OCI_IMAGE_ALPINE_LATEST}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE_ALPINE}" \
+            "${OCI_IMAGE_ALPINE_LATEST}" \
             sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
 
       - name: 'list dependencies'
@@ -688,12 +688,12 @@ jobs:
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE}"
+          time podman pull "${OCI_IMAGE_DEBIAN_TESTING}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
+            "${OCI_IMAGE_DEBIAN_TESTING}" \
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'
@@ -727,12 +727,12 @@ jobs:
           . ./_versions.sh
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
-          time podman pull "${DOCKER_IMAGE}"
+          time podman pull "${OCI_IMAGE_DEBIAN_TESTING}"
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
               '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${DOCKER_IMAGE}" \
+            "${OCI_IMAGE_DEBIAN_TESTING}" \
             sh -c ./_ci-linux-debian.sh
 
       - name: 'list dependencies'

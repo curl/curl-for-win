@@ -65,12 +65,12 @@ build_script:
       sudo loginctl enable-linger "$(id -u)"
       sudo podman image trust set --type reject default
       sudo podman image trust set --type accept docker.io/library
-      time podman pull "${DOCKER_IMAGE}"
+      time podman pull "${OCI_IMAGE_DEBIAN_TESTING}"
       podman info
       time podman run --security-opt seccomp=unconfined --volume="$(pwd):$(pwd)" --workdir="$(pwd)" \
         --env-file=<(env | grep -a -E \
           '^(CW_|SIGN_|COSIGN_|DEPLOY_|APPVEYOR_|CI_|DO_NOT_TRACK)') \
-        "${DOCKER_IMAGE}" \
+        "${OCI_IMAGE_DEBIAN_TESTING}" \
         sh -c ./_ci-linux-debian.sh
 
 artifacts:
