@@ -157,27 +157,6 @@ jobs:
             *-*-linux*.*
             urls.txt
 
-  linux-glibc-debian-testing-gcc-minimal-TEST:
-    name: 'linux-glibc-debian-testing-gcc-minimal-TEST'
-    runs-on: 'ubuntu-latest'
-    timeout-minutes: 5
-    container:
-      image: debian:testing-20250908-slim@sha256:f7e3f921f98e1a51742ceda3cbe52ac815e60e83b0c381ea9444ac17a1e32cb4
-    steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-        with:
-          persist-credentials: false
-          fetch-depth: '300'
-      - name: 'build'
-        env:
-          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
-          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
-        run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-unitybatch-prefill-zero-osnotls-osnoidn-nohttp-nocurltool-linux-x64-gcc"
-          export CW_REVISION="${GITHUB_SHA}"
-          export CW_GCCSUFFIX='-14'
-          ./_ci-linux-debian.sh
-
   linux-glibc-debian-testing-gcc-minimal:
     name: 'linux-glibc-debian-testing-gcc-minimal'
     runs-on: 'ubuntu-latest'
