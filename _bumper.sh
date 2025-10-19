@@ -26,7 +26,7 @@ export _CONFIG="${1:-}"
 
 ./_dl.sh bump
 
-# Find out the latest docker image release:
+# Find out the latest container image releases:
 
 echo
 
