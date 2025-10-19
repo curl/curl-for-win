@@ -123,7 +123,7 @@ _VER="$1"
 
   if [ "${CW_TURL_TEST:-}" = '1' ] && \
      [ "${_RUN_BIN}" != 'true' ]; then
-    python3 ./test.py "--runner=${_RUN_BIN}" "--trurl=${bin}"
+    python3 ./test.py --runner="${_RUN_BIN}" --trurl="${bin}"
   fi
 
   # Create package
