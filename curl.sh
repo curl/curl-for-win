@@ -535,11 +535,11 @@ _VER="$1"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(pwd)/_pkg"; rm -r -f "${_DST}"
 
-  mkdir -p "${_DST}/docs/examples"
-  mkdir -p "${_DST}/docs/libcurl"
-  mkdir -p "${_DST}/include/curl"
-  mkdir -p "${_DST}/lib"
-  mkdir -p "${_DST}/bin"
+  mkdir -p "${_DST}"/docs/examples
+  mkdir -p "${_DST}"/docs/libcurl
+  mkdir -p "${_DST}"/include/curl
+  mkdir -p "${_DST}"/lib
+  mkdir -p "${_DST}"/bin
 
   (
     set +x
@@ -555,50 +555,50 @@ _VER="$1"
       fi
     done
     # Copy examples
-    cp -f -p docs/examples/*.c                  "${_DST}/docs/examples/"
-    cp -f -p docs/examples/Makefile.example     "${_DST}/docs/examples/"
+    cp -f -p docs/examples/*.c                  "${_DST}"/docs/examples/
+    cp -f -p docs/examples/Makefile.example     "${_DST}"/docs/examples/
   )
-  cp -f -p "${_PP}"/include/curl/*.h          "${_DST}/include/curl/"
-  cp -f -a "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"  "${_DST}/${DYN_DIR}/"  # we must not pick up *.dll.a here
-  cp -f -p "${_PP}"/lib/*.a                   "${_DST}/lib/"
+  cp -f -p "${_PP}"/include/curl/*.h          "${_DST}"/include/curl/
+  cp -f -a "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"  "${_DST}/${DYN_DIR}"/  # we must not pick up *.dll.a here
+  cp -f -p "${_PP}"/lib/*.a                   "${_DST}"/lib/
   if [[ "${_CONFIG}" = *'curldocs'* ]]; then
-    mkdir -p "${_DST}/docs/libcurl/opts"
+    mkdir -p "${_DST}"/docs/libcurl/opts
     if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
-      mkdir -p "${_DST}/docs/cmdline-opts"
-      cp -f -p docs/cmdline-opts/*.md             "${_DST}/docs/cmdline-opts/"
+      mkdir -p "${_DST}"/docs/cmdline-opts
+      cp -f -p docs/cmdline-opts/*.md             "${_DST}"/docs/cmdline-opts/
     fi
-    cp -f -p docs/libcurl/opts/*.md             "${_DST}/docs/libcurl/opts/"
-    cp -f -p docs/libcurl/*.md                  "${_DST}/docs/libcurl/"
+    cp -f -p docs/libcurl/opts/*.md             "${_DST}"/docs/libcurl/opts/
+    cp -f -p docs/libcurl/*.md                  "${_DST}"/docs/libcurl/
   fi
-  cp -f -p docs/*.md                          "${_DST}/docs/"
-  cp -f -p COPYING                            "${_DST}/COPYING.txt"
-  cp -f -p README                             "${_DST}/README.txt"
-  cp -f -p RELEASE-NOTES                      "${_DST}/RELEASE-NOTES.txt"
+  cp -f -p docs/*.md                          "${_DST}"/docs/
+  cp -f -p COPYING                            "${_DST}"/COPYING.txt
+  cp -f -p README                             "${_DST}"/README.txt
+  cp -f -p RELEASE-NOTES                      "${_DST}"/RELEASE-NOTES.txt
 
   if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
-    cp -f -p "${bin}"                           "${_DST}/bin/"
+    cp -f -p "${bin}"                           "${_DST}"/bin/
   fi
 
   if [ "${_OS}" = 'win' ]; then
-    cp -f -p "${_PP}"/bin/*.def                 "${_DST}/bin/"
+    cp -f -p "${_PP}"/bin/*.def                 "${_DST}"/bin/
   fi
 
   if [ "${_OS}" = 'linux' ]; then
     # To copy these files in addition to `@libcurl.so -> libcurl.so.4`:
     #   @libcurl.so.4 -> libcurl.so.4.8.0
     #    libcurl.so.4.8.0
-    rsync --archive "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"* "${_DST}/${DYN_DIR}/"
+    rsync --archive "${_PP}/${DYN_DIR}"/*"${DYN_EXT}"* "${_DST}/${DYN_DIR}"/
   fi
 
   if [ "${CW_MAP}" = '1' ]; then
     if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
-      cp -f -p "${_PP}"/bin/curl.map              "${_DST}/bin/"
+      cp -f -p "${_PP}"/bin/curl.map              "${_DST}"/bin/
     fi
-    cp -f -p "${_PP}/${DYN_DIR}"/*.map          "${_DST}/${DYN_DIR}/"
+    cp -f -p "${_PP}/${DYN_DIR}"/*.map          "${_DST}/${DYN_DIR}"/
   fi
 
   if [[ "${_DEPS}" = *'cacert'* ]]; then
-    cp -f -p scripts/mk-ca-bundle.pl            "${_DST}/"
+    cp -f -p scripts/mk-ca-bundle.pl            "${_DST}"/
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"

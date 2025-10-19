@@ -132,15 +132,15 @@ _VER="$1"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(pwd)/_pkg"; rm -r -f "${_DST}"
 
-  mkdir -p "${_DST}/bin"
+  mkdir -p "${_DST}"/bin
 
-  cp -f -p "${bin}"       "${_DST}/bin/"
-  cp -f -p COPYING        "${_DST}/COPYING.txt"
-  cp -f -p README.md      "${_DST}/README.md"
-  cp -f -p RELEASE-NOTES  "${_DST}/RELEASE-NOTES.txt"
+  cp -f -p "${bin}"       "${_DST}"/bin/
+  cp -f -p COPYING        "${_DST}"/COPYING.txt
+  cp -f -p README.md      "${_DST}"/README.md
+  cp -f -p RELEASE-NOTES  "${_DST}"/RELEASE-NOTES.txt
 
   if [ "${CW_MAP}" = '1' ]; then
-    cp -f -p "${_PP}/bin/${map_name}"  "${_DST}/bin/"
+    cp -f -p "${_PP}/bin/${map_name}"  "${_DST}"/bin/
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"

@@ -54,7 +54,7 @@ EOF
   touch -c -r "${_ref}" "${_fn}"
 
   #if [ "${CURL_VER_}" = '8.12.0' ]; then
-    cp -f -p "${_CACERT}" "${_DST}/bin/curl-ca-bundle.crt"
+    cp -f -p "${_CACERT}" "${_DST}"/bin/curl-ca-bundle.crt
   #fi
 
   ../_pkg.sh "$(pwd)/${_ref}"

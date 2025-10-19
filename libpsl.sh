@@ -37,11 +37,11 @@ _VER="$1"
 
   # Install manually
 
-  mkdir -p "${_PP}/include"
-  mkdir -p "${_PP}/lib"
+  mkdir -p "${_PP}"/include
+  mkdir -p "${_PP}"/lib
 
-  cp -f -p include/libpsl.h "${_PP}/include/"
-  cp -f -p "${_BLDDIR}"/*.a "${_PP}/lib/"
+  cp -f -p include/libpsl.h "${_PP}"/include/
+  cp -f -p "${_BLDDIR}"/*.a "${_PP}"/lib/
 
   # Make steps for determinism
 
@@ -59,14 +59,14 @@ _VER="$1"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(pwd)/_pkg"; rm -r -f "${_DST}"
 
-  mkdir -p "${_DST}/include"
-  mkdir -p "${_DST}/lib"
+  mkdir -p "${_DST}"/include
+  mkdir -p "${_DST}"/lib
 
-  cp -f -p "${_PP}"/include/*.h "${_DST}/include/"
-  cp -f -p "${_PP}"/lib/*.a     "${_DST}/lib/"
-  cp -f -p NEWS                 "${_DST}/NEWS.txt"
-  cp -f -p AUTHORS              "${_DST}/AUTHORS.txt"
-  cp -f -p COPYING              "${_DST}/COPYING.txt"
+  cp -f -p "${_PP}"/include/*.h "${_DST}"/include/
+  cp -f -p "${_PP}"/lib/*.a     "${_DST}"/lib/
+  cp -f -p NEWS                 "${_DST}"/NEWS.txt
+  cp -f -p AUTHORS              "${_DST}"/AUTHORS.txt
+  cp -f -p COPYING              "${_DST}"/COPYING.txt
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

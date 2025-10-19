@@ -49,12 +49,12 @@ _VER="$1"
     # Workaround: Build static only and install manually.
     cmake --build "${_BLDDIR}" --target zlibstatic
 
-    mkdir -p "${_PP}/include"
-    mkdir -p "${_PP}/lib"
+    mkdir -p "${_PP}"/include
+    mkdir -p "${_PP}"/lib
 
-    cp -f -p ./zlib.h             "${_PP}/include/"
-    cp -f -p "${_BLDDIR}"/zconf.h "${_PP}/include/"
-    cp -f -p "${_BLDDIR}"/*.a     "${_PP}/lib/"
+    cp -f -p ./zlib.h             "${_PP}"/include/
+    cp -f -p "${_BLDDIR}"/zconf.h "${_PP}"/include/
+    cp -f -p "${_BLDDIR}"/*.a     "${_PP}"/lib/
   else
     cmake --build "${_BLDDIR}"
     cmake --install "${_BLDDIR}" --prefix "${_PP}"
@@ -90,17 +90,17 @@ _VER="$1"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(pwd)/_pkg"; rm -r -f "${_DST}"
 
-  mkdir -p "${_DST}/include"
-  mkdir -p "${_DST}/lib"
+  mkdir -p "${_DST}"/include
+  mkdir -p "${_DST}"/lib
 
-  cp -f -p "${_PP}"/include/*.h "${_DST}/include"
-  cp -f -p "${_PP}"/lib/*.a     "${_DST}/lib/"
+  cp -f -p "${_PP}"/include/*.h "${_DST}"/include
+  cp -f -p "${_PP}"/lib/*.a     "${_DST}"/lib/
   if [ "${_NAM}" = 'zlibng' ]; then
-    cp -f -p LICENSE.md           "${_DST}/"
-    cp -f -p README.md            "${_DST}/"
+    cp -f -p LICENSE.md           "${_DST}"/
+    cp -f -p README.md            "${_DST}"/
   else
-    cp -f -p LICENSE              "${_DST}/LICENSE.txt"
-    cp -f -p ChangeLog            "${_DST}/ChangeLog.txt"
+    cp -f -p LICENSE              "${_DST}"/LICENSE.txt
+    cp -f -p ChangeLog            "${_DST}"/ChangeLog.txt
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"

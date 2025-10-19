@@ -131,15 +131,15 @@ _VER="$1"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(pwd)/_pkg"; rm -r -f "${_DST}"
 
-  mkdir -p "${_DST}/include/libssh"
-  mkdir -p "${_DST}/lib"
+  mkdir -p "${_DST}"/include/libssh
+  mkdir -p "${_DST}"/lib
 
-  cp -f -p "${_PPS}"/include/libssh/*.h "${_DST}/include/libssh/"
-  cp -f -p "${_PPS}"/lib/*.a            "${_DST}/lib/"
-  cp -f -p CHANGELOG                    "${_DST}/CHANGELOG.txt"
-  cp -f -p AUTHORS                      "${_DST}/AUTHORS.txt"
-  cp -f -p COPYING                      "${_DST}/COPYING.txt"
-  cp -f -p README.md                    "${_DST}/"
+  cp -f -p "${_PPS}"/include/libssh/*.h "${_DST}"/include/libssh/
+  cp -f -p "${_PPS}"/lib/*.a            "${_DST}"/lib/
+  cp -f -p CHANGELOG                    "${_DST}"/CHANGELOG.txt
+  cp -f -p AUTHORS                      "${_DST}"/AUTHORS.txt
+  cp -f -p COPYING                      "${_DST}"/COPYING.txt
+  cp -f -p README.md                    "${_DST}"/
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

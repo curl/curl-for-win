@@ -57,14 +57,14 @@ _VER="$1"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(pwd)/_pkg"; rm -r -f "${_DST}"
 
-  mkdir -p "${_DST}/include"
-  mkdir -p "${_DST}/lib"
+  mkdir -p "${_DST}"/include
+  mkdir -p "${_DST}"/lib
 
-  cp -f -p "${_PP}"/include/*.h "${_DST}/include/"
-  cp -f -p "${_PP}"/lib/*.a     "${_DST}/lib/"
-  cp -f -p CHANGELOG            "${_DST}/CHANGELOG.txt"
-  cp -f -p README.md            "${_DST}/"
-  cp -f -p LICENSE              "${_DST}/LICENSE.txt"
+  cp -f -p "${_PP}"/include/*.h "${_DST}"/include/
+  cp -f -p "${_PP}"/lib/*.a     "${_DST}"/lib/
+  cp -f -p CHANGELOG            "${_DST}"/CHANGELOG.txt
+  cp -f -p README.md            "${_DST}"/
+  cp -f -p LICENSE              "${_DST}"/LICENSE.txt
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )
