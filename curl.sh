@@ -50,19 +50,19 @@ _VER="$1"
 
   if [ "${_OS}" = 'win' ]; then
     options+=" -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${_CURL_DLL_SUFFIX}.dll"
-    _DEF_NAME="libcurl${_CURL_DLL_SUFFIX}.def"
-    LDFLAGS_LIB+=" -Wl,--output-def,${_DEF_NAME}"
+    _def_name="libcurl${_CURL_DLL_SUFFIX}.def"
+    LDFLAGS_LIB+=" -Wl,--output-def,${_def_name}"
   fi
 
   if [ "${CW_MAP}" = '1' ]; then
-    _MAP_NAME_LIB="libcurl${_CURL_DLL_SUFFIX}.map"
-    _MAP_NAME_BIN='curl.map'
+    _map_name_lib="libcurl${_CURL_DLL_SUFFIX}.map"
+    _map_name_bin='curl.map'
     if [ "${_OS}" = 'mac' ]; then
-      LDFLAGS_LIB+=" -Wl,-map,${_MAP_NAME_LIB}"
-      LDFLAGS_BIN+=" -Wl,-map,${_MAP_NAME_BIN}"
+      LDFLAGS_LIB+=" -Wl,-map,${_map_name_lib}"
+      LDFLAGS_BIN+=" -Wl,-map,${_map_name_bin}"
     else
-      LDFLAGS_LIB+=" -Wl,-Map,${_MAP_NAME_LIB}"
-      LDFLAGS_BIN+=" -Wl,-Map,${_MAP_NAME_BIN}"
+      LDFLAGS_LIB+=" -Wl,-Map,${_map_name_lib}"
+      LDFLAGS_BIN+=" -Wl,-Map,${_map_name_bin}"
     fi
   fi
 
@@ -417,13 +417,13 @@ _VER="$1"
   fi
 
   if [ "${_OS}" = 'win' ]; then
-    cp -p "${_BLDDIR}/${_out_lib}${_DEF_NAME}" "${_PP}"/bin/
+    cp -p "${_BLDDIR}/${_out_lib}${_def_name}" "${_PP}"/bin/
   fi
 
   if [ "${CW_MAP}" = '1' ]; then
-    cp -p "${_BLDDIR}/${_out_lib}${_MAP_NAME_LIB}" "${_PP}/${DYN_DIR}/"
+    cp -p "${_BLDDIR}/${_out_lib}${_map_name_lib}" "${_PP}/${DYN_DIR}/"
     if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
-      cp -p "${_BLDDIR}/${_out_src}${_MAP_NAME_BIN}" "${_PP}"/bin/
+      cp -p "${_BLDDIR}/${_out_src}${_map_name_bin}" "${_PP}"/bin/
     fi
   fi
 
