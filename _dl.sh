@@ -845,10 +845,33 @@ if [[ "${_DEPS}" = *'curl'* ]]; then
   fi
 fi
 if [[ "${_DEPS}" = *'trurl'* ]]; then
-  # shellcheck disable=SC2153
-  live_dl trurl "${TRURL_VER_}"
-  # shellcheck disable=SC2153
-  live_xt trurl "${TRURL_HASH}"
+  if [[ "${_CONFIG}" = *'dev'* ]]; then
+    TRURL_HASH=
+    if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *' trurl '* ]] && \
+       [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *' trurl '* ]]; then
+      TRURL_REV_="${TRURL_REV_:-master}"
+      tmp="$(mktemp)"
+      my_curl --user-agent ' ' "https://api.github.com/repos/curl/trurl/commits/${TRURL_REV_}" \
+        --retry-all-errors --retry 10 \
+        --header 'X-GitHub-Api-Version: 2022-11-28' --output "${tmp}"
+      rev="$(jq --raw-output '.sha' "${tmp}")"
+      rm -r -f "${tmp}"
+      [ -n "${rev}" ] && TRURL_REV_="${rev}"
+      url="https://github.com/curl/trurl/archive/${TRURL_REV_}.tar.gz"
+      echo "${url}" > '__trurl.url'
+      my_curl --location --proto-redir =https --output pkg.bin "${url}"
+      # shellcheck disable=SC2153
+      live_xt trurl "${TRURL_HASH}"
+    fi
+  else
+    # shellcheck disable=SC2153
+    live_dl trurl "${TRURL_VER_}"
+    # shellcheck disable=SC2153
+    live_xt trurl "${TRURL_HASH}"
+  fi
+  if [[ "${_CONFIG}" = *'dev'* ]] || [ -d 'trurl/.git' ]; then
+    TRURL_VER_="$(grep -a -F 'define TRURL_VERSION_TXT' 'trurl/version.h' | grep -o -E '".+"' | tr -d '"')-DEV"
+  fi
 fi
 
 if [ "${_OS}" = 'win' ] && \
