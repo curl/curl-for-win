@@ -8,79 +8,82 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 export _NAM _VER _OUT _BAS _DST
 
-if [ "${TRURL_VER_}" = '0.16.1' ]; then
-  ./trurl-gnumake.sh "$@"
-  exit $?
-fi
-
-_NAM="$(basename "$0" | cut -f 1 -d '.')"
+_NAM="$(basename "$0" | cut -f 1 -d '.' | sed -e 's/-gnumake//')"
 _VER="$1"
 
 (
   cd "${_NAM}" || exit 0
 
-  rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
+  rm -r -f "${_PKGDIR:?}"
 
   # Build
 
-  options=''
-  CPPFLAGS=''
-  LDFLAGS=''
-  LIBS=''
+  export CC="${_CC_GLOBAL}"
+  export CFLAGS="${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_RAW}"
+  export CPPFLAGS="${_CPPFLAGS_GLOBAL}"
+  export LDFLAGS="${_LDFLAGS_GLOBAL}"
+  export LDLIBS=''
+  options='TRURL_IGNORE_CURL_CONFIG=1'
+
+  if [[ "${_CONFIG}" != *'debug'* ]]; then
+    options+=' NDEBUG=1'
+  fi
+
+  # musl-debian-gcc issues
+  # https://github.com/curl/curl-for-win/actions/runs/7095411627/job/19312285992
+  CFLAGS="${CFLAGS//-fvisibility=hidden/}"
+
+  if [[ "${_CONFIG}" != *'main'* ]]; then
+    LDFLAGS+=' -v'
+  # [ "${_CC}" = 'gcc' ] && LDFLAGS+=' -Wl,--trace'
+  fi
 
   if [ "${CW_MAP}" = '1' ]; then
-    _map_name='trurl.map'
+    map_name='trurl.map'
     if [ "${_OS}" = 'mac' ]; then
-      LDFLAGS+=" -Wl,-map,${_map_name}"
+      LDFLAGS+=" -Wl,-map,${map_name}"
     else
-      LDFLAGS+=" -Wl,-Map,${_map_name}"
+      LDFLAGS+=" -Wl,-Map,${map_name}"
     fi
   fi
 
-  options+=" -DCURL_INCLUDE_DIR=${_TOP}/curl/${_PP}/include"
+  CPPFLAGS+=" -I../curl/${_PP}/include"
   if [[ "${_CONFIG}" = *'zero'* ]]; then
     # link statically in 'zero' (no external dependencies) config
-    options+=" -DCURL_LIBRARY=${_TOP}/curl/${_PP}/lib/libcurl.a"
+    LDLIBS+=" ../curl/${_PP}/lib/libcurl.a"
     if [ "${_OS}" = 'win' ]; then
       CPPFLAGS+=' -DCURL_STATICLIB'
-      LIBS+=' -lws2_32 -liphlpapi -lcrypt32 -lbcrypt'
+      LDLIBS+=' -lws2_32 -liphlpapi -lcrypt32 -lbcrypt'
     elif [ "${_OS}" = 'mac' ]; then
       if [[ "${_CONFIG}" != *'osnotls'* ]]; then
-        LIBS+=' -framework Security'
+        LDLIBS+=' -framework Security'
       fi
-      LIBS+=' -framework SystemConfiguration'
+      LDLIBS+=' -framework SystemConfiguration'
     elif [ "${_OS}" = 'linux' ]; then
       LDFLAGS+=' -static'
     fi
   else
-    if [ "${_OS}" = 'win' ]; then
-      options+=" -DCURL_LIBRARY=${_TOP}/curl/${_PP}/lib/libcurl.dll.a"
-    elif [ "${_OS}" = 'mac' ]; then
-      options+=" -DCURL_LIBRARY=${_TOP}/curl/${_PP}/lib/libcurl.4.dylib"
-    elif [ "${_OS}" = 'linux' ]; then
-      options+=" -DCURL_LIBRARY=${_TOP}/curl/${_PP}/lib/libcurl.so"
-    fi
+    LDFLAGS+=" -L../curl/${_PP}/lib"
+    LDLIBS+=' -lcurl'
   fi
 
+  "${_MAKE}" clean
   # shellcheck disable=SC2086
-  cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
-    -DTRURL_MANUAL=OFF \
-    -DTRURL_WERROR=ON \
-    -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LDFLAGS} ${LIBS}" \
-    || { cat "${_BLDDIR}"/CMakeFiles/CMake*.yaml; false; }
-  TZ=UTC cmake --build "${_BLDDIR}" --verbose
-  TZ=UTC cmake --install "${_BLDDIR}" --prefix "${_PP}"
+  "${_MAKE}" ${options}
 
   if [ "${_OS}" = 'mac' ]; then
     install_name_tool -change \
       '@rpath/libcurl.4.dylib' \
-      '@executable_path/../lib/libcurl.4.dylib' "${_PP}/bin/trurl${BIN_EXT}"
+      '@executable_path/../lib/libcurl.4.dylib' "./trurl${BIN_EXT}"
   fi
 
-  # Manual copy to DESTDIR
+  # Install manually
 
+  mkdir -p "${_PP}/bin"
+
+  cp -f -p "./trurl${BIN_EXT}" "${_PP}/bin/"
   if [ "${CW_MAP}" = '1' ]; then
-    cp -p "${_BLDDIR}/${_map_name}" "${_PP}"/bin/
+    cp -f -p "./${map_name}" "${_PP}/bin/"
   fi
 
   # Make steps for determinism
@@ -98,7 +101,7 @@ _VER="$1"
 
   touch -c -r "${_ref}" "${bin}"
   if [ "${CW_MAP}" = '1' ]; then
-    touch -c -r "${_ref}" "${_PP}/${_map_name}"
+    touch -c -r "${_ref}" "${_PP}/bin/${map_name}"
   fi
 
   ../_info-bin.sh --filetype 'exe' "${bin}"
@@ -112,9 +115,9 @@ _VER="$1"
   # On macOS this picks up a system libcurl by default. Ours is picked up
   # when running it from the unpacked release tarball.
   out="../trurl-version-${_CPUPUB}.txt"
-#  LD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" \
-#  DYLD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" \
-#    ${_RUN_BIN} "${bin}" --version | sed 's/\r//g' | tee "${out}" || true
+  LD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" \
+  DYLD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" \
+    ${_RUN_BIN} "${bin}" --version | sed 's/\r//g' | tee "${out}" || true
   unset LD_DEBUG
   [ -s "${out}" ] || rm -f "${out}"
 
@@ -137,7 +140,7 @@ _VER="$1"
   cp -f -p RELEASE-NOTES  "${_DST}"/RELEASE-NOTES.txt
 
   if [ "${CW_MAP}" = '1' ]; then
-    cp -f -p "${_PP}/bin/${_map_name}" "${_DST}"/bin/
+    cp -f -p "${_PP}/bin/${map_name}"  "${_DST}"/bin/
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"
