@@ -58,7 +58,7 @@ _VER="$1"
     elif [ "${_OS}" = 'mac' ]; then
       options+=" -DCURL_LIBRARY=${_TOP}/curl/${_PP}/lib/libcurl.4.dylib"
     elif [ "${_OS}" = 'linux' ]; then
-      options+=" -DCURL_LIBRARY=${_TOP}/curl/${_PP}/lib/libcurl.so"
+      options+=" -DCURL_LIBRARY=${_TOP}/curl/${_PP}/lib/libcurl.so.4"
     fi
   fi
 
