@@ -28,6 +28,13 @@ _VER="$1"
   LDFLAGS=''
   LIBS=''
 
+  _CFLAGS_GLOBAL_PATCHED="${_CFLAGS_GLOBAL}"
+  # To work around this issue in llvm glibc/musl:
+  #   ld.lld-19: error: non-exported symbol 'main' in 'CMakeFiles/trurl.dir/trurl.c.o'
+  #   is referenced by DSO '/home/runner/work/curl-for-win/curl-for-win/curl/_r64-linux-musl/usr/lib/libcurl.so'
+  # https://github.com/curl/curl-for-win/actions/runs/18715806026
+  _CFLAGS_GLOBAL_PATCHED="${_CFLAGS_GLOBAL_PATCHED//-fvisibility=hidden/}"
+
   if [ "${CW_MAP}" = '1' ]; then
     _map_name='trurl.map'
     if [ "${_OS}" = 'mac' ]; then
@@ -36,13 +43,6 @@ _VER="$1"
       LDFLAGS+=" -Wl,-Map,${_map_name}"
     fi
   fi
-
-  _CFLAGS_GLOBAL_PATCHED="${_CFLAGS_GLOBAL}"
-  # To work around this issue in llvm glibc/musl:
-  #   ld.lld-19: error: non-exported symbol 'main' in 'CMakeFiles/trurl.dir/trurl.c.o'
-  #   is referenced by DSO '/home/runner/work/curl-for-win/curl-for-win/curl/_r64-linux-musl/usr/lib/libcurl.so'
-  # https://github.com/curl/curl-for-win/actions/runs/18715806026
-  _CFLAGS_GLOBAL_PATCHED="${_CFLAGS_GLOBAL_PATCHED//-fvisibility=hidden/}"
 
   options+=" -DCURL_INCLUDE_DIR=${_TOP}/curl/${_PP}/include"
   if [[ "${_CONFIG}" = *'zero'* ]]; then
