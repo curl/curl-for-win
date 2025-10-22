@@ -64,8 +64,9 @@ _VER="$1"
 
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
-    -DTRURL_MANUAL=OFF \
     -DTRURL_WERROR=ON \
+    -DTRURL_MANUAL=OFF \
+    -DTRURL_TESTS=OFF \
     -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LDFLAGS} ${LIBS}" \
     || { cat "${_BLDDIR}"/CMakeFiles/CMake*.yaml; false; }
   TZ=UTC cmake --build "${_BLDDIR}" --verbose
