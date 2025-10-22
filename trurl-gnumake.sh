@@ -39,11 +39,11 @@ _VER="$1"
   fi
 
   if [ "${CW_MAP}" = '1' ]; then
-    map_name='trurl.map'
+    _map_name='trurl.map'
     if [ "${_OS}" = 'mac' ]; then
-      LDFLAGS+=" -Wl,-map,${map_name}"
+      LDFLAGS+=" -Wl,-map,${_map_name}"
     else
-      LDFLAGS+=" -Wl,-Map,${map_name}"
+      LDFLAGS+=" -Wl,-Map,${_map_name}"
     fi
   fi
 
@@ -83,7 +83,7 @@ _VER="$1"
 
   cp -f -p "./trurl${BIN_EXT}" "${_PP}/bin/"
   if [ "${CW_MAP}" = '1' ]; then
-    cp -f -p "./${map_name}" "${_PP}/bin/"
+    cp -f -p "./${_map_name}" "${_PP}/bin/"
   fi
 
   # Make steps for determinism
@@ -101,7 +101,7 @@ _VER="$1"
 
   touch -c -r "${_ref}" "${bin}"
   if [ "${CW_MAP}" = '1' ]; then
-    touch -c -r "${_ref}" "${_PP}/bin/${map_name}"
+    touch -c -r "${_ref}" "${_PP}/bin/${_map_name}"
   fi
 
   ../_info-bin.sh --filetype 'exe' "${bin}"
@@ -140,7 +140,7 @@ _VER="$1"
   cp -f -p RELEASE-NOTES  "${_DST}"/RELEASE-NOTES.txt
 
   if [ "${CW_MAP}" = '1' ]; then
-    cp -f -p "${_PP}/bin/${map_name}"  "${_DST}"/bin/
+    cp -f -p "${_PP}/bin/${_map_name}"  "${_DST}"/bin/
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"
