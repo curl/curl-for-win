@@ -114,7 +114,7 @@ smb/smbs      | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 smtp/smtps    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 telnet        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 tftp          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
-wss/ws        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+ws/wss        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 
 - ¹: platform-dependent
 - noh3: HTTP/2
