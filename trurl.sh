@@ -123,9 +123,9 @@ _VER="$1"
   # On macOS this picks up a system libcurl by default. Ours is picked up
   # when running it from the unpacked release tarball.
   out="../trurl-version-${_CPUPUB}.txt"
-#  LD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" \
-#  DYLD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" \
-#    ${_RUN_BIN} "${bin}" --version | sed 's/\r//g' | tee "${out}" || true
+  LD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" \
+  DYLD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" \
+    ${_RUN_BIN} "${bin}" --version | sed 's/\r//g' | tee "${out}" || true
   unset LD_DEBUG
   [ -s "${out}" ] || rm -f "${out}"
 
