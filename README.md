@@ -72,50 +72,51 @@ Uses [LibreSSL](https://www.libressl.org/) TLS backend.
 
 feature       | Windows | Linux   | macOS   | noh3    | mini    | micro   | nano    | pico    |
 --------------| --------| --------| --------| --------| --------| --------| --------| --------|
-alt-svc       | x       | x       | x       | x       | x       | x       |         |         |
-AppleSecTrust |         |         | x       | .       | .       | .       | .       | .       |
-AsynchDNS     | x       | x       | x       | x       | x       | x       | x       | x       |
-brotli        | x       | x       | x       | x       |         |         |         |         |
-CAcert        | x       | x       |         | .       | .       | .       | .       | .       |
-HSTS          | x       | x       | x       | x       | x       | x       | x       | x       |
-HTTP2         | x       | x       | x       | x       | x       | x       |         |         |
-HTTP3         | x       | x       | x       |         |         |         |         |         |
-HTTPS-proxy   | x       | x       | x       | x       | x       | x       | x       | x       |
-IDN           | x       |         | x       | .       | .       | .       | .       |         |
-IPv6          | x       | x       | x       | x       | x       | x       | x       | x       |
-Kerberos      | x       |         |         | .       | .       | .       | .       |         |
-Largefile     | x       | x       | x       | x       | x       | x       | x       | x       |
-libz          | x       | x       | x       | x       | x       | x       | x       | x       |
-NTLM          | x       | x       | x       | x       | x       | x       | x       |         |
-PSL           | x       | x       | x       | x       | x       | x       | x       | x       |
-SPNEGO        | x       |         |         | .       | .       | .       | .       |         |
-SSL           | x       | x       | x       | x       | x       | x       | x       | x       |
-SSPI          | x       |         |         | .       | .       | .       | .       |         |
-SSLS-EXPORT   | x       | x       | x       | x       |         |         |         |         |
-threadsafe    | x       | x       | x       | x       | x       | x       | x       | x       |
-UnixSockets   | x       | x       | x       | x       | x       | x       | x       |         |
-zstd          | x       | x       | x       | x       |         |         |         |         |
+alt-svc       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |         |
+AppleSecTrust |         |         | ✓       | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
+AsynchDNS     | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
+brotli        | ✓       | ✓       | ✓       | ✓       |         |         |         |         |
+CAcert        | ✓       | ✓       |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
+HSTS          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
+HTTP2         | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |         |
+HTTP3         | ✓       | ✓       | ✓       |         |         |         |         |         |
+HTTPS-proxy   | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
+IDN           | ✓       |         | ✓       | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
+IPv6          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
+Kerberos      | ✓       |         |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
+Largefile     | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
+libz          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
+NTLM          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+PSL           | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
+SPNEGO        | ✓       |         |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
+SSL           | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
+SSPI          | ✓       |         |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
+SSLS-EXPORT   | ✓       | ✓       | ✓       | ✓       |         |         |         |         |
+threadsafe    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
+UnixSockets   | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+zstd          | ✓       | ✓       | ✓       | ✓       |         |         |         |         |
 
 protocol      | Windows | Linux   | macOS   | noh3    | mini    | micro   | nano    | pico    |
 --------------| --------| --------| --------| --------| --------| --------| --------| --------|
-dict          | x       | x       | x       | x       | x       | x       | x       |         |
-file          | x       | x       | x       | x       | x       | x       | x       |         |
-ftp/ftps      | x       | x       | x       | x       | x       | x       | x       |         |
-gopher/gophers| x       | x       | x       | x       | x       | x       | x       |         |
-http/https    | x       | x       | x       | x       | x       | x       | x       | x       |
-imap/imaps    | x       | x       | x       | x       | x       | x       | x       |         |
-ipfs/ipns     | x       | x       | x       | x       | x       | x       | x       |         |
-ldap/ldaps    | x       |         | x       | x       | x       | x       | x       |         |
-mqtt          | x       | x       | x       | x       | x       | x       | x       |         |
-pop3/pop3s    | x       | x       | x       | x       | x       | x       | x       |         |
-rtsp          | x       | x       | x       | x       | x       | x       | x       |         |
-scp/sftp      | x       | x       | x       | x       | x       |         |         |         |
-smb/smbs      | x       | x       | x       | x       | x       | x       | x       |         |
-smtp/smtps    | x       | x       | x       | x       | x       | x       | x       |         |
-telnet        | x       | x       | x       | x       | x       | x       | x       |         |
-tftp          | x       | x       | x       | x       | x       | x       | x       |         |
-wss/ws        | x       | x       | x       | x       | x       | x       | x       |         |
+dict          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+file          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+ftp/ftps      | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+gopher/gophers| ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+http/https    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
+imap/imaps    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+ipfs/ipns     | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+ldap/ldaps    | ✓       |         | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+mqtt          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+pop3/pop3s    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+rtsp          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+scp/sftp      | ✓       | ✓       | ✓       | ✓       | ✓       |         |         |         |
+smb/smbs      | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+smtp/smtps    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+telnet        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+tftp          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+wss/ws        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 
+- ¹: platform-dependent
 - noh3: HTTP/2
 - mini: without brotli and zstd, with OS TLS backend (Schannel) if available
 - micro: without libssh2
