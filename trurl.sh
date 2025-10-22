@@ -37,6 +37,13 @@ _VER="$1"
     fi
   fi
 
+  _CFLAGS_GLOBAL_PATCHED="${_CFLAGS_GLOBAL}"
+  # To work around this issue in llvm glibc/musl:
+  #   ld.lld-19: error: non-exported symbol 'main' in 'CMakeFiles/trurl.dir/trurl.c.o'
+  #   is referenced by DSO '/home/runner/work/curl-for-win/curl-for-win/curl/_r64-linux-musl/usr/lib/libcurl.so'
+  # https://github.com/curl/curl-for-win/actions/runs/18715806026
+  _CFLAGS_GLOBAL_PATCHED="${_CFLAGS_GLOBAL_PATCHED//-fvisibility=hidden/}"
+
   options+=" -DCURL_INCLUDE_DIR=${_TOP}/curl/${_PP}/include"
   if [[ "${_CONFIG}" = *'zero'* ]]; then
     # link statically in 'zero' (no external dependencies) config
@@ -67,7 +74,7 @@ _VER="$1"
     -DTRURL_WERROR=ON \
     -DTRURL_MANUAL=OFF \
     -DTRURL_TESTS=OFF \
-    -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LDFLAGS} ${LIBS}" \
+    -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL_PATCHED} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LDFLAGS} ${LIBS}" \
     || { cat "${_BLDDIR}"/CMakeFiles/CMake*.yaml; false; }
   TZ=UTC cmake --build "${_BLDDIR}" --verbose
   TZ=UTC cmake --install "${_BLDDIR}" --prefix "${_PP}"
