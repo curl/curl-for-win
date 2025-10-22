@@ -251,7 +251,7 @@ check_update() {
     slug="${BASH_REMATCH[1]}"
     jcommit="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/commits" \
       --header 'X-GitHub-Api-Version: 2022-11-28')"
-    newver="$(echo "${jcommit}" | jq --raw-output '.[0].commit.committer.date')"
+    newver="$(echo "${jcommit}" | jq --raw-output '.[0].commit.committer.date' | cut -c -10)"  # YYYY-MM-DDThh:mm:ssZ -> YYYY-MM-DD
     hash="$(echo   "${jcommit}" | jq --raw-output '.[0].sha')"
   elif [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
     slug="${BASH_REMATCH[1]}"
@@ -323,11 +323,11 @@ check_update() {
     fi
   fi
   if [ -n "${newver}" ]; then
-    if [[ "${newver}" = *'T'*'Z' ]]; then  # ISO timestamp
+    if [[ "${url}" =~ ^https://raw.githubusercontent.com/ ]]; then
       case "$(uname)" in
         Darwin*|*BSD)
-          unixold="$(date -u -j -f '%Y-%m-%dT%H:%M:%SZ' "${ourvern}" '+%s')"
-          unixnew="$(date -u -j -f '%Y-%m-%dT%H:%M:%SZ' "${newver}" '+%s')"
+          unixold="$(date -u -j -f '%Y-%m-%d' "${ourvern}" '+%s')"
+          unixnew="$(date -u -j -f '%Y-%m-%d' "${newver}" '+%s')"
           ;;
         *)  # GNU date
           unixold="$(date -d "${ourvern}" '+%s')"
