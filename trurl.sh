@@ -65,6 +65,9 @@ _VER="$1"
     elif [ "${_OS}" = 'mac' ]; then
       options+=" -DCURL_LIBRARY=${_TOP}/curl/${_PP}/lib/libcurl.4.dylib"
     elif [ "${_OS}" = 'linux' ]; then
+      if [ "${_CRT}" = 'musl' ]; then
+        _CFLAGS_GLOBAL_PATCHED="${_CFLAGS_GLOBAL_PATCHED//-static/}"  # for musl gcc
+      fi
       options+=" -DCURL_LIBRARY=${_TOP}/curl/${_PP}/lib/libcurl.so.4"
     fi
   fi
