@@ -46,6 +46,11 @@ cat <<EOF
     "ref_mask": "([0-9]{4}-[0-9]{2}-[0-9]{2})"
   },
   {
+    "name": "psl",
+    "url": "https://raw.githubusercontent.com/publicsuffix/list/{hash}/public_suffix_list.dat",
+    "bumpdays": 90
+  },
+  {
     "name": "libpsl",
     "url": "https://github.com/rockdaboot/libpsl/releases/download/{ver}/libpsl-{ver}.tar.gz",
     "sig": ".sig",
@@ -210,7 +215,8 @@ expandver() {
   sed \
     -e "s/{ver}/$1/g" \
     -e "s/{veru}/$(echo "$1" | tr '.' '_')/g" \
-    -e "s/{vermm}/$(echo "$1" | cut -d . -f -2)/g"
+    -e "s/{vermm}/$(echo "$1" | cut -d . -f -2)/g" \
+    -e "s/{hash}/${2:-}/g"
 }
 
 # convert 'x.y.z' to zero-padded "000x0y0z" numeric format (or leave as-is)
@@ -224,16 +230,30 @@ to8digit() {
   fi
 }
 
+# return _FOUND_VER and _FOUND_HASH (for content-addressed dependencies) variables
 check_update() {
   local pkg url ourvern newver newvern slug mask urldir res curlopt
+
   pkg="$1"
   ourvern="${2:-000000}"
   url="$3"
   newver=''
-  curlopt="$9"
+  bumpdays="${9:-90}"
+  curlopt="${10}"
+
+  unset _FOUND_VER
+  unset _FOUND_HASH
+
   options=()
   [ -n "${curlopt}" ] && options+=("${curlopt}")
-  if [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
+  if [[ "${url}" =~ ^https://raw.githubusercontent.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
+    # content at a specific commit, versioned by the commit date
+    slug="${BASH_REMATCH[1]}"
+    jcommit="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/commits" \
+      --header 'X-GitHub-Api-Version: 2022-11-28')"
+    newver="$(echo "${jcommit}" | jq --raw-output '.[0].commit.committer.date')"
+    hash="$(echo   "${jcommit}" | jq --raw-output '.[0].sha')"
+  elif [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
     slug="${BASH_REMATCH[1]}"
     if [ -n "$6" ]; then
       # raw.githubusercontent.com does not need it.
@@ -303,14 +323,30 @@ check_update() {
     fi
   fi
   if [ -n "${newver}" ]; then
-    if [ "${#newver}" -ge 32 ]; then
+    if [[ "${newver}" = *'T'*'Z' ]]; then  # ISO timestamp
+      case "$(uname)" in
+        Darwin*|*BSD)
+          unixold="$(date -u -j -f '%Y-%m-%dT%H:%M:%SZ' "${ourvern}" '+%s')"
+          unixnew="$(date -u -j -f '%Y-%m-%dT%H:%M:%SZ' "${newver}" '+%s')"
+          ;;
+        *)  # GNU date
+          unixold="$(date -d "${ourvern}" '+%s')"
+          unixnew="$(date -d "${newver}" '+%s')"
+          ;;
+      esac
+      diff_days=$(( (unixnew - unixold) / 86400 ))
+      if [ "${diff_days}" -ge "${bumpdays}" ]; then
+        _FOUND_VER="${newver}"
+        _FOUND_HASH="${hash}"
+      fi
+    elif [ "${#newver}" -ge 32 ]; then  # hash
       if [ "${newver}" != "${ourvern}" ]; then
-        printf '%s' "${newver}"
+        _FOUND_VER="${newver}"
       fi
     else
       newvern="$(printf '%s' "${newver}" | to8digit)"
       if [[ "${newvern}" > "${ourvern}" ]]; then
-        printf '%s' "${newver}"
+        _FOUND_VER="${newver}"
       fi
     fi
   fi
@@ -318,64 +354,72 @@ check_update() {
 
 check_dl() {
   local name url keys sig sha options key ok hash_calc hash_got curlopt
+
   name="$1"
   url="$2"
   sig="$3"
   sha="$4"
   keys="$6"
   curlopt="$7"
-  options=()
-  [ -n "${curlopt}" ] && options+=("${curlopt}")
-  [ "$5" = 'redir' ] && options+=(--location --proto-redir '=https')
-  options+=(--output pkg.bin "${url}")
-  if [ -n "${sig}" ]; then
-    [[ "${sig}" = 'https://'* ]] || sig="${url}${sig}"
-    options+=(--output pkg.sig "${sig}")
-  fi
-  [ -n "${sha}" ] && options+=(--output pkg.sha "${url}${sha}")
-  my_curl "${options[@]}"
 
-  ok='0'
-  hash_calc="$(openssl dgst -sha256 pkg.bin | grep -a -i -o -E '[0-9a-f]{64}$')"
-  if [ -n "${sig}" ]; then
-    if [ ! -s pkg.sig ]; then
-      >&2 echo "! ${name}: Verify: Failed (Signature expected, but missing)"
-    elif grep -a -q -F 'BEGIN SSH SIGNATURE' pkg.sig; then
-      [[ "${key}" = 'https://'* ]] && key="$(my_curl "${key}")"
-      exec 3<<EOF
+  if [[ "${url}" =~ ^https://raw.githubusercontent.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/([a-fA-F0-9]+) ]]; then
+    # basically do nothing here: return the hash we got within the url
+    hash_calc="${BASH_REMATCH[2]}"
+    ok='1'  # content addressed by hash
+  else
+    options=()
+    [ -n "${curlopt}" ] && options+=("${curlopt}")
+    [ "$5" = 'redir' ] && options+=(--location --proto-redir '=https')
+    options+=(--output pkg.bin "${url}")
+    if [ -n "${sig}" ]; then
+      [[ "${sig}" = 'https://'* ]] || sig="${url}${sig}"
+      options+=(--output pkg.sig "${sig}")
+    fi
+    [ -n "${sha}" ] && options+=(--output pkg.sha "${url}${sha}")
+    my_curl "${options[@]}"
+
+    ok='0'
+    hash_calc="$(openssl dgst -sha256 pkg.bin | grep -a -i -o -E '[0-9a-f]{64}$')"
+    if [ -n "${sig}" ]; then
+      if [ ! -s pkg.sig ]; then
+        >&2 echo "! ${name}: Verify: Failed (Signature expected, but missing)"
+      elif grep -a -q -F 'BEGIN SSH SIGNATURE' pkg.sig; then
+        [[ "${key}" = 'https://'* ]] && key="$(my_curl "${key}")"
+        exec 3<<EOF
 ${key}
 EOF
-      if ssh-keygen -Y check-novalidate -n 'file' -f /dev/fd/3 -s pkg.sig < pkg.bin; then
-        >&2 echo "! ${name}: Verify: OK (Valid SSH signature)"
-        ok='1'
+        if ssh-keygen -Y check-novalidate -n 'file' -f /dev/fd/3 -s pkg.sig < pkg.bin; then
+          >&2 echo "! ${name}: Verify: OK (Valid SSH signature)"
+          ok='1'
+        else
+          >&2 echo "! ${name}: Verify: Failed (SSH signature)"
+        fi
       else
-        >&2 echo "! ${name}: Verify: Failed (SSH signature)"
+        for key in ${keys}; do
+          gpg_recv_key "${key}" >/dev/null 2>&1
+        done
+
+        if my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin >/dev/null 2>&1; then
+          >&2 echo "! ${name}: Verify: OK (Valid PGP signature)"
+          ok='1'
+        else
+          >&2 echo "! ${name}: Verify: Failed (PGP signature)"
+        fi
+      fi
+
+      if [ "${ok}" = '1' ] && [ -n "${sha}" ]; then
+        hash_got="$(grep -a -i -o -E '[0-9A-Fa-f]{64,}' pkg.sha | tr '[:upper:]' '[:lower:]')"
+        if [ "${hash_calc}" = "${hash_got}" ]; then
+          >&2 echo "! ${name}: Verify: OK (Matching hash)"
+        else
+          >&2 echo "! ${name}: Verify: Failed (Mismatching hash)"
+          ok='0'
+        fi
       fi
     else
-      for key in ${keys}; do
-        gpg_recv_key "${key}" >/dev/null 2>&1
-      done
-
-      if my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin >/dev/null 2>&1; then
-        >&2 echo "! ${name}: Verify: OK (Valid PGP signature)"
-        ok='1'
-      else
-        >&2 echo "! ${name}: Verify: Failed (PGP signature)"
-      fi
+      >&2 echo "! ${name}: Verify: No PGP signature. Continuing without verification."
+      ok='1'
     fi
-
-    if [ "${ok}" = '1' ] && [ -n "${sha}" ]; then
-      hash_got="$(grep -a -i -o -E '[0-9A-Fa-f]{64,}' pkg.sha | tr '[:upper:]' '[:lower:]')"
-      if [ "${hash_calc}" = "${hash_got}" ]; then
-        >&2 echo "! ${name}: Verify: OK (Matching hash)"
-      else
-        >&2 echo "! ${name}: Verify: Failed (Mismatching hash)"
-        ok='0'
-      fi
-    fi
-  else
-    >&2 echo "! ${name}: Verify: No PGP signature. Continuing without verification."
-    ok='1'
   fi
 
   if [ "${ok}" = '1' ]; then
@@ -401,6 +445,7 @@ bump() {
     if [[ "${pkg}" =~ ^([A-Z0-9_]+)_VER_=(.+)$ ]]; then
       nameenv="${BASH_REMATCH[1]}"
       name="${nameenv,,}"
+      # [ "${name}" != 'psl' ] && continue
       name="${name//_/-}"
       ourver="${BASH_REMATCH[2]}"
       ourvern="$(printf '%s' "${ourver}" | to8digit)"
@@ -421,6 +466,7 @@ bump() {
         ref_url="$( printf '%s' "${jp}" | jq --raw-output '.ref_url' | sed 's/^null$//')"
         ref_expr="$(printf '%s' "${jp}" | jq --raw-output '.ref_expr' | sed 's/^null$//')"
         ref_mask="$(printf '%s' "${jp}" | jq --raw-output '.ref_mask' | sed 's/^null$//')"
+        bumpdays="$(printf '%s' "${jp}" | jq --raw-output '.bumpdays' | sed 's/^null$//')"
         curlopt="$( printf '%s' "${jp}" | jq --raw-output '.curlopt' | sed 's/^null$//')"
 
         if [ "${pin}" = 'true' ]; then
@@ -430,10 +476,19 @@ bump() {
           # Caveat: Major/minor upgrades are not detected in that case.
           # (e.g. libssh)
           urlver="$(printf '%s' "${url}" | expandver "${ourver}")"
-          newver="$(check_update "${name}" "${ourvern}" "${urlver}" \
+          check_update \
+            "${name}" \
+            "${ourvern}" \
+            "${urlver}" \
             "${tag}" \
             "${hasfile}" \
-            "${ref_url}" "${ref_expr}" "${ref_mask}" "${curlopt}")"
+            "${ref_url}" \
+            "${ref_expr}" \
+            "${ref_mask}" \
+            "${bumpdays}" \
+            "${curlopt}"
+          newver="${_FOUND_VER:-}"
+          newhash="${_FOUND_HASH:-}"
           if [ -n "${newver}" ]; then
             >&2 echo "! ${name}: New version found: |${newver}|"
 
@@ -443,9 +498,16 @@ bump() {
               redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"
               keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
 
-              urlver="$(printf '%s' "${url}" | expandver "${newver}")"
+              urlver="$(printf '%s' "${url}" | expandver "${newver}" "${newhash}")"
               sigver="$(printf '%s' "${sig}" | expandver "${newver}")"
-              newhash="$(check_dl "${name}" "${urlver}" "${sigver}" "${sha}" "${redir}" "${keys}" "${curlopt}")"
+              newhash="$(check_dl \
+                "${name}" \
+                "${urlver}" \
+                "${sigver}" \
+                "${sha}" \
+                "${redir}" \
+                "${keys}" \
+                "${curlopt}")"
             else
               newhash='-'
             fi
@@ -527,10 +589,14 @@ live_xt() {
      [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *" ${pkg} "* ]]; then
     hash="$(openssl dgst -sha256 pkg.bin)"
     echo "${hash}"
-    echo "${hash}" | grep -q -a -F -- "${2:-}" || exit 1
+    if [ "${pkg}" != 'psl' ]; then
+      echo "${hash}" | grep -q -a -F -- "${2:-}" || exit 1
+    fi
     rm -r -f "${pkg:?}"; mkdir "${pkg}"
     if [ "${pkg}" = 'cacert' ]; then
       mv pkg.bin "${pkg}/${_CACERT}"
+    elif [ "${pkg}" = 'psl' ]; then
+      mv pkg.bin "${pkg}/${_PSL}"
     else
       tar --no-same-owner --no-same-permissions --strip-components="${3:-1}" -xf pkg.bin --directory="${pkg}"
       [ -f "${pkg}${_PATCHSUFFIX}.patch" ] && patch --forward --strip=1 --directory="${pkg}" < "${pkg}${_PATCHSUFFIX}.patch"
@@ -556,8 +622,8 @@ live_dl() {
     jp="$(dependencies_json | jq \
       ".[] | select(.name == \"${name}\")")"
 
-    url="$(    printf '%s' "${jp}" | jq --raw-output '.url' | expandver "${ver}")"
-    mirror="$( printf '%s' "${jp}" | jq --raw-output '.mirror' | sed 's/^null$//' | expandver "${ver}")"
+    url="$(    printf '%s' "${jp}" | jq --raw-output '.url' | expandver "${ver}" "${hash}")"
+    mirror="$( printf '%s' "${jp}" | jq --raw-output '.mirror' | sed 's/^null$//' | expandver "${ver}" "${hash}")"
     sigraw="$( printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's/^null$//' | expandver "${ver}")"
     redir="$(  printf '%s' "${jp}" | jq --raw-output '.redir')"
     keys="$(   printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
@@ -671,6 +737,7 @@ if [[ "${_CONFIG}" = *'cares'* ]]; then
 fi
 
 if [[ ! "${_CONFIG}" =~ (zero|bldtst|nocookie) ]]; then
+  _DEPS+=' psl'
   _DEPS+=' libpsl'
 fi
 
@@ -753,6 +820,9 @@ fi
 if [[ "${_DEPS}" = *'ngtcp2'* ]]; then
   live_dl ngtcp2 "${NGTCP2_VER_}"
   live_xt ngtcp2 "${NGTCP2_HASH}"
+fi
+if [[ "${_DEPS}" = *'psl'* ]]; then
+  live_dl psl "${PSL_VER_}" "${PSL_HASH}"
 fi
 if [[ "${_DEPS}" = *'libpsl'* ]]; then
   live_dl libpsl "${LIBPSL_VER_}"

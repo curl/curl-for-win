@@ -292,6 +292,7 @@ export _OS='win'
 [[ "${_CONFIG}" = *'linux'* ]] && _OS='linux'
 
 export _CACERT='cacert.pem'
+export _PSL='public_suffix_list.dat'
 
 [ -n "${CW_CCSUFFIX:-}" ] || CW_CCSUFFIX=''
 
@@ -1729,6 +1730,7 @@ build_single_target() {
   bld zstd                 "${ZSTD_VER_}"
   bld brotli             "${BROTLI_VER_}"
   bld cares               "${CARES_VER_}"
+  bld psl                   "${PSL_VER_}"
   bld libpsl             "${LIBPSL_VER_}"
   bld nghttp3           "${NGHTTP3_VER_}"
   bld awslc               "${AWSLC_VER_}" boringssl

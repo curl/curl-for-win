@@ -22,7 +22,8 @@ _VER="$1"
 
   # Build manually
 
-  [ -f 'suffixes_dafsa.h' ] || python3 'src/psl-make-dafsa' --output-format=cxx+ 'list/public_suffix_list.dat' 'suffixes_dafsa.h'
+  # require the psl package, always
+  [ -f 'suffixes_dafsa.h' ] || python3 'src/psl-make-dafsa' --output-format=cxx+ "../psl/${_PSL}" 'suffixes_dafsa.h'
 
   mkdir -p "${_BLDDIR}"
   (
