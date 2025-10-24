@@ -73,7 +73,7 @@ Uses [LibreSSL](https://www.libressl.org/) TLS backend.
 feature       | Windows | Linux   | macOS   | noh3    | mini    | micro   | nano    | pico    |
 --------------| --------| --------| --------| --------| --------| --------| --------| --------|
 alt-svc       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |         |
-AppleSecTrust |         |         | ✓       | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
+AppleSecTrust | -       | -       | ✓       | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
 asyn-rr       |         |         |         |         |         |         |         |         |
 AsynchDNS     | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 brotli        | ✓       | ✓       | ✓       | ✓       |         |         |         |         |
@@ -92,10 +92,10 @@ NTLM          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 PSL           | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 SPNEGO        | ✓       |         |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
 SSL           | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
-SSPI          | ✓       |         |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
+SSPI          | ✓       | -       | -       | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
 SSLS-EXPORT   | ✓       | ✓       | ✓       | ✓       |         |         |         |         |
 threadsafe    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
-Unicode       |         |         |         |         |         |         |         |         |
+Unicode       |         | -       | -       |         |         |         |         |         |
 UnixSockets   | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 zstd          | ✓       | ✓       | ✓       | ✓       |         |         |         |         |
 
