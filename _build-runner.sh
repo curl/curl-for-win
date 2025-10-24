@@ -23,7 +23,7 @@ if [ ! -f .cw-initialized ]; then
   extra=''
   case "$(uname)" in
     *_NT*)
-      env='x86_64'
+      [[ "$(uname -s)" = *'ARM64'* ]] && env='clang-aarch64' || env='x86_64'
       pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
         mingw-w64-"${env}"-{clang,cmake,ninja,jq,python-pip,rsync,gettext,osslsigncode} \
         zip

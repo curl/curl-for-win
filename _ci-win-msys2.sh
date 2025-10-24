@@ -5,7 +5,7 @@
 
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
-env='x86_64'
+[[ "$(uname -s)" = *'ARM64'* ]] && env='clang-aarch64' || env='x86_64'
 
 pacman --noconfirm --ask 20 --noprogressbar --sync --refresh --sysupgrade --sysupgrade
 pacman --noconfirm --ask 20 --noprogressbar --sync --refresh --sysupgrade --sysupgrade
