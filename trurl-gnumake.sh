@@ -29,15 +29,6 @@ _VER="$1"
     options+=' NDEBUG=1'
   fi
 
-  # musl-debian-gcc issues
-  # https://github.com/curl/curl-for-win/actions/runs/7095411627/job/19312285992
-  CFLAGS="${CFLAGS//-fvisibility=hidden/}"
-
-  if [[ "${_CONFIG}" != *'main'* ]]; then
-    LDFLAGS+=' -v'
-  # [ "${_CC}" = 'gcc' ] && LDFLAGS+=' -Wl,--trace'
-  fi
-
   if [ "${CW_MAP}" = '1' ]; then
     _map_name='trurl.map'
     if [ "${_OS}" = 'mac' ]; then
@@ -48,34 +39,20 @@ _VER="$1"
   fi
 
   CPPFLAGS+=" -I../curl/${_PP}/include"
-  if [[ "${_CONFIG}" = *'zero'* ]]; then
-    # link statically in 'zero' (no external dependencies) config
-    LDLIBS+=" ../curl/${_PP}/lib/libcurl.a"
-    if [ "${_OS}" = 'win' ]; then
-      CPPFLAGS+=' -DCURL_STATICLIB'
-      LDLIBS+=' -lws2_32 -liphlpapi -lcrypt32 -lbcrypt'
-    elif [ "${_OS}" = 'mac' ]; then
-      if [[ "${_CONFIG}" != *'osnotls'* ]]; then
-        LDLIBS+=' -framework Security'
-      fi
-      LDLIBS+=' -framework SystemConfiguration'
-    elif [ "${_OS}" = 'linux' ]; then
-      LDFLAGS+=' -static'
+  LDLIBS+=" ../curl/${_PP}/lib/libcurl.a"
+  if [ "${_OS}" = 'win' ]; then
+    CPPFLAGS+=' -DCURL_STATICLIB'
+    LDLIBS+=' -lws2_32 -liphlpapi -lcrypt32 -lbcrypt'
+  elif [ "${_OS}" = 'mac' ]; then
+    if [[ "${_CONFIG}" != *'osnotls'* ]]; then
+      LDLIBS+=' -framework Security'
     fi
-  else
-    LDFLAGS+=" -L../curl/${_PP}/lib"
-    LDLIBS+=' -lcurl'
+    LDLIBS+=' -framework SystemConfiguration'
   fi
 
   "${_MAKE}" clean
   # shellcheck disable=SC2086
   "${_MAKE}" ${options}
-
-  if [ "${_OS}" = 'mac' ]; then
-    install_name_tool -change \
-      '@rpath/libcurl.4.dylib' \
-      '@executable_path/../lib/libcurl.4.dylib' "./trurl${BIN_EXT}"
-  fi
 
   # Install manually
 
@@ -106,19 +83,9 @@ _VER="$1"
 
   ../_info-bin.sh --filetype 'exe' "${bin}"
 
-  # Execute curl and compiled-in dependency code. This is not secure.
-  [ "${_OS}" = 'win' ] && cp -p "../curl/${_PP}/bin/"*"${DYN_EXT}" .
-  if [ "${_OS}" = 'linux' ] && [ "${_HOST}" = 'linux' ]; then
-    # https://www.man7.org/training/download/shlib_dynlinker_slides.pdf
-    export LD_DEBUG='libs,versions,statistics'
-  fi
-  # On macOS this picks up a system libcurl by default. Ours is picked up
-  # when running it from the unpacked release tarball.
+  # Execute trurl and compiled-in dependency code. This is not secure.
   out="../trurl-version-${_CPUPUB}.txt"
-  LD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" \
-  DYLD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" \
-    ${_RUN_BIN} "${bin}" --version | sed 's/\r//g' | tee "${out}" || true
-  unset LD_DEBUG
+  ${_RUN_BIN} "${bin}" --version | sed 's/\r//g' | tee "${out}"
   [ -s "${out}" ] || rm -f "${out}"
 
   if [ "${CW_TURL_TEST:-}" = '1' ] && \

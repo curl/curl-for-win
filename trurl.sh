@@ -28,13 +28,6 @@ _VER="$1"
   LDFLAGS=''
   LIBS=''
 
-  _CFLAGS_GLOBAL_PATCHED="${_CFLAGS_GLOBAL}"
-  # To work around this issue in llvm glibc/musl:
-  #   ld.lld-19: error: non-exported symbol 'main' in 'CMakeFiles/trurl.dir/trurl.c.o'
-  #   is referenced by DSO '/home/runner/work/curl-for-win/curl-for-win/curl/_r64-linux-musl/usr/lib/libcurl.so'
-  # https://github.com/curl/curl-for-win/actions/runs/18715806026
-  _CFLAGS_GLOBAL_PATCHED="${_CFLAGS_GLOBAL_PATCHED//-fvisibility=hidden/}"
-
   if [ "${CW_MAP}" = '1' ]; then
     _map_name='trurl.map'
     if [ "${_OS}" = 'mac' ]; then
@@ -45,31 +38,15 @@ _VER="$1"
   fi
 
   options+=" -DCURL_INCLUDE_DIR=${_TOP}/curl/${_PP}/include"
-  if [[ "${_CONFIG}" = *'zero'* ]]; then
-    # link statically in 'zero' (no external dependencies) config
-    options+=" -DCURL_LIBRARY=${_TOP}/curl/${_PP}/lib/libcurl.a"
-    if [ "${_OS}" = 'win' ]; then
-      CPPFLAGS+=' -DCURL_STATICLIB'
-      LIBS+=' -lws2_32 -liphlpapi -lcrypt32 -lbcrypt'
-    elif [ "${_OS}" = 'mac' ]; then
-      if [[ "${_CONFIG}" != *'osnotls'* ]]; then
-        LIBS+=' -framework Security'
-      fi
-      LIBS+=' -framework SystemConfiguration'
-    elif [ "${_OS}" = 'linux' ]; then
-      LDFLAGS+=' -static'
+  options+=" -DCURL_LIBRARY=${_TOP}/curl/${_PP}/lib/libcurl.a"
+  if [ "${_OS}" = 'win' ]; then
+    CPPFLAGS+=' -DCURL_STATICLIB'
+    LIBS+=' -lws2_32 -liphlpapi -lcrypt32 -lbcrypt'
+  elif [ "${_OS}" = 'mac' ]; then
+    if [[ "${_CONFIG}" != *'osnotls'* ]]; then
+      LIBS+=' -framework Security'
     fi
-  else
-    if [ "${_OS}" = 'win' ]; then
-      options+=" -DCURL_LIBRARY=${_TOP}/curl/${_PP}/lib/libcurl.dll.a"
-    elif [ "${_OS}" = 'mac' ]; then
-      options+=" -DCURL_LIBRARY=${_TOP}/curl/${_PP}/lib/libcurl.4.dylib"
-    elif [ "${_OS}" = 'linux' ]; then
-      if [ "${_CRT}" = 'musl' ]; then
-        _CFLAGS_GLOBAL_PATCHED="${_CFLAGS_GLOBAL_PATCHED//-static/}"  # for musl gcc
-      fi
-      options+=" -DCURL_LIBRARY=${_TOP}/curl/${_PP}/lib/libcurl.so.4"
-    fi
+    LIBS+=' -framework SystemConfiguration'
   fi
 
   # shellcheck disable=SC2086
@@ -77,16 +54,10 @@ _VER="$1"
     -DTRURL_WERROR=ON \
     -DTRURL_MANUAL=OFF \
     -DTRURL_TESTS=OFF \
-    -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL_PATCHED} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LDFLAGS} ${LIBS}" \
+    -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LDFLAGS} ${LIBS}" \
     || { cat "${_BLDDIR}"/CMakeFiles/CMake*.yaml; false; }
   TZ=UTC cmake --build "${_BLDDIR}" --verbose
   TZ=UTC cmake --install "${_BLDDIR}" --prefix "${_PP}"
-
-  if [ "${_OS}" = 'mac' ]; then
-    install_name_tool -change \
-      '@rpath/libcurl.4.dylib' \
-      '@executable_path/../lib/libcurl.4.dylib' "${_PP}/bin/trurl${BIN_EXT}"
-  fi
 
   # Manual copy to DESTDIR
 
@@ -114,19 +85,9 @@ _VER="$1"
 
   ../_info-bin.sh --filetype 'exe' "${bin}"
 
-  # Execute curl and compiled-in dependency code. This is not secure.
-  [ "${_OS}" = 'win' ] && cp -p "../curl/${_PP}/bin/"*"${DYN_EXT}" .
-  if [ "${_OS}" = 'linux' ] && [ "${_HOST}" = 'linux' ]; then
-    # https://www.man7.org/training/download/shlib_dynlinker_slides.pdf
-    export LD_DEBUG='libs,versions,statistics'
-  fi
-  # On macOS this picks up a system libcurl by default. Ours is picked up
-  # when running it from the unpacked release tarball.
+  # Execute trurl and compiled-in dependency code. This is not secure.
   out="../trurl-version-${_CPUPUB}.txt"
-  LD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" \
-  DYLD_LIBRARY_PATH="$(pwd)/../curl/${_PP}/lib" \
-    ${_RUN_BIN} "${bin}" --version | sed 's/\r//g' | tee "${out}" || true
-  unset LD_DEBUG
+  ${_RUN_BIN} "${bin}" --version | sed 's/\r//g' | tee "${out}"
   [ -s "${out}" ] || rm -f "${out}"
 
   if [ "${CW_TURL_TEST:-}" = '1' ] && \
