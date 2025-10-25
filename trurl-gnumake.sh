@@ -47,7 +47,7 @@ _VER="$1"
     if [[ "${_CONFIG}" != *'osnotls'* ]]; then
       LDLIBS+=' -framework Security'
     fi
-    LDLIBS+=' -framework SystemConfiguration'
+    LDLIBS+=' -framework SystemConfiguration -framework CoreFoundation'
   fi
 
   "${_MAKE}" clean

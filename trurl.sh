@@ -46,7 +46,7 @@ _VER="$1"
     if [[ "${_CONFIG}" != *'osnotls'* ]]; then
       LIBS+=' -framework Security'
     fi
-    LIBS+=' -framework SystemConfiguration'
+    LIBS+=' -framework SystemConfiguration -framework CoreFoundation'
   fi
 
   # shellcheck disable=SC2086
