@@ -1765,17 +1765,26 @@ build_single_target() {
     save_PP="${_PP}"
     save_PPS="${_PPS}"
 
-    # Minimal curl configuration optimized for trurl
-    _CONFIG+='-zero-imap-osnotls-osnoidn-nohttp-nocurltool-nounity-CURLNOPKG'
+    # Minimal curl configuration optimized for trurl (if differs from the main config)
+    if [[ "${_CONFIG}" != *'zero'* || \
+          "${_CONFIG}" != *'imap'* || \
+          "${_CONFIG}" != *'osnotls'* || \
+          "${_CONFIG}" != *'osnoidn'* || \
+          "${_CONFIG}" != *'nohttp'* || \
+          "${_CONFIG}" != *'nounity'* ]]; then
 
-    _PKGDIR="_${_CPU}-${_OS}-${_CRT}-for-trurl"
-    _PKGDIRS="${_PKGDIR}"
-    _ZLIB=
-    _OPENSSL=
-    _PP="${_PKGDIR}${_PREFIX}"
-    _PPS="${_PKGDIRS}${_PREFIX}"
+      _CONFIG+='-zero-imap-osnotls-osnoidn-nohttp-nocurltool-nounity-CURLNOPKG'
 
-    bld curl                 "${CURL_VER_}"
+      _PKGDIR="_${_CPU}-${_OS}-${_CRT}-for-trurl"
+      _PKGDIRS="${_PKGDIR}"
+      _ZLIB=
+      _OPENSSL=
+      _PP="${_PKGDIR}${_PREFIX}"
+      _PPS="${_PKGDIRS}${_PREFIX}"
+
+      bld curl                 "${CURL_VER_}"
+    fi
+
     bld trurl               "${TRURL_VER_}"
 
     _CONFIG="${save_CONFIG}"
