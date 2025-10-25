@@ -1785,8 +1785,6 @@ build_single_target() {
     _OPENSSL="${save_OPENSSL}"
     _PP="${save_PP}"
     _PPS="${save_PPS}"
-  else
-    bld trurl               "${TRURL_VER_}"
   fi
 
   # Unified, per-target package: Build
