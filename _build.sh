@@ -1767,7 +1767,7 @@ build_single_target() {
     save_PPS="${_PPS}"
 
     # Minimal curl configuration optimized for trurl
-    _CONFIG+='-zero-imap-osnotls-osnoidn-nohttp-nocurltool-nounity-CURLNOPKG'
+    _CONFIG+='-zero-imap-osnotls-osnoidn-nohttp-nocurltool-CURLNOPKG'
 
     _PKGDIR="_${_CPU}-${_OS}-${_CRT}-for-trurl"
     _PKGDIRS="${_PKGDIR}"
