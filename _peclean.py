@@ -3,8 +3,7 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-"""Sets internal timestamps in PE executables
-"""
+# Sets internal timestamps in PE executables.
 
 import datetime
 import glob
