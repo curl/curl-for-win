@@ -37,6 +37,14 @@ _VER="$1"
     fi
   fi
 
+  # Ugly hack. Everything breaks without this due to the accidental ordering
+  # of libs and objects, and offering no universal way to (re)insert libs at
+  # specific positions. Linker complains about a missing --end-group, then
+  # adds it automatically anyway.
+  if [ "${_LD}" = 'ld' ]; then
+    LDFLAGS+=' -Wl,--start-group'
+  fi
+
   options+=" -DCURL_INCLUDE_DIR=${_TOP}/curl/${_PP}/include"
   options+=" -DCURL_LIBRARY=${_TOP}/curl/${_PP}/lib/libcurl.a"
   if [ "${_OS}" = 'win' ]; then
