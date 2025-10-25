@@ -1752,7 +1752,42 @@ build_single_target() {
   bld libssh2           "${LIBSSH2_VER_}"
   bld cacert             "${CACERT_VER_}"
   bld curl                 "${CURL_VER_}"
-  bld trurl               "${TRURL_VER_}"
+
+  # Special build path for trurl. We first build another libcurl tailored
+  # for trurl. This means using no dependencies and just the options necessary
+  # for trurl, to keep binary size low, with static linking.
+  if [[ "${_DEPS}" = *'trurl'* ]]; then
+    save_CONFIG="${_CONFIG}"
+    save_PKGDIR="${_PKGDIR}"
+    save_PKGDIRS="${_PKGDIRS}"
+    save_ZLIB="${_ZLIB}"
+    save_OPENSSL="${_OPENSSL}"
+    save_PP="${_PP}"
+    save_PPS="${_PPS}"
+
+    # Minimal curl configuration optimized for trurl
+    _CONFIG+='-zero-imap-osnotls-osnoidn-nohttp-nocurltool-nounity-CURLNOPKG'
+
+    _PKGDIR="_${_CPU}-${_OS}-${_CRT}-for-trurl"
+    _PKGDIRS="${_PKGDIR}"
+    _ZLIB=
+    _OPENSSL=
+    _PP="${_PKGDIR}${_PREFIX}"
+    _PPS="${_PKGDIRS}${_PREFIX}"
+
+    bld curl                 "${CURL_VER_}"
+    bld trurl               "${TRURL_VER_}"
+
+    _CONFIG="${save_CONFIG}"
+    _PKGDIR="${save_PKGDIR}"
+    _PKGDIRS="${save_PKGDIRS}"
+    _ZLIB="${save_ZLIB}"
+    _OPENSSL="${save_OPENSSL}"
+    _PP="${save_PP}"
+    _PPS="${save_PPS}"
+  else
+    bld trurl               "${TRURL_VER_}"
+  fi
 
   # Unified, per-target package: Build
   export _NAM="${_UNIPKG}"

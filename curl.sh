@@ -408,6 +408,8 @@ _VER="$1"
     TZ=UTC cmake --build "${_BLDDIR}" --target testdeps
   fi
 
+  [[ "${_CONFIG}" = *'CURLNOPKG'* ]] && exit
+
   # Manual copy to DESTDIR
 
   # These custom outputs end up in different directories depending on make tool
