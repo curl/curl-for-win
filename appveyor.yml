@@ -58,7 +58,7 @@ build_script:
       sudo apt-get -o Dpkg::Use-Pty=0 update
       sudo rm -f /var/lib/man-db/auto-update
       sudo apt-get -o Dpkg::Use-Pty=0 install -y --no-install-suggests --no-install-recommends podman uidmap
-      export CW_CONFIG="${APPVEYOR_REPO_BRANCH}-werror-win"
+      export CW_CONFIG="${APPVEYOR_REPO_BRANCH}-werror-trurl-win"
       . ./_versions.sh
       mkdir -p ~/.config/containers/
       printf "[storage]\ndriver = \"overlay\"\n" > ~/.config/containers/storage.conf
