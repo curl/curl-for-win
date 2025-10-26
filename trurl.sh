@@ -98,7 +98,7 @@ _VER="$1"
   ${_RUN_BIN} "${bin}" --version | sed 's/\r//g' | tee "${out}"
   [ -s "${out}" ] || rm -f "${out}"
 
-  if [ "${CW_TURL_TEST:-}" = '1' ] && \
+  if [ "${CW_TRURL_TEST:-}" = '1' ] && \
      [ "${_RUN_BIN}" != 'true' ]; then
     python3 ./test.py --runner="${_RUN_BIN}" --trurl="${bin}"
   fi
