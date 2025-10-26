@@ -60,7 +60,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        pico       build with less features, see README.md
 #        bldtst     build without 3rd-party dependencies (except zlib) (for testing)
 #        zero       build without 3rd-party dependencies (for testing, implies 'small' option)
-#        trurl      build trurl (default for 'dev' and 'test' configs)
+#        trurl      build trurl (default for 'dev' and 'test' configs) (alongside a second, minimal, libcurl, for trurl only)
 #        thinlto    build with ThinLTO enabled (requires llvm) [EXPERIMENTAL]
 #        small      optimize for size
 #        r64        build riscv64 target only [EXPERIMENTAL]
