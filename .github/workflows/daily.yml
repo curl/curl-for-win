@@ -63,7 +63,10 @@ jobs:
         with:
           name: 'curl-linux-glibc-daily-tool'
           retention-days: 42
-          path: curl-*-*-*/curl*
+          path: |
+            curl-*-*-*/curl*
+            curl-*-*-*/trurl*
+
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: 'curl-linux-glibc-daily'
@@ -108,7 +111,10 @@ jobs:
         with:
           name: 'curl-linux-musl-daily-tool'
           retention-days: 42
-          path: curl-*-*-*/curl*
+          path: |
+            curl-*-*-*/curl*
+            curl-*-*-*/trurl*
+
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: 'curl-linux-musl-daily'
@@ -146,7 +152,10 @@ jobs:
         with:
           name: 'curl-macos-universal-daily-tool'
           retention-days: 42
-          path: curl-*-universal-*/curl*
+          path: |
+            curl-*-universal-*/curl*
+            curl-*-universal-*/trurl*
+
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: 'curl-macos-universal-daily'
@@ -194,7 +203,10 @@ jobs:
         with:
           name: 'curl-windows-daily-tool'
           retention-days: 42
-          path: curl-*-*-*/curl*
+          path: |
+            curl-*-*-*/curl*
+            curl-*-*-*/trurl*
+
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: 'curl-windows-daily'
