@@ -22,13 +22,20 @@ fi
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' golang'
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
-  extra+=' gcc-mingw-w64-x86-64-win32 wine64 wine'
-  [[ "${CW_CONFIG:-}" = *'x86'* ]] && extra+=' gcc-mingw-w64-i686-win32 wine32'
+  extra+=' gcc-mingw-w64-x86-64-win32'
+  extra+=' wine64 wine'
+  if [[ "${CW_CONFIG:-}" = *'x86'* ]]; then
+    extra+=' gcc-mingw-w64-i686-win32'
+    extra+=' wine32'
+  fi
   # https://tracker.debian.org/pkg/osslsigncode
   extra+=' osslsigncode'
   if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
-    extra+=' g++-mingw-w64-x86-64-win32 nasm'
-    [[ "${CW_CONFIG:-}" = *'x86'* ]] && extra+=' g++-mingw-w64-i686-win32'
+    extra+=' g++-mingw-w64-x86-64-win32'
+    extra+=' nasm'
+    if [[ "${CW_CONFIG:-}" = *'x86'* ]]; then
+      extra+=' g++-mingw-w64-i686-win32'
+    fi
   fi
   extra+=' python3-pip python3-venv'  # for pefile and libpsl
   [ -n "${DEPLOY_GPG_PASS:+1}" ] && extra+=' openssh-client'
