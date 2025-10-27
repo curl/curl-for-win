@@ -16,25 +16,27 @@ dl=''
 
 if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
   [ -n "${CW_CCSUFFIX:-}" ] || export CW_CCSUFFIX='-19'
-  extra+=" llvm${CW_CCSUFFIX} clang${CW_CCSUFFIX} lld${CW_CCSUFFIX} libclang-rt${CW_CCSUFFIX}-dev"
+  if [[ "${CW_CONFIG:-}" != *'win'* ]] || [ "${CW_LLVM_MINGW_ONLY:-}" != '1' ]; then
+    extra+=" llvm${CW_CCSUFFIX} clang${CW_CCSUFFIX} lld${CW_CCSUFFIX} libclang-rt${CW_CCSUFFIX}-dev"
+  fi
 fi
 
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' golang'
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
-  extra+=' gcc-mingw-w64-x86-64-win32'
+  [ "${CW_LLVM_MINGW_ONLY:-}" != '1' ] && extra+=' gcc-mingw-w64-x86-64-win32'
   extra+=' wine64 wine'
   if [[ "${CW_CONFIG:-}" = *'x86'* ]]; then
-    extra+=' gcc-mingw-w64-i686-win32'
+    [ "${CW_LLVM_MINGW_ONLY:-}" != '1' ] && extra+=' gcc-mingw-w64-i686-win32'
     extra+=' wine32'
   fi
   # https://tracker.debian.org/pkg/osslsigncode
   extra+=' osslsigncode'
   if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
-    extra+=' g++-mingw-w64-x86-64-win32'
+    [ "${CW_LLVM_MINGW_ONLY:-}" != '1' ] && extra+=' g++-mingw-w64-x86-64-win32'
     extra+=' nasm'
     if [[ "${CW_CONFIG:-}" = *'x86'* ]]; then
-      extra+=' g++-mingw-w64-i686-win32'
+      [ "${CW_LLVM_MINGW_ONLY:-}" != '1' ] && extra+=' g++-mingw-w64-i686-win32'
     fi
   fi
   extra+=' python3-pip python3-venv'  # for pefile and libpsl
