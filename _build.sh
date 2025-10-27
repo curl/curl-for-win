@@ -1357,7 +1357,7 @@ build_single_target() {
 
   # for boringssl/awslc
   export _STRIP_BINUTILS=''
-  if [ "${_OS}" = 'win' ] && [ "${_CC}" = 'llvm' ]; then
+  if [ "${_OS}" = 'win' ] && [ "${_CC}" = 'llvm' ] && [ "${boringssl}" = '1' ]; then
     if [ "${_CPU}" = 'x64' ] || \
        [ "${_CPU}" = 'x86' ]; then
       # Make sure to pick the prefixed binutils strip tool from an unmodified
