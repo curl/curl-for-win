@@ -668,7 +668,7 @@ jobs:
           SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
           SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'
-          CW_LLVM_MINGW_ONLY: '0'
+          CW_LLVM_MINGW_ONLY: '1'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-win"
           export CW_REVISION="${GITHUB_SHA}"
@@ -703,7 +703,7 @@ jobs:
           SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
           SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'
-          CW_LLVM_MINGW_ONLY: '0'
+          CW_LLVM_MINGW_ONLY: '1'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-win"
           export CW_REVISION="${GITHUB_SHA}"
