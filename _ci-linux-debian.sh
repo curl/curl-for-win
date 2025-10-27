@@ -24,10 +24,18 @@ fi
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' golang'
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
-  [ "${CW_LLVM_MINGW_ONLY:-}" != '1' ] && extra+=' gcc-mingw-w64-x86-64-win32'
+  if [ "${CW_LLVM_MINGW_ONLY:-}" != '1' ]; then
+    extra+=' gcc-mingw-w64-x86-64-win32'
+  elif [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
+    extra+=' binutils-mingw-w64-x86-64'
+  fi
   extra+=' wine64 wine'
   if [[ "${CW_CONFIG:-}" = *'x86'* ]]; then
-    [ "${CW_LLVM_MINGW_ONLY:-}" != '1' ] && extra+=' gcc-mingw-w64-i686-win32'
+    if [ "${CW_LLVM_MINGW_ONLY:-}" != '1' ]; then
+      extra+=' gcc-mingw-w64-i686-win32'
+    elif [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
+      extra+=' binutils-mingw-w64-i686'
+    fi
     extra+=' wine32'
   fi
   # https://tracker.debian.org/pkg/osslsigncode
