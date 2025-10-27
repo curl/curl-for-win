@@ -609,7 +609,7 @@ jobs:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'
-          CW_LLVM_MINGW_ONLY: '0'
+          CW_LLVM_MINGW_ONLY: '1'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-win"
           export CW_REVISION="${GITHUB_SHA}"
@@ -640,7 +640,7 @@ jobs:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'
-          CW_LLVM_MINGW_ONLY: '0'
+          CW_LLVM_MINGW_ONLY: '1'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-win"
           export CW_REVISION="${GITHUB_SHA}"
