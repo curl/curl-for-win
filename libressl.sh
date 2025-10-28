@@ -3,8 +3,8 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-# Caveats (as of 4.1.0):
-# - ASM support only for x64.
+# Caveats (as of 4.2.0):
+# - Most ASM is implemented for x64 only.
 # - Not possible to hide most ASM symbols from shared lib exports in Linux, macOS.
 #   https://github.com/libressl/portable/issues/957
 #   Local patch exists for this, or ASM can be disabled.
