@@ -150,22 +150,26 @@ cat <<EOF
   {
     "name": "llvm-mingw-linux-x86-64",
     "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-ubuntu-22.04-x86_64.tar.xz",
-    "redir": "redir"
+    "redir": "redir",
+    "pinned": true
   },
   {
     "name": "llvm-mingw-linux-aarch64",
     "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-ubuntu-22.04-aarch64.tar.xz",
-    "redir": "redir"
+    "redir": "redir",
+    "pinned": true
   },
   {
     "name": "llvm-mingw-mac",
     "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-macos-universal.tar.xz",
-    "redir": "redir"
+    "redir": "redir",
+    "pinned": true
   },
   {
     "name": "llvm-mingw-win",
     "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-x86_64.zip",
-    "redir": "redir"
+    "redir": "redir",
+    "pinned": true
   }
 ]
 EOF
