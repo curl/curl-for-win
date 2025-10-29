@@ -122,7 +122,7 @@ _VER="$1"
       options+=' -DCURL_WINDOWS_SSPI=OFF'
     fi
     options+=' -DENABLE_UNIX_SOCKETS=OFF'
-    options+=' -DENABLE_WEBSOCKETS=OFF'
+    options+=' -DCURL_DISABLE_WEBSOCKETS=ON'
     options+=' -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON'
   else
     [[ "${_CONFIG}" = *'noftp'* ]] && options+=' -DCURL_DISABLE_FTP=ON'
