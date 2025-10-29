@@ -529,6 +529,9 @@ _VER="$1"
     out="../curl-version-${_CPUPUB}.txt"
     ${_RUN_BIN} "${bin}" --disable --version | sed 's/\r//g' | tee "${out}"
     [ -s "${out}" ] || rm -f "${out}"
+
+    # Test basic functionality
+    ${_RUN_BIN} "${bin}" --disable --verbose --head https://curl.se/
   fi
 
   # Create package
