@@ -787,7 +787,7 @@ if [ "${need_cacert}" = '1' ]; then
   _DEPS+=' cacert'
 fi
 
-if [[ "${_CONFIG}" =~ (dev|test|trurl) ]]; then
+if [[ "${_CONFIG}" != *'notrurl'* && "${_CONFIG}" =~ (dev|test|trurl) ]]; then
   _DEPS+=' trurl'
 fi
 
