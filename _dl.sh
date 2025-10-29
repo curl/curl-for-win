@@ -943,7 +943,7 @@ if [[ "${_DEPS}" = *'trurl'* ]]; then
     # shellcheck disable=SC2153
     live_xt trurl "${TRURL_HASH}"
   fi
-  if [[ "${_CONFIG}" = *'dev'* ]] || [ -d 'trurl/.git' ]; then
+  if [[ "${_CONFIG}" = *'dev'* && -d 'trurl' ]] || [ -d 'trurl/.git' ]; then
     TRURL_VER_="$(grep -a -F 'define TRURL_VERSION_TXT' 'trurl/version.h' | grep -o -E '".+"' | tr -d '"')-DEV"
   fi
 fi
