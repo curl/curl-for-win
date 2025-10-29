@@ -136,9 +136,10 @@ _VER="$1"
   if [[ "${_CONFIG}" = *'nocookie'* ]]; then
     options+=' -DCURL_DISABLE_COOKIES=ON'
   fi
-
   if [[ "${_CONFIG}" = *'nohttp'* ]]; then
     options+=' -DCURL_DISABLE_HTTP=ON'
+  fi
+  if [[ "${_CONFIG}" = *'nohttp'* || "${_CONFIG}" = *'noproxy'* ]]; then
     options+=' -DCURL_DISABLE_PROXY=ON'
   fi
 

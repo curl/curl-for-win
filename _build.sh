@@ -45,6 +45,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        noftp      build without FTP/FTPS support
 #        nohttp     build without HTTP and proxy support
 #        nocookie   build without cookie support
+#        noproxy    build without proxy support
 #        imap       build with IMAP protocol (for zero, bldtst or pico build)
 #        awslc      build with AWS-LC [EXPERIMENTAL]
 #        boringssl  build with BoringSSL [EXPERIMENTAL]
