@@ -34,6 +34,7 @@ environment:
   CW_LLVM_MINGW_ONLY: '0'
   CW_MAP: '0'
   CW_JOBS: '2'
+  CW_CURL_TEST: '1'
   SIGN_CODE_GPG_PASS:
     secure: 'GalldmjiSv7Zkxb+W9T2ccx8M58tEJx6vXIs75szSPAVGH3Tl6s/IjIfdYhcjKQf'
   SIGN_CODE_KEY_PASS:

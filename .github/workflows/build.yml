@@ -21,6 +21,7 @@ env:
   GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
   CW_MAP: '1'
   CW_JOBS: '5'
+  CW_CURL_TEST: '1'
   DO_NOT_TRACK: '1'
 
 jobs:
