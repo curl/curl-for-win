@@ -23,7 +23,7 @@ updates:
       - '/'
       - '.github/workflows'
     schedule:
-      interval: 'monthly'
+      interval: 'quarterly'
     cooldown:
       default-days: 7
       semver-major-days: 15
