@@ -3,4 +3,4 @@
 
 codespell==2.4.1
 reuse==6.1.2
-ruff==0.14.1
+ruff==0.14.2
