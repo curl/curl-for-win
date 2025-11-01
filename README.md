@@ -7,6 +7,9 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 
 # Reproducible, static, curl binaries for Linux, macOS and Windows
 
+> [!tip]
+> A statically built [`trurl`](https://github.com/curl/trurl) binary is now part of the package.
+
 - [Download](https://curl.se/windows/) our
   `.zip` or `.tar.xz` packages,<br>PGP signed with:
   [`BDCF 067D 3908 B272 7A4A 9487 67C1 0037 40BF 8DC2`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
