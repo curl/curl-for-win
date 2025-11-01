@@ -6,7 +6,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 [![Daily status](https://github.com/curl/curl-for-win/actions/workflows/daily.yml/badge.svg)](https://github.com/curl/curl-for-win/actions/workflows/daily.yml)
 
 > [!tip]
-> The statically built [`trurl`](https://github.com/curl/trurl) binary is part of the package since October 2025.
+> The statically built [`trurl`](https://github.com/curl/trurl) binary is part of the package since [October 2025](https://github.com/curl/trurl/discussions/408).
 
 # Reproducible, static, curl binaries for Linux, macOS and Windows
 
