@@ -343,7 +343,7 @@ _VER="$1"
     options+=' -DBUILD_STATIC_CURL=ON'
 
     if [ -n "${_OPENSSL}" ]; then
-      if [ "${_OS}" = 'mac' ] && [ "${CURL_VER_}" != '8.16.0' ]; then
+      if [ "${_OS}" = 'mac' ]; then
         options+=' -DUSE_APPLE_SECTRUST=ON'
       else
         if [[ "${_DEPS}" = *'cacert'* ]]; then
