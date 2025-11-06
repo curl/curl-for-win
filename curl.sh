@@ -605,6 +605,7 @@ _VER="$1"
           printf "%s\r\n" '@if "%PROCESSOR_ARCHITECTURE%" == "ARM64" set bb_exe=busybox64a.exe'
           printf "%s\r\n" '@for %%P in (%PATH:;=;%) do @dir /b "%%~P\busybox.exe" >nul 2>&1 && (set bb_dir=%%~P\& set bb_exe=busybox.exe)'
           printf "%s\r\n" '@if not exist "%bb_dir%%bb_exe%" curl -fsSO https://frippery.org/files/busybox/%bb_exe%'
+          printf "%s\r\n" '@set PATH=%~dp0;%PATH'
           printf "%s\r\n" '@"%bb_dir%%bb_exe%" sh "%~dp0wcurl" %*'
         } > "${_DST}"/bin/wcurl.bat
       fi
