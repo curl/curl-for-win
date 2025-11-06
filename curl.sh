@@ -607,7 +607,7 @@ _VER="$1"
           printf "%s\r\n" '@if not exist "%bb_dir%%bb_exe%" curl -fsSO https://frippery.org/files/busybox/%bb_exe%'
           printf "%s\r\n" '@set PATH=%~dp0;%PATH'
           printf "%s\r\n" '@"%bb_dir%%bb_exe%" sh "%~dp0wcurl" %*'
-        } > "${_DST}"/bin/wcurl.bat
+        } > "${_DST}"/bin/wcurl.cmd
       fi
     fi
   fi
