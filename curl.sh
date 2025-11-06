@@ -589,6 +589,9 @@ _VER="$1"
 
   if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
     cp -f -p "${bin}"                           "${_DST}"/bin/
+    if [ "${_OS}" != 'win' ]; then
+      cp -f -p "${_PP}"/bin/wcurl                 "${_DST}"/bin/
+    fi
   fi
 
   if [ "${_OS}" = 'win' ]; then

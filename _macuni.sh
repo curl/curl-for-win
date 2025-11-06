@@ -39,7 +39,7 @@ else
   # Is it possible to merge .map files? Exclude them from universal packages for now.
   find "${unipkg}" -name '*.map' -delete
   # Walk through all executables and libraries we want to merge into universal.
-  find "${unipkg}" -mindepth 2 -type f \( -name '*.a' -o -perm +111 \) | while read -r f; do
+  find "${unipkg}" -mindepth 2 -type f \( -name '*.a' -o \( -perm +111 -a -not -name 'wcurl' \) \) | while read -r f; do
     sub="$(printf '%s' "${f}" | cut -c 2- | sed -E 's|^[^/]+||g')"  # get subdir part, e.g. '/lib/libname.a'
     in=()
     while read -r d; do
