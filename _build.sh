@@ -1772,10 +1772,9 @@ build_single_target() {
           "${_CONFIG}" != *'imap'* || \
           "${_CONFIG}" != *'osnotls'* || \
           "${_CONFIG}" != *'osnoidn'* || \
-          "${_CONFIG}" != *'nohttp'* || \
-          "${_CONFIG}" != *'nounity'* ]]; then
+          "${_CONFIG}" != *'nohttp'* ]]; then
 
-      _CONFIG+='-zero-imap-osnotls-osnoidn-nohttp-nocurltool-nounity-CURLNOPKG'
+      _CONFIG+='-zero-imap-osnotls-osnoidn-nohttp-nocurltool-CURLNOPKG'
 
       _PKGDIR="_${_CPU}-${_OS}-${_CRT}-for-trurl"
       _PKGDIRS="${_PKGDIR}"
