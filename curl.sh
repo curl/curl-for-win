@@ -94,6 +94,10 @@ _VER="$1"
 
   if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro|mini) ]]; then
     options+=' -DUSE_SSLS_EXPORT=ON'
+
+    if [ "${_OS}" = 'mac' ] && [[ "${_CONFIG}" != *'nogss'* ]]; then
+      options+=' -DCURL_USE_GSSAPI=ON'
+    fi
   fi
 
   # for H2/H3
