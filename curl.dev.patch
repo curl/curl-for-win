@@ -1,1 +1,13 @@
-curl.patch
+diff --git a/wcurl b/wcurl
+index 7b53b74..45857d6 100755
+--- a/scripts/wcurl
++++ b/scripts/wcurl
+@@ -85,7 +85,7 @@ _EOF_
+ # Display an error message and bail out.
+ error()
+ {
+-    printf "%s\n" "$*" > /dev/stderr
++    printf "%s\n" "$*" >&2
+     exit 1
+ }
+ 
