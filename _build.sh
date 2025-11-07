@@ -1784,7 +1784,12 @@ build_single_target() {
       _PP="${_PKGDIR}${_PREFIX}"
       _PPS="${_PKGDIRS}${_PREFIX}"
 
+      save_CW_BLD="${CW_BLD:-}"
+      [ -n "${CW_BLD:-}" ] && CW_BLD="${CW_BLD} curl"  # to allow disabling the main curl build, and still be able to build trurl
+
       bld curl                 "${CURL_VER_}"
+
+      CW_BLD="${save_CW_BLD}"
     fi
 
     bld trurl               "${TRURL_VER_}"
