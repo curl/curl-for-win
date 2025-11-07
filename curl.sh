@@ -363,6 +363,12 @@ _VER="$1"
     options+=' -DBUILD_CURL_EXE=OFF'
   fi
 
+  if [[ "${_CONFIG}" = *'CURLNOPKG'* ]]; then
+    options+=' -DBUILD_SHARED_LIBS=OFF'
+  else
+    options+=' -DBUILD_SHARED_LIBS=ON'
+  fi
+
   patch="${_NAM}${_PATCHSUFFIX}.patch"
   if [ -f "../${patch}" ] && false; then
     # This command requires a git clone deep enough to contain all
@@ -391,7 +397,6 @@ _VER="$1"
     cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
       -DCURL_CA_PATH=none \
       -DCURL_CA_BUNDLE=none \
-      -DBUILD_SHARED_LIBS=ON \
       -DBUILD_STATIC_LIBS=ON \
       -DCURL_HIDDEN_SYMBOLS=ON \
       -DCMAKE_RC_FLAGS="${_RCFLAGS_GLOBAL}" \
