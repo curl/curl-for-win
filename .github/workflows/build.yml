@@ -85,18 +85,16 @@ jobs:
         run: |
           source ~/venv/bin/activate
           codespell --version
-          # shellcheck disable=SC2046
+          git ls-files -z | xargs -0 -r \
           codespell --skip='*.asc,*.patch,*.pem' \
-            --ignore-words '.github/workflows/codespell-ignore.words' \
-            $(git ls-files)
+            --ignore-words '.github/workflows/codespell-ignore.words'
 
       - name: 'ruff'
         run: |
           source ~/venv/bin/activate
           ruff --version
-          # shellcheck disable=SC2046
-          ruff check --extend-select=B007,B016,C405,C416,COM818,D200,D213,D204,D401,D415,FURB129,N818,PERF401,PERF403,PIE790,PIE808,PLW0127,Q004,RUF010,SIM101,SIM117,SIM118,TRY400,TRY401 \
-            $(git ls-files '*.py')
+          git ls-files -z '*.py' | xargs -0 -r \
+          ruff check --extend-select=B007,B016,C405,C416,COM818,D200,D213,D204,D401,D415,FURB129,N818,PERF401,PERF403,PIE790,PIE808,PLW0127,Q004,RUF010,SIM101,SIM117,SIM118,TRY400,TRY401 --
 
   linux-glibc-debian-testing-llvm:
     name: 'linux-glibc-debian-testing-llvm'
