@@ -20,9 +20,9 @@ if [ "${_NAM}" != "${_UNIPKG}" ]; then
 
   chmod -R a+rw-s,go-w "${_DST}"
   # NOTE: Not effective on MSYS2:
-  find "${_DST}" -name '*.a' -exec chmod a-x '{}' +
+  find "${_DST}" -name '*.a' -exec chmod a-x -- '{}' +
   if [ "${_OS}" = 'win' ]; then
-    find "${_DST}" \( -name '*.exe' -o -name '*.dll' \) -exec chmod a+x '{}' +
+    find "${_DST}" \( -name '*.exe' -o -name '*.dll' \) -exec chmod a+x -- '{}' +
   fi
 
   # First, merge this package into the unified package
@@ -70,10 +70,10 @@ create_pkg() {
   (
     cd "${_DST}/.."
     case "${_HOST}" in
-      win) find "${_BAS}" -exec attrib +A -R '{}' \;
+      win) find "${_BAS}" -exec attrib +A -R -- '{}' \;
     esac
 
-    find "${_DST}" -depth -type d -exec touch -c -r "$1" '{}' +
+    find "${_DST}" -depth -type d -exec touch -c -r "$1" -- '{}' +
 
     find "${_BAS}" | sort > "${_FLS}"
 
