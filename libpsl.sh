@@ -28,12 +28,13 @@ _VER="$1"
   mkdir -p "${_BLDDIR}"
   (
     cd "${_BLDDIR}"
-    # shellcheck disable=SC2046,SC2086
+    # shellcheck disable=SC2086
+    find ../src -name '*.c' -print0 | sort -z | xargs -0 -r \
     ${_CC_GLOBAL} ${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_RAW} ${_CPPFLAGS_GLOBAL} \
       -DENABLE_BUILTIN -DPACKAGE_VERSION="\"${LIBPSL_VER_}\"" \
-      -I. -I.. -I../include -c $(find ../src -name '*.c' | sort)
-    # shellcheck disable=SC2046
-    "${AR}" rcs libpsl.a $(find . -name '*.o' | sort)
+      -I. -I.. -I../include -c   # clang supports `--`, gcc does not
+    find . -name '*.o' -print0 | sort -z | xargs -0 -r \
+    "${AR}" rcs libpsl.a
   )
 
   # Install manually
