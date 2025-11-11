@@ -55,7 +55,7 @@ jobs:
       - name: 'actionlint'
         run: |
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          export SHELLCHECK_OPTS='--exclude=1090,1091,2086,2153 --enable=avoid-nullary-conditions,deprecate-which'
+          export SHELLCHECK_OPTS='--exclude=1090,1091 --enable=avoid-nullary-conditions,deprecate-which'
           actionlint --version
           actionlint .github/workflows/*.yml
 
@@ -63,7 +63,7 @@ jobs:
         run: |
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           shellcheck --version
-          export SHELLCHECK_OPTS='--exclude=1090,1091,2086,2153 --enable=avoid-nullary-conditions,deprecate-which'
+          export SHELLCHECK_OPTS='--exclude=1090,1091 --enable=avoid-nullary-conditions,deprecate-which'
           git ls-files '.github/workflows/*.yml' | while read -r f; do
             echo "Verifying ${f}..."
             {
