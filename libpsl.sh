@@ -28,7 +28,7 @@ _VER="$1"
     gencsrc='suffixes_dafsa.h'
     python3 'src/psl-make-dafsa' --output-format=cxx+ "${pslfile}" "${gencsrc}"
     # The generator above is including the local PDL filename in the output.
-    # libpsl is then making an attemp to load this filename at runtime as-is
+    # libpsl is then making an attempt to load this filename at runtime as-is
     # and loading its content if its timestamp is newer than the embedded one.
     # This is terrible idea in many use cases, including this one, because:
     # - the filename is relative one.
