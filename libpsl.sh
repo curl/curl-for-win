@@ -48,6 +48,11 @@ _VER="$1"
       echo "! Error: Our local PSL database filename is leaking into the libpsl code."
       exit 1
     fi
+    # Fix to use the Windows-native stat function to avoid mingw-w64 v13
+    # mapping the POSIX 'stat' one used in libpsl to an intrinsic and breaking
+    # interoperability with earlier mingw-w64 versions.
+    # This shall really be fixed upstream in libpsl.
+    [ "${_OS}" = 'win' ] && echo '#define stat _stati64' >> "${gencsrc}"
   fi
 
   mkdir -p "${_BLDDIR}"
