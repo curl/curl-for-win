@@ -71,9 +71,7 @@ _VER="$1"
         rm -f "${tmp}"
       fi
 
-      if [ "${_OS}" = 'win' ]; then
-        CPPFLAGS+=' -DWIN32_LEAN_AND_MEAN'
-      fi
+      [ "${_OS}" = 'win' ] && CPPFLAGS+=' -DWIN32_LEAN_AND_MEAN'
       LIBS+=' -lpthread'  # to detect EVP_aes_128_*
     elif [ "${_OPENSSL}" = 'libressl' ]; then
       # FIXME (upstream):
