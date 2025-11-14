@@ -23,7 +23,32 @@ _VER="$1"
   # Build manually
 
   # require the psl package, always
-  [ -f 'suffixes_dafsa.h' ] || python3 'src/psl-make-dafsa' --output-format=cxx+ "../psl/${_PSL}" 'suffixes_dafsa.h'
+  if [ ! -f 'suffixes_dafsa.h' ]; then
+    pslfile="../psl/${_PSL}"
+    gencsrc='suffixes_dafsa.h'
+    python3 'src/psl-make-dafsa' --output-format=cxx+ "${pslfile}" "${gencsrc}"
+    # The generator above is including the local PDL filename in the output.
+    # libpsl is then making an attemp to load this filename at runtime as-is
+    # and loading its content if its timestamp is newer than the embedded one.
+    # This is terrible idea in many use cases, including this one, because:
+    # - the filename is relative one.
+    # - this is loaded on the end user's machine, relative to their current
+    #   working directory.
+    # - which is by good chance world-writable, and for sure without any
+    #   guarantees for protection.
+    # - there is no universal location on disks that is not world-writable.
+    # - leaks this internal filename into the final binary.
+    # Similar case to OpenSSL configurations and CA bundles loaded from
+    # world-writable, or arbitrary places on disk (such as PATH), on Windows.
+    # To avoid these issues, strip the filename from the output to avoid
+    # loading it at runtime:
+    sed -i.bak -E 's/(_psl_filename\[\]) *=.+/\1 = "";/g' "${gencsrc}"
+    # Verify and abort if the filename is still found in the file
+    if grep -a -F "${pslfile}" "${gencsrc}"; then
+      echo "! Error: Our local PSL database filename is leaking into the libpsl code."
+      exit 1
+    fi
+  fi
 
   mkdir -p "${_BLDDIR}"
   (
