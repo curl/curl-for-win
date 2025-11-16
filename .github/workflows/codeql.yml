@@ -23,7 +23,6 @@ permissions: {}
 
 jobs:
   gha_python:
-    if: ${{ github.repository_owner == 'curl' || github.event_name != 'schedule' }}
     name: 'GHA and Python'
     runs-on: ubuntu-latest
     permissions:
