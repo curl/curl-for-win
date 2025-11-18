@@ -93,8 +93,6 @@ _VER="$1"
   options+=' -DBUILD_EXAMPLES=OFF'
 
   if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro|mini) ]]; then
-    options+=' -DUSE_SSLS_EXPORT=ON'
-
     if [ "${_OS}" = 'mac' ] && [[ "${_CONFIG}" != *'nogss'* ]]; then
       options+=' -DCURL_USE_GSSAPI=ON'
     fi
