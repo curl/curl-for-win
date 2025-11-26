@@ -36,7 +36,7 @@ _VER="$1"
     #   working directory.
     # - which is by good chance world-writable, and for sure without any
     #   guarantees for protection.
-    # - there is no universal location on disks that is not world-writable.
+    # - there is no universal location on disk that is not world-writable.
     # - leaks this internal filename into the final binary.
     # Similar case to OpenSSL configurations and CA bundles loaded from
     # world-writable, or arbitrary places on disk (such as PATH), on Windows.
