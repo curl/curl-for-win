@@ -77,7 +77,7 @@ create_pkg() {
 
     find "${_BAS}" | sort > "${_FLS}"
 
-    rm -f "${_cdo}/${_pkg}"
+    rm -f -- "${_cdo}/${_pkg}"
     case "${arch_ext}" in
       .tar.xz) TZ=UTC tar --create \
         --format=ustar \
@@ -91,7 +91,7 @@ create_pkg() {
     touch -c -r "$1" "${_cdo}/${_pkg}"
   )
 
-  rm -f "${_FLS}"
+  rm -f -- "${_FLS}"
 
   # <filename>: <size> bytes <YYYY-MM-DD> <HH:MM>
   case "${_HOST}" in

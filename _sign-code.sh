@@ -39,7 +39,7 @@ EOF
   # "${_OSSLSIGNCODE}" extract-signature \
   #   -in  "${file}-signed" \
   #   -out "${file}.p7"
-    cp -f "${file}-signed" "${file}"
-    rm -f "${file}-signed"
+    cp -f -- "${file}-signed" "${file}"
+    rm -f -- "${file}-signed"
   done
 fi

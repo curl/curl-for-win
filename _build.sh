@@ -1337,7 +1337,7 @@ build_single_target() {
       # Workaround for:
       #   ../crypto/mem_sec.c:60:13: fatal error: linux/mman.h: No such file or directory
       # Based on: https://github.com/openssl/openssl/issues/7207#issuecomment-880121450
-      _my_incdir='_sys_include'; rm -r -f "${_my_incdir}"; mkdir "${_my_incdir}"; _my_incdir="$(pwd)/${_my_incdir}"
+      _my_incdir='_sys_include'; rm -r -f -- "${_my_incdir}"; mkdir "${_my_incdir}"; _my_incdir="$(pwd)/${_my_incdir}"
       ln -s -f "/usr/include/${_HOST_TRIPLETSH}/asm" "${_my_incdir}/asm"
       ln -s -f '/usr/include/asm-generic'            "${_my_incdir}/asm-generic"
       ln -s -f '/usr/include/linux'                  "${_my_incdir}/linux"
@@ -1910,20 +1910,20 @@ elif [ "${_OS}" = 'linux' ]; then
 fi
 
 case "${_HOST}" in
-  mac)   rm -f -P "${SIGN_CODE_KEY}";;
-  linux) [ -w "${SIGN_CODE_KEY}" ] && command -v srm >/dev/null 2>&1 && srm "${SIGN_CODE_KEY}";;
+  mac)   rm -f -P -- "${SIGN_CODE_KEY}";;
+  linux) [ -w "${SIGN_CODE_KEY}" ] && command -v srm >/dev/null 2>&1 && srm -- "${SIGN_CODE_KEY}";;
 esac
-rm -f "${SIGN_CODE_KEY}"
+rm -f -- "${SIGN_CODE_KEY}"
 
 # Upload/deploy binaries
 . ./_ul.sh
 
 if [ -n "${COSIGN_PKG_KEY:-}" ]; then
   case "${_HOST}" in
-    mac)   rm -f -P "${COSIGN_PKG_KEY}";;
-    linux) [ -w "${COSIGN_PKG_KEY}" ] && command -v srm >/dev/null 2>&1 && srm "${COSIGN_PKG_KEY}";;
+    mac)   rm -f -P -- "${COSIGN_PKG_KEY}";;
+    linux) [ -w "${COSIGN_PKG_KEY}" ] && command -v srm >/dev/null 2>&1 && srm -- "${COSIGN_PKG_KEY}";;
   esac
-  rm -f "${COSIGN_PKG_KEY}"
+  rm -f -- "${COSIGN_PKG_KEY}"
 fi
 
 # Leave "flat" layout for curl tool if requested

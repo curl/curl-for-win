@@ -12,7 +12,7 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 # Redirect stdout securely to non-world-readable files
 privout() {
-  o="$1"; rm -f "$o"; install -m 600 /dev/null "$o"; shift
+  o="$1"; rm -f -- "$o"; install -m 600 /dev/null "$o"; shift
   (
     "$@"
   ) >> "$o"
@@ -76,7 +76,7 @@ passphrase: ${pass}
 %echo ! Done.
 EOF
 
-fp="$(cat "${master}-id.txt")"; rm -f "${master}-id.txt"
+fp="$(cat "${master}-id.txt")"; rm -f -- "${master}-id.txt"
 echo "MY_GPG_SIGN_KEY=${fp}"
 
 # Save the automatically generated revocation certificate
@@ -155,4 +155,4 @@ my_gpg --batch --yes --no-tty \
   --s2k-cipher-algo aes256 --s2k-digest-algo sha512 \
   --symmetric --no-symkey-cache --output "${master}-private_gpg.asc" --armor
 
-rm -r -f "${dir}"; unset GNUPGHOME
+rm -r -f -- "${dir}"; unset GNUPGHOME

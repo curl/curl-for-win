@@ -61,7 +61,7 @@ esac
 
 # Redirect stdout securely to non-world-readable files
 privout() {
-  o="$1"; rm -f "$o"; install -m 600 /dev/null "$o"; shift
+  o="$1"; rm -f -- "$o"; install -m 600 /dev/null "$o"; shift
   (
     "$@"
   ) >> "$o"

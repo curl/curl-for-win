@@ -68,7 +68,7 @@ _VER="$1"
         touch -r "${v}" "${tmp}"
         printf '\n#if 0\n%s\n#endif\n' "${l}" >> "${v}"
         touch -r "${tmp}" "${v}"
-        rm -f "${tmp}"
+        rm -f -- "${tmp}"
       fi
 
       [ "${_OS}" = 'win' ] && CPPFLAGS+=' -DWIN32_LEAN_AND_MEAN'
