@@ -27,12 +27,12 @@ _VER="$1"
   cmake --install "${_BLDDIR}" --prefix "${_PP}"
 
   # libcurl does not need the encoding functionality
-  rm -f "${_PP}"/include/encode.h
-  rm -f "${_PP}"/lib/libbrotlienc.a
-  rm -f "${_PP}"/lib/pkgconfig/libbrotlienc.pc
+  rm -f -- "${_PP}"/include/encode.h
+  rm -f -- "${_PP}"/lib/libbrotlienc.a
+  rm -f -- "${_PP}"/lib/pkgconfig/libbrotlienc.pc
 
   # Delete .pc files
-  rm -r -f "${_PP}"/lib/pkgconfig
+  rm -r -f -- "${_PP}"/lib/pkgconfig
 
   # Make steps for determinism
 

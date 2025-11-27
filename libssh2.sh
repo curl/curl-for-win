@@ -68,7 +68,7 @@ _VER="$1"
 
   readonly _ref='NEWS'
 
-  rm -f "${_PPS}"/lib/*.dll.a
+  rm -f -- "${_PPS}"/lib/*.dll.a
 
   # shellcheck disable=SC2086
   "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PPS}"/lib/*.a

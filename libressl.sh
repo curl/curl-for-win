@@ -122,8 +122,8 @@ _VER="$1"
   # We want to keep this package as interchangeable with other openssl forks
   # as possible. Do not distribute the libressl-specific libtls at this time.
   # libtls also has pending issue when built with CMake, as of v3.8.2.
-  rm -f "${_PP}/lib/libtls.a"
-  rm -f "${_PP}/include/tls.h"
+  rm -f -- "${_PP}/lib/libtls.a"
+  rm -f -- "${_PP}/include/tls.h"
 
   # Make steps for determinism
 
