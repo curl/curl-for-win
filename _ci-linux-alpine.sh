@@ -14,7 +14,8 @@ extra=''
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go'
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
-  extra+=' mingw-w64-gcc-base wine'
+  extra+=' mingw-w64-gcc-base'
+  [[ "${CW_CONFIG:-}" != *'noWINE'* ]] && extra+=' wine'
   if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
     extra+=' nasm'
   fi

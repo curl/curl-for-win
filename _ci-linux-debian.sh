@@ -29,7 +29,7 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   elif [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
     extra+=' binutils-mingw-w64-x86-64'
   fi
-  extra+=' wine64 wine'
+  [[ "${CW_CONFIG:-}" != *'noWINE'* ]] && extra+=' wine64 wine'
   if [[ "${CW_CONFIG:-}" = *'x86'* ]]; then
     if [ "${CW_LLVM_MINGW_ONLY:-}" != '1' ]; then
       extra+=' gcc-mingw-w64-i686-win32'

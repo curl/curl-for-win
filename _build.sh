@@ -81,6 +81,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        osnoidn    build curl without OS-supplied IDN support
 #        werror     turn compiler warnings into errors
 #        nodumpconf do not dump curl_config.h
+#        noWINE     do not install WINE (to show/extract version info from freshly built curl/trurl)
 #        debug      debug build
 #        curltests  build curl tests
 #        win        build Windows target (default)

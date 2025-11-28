@@ -16,9 +16,12 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   extra+=' mingw-w64 osslsigncode'
   [ -n "${DEPLOY_GPG_PASS:+1}" ] && extra+=' openssh'
   # On AppVeyor CI macos-sonoma runner wine stalls for 5 minutes 5 times with
-  # this error on first invocation (from this script). Then on a next invocation
+  # an error on first invocation (from this script). Then on a next invocation
   # it repeats the 5-minute stalls indefinitely. Skip wine as a workaround:
-  [ -z "${APPVEYOR_ACCOUNT_NAME:-}" ] && extra+=' wine-stable'
+  if [[ "${CW_CONFIG:-}" != *'noWINE'* ]] && \
+     [ -z "${APPVEYOR_ACCOUNT_NAME:-}" ]; then
+    extra+=' wine-stable'
+  fi
   if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
     extra+=' nasm'
   fi
