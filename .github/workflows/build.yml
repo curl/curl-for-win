@@ -611,7 +611,7 @@ jobs:
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '1'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-win"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-win-noWINE"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sh -c ./_ci-mac-homebrew.sh
@@ -642,7 +642,7 @@ jobs:
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '1'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-win"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-win-noWINE"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
@@ -681,7 +681,7 @@ jobs:
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-win-gcc"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-win-gcc-noWINE"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
