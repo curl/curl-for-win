@@ -101,4 +101,4 @@ llvm_latest="$(curl --disable --user-agent 'curl' --silent --fail --show-error \
   | hxclean | hxselect -i -c -s '\n' 'h3' \
   | grep -a -o -E 'llvm-[0-9]+' | sort -u | tail -n -1)"
 
-echo; echo "export CW_CCSUFFIX='$(echo "${llvm_latest}" | cut -c 5-)'  # ${llvm_latest}"
+echo; echo "export CW_CCSUFFIX='$(echo "${llvm_latest}" | cut -c 5-)'  # ${llvm_latest} (in debian:testing)"
