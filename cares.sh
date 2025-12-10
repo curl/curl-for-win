@@ -3,13 +3,10 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-# Issues (as of 1.34.5):
+# Issues (as of 1.34.6):
 # - `-DCARES_SYMBOL_HIDING=ON` does not seem to work on macOS with clang for
 #   example. The issue seems to be that CARES_EXTERN is set unconditionally
 #   to default visibility and -fvisibility=hidden does not override that.
-# - Compiler warnings when building for macOS with GCC.
-# - `bool` type is undeclared in <notify.h> when building for macOS with GCC.
-#   [MERGED via https://github.com/c-ares/c-ares/pull/989 expected in next after 1.34.5 release]
 # - Bad cmake configure performance.
 
 # shellcheck disable=SC3040,SC2039

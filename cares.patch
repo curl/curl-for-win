@@ -11,15 +11,3 @@ index 7fe3ec78..ac417245 100644
  #  elif defined(__INTEL_COMPILER) && __INTEL_COMPILER >= 900
  #    define CARES_EXTERN __attribute__((visibility("default")))
  #  elif defined(__SUNPRO_C)
-diff --git a/src/lib/event/ares_event_configchg.c b/src/lib/event/ares_event_configchg.c
-index 4dd6df8d..2a69af20 100644
---- a/src/lib/event/ares_event_configchg.c
-+++ b/src/lib/event/ares_event_configchg.c
-@@ -383,6 +383,7 @@ done:
- 
- #  include <sys/types.h>
- #  include <unistd.h>
-+#  include <stdbool.h>
- #  include <notify.h>
- #  include <dlfcn.h>
- #  include <fcntl.h>
