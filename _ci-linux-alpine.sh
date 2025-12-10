@@ -8,7 +8,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 cat /etc/*-release
 
-LLVM='20'
+LLVM=''
 
 extra=''
 [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go'
