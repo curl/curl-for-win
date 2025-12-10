@@ -21,7 +21,6 @@ _VER="$1"
   if [ "${_NAM}" = 'zlibng' ]; then
     options+=' -DZLIB_COMPAT=ON'
     options+=' -DZLIB_ENABLE_TESTS=OFF'
-    options+=' -DZLIBNG_ENABLE_TESTS=OFF'
     options+=' -DWITH_GTEST=OFF'
   elif [ "${_VER}" = '1.3.1' ]; then
     options+=' -DZLIB_BUILD_EXAMPLES=OFF'
