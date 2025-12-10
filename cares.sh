@@ -7,6 +7,7 @@
 # - `-DCARES_SYMBOL_HIDING=ON` does not seem to work on macOS with clang for
 #   example. The issue seems to be that CARES_EXTERN is set unconditionally
 #   to default visibility and -fvisibility=hidden does not override that.
+# - Compiler warnings when building for macOS with GCC.
 # - Bad cmake configure performance.
 
 # shellcheck disable=SC3040,SC2039
