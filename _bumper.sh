@@ -49,14 +49,6 @@ dockerhub_latest_tag() {
   # collect all tags. Each request returns 1000 tags max.
   url="https://registry-1.docker.io/v2/library/${name}/tags/list"
   while true; do
-    head="$(curl --disable --user-agent '' --silent --fail --show-error \
-      --header 'Accept: application/json' \
-      --header @/dev/stdin \
-      "${url}" --write-out '%{header_json}' --output /dev/null <<EOF
-Authorization: Bearer ${token}
-EOF
-)"
-
     curl --disable --user-agent '' --silent --fail --show-error \
       --header 'Accept: application/json' \
       --header @/dev/stdin \
@@ -70,7 +62,14 @@ EOF
     #   "</v2/library/debian/tags/list?last=oldoldstable-20201012-slim&n=1000>; rel=\"next\""
     # ]
     # -> /v2/library/debian/tags/list?last=oldoldstable-20201012-slim&n=1000
-    next="$(printf '%s' "${head}" | jq --raw-output '.link[0]' | cut '-d;' -f 1 | tr -d '<>')"
+    next="$(curl --disable --user-agent '' --silent --fail --show-error \
+      --header 'Accept: application/json' \
+      --header @/dev/stdin \
+      "${url}" --write-out '%{header_json}' --output /dev/null <<EOF \
+        | jq --raw-output '.link[0]' | cut '-d;' -f 1 | tr -d '<>'
+Authorization: Bearer ${token}
+EOF
+)"
     [ "${next}" = 'null' ] && break
     url="$(printf 'https://registry-1.docker.io%s' "${next}")"
   done | grep -E "^${release}-[0-9]{8}-slim\$" | sort | tail -n -1
