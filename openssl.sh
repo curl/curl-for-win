@@ -155,6 +155,7 @@ _VER="$1"
       no-camellia no-ocb no-des no-dh no-ec2m no-gost no-md4 \
       no-argon2 no-aria no-blake2 no-rmd160 no-scrypt no-siphash no-sm2 no-sm3 no-sm4 \
       no-async no-cmp no-cms no-dgram no-http no-multiblock no-seed no-siv no-srtp no-ts \
+      no-ocsp \
       no-tests \
       no-makedepend \
       --prefix="${_my_prefix}" \
