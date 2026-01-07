@@ -8,12 +8,12 @@ export OCI_IMAGE_DEBIAN_STABLE='debian:trixie-20251229-slim@sha256:df5cf6304b59b
 export OCI_IMAGE_ALPINE_LATEST='alpine:latest@sha256:865b95f46d98cf867a156fe4a135ad3fe50d2056aa3f25ed31662dff6da4eb62'
 export OCI_IMAGE_DEBIAN="${OCI_IMAGE_DEBIAN_TESTING}"
 
-export CURL_VER_='8.17.0'
-export CURL_HASH=955f6e729ad6b3566260e8fef68620e76ba3c31acf0a18524416a185acf77992
+export CURL_VER_='8.18.0'
+export CURL_HASH=40df79166e74aa20149365e11ee4c798a46ad57c34e4f68fd13100e2c9a91946
 # Create revision string
 # NOTE: Set _REV to 1 after bumping CURL_VER_, then increment for each
 #       CI rebuild via `main` branch push (e.g. after bumping a dependency).
-export _REV="${CW_REVISION:-6}"
+export _REV="${CW_REVISION:-1}"
 
 export TRURL_VER_='0.16.1'
 export TRURL_HASH=aac947d4fb421a58abc19a3771e87942cd4721b8f855c433478c94c11a8203ba
