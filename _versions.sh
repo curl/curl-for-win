@@ -3,8 +3,8 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-export OCI_IMAGE_DEBIAN_TESTING='debian:testing-20260112-slim@sha256:ecd7a7c0680ecb0936fb28177dd6357082faa6128e0d56cf54391d2282770cb2'
-export OCI_IMAGE_DEBIAN_STABLE='debian:trixie-20260112-slim@sha256:e9f1b0bda36daad09fcd6779f7af47191dbee4ff52f8903fffd15240eb986bd8'
+export OCI_IMAGE_DEBIAN_TESTING='debian:testing-20260112-slim@sha256:fa40d7271e1233ac36765d39caf1706067ff7507e459a2be0d27c4e7edaad004'
+export OCI_IMAGE_DEBIAN_STABLE='debian:trixie-20260112-slim@sha256:77ba0164de17b88dd0bf6cdc8f65569e6e5fa6cd256562998b62553134a00ef0'
 export OCI_IMAGE_ALPINE_LATEST='alpine:latest@sha256:865b95f46d98cf867a156fe4a135ad3fe50d2056aa3f25ed31662dff6da4eb62'
 export OCI_IMAGE_DEBIAN="${OCI_IMAGE_DEBIAN_TESTING}"
 
