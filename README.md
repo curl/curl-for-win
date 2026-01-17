@@ -96,6 +96,7 @@ IPv6          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 Kerberos      | ✓       |         |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
 Largefile     | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 libz          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
+NativeCA      | ✓²      | -       | -       | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
 NTLM          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 PSL           | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 SPNEGO        | ✓       |         |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
@@ -127,6 +128,7 @@ tftp          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 ws/wss        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 
 - ¹: platform-dependent
+- ²: expected in upcoming release 8.19.0
 - noh3: HTTP/2
 - mini: without brotli and zstd, with OS TLS backend (Schannel) if available
 - micro: without libssh2
