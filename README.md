@@ -2,7 +2,6 @@
 Copyright (C) Viktor Szakats
 SPDX-License-Identifier: CC-BY-SA-4.0
 -->
-[![Build status](https://ci.appveyor.com/api/projects/status/8yf6xjgq7u0cm013/branch/main?svg=true)](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main)
 [![Daily status](https://github.com/curl/curl-for-win/actions/workflows/daily.yml/badge.svg)](https://github.com/curl/curl-for-win/actions/workflows/daily.yml)
 
 > [!tip]
