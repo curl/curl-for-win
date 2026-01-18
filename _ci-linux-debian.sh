@@ -52,6 +52,8 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   [ -n "${CW_GCCSUFFIX:-}" ] || CW_GCCSUFFIX='-14'
 
+  [ "${CW_TRURL_TEST:-}" = '1' ] extra+=' python3'
+
   extra+=' checksec'
 
   [[ ! "${CW_CONFIG}" =~ (zero|bldtst|nocookie) ]] && extra+=' python3'  # for libpsl
