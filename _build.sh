@@ -1778,13 +1778,12 @@ build_single_target() {
 
     # Minimal curl configuration optimized for trurl (if differs from the main config)
     if [[ "${_CONFIG}" != *'zero'* || \
-          "${_CONFIG}" != *'imap'* || \
           "${_CONFIG}" != *'osnotls'* || \
           "${_CONFIG}" != *'osnoidn'* || \
           "${_CONFIG}" != *'nohttp'* || \
           "${_CONFIG}" != *'noverbose'* ]]; then
 
-      _CONFIG+='-zero-imap-osnotls-osnoidn-nohttp-noverbose-nocurltool-CURLNOPKG'
+      _CONFIG+='-zero-osnotls-osnoidn-nohttp-noverbose-nocurltool-CURLNOPKG'
 
       _PKGDIR="_${_CPU}-${_OS}-${_CRT}-for-trurl"
       _PKGDIRS="${_PKGDIR}"
