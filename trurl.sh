@@ -100,10 +100,7 @@ _VER="$1"
 
   if [ "${CW_TRURL_TEST:-}" = '1' ] && \
      [ "${_RUN_BIN}" != 'true' ]; then
-    python=''
-    command -v python >/dev/null 2>&1 && python='python'
-    command -v python3 >/dev/null 2>&1 && python='python3'
-    [ -n "${python}" ] && "${python}" test.py --runner="${_RUN_BIN}" --trurl="${bin}"
+    python3 test.py --runner="${_RUN_BIN}" --trurl="${bin}"
   fi
 
   # Create package
