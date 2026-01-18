@@ -1769,6 +1769,10 @@ build_single_target() {
     save_PP="${_PP}"
     save_PPS="${_PPS}"
 
+    # Always apply this for libcurl for trurl and trurl itself
+    _CFLAGS_GLOBAL_RAW+=' -Os'
+    _CMAKE_GLOBAL+=' -DCMAKE_BUILD_TYPE=MinSizeRel'
+
     # Minimal curl configuration optimized for trurl (if differs from the main config)
     if [[ "${_CONFIG}" != *'zero'* || \
           "${_CONFIG}" != *'imap'* || \
