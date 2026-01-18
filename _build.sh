@@ -1090,7 +1090,9 @@ build_single_target() {
   _CFLAGS_GLOBAL+=' -fno-unwind-tables'
   _CFLAGS_GLOBAL+=' -fno-asynchronous-unwind-tables'
 
-  if [ "${_OS}" != 'mac' ]; then
+  if [ "${_OS}" = 'mac' ]; then
+    _LDFLAGS_GLOBAL+=' -Wl,-dead_strip'
+  else
     # May cause `osslsigncode` (as of v2.7, 2023-12) to crash while signing
     # a trurl.exe built with a CMake non-unity libcurl static library. Same
     # worked with unity mode.
