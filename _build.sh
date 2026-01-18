@@ -46,6 +46,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        nohttp     build without HTTP and proxy support
 #        nocookie   build without cookie support
 #        noproxy    build without proxy support
+#        noverbose  build without verbose strings
 #        nogss      build without GSS-API support (for mac target. Other targets do not have it enabled)
 #        imap       build with IMAP protocol (for zero, bldtst or pico build)
 #        awslc      build with AWS-LC [EXPERIMENTAL]

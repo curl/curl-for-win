@@ -159,6 +159,12 @@ _VER="$1"
     options+=' -DENABLE_THREADED_RESOLVER=ON'
   fi
 
+  if [[ "${_CONFIG}" = *'noverbose'* ]]; then
+    options+=' -DCURL_DISABLE_VERBOSE_STRINGS=ON'
+  else
+    options+=' -DCURL_DISABLE_VERBOSE_STRINGS=OFF'
+  fi
+
   if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
     options+=" -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
     options+=" -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
