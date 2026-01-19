@@ -21,6 +21,11 @@ while [ -n "${1:-}" ]; do
 
   f="$1"; shift
 
+  case "${_HOST}" in
+    bsd|mac) stat -f '%10z bytes: %N' "${f}";;
+    *)       stat -c '%10s bytes: %n' "${f}";;
+  esac
+
   if [ "${_OS}" = 'win' ]; then
     # = llvm-readobj --coff-imports | grep -a -F 'Name: ' | sort -r -f
     TZ=UTC "${_OBJDUMP}" --all-headers "${f}" | grep -a -E -i "(file format|DLL Name|Time/Date)" | sort -r -f
