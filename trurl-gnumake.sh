@@ -42,12 +42,7 @@ _VER="$1"
   LDLIBS+=" ../curl/${_PP}/lib/libcurl.a"
   if [ "${_OS}" = 'win' ]; then
     CPPFLAGS+=' -DCURL_STATICLIB'
-    LDLIBS+=' -lws2_32 -liphlpapi -lcrypt32 -lbcrypt'
-  elif [ "${_OS}" = 'mac' ]; then
-    if [[ "${_CONFIG}" != *'osnotls'* ]]; then
-      LDLIBS+=' -framework Security'
-    fi
-    LDLIBS+=' -framework SystemConfiguration -framework CoreFoundation'
+    LDLIBS+=' -lws2_32 -lbcrypt'
   fi
 
   "${_MAKE}" clean

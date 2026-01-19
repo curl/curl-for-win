@@ -49,12 +49,7 @@ _VER="$1"
   options+=" -DCURL_LIBRARY=${_TOP}/curl/${_PP}/lib/libcurl.a"
   if [ "${_OS}" = 'win' ]; then
     CPPFLAGS+=' -DCURL_STATICLIB'
-    LIBS+=' -lws2_32 -liphlpapi -lcrypt32 -lbcrypt'
-  elif [ "${_OS}" = 'mac' ]; then
-    if [[ "${_CONFIG}" != *'osnotls'* ]]; then
-      LIBS+=' -framework Security'
-    fi
-    LIBS+=' -framework SystemConfiguration -framework CoreFoundation'
+    LIBS+=' -lws2_32 -lbcrypt'
   fi
 
   # shellcheck disable=SC2086
