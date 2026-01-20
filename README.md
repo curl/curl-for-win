@@ -77,13 +77,15 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 Uses [LibreSSL](https://www.libressl.org/) TLS backend.
 
 feature       | Windows | Linux   | macOS   | noh3    | mini    | micro   | nano    | pico    |
---------------| --------| --------| --------| --------| --------| --------| --------| --------|
+--------------|---------|---------|---------|---------|---------|---------|---------|---------|
 alt-svc       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |         |
 AppleSecTrust | -       | -       | ✓       | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
 asyn-rr       |         |         |         |         |         |         |         |         |
 AsynchDNS     | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 brotli        | ✓       | ✓       | ✓       | ✓       |         |         |         |         |
-CAcert        | ✓       | ✓       |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
+CAcert        | ✓³      | ✓       |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
+ECH           |         |         |         |         |         |         |         |         |
+gsasl         |         |         |         |         |         |         |         |         |
 GSS-API       |         |         | ✓       | ✓¹      |         |         |         |         |
 HSTS          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 HTTP2         | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |         |
@@ -95,19 +97,22 @@ IPv6          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 Kerberos      | ✓       |         |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
 Largefile     | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 libz          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
+MultiSSL      |         |         |         |         |         |         |         |         |
 NativeCA      | ✓²      | -       | -       | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
 NTLM          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 PSL           | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 SPNEGO        | ✓       |         |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
 SSL           | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 SSPI          | ✓       | -       | -       | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
+SSLS-EXPORT   |         |         |         |         |         |         |         |         |
+TLS-SRP       |         |         |         |         |         |         |         |         |
 threadsafe    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 Unicode       |         | -       | -       |         |         |         |         |         |
 UnixSockets   | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 zstd          | ✓       | ✓       | ✓       | ✓       |         |         |         |         |
 
 protocol      | Windows | Linux   | macOS   | noh3    | mini    | micro   | nano    | pico    |
---------------| --------| --------| --------| --------| --------| --------| --------| --------|
+--------------|---------|---------|---------|---------|---------|---------|---------|---------|
 dict          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 file          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 ftp/ftps      | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
@@ -128,6 +133,7 @@ ws/wss        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 
 - ¹: platform-dependent
 - ²: expected in upcoming release 8.19.0
+- ³: replaced by NativeCA in upcoming release 8.19.0
 - noh3: HTTP/2
 - mini: without brotli and zstd, with OS TLS backend (Schannel) if available
 - micro: without libssh2
