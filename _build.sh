@@ -1088,6 +1088,7 @@ build_single_target() {
   # https://github.com/curl/curl/blob/master/docs/INSTALL.md#reducing-size
 
   _CFLAGS_GLOBAL+=' -fno-unwind-tables'
+  # Also to make -Wl,--gc-sections work on Windows: https://sourceware.org/bugzilla/show_bug.cgi?id=11539
   _CFLAGS_GLOBAL+=' -fno-asynchronous-unwind-tables'
 
   if [ "${_OS}" = 'mac' ]; then
