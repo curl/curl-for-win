@@ -14,5 +14,8 @@ if [ -n "${MINISIGN_KEY:-}" ] && \
    [ -n "${MINISIGN_KEY_PASS:+1}" ]; then
   file="$1"
   echo "Package signing with minisign: '${file}'"
-  echo "${MINISIGN_KEY_PASS}" | minisign -S -s "${MINISIGN_KEY}" -m "${file}" # => "${file}.minisign"
+  # Signature saved to "${file}.minisign"
+  minisign -S -s "${MINISIGN_KEY}" -m "${file}" <<EOF
+${MINISIGN_KEY_PASS}
+EOF
 fi

@@ -481,7 +481,9 @@ if command -v age >/dev/null 2>&1 &&
   if [ -s "${MINISIGN_KEY}.asc" ] && \
      [ -n "${MINISIGN_AGE_PASS:+1}" ]; then
     install -m 600 /dev/null "${MINISIGN_KEY}"
-    echo "${MINISIGN_AGE_PASS}" | age --decrypt --identity=- "${MINISIGN_KEY}.asc" >> "${MINISIGN_KEY}"
+    age --decrypt --identity=- "${MINISIGN_KEY}.asc" >> "${MINISIGN_KEY}" <<EOF
+${MINISIGN_AGE_PASS}
+EOF
   fi
 fi
 
