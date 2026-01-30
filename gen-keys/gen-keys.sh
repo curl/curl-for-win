@@ -19,8 +19,7 @@ mkdir -m 700 workdir
   ../mk-cert-code.sh "${name}" "${year}" rsa
 
   cp -p "${name}_${year}-ca-cert.pem"      ../curl-for-win-ca-cert.pem
-  cp -p "${name}_${year}-code.p12.asc"     ../sign-code.p12.asc
-  cp -p "${name}_${year}-code.p12.age.asc" ../sign-code.p12.age.asc
+  cp -p "${name}_${year}-code.p12.age.asc" ../sign-code.p12.asc
 
   # 2. GPG package signing key
 
@@ -29,8 +28,7 @@ mkdir -m 700 workdir
   ../mk-gpg-sign.sh '' "${name}" "${mail}"
 
   cp -p "${mail}-sign-public.asc"          ../sign-pkg-public.asc
-  cp -p "${mail}-sign-private_gpg.asc"     ../sign-pkg.gpg.asc
-  cp -p "${mail}-sign-private.gpg.age.asc" ../sign-pkg.gpg.age.asc
+  cp -p "${mail}-sign-private.gpg.age.asc" ../sign-pkg.gpg.asc
 
   # 3. minisign package signing key
 
@@ -48,8 +46,7 @@ mkdir -m 700 workdir
   ../mk-cosign.sh "${name}" "${year}"
 
   cp -p cosign.pub         ../cosign.pub.asc
-  cp -p cosign.key.asc     ../cosign.key.asc
-  cp -p cosign.key.age.asc ../cosign.key.age.asc
+  cp -p cosign.key.age.asc ../cosign.key.asc
 
   # 5. SSH deploy key
 
