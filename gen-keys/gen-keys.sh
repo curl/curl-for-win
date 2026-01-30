@@ -36,8 +36,8 @@ mkdir -m 700 workdir
   year='2026'
   ../mk-minisign.sh "${name}" "${year}"
 
-  cp -p "${name}_${year}-minisign.pub"     ../minisign.pub
-  cp -p "${name}_${year}-minisign.key.asc" ../minisign.key.asc
+  cp -p "${name}_${year}-minisign.pub"         ../minisign.pub
+  cp -p "${name}_${year}-minisign.key.age.asc" ../minisign.key.asc
 
   # 4. package blob cosign key pair
 

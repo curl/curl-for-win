@@ -30,5 +30,6 @@ printf '%s' "${minisign_pass}"
 printf "%s\n%s\n" "${minisign_pass}" "${minisign_pass}" | \
 minisign -G -p "${prfx}-minisign.pub" -s "${prfx}-minisign.key"
 
-age-keygen -o "${prfx}-minisign.key.asc.key"
-age --encrypt --identity="${prfx}-minisign.key.asc.key" --armor "${prfx}-minisign.key" > "${prfx}-minisign.key.asc"
+age-keygen      --output="${prfx}-minisign.key.age.key"
+age --encrypt --identity="${prfx}-minisign.key.age.key" --armor "${prfx}-minisign.key" > "${prfx}-minisign.key.age.asc"
+age --encrypt --identity="${prfx}-minisign.key.age.key"         "${prfx}-minisign.key" > "${prfx}-minisign.key.age"
