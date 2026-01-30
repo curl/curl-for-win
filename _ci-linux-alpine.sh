@@ -19,7 +19,7 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
     extra+=' nasm'
   fi
-  [ -n "${DEPLOY_GPG_PASS:+1}" ] && extra+=' openssh-client-default'
+  [ -n "${DEPLOY_AGE_PASS:+1}" ] && extra+=' openssh-client-default'
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   apk add --no-cache checksec-rs --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community/
   extra+=' compiler-rt'  # for llvm
@@ -38,8 +38,10 @@ if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
   extra+=" llvm${LLVM} clang${LLVM} lld"
 fi
 
-[ -n "${COSIGN_GPG_PASS:+1}" ] && extra+=' cosign'
-[ -n "${MINISIGN_AGE_PASS:+1}" ] && extra+=' age minisign'
+[ -n "${COSIGN_AGE_PASS:+1}" ] && extra+=' cosign'
+[ -n "${MINISIGN_AGE_PASS:+1}" ] && extra+=' minisign'
+
+[ -n "${SIGN_CODE_AGE_PASS:+1}${COSIGN_AGE_PASS:+1}${DEPLOY_AGE_PASS:+1}${MINISIGN_AGE_PASS:+1}" ] && extra+=' age'
 
 # https://pkgs.alpinelinux.org/packages
 # shellcheck disable=SC2086

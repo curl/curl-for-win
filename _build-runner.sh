@@ -89,16 +89,16 @@ export CW_MAP=1
 export CW_JOBS=2
 
 export VIRUSTOTAL_APIKEY=
-export COSIGN_GPG_PASS=
+export COSIGN_AGE_PASS=
 export COSIGN_KEY_PASS=
 export MINISIGN_AGE_PASS=
 export MINISIGN_KEY_PASS=
-export SIGN_CODE_GPG_PASS=
+export SIGN_CODE_AGE_PASS=
 export SIGN_CODE_KEY_PASS=
 export SIGN_PKG_KEY_ID=
 export SIGN_PKG_GPG_PASS=
 export SIGN_PKG_KEY_PASS=
-export DEPLOY_GPG_PASS=
+export DEPLOY_AGE_PASS=
 export DEPLOY_KEY_PASS=
 
 ./_build.sh 2>&1 | stdbuf -i0 -o0 -e0 tee "log-$(date '+%s').txt"

@@ -48,7 +48,7 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
     fi
   fi
   extra+=' python3-pip python3-venv'  # for pefile and libpsl
-  [ -n "${DEPLOY_GPG_PASS:+1}" ] && extra+=' openssh-client'
+  [ -n "${DEPLOY_AGE_PASS:+1}" ] && extra+=' openssh-client'
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   [ -n "${CW_GCCSUFFIX:-}" ] || CW_GCCSUFFIX='-14'
 
@@ -127,8 +127,10 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   fi
 fi
 
-[ -n "${COSIGN_GPG_PASS:+1}" ] && extra+=' cosign'
-[ -n "${MINISIGN_AGE_PASS:+1}" ] && extra+=' age minisign'
+[ -n "${COSIGN_AGE_PASS:+1}" ] && extra+=' cosign'
+[ -n "${MINISIGN_AGE_PASS:+1}" ] && extra+=' minisign'
+
+[ -n "${SIGN_CODE_AGE_PASS:+1}${COSIGN_AGE_PASS:+1}${DEPLOY_AGE_PASS:+1}${MINISIGN_AGE_PASS:+1}" ] && extra+=' age'
 
 ${sudo} apt-get --option Dpkg::Use-Pty=0 --yes update
 # shellcheck disable=SC2086

@@ -14,7 +14,7 @@ fi
 
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   extra+=' mingw-w64 osslsigncode'
-  [ -n "${DEPLOY_GPG_PASS:+1}" ] && extra+=' openssh'
+  [ -n "${DEPLOY_AGE_PASS:+1}" ] && extra+=' openssh'
   # On AppVeyor CI macos-sonoma runner wine stalls for 5 minutes 5 times with
   # an error on first invocation (from this script). Then on a next invocation
   # it repeats the 5-minute stalls indefinitely. Skip wine as a workaround:
@@ -31,8 +31,10 @@ elif [[ "${CW_CONFIG:-}" = *'mac'* ]] && [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
   extra+=' gcc'
 fi
 
-[ -n "${COSIGN_GPG_PASS:+1}" ] && extra+=' cosign'
-[ -n "${MINISIGN_AGE_PASS:+1}" ] && extra+=' age minisign'
+[ -n "${COSIGN_AGE_PASS:+1}" ] && extra+=' cosign'
+[ -n "${MINISIGN_AGE_PASS:+1}" ] && extra+=' minisign'
+
+[ -n "${SIGN_CODE_AGE_PASS:+1}${COSIGN_AGE_PASS:+1}${DEPLOY_AGE_PASS:+1}${MINISIGN_AGE_PASS:+1}" ] && extra+=' age'
 
 if [ -n "${extra}" ]; then
   export HOMEBREW_NO_AUTO_UPDATE=1

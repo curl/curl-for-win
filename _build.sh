@@ -120,9 +120,9 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # CW_PKG_SIGN
 #      Enable package signing. Default: 1 for the 'main' branch, 0 otherwise
 #
-# SIGN_CODE_GPG_PASS, SIGN_CODE_KEY_PASS: for code signing
-# COSIGN_GPG_PASS, COSIGN_KEY_PASS, MINISIGN_AGE_PASS, MINISIGN_KEY_PASS, SIGN_PKG_GPG_PASS, SIGN_PKG_KEY_PASS: for package signing
-# DEPLOY_GPG_PASS, DEPLOY_KEY_PASS: for publishing results
+# SIGN_CODE_AGE_PASS, SIGN_CODE_KEY_PASS: for code signing
+# COSIGN_AGE_PASS, COSIGN_KEY_PASS, MINISIGN_AGE_PASS, MINISIGN_KEY_PASS, SIGN_PKG_GPG_PASS, SIGN_PKG_KEY_PASS: for package signing
+# DEPLOY_AGE_PASS, DEPLOY_KEY_PASS: for publishing results
 #      Secrets used for the above operations.
 #      Optional. Skipping any operation missing a secret.
 
@@ -464,12 +464,10 @@ fi
 if command -v cosign >/dev/null 2>&1; then
   export COSIGN_KEY; COSIGN_KEY='cosign.key'
   if [ -s "${COSIGN_KEY}.asc" ] && \
-     [ -n "${COSIGN_GPG_PASS:+1}" ]; then
+     [ -n "${COSIGN_AGE_PASS:+1}" ]; then
     install -m 600 /dev/null "${COSIGN_KEY}"
-    gpg --batch --yes --no-tty --quiet \
-      --pinentry-mode loopback --passphrase-fd 0 \
-      --decrypt "${COSIGN_KEY}.asc" 2>/dev/null >> "${COSIGN_KEY}" <<EOF || true
-${COSIGN_GPG_PASS}
+    age --decrypt --identity=- "${COSIGN_KEY}.asc" >> "${COSIGN_KEY}" <<EOF
+${COSIGN_AGE_PASS}
 EOF
   fi
 fi
@@ -490,12 +488,10 @@ fi
 # decrypt code signing key
 export SIGN_CODE_KEY; SIGN_CODE_KEY="$(pwd)/sign-code.p12"
 if [ -s "${SIGN_CODE_KEY}.asc" ] && \
-   [ -n "${SIGN_CODE_GPG_PASS:+1}" ]; then
+   [ -n "${SIGN_CODE_AGE_PASS:+1}" ]; then
   install -m 600 /dev/null "${SIGN_CODE_KEY}"
-  gpg --batch --yes --no-tty --quiet \
-    --pinentry-mode loopback --passphrase-fd 0 \
-    --decrypt "${SIGN_CODE_KEY}.asc" 2>/dev/null >> "${SIGN_CODE_KEY}" <<EOF || true
-${SIGN_CODE_GPG_PASS}
+  age --decrypt --identity=- "${SIGN_CODE_KEY}.asc" >> "${SIGN_CODE_KEY}" <<EOF
+${SIGN_CODE_AGE_PASS}
 EOF
 fi
 

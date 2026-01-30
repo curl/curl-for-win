@@ -73,14 +73,12 @@ DEPLOY_KEY="$(pwd)/deploy.key"
 if [ "${PUBLISH_PROD_FROM}" = "${_HOST}" ] && \
    [[ "${_CONFIG}" = *'main'* ]] && \
    [ -s "${DEPLOY_KEY}.asc" ] && \
-   [ -n "${DEPLOY_GPG_PASS:+1}" ]; then
+   [ -n "${DEPLOY_AGE_PASS:+1}" ]; then
 
   # decrypt deploy key
   install -m 600 /dev/null "${DEPLOY_KEY}"
-  gpg --batch --yes --no-tty --quiet \
-    --pinentry-mode loopback --passphrase-fd 0 \
-    --decrypt "${DEPLOY_KEY}.asc" 2>/dev/null >> "${DEPLOY_KEY}" <<EOF || true
-${DEPLOY_GPG_PASS}
+  age --decrypt --identity=- "${DEPLOY_KEY}.asc" >> "${DEPLOY_KEY}" <<EOF
+${DEPLOY_AGE_PASS}
 EOF
 
   if [ -s "${DEPLOY_KEY}" ]; then

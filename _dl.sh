@@ -945,7 +945,7 @@ if [[ "${_DEPS}" = *'trurl'* ]]; then
 fi
 
 if [ "${_OS}" = 'win' ] && \
-   [ -n "${SIGN_CODE_GPG_PASS:+1}" ] && \
+   [ -n "${SIGN_CODE_AGE_PASS:+1}" ] && \
   ! command -v osslsigncode >/dev/null 2>&1; then
   live_dl osslsigncode "${OSSLSIGNCODE_VER_}"
   live_xt osslsigncode "${OSSLSIGNCODE_HASH}"
