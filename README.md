@@ -24,7 +24,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   -----END PUBLIC KEY-----
   ```
   Verify using:
-  ```
+  ```shell
   cosign verify-blob --key cosign.pub.asc --bundle curl-8.16.0-win64-mingw.zip.sigstore curl-8.16.0-win64-mingw.zip
   ```
 - Standalone `curl`, `trurl` tools and `libcurl` DLL. Static libraries
