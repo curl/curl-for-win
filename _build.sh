@@ -474,6 +474,17 @@ EOF
   fi
 fi
 
+# Decrypt package signing minisign key
+if command -v age >/dev/null 2>&1 &&
+   command -v minisign >/dev/null 2>&1; then
+  export MINISIGN_KEY; MINISIGN_KEY='minisign.key'
+  if [ -s "${MINISIGN_KEY}.asc" ] && \
+     [ -n "${MINISIGN_AGE_PASS:+1}" ]; then
+    install -m 600 /dev/null "${MINISIGN_KEY}"
+    echo "${MINISIGN_AGE_PASS}" | age --decrypt --identity=- "${MINISIGN_KEY}.asc" >> "${MINISIGN_KEY}"
+  fi
+fi
+
 # decrypt code signing key
 export SIGN_CODE_KEY; SIGN_CODE_KEY="$(pwd)/sign-code.p12"
 if [ -s "${SIGN_CODE_KEY}.asc" ] && \
@@ -1933,6 +1944,14 @@ if [ -n "${COSIGN_PKG_KEY:-}" ]; then
     linux) [ -w "${COSIGN_PKG_KEY}" ] && command -v srm >/dev/null 2>&1 && srm -- "${COSIGN_PKG_KEY}";;
   esac
   rm -f -- "${COSIGN_PKG_KEY}"
+fi
+
+if [ -n "${MINISIGN_KEY:-}" ]; then
+  case "${_HOST}" in
+    mac)   rm -f -P -- "${MINISIGN_KEY}";;
+    linux) [ -w "${MINISIGN_KEY}" ] && command -v srm >/dev/null 2>&1 && srm -- "${MINISIGN_KEY}";;
+  esac
+  rm -f -- "${MINISIGN_KEY}"
 fi
 
 # Leave "flat" layout for curl tool if requested

@@ -106,6 +106,7 @@ create_pkg() {
      [ "${CW_PKG_SIGN:-}" = '1' ]; then
     ./_sign-pkg.sh "${_pkg}"
     ./_sign-pkg-cosign.sh "${_pkg}"
+    ./_sign-pkg-minisign.sh "${_pkg}"
   fi
 }
 

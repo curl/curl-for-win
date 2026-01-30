@@ -32,6 +32,7 @@ elif [[ "${CW_CONFIG:-}" = *'mac'* ]] && [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
 fi
 
 [ -n "${COSIGN_PKG_GPG_PASS:+1}" ] && extra+=' cosign'
+[ -n "${MINISIGN_AGE_PASS:+1}" ] && extra+=' age minisign'
 
 if [ -n "${extra}" ]; then
   export HOMEBREW_NO_AUTO_UPDATE=1

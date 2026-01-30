@@ -109,6 +109,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-x64"
           export CW_REVISION="${GITHUB_SHA}"
@@ -119,7 +121,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CW_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${OCI_IMAGE_DEBIAN_TESTING}" \
             sh -c ./_ci-linux-debian.sh
 
@@ -146,6 +148,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-gcc"
           export CW_REVISION="${GITHUB_SHA}"
@@ -157,7 +161,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CW_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${OCI_IMAGE_DEBIAN_TESTING}" \
             sh -c ./_ci-linux-debian.sh
 
@@ -184,6 +188,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-x64"
           export CW_REVISION="${GITHUB_SHA}"
@@ -196,7 +202,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CW_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${OCI_IMAGE_DEBIAN_STABLE}" \
             sh -c ./_ci-linux-debian.sh
 
@@ -223,6 +229,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-gcc"
           export CW_REVISION="${GITHUB_SHA}"
@@ -234,7 +242,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CW_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${OCI_IMAGE_DEBIAN_STABLE}" \
             sh -c ./_ci-linux-debian.sh
 
@@ -261,6 +269,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl"
           export CW_REVISION="${GITHUB_SHA}"
@@ -271,7 +281,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CW_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${OCI_IMAGE_DEBIAN_TESTING}" \
             sh -c ./_ci-linux-debian.sh
 
@@ -298,6 +308,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl-gcc"
           export CW_REVISION="${GITHUB_SHA}"
@@ -309,7 +321,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CW_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${OCI_IMAGE_DEBIAN_TESTING}" \
             sh -c ./_ci-linux-debian.sh
 
@@ -336,6 +348,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl"
           export CW_REVISION="${GITHUB_SHA}"
@@ -348,7 +362,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CW_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${OCI_IMAGE_DEBIAN_STABLE}" \
             sh -c ./_ci-linux-debian.sh
 
@@ -375,6 +389,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl-gcc"
           export CW_REVISION="${GITHUB_SHA}"
@@ -386,7 +402,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CW_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${OCI_IMAGE_DEBIAN_STABLE}" \
             sh -c ./_ci-linux-debian.sh
 
@@ -413,6 +429,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux"
           export CW_REVISION="${GITHUB_SHA}"
@@ -423,7 +441,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CW_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${OCI_IMAGE_ALPINE_LATEST}" \
             sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
 
@@ -450,6 +468,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-gcc"
           export CW_REVISION="${GITHUB_SHA}"
@@ -460,7 +480,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CW_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${OCI_IMAGE_ALPINE_LATEST}" \
             sh -c 'apk add --no-cache bash && ./_ci-linux-alpine.sh'
 
@@ -487,6 +507,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux"
           export CW_REVISION="${GITHUB_SHA}"
@@ -517,6 +539,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-mac-macuni"
           export CW_REVISION="${GITHUB_SHA}"
@@ -547,6 +571,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-mac-macuni-llvm"
           export CW_REVISION="${GITHUB_SHA}"
@@ -577,6 +603,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
         run: |
           export CW_CCSUFFIX='-15'
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-mac-gcc-a64"
@@ -608,6 +636,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |
@@ -639,6 +669,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |
@@ -651,7 +683,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CW_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${OCI_IMAGE_DEBIAN_TESTING}" \
             sh -c ./_ci-linux-debian.sh
 
@@ -678,6 +710,8 @@ jobs:
         env:
           COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
           COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
+          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |
@@ -690,7 +724,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|COSIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CW_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${OCI_IMAGE_DEBIAN_TESTING}" \
             sh -c ./_ci-linux-debian.sh
 

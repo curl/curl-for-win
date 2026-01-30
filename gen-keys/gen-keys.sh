@@ -30,7 +30,16 @@ mkdir -m 700 workdir
   cp -p "${mail}-sign-public.asc"      ../sign-pkg-public.asc
   cp -p "${mail}-sign-private_gpg.asc" ../sign-pkg.gpg.asc
 
-  # 3. package blob cosign key pair
+  # 3. minisign package signing key
+
+  name='curl-for-win'
+  year='2026'
+  ../mk-minisign.sh "${name}" "${year}"
+
+  cp -p "${name}_${year}-minisign.pub"     ../minisign.pub
+  cp -p "${name}_${year}-minisign.key.asc" ../minisign.key.asc
+
+  # 4. package blob cosign key pair
 
   name='curl-for-win'
   year='2025'
@@ -39,7 +48,7 @@ mkdir -m 700 workdir
   cp -p cosign.pub     ../cosign.pub.asc
   cp -p cosign.key.asc ../cosign.key.asc
 
-  # 4. SSH deploy key
+  # 5. SSH deploy key
 
   ../mk-ssh-curl-for-win.sh
 

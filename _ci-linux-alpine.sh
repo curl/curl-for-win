@@ -39,6 +39,7 @@ if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
 fi
 
 [ -n "${COSIGN_PKG_GPG_PASS:+1}" ] && extra+=' cosign'
+[ -n "${MINISIGN_AGE_PASS:+1}" ] && extra+=' age minisign'
 
 # https://pkgs.alpinelinux.org/packages
 # shellcheck disable=SC2086
