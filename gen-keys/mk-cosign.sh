@@ -7,7 +7,7 @@
 set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 # Requires:
-#   brew install cosign
+#   brew install cosign age
 #   pip install base58
 
 # Redirect stdout securely to non-world-readable files
