@@ -45,9 +45,9 @@ environment:
   SIGN_PKG_KEY_PASS:
     secure: 'hPd2pmh39DzHjaINLeLKHl3VGVuAuRlLt05nhU7fph55KBeTBjtkHNaKUxBu+3Ev'
   MINISIGN_AGE_PASS:
-    secure: 'Kvuc2lflkeLOXATpw3n81b0nvVkkND1Aj7Gr5e4ZeQ12w6QvvnY2ms9NjqDhOFL4qDc2IC9IHFhL853xLXtQfAvWdYRiRdsPahGYVQsQlFs'
+    secure: 'Kvuc2lflkeLOXATpw3n81dQ2XVwnrrcAGRZrGPCKuoIosswB5H6uJBlDSyfisyVixhfKp2QLSwOJClxXqjXJJB7JbvB5r5cVs5KVd1AsZDU'
   MINISIGN_KEY_PASS:
-    secure: 'D1DfjsRKyBxa2USH9UymYkrstyFrGePhjn0HRFe1q+fwRnq2vgu58T/Oh4bwNY1k'
+    secure: 'zVUZlA13ycmDZs10UNTpFRC3zPZgZCbRTcj2lLEzVxllwHJ8eKL8wnhxOVGYg560'
   COSIGN_AGE_PASS:
     secure: 'Kvuc2lflkeLOXATpw3n81U2jfbp79rZpYCNfn2BjnPuPCR6LkZEIUyhq1rerx9Asgs62HsVaO57XEgKB0n2PTgIuKsOEGexZ9BTODGvfwtQ='
   COSIGN_KEY_PASS:

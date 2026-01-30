@@ -29,7 +29,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   ```
   or use [minisign](https://jedisct1.github.io/minisign/):
   ```shell
-  minisign -VP RWRZFf16h9t+D9LTccBhZjAn4KIMf4SpXw40UruWcISGdsvXhSkOTIVe -m curl-8.16.0-win64-mingw.zip
+  minisign -VP RWQcXBEFq5MO2MDhlrz30eklTuapCJXgMYBo3WDnlugoumiHsewGfvfK -m curl-8.16.0-win64-mingw.zip
   ```
 - Standalone `curl`, `trurl` tools and `libcurl` DLL. Static libraries
   included.
