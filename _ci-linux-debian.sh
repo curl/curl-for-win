@@ -127,7 +127,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   fi
 fi
 
-[ -n "${COSIGN_PKG_GPG_PASS:+1}" ] && extra+=' cosign'
+[ -n "${COSIGN_GPG_PASS:+1}" ] && extra+=' cosign'
 [ -n "${MINISIGN_AGE_PASS:+1}" ] && extra+=' age minisign'
 
 ${sudo} apt-get --option Dpkg::Use-Pty=0 --yes update

@@ -31,7 +31,7 @@ elif [[ "${CW_CONFIG:-}" = *'mac'* ]] && [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
   extra+=' gcc'
 fi
 
-[ -n "${COSIGN_PKG_GPG_PASS:+1}" ] && extra+=' cosign'
+[ -n "${COSIGN_GPG_PASS:+1}" ] && extra+=' cosign'
 [ -n "${MINISIGN_AGE_PASS:+1}" ] && extra+=' age minisign'
 
 if [ -n "${extra}" ]; then

@@ -38,7 +38,7 @@ if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
   extra+=" llvm${LLVM} clang${LLVM} lld"
 fi
 
-[ -n "${COSIGN_PKG_GPG_PASS:+1}" ] && extra+=' cosign'
+[ -n "${COSIGN_GPG_PASS:+1}" ] && extra+=' cosign'
 [ -n "${MINISIGN_AGE_PASS:+1}" ] && extra+=' age minisign'
 
 # https://pkgs.alpinelinux.org/packages

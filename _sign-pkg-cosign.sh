@@ -9,14 +9,14 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 cd "$(dirname "$0")"
 
 # Create signature for package
-if [ -n "${COSIGN_PKG_KEY:-}" ] && \
-   [ -s "${COSIGN_PKG_KEY}" ] && \
-   [ -n "${COSIGN_PKG_KEY_PASS:+1}" ]; then
+if [ -n "${COSIGN_KEY:-}" ] && \
+   [ -s "${COSIGN_KEY}" ] && \
+   [ -n "${COSIGN_KEY_PASS:+1}" ]; then
   file="$1"
   echo "Package signing with cosign: '${file}'"
   tr -d '\n' <<EOF | \
-  cosign sign-blob --yes --key="${COSIGN_PKG_KEY}" --new-bundle-format=true --bundle="${file}".sigstore "${file}"
-${COSIGN_PKG_KEY_PASS}
+  cosign sign-blob --yes --key="${COSIGN_KEY}" --new-bundle-format=true --bundle="${file}".sigstore "${file}"
+${COSIGN_KEY_PASS}
 EOF
   chmod 0644 "${file}".sigstore  # cosign creates it with 0600
 fi

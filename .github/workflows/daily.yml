@@ -38,8 +38,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
-          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          COSIGN_GPG_PASS: '${{ secrets.COSIGN_GPG_PASS }}'
+          COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
           MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
           SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
@@ -90,8 +90,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
-          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          COSIGN_GPG_PASS: '${{ secrets.COSIGN_GPG_PASS }}'
+          COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
           MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
           SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
@@ -142,8 +142,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
-          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          COSIGN_GPG_PASS: '${{ secrets.COSIGN_GPG_PASS }}'
+          COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
           MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
           SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
@@ -183,8 +183,8 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_PKG_GPG_PASS: '${{ secrets.COSIGN_PKG_GPG_PASS }}'
-          COSIGN_PKG_KEY_PASS: '${{ secrets.COSIGN_PKG_KEY_PASS }}'
+          COSIGN_GPG_PASS: '${{ secrets.COSIGN_GPG_PASS }}'
+          COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
           MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
           SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'

@@ -462,14 +462,14 @@ fi
 
 # Decrypt package signing cosign key
 if command -v cosign >/dev/null 2>&1; then
-  export COSIGN_PKG_KEY; COSIGN_PKG_KEY='cosign.key'
-  if [ -s "${COSIGN_PKG_KEY}.asc" ] && \
-     [ -n "${COSIGN_PKG_GPG_PASS:+1}" ]; then
-    install -m 600 /dev/null "${COSIGN_PKG_KEY}"
+  export COSIGN_KEY; COSIGN_KEY='cosign.key'
+  if [ -s "${COSIGN_KEY}.asc" ] && \
+     [ -n "${COSIGN_GPG_PASS:+1}" ]; then
+    install -m 600 /dev/null "${COSIGN_KEY}"
     gpg --batch --yes --no-tty --quiet \
       --pinentry-mode loopback --passphrase-fd 0 \
-      --decrypt "${COSIGN_PKG_KEY}.asc" 2>/dev/null >> "${COSIGN_PKG_KEY}" <<EOF || true
-${COSIGN_PKG_GPG_PASS}
+      --decrypt "${COSIGN_KEY}.asc" 2>/dev/null >> "${COSIGN_KEY}" <<EOF || true
+${COSIGN_GPG_PASS}
 EOF
   fi
 fi
@@ -1940,12 +1940,12 @@ rm -f -- "${SIGN_CODE_KEY}"
 # Upload/deploy binaries
 . ./_ul.sh
 
-if [ -n "${COSIGN_PKG_KEY:-}" ]; then
+if [ -n "${COSIGN_KEY:-}" ]; then
   case "${_HOST}" in
-    mac)   rm -f -P -- "${COSIGN_PKG_KEY}";;
-    linux) [ -w "${COSIGN_PKG_KEY}" ] && command -v srm >/dev/null 2>&1 && srm -- "${COSIGN_PKG_KEY}";;
+    mac)   rm -f -P -- "${COSIGN_KEY}";;
+    linux) [ -w "${COSIGN_KEY}" ] && command -v srm >/dev/null 2>&1 && srm -- "${COSIGN_KEY}";;
   esac
-  rm -f -- "${COSIGN_PKG_KEY}"
+  rm -f -- "${COSIGN_KEY}"
 fi
 
 if [ -n "${MINISIGN_KEY:-}" ]; then
