@@ -55,3 +55,7 @@ echo "${encr_pass}" | gpg --batch --verbose --yes --no-tty \
   --set-filename '' 'cosign.key'
 
 gpg --batch --dearmor < 'cosign.key.asc' > 'cosign.key.gpg'
+
+age-keygen      --output="cosign.key.age.key"
+age --encrypt --identity="cosign.key.age.key" --armor "cosign.key" > "cosign.key.age.asc"
+age --encrypt --identity="cosign.key.age.key"         "cosign.key" > "cosign.key.age"

@@ -39,3 +39,7 @@ if echo "${gpg_pass}" | gpg \
    cmp --quiet -- "${key}" -; then
   cp -p "${key}.asc" 'deploy.key.asc'
 fi
+
+age-keygen      --output="${key}.age.key"
+age --encrypt --identity="${key}.age.key" --armor "${key}" > "${key}.age.asc"
+age --encrypt --identity="${key}.age.key"         "${key}" > "${key}.age"
