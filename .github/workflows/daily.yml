@@ -42,7 +42,7 @@ jobs:
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
           MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
-          SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
+          SIGN_PKG_AGE_PASS: '${{ secrets.SIGN_PKG_AGE_PASS }}'
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG='werror-dev-linux-a64-x64'
@@ -94,7 +94,7 @@ jobs:
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
           MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
-          SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
+          SIGN_PKG_AGE_PASS: '${{ secrets.SIGN_PKG_AGE_PASS }}'
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG='werror-dev-linux-a64-r64-x64-musl'
@@ -146,7 +146,7 @@ jobs:
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
           MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
-          SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
+          SIGN_PKG_AGE_PASS: '${{ secrets.SIGN_PKG_AGE_PASS }}'
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
           export CW_CONFIG='werror-dev-mac-macuni'
@@ -187,7 +187,7 @@ jobs:
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
           MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
-          SIGN_PKG_GPG_PASS: '${{ secrets.SIGN_PKG_GPG_PASS }}'
+          SIGN_PKG_AGE_PASS: '${{ secrets.SIGN_PKG_AGE_PASS }}'
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'

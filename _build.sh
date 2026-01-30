@@ -121,7 +121,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Enable package signing. Default: 1 for the 'main' branch, 0 otherwise
 #
 # SIGN_CODE_AGE_PASS, SIGN_CODE_KEY_PASS: for code signing
-# COSIGN_AGE_PASS, COSIGN_KEY_PASS, MINISIGN_AGE_PASS, MINISIGN_KEY_PASS, SIGN_PKG_GPG_PASS, SIGN_PKG_KEY_PASS: for package signing
+# COSIGN_AGE_PASS, COSIGN_KEY_PASS, MINISIGN_AGE_PASS, MINISIGN_KEY_PASS, SIGN_PKG_AGE_PASS, SIGN_PKG_KEY_PASS: for package signing
 # DEPLOY_AGE_PASS, DEPLOY_KEY_PASS: for publishing results
 #      Secrets used for the above operations.
 #      Optional. Skipping any operation missing a secret.
@@ -451,12 +451,10 @@ fi
 SIGN_PKG_KEY='sign-pkg.gpg.asc'
 if [ -s "${SIGN_PKG_KEY}" ] && \
    [ -n "${SIGN_PKG_KEY_ID:-}" ] && \
-   [ -n "${SIGN_PKG_GPG_PASS:+1}" ]; then
-  gpg --batch --yes --no-tty --quiet \
-    --pinentry-mode loopback --passphrase-fd 0 \
-    --decrypt "${SIGN_PKG_KEY}" 2>/dev/null <<EOF | \
+   [ -n "${SIGN_PKG_AGE_PASS:+1}" ]; then
+    age --decrypt --identity=- "${SIGN_PKG_KEY}" <<EOF | \
   gpg --batch --quiet --import
-${SIGN_PKG_GPG_PASS}
+${SIGN_PKG_AGE_PASS}
 EOF
 fi
 

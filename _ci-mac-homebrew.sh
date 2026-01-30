@@ -34,7 +34,7 @@ fi
 [ -n "${COSIGN_AGE_PASS:+1}" ] && extra+=' cosign'
 [ -n "${MINISIGN_AGE_PASS:+1}" ] && extra+=' minisign'
 
-[ -n "${SIGN_CODE_AGE_PASS:+1}${COSIGN_AGE_PASS:+1}${DEPLOY_AGE_PASS:+1}${MINISIGN_AGE_PASS:+1}" ] && extra+=' age'
+[ -n "${SIGN_CODE_AGE_PASS:+1}${COSIGN_AGE_PASS:+1}${DEPLOY_AGE_PASS:+1}${MINISIGN_AGE_PASS:+1}${SIGN_PKG_AGE_PASS:+1}" ] && extra+=' age'
 
 if [ -n "${extra}" ]; then
   export HOMEBREW_NO_AUTO_UPDATE=1

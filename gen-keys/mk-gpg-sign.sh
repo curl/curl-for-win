@@ -7,7 +7,7 @@
 set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 # Requires:
-#   brew install gnupg optipng pgpdump scour
+#   brew install gnupg optipng pgpdump scour age
 #   pip install base58
 
 # Redirect stdout securely to non-world-readable files
@@ -116,6 +116,15 @@ optipng -silent -preserve -fix -strip all -o3 "${master}-public-qr.png"
 my_gpg --batch --dearmor < "${master}-public.asc" | qrencode --type svg --inline --svg-path --rle | \
   scour --strip-xml-prolog --enable-comment-stripping --enable-id-stripping --enable-viewboxing --remove-metadata > "${master}-public-qr.svg"
 
+# Export private key (encrypted, binary)
+echo "${pass}" | my_gpg \
+  --batch --yes --no-tty \
+  --keyid-format 0xlong \
+  --pinentry-mode loopback --passphrase-fd 0 \
+  --s2k-cipher-algo aes256 \
+  --s2k-digest-algo sha512 \
+  --export-secret-key "${id}" > "${master}-private.gpg"
+
 # Export private key (encrypted)
 echo "${pass}" | my_gpg \
   --batch --yes --no-tty \
@@ -123,7 +132,7 @@ echo "${pass}" | my_gpg \
   --pinentry-mode loopback --passphrase-fd 0 \
   --s2k-cipher-algo aes256 \
   --s2k-digest-algo sha512 \
-  --armor --export-secret-key "${id}" > "${master}-private.asc"
+  --export-secret-key --armor "${id}" > "${master}-private.asc"
 pgpdump "${master}-private.asc" 2>/dev/null \
       > "${master}-private.asc.dump.txt"
 my_gpg --list-packets --verbose --debug 0x02 2>/dev/null \
@@ -138,21 +147,16 @@ privout "${master}-private_gpg.password" \
 printf '%s' "${encr_pass}"
 
 # Double-encrypted .asc for distribution
-exec 3<<EOF
-${encr_pass}
-EOF
-echo "${pass}" | my_gpg \
-  --batch --yes --no-tty \
-  --keyid-format 0xlong \
+echo ${encr_pass} | my_gpg --batch --yes --no-tty \
   --pinentry-mode loopback --passphrase-fd 0 \
-  --s2k-cipher-algo aes256 \
-  --s2k-digest-algo sha512 \
-  --export-secret-key "${id}" | \
-my_gpg --batch --yes --no-tty \
-  --pinentry-mode loopback --passphrase-fd 3 \
   --force-ocb \
   --cipher-algo aes256 --digest-algo sha512 --compress-algo none \
   --s2k-cipher-algo aes256 --s2k-digest-algo sha512 \
-  --symmetric --no-symkey-cache --output "${master}-private_gpg.asc" --armor
+  --symmetric --no-symkey-cache --output "${master}-private_gpg.asc" --armor \
+  --set-filename '' "${master}-private.gpg"
+
+age-keygen      --output="${master}-private.gpg.age.key"
+age --encrypt --identity="${master}-private.gpg.age.key" --armor "${master}-private.gpg" > "${master}-private.gpg.age.asc"
+age --encrypt --identity="${master}-private.gpg.age.key"         "${master}-private.gpg" > "${master}-private.gpg.age"
 
 rm -r -f -- "${dir}"; unset GNUPGHOME

@@ -28,8 +28,9 @@ mkdir -m 700 workdir
   mail="${name}@localhost"
   ../mk-gpg-sign.sh '' "${name}" "${mail}"
 
-  cp -p "${mail}-sign-public.asc"      ../sign-pkg-public.asc
-  cp -p "${mail}-sign-private_gpg.asc" ../sign-pkg.gpg.asc
+  cp -p "${mail}-sign-public.asc"          ../sign-pkg-public.asc
+  cp -p "${mail}-sign-private_gpg.asc"     ../sign-pkg.gpg.asc
+  cp -p "${mail}-sign-private.gpg.age.asc" ../sign-pkg.gpg.age.asc
 
   # 3. minisign package signing key
 
