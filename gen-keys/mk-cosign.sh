@@ -18,17 +18,6 @@ privout() {
   ) >> "$o"
 }
 
-case "$(uname)" in
-  *Darwin*)
-    MY_GPG="$(brew --prefix)/opt/gnupg/bin/gpg";;
-  *)
-    MY_GPG='gpg';;
-esac
-
-my_gpg() {
-  "${MY_GPG}" --full-timestrings "$@"
-}
-
 readonly base="$1"
 readonly revi="$2"
 
