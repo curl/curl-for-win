@@ -101,14 +101,16 @@ name='alpine'
 tag='latest'
 token="$(dockerhub_token "${name}")"
 # Architecture-agnostic image hash:
-digest="$(curl --disable --user-agent '' --silent --fail --show-error --head --write-out '%header{docker-content-digest}' --output /dev/null \
+digest="$(curl --disable --user-agent '' --silent --fail --show-error --write-out '%header{docker-content-digest}' --output _temp.json \
     --header 'Accept: application/json' \
     --header @/dev/stdin \
     "https://registry-1.docker.io/v2/library/${name}/manifests/${tag}" <<EOF
 Authorization: Bearer ${token}
 EOF
 )"
-echo "export OCI_IMAGE_ALPINE_LATEST='${name}:${tag}@${digest}'"
+version="$(jq --raw-output '.manifests[0].annotations."org.opencontainers.image.version"' _temp.json)"
+rm -f _temp.json
+echo "export OCI_IMAGE_ALPINE_LATEST='${name}:${tag}@${digest}' # v${version}"
 
 # Find out the latest AppVeyor CI Ubuntu worker image
 
