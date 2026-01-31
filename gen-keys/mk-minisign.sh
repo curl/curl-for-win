@@ -10,26 +10,14 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 #   brew install minisign age
 #   pip install base58
 
-# Redirect stdout securely to non-world-readable files
-privout() {
-  o="$1"; rm -f -- "$o"; install -m 600 /dev/null "$o"; shift
-  (
-    "$@"
-  ) >> "$o"
-}
-
 readonly base="$1"
 readonly revi="$2"
+readonly prfx="${base}_${revi}-minisign"
 
-readonly prfx="${base}_${revi}"
+install -m 600 /dev/null "${prfx}.password"; key_pass="$(openssl rand 32 | base58 | tee -a "${prfx}.password")"
 
-minisign_pass="$(openssl rand 32 | base58)"; readonly minisign_pass
-privout "${prfx}-minisign.password" \
-printf '%s' "${minisign_pass}"
-
-printf "%s\n%s\n" "${minisign_pass}" "${minisign_pass}" | \
-minisign -G -p "${prfx}-minisign.pub" -s "${prfx}-minisign.key"
+printf "%s\n%s\n" "${key_pass}" "${key_pass}" | minisign -G -p "${prfx}.pub" -s "${prfx}.key"
 
 # Encrypt private key once again, for distribution (ASCII, binary)
-age-keygen      --output="${prfx}-minisign.key.age.key"
-age --encrypt --identity="${prfx}-minisign.key.age.key" --armor "${prfx}-minisign.key" > "${prfx}-minisign.key.age.asc"
+age-keygen      --output="${prfx}.key.age.key"
+age --encrypt --identity="${prfx}.key.age.key" --armor "${prfx}.key" > "${prfx}.key.age.asc"

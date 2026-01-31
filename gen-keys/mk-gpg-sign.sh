@@ -10,14 +10,6 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 #   brew install gnupg optipng pgpdump scour age
 #   pip install base58
 
-# Redirect stdout securely to non-world-readable files
-privout() {
-  o="$1"; rm -f -- "$o"; install -m 600 /dev/null "$o"; shift
-  (
-    "$@"
-  ) >> "$o"
-}
-
 case "$(uname)" in
   *Darwin*)
     MY_GPG="$(brew --prefix)/opt/gnupg/bin/gpg";;
@@ -43,8 +35,7 @@ fi
 usage='sign'
 master="${base}${mail}-${usage}"
 
-pass="$(openssl rand 32 | base58)"; readonly pass
-privout "${master}.password" printf '%s' "${pass}"
+install -m 600 /dev/null "${master}.password"; key_pass="$(openssl rand 32 | base58 | tee -a "${master}.password")"
 
 # FIXME:
 # Private keys are stored and exported using obsolete SHA1 and less-secure
@@ -71,7 +62,7 @@ name-real: ${name}
 #name-comment: my comment
 name-email: ${mail}
 expire-date: 10y
-passphrase: ${pass}
+passphrase: ${key_pass}
 %commit
 %echo ! Done.
 EOF
@@ -117,7 +108,7 @@ my_gpg --batch --dearmor < "${master}-public.asc" | qrencode --type svg --inline
   scour --strip-xml-prolog --enable-comment-stripping --enable-id-stripping --enable-viewboxing --remove-metadata > "${master}-public-qr.svg"
 
 # Export private key (encrypted, binary)
-echo "${pass}" | my_gpg \
+echo "${key_pass}" | my_gpg \
   --batch --yes --no-tty \
   --keyid-format 0xlong \
   --pinentry-mode loopback --passphrase-fd 0 \
@@ -126,7 +117,7 @@ echo "${pass}" | my_gpg \
   --export-secret-key "${id}" > "${master}-private.gpg"
 
 # Export private key (encrypted)
-echo "${pass}" | my_gpg \
+echo "${key_pass}" | my_gpg \
   --batch --yes --no-tty \
   --keyid-format 0xlong \
   --pinentry-mode loopback --passphrase-fd 0 \

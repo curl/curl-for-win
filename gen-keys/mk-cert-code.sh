@@ -49,6 +49,7 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 case "$(uname)" in
   *Darwin*)
+    # shellcheck disable=SC2139
     alias openssl="$(brew --prefix)/opt/openssl/bin/openssl"
     readonly os='mac';;
   *_NT*)

@@ -10,26 +10,16 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 #   brew install cosign age
 #   pip install base58
 
-# Redirect stdout securely to non-world-readable files
-privout() {
-  o="$1"; rm -f -- "$o"; install -m 600 /dev/null "$o"; shift
-  (
-    "$@"
-  ) >> "$o"
-}
-
 readonly base="$1"
 readonly revi="$2"
+readonly prfx="${base}_${revi}-cosign"
 
-readonly prfx="${base}_${revi}"
+install -m 600 /dev/null "${prfx}.password"; key_pass="$(openssl rand 32 | base58 | tee -a "${prfx}.password")"
 
-cosign_pass="$(openssl rand 32 | base58)"; readonly cosign_pass
-privout "${prfx}-cosign.password" \
-printf '%s' "${cosign_pass}"
-
-export COSIGN_PASSWORD="${cosign_pass}"
-cosign generate-key-pair
+COSIGN_PASSWORD="${key_pass}" cosign generate-key-pair
+mv cosign.key "${prfx}.key"
+mv cosign.pub "${prfx}.pub"
 
 # Encrypt private key once again, for distribution (ASCII, binary)
-age-keygen      --output='cosign.key.age.key'
-age --encrypt --identity='cosign.key.age.key' --armor 'cosign.key' > 'cosign.key.age.asc'
+age-keygen      --output="${prfx}.key.age.key"
+age --encrypt --identity="${prfx}.key.age.key" --armor "${prfx}.key" > "${prfx}.key.age.asc"

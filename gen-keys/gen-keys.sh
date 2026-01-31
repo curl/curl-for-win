@@ -45,8 +45,8 @@ mkdir -m 700 workdir
   year='2025'
   ../mk-cosign.sh "${name}" "${year}"
 
-  cp -p cosign.pub         ../cosign.pub.asc
-  cp -p cosign.key.age.asc ../cosign.key.asc
+  cp -p "${name}_${year}-cosign.pub"         ../cosign.pub.asc
+  cp -p "${name}_${year}-cosign.key.age.asc" ../cosign.key.asc
 
   # 5. SSH deploy key
 
