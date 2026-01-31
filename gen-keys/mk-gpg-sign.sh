@@ -145,6 +145,5 @@ my_gpg --list-packets --verbose --debug 0x02 2>/dev/null \
 # Encrypt private key once again, for distribution (ASCII, binary)
 age-keygen      --output="${master}-private.gpg.age.key"
 age --encrypt --identity="${master}-private.gpg.age.key" --armor "${master}-private.gpg" > "${master}-private.gpg.age.asc"
-age --encrypt --identity="${master}-private.gpg.age.key"         "${master}-private.gpg" > "${master}-private.gpg.age"
 
 rm -r -f -- "${dir}"; unset GNUPGHOME

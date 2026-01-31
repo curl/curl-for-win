@@ -20,7 +20,6 @@ rm -f "${key}"; ssh-keygen -N "${key_pass}" -a 192 -t ed25519 -f "${key}" -C "${
 # Encrypt private key once again, for distribution (ASCII, binary)
 age-keygen      --output="${key}.age.key"
 age --encrypt --identity="${key}.age.key" --armor "${key}" > "${key}.age.asc"
-age --encrypt --identity="${key}.age.key"         "${key}" > "${key}.age"
 
 if age --decrypt --identity="${key}.age.key" "${key}.age.asc" | cmp --quiet -- "${key}" -; then
   cp -p "${key}.age.asc" 'deploy.key.asc'
