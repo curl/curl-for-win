@@ -13,14 +13,14 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 # those signature using osslsigncode and sigcheck.exe (on Windows only).
 
 # Requires:
-#   openssl 1.1.x+, gpg, osslsigncode 2.1.0+, GNU tail, base58, age
+#   openssl 1.1.x+, osslsigncode 2.1.0+, GNU tail, base58, age
 # Debian:
 #   apt install osslsigncode base58 age
 # Mac:
-#   brew install openssl gnupg osslsigncode coreutils diffutils age
+#   brew install openssl osslsigncode coreutils diffutils age
 #   pip install base58
 # Windows:
-#   pacman --sync openssl gnupg mingw-w64-x86_64-osslsigncode
+#   pacman --sync openssl mingw-w64-x86_64-osslsigncode mingw-w64-x86_64-age
 #   sigcheck64.exe:
 #     curl --user-agent '' --remote-name --remote-time --xattr https://live.sysinternals.com/tools/sigcheck64.exe
 #   signtool.exe:
@@ -259,29 +259,7 @@ echo "${code_pass}" | openssl pkcs12 -passin fd:0 -in "${code}-weak.p12" -info -
 privout "${code}-weak.p12.asn1.txt" \
 openssl asn1parse -i -inform DER -in "${code}-weak.p12"
 
-# reuse password if found on disk
-if [ -r "${code}.p12.gpg.password" ]; then
-  encr_pass="$(cat "${code}.p12.gpg.password")"; readonly encr_pass
-else
-  # "$(pwgen --secure 40 1)"
-  # Make sure password does not start with '/'. Some tools can mistake it for
-  # an option.
-  encr_pass="$(openssl rand 32 | base58)"; readonly encr_pass
-  privout "${code}.p12.gpg.password" \
-  printf '%s' "${encr_pass}"
-fi
-
-# Encrypted .p12 for distribution (ASCII, binary)
-echo "${encr_pass}" | gpg --batch --verbose --yes --no-tty \
-  --pinentry-mode loopback --passphrase-fd 0 \
-  --force-ocb \
-  --cipher-algo aes256 --digest-algo sha512 --compress-algo none \
-  --s2k-cipher-algo aes256 --s2k-digest-algo sha512 \
-  --symmetric --no-symkey-cache --output "${code}.p12.asc" --armor \
-  --set-filename '' "${code}.p12"
-
-gpg --batch --dearmor < "${code}.p12.asc" > "${code}.p12.gpg"
-
+# Encrypt private key once again, for distribution (ASCII, binary)
 age-keygen      --output="${code}.p12.age.key"
 age --encrypt --identity="${code}.p12.age.key" --armor "${code}.p12" > "${code}.p12.age.asc"
 age --encrypt --identity="${code}.p12.age.key"         "${code}.p12" > "${code}.p12.age"
@@ -338,9 +316,8 @@ if [ -f "${test}" ]; then
 
   temp='./_code.p12'
   rm -f "${temp}"
-  echo "${encr_pass}" | gpg --batch --no-tty \
-    --pinentry-mode loopback --passphrase-fd 0 \
-    --output "${temp}" --decrypt "${code}.p12.asc"
+  install -m 600 /dev/null "${temp}"
+  age --decrypt --identity="${code}.p12.age.key" "${code}.p12.age.asc" >> "${temp}"
 
   case "$(uname)" in
     Darwin*|*BSD) unixts="$(TZ=UTC stat -f '%m'       "${test}")";;

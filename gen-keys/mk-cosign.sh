@@ -30,21 +30,7 @@ printf '%s' "${cosign_pass}"
 export COSIGN_PASSWORD="${cosign_pass}"
 cosign generate-key-pair
 
-encr_pass="$(openssl rand 32 | base58)"; readonly encr_pass
-privout "${prfx}-cosign-private_gpg.password" \
-printf '%s' "${encr_pass}"
-
-# Encrypted .p12 for distribution (ASCII, binary)
-echo "${encr_pass}" | gpg --batch --verbose --yes --no-tty \
-  --pinentry-mode loopback --passphrase-fd 0 \
-  --force-ocb \
-  --cipher-algo aes256 --digest-algo sha512 --compress-algo none \
-  --s2k-cipher-algo aes256 --s2k-digest-algo sha512 \
-  --symmetric --no-symkey-cache --output 'cosign.key.asc' --armor \
-  --set-filename '' 'cosign.key'
-
-gpg --batch --dearmor < 'cosign.key.asc' > 'cosign.key.gpg'
-
+# Encrypt private key once again, for distribution (ASCII, binary)
 age-keygen      --output='cosign.key.age.key'
 age --encrypt --identity='cosign.key.age.key' --armor 'cosign.key' > 'cosign.key.age.asc'
 age --encrypt --identity='cosign.key.age.key'         'cosign.key' > 'cosign.key.age'

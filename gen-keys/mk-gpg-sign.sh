@@ -140,21 +140,9 @@ my_gpg --list-packets --verbose --debug 0x02 2>/dev/null \
   > "${master}-private.asc.pkt.txt"
 
 # brew install paperkey
-# paperkey --secret-key my-secret-key.gpg --output sec
+# paperkey --secret-key "${master}-private.gpg" --output "${master}-private.gpg.paperkey.txt"
 
-encr_pass="$(openssl rand 32 | base58)"; readonly encr_pass
-privout "${master}-private_gpg.password" \
-printf '%s' "${encr_pass}"
-
-# Double-encrypted .asc for distribution
-echo ${encr_pass} | my_gpg --batch --yes --no-tty \
-  --pinentry-mode loopback --passphrase-fd 0 \
-  --force-ocb \
-  --cipher-algo aes256 --digest-algo sha512 --compress-algo none \
-  --s2k-cipher-algo aes256 --s2k-digest-algo sha512 \
-  --symmetric --no-symkey-cache --output "${master}-private_gpg.asc" --armor \
-  --set-filename '' "${master}-private.gpg"
-
+# Encrypt private key once again, for distribution (ASCII, binary)
 age-keygen      --output="${master}-private.gpg.age.key"
 age --encrypt --identity="${master}-private.gpg.age.key" --armor "${master}-private.gpg" > "${master}-private.gpg.age.asc"
 age --encrypt --identity="${master}-private.gpg.age.key"         "${master}-private.gpg" > "${master}-private.gpg.age"
