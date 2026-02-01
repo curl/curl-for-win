@@ -77,9 +77,8 @@ jobs:
         run: |
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           shellcheck --version
-          shellcheck --exclude=1091 \
-            --enable=avoid-nullary-conditions,deprecate-which,quote-safe-variables,require-variable-braces \
-            ./*.sh
+          git ls-files '*.sh' -z | xargs -0 -r \
+          shellcheck --exclude=1091 --enable=avoid-nullary-conditions,deprecate-which,quote-safe-variables,require-variable-braces
 
       - name: 'codespell'
         run: |
