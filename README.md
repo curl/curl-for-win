@@ -7,8 +7,8 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 > [!tip]
 > Sponsor these binary builds to support maintenance, fixes and further improvements: <https://github.com/sponsors/vszakats>
 
-> [!tip]
-> The statically built [`trurl`](https://github.com/curl/trurl) binary is part of the package since [October 2025](https://github.com/curl/trurl/discussions/408).
+> [!warning]
+> PGP signatures are deprecated and will be dropped in [July 2026](https://github.com/curl/curl-for-win/discussions/93) in favor or cosign and minisign.
 
 # Reproducible, static, curl binaries for Linux, macOS and Windows
 
