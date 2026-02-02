@@ -386,9 +386,9 @@ check_dl() {
       elif grep -a -q -F 'BEGIN SSH SIGNATURE' pkg.sig; then
         [[ "${key}" = 'https://'* ]] && key="$(my_curl "${key}")"
         exec 3<<EOF
-${key}
+id-dep $(cat id-curl-for-win-sign.pub)
 EOF
-        if ssh-keygen -Y check-novalidate -n 'file' -f /dev/fd/3 -s pkg.sig < pkg.bin; then
+        if ssh-keygen -Y verify -n 'file' -f /dev/fd/3 -s pkg.sig -I 'id-dep' < pkg.bin; then
           >&2 echo "! ${name}: Verify: OK (Valid SSH signature)"
           ok='1'
         else
