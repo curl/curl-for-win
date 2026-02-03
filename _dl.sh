@@ -383,17 +383,6 @@ check_dl() {
     if [ -n "${sig}" ]; then
       if [ ! -s pkg.sig ]; then
         >&2 echo "! ${name}: Verify: Failed (Signature expected, but missing)"
-      elif grep -a -q -F 'BEGIN SSH SIGNATURE' pkg.sig; then
-        [[ "${keys}" = 'https://'* ]] && key="$(my_curl "${keys}")"
-        exec 3<<EOF
-id-dep $(cat id-curl-for-win-sign.pub)
-EOF
-        if ssh-keygen -Y verify -n 'file' -f /dev/fd/3 -s pkg.sig -I 'id-dep' < pkg.bin; then
-          >&2 echo "! ${name}: Verify: OK (Valid SSH signature)"
-          ok='1'
-        else
-          >&2 echo "! ${name}: Verify: Failed (SSH signature)"
-        fi
       else
         for key in ${keys}; do
           gpg_recv_key "${key}" >/dev/null 2>&1
