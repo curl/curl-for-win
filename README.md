@@ -24,11 +24,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   -----END PUBLIC KEY-----
   ```
   Verify using:
-  ```shell
+  ```sh
   cosign verify-blob --key cosign.pub.asc --bundle curl-8.16.0-win64-mingw.zip.sigstore curl-8.16.0-win64-mingw.zip
   ```
   or use [minisign](https://jedisct1.github.io/minisign/):
-  ```shell
+  ```sh
   minisign -VP RWQcXBEFq5MO2MDhlrz30eklTuapCJXgMYBo3WDnlugoumiHsewGfvfK -m curl-8.16.0-win64-mingw.zip
   ```
 - Standalone `curl`, `trurl` tools and `libcurl` DLL. Static libraries
