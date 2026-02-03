@@ -50,7 +50,7 @@ mkdir -m 700 workdir
 
   # 5. SSH deploy key
 
-  ../mk-ssh-curl-for-win.sh
+  ../mk-ssh-curl-for-win-deploy.sh
 
   mv deploy.key.asc ..
 )
