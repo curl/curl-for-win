@@ -74,7 +74,7 @@ build_script:
       podman info
       time podman run --security-opt seccomp=unconfined --volume="$(pwd):$(pwd)" --workdir="$(pwd)" \
         --env-file=<(env | grep -a -E \
-          '^(CW_|SIGN_|COSIGN_|DEPLOY_|APPVEYOR_|CI_|DO_NOT_TRACK)') \
+          '^(CW_|SIGN_|COSIGN_|MINISIGN_|DEPLOY_|APPVEYOR_|CI_|DO_NOT_TRACK)') \
         "${OCI_IMAGE_DEBIAN_TESTING}" \
         sh -c ./_ci-linux-debian.sh
 
