@@ -655,11 +655,11 @@ live_dl() {
         >&2 echo "! ${name}: Verify: Failed (Signature expected, but missing)"
         exit 1
       elif grep -a -q -F 'BEGIN SSH SIGNATURE' pkg.sig; then
-        [[ "${key}" = 'https://'* ]] && key="$(my_curl "${key}")"
+        [[ "${keys}" = 'https://'* ]] && key="$(my_curl "${keys}")"
         exec 3<<EOF
-${key}
+id-dep $(cat id-curl-for-win-sign.pub)
 EOF
-        ssh-keygen -Y check-novalidate -n 'file' -f /dev/fd/3 -s pkg.sig < pkg.bin || exit 1
+        ssh-keygen -Y verify -n 'file' -f /dev/fd/3 -s pkg.sig -I 'id-dep' < pkg.bin
       else
         for key in ${keys}; do
           gpg_recv_key "${key}"
