@@ -48,9 +48,7 @@ mkdir -m 700 workdir
   cp -p "${name}_${year}-cosign.pub"         ../cosign.pub.asc
   cp -p "${name}_${year}-cosign.key.age.asc" ../cosign.key.asc
 
-  # 5. SSH deploy key
+  # 5. SSH deploy key for CI script (restricted)
 
-  ../mk-ssh-curl-for-win-deploy.sh
-
-  mv deploy.key.asc ..
+  ../mk-ssh-keygen.sh 'id-curl-for-win-deploy' '../deploy.key.asc'
 )
