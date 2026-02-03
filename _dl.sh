@@ -384,7 +384,7 @@ check_dl() {
       if [ ! -s pkg.sig ]; then
         >&2 echo "! ${name}: Verify: Failed (Signature expected, but missing)"
       elif grep -a -q -F 'BEGIN SSH SIGNATURE' pkg.sig; then
-        [[ "${key}" = 'https://'* ]] && key="$(my_curl "${key}")"
+        [[ "${keys}" = 'https://'* ]] && key="$(my_curl "${keys}")"
         exec 3<<EOF
 id-dep $(cat id-curl-for-win-sign.pub)
 EOF
