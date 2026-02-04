@@ -578,8 +578,8 @@ live_xt() {
      [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *" ${pkg} "* ]]; then
     hash="$(openssl dgst -sha256 pkg.bin)"
     echo "${hash}"
-    if [ "${pkg}" != 'psl' ]; then
-      echo "${hash}" | grep -q -a -F -- "${2:-}" || exit 1
+    if [ "${pkg}" != 'psl' ] && [ -n "${2:-}" ]; then
+      echo "${hash}" | grep -q -a -F -w -- "${2:-}" || exit 1
     fi
     rm -r -f "${pkg:?}"; mkdir "${pkg}"
     if [ "${pkg}" = 'cacert' ]; then
