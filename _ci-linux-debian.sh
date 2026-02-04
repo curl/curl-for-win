@@ -143,6 +143,7 @@ if [ -n "${dl}" ]; then
   apt-get --option Dpkg::Use-Pty=0 --yes download ${dl}
   # https://deb.debian.org/debian/pool/main/l/llvm-toolchain-17/libclang-rt-17-dev_17.0.5-1_arm64.deb -> libclang-rt-17-dev_1%3a17.0.5-1_arm64.deb
   for f in ./*.deb; do
+    openssl dgst -sha256 "${f}"
     dpkg-deb --contents "${f}"
     dpkg-deb --extract --verbose "${f}" my-pkg
   done
