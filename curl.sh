@@ -346,14 +346,21 @@ _VER="$1"
     options+=' -D_CURL_PREFILL=ON'
   fi
 
+  if [ -n "${_OPENSSL}" ]; then
+    if [ "${_OS}" = 'mac' ]; then
+      options+=' -DUSE_APPLE_SECTRUST=ON'
+    elif [ "${CURL_VER_}" != '8.18.0' ] && \
+         [ "${_OS}" = 'win' ]; then
+      options+=' -DCURL_CA_NATIVE=ON'
+    fi
+  fi
+
   if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
     options+=' -DBUILD_CURL_EXE=ON'
     options+=' -DBUILD_STATIC_CURL=ON'
 
     if [ -n "${_OPENSSL}" ]; then
-      if [ "${_OS}" = 'mac' ]; then
-        options+=' -DUSE_APPLE_SECTRUST=ON'
-      elif [ "${CURL_VER_}" = '8.18.0' ]; then
+      if [ "${CURL_VER_}" = '8.18.0' ]; then
         if [[ "${_DEPS}" = *'cacert'* ]]; then
           options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
         fi
@@ -361,8 +368,6 @@ _VER="$1"
         if [ "${_OS}" = 'win' ]; then
           options+=' -DCURL_CA_SEARCH_SAFE=ON'
         fi
-      elif [ "${_OS}" = 'win' ]; then
-        options+=' -DCURL_CA_NATIVE=ON'
       elif [[ "${_DEPS}" = *'cacert'* ]]; then
         options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
       fi
