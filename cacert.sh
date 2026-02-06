@@ -53,10 +53,7 @@ EOF
   fi
   touch -c -r "${_ref}" "${_fn}"
 
-  if [ -n "${_OPENSSL}" ] && \
-     [ "${_OS}" != 'mac' ]; then
-    cp -f -p "${_CACERT}" "${_DST}"/bin/curl-ca-bundle.crt
-  fi
+  cp -f -p "${_CACERT}" "${_DST}"/bin/curl-ca-bundle.crt
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

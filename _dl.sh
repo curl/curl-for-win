@@ -762,7 +762,8 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro) || "${_CONFIG}" =~ (libssh
   fi
 fi
 
-if [ "${need_cacert}" = '1' ]; then
+if [ "${need_cacert}" = '1' ] && \
+   [ "${_OS}" != 'mac' ]; then
   _DEPS+=' cacert'
 fi
 
