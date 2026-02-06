@@ -24,6 +24,8 @@ _VER="$1"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(pwd)/_pkg"; rm -r -f "${_DST}"
 
+  mkdir -p "${_DST}"
+
   touch -c -r "${_ref}" LICENSE  # when using the versioned tarball, this is redundant
 
   cp -f -p LICENSE "${_DST}"/LICENSE.txt
