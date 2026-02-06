@@ -26,32 +26,7 @@ _VER="$1"
 
   mkdir -p "${_DST}/bin"
 
-  # To avoid depending on yet another unversioned download (or vendoring
-  # the license), link to it instead:
-  url="https://raw.githubusercontent.com/publicsuffix/list/${PSL_HASH}/LICENSE"
-  if [ "${_OS}" = 'win' ]; then
-    _fn="${_DST}/LICENSE.url"
-    cat <<EOF | sed 's/$/\r/' > "${_fn}"
-[InternetShortcut]
-URL=${url}
-EOF
-  elif [ "${_OS}" = 'mac' ]; then
-    _fn="${_DST}/LICENSE.webloc"
-    cat <<EOF > "${_fn}"
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>URL</key>
-  <string>${url}</string>
-</dict>
-</plist>
-EOF
-  else
-    _fn="${_DST}/LICENSE-URL.txt"
-    echo "${url}" > "${_fn}"
-  fi
-  touch -c -r "${_ref}" "${_fn}"
+  ../_mk-url-file.sh "${_ref}" 'LICENSE' "https://raw.githubusercontent.com/publicsuffix/list/${PSL_HASH}/LICENSE"
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

@@ -1846,29 +1846,7 @@ build_single_target() {
       touch -c -r "../${_ref}" "${_fn}"
     )
 
-    if [ "${_OS}" = 'win' ]; then
-      _fn="${_DST}/BUILD-README.url"
-      cat <<EOF | sed 's/$/\r/' > "${_fn}"
-[InternetShortcut]
-URL=${_URL_BASE}
-EOF
-    elif [ "${_OS}" = 'mac' ]; then
-      _fn="${_DST}/BUILD-README.webloc"
-      cat <<EOF > "${_fn}"
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>URL</key>
-  <string>${_URL_BASE}</string>
-</dict>
-</plist>
-EOF
-    else
-      _fn="${_DST}/BUILD-README-URL.txt"
-      echo "${_URL_BASE}" > "${_fn}"
-    fi
-    touch -c -r "${_ref}" "${_fn}"
+    ./_mk-url-file.sh "${_ref}" 'BUILD-README' "${_URL_BASE}"
 
     ./_pkg.sh "${_ref}" 'unified'
   fi
