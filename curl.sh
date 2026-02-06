@@ -359,13 +359,12 @@ _VER="$1"
     options+=' -DBUILD_CURL_EXE=ON'
     options+=' -DBUILD_STATIC_CURL=ON'
 
-    if [ -n "${_OPENSSL}" ]; then
-      if [ "${CURL_VER_}" = '8.18.0' ]; then
-        if [[ "${_DEPS}" = *'cacert'* ]]; then
-          options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
-        fi
-
-        if [ "${_OS}" = 'win' ]; then
+    if [ -n "${_OPENSSL}" ] && [ "${_OS}" != 'mac' ]; then
+      if [ "${_OS}" = 'win' ]; then
+        if [ "${CURL_VER_}" = '8.18.0' ]; then
+          if [[ "${_DEPS}" = *'cacert'* ]]; then
+            options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
+          fi
           options+=' -DCURL_CA_SEARCH_SAFE=ON'
         fi
       elif [[ "${_DEPS}" = *'cacert'* ]]; then
