@@ -26,7 +26,9 @@ _VER="$1"
 
   mkdir -p "${_DST}/bin"
 
-  ../_mk-url-file.sh "${_ref}" 'LICENSE' "https://raw.githubusercontent.com/publicsuffix/list/${PSL_HASH}/LICENSE"
+  touch -c -r "${_ref}" LICENSE
+
+  cp -f -p LICENSE "${_DST}"/LICENSE.txt
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

@@ -807,6 +807,9 @@ if [[ "${_DEPS}" = *'ngtcp2'* ]]; then
 fi
 if [[ "${_DEPS}" = *'psl'* ]]; then
   live_dl psl "${PSL_VER_}" "${PSL_HASH}"
+  my_curl "https://raw.githubusercontent.com/publicsuffix/list/${PSL_HASH}/LICENSE" \
+    --retry-all-errors --retry 10 \
+    --output 'psl/LICENSE'
 fi
 if [[ "${_DEPS}" = *'libpsl'* ]]; then
   live_dl libpsl "${LIBPSL_VER_}"
