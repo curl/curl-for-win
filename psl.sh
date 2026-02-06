@@ -26,7 +26,7 @@ _VER="$1"
 
   mkdir -p "${_DST}/bin"
 
-  touch -c -r "${_ref}" LICENSE
+  touch -c -r "${_ref}" LICENSE  # when using the versioned tarball, this is redundant
 
   cp -f -p LICENSE "${_DST}"/LICENSE.txt
 

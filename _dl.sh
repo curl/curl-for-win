@@ -48,7 +48,8 @@ cat <<EOF
   {
     "name": "psl",
     "url": "https://raw.githubusercontent.com/publicsuffix/list/{hash}/public_suffix_list.dat",
-    "bumpdays": 90
+    "bumpdays": 90,
+    "gittar": "1"
   },
   {
     "name": "libpsl",
@@ -584,8 +585,6 @@ live_xt() {
     rm -r -f "${pkg:?}"; mkdir "${pkg}"
     if [ "${pkg}" = 'cacert' ]; then
       mv pkg.bin "${pkg}/${_CACERT}"
-    elif [ "${pkg}" = 'psl' ]; then
-      mv pkg.bin "${pkg}/${_PSL}"
     else
       tar --no-same-owner --no-same-permissions --strip-components="${3:-1}" -xf pkg.bin --directory="${pkg}"
       [ -f "${pkg}${_PATCHSUFFIX}.patch" ] && patch --forward --strip=1 --directory="${pkg}" < "${pkg}${_PATCHSUFFIX}.patch"
@@ -617,6 +616,14 @@ live_dl() {
     redir="$(  printf '%s' "${jp}" | jq --raw-output '.redir')"
     keys="$(   printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
     curlopt="$(printf '%s' "${jp}" | jq --raw-output '.curlopt' | sed 's/^null$//')"
+    gittar="$( printf '%s' "${jp}" | jq --raw-output '.gittar' | sed 's/^null$//')"
+
+    # Download the whole tarball for the commit hash. GitHub sets the timestamp of all files to the commit timestamp.
+    if [ "${gittar}" = '1' ] && [[ "${url}" =~ ^https://raw.githubusercontent.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
+      slug="${BASH_REMATCH[1]}"
+      url="https://github.com/${slug}/archive/${hash}.tar.gz"
+      redir='redir'
+    fi
 
     options=(--retry-all-errors)
     [ -n "${curlopt}" ] && options+=("${curlopt}")
@@ -664,7 +671,7 @@ live_dl() {
 
     echo "${url}" > "__${name}.url"
 
-    if [ -n "${hash}" ]; then
+    if [ -n "${hash}" ] && [ "${gittar}" != '1' ]; then
       live_xt "${name}" "${hash}"
     else
       true
@@ -807,9 +814,7 @@ if [[ "${_DEPS}" = *'ngtcp2'* ]]; then
 fi
 if [[ "${_DEPS}" = *'psl'* ]]; then
   live_dl psl "${PSL_VER_}" "${PSL_HASH}"
-  my_curl "https://raw.githubusercontent.com/publicsuffix/list/${PSL_HASH}/LICENSE" \
-    --retry-all-errors --retry 10 \
-    --output 'psl/LICENSE'
+  live_xt psl ''
 fi
 if [[ "${_DEPS}" = *'libpsl'* ]]; then
   live_dl libpsl "${LIBPSL_VER_}"
