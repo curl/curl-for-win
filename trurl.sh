@@ -83,7 +83,7 @@ _VER="$1"
 
   touch -c -r "${_ref}" "${bin}"
   if [ "${CW_MAP}" = '1' ]; then
-    touch -c -r "${_ref}" "${_PP}/${_map_name}"
+    touch -c -r "${_ref}" "${_PP}/bin/${_map_name}"
   fi
 
   ../_info-bin.sh --filetype 'exe' "${bin}"
