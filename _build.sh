@@ -1315,6 +1315,7 @@ build_single_target() {
     if xcodebuild -version >/dev/null 2>/dev/null; then
       # This fails in gcc builds for some reason:
       _ver="$(xcodebuild -version 2>/dev/null | head -n 1 || true)"
+      xcodebuild -version || true
     else
       _ver="$(pkgutil --pkg-info=com.apple.pkg.CLTools_Executables | grep -a -F 'version:' || true)"
     fi
@@ -1322,7 +1323,6 @@ build_single_target() {
     _XCODEVER="$(printf '%s' "${_ver}" | grep -a -o -E ' [0-9]+' | cut -c 2-)"  # major version, 2 digits
 
     # Installed/selected Xcode version and SDK version:
-    xcodebuild -version || true
     echo "Default sysroot: ${_SYSROOT}"
     echo "macOS SDK version: ${_SDKVER}"
     echo "Xcode version: ${_XCODEVERFULL}"
