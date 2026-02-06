@@ -28,7 +28,7 @@ _VER="$1"
 
   # To avoid depending on yet another unversioned download (or vendoring
   # the license), link to it instead:
-  url='https://raw.githubusercontent.com/publicsuffix/list/refs/heads/main/LICENSE'
+  url="https://raw.githubusercontent.com/publicsuffix/list/${PSL_HASH}/LICENSE"
   if [ "${_OS}" = 'win' ]; then
     _fn="${_DST}/LICENSE.url"
     cat <<EOF | sed 's/$/\r/' > "${_fn}"
