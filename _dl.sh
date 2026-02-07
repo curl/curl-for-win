@@ -596,7 +596,7 @@ live_xt() {
 }
 
 live_dl() {
-  local name ver hash jp url mirror sig redir key keys options
+  local name ver hash jp url mirror sig redir key keys options curlopt gittar slug
 
   name="$1"
 
