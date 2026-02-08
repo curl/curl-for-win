@@ -9,17 +9,17 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 # Create a clickable desktop icon opening a URL
 
 ref="$1"
-nam="$2"
+fil="$2"
 url="$3"
 
 if [ "${_OS}" = 'win' ]; then
-  _fn="${_DST}/${nam}.url"
+  _fn="${_DST}/${fil}.url"
   cat <<EOF | sed 's/$/\r/' > "${_fn}"
 [InternetShortcut]
 URL=${url}
 EOF
 elif [ "${_OS}" = 'mac' ]; then
-  _fn="${_DST}/${nam}.webloc"
+  _fn="${_DST}/${fil}.webloc"
   cat <<EOF > "${_fn}"
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -32,15 +32,15 @@ elif [ "${_OS}" = 'mac' ]; then
 EOF
 elif [ "${_OS}" = 'linux' ]; then
   # https://specifications.freedesktop.org/desktop-entry/latest/index.html
-  _fn="${_DST}/${nam}.desktop"
+  _fn="${_DST}/${fil}.desktop"
   cat <<EOF > "${_fn}"
 [Desktop Entry]
 Type=Link
-Name=${nam}
+Name=${fil}
 URL=${url}
 EOF
 else
-  _fn="${_DST}/${nam}-URL.txt"
+  _fn="${_DST}/${fil}-URL.txt"
   echo "${url}" > "${_fn}"
 fi
 
