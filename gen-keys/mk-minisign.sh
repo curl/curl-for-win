@@ -7,7 +7,7 @@
 set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 # Requires:
-#   brew install minisign age
+#   brew install minisign minizign age
 #   pip install base58
 
 readonly base="$1"
@@ -17,6 +17,10 @@ readonly prfx="${base}_${revi}-minisign"
 install -m 600 /dev/null "${prfx}.password"; key_pass="$(openssl rand 32 | base58 | tee -a "${prfx}.password")"
 
 printf "%s\n%s\n" "${key_pass}" "${key_pass}" | minisign -G -p "${prfx}.pub" -s "${prfx}.key"
+
+if command -v minizign >/dev/null 2>&1; then
+  minizign -p "${prfx}.pub" -C > "${prfx}.pub.ssh"
+fi
 
 # Encrypt private key once again, for distribution (ASCII, binary)
 age-keygen      --output="${prfx}.key.age.key"
