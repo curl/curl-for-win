@@ -118,7 +118,12 @@ if [ "${CW_NOPKG:-}" = '1' ]; then
 fi
 
 if [ "${_NAM}" != "${_UNIPKG}" ]; then
-  ver="${_VER}"
+  ver_raw="${_VER}"
+  if [[ "${ver_raw}" =~ (.+)-([a-f0-9]{40,}) ]]; then
+    ver="${BASH_REMATCH[1]}"
+  else
+    ver="${ver_raw}"
+  fi
   url=''
   [ "${#ver}" -ge 32 ] && ver="$(printf '%.8s' "${ver}")"
   namver="${_NAM} ${ver}"

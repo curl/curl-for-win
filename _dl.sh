@@ -40,13 +40,13 @@ cat <<EOF
   },
   {
     "name": "certdata",
-    "url": "https://raw.githubusercontent.com/mozilla-firefox/firefox/{hash}/security/nss/lib/ckfw/builtins/certdata.txt",
+    "url": "https://raw.githubusercontent.com/mozilla-firefox/firefox/{commit}/security/nss/lib/ckfw/builtins/certdata.txt",
     "refs": "refs/heads/release",
     "bumpdays": 5
   },
   {
     "name": "psl",
-    "url": "https://raw.githubusercontent.com/publicsuffix/list/{hash}/public_suffix_list.dat",
+    "url": "https://raw.githubusercontent.com/publicsuffix/list/{commit}/public_suffix_list.dat",
     "bumpdays": 90,
     "gittar": "1"
   },
@@ -216,7 +216,7 @@ expandver() {
     -e "s/{ver}/$1/g" \
     -e "s/{veru}/$(echo "$1" | tr '.' '_')/g" \
     -e "s/{vermm}/$(echo "$1" | cut -d . -f -2)/g" \
-    -e "s/{hash}/${2:-}/g"
+    -e "s/{commit}/${2:-}/g"
 }
 
 # convert 'x.y.z' to zero-padded "000x0y0z" numeric format (or leave as-is)
@@ -230,9 +230,8 @@ to8digit() {
   fi
 }
 
-# return _FOUND_VER and _FOUND_HASH (for content-addressed dependencies) variables
 check_update() {
-  local pkg url ourvern newver newvern slug mask urldir res curlopt
+  local pkg url ourvern newver newvern newcommit slug mask urldir res curlopt commit
 
   pkg="$1"
   ourvern="${2:-000000}"
@@ -240,9 +239,6 @@ check_update() {
   newver=''
   bumpdays="${9:-90}"
   curlopt="${10}"
-
-  unset _FOUND_VER
-  unset _FOUND_HASH
 
   options=()
   [ -n "${curlopt}" ] && options+=("${curlopt}")
@@ -256,8 +252,8 @@ check_update() {
     [ -n "${8:-}" ] && refs="&sha=${8}"  # e.g. refs/heads/release
     jcommit="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/commits?path=${path}${refs}" \
       --header 'X-GitHub-Api-Version: 2022-11-28')"
-    newver="$(echo "${jcommit}" | jq --raw-output '.[0].commit.committer.date' | cut -c -10)"  # 'YYYY-MM-DDThh:mm:ssZ' -> 'YYYY-MM-DD'
-    hash="$(echo   "${jcommit}" | jq --raw-output '.[0].sha')"
+    newver="$(echo    "${jcommit}" | jq --raw-output '.[0].commit.committer.date' | cut -c -10)"  # 'YYYY-MM-DDThh:mm:ssZ' -> 'YYYY-MM-DD'
+    newcommit="$(echo "${jcommit}" | jq --raw-output '.[0].sha')"
   elif [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
     slug="${BASH_REMATCH[1]}"
     if [ -n "$6" ]; then
@@ -341,79 +337,85 @@ check_update() {
       esac
       diff_days=$(( (unixnew - unixold) / 86400 ))
       if [ "${diff_days}" -ge "${bumpdays}" ]; then
-        _FOUND_VER="${newver}"
-        _FOUND_HASH="${hash}"
+        printf '%s' "${newver}-${newcommit}"
       fi
     elif [ "${#newver}" -ge 32 ]; then  # hash
       if [ "${newver}" != "${ourvern}" ]; then
-        _FOUND_VER="${newver}"
+        printf '%s' "${newver}"
       fi
     else
       newvern="$(printf '%s' "${newver}" | to8digit)"
       if [[ "${newvern}" > "${ourvern}" ]]; then
-        _FOUND_VER="${newver}"
+        printf '%s' "${newver}"
       fi
     fi
   fi
 }
 
 check_dl() {
-  local name url keys sig sha options key ok hash_calc hash_got curlopt
+  local name url keys sig sha redir options key ok hash_calc hash_got curlopt gittar slug commit dcommit
 
   name="$1"
   url="$2"
   sig="$3"
   sha="$4"
+  redir="$5"
   keys="$6"
   curlopt="$7"
+  gittar="$8"
 
-  if [[ "${url}" =~ ^https://raw.githubusercontent.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/([a-fA-F0-9]+) ]]; then
-    # basically do nothing here: return the hash we got within the url
-    hash_calc="${BASH_REMATCH[2]}"
-    ok='1'  # content addressed by hash
-  else
-    options=()
-    [ -n "${curlopt}" ] && options+=("${curlopt}")
-    [ "$5" = 'redir' ] && options+=(--location --proto-redir '=https')
-    options+=(--output pkg.bin "${url}")
-    if [ -n "${sig}" ]; then
-      [[ "${sig}" = 'https://'* ]] || sig="${url}${sig}"
-      options+=(--output pkg.sig "${sig}")
+  if [[ "${url}" =~ ^https://raw.githubusercontent.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/([a-fA-F0-9]+)/(.+)$ ]]; then
+    slug="${BASH_REMATCH[1]}"
+    commit="${BASH_REMATCH[2]}"
+    if [ "${gittar}" = '1' ]; then
+      # Download the whole tarball for the commit hash. GitHub sets the timestamp of all files to the commit timestamp.
+      # (so does Forgejo, Gitea, GitLab, and probably more. Notably not true for googlesource.com tarballs.)
+      url="https://github.com/${slug}/archive/${commit}.tar.gz"
+      redir='redir'
     fi
-    [ -n "${sha}" ] && options+=(--output pkg.sha "${url}${sha}")
-    my_curl "${options[@]}"
+  fi
 
-    ok='0'
-    hash_calc="$(openssl dgst -sha256 pkg.bin | grep -a -i -o -E '[0-9a-f]{64}$')"
-    if [ -n "${sig}" ]; then
-      if [ ! -s pkg.sig ]; then
-        >&2 echo "! ${name}: Verify: Failed (Signature expected, but missing)"
-      else
-        for key in ${keys}; do
-          gpg_recv_key "${key}" >/dev/null 2>&1
-        done
+  options=()
+  [ -n "${curlopt}" ] && options+=("${curlopt}")
+  [ "${redir}" = 'redir' ] && options+=(--location --proto-redir '=https')
+  options+=(--output pkg.bin "${url}")
+  if [ -n "${sig}" ]; then
+    [[ "${sig}" = 'https://'* ]] || sig="${url}${sig}"
+    options+=(--output pkg.sig "${sig}")
+  fi
+  [ -n "${sha}" ] && options+=(--output pkg.sha "${url}${sha}")
+  my_curl "${options[@]}"
 
-        if my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin >/dev/null 2>&1; then
-          >&2 echo "! ${name}: Verify: OK (Valid PGP signature)"
-          ok='1'
-        else
-          >&2 echo "! ${name}: Verify: Failed (PGP signature)"
-        fi
-      fi
-
-      if [ "${ok}" = '1' ] && [ -n "${sha}" ]; then
-        hash_got="$(grep -a -i -o -E '[0-9A-Fa-f]{64,}' pkg.sha | tr '[:upper:]' '[:lower:]')"
-        if [ "${hash_calc}" = "${hash_got}" ]; then
-          >&2 echo "! ${name}: Verify: OK (Matching hash)"
-        else
-          >&2 echo "! ${name}: Verify: Failed (Mismatching hash)"
-          ok='0'
-        fi
-      fi
+  ok='0'
+  hash_calc="$(openssl dgst -sha256 pkg.bin | grep -a -i -o -E '[0-9a-f]{64}$')"
+  if [ -n "${sig}" ]; then
+    if [ ! -s pkg.sig ]; then
+      >&2 echo "! ${name}: Verify: Failed (Signature expected, but missing)"
     else
-      >&2 echo "! ${name}: Verify: No PGP signature. Continuing without verification."
-      ok='1'
+      for key in ${keys}; do
+        gpg_recv_key "${key}" >/dev/null 2>&1
+      done
+
+      if my_gpg --verify-options show-primary-uid-only --verify pkg.sig pkg.bin >/dev/null 2>&1; then
+        >&2 echo "! ${name}: Verify: OK (Valid PGP signature)"
+        ok='1'
+      else
+        >&2 echo "! ${name}: Verify: Failed (PGP signature)"
+      fi
     fi
+
+    if [ "${ok}" = '1' ] && [ -n "${sha}" ]; then
+      hash_got="$(grep -a -i -o -E '[0-9A-Fa-f]{64,}' pkg.sha | tr '[:upper:]' '[:lower:]')"
+      if [ "${hash_calc}" = "${hash_got}" ]; then
+        >&2 echo "! ${name}: Verify: OK (Matching hash)"
+      else
+        >&2 echo "! ${name}: Verify: Failed (Mismatching hash)"
+        ok='0'
+      fi
+    fi
+  else
+    >&2 echo "! ${name}: Verify: No PGP signature. Continuing without verification."
+    ok='1'
   fi
 
   if [ "${ok}" = '1' ]; then
@@ -425,8 +427,8 @@ check_dl() {
 }
 
 bump() {
-  local keypkg newcurl newdep pkg name ourver ourvern hashenv hash jp url pin
-  local newver newhash sig sha redir keys urlver
+  local keypkg newcurl newdep pkg name ourver_raw ourver ourvern hashenv hash jp url pin
+  local newver_raw newver newcommit newhash sig sha redir keys urlver curlopt gittar
 
   set +x
 
@@ -439,9 +441,13 @@ bump() {
     if [[ "${pkg}" =~ ^([A-Z0-9_]+)_VER_=(.+)$ ]]; then
       nameenv="${BASH_REMATCH[1]}"
       name="${nameenv,,}"
-      # [ "${name}" != 'psl' ] && continue
       name="${name//_/-}"
-      ourver="${BASH_REMATCH[2]}"
+      ourver_raw="${BASH_REMATCH[2]}"
+      if [[ "${ourver_raw}" =~ (.+)-([a-f0-9]{40,}) ]]; then
+        ourver="${BASH_REMATCH[1]}"
+      else
+        ourver="${ourver_raw}"
+      fi
       ourvern="$(printf '%s' "${ourver}" | to8digit)"
 
       hashenv="${nameenv}_HASH"
@@ -470,8 +476,7 @@ bump() {
           # Caveat: Major/minor upgrades are not detected in that case.
           # (e.g. libssh)
           urlver="$(printf '%s' "${url}" | expandver "${ourver}")"
-          check_update \
-            "${name}" \
+          newver_raw="$(check_update "${name}" \
             "${ourvern}" \
             "${urlver}" \
             "${tag}" \
@@ -480,19 +485,26 @@ bump() {
             "${ref_expr}" \
             "${refs}" \
             "${bumpdays}" \
-            "${curlopt}"
-          newver="${_FOUND_VER:-}"
-          newhash="${_FOUND_HASH:-}"
+            "${curlopt}")"
+
+          if [[ "${newver_raw}" =~ (.+)-([a-f0-9]{40,}) ]]; then
+            newver="${BASH_REMATCH[1]}"
+            newcommit="${BASH_REMATCH[2]}"
+          else
+            newver="${newver_raw}"
+            newcommit=''
+          fi
           if [ -n "${newver}" ]; then
             >&2 echo "! ${name}: New version found: |${newver}|"
 
             if [ -n "${hash}" ]; then
-              sig="$(  printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's/^null$//')"
-              sha="$(  printf '%s' "${jp}" | jq --raw-output '.sha' | sed 's/^null$//')"
-              redir="$(printf '%s' "${jp}" | jq --raw-output '.redir')"
-              keys="$( printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
+              sig="$(   printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's/^null$//')"
+              sha="$(   printf '%s' "${jp}" | jq --raw-output '.sha' | sed 's/^null$//')"
+              redir="$( printf '%s' "${jp}" | jq --raw-output '.redir')"
+              keys="$(  printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
+              gittar="$(printf '%s' "${jp}" | jq --raw-output '.gittar' | sed 's/^null$//')"
 
-              urlver="$(printf '%s' "${url}" | expandver "${newver}" "${newhash}")"
+              urlver="$(printf '%s' "${url}" | expandver "${newver}" "${newcommit}")"
               sigver="$(printf '%s' "${sig}" | expandver "${newver}")"
               newhash="$(check_dl \
                 "${name}" \
@@ -501,7 +513,8 @@ bump() {
                 "${sha}" \
                 "${redir}" \
                 "${keys}" \
-                "${curlopt}")"
+                "${curlopt}" \
+                "${gittar}")"
             else
               newhash='-'
             fi
@@ -521,12 +534,12 @@ bump() {
 
       if [ -z "${newhash}" ]; then
         # Keep old values
-        newver="${ourver}"
+        newver_raw="${ourver_raw}"
         # shellcheck disable=SC2154
         newhash="${hash}"
       fi
 
-      echo "export ${nameenv^^}_VER_='${newver}'"
+      echo "export ${nameenv^^}_VER_='${newver_raw}'"
       [ -n "${hash}" ] && echo "export ${hashenv}=${newhash}"
     fi
   done <<< "$(env | grep -a -E '^[A-Z0-9_]+_VER_' | \
@@ -583,12 +596,12 @@ live_xt() {
      [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *" ${pkg} "* ]]; then
     hash="$(openssl dgst -sha256 pkg.bin)"
     echo "${hash}"
-    if [ "${pkg}" != 'psl' ] && [ "${pkg}" != 'certdata' ] && [ -n "${2:-}" ]; then
+    if [ -n "${2:-}" ]; then
       echo "${hash}" | grep -q -a -F -w -- "${2:-}" || exit 1
     fi
     rm -r -f "${pkg:?}"; mkdir "${pkg}"
     if [ "${pkg}" = 'certdata' ]; then
-      mv pkg.bin "${pkg}/${_CERTDATA}"
+      mv pkg.bin "${pkg}/${_CERTDATA}"  # It is a single file in this case
     else
       tar --no-same-owner --no-same-permissions --strip-components="${3:-1}" -xf pkg.bin --directory="${pkg}"
       [ -f "${pkg}${_PATCHSUFFIX}.patch" ] && patch --forward --strip=1 --directory="${pkg}" < "${pkg}${_PATCHSUFFIX}.patch"
@@ -600,27 +613,34 @@ live_xt() {
 }
 
 live_dl() {
-  local name ver hash jp url mirror sig redir key keys options curlopt refs gittar slug dcommit
+  local name ver hash jp url mirror sig redir key keys options curlopt sha gittar slug commit dcommit
 
   name="$1"
 
   if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *" ${name} "* ]] && \
      [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *" ${name} "* ]]; then
 
-    ver="$2"
+    ver_raw="$2"
     hash="${3:-}"
+
+    if [[ "${ver_raw}" =~ (.+)-([a-f0-9]{40,}) ]]; then
+      ver="${BASH_REMATCH[1]}"
+      commit="${BASH_REMATCH[2]}"
+    else
+      ver="${ver_raw}"
+      commit=''
+    fi
 
     set +x
     jp="$(dependencies_json | jq \
       ".[] | select(.name == \"${name}\")")"
 
-    url="$(    printf '%s' "${jp}" | jq --raw-output '.url' | expandver "${ver}" "${hash}")"
-    mirror="$( printf '%s' "${jp}" | jq --raw-output '.mirror' | sed 's/^null$//' | expandver "${ver}" "${hash}")"
+    url="$(    printf '%s' "${jp}" | jq --raw-output '.url' | expandver "${ver}" "${commit}")"
+    mirror="$( printf '%s' "${jp}" | jq --raw-output '.mirror' | sed 's/^null$//' | expandver "${ver}" "${commit}")"
     sigraw="$( printf '%s' "${jp}" | jq --raw-output '.sig' | sed 's/^null$//' | expandver "${ver}")"
     redir="$(  printf '%s' "${jp}" | jq --raw-output '.redir')"
     keys="$(   printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
     curlopt="$(printf '%s' "${jp}" | jq --raw-output '.curlopt' | sed 's/^null$//')"
-    refs="$(   printf '%s' "${jp}" | jq --raw-output '.refs' | sed 's/^null$//')"
     gittar="$( printf '%s' "${jp}" | jq --raw-output '.gittar' | sed 's/^null$//')"
 
     dcommit=''
@@ -630,14 +650,15 @@ live_dl() {
       if [ "${gittar}" = '1' ]; then
         # Download the whole tarball for the commit hash. GitHub sets the timestamp of all files to the commit timestamp.
         # (so does Forgejo, Gitea, GitLab, and probably more. Notably not true for googlesource.com tarballs.)
-        url="https://github.com/${slug}/archive/${hash}.tar.gz"
+        url="https://github.com/${slug}/archive/${commit}.tar.gz"
         redir='redir'
       else
         # Use the GitHub API to find out the timestamp of the downloaded file
-        [ -n "${refs:-}" ] && refs="&sha=${refs}"
+        sha=''
+        [ -n "${commit:-}" ] && sha="&sha=${commit}"
         # Tweak the received date format to be accepted also by busybox (on Alpine).
         # https://busybox.net/downloads/BusyBox.html#date
-        dcommit="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/commits?path=${path}${refs}" \
+        dcommit="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/commits?path=${path}${sha}" \
           --header 'X-GitHub-Api-Version: 2022-11-28' \
           | jq --raw-output '.[0].commit.committer.date' | sed 's/^null$//' | tr 'T' ' ' | tr -d 'Z')"  # 'YYYY-MM-DDThh:mm:ssZ' -> 'YYYY-MM-DD hh:mm:ss'
         echo "! Detected file timestamp: |${dcommit}|"
@@ -836,8 +857,8 @@ if [[ "${_DEPS}" = *'ngtcp2'* ]]; then
   live_xt ngtcp2 "${NGTCP2_HASH}"
 fi
 if [[ "${_DEPS}" = *'psl'* ]]; then
-  live_dl psl "${PSL_VER_}" "${PSL_HASH}"
-  live_xt psl ''
+  live_dl psl "${PSL_VER_}"
+  live_xt psl "${PSL_HASH}"
 fi
 if [[ "${_DEPS}" = *'libpsl'* ]]; then
   live_dl libpsl "${LIBPSL_VER_}"
@@ -900,7 +921,8 @@ if [[ "${_DEPS}" = *'libssh2'* ]]; then
   fi
 fi
 if [[ "${_DEPS}" = *'certdata'* ]]; then
-  live_dl certdata "${CERTDATA_VER_}" "${CERTDATA_HASH}"
+  live_dl certdata "${CERTDATA_VER_}"
+  live_xt certdata "${CERTDATA_HASH}"
 fi
 if [[ "${_DEPS}" = *'curl'* ]]; then
   if [[ "${_CONFIG}" = *'dev'* ]]; then
