@@ -15,6 +15,9 @@ if [ -n "${MINISIGN_KEY:-}" ] && \
   file="$1"
   echo "Package signing with minisign: '${file}'"
   # Signature saved to "${file}.minisign"
+  # The -l option is able to create signatures compatible with signify,
+  # but it is not recommended by the minisign documentation.
+  # https://jedisct1.github.io/minisign/
   minisign -S -s "${MINISIGN_KEY}" -m "${file}" <<EOF
 ${MINISIGN_KEY_PASS}
 EOF
