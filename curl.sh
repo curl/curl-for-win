@@ -355,6 +355,8 @@ _VER="$1"
     fi
   fi
 
+  cacert="$(pwd)/cacert.pem"  # use absolute name for CMake
+
   if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
     options+=' -DBUILD_CURL_EXE=ON'
     options+=' -DBUILD_STATIC_CURL=ON'
@@ -362,17 +364,24 @@ _VER="$1"
     if [ -n "${_OPENSSL}" ] && [ "${_OS}" != 'mac' ]; then
       if [ "${_OS}" = 'win' ]; then
         if [ "${CURL_VER_}" = '8.18.0' ]; then
-          if [[ "${_DEPS}" = *'cacert'* ]]; then
-            options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
+          if [[ "${_DEPS}" = *'certdata'* ]]; then
+            options+=" -DCURL_CA_EMBED=${cacert}"
           fi
           options+=' -DCURL_CA_SEARCH_SAFE=ON'
         fi
-      elif [[ "${_DEPS}" = *'cacert'* ]]; then
-        options+=" -DCURL_CA_EMBED=${_TOP}/cacert/${_CACERT}"
+      elif [[ "${_DEPS}" = *'certdata'* ]]; then
+        options+=" -DCURL_CA_EMBED=${cacert}"
       fi
     fi
   else
     options+=' -DBUILD_CURL_EXE=OFF'
+  fi
+
+  if [[ "${_DEPS}" = *'certdata'* ]] && [ ! -f "${cacert}" ]; then
+    cp -p "../certdata/${_CERTDATA}" .
+    TZ=UTC scripts/mk-ca-bundle.pl -n
+    touch -c -r "../certdata/${_CERTDATA}" ca-bundle.crt
+    mv ca-bundle.crt "${cacert}"
   fi
 
   if [[ "${_CONFIG}" = *'CURLNOPKG'* ]]; then
@@ -647,8 +656,9 @@ _VER="$1"
     cp -f -p "${_PP}/${DYN_DIR}"/*.map          "${_DST}/${DYN_DIR}"/
   fi
 
-  if [[ "${_DEPS}" = *'cacert'* ]]; then
-    cp -f -p scripts/mk-ca-bundle.pl            "${_DST}"/
+  if [[ "${_DEPS}" = *'certdata'* ]]; then
+    cp -f -p scripts/mk-ca-bundle.pl "${_DST}"/
+    cp -f -p "${cacert}"             "${_DST}"/bin/curl-ca-bundle.crt
   fi
 
   ../_pkg.sh "$(pwd)/${_ref}"

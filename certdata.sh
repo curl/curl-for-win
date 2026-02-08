@@ -16,7 +16,7 @@ _VER="$1"
 
   # Make steps for determinism
 
-  readonly _ref="${_CACERT}"
+  readonly _ref="${_CERTDATA}"
 
   # Create package
 
@@ -24,13 +24,14 @@ _VER="$1"
   _BAS="${_NAM}-${_VER}${_PKGSUFFIX}"
   _DST="$(pwd)/_pkg"; rm -r -f "${_DST}"
 
-  mkdir -p "${_DST}/bin"
+  mkdir -p "${_DST}"
 
-  # To avoid depending on an unversioned download (or vendoring
-  # the license), link to it instead:
+  # Sadly there do not seem to be a copy of this license within the certdata
+  # (Firefox) repository, that we could download from the same commit hash
+  # as certdata itself. (only some _almost_ identical copies.)
+  # To avoid depending on an unversioned download (or vendoring this file),
+  # link to it instead:
   ../_mk-url-file.sh "${_ref}" 'LICENSE' 'https://www.mozilla.org/media/MPL/2.0/index.txt'
-
-  cp -f -p "${_CACERT}" "${_DST}"/bin/curl-ca-bundle.crt
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )

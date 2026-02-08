@@ -296,7 +296,7 @@ export _OS='win'
 [[ "${_CONFIG}" = *'mac'* ]] && _OS='mac'
 [[ "${_CONFIG}" = *'linux'* ]] && _OS='linux'
 
-export _CACERT='cacert.pem'
+export _CERTDATA='certdata.txt'
 export _PSL='public_suffix_list.dat'
 
 [ -n "${CW_CCSUFFIX:-}" ] || CW_CCSUFFIX=''
@@ -1765,7 +1765,7 @@ build_single_target() {
   bld nghttp2           "${NGHTTP2_VER_}"
   bld libssh             "${LIBSSH_VER_}"
   bld libssh2           "${LIBSSH2_VER_}"
-  bld cacert             "${CACERT_VER_}"
+  bld certdata         "${CERTDATA_VER_}"
   bld curl                 "${CURL_VER_}"
 
   # Special build path for trurl. We first build another libcurl tailored

@@ -39,11 +39,10 @@ cat <<EOF
     "keys": "27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
   },
   {
-    "name": "cacert",
-    "url": "https://curl.se/ca/cacert-{ver}.pem",
-    "sha": ".sha256",
-    "ref_url": "https://curl.se/docs/caextract.html",
-    "ref_mask": "([0-9]{4}-[0-9]{2}-[0-9]{2})"
+    "name": "certdata",
+    "url": "https://raw.githubusercontent.com/mozilla-firefox/firefox/{hash}/security/nss/lib/ckfw/builtins/certdata.txt",
+    "refs": "refs/heads/release",
+    "bumpdays": 5
   },
   {
     "name": "psl",
@@ -247,10 +246,15 @@ check_update() {
 
   options=()
   [ -n "${curlopt}" ] && options+=("${curlopt}")
-  if [[ "${url}" =~ ^https://raw.githubusercontent.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
+  if [[ "${url}" =~ ^https://raw.githubusercontent.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/(/.+)$ ]]; then
     # content at a specific commit, versioned by the commit date
     slug="${BASH_REMATCH[1]}"
-    jcommit="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/commits" \
+    path="${BASH_REMATCH[2]}"
+    # https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28
+    # https://api.github.com/repos/<user>/<repo>/commits?path=<filename>[&sha=<refs>]
+    refs=''
+    [ -n "${8:-}" ] && refs="&sha=${8}"  # e.g. refs/heads/release
+    jcommit="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/commits?path=${path}${refs}" \
       --header 'X-GitHub-Api-Version: 2022-11-28')"
     newver="$(echo "${jcommit}" | jq --raw-output '.[0].commit.committer.date' | cut -c -10)"  # 'YYYY-MM-DDThh:mm:ssZ' -> 'YYYY-MM-DD'
     hash="$(echo   "${jcommit}" | jq --raw-output '.[0].sha')"
@@ -455,7 +459,7 @@ bump() {
         hasfile="$( printf '%s' "${jp}" | jq --raw-output '.hasfile' | sed 's/^null$//')"
         ref_url="$( printf '%s' "${jp}" | jq --raw-output '.ref_url' | sed 's/^null$//')"
         ref_expr="$(printf '%s' "${jp}" | jq --raw-output '.ref_expr' | sed 's/^null$//')"
-        ref_mask="$(printf '%s' "${jp}" | jq --raw-output '.ref_mask' | sed 's/^null$//')"
+        refs="$(    printf '%s' "${jp}" | jq --raw-output '.refs' | sed 's/^null$//')"
         bumpdays="$(printf '%s' "${jp}" | jq --raw-output '.bumpdays' | sed 's/^null$//')"
         curlopt="$( printf '%s' "${jp}" | jq --raw-output '.curlopt' | sed 's/^null$//')"
 
@@ -474,7 +478,7 @@ bump() {
             "${hasfile}" \
             "${ref_url}" \
             "${ref_expr}" \
-            "${ref_mask}" \
+            "${refs}" \
             "${bumpdays}" \
             "${curlopt}"
           newver="${_FOUND_VER:-}"
@@ -579,12 +583,12 @@ live_xt() {
      [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *" ${pkg} "* ]]; then
     hash="$(openssl dgst -sha256 pkg.bin)"
     echo "${hash}"
-    if [ "${pkg}" != 'psl' ] && [ -n "${2:-}" ]; then
+    if [ "${pkg}" != 'psl' ] && [ "${pkg}" != 'certdata' ] && [ -n "${2:-}" ]; then
       echo "${hash}" | grep -q -a -F -w -- "${2:-}" || exit 1
     fi
     rm -r -f "${pkg:?}"; mkdir "${pkg}"
-    if [ "${pkg}" = 'cacert' ]; then
-      mv pkg.bin "${pkg}/${_CACERT}"
+    if [ "${pkg}" = 'certdata' ]; then
+      mv pkg.bin "${pkg}/${_CERTDATA}"
     else
       tar --no-same-owner --no-same-permissions --strip-components="${3:-1}" -xf pkg.bin --directory="${pkg}"
       [ -f "${pkg}${_PATCHSUFFIX}.patch" ] && patch --forward --strip=1 --directory="${pkg}" < "${pkg}${_PATCHSUFFIX}.patch"
@@ -596,7 +600,7 @@ live_xt() {
 }
 
 live_dl() {
-  local name ver hash jp url mirror sig redir key keys options curlopt gittar slug
+  local name ver hash jp url mirror sig redir key keys options curlopt refs gittar slug dcommit
 
   name="$1"
 
@@ -616,13 +620,28 @@ live_dl() {
     redir="$(  printf '%s' "${jp}" | jq --raw-output '.redir')"
     keys="$(   printf '%s' "${jp}" | jq --raw-output '.keys' | sed 's/^null$//')"
     curlopt="$(printf '%s' "${jp}" | jq --raw-output '.curlopt' | sed 's/^null$//')"
+    refs="$(   printf '%s' "${jp}" | jq --raw-output '.refs' | sed 's/^null$//')"
     gittar="$( printf '%s' "${jp}" | jq --raw-output '.gittar' | sed 's/^null$//')"
 
-    # Download the whole tarball for the commit hash. GitHub sets the timestamp of all files to the commit timestamp.
-    if [ "${gittar}" = '1' ] && [[ "${url}" =~ ^https://raw.githubusercontent.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
+    dcommit=''
+    if [[ "${url}" =~ ^https://raw.githubusercontent.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/[^/]+(/.+)$ ]]; then
       slug="${BASH_REMATCH[1]}"
-      url="https://github.com/${slug}/archive/${hash}.tar.gz"
-      redir='redir'
+      path="${BASH_REMATCH[2]}"
+      if [ "${gittar}" = '1' ]; then
+        # Download the whole tarball for the commit hash. GitHub sets the timestamp of all files to the commit timestamp.
+        # (so does Forgejo, Gitea, GitLab, and probably more. Notably not true for googlesource.com tarballs.)
+        url="https://github.com/${slug}/archive/${hash}.tar.gz"
+        redir='redir'
+      else
+        # Use the GitHub API to find out the timestamp of the downloaded file
+        [ -n "${refs:-}" ] && refs="&sha=${refs}"
+        # Tweak the received date format to be accepted also by busybox (on Alpine).
+        # https://busybox.net/downloads/BusyBox.html#date
+        dcommit="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/commits?path=${path}${refs}" \
+          --header 'X-GitHub-Api-Version: 2022-11-28' \
+          | jq --raw-output '.[0].commit.committer.date' | sed 's/^null$//' | tr 'T' ' ' | tr -d 'Z')"  # 'YYYY-MM-DDThh:mm:ssZ' -> 'YYYY-MM-DD hh:mm:ss'
+        echo "! Detected file timestamp: |${dcommit}|"
+      fi
     fi
 
     options=(--retry-all-errors)
@@ -655,6 +674,10 @@ live_dl() {
         >&2 echo "! ${name}: Download: Failed"
         exit 1
       fi
+    fi
+    if [ -n "${dcommit}" ]; then
+      TZ=UTC touch -c -d "${dcommit}" pkg.bin
+      ls -l pkg.bin  # log to verify
     fi
 
     if [ -n "${sig}" ]; then
@@ -731,25 +754,25 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst|nocookie) ]]; then
   _DEPS+=' libpsl'
 fi
 
-need_cacert=0
+need_certdata=0
 
 if [[ ! "${_CONFIG}" =~ (zero|bldtst) || "${_CONFIG}" = *'libssh1'* ]]; then
   if   [[ "${_CONFIG}" = *'libressl'* ]]; then
     _DEPS+=' libressl'
-    need_cacert=1
+    need_certdata=1
   elif [[ "${_CONFIG}" = *'awslc'* ]]; then
     _DEPS+=' awslc'
-    need_cacert=1
+    need_certdata=1
   elif [[ "${_CONFIG}" = *'boringssl'* ]]; then
     _DEPS+=' boringssl'
-    need_cacert=1
+    need_certdata=1
   elif [[ "${_CONFIG}" = *'openssl'* ]]; then
     _DEPS+=' openssl'
-    need_cacert=1
+    need_certdata=1
   elif [[ "${_OS}" = 'linux' ]] || \
        [[ ! "${_CONFIG}" =~ (pico|nano|micro|mini|ostls) ]]; then
     _DEPS+=' libressl'
-    need_cacert=1
+    need_certdata=1
   fi
 fi
 
@@ -769,9 +792,9 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro) || "${_CONFIG}" =~ (libssh
   fi
 fi
 
-if [ "${need_cacert}" = '1' ] && \
+if [ "${need_certdata}" = '1' ] && \
    [ "${_OS}" != 'mac' ]; then
-  _DEPS+=' cacert'
+  _DEPS+=' certdata'
 fi
 
 if [[ "${_CONFIG}" != *'notrurl'* && "${_CONFIG}" =~ (dev|test|trurl) ]]; then
@@ -876,9 +899,8 @@ if [[ "${_DEPS}" = *'libssh2'* ]]; then
     LIBSSH2_VER_="$(grep -a -F 'define LIBSSH2_VERSION ' 'libssh2/include/libssh2.h' | grep -o -E '".+"' | tr -d '"')"
   fi
 fi
-if [[ "${_DEPS}" = *'cacert'* ]]; then
-  live_dl cacert "${CACERT_VER_}"
-  live_xt cacert "${CACERT_HASH}"
+if [[ "${_DEPS}" = *'certdata'* ]]; then
+  live_dl certdata "${CERTDATA_VER_}" "${CERTDATA_HASH}"
 fi
 if [[ "${_DEPS}" = *'curl'* ]]; then
   if [[ "${_CONFIG}" = *'dev'* ]]; then
