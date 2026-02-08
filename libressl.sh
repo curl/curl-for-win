@@ -3,13 +3,13 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-# Caveats (as of 4.2.0):
+# Caveats (as of 4.2.1):
 # - Most ASM is implemented for x64 only.
 # - ASM implemented for ARM64 on Windows triggers -Wasm-operand-widths, 2300+ times.
 #   It breaks connecting with TLS:
 #     curl: (35) TLS connect error: error:04FFF077:rsa routines:CRYPTO_internal:wrong signature length
 #   or cause a hang, depending on website.
-#   https://github.com/libressl/portable/issues/1210
+#   https://github.com/libressl/portable/issues/1210 [EXPECTED FIXED IN THE NEXT RELEASE]
 # - Not possible to hide most ASM symbols from shared lib exports in Linux, macOS.
 #   https://github.com/libressl/portable/issues/957
 #   Local patch exists for this, or ASM can be disabled.
@@ -45,8 +45,8 @@ _VER="$1"
   CFLAGS=''
   CPPFLAGS='-DOPENSSL_NO_FILENAMES'
 
-  if [ "${_OS}" = 'win' ] && [ "${_CPU}" = 'a64' ]; then
-    options+=' -DENABLE_ASM=OFF'  # Pending: https://github.com/libressl/portable/issues/1210
+  if [ "${_OS}" = 'win' ] && [ "${_CPU}" = 'a64' ] && [ "${LIBRESSL_VER_}" = '4.2.1' ]; then
+    options+=' -DENABLE_ASM=OFF'  # Pending: https://github.com/libressl/portable/issues/1210 [FIXED]
   fi
 
   if [[ "${_CONFIG}" != *'debug'* ]]; then
