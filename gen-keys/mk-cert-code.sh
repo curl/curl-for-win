@@ -44,14 +44,10 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 case "$(uname)" in
   *Darwin*)
     # shellcheck disable=SC2139
-    alias openssl="$(brew --prefix)/opt/openssl/bin/openssl"
-    readonly os='mac';;
+    alias openssl="$(brew --prefix)/opt/openssl/bin/openssl";;
   *_NT*)
     # To find osslsigncode
-    PATH="/mingw64/bin:${PATH}"
-    readonly os='win';;
-  Linux*)
-    readonly os='linux';;
+    PATH="/mingw64/bin:${PATH}";;
 esac
 
 # Redirect stdout securely to non-world-readable files
@@ -363,22 +359,6 @@ if [ -f "${test}" ]; then
       echo "! OK: signed exe passes 'osslsigncode verify': ${file}"
     else
       echo "! Fail: signed exe fails 'osslsigncode verify': ${file}"
-    fi
-
-    unset wine
-    [ "${os}" = 'win' ] || wine=wine
-
-    if [ "${os}" = 'win' ]; then
-      # TODO: verify using `signtool.exe verify`
-
-      # Verify signature with sigcheck
-      if "${wine}" sigcheck64.exe -nobanner -accepteula "${file}"; then
-        # If we have not specified a timestamp server when code signing,
-        # sigcheck reports the _current time_ as "Signing date".
-        echo "! OK: signed exe passes 'sigcheck64.exe': ${file}"
-      else
-        echo "! Fail: signed exe fails 'sigcheck64.exe': ${file}"
-      fi
     fi
   done
 else
