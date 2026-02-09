@@ -7,8 +7,7 @@
 set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 # Requires:
-#   brew install gnupg optipng pgpdump scour age
-#   pip install base58
+#   brew install gnupg optipng pgpdump scour age pwgen
 
 case "$(uname)" in
   *Darwin*)
@@ -35,7 +34,7 @@ fi
 usage='sign'
 master="${base}${mail}-${usage}"
 
-install -m 600 /dev/null "${master}.password"; key_pass="$(openssl rand 32 | base58 | tee -a "${master}.password")"
+install -m 600 /dev/null "${master}.password"; key_pass="$(pwgen --secure 42 1 | tee -a "${master}.password")"
 
 # FIXME:
 # Private keys are stored and exported using obsolete SHA1 and less-secure

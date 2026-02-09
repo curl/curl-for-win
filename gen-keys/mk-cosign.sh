@@ -7,14 +7,13 @@
 set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 # Requires:
-#   brew install cosign age
-#   pip install base58
+#   brew install cosign age pwgen
 
 readonly base="$1"
 readonly revi="$2"
 readonly prfx="${base}_${revi}-cosign"
 
-install -m 600 /dev/null "${prfx}.password"; key_pass="$(openssl rand 32 | base58 | tee -a "${prfx}.password")"
+install -m 600 /dev/null "${prfx}.password"; key_pass="$(pwgen --secure 42 1 | tee -a "${prfx}.password")"
 
 COSIGN_PASSWORD="${key_pass}" cosign generate-key-pair
 mv cosign.key "${prfx}.key"

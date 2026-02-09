@@ -7,12 +7,11 @@
 set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 # Requires:
-#   brew install age diffutils  # for cmp
-#   pip install base58
+#   brew install age pwgen diffutils  # for cmp
 
 key="$1"
 
-install -m 600 /dev/null "${key}.password"; key_pass="$(openssl rand 32 | base58 | tee -a "${key}.password")"
+install -m 600 /dev/null "${key}.password"; key_pass="$(pwgen --secure 42 1 | tee -a "${key}.password")"
 
 rm -f "${key}"; ssh-keygen -N "${key_pass}" -a 192 -t ed25519 -f "${key}" -C "${key}"
 

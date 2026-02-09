@@ -13,12 +13,11 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 # those signature using osslsigncode and sigcheck.exe (on Windows only).
 
 # Requires:
-#   openssl 1.1.x+, osslsigncode 2.1.0+, GNU tail, base58, age
+#   openssl 1.1.x+, osslsigncode 2.1.0+, GNU tail, age, pwgen
 # Debian:
-#   apt install osslsigncode base58 age
+#   apt install osslsigncode age pwgen
 # Mac:
-#   brew install openssl osslsigncode coreutils diffutils age
-#   pip install base58
+#   brew install openssl osslsigncode coreutils diffutils age pwgen
 
 # - .pem is a format, "Privacy Enhanced Mail", text, base64-encoded binary
 #           (with various twists, if encrypted)
@@ -103,8 +102,7 @@ fi
 if [ -r "${root}.password" ]; then
   root_pass="$(cat "${root}.password")"; readonly root_pass
 else
-  # "$(pwgen --secure 40 1)"
-  root_pass="$(openssl rand 32 | base58)"; readonly root_pass
+  root_pass="$(pwgen --secure 42 1)"; readonly root_pass
   privout "${root}.password" \
   printf '%s' "${root_pass}"
 fi
@@ -178,8 +176,7 @@ echo "! Creating ${what} Signing Certificate..."
 if [ -r "${code}.password" ]; then
   code_pass="$(cat "${code}.password")"; readonly code_pass
 else
-  # "$(pwgen --secure 40 1)"
-  code_pass="$(openssl rand 32 | base58)"; readonly code_pass
+  code_pass="$(pwgen --secure 42 1)"; readonly code_pass
   privout "${code}.password" \
   printf '%s' "${code_pass}"
 fi
