@@ -277,7 +277,7 @@ if [ "${test}" = 'test.exe' ]; then
     # Re-create minimal (runnable) PE executable.
     # base64 dump created using:
     #   curl https://raw.githubusercontent.com/rcx/tinyPE/e222f7bff411b09d8dd03b8364c2f83d6cb7e15e/smallest-pe-without-overlap.exe \
-    #   | openssl base64 -e > test.exe.b64
+    #   | base64 --wrap=64 > test.exe.b64
     #   # SHA2-256: 9a2080a2fd7737de95a7b1e60367ec0b76a8d645acd8095e500c1fe15644a50c
     #   # SHA2-512: 04e27ad8e4b8b8e454e17e90d1d844bc1e76f9be4c703ffc7d0022554e397a7241dfd7fa7d6edd7b4ef2d608462cada49b595bc62c6314e65b9d81c7e2067ee5
     #   # length: 328 bytes
