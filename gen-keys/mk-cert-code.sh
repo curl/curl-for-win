@@ -272,7 +272,7 @@ readonly test="${5:-test.exe}"
 
 if [ "${test}" = 'test.exe' ]; then
   if command -v x86_64-w64-mingw32-gcc >/dev/null 2>&1; then
-    echo 'int main(void) { return 0; }' | x86_64-w64-mingw32-gcc -x c - -s -o "${test}"
+    echo 'int main(void) {}' | x86_64-w64-mingw32-gcc -x c - -s -o "${test}"
   else
     # Re-create minimal (runnable) PE executable.
     # base64 dump created using:
