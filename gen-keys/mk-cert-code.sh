@@ -19,12 +19,6 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 # Mac:
 #   brew install openssl osslsigncode coreutils diffutils age
 #   pip install base58
-# Windows:
-#   pacman --sync openssl mingw-w64-x86_64-osslsigncode mingw-w64-x86_64-age
-#   sigcheck64.exe:
-#     curl --user-agent '' --remote-name --remote-time --xattr https://live.sysinternals.com/tools/sigcheck64.exe
-#   signtool.exe:
-#     part of Windows SDK
 
 # - .pem is a format, "Privacy Enhanced Mail", text, base64-encoded binary
 #           (with various twists, if encrypted)
@@ -218,8 +212,6 @@ echo "${root_pass}" | openssl x509 -req -sha512 -days 1095 \
   -in "${code}-csr.pem" -passin fd:0 \
   -CA "${root}-cert.pem" -CAkey "${root}-private.pem" -CAcreateserial -out "${code}-cert.pem"
 openssl x509 -in "${code}-cert.pem" -text -noout -nameopt utf8 -sha256 -fingerprint > "${code}-cert.pem.x509.txt"
-# Extract SHA1 fingerprint for Windows signtool.exe
-openssl x509 -in "${code}-cert.pem"       -noout -nameopt utf8 -sha1   -fingerprint | grep -a -o -E '[A-Z0-9:]{59}' | tr -d ':' > "${code}-cert-sha1.txt"
 openssl x509 -in "${code}-cert.pem"       -noout -nameopt utf8 -sha256 -fingerprint | grep -a -o -E '[A-Z0-9:]{95}' | tr -d ':' > "${code}-cert-sha256.txt"
 openssl asn1parse -i -in "${code}-cert.pem" > "${code}-cert.pem.asn1.txt"
 
@@ -308,7 +300,7 @@ if [ -f "${test}" ]; then
   #   It always uses `Microsoft Individual Code Signing`, regardless of
   #   the `extendedKeyUsage` value in the signing certificate. Can switch
   #   to Commercial by passing `-comm` option.
-  # - signtool appears to be deterministic and excludes the root certificate.
+  # - signtool.exe appears to be deterministic and excludes the root certificate.
   #   Root (and intermediate) cert(s) can be added via -ac option.
   #   It honors the Commercial/Individual info in `extendedKeyUsage`.
   #   if both are specified, it is Commercial,
@@ -351,45 +343,6 @@ if [ -f "${test}" ]; then
     echo '! Info: osslsigncode code signing: deterministic'
   else
     echo '! Info: osslsigncode code signing: non-deterministic'
-  fi
-
-  # using signtool.exe
-
-  if [ "${os}" = 'win' ]; then
-
-    # Root CA may need to be installed as a "Trust Root Certificate".
-    # It has to be confirmed on a GUI dialog:
-    #   certutil.exe -addStore -user -f 'Root' "${root}-cert.pem"
-
-    code_hash="$(cat "${code}-cert-sha1.txt")"
-
-    cp -p "${test}" "${test%.exe}-signed-ms-ts.exe"
-    signtool.exe sign -fd sha512 \
-      -sha1 "${code_hash}" \
-      -td sha512 -tr "${ts}" \
-      "${test%.exe}-signed-ms-ts.exe"
-
-    cp -p "${test}" "${test%.exe}-signed-ms-1.exe"
-    signtool.exe sign -fd sha512 \
-      -sha1 "${code_hash}" \
-      "${test%.exe}-signed-ms-1.exe"
-    sleep 3
-    cp -p "${test}" "${test%.exe}-signed-ms-2.exe"
-    signtool.exe sign -fd sha512 \
-      -sha1 "${code_hash}" \
-      "${test%.exe}-signed-ms-2.exe"
-
-    # Remove root CA:
-    #   certutil.exe -delStore -user 'Root' "$(openssl x509 -noout -subject -in "${root}-cert.pem" | sed -n '/^subject/s/^.*CN=//p')"
-
-    # signtool.exe is deterministic, unless we specify a timestamp server
-    if cmp --quiet -- \
-         "${test%.exe}-signed-ms-1.exe" \
-         "${test%.exe}-signed-ms-2.exe"; then
-      echo '! Info: signtool.exe code signing: deterministic'
-    else
-      echo '! Info: signtool.exe code signing: non-deterministic'
-    fi
   fi
 
   if osslsigncode verify -CAfile "${root}-cert.pem" "${test}" 2>/dev/null | grep -q 'Signature verification: ok'; then
