@@ -208,7 +208,6 @@ echo "${root_pass}" | openssl x509 -req -sha512 -days 1095 \
   -in "${code}-csr.pem" -passin fd:0 \
   -CA "${root}-cert.pem" -CAkey "${root}-private.pem" -CAcreateserial -out "${code}-cert.pem"
 openssl x509 -in "${code}-cert.pem" -text -noout -nameopt utf8 -sha256 -fingerprint > "${code}-cert.pem.x509.txt"
-openssl x509 -in "${code}-cert.pem"       -noout -nameopt utf8 -sha256 -fingerprint | grep -a -o -E '[A-Z0-9:]{95}' | tr -d ':' > "${code}-cert-sha256.txt"
 openssl asn1parse -i -in "${code}-cert.pem" > "${code}-cert.pem.asn1.txt"
 
 # You can include/exclude the root certificate by adding/removing option:
