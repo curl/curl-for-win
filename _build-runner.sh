@@ -64,7 +64,7 @@ if [ ! -f .cw-initialized ]; then
         fi
         # shellcheck disable=SC2086
         apk add --no-cache curl git gpg rsync build-base cmake ninja-build \
-          zip tar xz jq openssl ${extra}
+          zip tar xz jq coreutils ${extra}
       fi
       ;;
     Darwin*)
