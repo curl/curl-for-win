@@ -44,8 +44,9 @@ fi
 [ -n "${SIGN_CODE_AGE_PASS:+1}${COSIGN_AGE_PASS:+1}${DEPLOY_AGE_PASS:+1}${MINISIGN_AGE_PASS:+1}${SIGN_PKG_AGE_PASS:+1}" ] && extra+=' age'
 
 # https://pkgs.alpinelinux.org/packages
+# coreutils to override the busybox sha256sum implementation for `--tag` option support.
 # shellcheck disable=SC2086
-apk add --no-cache curl git gpg gpg-agent rsync build-base cmake samurai \
-  zip tar xz jq openssl sed perl ${extra}
+apk add --no-cache curl coreutils git gpg gpg-agent rsync build-base cmake samurai \
+  zip tar xz jq sed perl ${extra}
 
 ./_build.sh

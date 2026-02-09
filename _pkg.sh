@@ -99,7 +99,7 @@ create_pkg() {
     *)       TZ=UTC stat -c '%n: %s bytes %y' "${_pkg}";;
   esac
 
-  openssl dgst -sha256 "${_pkg}" | sed 's/^SHA256/SHA2-256/g' | tee "${_pkg}.txt" | tee -a hashes.txt
+  sha256sum --tag "${_pkg}" | tee "${_pkg}.txt" | tee -a hashes.txt
 
   # Sign production releases, or when explicitly asked to do so (e.g. daily builds)
   if [ -z "${_suf}" ] || \

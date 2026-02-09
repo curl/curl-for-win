@@ -1838,11 +1838,7 @@ build_single_target() {
       cd "${_DST}"
       set +x
       _fn='BUILD-HASHES.txt'
-      {
-        find . -type f | grep -a -E '/(bin|include|lib)/' | sort | while read -r f; do
-          openssl dgst -sha256 "${f}"
-        done
-      } | sed 's/^SHA256/SHA2-256/g' > "${_fn}"
+      find . -type f | grep -a -E '/(bin|include|lib)/' | sort | xargs -r sha256sum --tag -- > "${_fn}"
       touch -c -r "../${_ref}" "${_fn}"
     )
 

@@ -387,7 +387,7 @@ check_dl() {
   my_curl "${options[@]}"
 
   ok='0'
-  hash_calc="$(openssl dgst -sha256 pkg.bin | grep -a -i -o -E '[0-9a-f]{64}$')"
+  hash_calc="$(sha256sum --tag pkg.bin | grep -a -i -o -E '[0-9a-f]{64}$')"
   if [ -n "${sig}" ]; then
     if [ ! -s pkg.sig ]; then
       >&2 echo "! ${name}: Verify: Failed (Signature expected, but missing)"
@@ -594,7 +594,7 @@ live_xt() {
   pkg="$1"
   if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *" ${pkg} "* ]] && \
      [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *" ${pkg} "* ]]; then
-    hash="$(openssl dgst -sha256 pkg.bin)"
+    hash="$(sha256sum --tag pkg.bin)"
     echo "${hash}"
     if [ -n "${2:-}" ]; then
       echo "${hash}" | grep -q -a -F -w -- "${2:-}" || exit 1

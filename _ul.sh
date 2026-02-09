@@ -61,7 +61,7 @@ _ALL="all-${_PKGOS}-${CURL_VER_}${_REVSUFFIX}${_FLAV}.zip"
 TZ=UTC zip --quiet -0 --strip-extra --names-stdin - > "${_ALL}"
 TZ=UTC zip --latest-time "${_ALL}"
 
-openssl dgst -sha256 "${_ALL}" | sed 's/^SHA256/SHA2-256/g' | tee "${_ALL}.txt"
+sha256sum --tag "${_ALL}" | tee "${_ALL}.txt"
 touch -c -r "${_ALL}" "${_ALL}.txt"
 
 ./_sign-pkg.sh "${_ALL}"
