@@ -8,6 +8,7 @@ SPDX-PackageDownloadLocation = "https://github.com/curl/curl-for-win"
 [[annotations]]
 path = [
   "*.asc",
+  "*.id",
   "*.patch",
   "*.pub",
   "curl-for-win-ca-cert*.pem",

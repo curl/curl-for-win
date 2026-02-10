@@ -32,6 +32,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   ```sh
   minisign -VP RWQcXBEFq5MO2MDhlrz30eklTuapCJXgMYBo3WDnlugoumiHsewGfvfK -m curl-8.16.0-win64-mingw.zip
   ```
+  or OpenSSH, with
+  [id](https://raw.githubusercontent.com/curl/curl-for-win/main/id-curl-for-win-sign.id):
+  ```sh
+  ssh-keygen -Y verify -n file -f id-curl-for-win-sign.id -I id-curl-for-win-sign -s curl-8.16.0-win64-mingw.zip.sig < curl-8.16.0-win64-mingw.zip
+  ```
 - Standalone `curl`, `trurl` tools and `libcurl` DLL. Static libraries
   included.
 - Required: Windows Vista with

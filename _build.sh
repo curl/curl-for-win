@@ -121,7 +121,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #      Enable package signing. Default: 1 for the 'main' branch, 0 otherwise
 #
 # SIGN_CODE_AGE_PASS, SIGN_CODE_KEY_PASS: for code signing
-# COSIGN_AGE_PASS, COSIGN_KEY_PASS, MINISIGN_AGE_PASS, MINISIGN_KEY_PASS, SIGN_PKG_AGE_PASS, SIGN_PKG_KEY_PASS: for package signing
+# COSIGN_AGE_PASS, COSIGN_KEY_PASS, MINISIGN_AGE_PASS, MINISIGN_KEY_PASS, SIGN_SSH_AGE_PASS, SIGN_SSH_KEY_PASS, SIGN_PKG_AGE_PASS, SIGN_PKG_KEY_PASS: for package signing
 # DEPLOY_AGE_PASS, DEPLOY_KEY_PASS: for publishing results
 #      Secrets used for the above operations.
 #      Optional. Skipping any operation missing a secret.
@@ -477,6 +477,19 @@ if command -v age >/dev/null 2>&1 &&
     install -m 600 /dev/null "${MINISIGN_KEY}"
     age --decrypt --identity=- "${MINISIGN_KEY}.asc" >> "${MINISIGN_KEY}" <<EOF
 ${MINISIGN_AGE_PASS}
+EOF
+  fi
+fi
+
+# Decrypt package signing minisign key
+if command -v age >/dev/null 2>&1 &&
+   command -v ssh-keygen >/dev/null 2>&1; then
+  export SIGN_SSH_KEY; SIGN_SSH_KEY='id-curl-for-win-sign.key'
+  if [ -s "${SIGN_SSH_KEY}.asc" ] && \
+     [ -n "${SIGN_SSH_AGE_PASS:+1}" ]; then
+    install -m 600 /dev/null "${SIGN_SSH_KEY}"
+    age --decrypt --identity=- "${SIGN_SSH_KEY}.asc" >> "${SIGN_SSH_KEY}" <<EOF
+${SIGN_SSH_AGE_PASS}
 EOF
   fi
 fi
@@ -1920,6 +1933,14 @@ if [ -n "${MINISIGN_KEY:-}" ]; then
     linux) [ -w "${MINISIGN_KEY}" ] && command -v srm >/dev/null 2>&1 && srm -- "${MINISIGN_KEY}";;
   esac
   rm -f -- "${MINISIGN_KEY}"
+fi
+
+if [ -n "${SIGN_SSH_KEY:-}" ]; then
+  case "${_HOST}" in
+    mac)   rm -f -P -- "${SIGN_SSH_KEY}";;
+    linux) [ -w "${SIGN_SSH_KEY}" ] && command -v srm >/dev/null 2>&1 && srm -- "${SIGN_SSH_KEY}";;
+  esac
+  rm -f -- "${SIGN_SSH_KEY}"
 fi
 
 # Leave "flat" layout for curl tool if requested

@@ -40,8 +40,9 @@ fi
 
 [ -n "${COSIGN_AGE_PASS:+1}" ] && extra+=' cosign'
 [ -n "${MINISIGN_AGE_PASS:+1}" ] && extra+=' minisign'
+[ -n "${SIGN_SSH_AGE_PASS:+1}" ] && extra+=' openssh-client-default'
 
-[ -n "${SIGN_CODE_AGE_PASS:+1}${COSIGN_AGE_PASS:+1}${DEPLOY_AGE_PASS:+1}${MINISIGN_AGE_PASS:+1}${SIGN_PKG_AGE_PASS:+1}" ] && extra+=' age'
+[ -n "${SIGN_CODE_AGE_PASS:+1}${COSIGN_AGE_PASS:+1}${DEPLOY_AGE_PASS:+1}${MINISIGN_AGE_PASS:+1}${SIGN_PKG_AGE_PASS:+1}${SIGN_SSH_AGE_PASS:+1}" ] && extra+=' age'
 
 # https://pkgs.alpinelinux.org/packages
 # coreutils to override the busybox sha256sum implementation for `--tag` option support.

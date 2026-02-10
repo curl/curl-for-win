@@ -107,6 +107,7 @@ create_pkg() {
     ./_sign-pkg.sh "${_pkg}"
     ./_sign-pkg-cosign.sh "${_pkg}"
     ./_sign-pkg-minisign.sh "${_pkg}"
+    ./_sign-pkg-ssh.sh "${_pkg}"
   fi
 }
 

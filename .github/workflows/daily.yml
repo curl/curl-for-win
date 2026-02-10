@@ -42,6 +42,8 @@ jobs:
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
           MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
+          SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
+          SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
           SIGN_PKG_AGE_PASS: '${{ secrets.SIGN_PKG_AGE_PASS }}'
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
@@ -94,6 +96,8 @@ jobs:
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
           MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
+          SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
+          SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
           SIGN_PKG_AGE_PASS: '${{ secrets.SIGN_PKG_AGE_PASS }}'
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
@@ -146,6 +150,8 @@ jobs:
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
           MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
+          SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
+          SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
           SIGN_PKG_AGE_PASS: '${{ secrets.SIGN_PKG_AGE_PASS }}'
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
@@ -187,6 +193,8 @@ jobs:
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
           MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
+          SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
+          SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
           SIGN_PKG_AGE_PASS: '${{ secrets.SIGN_PKG_AGE_PASS }}'
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'

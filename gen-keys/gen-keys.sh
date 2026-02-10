@@ -48,7 +48,13 @@ mkdir -m 700 workdir
   cp -p "${name}_${year}-cosign.pub"         ../cosign.pub.asc
   cp -p "${name}_${year}-cosign.key.age.asc" ../cosign.key.asc
 
-  # 5. SSH deploy key for CI script (restricted)
+  # 5. SSH package signing key
+
+  ../mk-ssh-keygen.sh 'id-curl-for-win-sign' ../id-curl-for-win-sign.key.asc
+
+  echo "id-curl-for-win-sign $(cat id-curl-for-win-sign.pub)" > ../id-curl-for-win-sign.id
+
+  # 6. SSH deploy key for CI script (restricted)
 
   ../mk-ssh-keygen.sh 'id-curl-for-win-deploy' ../deploy.key.asc
 )

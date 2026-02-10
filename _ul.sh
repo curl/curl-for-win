@@ -67,6 +67,7 @@ touch -c -r "${_ALL}" "${_ALL}.txt"
 ./_sign-pkg.sh "${_ALL}"
 ./_sign-pkg-cosign.sh "${_ALL}"
 ./_sign-pkg-minisign.sh "${_ALL}"
+./_sign-pkg-ssh.sh "${_ALL}"
 
 # Official deploy
 DEPLOY_KEY="$(pwd)/deploy.key"

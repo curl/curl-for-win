@@ -98,6 +98,8 @@ export SIGN_CODE_KEY_PASS=
 export SIGN_PKG_KEY_ID=
 export SIGN_PKG_AGE_PASS=
 export SIGN_PKG_KEY_PASS=
+export SIGN_SSH_AGE_PASS=
+export SIGN_SSH_KEY_PASS=
 export DEPLOY_AGE_PASS=
 export DEPLOY_KEY_PASS=
 
