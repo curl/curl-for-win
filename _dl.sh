@@ -250,7 +250,7 @@ check_update() {
     # https://api.github.com/repos/<user>/<repo>/commits?path=<filename>[&sha=<refs>]
     refs=''
     [ -n "${8:-}" ] && refs="&sha=${8}"  # e.g. refs/heads/release
-    jcommit="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/commits?path=${path}${refs}" \
+    jcommit="$(my_curl --user-agent 'curl' "https://api.github.com/repos/${slug}/commits?path=${path}${refs}" \
       --header 'X-GitHub-Api-Version: 2022-11-28')"
     newver="$(echo    "${jcommit}" | jq --raw-output '.[0].commit.committer.date' | cut -c -10)"  # 'YYYY-MM-DDThh:mm:ssZ' -> 'YYYY-MM-DD'
     newcommit="$(echo "${jcommit}" | jq --raw-output '.[0].sha')"
@@ -269,7 +269,7 @@ check_update() {
         heads_or_tags='tags'
       fi
       # >&2 echo "tag|${tag}|"
-      ref="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/git/refs/${heads_or_tags}" \
+      ref="$(my_curl --user-agent 'curl' "https://api.github.com/repos/${slug}/git/refs/${heads_or_tags}" \
         --header 'X-GitHub-Api-Version: 2022-11-28' \
         | jq --raw-output '.[].ref' \
         | grep -a -E "$4" | sort -V | tail -n -1)"
@@ -281,14 +281,14 @@ check_update() {
       fi
     else
       if [[ "${_CONFIG}" = *'dev'* ]]; then
-        newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases" \
+        newver="$(my_curl --user-agent 'curl' "https://api.github.com/repos/${slug}/releases" \
           --header 'X-GitHub-Api-Version: 2022-11-28' \
           | jq --raw-output 'map(select(.prerelease)) | first | .tag_name' | sed 's/^v//')"
         [ "${newver}" = 'null' ] && newver=''
         [[ ! "${newver}" =~ ^[0-9.]+$ ]] && newver=''
       fi
       if [ -z "${newver}" ]; then
-        newver="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/releases/latest" \
+        newver="$(my_curl --user-agent 'curl' "https://api.github.com/repos/${slug}/releases/latest" \
           --header 'X-GitHub-Api-Version: 2022-11-28' \
           | jq --raw-output '.tag_name' | sed 's/^v//')"
       fi
@@ -658,7 +658,7 @@ live_dl() {
         [ -n "${commit:-}" ] && sha="&sha=${commit}"
         # Tweak the received date format to be accepted also by busybox (on Alpine).
         # https://busybox.net/downloads/BusyBox.html#date
-        dcommit="$(my_curl --user-agent ' ' "https://api.github.com/repos/${slug}/commits?path=${path}${sha}" \
+        dcommit="$(my_curl --user-agent 'curl' "https://api.github.com/repos/${slug}/commits?path=${path}${sha}" \
           --header 'X-GitHub-Api-Version: 2022-11-28' \
           | jq --raw-output '.[0].commit.committer.date' | sed 's/^null$//' | tr 'T' ' ' | tr -d 'Z')"  # 'YYYY-MM-DDThh:mm:ssZ' -> 'YYYY-MM-DD hh:mm:ss'
         echo "! Detected file timestamp: |${dcommit}|"
@@ -901,7 +901,7 @@ if [[ "${_DEPS}" = *'libssh2'* ]]; then
        [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *' libssh2 '* ]]; then
       LIBSSH2_REV_="${LIBSSH2_REV_:-master}"
       tmp="$(mktemp)"
-      my_curl --user-agent ' ' "https://api.github.com/repos/libssh2/libssh2/commits/${LIBSSH2_REV_}" \
+      my_curl --user-agent 'curl' "https://api.github.com/repos/libssh2/libssh2/commits/${LIBSSH2_REV_}" \
         --retry-all-errors --retry 10 \
         --header 'X-GitHub-Api-Version: 2022-11-28' --output "${tmp}"
       rev="$(jq --raw-output '.sha' "${tmp}")"
@@ -931,7 +931,7 @@ if [[ "${_DEPS}" = *'curl'* ]]; then
        [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *' curl '* ]]; then
       CURL_REV_="${CURL_REV_:-master}"
       tmp="$(mktemp)"
-      my_curl --user-agent ' ' "https://api.github.com/repos/curl/curl/commits/${CURL_REV_}" \
+      my_curl --user-agent 'curl' "https://api.github.com/repos/curl/curl/commits/${CURL_REV_}" \
         --retry-all-errors --retry 10 \
         --header 'X-GitHub-Api-Version: 2022-11-28' --output "${tmp}"
       rev="$(jq --raw-output '.sha' "${tmp}")"
@@ -957,7 +957,7 @@ if [[ "${_DEPS}" = *'trurl'* ]]; then
        [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *' trurl '* ]]; then
       TRURL_REV_="${TRURL_REV_:-master}"
       tmp="$(mktemp)"
-      my_curl --user-agent ' ' "https://api.github.com/repos/curl/trurl/commits/${TRURL_REV_}" \
+      my_curl --user-agent 'curl' "https://api.github.com/repos/curl/trurl/commits/${TRURL_REV_}" \
         --retry-all-errors --retry 10 \
         --header 'X-GitHub-Api-Version: 2022-11-28' --output "${tmp}"
       rev="$(jq --raw-output '.sha' "${tmp}")"
