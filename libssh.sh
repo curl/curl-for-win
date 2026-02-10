@@ -24,13 +24,15 @@ _VER="$1"
   LIBS=''
   options=''
 
-  # Hack to force pthread to remain undetected and force falling back to Windows
-  # native threading. If there is a better way, I could not find it. Tried these
-  # without success:
-  #   -DCMAKE_THREAD_PREFER_PTHREADS=OFF
-  #   -DTHREADS_PREFER_PTHREAD_FLAG=OFF
-  #   -DCMAKE_USE_WIN32_THREADS_INIT=ON
-  CPPFLAGS+=' -Dpthread_create=func_not_existing'
+  if [ "${_OS}" = 'win' ]; then
+    # Hack to force pthread to remain undetected and force falling back to
+    # Windows native threading. If there is a better way, I could not find it.
+    # Tried these without success:
+    #   -DCMAKE_THREAD_PREFER_PTHREADS=OFF
+    #   -DTHREADS_PREFER_PTHREAD_FLAG=OFF
+    #   -DCMAKE_USE_WIN32_THREADS_INIT=ON
+    CPPFLAGS+=' -Dpthread_create=func_not_existing'
+  fi
 
   # Silence libssh API deprecation warnings when building libssh itself.
   CPPFLAGS+=' -DSSH_SUPPRESS_DEPRECATED'
