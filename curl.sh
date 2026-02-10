@@ -624,15 +624,15 @@ _VER="$1"
       cp -f -p "${_PP}"/bin/wcurl                 "${_DST}"/bin/
       if [ "${_OS}" = 'win' ]; then
         {
-          printf "%s\r\n" ':: EXPERIMENTAL'
-          printf "%s\r\n" '@set bb_dir=%~dp0'
-          printf "%s\r\n" '@set bb=busybox'
-          printf "%s\r\n" '@if "%PROCESSOR_ARCHITECTURE%" == "AMD64" set bb=busybox64'
-          printf "%s\r\n" '@if "%PROCESSOR_ARCHITECTURE%" == "ARM64" set bb=busybox64a'
-          printf "%s\r\n" '@for %%P in (%PATH:;=;%) do @dir /b "%%~P\busybox.exe" >nul 2>&1 && (set bb_dir=%%~P\& set bb=busybox)'
-          printf "%s\r\n" '@set PATH=%~dp0;%PATH'
-          printf "%s\r\n" '@if not exist "%bb_dir%%bb%.exe" curl -fsSO https://frippery.org/files/busybox/%bb%.exe'
-          printf "%s\r\n" '@"%bb_dir%%bb%.exe" sh "%~dp0wcurl" %*'
+          printf '%s\r\n' ':: EXPERIMENTAL'
+          printf '%s\r\n' '@set bb_dir=%~dp0'
+          printf '%s\r\n' '@set bb=busybox'
+          printf '%s\r\n' '@if "%PROCESSOR_ARCHITECTURE%" == "AMD64" set bb=busybox64'
+          printf '%s\r\n' '@if "%PROCESSOR_ARCHITECTURE%" == "ARM64" set bb=busybox64a'
+          printf '%s\r\n' '@for %%P in (%PATH:;=;%) do @dir /b "%%~P\busybox.exe" >nul 2>&1 && (set bb_dir=%%~P\& set bb=busybox)'
+          printf '%s\r\n' '@set PATH=%~dp0;%PATH'
+          printf '%s\r\n' '@if not exist "%bb_dir%%bb%.exe" curl -fsSO https://frippery.org/files/busybox/%bb%.exe'
+          printf '%s\r\n' '@"%bb_dir%%bb%.exe" sh "%~dp0wcurl" %*'
         } > "${_DST}"/bin/wcurl.bat
       fi
     fi
