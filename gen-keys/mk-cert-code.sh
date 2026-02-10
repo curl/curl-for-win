@@ -91,10 +91,15 @@ if [ "${3:-}" = 'rsa' ]; then
   cryptopt='-algorithm RSA -pkeyopt rsa_keygen_bits:4096'
 else
   # TODO:
-  #   https://github.com/openssl/openssl/pull/18809 [MERGED]
+  #   It seems this option needs to be enabled when signing, not when creating
+  #   the signature. It means it has to be implemented in osslsigncode.
+  #   https://github.com/openssl/openssl/issues/23205 (usage example from an Issue)
+  #   https://github.com/openssl/openssl/blob/69b0330a4574609a0b9f3adbef1d68b552b37a01/test/recipes/20-test_dgst.t#L375-L388
+  #   https://github.com/openssl/openssl/pull/18809 [MERGED OpenSSL 3.2.0+]
   #   https://github.com/openssl/openssl/pull/9223
   #     -pkeyopt ecdsa_nonce_type:deterministic
   #     or? -sigopt ecdsa_nonce_type:deterministic
+  #     or? -sigopt nonce-type:1
   cryptopt='-algorithm EC  -pkeyopt ec_paramgen_curve:prime256v1 -pkeyopt ec_param_enc:named_curve'
 fi
 
