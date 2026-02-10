@@ -13,7 +13,7 @@ set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 # those signature using osslsigncode and sigcheck.exe (on Windows only).
 
 # Requires:
-#   openssl 1.1.x+, osslsigncode 2.1.0+, GNU tail, age, pwgen
+#   openssl 1.1.x+, osslsigncode 2.9+, GNU tail, age, pwgen
 # Debian:
 #   apt install osslsigncode age pwgen
 # Mac:
@@ -312,17 +312,17 @@ if [ -f "${test}" ]; then
   echo "${code_pass}" | osslsigncode sign -h sha512 \
     -in "${test}" -out "${test%.exe}-signed-ossl-ts-1.exe" \
     -ts "${ts}" \
-    -pkcs12 "${temp}" -readpass /dev/stdin
+    -pkcs12 "${temp}" -readpass -
 
   echo "${code_pass}" | osslsigncode sign -h sha512 \
     -in "${test}" -out "${test%.exe}-signed-ossl-1.exe" \
     -time "${unixts}" \
-    -pkcs12 "${temp}" -readpass /dev/stdin
+    -pkcs12 "${temp}" -readpass -
   sleep 3
   echo "${code_pass}" | osslsigncode sign -h sha512 \
     -in "${test}" -out "${test%.exe}-signed-ossl-2.exe"  \
     -time "${unixts}" \
-    -pkcs12 "${temp}" -readpass /dev/stdin
+    -pkcs12 "${temp}" -readpass -
 
   rm -f "${temp}"
 

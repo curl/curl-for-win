@@ -25,14 +25,13 @@ if [ "${_OS}" = 'win' ] && \
   # Add code signature
   for file in "$@"; do
     echo "Code signing: '${file}'"
-    # Requires: osslsigncode 2.4 or newer
+    # Requires: osslsigncode 2.9 or newer
     # -ts 'https://freetsa.org/tsr'
-    # TODO: osslsigncode 2.9 supports `-` instead of `/dev/stdin`.
     "${_OSSLSIGNCODE}" sign \
       -h sha512 \
       -in "${file}" -out "${file}-signed" \
       -time "${unixts}" \
-      -pkcs12 "${SIGN_CODE_KEY}" -readpass /dev/stdin <<EOF
+      -pkcs12 "${SIGN_CODE_KEY}" -readpass - <<EOF
 ${SIGN_CODE_KEY_PASS}
 EOF
   # # Create detached code signature:
