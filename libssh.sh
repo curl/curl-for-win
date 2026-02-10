@@ -78,8 +78,8 @@ _VER="$1"
       # - Public function explicit_bzero() clashes with libressl.
       #   Workaround: put -lssh before -lcrypto.
       options+=' -DHAVE_OPENSSL_EVP_CHACHA20=0'  # FIXME (upstream): avoid detection to avoid build-time error: use of undeclared identifier 'EVP_PKEY_POLY1305'
-      [ "${_OS}" = 'win' ] && CPPFLAGS+=' -DLIBRESSL_DISABLE_OVERRIDE_WINCRYPT_DEFINES_WARNING'
       if [ "${_OS}" = 'win' ]; then
+        CPPFLAGS+=' -DLIBRESSL_DISABLE_OVERRIDE_WINCRYPT_DEFINES_WARNING'
         LIBS+=' -lbcrypt'
         LIBS+=' -lws2_32'  # to detect EVP_aes_128_*
       fi
