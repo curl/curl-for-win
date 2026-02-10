@@ -50,5 +50,5 @@ mkdir -m 700 workdir
 
   # 5. SSH deploy key for CI script (restricted)
 
-  ../mk-ssh-keygen.sh 'id-curl-for-win-deploy' '../deploy.key.asc'
+  ../mk-ssh-keygen.sh 'id-curl-for-win-deploy' ../deploy.key.asc
 )
