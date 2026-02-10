@@ -287,8 +287,8 @@ if [ -f "${test}" ]; then
 
   # using osslsigncode
 
-  # - osslsigncode is not deterministic and it also includes all certificates
-  #   from the .p12 file.
+  # - osslsigncode is not deterministic by default (needs '-time' to fix it),
+  #   and it also includes all certificates from the .p12 file.
   #   It always uses `Microsoft Individual Code Signing`, regardless of
   #   the `extendedKeyUsage` value in the signing certificate. Can switch
   #   to Commercial by passing `-comm` option.
@@ -326,9 +326,10 @@ if [ -f "${test}" ]; then
 
   rm -f "${temp}"
 
-  # osslsigncode is non-deterministic, even if not specifying a timestamp
-  # server, because openssl PKCS #7 code unconditionally includes the local
-  # timestamp inside a `signingTime` PKCS #7 record.
+  # osslsigncode is non-deterministic by default, even if not specifying
+  # a timestamp server, because openssl PKCS #7 code unconditionally includes
+  # the local timestamp inside a `signingTime` PKCS #7 record. '-time' option
+  # needs to be passed with a deterministic timestamp to fix it.
   if cmp --quiet -- \
        "${test%.exe}-signed-ossl-1.exe" \
        "${test%.exe}-signed-ossl-2.exe"; then
