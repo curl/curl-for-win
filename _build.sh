@@ -922,12 +922,12 @@ build_single_target() {
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Darwin ${_CMAKE_GLOBAL}"
       _CROSS=1
     fi
-    # macOS 10.9 Mavericks 2013-10-22. Seems to work for arm64 builds,
+    # macOS 10.12 Sierra 2016-09-20. Seems to work for arm64 builds,
     # though arm64 was released in macOS 11.0 Big Sur 2020-11-12.
     # Bump to macOS 10.13 High Sierra 2017-09-25 if we decide to disable
     # LDAP/LDAPS for macOS builds.
     # NOTE: 10.8 (and older) trigger C++ issues with Xcode and CMake.
-    macminver='10.9'
+    macminver='10.12'
     _CMAKE_GLOBAL+=" -DCMAKE_OSX_DEPLOYMENT_TARGET=${macminver}"
     # TODO: This option might have been renamed to `-mmacos-version-min=`?
     _CFLAGS_GLOBAL+=" -mmacosx-version-min=${macminver}"
