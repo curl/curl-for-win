@@ -411,7 +411,8 @@ _VER="$1"
     if [ -n "${hash}" ]; then
       patchstamp="https://github.com/curl/curl-for-win/blob/${hash}/${patch}"
       # Appearing as: "security patched: https://github.com/curl/curl-for-win/blob/95a0e6df/curl.patch"
-      [ -n "${patchstamp}" ] && CPPFLAGS+=" -DCURL_PATCHSTAMP=\\\"${patchstamp}\\\""
+      [ -n "${patchstamp}" ] && [ "${CURL_VER_}" = '8.18.0' ] && CPPFLAGS+=" -DCURL_PATCHSTAMP=\\\"${patchstamp}\\\""
+      [ -n "${patchstamp}" ] && [ "${CURL_VER_}" != '8.18.0' ] && options+=" -DCURL_PATCHSTAMP=${patchstamp}"
     fi
   fi
 
