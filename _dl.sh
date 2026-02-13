@@ -648,8 +648,10 @@ live_dl() {
       slug="${BASH_REMATCH[1]}"
       path="${BASH_REMATCH[2]}"
       if [ "${gittar}" = '1' ]; then
-        # Download the whole tarball for the commit hash. GitHub sets the timestamp of all files to the commit timestamp.
-        # (so does Forgejo, Gitea, GitLab, and probably more. Notably not true for googlesource.com tarballs.)
+        # Download the whole tarball for the commit hash. GitHub sets
+        # the timestamp of all files to the commit timestamp.
+        # (so does Forgejo, Gitea, GitLab, and probably more. Notably
+        # not true for googlesource.com tarballs.)
         url="https://github.com/${slug}/archive/${commit}.tar.gz"
         redir='redir'
       else
