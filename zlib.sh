@@ -19,51 +19,27 @@ _VER="$1"
   options=''
 
   if [ "${_NAM}" = 'zlibng' ]; then
+    options+=' -DBUILD_SHARED_LIBS=OFF'
     options+=' -DZLIB_COMPAT=ON'
     options+=' -DZLIB_ENABLE_TESTS=OFF'
     options+=' -DWITH_GTEST=OFF'
-  elif [ "${_VER}" = '1.3.1' ]; then
-    options+=' -DZLIB_BUILD_EXAMPLES=OFF'
   else
     options+=' -DZLIB_BUILD_TESTING=OFF'
     options+=' -DZLIB_BUILD_SHARED=OFF'
-    options+=' -DZLIB_BUILD_MINIZIP=OFF'
   fi
-
-  # `BUILD_SHARED_LIBS=OFF` broken as of zlib v1.3.
-  # PR: https://github.com/madler/zlib/pull/347
-
-  # As of zlib v1.3 CMake warns about unused `CMAKE_INSTALL_LIBDIR` variable.
-  # This is an upstream bug. zlib is supposed to be obeying this variable.
-  # PR: https://github.com/madler/zlib/pull/148 (opened on 2016-06-04)
 
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
-    -DBUILD_SHARED_LIBS=OFF \
     -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL}"
 
-  if [ "${_NAM}" = 'zlib' ]; then
-    # zlib's RC compilation is broken as of v1.3 (2023-08-18) with broken CMake
-    # option to disable shared libs. `install` wants to build all targets.
-    # Workaround: Build static only and install manually.
-    cmake --build "${_BLDDIR}" --target zlibstatic
-
-    mkdir -p "${_PP}"/include
-    mkdir -p "${_PP}"/lib
-
-    cp -f -p ./zlib.h             "${_PP}"/include/
-    cp -f -p "${_BLDDIR}"/zconf.h "${_PP}"/include/
-    cp -f -p "${_BLDDIR}"/*.a     "${_PP}"/lib/
-  else
-    cmake --build "${_BLDDIR}"
-    cmake --install "${_BLDDIR}" --prefix "${_PP}"
-  fi
+  cmake --build "${_BLDDIR}"
+  cmake --install "${_BLDDIR}" --prefix "${_PP}"
 
   ls -l "${_PP}"/lib/*.a
 
-  if [ "${_NAM}" = 'zlib' ] && [ -f "${_PP}"/lib/libzlibstatic.a ]; then
+  if [ "${_NAM}" = 'zlib' ] && [ -f "${_PP}"/lib/libzs.a ]; then
     # Stick to the name expected by everyone
-    mv -f "${_PP}"/lib/libzlibstatic.a "${_PP}"/lib/libz.a
+    mv -f "${_PP}"/lib/libzs.a "${_PP}"/lib/libz.a
   fi
 
   # Delete .pc files
