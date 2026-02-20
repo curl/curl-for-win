@@ -5,10 +5,13 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 [![Daily status](https://github.com/curl/curl-for-win/actions/workflows/daily.yml/badge.svg)](https://github.com/curl/curl-for-win/actions/workflows/daily.yml)
 
 > [!tip]
-> Sponsor these binary builds to support maintenance, fixes and further improvements: <https://github.com/sponsors/vszakats>
+> Sponsor these binary builds to support maintenance, fixes and further
+> improvements: <https://github.com/sponsors/vszakats>
 
 > [!warning]
-> PGP signatures are deprecated and will be dropped in [July 2026](https://github.com/curl/curl-for-win/discussions/93) in favor or cosign and minisign.
+> PGP signatures are deprecated and will be dropped in
+> [July 2026](https://github.com/curl/curl-for-win/discussions/93) in
+> favor of cosign, minisign and SSH signatures.
 
 # Reproducible, static, curl binaries for Linux, macOS and Windows
 
