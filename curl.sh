@@ -226,9 +226,6 @@ _VER="$1"
   fi
 
   if [ "${_OS}" = 'win' ]; then
-    # fast-track configuration
-    options+=' -DHAVE_FILE_OFFSET_BITS=1'
-
     if [[ "${_CONFIG}" != *'osnotls'* && ("${h3}" = '0' || "${_CONFIG}" = *'noh3'*) ]]; then
       options+=' -DCURL_USE_SCHANNEL=ON'
     else
