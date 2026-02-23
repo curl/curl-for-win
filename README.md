@@ -112,7 +112,7 @@ Largefile     | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 libz          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 MultiSSL      |         |         |         |         |         |         |         |         |
 NativeCA      | ✓²      | -       | -       | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
-NTLM          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+NTLM          | ✓⁴      | ✓⁴      | ✓⁴      | ✓⁴      | ✓⁴      | ✓⁴      | ✓⁴      |         |
 PSL           | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 SPNEGO        | ✓       |         |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
 SSL           | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
@@ -147,6 +147,7 @@ ws/wss        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 - ¹: platform-dependent
 - ²: expected in upcoming release 8.19.0
 - ³: replaced by NativeCA in upcoming release 8.19.0
+- ⁴: expected to be disabled in future release 8.20.0
 - noh3: HTTP/2
 - mini: without brotli and zstd, with OS TLS backend (Schannel) if available
 - micro: without libssh2
