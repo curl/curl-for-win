@@ -40,6 +40,7 @@ _VER="$1"
   options+=' -DHAVE__Wall=1'
   options+=' -DHAVE__Wcast_align=1'
   options+=' -DHAVE__Wcast_qual=1'
+  options+=' -DHAVE__Wconversion=1'
   options+=' -DHAVE__Wdeclaration_after_statement=1'
   options+=' -DHAVE__Wdouble_promotion=1'
   options+=' -DHAVE__Werror_implicit_function_declaration=1'
@@ -48,6 +49,12 @@ _VER="$1"
   options+=' -DHAVE__Wfloat_equal=1'
   options+=' -DHAVE__Wformat_security=1'
   options+=' -DHAVE__Winit_self=1'
+  # TODO: enable for macOS once Apple clang 26.4+ becomes the default on the runner
+  if [[ "${_CC}" = 'gcc' || ("${_TOOLCHAIN}" != 'llvm-apple' && "${_CCVER}" -ge '21') ]]; then
+    options+=' -DHAVE__Wjump_misses_init=1'  # 29 builds (17 gcc, 12 llvm/clang)
+  else
+    options+=' -DHAVE__Wjump_misses_init=0'  # 7 builds (apple clang)
+  fi
   options+=' -DHAVE__Wmissing_braces=1'
   options+=' -DHAVE__Wmissing_declarations=1'
   options+=' -DHAVE__Wmissing_format_attribute=1'
@@ -57,9 +64,11 @@ _VER="$1"
   options+=' -DHAVE__Wno_long_long=1'
   options+=' -DHAVE__Wold_style_definition=1'
   options+=' -DHAVE__Wpacked=1'
+  options+=' -DHAVE__Wpedantic=1'
   options+=' -DHAVE__Wpointer_arith=1'
   options+=' -DHAVE__Wredundant_decls=1'
   options+=' -DHAVE__Wshadow=1'
+  options+=' -DHAVE__Wsign_conversion=1'
   options+=' -DHAVE__Wstrict_overflow=1'
   options+=' -DHAVE__Wstrict_prototypes=1'
   options+=' -DHAVE__Wundef=1'
@@ -72,31 +81,18 @@ _VER="$1"
   if [ "${_CC}" = 'gcc' ]; then
     options+=' -DHAVE__fcolor_diagnostics=0'
     options+=' -DHAVE__Qunused_arguments=0'
-    options+=' -DHAVE__Wconversion=1'
     options+=' -DHAVE__Werror_partial_availability=0'
     options+=' -DHAVE__Wimplicit_fallthrough_3=1'
-    options+=' -DHAVE__Wjump_misses_init=1'
     options+=' -DHAVE__Wlogical_op=1'
     options+=' -DHAVE__Wno_coverage_mismatch=1'
-    options+=' -DHAVE__Wpedantic=1'
-    options+=' -DHAVE__Wsign_conversion=1'
     options+=' -DHAVE__Wtrampolines=1'
   else
     options+=' -DHAVE__fcolor_diagnostics=1'
     options+=' -DHAVE__Qunused_arguments=1'
-    options+=' -DHAVE__Wconversion=1'
     options+=' -DHAVE__Werror_partial_availability=1'
     options+=' -DHAVE__Wimplicit_fallthrough_3=0'
-    # TODO: enable for macOS once Apple clang 26.4+ becomes the default on the runner
-    if [ "${_TOOLCHAIN}" != 'llvm-apple' ] && [ "${_CCVER}" -ge '21' ]; then
-      options+=' -DHAVE__Wjump_misses_init=1'  # 12 builds
-    else
-      options+=' -DHAVE__Wjump_misses_init=0'  # 7 builds
-    fi
     options+=' -DHAVE__Wlogical_op=0'
     options+=' -DHAVE__Wno_coverage_mismatch=0'
-    options+=' -DHAVE__Wpedantic=1'
-    options+=' -DHAVE__Wsign_conversion=1'
     options+=' -DHAVE__Wtrampolines=0'
   fi
 
