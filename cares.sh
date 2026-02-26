@@ -330,7 +330,11 @@ _VER="$1"
 
       options+=' -DIOS=0'
       options+=' -DIOS_V10=0'
-      options+=' -DMACOS_V1012=0'
+      if [ "${_OSVER}" -ge '1012' ]; then
+        options+=' -DMACOS_V1012=1'
+      else
+        options+=' -DMACOS_V1012=0'
+      fi
     fi
   fi
 
