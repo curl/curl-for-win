@@ -92,7 +92,7 @@ if [ "${3:-}" = 'rsa' ]; then
 else
   # TODO:
   #   It seems this option needs to be enabled when signing, not when creating
-  #   the signature. It means it has to be implemented in osslsigncode.
+  #   the keys. It means it has to be implemented in osslsigncode.
   #   https://github.com/openssl/openssl/issues/23205 (usage example from an Issue)
   #   https://github.com/openssl/openssl/blob/69b0330a4574609a0b9f3adbef1d68b552b37a01/test/recipes/20-test_dgst.t#L375-L388
   #   https://github.com/openssl/openssl/pull/18809 [MERGED OpenSSL 3.2.0+]
