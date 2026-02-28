@@ -48,20 +48,32 @@ _VER="$1"
     options+=' -DENABLE_UNICODE=ON'
   fi
 
-  if [ "${_OS}" = 'win' ]; then
-    options+=" -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${_CURL_DLL_SUFFIX}.dll"
-    _def_name="libcurl${_CURL_DLL_SUFFIX}.def"
-    LDFLAGS_LIB+=" -Wl,--output-def,${_def_name}"
+  if [[ "${_CONFIG}" = *'CURLNOPKG'* ]]; then
+    options+=' -DBUILD_SHARED_LIBS=OFF'
+  else
+    options+=' -DBUILD_SHARED_LIBS=ON'
+
+    if [ "${_OS}" = 'win' ]; then
+      options+=" -DCMAKE_SHARED_LIBRARY_SUFFIX_C=${_CURL_DLL_SUFFIX}.dll"
+      _def_name="libcurl${_CURL_DLL_SUFFIX}.def"
+      LDFLAGS_LIB+=" -Wl,--output-def,${_def_name}"
+    fi
+
+    if [ "${CW_MAP}" = '1' ]; then
+      _map_name_lib="libcurl${_CURL_DLL_SUFFIX}.map"
+      if [ "${_OS}" = 'mac' ]; then
+        LDFLAGS_LIB+=" -Wl,-map,${_map_name_lib}"
+      else
+        LDFLAGS_LIB+=" -Wl,-Map,${_map_name_lib}"
+      fi
+    fi
   fi
 
-  if [ "${CW_MAP}" = '1' ]; then
-    _map_name_lib="libcurl${_CURL_DLL_SUFFIX}.map"
+  if [ "${CW_MAP}" = '1' ] && [[ "${_CONFIG}" != *'nocurltool'* ]]; then
     _map_name_bin='curl.map'
     if [ "${_OS}" = 'mac' ]; then
-      LDFLAGS_LIB+=" -Wl,-map,${_map_name_lib}"
       LDFLAGS_BIN+=" -Wl,-map,${_map_name_bin}"
     else
-      LDFLAGS_LIB+=" -Wl,-Map,${_map_name_lib}"
       LDFLAGS_BIN+=" -Wl,-Map,${_map_name_bin}"
     fi
   fi
@@ -389,12 +401,6 @@ _VER="$1"
     TZ=UTC scripts/mk-ca-bundle.pl -n
     touch -c -r "../certdata/${_CERTDATA}" ca-bundle.crt
     mv ca-bundle.crt "${cacert}"
-  fi
-
-  if [[ "${_CONFIG}" = *'CURLNOPKG'* ]]; then
-    options+=' -DBUILD_SHARED_LIBS=OFF'
-  else
-    options+=' -DBUILD_SHARED_LIBS=ON'
   fi
 
   patch="${_NAM}${_PATCHSUFFIX}.patch"
