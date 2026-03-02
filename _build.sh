@@ -37,6 +37,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        main       production build
 #        test       test build (.map files enabled by default, publishing disabled)
 #        dev        development build (use source snapshots instead of stable releases)
+#        canonsrc   prefer the canonical URL for source tarballs (vs. the mirror)
 #        noh3       build without HTTP/3 (QUIC) support
 #        nobrotli   build without brotli
 #        nozstd     build without zstd

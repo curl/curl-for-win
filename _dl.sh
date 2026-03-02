@@ -13,14 +13,12 @@ cat <<EOF
 [
   {
     "name": "brotli",
-    "url": "https://github.com/google/brotli/archive/v{ver}.tar.gz",
-    "redir": "redir"
+    "url": "https://github.com/google/brotli/archive/v{ver}.tar.gz"
   },
   {
     "name": "cares",
     "url": "https://github.com/c-ares/c-ares/releases/download/v{ver}/c-ares-{ver}.tar.gz",
     "sig": ".asc",
-    "redir": "redir",
     "keys": "DA7D64E4C82C6294CB73A20E22E3D13B5411B7CA 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2"
   },
   {
@@ -54,7 +52,6 @@ cat <<EOF
     "name": "libpsl",
     "url": "https://github.com/rockdaboot/libpsl/releases/download/{ver}/libpsl-{ver}.tar.gz",
     "sig": ".sig",
-    "redir": "redir",
     "keys": "1CB27DBC98614B2D5841646D08302DB6A2670428"
   },
   {
@@ -76,21 +73,18 @@ cat <<EOF
     "name": "nghttp2",
     "url": "https://github.com/nghttp2/nghttp2/releases/download/v{ver}/nghttp2-{ver}.tar.xz",
     "sig": ".asc",
-    "redir": "redir",
     "keys": "516B622918D15C478AB1EA3A5339A2BE82E07DEC"
   },
   {
     "name": "nghttp3",
     "url": "https://github.com/ngtcp2/nghttp3/releases/download/v{ver}/nghttp3-{ver}.tar.xz",
     "sig": ".asc",
-    "redir": "redir",
     "keys": "516B622918D15C478AB1EA3A5339A2BE82E07DEC"
   },
   {
     "name": "ngtcp2",
     "url": "https://github.com/ngtcp2/ngtcp2/releases/download/v{ver}/ngtcp2-{ver}.tar.xz",
     "sig": ".asc",
-    "redir": "redir",
     "keys": "516B622918D15C478AB1EA3A5339A2BE82E07DEC"
   },
   {
@@ -98,7 +92,6 @@ cat <<EOF
     "url": "https://github.com/openssl/openssl/releases/download/openssl-{ver}/openssl-{ver}.tar.gz",
     "sig": ".asc",
     "sha": ".sha256",
-    "redir": "redir",
     "tag": "openssl-\\\\d+\\\\.\\\\d+\\\\.\\\\d+$",
     "keys_comment": "Via: https://raw.githubusercontent.com/openssl/openssl/master/doc/fingerprints.txt",
     "keys": "BA5473A2B0587B07FB27CF2D216094DFD0CB81EF 7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C 8657ABB260F056B1E5190839D9C4D26D0E604491 B7C1C14360F353A36862E4D5231C84CDDCC69C45 A21FAB74B0088AA361152586B8EF1A6BA9DA2D5C"
@@ -113,24 +106,20 @@ cat <<EOF
   {
     "name": "awslc",
     "url": "https://github.com/aws/aws-lc/archive/refs/tags/v{ver}.tar.gz",
-    "redir": "redir",
     "tag": "v\\\\d+\\\\.\\\\d+\\\\.\\\\d+$",
     "pinned": true
   },
   {
     "name": "boringssl",
-    "url": "https://github.com/google/boringssl/releases/download/{ver}/boringssl-{ver}.tar.gz",
-    "redir": "redir"
+    "url": "https://github.com/google/boringssl/releases/download/{ver}/boringssl-{ver}.tar.gz"
   },
   {
     "name": "osslsigncode",
-    "url": "https://github.com/mtrojnar/osslsigncode/archive/refs/tags/{vermm}.tar.gz",
-    "redir": "redir"
+    "url": "https://github.com/mtrojnar/osslsigncode/archive/refs/tags/{vermm}.tar.gz"
   },
   {
     "name": "zlibng",
-    "url": "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/{ver}.tar.gz",
-    "redir": "redir"
+    "url": "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/{ver}.tar.gz"
   },
   {
     "name": "zlib",
@@ -144,28 +133,23 @@ cat <<EOF
     "url": "https://github.com/facebook/zstd/releases/download/v{ver}/zstd-{ver}.tar.gz",
     "sig": ".sig",
     "sha": ".sha256",
-    "redir": "redir",
     "keys": "4EF4AC63455FC9F4545D9B7DEF8FE99528B52FFD"
   },
   {
     "name": "llvm-mingw-linux-x86-64",
-    "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-ubuntu-22.04-x86_64.tar.xz",
-    "redir": "redir"
+    "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-ubuntu-22.04-x86_64.tar.xz"
   },
   {
     "name": "llvm-mingw-linux-aarch64",
-    "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-ubuntu-22.04-aarch64.tar.xz",
-    "redir": "redir"
+    "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-ubuntu-22.04-aarch64.tar.xz"
   },
   {
     "name": "llvm-mingw-mac",
-    "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-macos-universal.tar.xz",
-    "redir": "redir"
+    "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-macos-universal.tar.xz"
   },
   {
     "name": "llvm-mingw-win",
-    "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-x86_64.zip",
-    "redir": "redir"
+    "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/{ver}/llvm-mingw-{ver}-ucrt-x86_64.zip"
   }
 ]
 EOF
@@ -613,7 +597,7 @@ live_xt() {
 }
 
 live_dl() {
-  local name ver hash jp url mirror sig redir key keys options curlopt sha gittar slug commit dcommit
+  local name ver hash jp url mirror sig redir key keys options curlopt sha gittar slug commit dcommit tmp
 
   name="$1"
 
@@ -643,6 +627,14 @@ live_dl() {
     curlopt="$(printf '%s' "${jp}" | jq --raw-output '.curlopt' | sed 's/^null$//')"
     gittar="$( printf '%s' "${jp}" | jq --raw-output '.gittar' | sed 's/^null$//')"
 
+    # Prefer using the mirror by default, to avoid banging the canonical source.
+    # Production builds use the canonical source by explicitly opting in.
+    if [ -n "${mirror}" ] && [[ "${_CONFIG}" != *'canonsrc'* ]]; then
+      tmp="${url}"
+      url="${mirror}"
+      mirror="${tmp}"
+    fi
+
     dcommit=''
     if [[ "${url}" =~ ^https://raw.githubusercontent.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/[^/]+(/.+)$ ]]; then
       slug="${BASH_REMATCH[1]}"
@@ -670,7 +662,9 @@ live_dl() {
 
     options=(--retry-all-errors)
     [ -n "${curlopt}" ] && options+=("${curlopt}")
-    [ "${redir}" = 'redir' ] && options+=(--location --proto-redir '=https')
+    if [[ "${url}" = 'https://github.com/'* ]] || [ "${redir}" = 'redir' ]; then
+      options+=(--location --proto-redir '=https')
+    fi
     options+=(--output pkg.bin "${url}")
     sig="${sigraw}"
     if [ -n "${sig}" ]; then
