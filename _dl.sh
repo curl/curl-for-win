@@ -226,7 +226,7 @@ check_update() {
 
   options=()
   [ -n "${curlopt}" ] && options+=("${curlopt}")
-  if [[ "${url}" =~ ^https://raw.githubusercontent.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/(/.+)$ ]]; then
+  if [[ "${url}" =~ ^https://raw.githubusercontent.com/([a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+)/(/.+)$ ]]; then
     # content at a specific commit, versioned by the commit date
     slug="${BASH_REMATCH[1]}"
     path="${BASH_REMATCH[2]}"
@@ -238,7 +238,7 @@ check_update() {
       --header 'X-GitHub-Api-Version: 2022-11-28')"
     newver="$(echo    "${jcommit}" | jq --raw-output '.[0].commit.committer.date' | cut -c -10)"  # 'YYYY-MM-DDThh:mm:ssZ' -> 'YYYY-MM-DD'
     newcommit="$(echo "${jcommit}" | jq --raw-output '.[0].sha')"
-  elif [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/ ]]; then
+  elif [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+)/ ]]; then
     slug="${BASH_REMATCH[1]}"
     if [ -n "$6" ]; then
       # raw.githubusercontent.com does not need it.
@@ -348,7 +348,7 @@ check_dl() {
   curlopt="$7"
   gittar="$8"
 
-  if [[ "${url}" =~ ^https://raw.githubusercontent.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/([a-fA-F0-9]+)/(.+)$ ]]; then
+  if [[ "${url}" =~ ^https://raw.githubusercontent.com/([a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+)/([a-fA-F0-9]+)/(.+)$ ]]; then
     slug="${BASH_REMATCH[1]}"
     commit="${BASH_REMATCH[2]}"
     if [ "${gittar}" = '1' ]; then
@@ -636,7 +636,7 @@ live_dl() {
     fi
 
     dcommit=''
-    if [[ "${url}" =~ ^https://raw.githubusercontent.com/([a-zA-Z0-9-]+/[a-zA-Z0-9-]+)/[^/]+(/.+)$ ]]; then
+    if [[ "${url}" =~ ^https://raw.githubusercontent.com/([a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+)/[^/]+(/.+)$ ]]; then
       slug="${BASH_REMATCH[1]}"
       path="${BASH_REMATCH[2]}"
       if [ "${gittar}" = '1' ]; then
