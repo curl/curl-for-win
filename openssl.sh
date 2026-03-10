@@ -136,6 +136,10 @@ _VER="$1"
 
   # 'no-dso' implies 'no-dynamic-engine' which in turn compiles in these
   # engines non-dynamically. To avoid them, also set `no-engine`.
+  if [[ "${_VER}" != '4.'* ]]; then
+    options+=' no-engine'
+  fi
+
   (
     mkdir "${_BLDDIR}"; cd "${_BLDDIR}"
     # shellcheck disable=SC2086
@@ -144,7 +148,6 @@ _VER="$1"
       no-legacy \
       no-apps \
       no-autoload-config \
-      no-engine \
       no-module \
       no-dso \
       no-shared \
