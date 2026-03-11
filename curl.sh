@@ -32,7 +32,6 @@ _VER="$1"
 
   options=''
   CFLAGS=''
-  CPPFLAGS=''
 
   LIBS=''
   LDFLAGS=''
@@ -189,7 +188,7 @@ _VER="$1"
     options+=" -DBROTLI_INCLUDE_DIR=${_TOP}/brotli/${_PP}/include"
     options+=" -DBROTLIDEC_LIBRARY=${_TOP}/brotli/${_PP}/lib/libbrotlidec.a"
     options+=" -DBROTLICOMMON_LIBRARY=${_TOP}/brotli/${_PP}/lib/libbrotlicommon.a"
-    [ "${CURL_VER_}" != '8.18.0' ] && options+=' -DBROTLI_USE_STATIC_LIBS=ON'  # a no-op
+    options+=' -DBROTLI_USE_STATIC_LIBS=ON'  # a no-op
   else
     options+=' -DCURL_BROTLI=OFF'
   fi
@@ -197,7 +196,7 @@ _VER="$1"
     options+=' -DCURL_ZSTD=ON'
     options+=" -DZSTD_INCLUDE_DIR=${_TOP}/zstd/${_PP}/include"
     options+=" -DZSTD_LIBRARY=${_TOP}/zstd/${_PP}/lib/libzstd.a"
-    [ "${CURL_VER_}" != '8.18.0' ] && options+=' -DZSTD_USE_STATIC_LIBS=ON'  # a no-op
+    options+=' -DZSTD_USE_STATIC_LIBS=ON'  # a no-op
   else
     options+=' -DCURL_ZSTD=OFF'
   fi
@@ -213,8 +212,7 @@ _VER="$1"
     options+=' -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON'
     if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
       if [ "${_OPENSSL}" = 'boringssl' ]; then
-        [ "${CURL_VER_}" = '8.18.0' ] && CPPFLAGS+=" -DCURL_BORINGSSL_VERSION=\\\"${BORINGSSL_VER_}\\\""
-        [ "${CURL_VER_}" != '8.18.0' ] && options+=" -DBORINGSSL_VERSION=${BORINGSSL_VER_}"
+        options+=" -DBORINGSSL_VERSION=${BORINGSSL_VER_}"
         options+=' -DHAVE_BORINGSSL=1 -DHAVE_AWSLC=0'  # fast-track configuration
       else
         options+=' -DHAVE_BORINGSSL=0 -DHAVE_AWSLC=1'  # fast-track configuration
@@ -252,14 +250,13 @@ _VER="$1"
     options+=' -DCURL_USE_LIBSSH2=OFF'
     options+=" -DLIBSSH_INCLUDE_DIR=${_TOP}/libssh/${_PPS}/include"
     options+=" -DLIBSSH_LIBRARY=${_TOP}/libssh/${_PPS}/lib/libssh.a"
-    [ "${CURL_VER_}" = '8.18.0' ] && CPPFLAGS+=' -DLIBSSH_STATIC'
-    [ "${CURL_VER_}" != '8.18.0' ] && options+=' -DLIBSSH_USE_STATIC_LIBS=ON'
+    options+=' -DLIBSSH_USE_STATIC_LIBS=ON'
   elif [[ "${_DEPS}" = *'libssh2'* ]] && [ -d "../libssh2/${_PPS}" ]; then
     options+=' -DCURL_USE_LIBSSH2=ON'
     options+=' -DCURL_USE_LIBSSH=OFF'
     options+=" -DLIBSSH2_INCLUDE_DIR=${_TOP}/libssh2/${_PPS}/include"
     options+=" -DLIBSSH2_LIBRARY=${_TOP}/libssh2/${_PPS}/lib/libssh2.a"
-    [ "${CURL_VER_}" != '8.18.0' ] && options+=' -DLIBSSH2_USE_STATIC_LIBS=ON'  # a no-op
+    options+=' -DLIBSSH2_USE_STATIC_LIBS=ON'  # a no-op
   else
     options+=' -DCURL_USE_LIBSSH=OFF'
     options+=' -DCURL_USE_LIBSSH2=OFF'
@@ -269,8 +266,7 @@ _VER="$1"
     options+=' -DUSE_NGHTTP2=ON'
     options+=" -DNGHTTP2_INCLUDE_DIR=${_TOP}/nghttp2/${_PP}/include"
     options+=" -DNGHTTP2_LIBRARY=${_TOP}/nghttp2/${_PP}/lib/libnghttp2.a"
-    [ "${CURL_VER_}" = '8.18.0' ] && CPPFLAGS+=' -DNGHTTP2_STATICLIB'
-    [ "${CURL_VER_}" != '8.18.0' ] && options+=' -DNGHTTP2_USE_STATIC_LIBS=ON'
+    options+=' -DNGHTTP2_USE_STATIC_LIBS=ON'
   else
     options+=' -DUSE_NGHTTP2=OFF'
   fi
@@ -280,14 +276,12 @@ _VER="$1"
         "${_DEPS}" = *'ngtcp2'* && -d "../ngtcp2/${_PPS}" ]]; then
     options+=" -DNGHTTP3_INCLUDE_DIR=${_TOP}/nghttp3/${_PP}/include"
     options+=" -DNGHTTP3_LIBRARY=${_TOP}/nghttp3/${_PP}/lib/libnghttp3.a"
-    [ "${CURL_VER_}" = '8.18.0' ] && CPPFLAGS+=' -DNGHTTP3_STATICLIB'
-    [ "${CURL_VER_}" != '8.18.0' ] && options+=' -DNGHTTP3_USE_STATIC_LIBS=ON'
+    options+=' -DNGHTTP3_USE_STATIC_LIBS=ON'
 
     options+=' -DUSE_NGTCP2=ON'
     options+=" -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PPS}/include"
     options+=" -DNGTCP2_LIBRARY=${_TOP}/ngtcp2/${_PPS}/lib/libngtcp2.a"
-    [ "${CURL_VER_}" = '8.18.0' ] && CPPFLAGS+=' -DNGTCP2_STATICLIB'
-    [ "${CURL_VER_}" != '8.18.0' ] && options+=' -DNGTCP2_USE_STATIC_LIBS=ON'
+    options+=' -DNGTCP2_USE_STATIC_LIBS=ON'
   else
     options+=' -DUSE_NGTCP2=OFF'
   fi
@@ -295,8 +289,7 @@ _VER="$1"
     options+=' -DENABLE_ARES=ON'
     options+=" -DCARES_INCLUDE_DIR=${_TOP}/cares/${_PP}/include"
     options+=" -DCARES_LIBRARY=${_TOP}/cares/${_PP}/lib/libcares.a"
-    [ "${CURL_VER_}" = '8.18.0' ] && CPPFLAGS+=' -DCARES_STATICLIB'
-    [ "${CURL_VER_}" != '8.18.0' ] && options+=' -DCARES_USE_STATIC_LIBS=ON'
+    options+=' -DCARES_USE_STATIC_LIBS=ON'
     options+=' -DUSE_HTTPSRR=ON'
   fi
   if [ "${_OS}" = 'mac' ]; then
@@ -368,8 +361,7 @@ _VER="$1"
   if [ -n "${_OPENSSL}" ]; then
     if [ "${_OS}" = 'mac' ]; then
       options+=' -DUSE_APPLE_SECTRUST=ON'
-    elif [ "${CURL_VER_}" != '8.18.0' ] && \
-         [ "${_OS}" = 'win' ]; then
+    elif [ "${_OS}" = 'win' ]; then
       options+=' -DCURL_CA_NATIVE=ON'
     fi
   fi
@@ -380,17 +372,12 @@ _VER="$1"
     options+=' -DBUILD_CURL_EXE=ON'
     options+=' -DBUILD_STATIC_CURL=ON'
 
-    if [ -n "${_OPENSSL}" ] && [ "${_OS}" != 'mac' ]; then
-      if [ "${_OS}" = 'win' ]; then
-        if [ "${CURL_VER_}" = '8.18.0' ]; then
-          if [[ "${_DEPS}" = *'certdata'* ]]; then
-            options+=" -DCURL_CA_EMBED=${cacert}"
-          fi
-          options+=' -DCURL_CA_SEARCH_SAFE=ON'
-        fi
-      elif [[ "${_DEPS}" = *'certdata'* ]]; then
-        options+=" -DCURL_CA_EMBED=${cacert}"
-      fi
+    # for Linux
+    if [ -n "${_OPENSSL}" ] && \
+       [ "${_OS}" != 'mac' ] && \
+       [ "${_OS}" != 'win' ] && \
+       [[ "${_DEPS}" = *'certdata'* ]]; then
+      options+=" -DCURL_CA_EMBED=${cacert}"
     fi
   else
     options+=' -DBUILD_CURL_EXE=OFF'
@@ -414,8 +401,7 @@ _VER="$1"
     if [ -n "${hash}" ]; then
       patchstamp="https://github.com/curl/curl-for-win/blob/${hash}/${patch}"
       # Appearing as: "security patched: https://github.com/curl/curl-for-win/blob/95a0e6df/curl.patch"
-      [ -n "${patchstamp}" ] && [ "${CURL_VER_}" = '8.18.0' ] && CPPFLAGS+=" -DCURL_PATCHSTAMP=\\\"${patchstamp}\\\""
-      [ -n "${patchstamp}" ] && [ "${CURL_VER_}" != '8.18.0' ] && options+=" -DCURL_PATCHSTAMP=${patchstamp}"
+      [ -n "${patchstamp}" ] && options+=" -DCURL_PATCHSTAMP=${patchstamp}"
     fi
   fi
 
@@ -435,7 +421,7 @@ _VER="$1"
       -DBUILD_STATIC_LIBS=ON \
       -DCURL_HIDDEN_SYMBOLS=ON \
       -DCMAKE_RC_FLAGS="${_RCFLAGS_GLOBAL}" \
-      -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}" \
+      -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${_LDFLAGS_GLOBAL}" \
       -DCMAKE_EXE_LINKER_FLAGS="${LDFLAGS} ${LDFLAGS_BIN} ${LIBS}" \
       -DCMAKE_SHARED_LINKER_FLAGS="${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}" \
       || { cat "${_BLDDIR}"/CMakeFiles/CMake*.yaml; false; }

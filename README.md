@@ -96,7 +96,7 @@ AppleSecTrust | -       | -       | ✓       | ✓¹      | ✓¹      | ✓¹ 
 asyn-rr       |         |         |         |         |         |         |         |         |
 AsynchDNS     | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 brotli        | ✓       | ✓       | ✓       | ✓       |         |         |         |         |
-CAcert        | ✓³      | ✓       |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
+CAcert        |         | ✓       |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
 ECH           |         |         |         |         |         |         |         |         |
 gsasl         |         |         |         |         |         |         |         |         |
 GSS-API       |         |         | ✓       | ✓¹      |         |         |         |         |
@@ -111,8 +111,8 @@ Kerberos      | ✓       |         |         | ✓¹      | ✓¹      | ✓¹ 
 Largefile     | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 libz          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 MultiSSL      |         |         |         |         |         |         |         |         |
-NativeCA      | ✓²      | -       | -       | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
-NTLM          | ✓⁴      | ✓⁴      | ✓⁴      | ✓⁴      | ✓⁴      | ✓⁴      | ✓⁴      |         |
+NativeCA      | ✓       | -       | -       | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
+NTLM          | ✓²      | ✓²      | ✓²      | ✓²      | ✓²      | ✓²      | ✓²      |         |
 PSL           | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 SPNEGO        | ✓       |         |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
 SSL           | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
@@ -134,20 +134,18 @@ http/https    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 imap/imaps    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 ipfs/ipns     | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 ldap/ldaps    | ✓       |         | ✓       | ✓       | ✓       | ✓       | ✓       |         |
-mqtt/mqtts²   | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+mqtt/mqtts    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 pop3/pop3s    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 rtsp          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 scp/sftp      | ✓       | ✓       | ✓       | ✓       | ✓       |         |         |         |
-smb/smbs      | ✓⁴      | ✓⁴      | ✓⁴      | ✓⁴      | ✓⁴      | ✓⁴      | ✓⁴      |         |
+smb/smbs      | ✓²      | ✓²      | ✓²      | ✓²      | ✓²      | ✓²      | ✓²      |         |
 smtp/smtps    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 telnet        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 tftp          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 ws/wss        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 
 - ¹: platform-dependent
-- ²: expected in upcoming release 8.19.0
-- ³: replaced by NativeCA in upcoming release 8.19.0
-- ⁴: expected to be disabled in future release 8.20.0
+- ²: expected to be disabled in future release 8.20.0
 - noh3: HTTP/2
 - mini: without brotli and zstd, with OS TLS backend (Schannel) if available
 - micro: without libssh2
