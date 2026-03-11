@@ -105,13 +105,6 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
-        env:
-          COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
-          COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
-          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
-          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
-          SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
-          SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-x64"
           export CW_REVISION="${GITHUB_SHA}"
@@ -146,13 +139,6 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
-        env:
-          COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
-          COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
-          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
-          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
-          SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
-          SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-gcc"
           export CW_REVISION="${GITHUB_SHA}"
@@ -188,13 +174,6 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
-        env:
-          COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
-          COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
-          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
-          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
-          SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
-          SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-x64"
           export CW_REVISION="${GITHUB_SHA}"
@@ -231,13 +210,6 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
-        env:
-          COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
-          COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
-          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
-          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
-          SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
-          SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-gcc"
           export CW_REVISION="${GITHUB_SHA}"
@@ -267,6 +239,7 @@ jobs:
     name: 'linux-musl-debian-testing-llvm'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
+    environment: 'production'
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -314,13 +287,6 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
-        env:
-          COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
-          COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
-          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
-          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
-          SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
-          SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl-gcc"
           export CW_REVISION="${GITHUB_SHA}"
@@ -350,6 +316,7 @@ jobs:
     name: 'linux-musl-debian-stable-llvm'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
+    environment: 'production'
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -399,13 +366,6 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
-        env:
-          COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
-          COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
-          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
-          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
-          SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
-          SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl-gcc"
           export CW_REVISION="${GITHUB_SHA}"
@@ -435,6 +395,7 @@ jobs:
     name: 'linux-musl-alpine-llvm'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
+    environment: 'production'
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -482,13 +443,6 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
-        env:
-          COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
-          COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
-          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
-          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
-          SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
-          SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-gcc"
           export CW_REVISION="${GITHUB_SHA}"
@@ -523,13 +477,6 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
-        env:
-          COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
-          COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
-          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
-          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
-          SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
-          SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux"
           export CW_REVISION="${GITHUB_SHA}"
@@ -549,6 +496,7 @@ jobs:
     name: 'mac-clang'
     runs-on: 'macos-latest'
     timeout-minutes: 30
+    environment: 'production'
     env:
       CW_JOBS: '4'
     steps:
@@ -591,13 +539,6 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
-        env:
-          COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
-          COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
-          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
-          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
-          SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
-          SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-mac-macuni-llvm"
           export CW_REVISION="${GITHUB_SHA}"
@@ -625,13 +566,6 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
-        env:
-          COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
-          COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
-          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
-          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
-          SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
-          SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
         run: |
           export CW_CCSUFFIX='-15'
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-mac-gcc-a64"
@@ -661,12 +595,6 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
-          COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
-          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
-          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
-          SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
-          SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '1'
         run: |
@@ -689,6 +617,7 @@ jobs:
     name: 'win-llvm'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
+    environment: 'production'
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -739,12 +668,6 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
-          COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
-          COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
-          MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
-          MINISIGN_KEY_PASS: '${{ secrets.MINISIGN_KEY_PASS }}'
-          SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
-          SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |
