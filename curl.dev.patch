@@ -1,0 +1,112 @@
+diff --git a/lib/vtls/openssl.c b/lib/vtls/openssl.c
+index b35120ad76..a4cf72f487 100644
+--- a/lib/vtls/openssl.c
++++ b/lib/vtls/openssl.c
+@@ -2891,34 +2891,44 @@ static CURLcode ossl_win_load_store(struct Curl_easy *data,
+ 
+       VERBOSE(++total);
+ 
+-#if defined(DEBUGBUILD) && defined(CURLVERBOSE)
+       {
+         char cert_name[256];
+         if(!CertGetNameStringA(pContext, CERT_NAME_SIMPLE_DISPLAY_TYPE, 0,
+                                NULL, cert_name, sizeof(cert_name)))
+-          infof(data, "SSL: unknown cert name");
++          CURL_TRC_CF(data, cf, "SSL: unknown cert name");
+         else
+-          infof(data, "SSL: Checking cert \"%s\"", cert_name);
++          CURL_TRC_CF(data, cf, "SSL: Checking cert \"%s\"", cert_name);
+       }
+-#endif
++
+       encoded_cert = (const unsigned char *)pContext->pbCertEncoded;
+-      if(!encoded_cert)
++      if(!encoded_cert) {
++        CURL_TRC_CF(data, cf, "SSL: discard: encoded_cert == NULL");
+         continue;
++      }
+ 
+       GetSystemTimeAsFileTime(&now);
+       if(CompareFileTime(&pContext->pCertInfo->NotBefore, &now) > 0 ||
+-         CompareFileTime(&now, &pContext->pCertInfo->NotAfter) > 0)
++         CompareFileTime(&now, &pContext->pCertInfo->NotAfter) > 0) {
++        CURL_TRC_CF(data, cf, "SSL: discard: expired");
+         continue;
++      }
+ 
+       /* If key usage exists check for signing attribute */
+       if(CertGetIntendedKeyUsage(pContext->dwCertEncodingType,
+                                  pContext->pCertInfo,
+                                  key_usage, sizeof(key_usage))) {
+-        if(!(key_usage[0] & CERT_KEY_CERT_SIGN_KEY_USAGE))
++        if(!(key_usage[0] & CERT_KEY_CERT_SIGN_KEY_USAGE)) {
++          CURL_TRC_CF(data, cf,
++                      "SSL: discard: !CERT_KEY_CERT_SIGN_KEY_USAGE |%02x|",
++                      (unsigned int)key_usage[0]);
+           continue;
++        }
+       }
+-      else if(GetLastError())
++      else if(GetLastError()) {
++        CURL_TRC_CF(data, cf, "SSL: discard: GetLastError(): %08lx",
++                    (unsigned long)GetLastError());
+         continue;
++      }
+ 
+       /* If enhanced key usage exists check for server auth attribute.
+        *
+@@ -2947,8 +2957,11 @@ static CURLcode ossl_win_load_store(struct Curl_easy *data,
+             /* "If GetLastError returns CRYPT_E_NOT_FOUND, the certificate
+                is good for all uses. If it returns zero, the certificate
+                has no valid uses." */
+-            if((HRESULT)GetLastError() != CRYPT_E_NOT_FOUND)
++            if((HRESULT)GetLastError() != CRYPT_E_NOT_FOUND) {
++              CURL_TRC_CF(data, cf, "SSL: discard: GetLastError()-2: %08lx",
++                          (unsigned long)GetLastError());
+               continue;
++            }
+           }
+           else {
+             DWORD i;
+@@ -2962,15 +2975,24 @@ static CURLcode ossl_win_load_store(struct Curl_easy *data,
+               }
+             }
+ 
+-            if(!found)
++            if(!found) {
++              CURL_TRC_CF(data, cf, "SSL: discard: OID not found");
+               continue;
++            }
+           }
+         }
+-        else
++        else {
++          CURL_TRC_CF(data, cf,
++                      "SSL: discard: !CertGetEnhancedKeyUsage() read");
+           continue;
++        }
+       }
+-      else
++      else {
++        CURL_TRC_CF(data, cf,
++                    "SSL: discard: !CertGetEnhancedKeyUsage() or |%ld|",
++                    req_size);
+         continue;
++      }
+ 
+       x509 = d2i_X509(NULL, &encoded_cert, (long)pContext->cbCertEncoded);
+       if(!x509)
+@@ -2981,9 +3003,7 @@ static CURLcode ossl_win_load_store(struct Curl_easy *data,
+          OpenSSL. */
+       if(X509_STORE_add_cert(store, x509) == 1) {
+         VERBOSE(++imported);
+-#ifdef DEBUGBUILD
+-        infof(data, "SSL: Imported cert");
+-#endif
++        CURL_TRC_CF(data, cf, "SSL: Imported cert");
+         *padded = TRUE;
+       }
+       X509_free(x509);
+-- 
+2.53.0
+
