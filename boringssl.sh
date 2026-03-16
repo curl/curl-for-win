@@ -141,6 +141,11 @@ _VER="$1"
   # List files created
   find "${_PP}"
 
+  if [ "${_NAM}" = 'awslc' ]; then
+    # Delete .pc files
+    rm -r -f "${_PP}"/lib/pkgconfig
+  fi
+
   # Make steps for determinism
 
   readonly _ref='README.md'
