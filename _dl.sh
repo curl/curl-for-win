@@ -361,7 +361,9 @@ check_dl() {
 
   options=()
   [ -n "${curlopt}" ] && options+=("${curlopt}")
-  [ "${redir}" = 'redir' ] && options+=(--location --proto-redir '=https')
+  if [[ "${url}" = 'https://github.com/'* ]] || [ "${redir}" = 'redir' ]; then
+    options+=(--location --proto-redir '=https')
+  fi
   options+=(--output pkg.bin "${url}")
   if [ -n "${sig}" ]; then
     [[ "${sig}" = 'https://'* ]] || sig="${url}${sig}"
