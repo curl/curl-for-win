@@ -45,7 +45,7 @@ _VER="$1"
 
   options+=" ${_LDFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
   if [ "${_OS}" = 'win' ]; then
-    options+=' -DUSE_BCRYPTGENRANDOM -lbcrypt'
+    options+=' -DUSE_BCRYPTGENRANDOM -lbcrypt'  # default for MSVC Vista+ targets. Enable manually for mingw-w64.
   fi
   [ "${_CPU}" = 'x86' ] || options+=' enable-ec_nistp_64_gcc_128'
 
