@@ -914,6 +914,8 @@ build_single_target() {
       fi
     fi
 
+    _LDFLAGS_GLOBAL+=' -Wl,--tsaware'
+
     _CPPFLAGS_GLOBAL+=' -D_FORTIFY_SOURCE=3'  # Requires mingw-w64 11.0.0
 
     _CPPFLAGS_GLOBAL+=' -D_FILE_OFFSET_BITS=64'
