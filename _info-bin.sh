@@ -50,8 +50,9 @@ while [ -n "${1:-}" ]; do
       "${_READELF}" --file-headers --coff-debug-directory "${f}" | grep -a -F 'IMAGE_DLL_CHARACTERISTICS_' | sort || true
       # Dump cfguard load configuration flags
       #   CF_FUNCTION_TABLE_PRESENT, CF_INSTRUMENTED, CF_LONGJUMP_TABLE_PRESENT (optional)
+      # Also dump DependentLoadFlags to verify if its value is 0x800 = LOAD_LIBRARY_SEARCH_SYSTEM32.
       # binutils readelf (as of v2.40) does not recognize this option
-      "${_READELF}" --coff-load-config "${f}" | grep -a -E 'CF_[A-Z_]' | sort || true
+      "${_READELF}" --coff-load-config "${f}" | grep -a -E '(CF_[A-Z_]|DependentLoadFlags)' | sort || true
     else
       # Dump 'DllCharacteristics' flags, e.g.
       #   HIGH_ENTROPY_VA, DYNAMIC_BASE, NX_COMPAT, GUARD_CF, TERMINAL_SERVICE_AWARE
