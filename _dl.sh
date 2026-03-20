@@ -40,7 +40,7 @@ cat <<EOF
     "name": "certdata",
     "url": "https://raw.githubusercontent.com/mozilla-firefox/firefox/{commit}/security/nss/lib/ckfw/builtins/certdata.txt",
     "refs": "refs/heads/release",
-    "bumpdays": 5
+    "bumpdays": 1
   },
   {
     "name": "psl",
