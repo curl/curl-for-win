@@ -1401,8 +1401,8 @@ build_single_target() {
   fi
 
   if [ "${_OS}" = 'win' ] && [ "${_LD}" = 'lld' ]; then
-     # https://learn.microsoft.com/cpp/build/reference/dependentloadflag
-     # https://learn.microsoft.com/windows/win32/dlls/dynamic-link-library-search-order#search-order-using-load_library_search-flags
+    # https://learn.microsoft.com/cpp/build/reference/dependentloadflag
+    # https://learn.microsoft.com/windows/win32/dlls/dynamic-link-library-search-order#search-order-using-load_library_search-flags
     _LDFLAGS_GLOBAL+=' -Wl,--dependent-load-flag=0x800'  # 0x800 = LOAD_LIBRARY_SEARCH_SYSTEM32, requires llvm 20+
   fi
 
