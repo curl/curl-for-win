@@ -24,6 +24,14 @@ if len(sys.argv) > 2:
                 + fname
             )
             pe = pefile.PE(fname)
+
+            # https://learn.microsoft.com/cpp/build/reference/dependentloadflag
+            # https://learn.microsoft.com/windows/win32/dlls/dynamic-link-library-search-order#search-order-using-load_library_search-flags
+            try:
+                pe.DIRECTORY_ENTRY_LOAD_CONFIG.struct.DependentLoadFlags = 0x800  # 0x800 = LOAD_LIBRARY_SEARCH_SYSTEM32, for binutils ld
+            except AttributeError:
+                pass
+
             pe.FILE_HEADER.TimeDateStamp = ts
             try:
                 pe.DIRECTORY_ENTRY_EXPORT.struct.TimeDateStamp = ts
