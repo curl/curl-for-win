@@ -47,7 +47,7 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
       [ "${CW_LLVM_MINGW_ONLY:-}" != '1' ] && extra+=' g++-mingw-w64-i686-win32'
     fi
   fi
-  extra+=' python3-pip python3-venv'  # for pefile and libpsl
+  extra+=' python3-pefile'
   [ -n "${DEPLOY_AGE_PASS:+1}" ] && extra+=' openssh-client'
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   [ -n "${CW_GCCSUFFIX:-}" ] || CW_GCCSUFFIX='-14'
@@ -55,8 +55,6 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   [ "${CW_TRURL_TEST:-}" = '1' ] && extra+=' python3'
 
   extra+=' checksec'
-
-  [[ ! "${CW_CONFIG}" =~ (zero|bldtst|nocookie) ]] && extra+=' python3'  # for libpsl
 
   x64=0; a64=0; r64=0
   [[ "${CW_CONFIG}" = *'a64'* || ! "${CW_CONFIG}" =~ (x64|r64) ]] && a64=1
@@ -126,6 +124,8 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     [ "${anynoncross}" = 1 ] && extra+=' libc6-dev'
   fi
 fi
+
+[[ ! "${CW_CONFIG}" =~ (zero|bldtst|nocookie) ]] && extra+=' python3'  # for libpsl
 
 [ -n "${COSIGN_AGE_PASS:+1}" ] && extra+=' cosign'
 [ -n "${MINISIGN_AGE_PASS:+1}" ] && extra+=' minisign'

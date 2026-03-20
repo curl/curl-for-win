@@ -429,7 +429,7 @@ export _REVSUFFIX="${_REV}"; [ -z "${_REVSUFFIX}" ] || _REVSUFFIX="_${_REVSUFFIX
 . ./_dl.sh
 
 # Install required component
-if [ "${_OS}" = 'win' ]; then
+if [ "${_OS}" = 'win' ] && [ "${_HOST}" != 'linux' ]; then
   if [ ! -d .venv ]; then
     python3 -m venv .venv
     PIP_PROGRESS_BAR=off .venv/bin/python3 -m pip --disable-pip-version-check --no-cache-dir --require-virtualenv install -r requirements.txt

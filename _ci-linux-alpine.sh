@@ -19,6 +19,7 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
     extra+=' nasm'
   fi
+  extra+=' py3-pefile'
   [ -n "${DEPLOY_AGE_PASS:+1}" ] && extra+=' openssh-client-default'
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   apk add --no-cache checksec-rs --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community/
