@@ -145,7 +145,7 @@ tftp          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 ws/wss        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 
 - ¹: platform-dependent
-- ²: expected to be disabled in future release 8.20.0
+- ²: disabled by the next release 8.20.0
 - noh3: HTTP/2
 - mini: without brotli and zstd, with OS TLS backend (Schannel) if available
 - micro: without libssh2
