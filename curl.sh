@@ -31,7 +31,6 @@ _VER="$1"
   # Build
 
   options=''
-  CFLAGS=''
 
   LIBS=''
   LDFLAGS=''
@@ -341,16 +340,6 @@ _VER="$1"
     options+=' -DCMAKE_UNITY_BUILD=ON'
     if [[ "${_CONFIG}" =~ (dev|unitybatch) ]]; then
       options+=' -DCMAKE_UNITY_BUILD_BATCH_SIZE=30'
-    else
-      # Prevent false positive compiler warnings breaking the build when
-      # building for linux on mac in single-batch unity mode.
-      # Seen with gcc 9.2.0 via filosottile/musl-cross/musl-cross
-      if [ "${_HOST}" = 'mac' ] && \
-         [ "${_OS}" = 'linux' ] && \
-         [ "${_CC}" = 'gcc' ] && \
-         [ "${_CRT}" = 'musl' ]; then
-        CFLAGS+=' -Wno-error=null-dereference'
-      fi
     fi
   fi
 
@@ -421,7 +410,7 @@ _VER="$1"
       -DBUILD_STATIC_LIBS=ON \
       -DCURL_HIDDEN_SYMBOLS=ON \
       -DCMAKE_RC_FLAGS="${_RCFLAGS_GLOBAL}" \
-      -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${_LDFLAGS_GLOBAL}" \
+      -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL}" \
       -DCMAKE_EXE_LINKER_FLAGS="${LDFLAGS} ${LDFLAGS_BIN} ${LIBS}" \
       -DCMAKE_SHARED_LINKER_FLAGS="${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}" \
       || { cat "${_BLDDIR}"/CMakeFiles/CMake*.yaml; false; }
