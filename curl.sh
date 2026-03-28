@@ -205,7 +205,6 @@ _VER="$1"
   if [ -n "${_OPENSSL}" ] && [ -d "../${_OPENSSL}/${_PP}" ]; then
     # ECH feature requests:
     #   https://github.com/libressl/portable/issues/546
-    #   https://github.com/openssl/openssl/pull/22938
     options+=' -DCURL_USE_OPENSSL=ON'
     options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     options+=' -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON'
@@ -227,6 +226,9 @@ _VER="$1"
     fi
     if [ "${_OPENSSL}" = 'openssl' ]; then
       options+=' -DHAVE_SSL_SET_QUIC_TLS_CBS=1'  # fast-track configuration
+      if [[ "${OPENSSL_VER_}" != '3'* ]]; then
+        options+=' -DUSE_ECH=ON'
+      fi
     else
       options+=' -DHAVE_SSL_SET_QUIC_USE_LEGACY_CODEPOINT=1'  # fast-track configuration
     fi
