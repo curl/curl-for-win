@@ -1662,9 +1662,9 @@ build_single_target() {
       toolchver+=" ${CW_LLVM_MINGW_VER_:-?}"
       versuffix="${versuffix_llvm_mingw}"
       # Extract mingw-w64 version from llvm-mingw/generic-w64-mingw32/include/_mingw_mac.h
-      ma="$(grep -a -h -E -R --include '_*.h' 'define +__MINGW64_VERSION_MAJOR +[0-9]+' -- llvm-mingw/generic* | head -n 1 | grep -a -E -o ' [0-9]+' | tr -d ' ')"
-      mi="$(grep -a -h -E -R --include '_*.h' 'define +__MINGW64_VERSION_MINOR +[0-9]+' -- llvm-mingw/generic* | head -n 1 | grep -a -E -o ' [0-9]+' | tr -d ' ')"
-      bf="$(grep -a -h -E -R --include '_*.h' 'define +__MINGW64_VERSION_BUGFIX +[0-9]+' -- llvm-mingw/generic* | head -n 1 | grep -a -E -o ' [0-9]+' | tr -d ' ')"
+      ma="$(grep -a -h -E -R --include '_*.h' 'define +__MINGW64_VERSION_MAJOR +[0-9]+' -- "${CW_LLVM_MINGW_PATH}"/generic* | head -n 1 | grep -a -E -o ' [0-9]+' | tr -d ' ')"
+      mi="$(grep -a -h -E -R --include '_*.h' 'define +__MINGW64_VERSION_MINOR +[0-9]+' -- "${CW_LLVM_MINGW_PATH}"/generic* | head -n 1 | grep -a -E -o ' [0-9]+' | tr -d ' ')"
+      bf="$(grep -a -h -E -R --include '_*.h' 'define +__MINGW64_VERSION_BUGFIX +[0-9]+' -- "${CW_LLVM_MINGW_PATH}"/generic* | head -n 1 | grep -a -E -o ' [0-9]+' | tr -d ' ')"
       [ -n "${ma}${mi}${bf}" ] && mingwver="mingw-w64 ${ma}.${mi}.${bf}"
     else
       case "${_HOST}" in
