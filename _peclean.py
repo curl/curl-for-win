@@ -15,7 +15,13 @@ import pefile
 if len(sys.argv) > 2:
     # https://docs.python.org/3/library/os.path.html#os.path.getmtime
     # https://docs.python.org/3/library/time.html
-    ts = int(os.path.getmtime(os.path.normpath(sys.argv[1])))
+    fref = os.path.normpath(sys.argv[1])
+    try:
+        ts = int(os.path.getmtime(fref))
+    except OSError as e:
+        print(f"Error: Cannot access reference file '{fref}': {e}", file=sys.stderr)
+        sys.exit(1)
+
     for argv in sys.argv[2:]:
         for fname in glob.glob(argv):
             print(
