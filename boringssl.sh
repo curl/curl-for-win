@@ -6,6 +6,22 @@
 # Requires macOS 10.13
 
 # FIXME (upstream):
+# - cfguard seems to be incompatible with BoringSSL, with error:
+#     ld.lld: error: libcrypto.a(err.o): invalid symbol index in addrsig section
+#   Workaround: drop `-Wl,--icf=all` (also `-Wl,--icf=safe`), and `-mguard=cf`.
+#   Seen on Windows with llvm-mingw, and did not triangulate further.
+#   Also seen with AWS-LC 1.37.0 earlier, but no longer reproduces with 1.66.1.
+#     Ref: 1d3f910140f249bd31442468d058d4fff9fdfde6
+#   At the same time throwing weird linker warnings (also seen with BoringSSL
+#   in a certain cfguard option combination):
+#     ld.lld: warning: ignoring invalid symbol table index in section .gfids$y in object libcrypto.a(digest_extra.o)
+#     ld.lld: warning: ignoring invalid symbol table index in section .gfids$y in object libcrypto.a(mem.o)
+#     ld.lld: warning: ignoring invalid symbol table index in section .gfids$y in object libcrypto.a(rand_extra.o)
+#     ld.lld: warning: ignoring invalid symbol table index in section .gfids$y in object libcrypto.a(hpke.o)
+#     ld.lld: warning: ignoring invalid symbol table index in section .gfids$y in object libcrypto.a(a_mbstr.o)
+#     ld.lld: warning: ignoring invalid symbol table index in section .gfids$y in object libcrypto.a(pkcs8.o)
+#     ld.lld: warning: ignoring invalid symbol table index in section .gfids$y in object libcrypto.a(v3_conf.o)
+#     ld.lld: warning: ignoring invalid symbol table index in section .gfids$y in object libcrypto.a(p5_pbev2.o)
 # - x64 mingw-w64 pthread ucrt static linking bug -> requires llvm-mingw
 #   Likely fixed in mingw-w64 12.0.0.
 #   https://sourceforge.net/p/mingw-w64/mingw-w64/ci/ad2b46ca1e603872f62f83eaaff9e5ef77c99500/
