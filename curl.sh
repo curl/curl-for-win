@@ -386,7 +386,7 @@ _VER="$1"
   patch="${_NAM}${_PATCHSUFFIX}.patch"
   if [ -f "../${patch}" ] && false; then  # explicitly disabled
     # This command requires a git clone deep enough to contain all
-    # curl-for-win repo versions pointing the current latest curl release.
+    # curl-for-win repo versions pointing to the current latest curl release.
     # To retrieve the hash for the commit adding or updating the .patch
     # file (if any). In a shallow clone this could return the latest commit
     # hash, breaking reproducibility.
