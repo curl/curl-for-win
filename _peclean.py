@@ -48,3 +48,6 @@ if len(sys.argv) > 2:
             pe.OPTIONAL_HEADER.CheckSum = pe.generate_checksum()
             pe.write(fname)
             pe.close()
+else:
+    print("Usage: _peclean.py <reference-file> <exe-file[s]>", file=sys.stderr)
+    sys.exit(1)
