@@ -23,7 +23,12 @@ if len(sys.argv) > 2:
                 + " -> "
                 + fname
             )
-            pe = pefile.PE(fname)
+
+            try:
+                pe = pefile.PE(fname)
+            except pefile.PEFormatError as e:
+                print(f"Error: Not a PE file '{fname}': {e}", file=sys.stderr)
+                continue
 
             # https://learn.microsoft.com/cpp/build/reference/dependentloadflag
             # https://learn.microsoft.com/windows/win32/dlls/dynamic-link-library-search-order#search-order-using-load_library_search-flags
