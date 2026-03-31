@@ -217,6 +217,7 @@ _VER="$1"
         options+=' -DHAVE_BORINGSSL=0 -DHAVE_AWSLC=1'  # fast-track configuration
       fi
       options+=' -DUSE_ECH=ON'
+      options+=' -DHAVE_SSL_SET1_ECH_CONFIG_LIST=1'  # fast-track configuration
       LIBS+=' -lpthread'
     else
       options+=' -DHAVE_BORINGSSL=0 -DHAVE_AWSLC=0'  # fast-track configuration
@@ -229,6 +230,7 @@ _VER="$1"
       options+=' -DHAVE_SSL_SET_QUIC_TLS_CBS=1'  # fast-track configuration
       if [[ "${OPENSSL_VER_}" != '3'* ]]; then
         options+=' -DUSE_ECH=ON'
+        options+=' -DHAVE_SSL_SET1_ECH_CONFIG_LIST=1'  # fast-track configuration
       fi
     else
       options+=' -DHAVE_SSL_SET_QUIC_USE_LEGACY_CODEPOINT=1'  # fast-track configuration
