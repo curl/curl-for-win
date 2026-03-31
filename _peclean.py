@@ -30,17 +30,20 @@ if len(sys.argv) > 2:
             try:
                 pe.DIRECTORY_ENTRY_LOAD_CONFIG.struct.DependentLoadFlags = 0x800  # 0x800 = LOAD_LIBRARY_SEARCH_SYSTEM32, for binutils ld
             except AttributeError:
+                # Silently ignore if there is no such item
                 pass
 
             pe.FILE_HEADER.TimeDateStamp = ts
             try:
                 pe.DIRECTORY_ENTRY_EXPORT.struct.TimeDateStamp = ts
             except AttributeError:
+                # Silently ignore if there is no such item
                 pass
             try:
                 for entry in pe.DIRECTORY_ENTRY_DEBUG:
                     entry.struct.TimeDateStamp = ts
             except AttributeError:
+                # Silently ignore if there is no such item
                 pass
             pe.OPTIONAL_HEADER.CheckSum = pe.generate_checksum()
             pe.write(fname)
