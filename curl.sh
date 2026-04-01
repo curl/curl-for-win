@@ -624,9 +624,9 @@ _VER="$1"
           # add self directory to PATH to find our curl.exe from within the batch and from wcurl
           printf '%s\r\n' '@set PATH=%~dp0;%PATH%'
           printf '%s\r\n' '@if exist "%bb%" goto have_busybox'
-          printf '%s\r\n' "@set bd=-w64u& set bv=${BUSYBOX_W64U_VER_}& set bh=${BUSYBOX_W64U_HASH}"
-          printf '%s\r\n' "@if \"%PROCESSOR_ARCHITECTURE%\" == \"ARM64\" (set bd=-w64a& set bv=${BUSYBOX_W64A_VER_}& set bh=${BUSYBOX_W64A_HASH})"
-          printf '%s\r\n' '@set url=https://frippery.org/files/busybox/busybox%bd%-%bv%.exe'
+          printf '%s\r\n' "@set sfx=-w64u-${BUSYBOX_W64U_VER_}& set bh=${BUSYBOX_W64U_HASH}"
+          printf '%s\r\n' "@if \"%PROCESSOR_ARCHITECTURE%\" == \"ARM64\" (set sfx=-w64a-${BUSYBOX_W64A_VER_}& set bh=${BUSYBOX_W64A_HASH})"
+          printf '%s\r\n' '@set url=https://frippery.org/files/busybox/busybox%sfx%.exe'
           printf '%s\r\n' '@echo Downloading "%url%" as "%bb%"...'
           printf '%s\r\n' '@curl.exe -fsS "%url%" -o "%bb%"'
           printf '%s\r\n' "@for /f \"tokens=*\" %%H in ('certutil -hashfile \"%bb%\" SHA256 ^| find /i /v \"hash\" ^| find /i /v \"CertUtil\"') do @set \"dh=%%H\""
