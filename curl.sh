@@ -612,8 +612,7 @@ _VER="$1"
 
   if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
     cp -f -p "${bin}"                           "${_DST}"/bin/
-    if [ "${_OS}" != 'win' ] || \
-       [[ "${_CONFIG}" = *'dev'* ]]; then  # include in -dev Windows builds also
+    if [ "${_OS}" != 'win' ] || [ "${_CPU}" != 'x86' ]; then  # all platforms except Windows 32-bit
       cp -f -p "${_PP}"/bin/wcurl                 "${_DST}"/bin/
       if [ "${_OS}" = 'win' ]; then
         {
