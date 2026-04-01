@@ -65,7 +65,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: 'curl-linux-glibc-daily-tool'
           retention-days: 42
@@ -73,7 +73,7 @@ jobs:
             curl-*-*-*/curl*
             curl-*-*-*/trurl*
 
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: 'curl-linux-glibc-daily'
           retention-days: 42
@@ -118,7 +118,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: 'curl-linux-musl-daily-tool'
           retention-days: 42
@@ -126,7 +126,7 @@ jobs:
             curl-*-*-*/curl*
             curl-*-*-*/trurl*
 
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: 'curl-linux-musl-daily'
           retention-days: 42
@@ -164,7 +164,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: 'curl-macos-universal-daily-tool'
           retention-days: 42
@@ -172,7 +172,7 @@ jobs:
             curl-*-universal-*/curl*
             curl-*-universal-*/trurl*
 
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: 'curl-macos-universal-daily'
           retention-days: 42
@@ -220,7 +220,7 @@ jobs:
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
       # https://github.com/actions/upload-artifact
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: 'curl-windows-daily-tool'
           retention-days: 42
@@ -228,7 +228,7 @@ jobs:
             curl-*-*-*/curl*
             curl-*-*-*/trurl*
 
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: 'curl-windows-daily'
           retention-days: 42
