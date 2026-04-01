@@ -12,6 +12,22 @@ dependencies_json() {
 cat <<EOF
 [
   {
+    "name": "busybox-w64u",
+    "url": "https://frippery.org/files/busybox/busybox-w64u-{ver}.exe",
+    "sig": ".sig",
+    "keys": "https://github.com/rmyorston.gpg",
+    "ref_url": "https://frippery.org/files/busybox/",
+    "refs": "(FRP-[0-9]{4,}-g[0-9a-fA-F]{9,})"
+  },
+  {
+    "name": "busybox-w64a",
+    "url": "https://frippery.org/files/busybox/busybox-w64a-{ver}.exe",
+    "sig": ".sig",
+    "keys": "https://github.com/rmyorston.gpg",
+    "ref_url": "https://frippery.org/files/busybox/",
+    "refs": "(FRP-[0-9]{4,}-g[0-9a-fA-F]{9,})"
+  },
+  {
     "name": "brotli",
     "url": "https://github.com/google/brotli/archive/v{ver}.tar.gz"
   },
@@ -188,9 +204,13 @@ my_gpg() {
 
 gpg_recv_key() {
   local req
-  req="pks/lookup?op=get&options=mr&exact=on&search=0x$1"
-  my_curl "https://pgpkeys.eu/${req}"           | my_gpg --import --status-fd 1 || \
-  my_curl "https://keyserver.ubuntu.com/${req}" | my_gpg --import --status-fd 1
+  if [[ "$1" = 'https://'* ]]; then
+    my_curl "$1" | my_gpg --import --status-fd 1
+  else
+    req="pks/lookup?op=get&options=mr&exact=on&search=0x$1"
+    my_curl "https://pgpkeys.eu/${req}"           | my_gpg --import --status-fd 1 || \
+    my_curl "https://keyserver.ubuntu.com/${req}" | my_gpg --import --status-fd 1
+  fi
 }
 
 # replace {ver}/{veru}/{vermm} macros with the version number
