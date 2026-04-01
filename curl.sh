@@ -618,14 +618,22 @@ _VER="$1"
       if [ "${_OS}" = 'win' ]; then
         {
           printf '%s\r\n' ':: EXPERIMENTAL'
-          printf '%s\r\n' '@set bb_dir=%~dp0'
-          printf '%s\r\n' '@set bb=busybox'
-          printf '%s\r\n' '@if "%PROCESSOR_ARCHITECTURE%" == "AMD64" set bb=busybox64'
-          printf '%s\r\n' '@if "%PROCESSOR_ARCHITECTURE%" == "ARM64" set bb=busybox64a'
-          printf '%s\r\n' '@for %%P in (%PATH:;=;%) do @dir /b "%%~P\busybox.exe" >nul 2>&1 && (set bb_dir=%%~P\& set bb=busybox)'
+          printf '%s\r\n' '@set bb=%~dp0'
+          printf '%s\r\n' "@for %%P in (%PATH:;=;%) do @dir /b \"%%~P\busybox.exe\" >nul 2>&1 && set bb=%%~P\\"
+          printf '%s\r\n' '@set "bb=%bb%busybox.exe"'
+          # add self directory to PATH to find our curl.exe from within the batch and from wcurl
           printf '%s\r\n' '@set PATH=%~dp0;%PATH%'
-          printf '%s\r\n' '@if not exist "%bb_dir%%bb%.exe" curl -fsSO https://frippery.org/files/busybox/%bb%.exe'
-          printf '%s\r\n' '@"%bb_dir%%bb%.exe" sh "%~dp0wcurl" %*'
+          printf '%s\r\n' '@if exist "%bb%" goto have_busybox'
+          printf '%s\r\n' '@set bd=-w64& set bh=0ee2bfac98adea79969ff9a969799def74db332a86afa87a890e6230642eb901'
+          printf '%s\r\n' '@if "%PROCESSOR_ARCHITECTURE%" == "ARM64" (set bd=-w64a& set bh=4e39dc577782fd0af75222738e609ba43d8d2a98131e88928f1b0dad45048b99)'
+          printf '%s\r\n' '@set url=https://frippery.org/files/busybox/busybox%bd%-FRP-5857-g3681e397f.exe'
+          printf '%s\r\n' '@echo Downloading "%url%" as "%bb%"...'
+          printf '%s\r\n' '@curl.exe -fsS "%url%" -o "%bb%"'
+          printf '%s\r\n' "@for /f \"tokens=*\" %%H in ('certutil -hashfile \"%bb%\" SHA256 ^| find /i /v \"hash\" ^| find /i /v \"CertUtil\"') do @set \"dh=%%H\""
+          # certutil on Windows 7 is seen to output a space between each hex byte
+          printf '%s\r\n' '@if /i not "%dh: =%" == "%bh%" (echo Error: Integrity check failed.& del /q "%bb%" & exit /b 1)'
+          printf '%s\r\n' ':have_busybox'
+          printf '%s\r\n' '@"%bb%" sh "%~dp0wcurl" %*'
         } > "${_DST}"/bin/wcurl.bat
       fi
     fi
