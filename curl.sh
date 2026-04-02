@@ -617,22 +617,13 @@ _VER="$1"
       if [ "${_OS}" = 'win' ]; then
         {
           printf '%s\r\n' ':: EXPERIMENTAL'
-          printf '%s\r\n' '@set bb=%~dp0'
-          printf '%s\r\n' "@for %%P in (%PATH:;=;%) do @dir /b \"%%~P\busybox.exe\" >nul 2>&1 && set bb=%%~P\\"
-          printf '%s\r\n' '@set "bb=%bb%busybox.exe"'
-          # add self directory to PATH to find our curl.exe from within the batch and from wcurl
+          printf '%s\r\n' '@set bb='
+          printf '%s\r\n' '@set bs='
           printf '%s\r\n' '@set PATH=%~dp0;%PATH%'
-          printf '%s\r\n' '@if exist "%bb%" goto have_busybox'
-          printf '%s\r\n' "@set sfx=-w64u-${BUSYBOX_W64U_VER_}& set bh=${BUSYBOX_W64U_HASH}"
-          printf '%s\r\n' "@if \"%PROCESSOR_ARCHITECTURE%\" == \"ARM64\" (set sfx=-w64a-${BUSYBOX_W64A_VER_}& set bh=${BUSYBOX_W64A_HASH})"
-          printf '%s\r\n' '@set url=https://frippery.org/files/busybox/busybox%sfx%.exe'
-          printf '%s\r\n' '@echo Downloading "%url%" as "%bb%"...'
-          printf '%s\r\n' '@curl.exe -fsS "%url%" -o "%bb%"'
-          printf '%s\r\n' "@for /f \"tokens=*\" %%H in ('certutil -hashfile \"%bb%\" SHA256 ^| find /i /v \"hash\" ^| find /i /v \"CertUtil\"') do @set \"dh=%%H\""
-          # certutil on Windows 7 is seen to output a space between each hex byte
-          printf '%s\r\n' '@if /i not "%dh: =%" == "%bh%" (echo Error: Integrity check failed.& del /q "%bb%" & exit /b 1)'
-          printf '%s\r\n' ':have_busybox'
-          printf '%s\r\n' '@"%bb%" sh "%~dp0wcurl" %*'
+          printf '%s\r\n' '@if "%bb%" equ "" for %%P in (%PATH:;=;%) do @dir /b "%%~P\sh.exe" >nul 2>&1 && set bb=%%~P\sh.exe'
+          printf '%s\r\n' '@if "%bb%" equ "" for %%P in (%PATH:;=;%) do @dir /b "%%~P\busybox.exe" >nul 2>&1 && (set bb=%%~P\busybox.exe& set bs=sh)'
+          printf '%s\r\n' '@if "%bb%" equ "" echo Error: requires a POSIX shell (sh.exe or busybox.exe) in PATH.'
+          printf '%s\r\n' '@if "%bb%" neq "" "%bb%" %bs% -c wcurl %*'
         } > "${_DST}"/bin/wcurl.bat
       fi
     fi

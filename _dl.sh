@@ -12,22 +12,6 @@ dependencies_json() {
 cat <<EOF
 [
   {
-    "name": "busybox-w64u",
-    "url": "https://frippery.org/files/busybox/busybox-w64u-{ver}.exe",
-    "sig": ".sig",
-    "keys": "https://github.com/rmyorston.gpg",
-    "ref_url": "https://frippery.org/files/busybox/",
-    "refs": "(FRP-[0-9]{4,}-g[0-9a-fA-F]{9,})"
-  },
-  {
-    "name": "busybox-w64a",
-    "url": "https://frippery.org/files/busybox/busybox-w64a-{ver}.exe",
-    "sig": ".sig",
-    "keys": "https://github.com/rmyorston.gpg",
-    "ref_url": "https://frippery.org/files/busybox/",
-    "refs": "(FRP-[0-9]{4,}-g[0-9a-fA-F]{9,})"
-  },
-  {
     "name": "brotli",
     "url": "https://github.com/google/brotli/archive/v{ver}.tar.gz"
   },
