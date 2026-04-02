@@ -26,6 +26,16 @@
 #            on a different drive. Windows has no guaranteed protected
 #            directory across versions, configurations and installations.
 #
+#          - Binaries built with default options, as seen in MSYS2/mingw, refer
+#            to the new default config locations via `C:ProgramData/ssh/...`.
+#            Note the missing slash/backslash after the drive letter. It means
+#            that the directory uses the current working directory on the `C:`
+#            drive as a base, instead of the expected `C:` root. This makes it
+#            broken and insecure. Ref:
+#            https://mirror.msys2.org/mingw/clangarm64/mingw-w64-clang-aarch64-libssh-0.12.0-1-any.pkg.tar.zst
+#            https://packages.msys2.org/packages/mingw-w64-clang-aarch64-libssh
+#            https://github.com/msys2/MINGW-packages/blob/ccbc2a651686f7b4d78a27c73343baaff1cd89aa/mingw-w64-libssh/PKGBUILD
+#
 #          - Same issue with the fallback value, which may be correct for
 #            many/most systems, but not for all.
 #            To fix both, this directory would need to be determined at
