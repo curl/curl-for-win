@@ -623,7 +623,8 @@ _VER="$1"
           printf '%s\r\n' '@if "%bb%" equ "" for %%P in (%PATH:;=;%) do @dir /b "%%~P\sh.exe" >nul 2>&1 && set bb=%%~P\sh.exe'
           printf '%s\r\n' '@if "%bb%" equ "" for %%P in (%PATH:;=;%) do @dir /b "%%~P\busybox.exe" >nul 2>&1 && (set bb=%%~P\busybox.exe& set bs=sh)'
           printf '%s\r\n' '@if "%bb%" equ "" echo Error: requires a POSIX shell (sh.exe or busybox.exe) in PATH.'
-          printf '%s\r\n' '@if "%bb%" neq "" "%bb%" %bs% -c wcurl %*'
+          printf '%s\r\n' '@set self=%~dp0'
+          printf '%s\r\n' '@if "%bb%" neq "" "%bb%" %bs% "%self:\=/%wcurl" %*'
         } > "${_DST}"/bin/wcurl.bat
       fi
     fi
