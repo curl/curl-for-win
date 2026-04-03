@@ -616,14 +616,14 @@ _VER="$1"
       cp -f -p "${_PP}"/bin/wcurl                 "${_DST}"/bin/
       if [ "${_OS}" = 'win' ]; then
         {
+          printf '%s\r\n' '@set sh='
           printf '%s\r\n' '@set bb='
-          printf '%s\r\n' '@set bs='
           printf '%s\r\n' '@set PATH=%~dp0;%PATH%'
-          printf '%s\r\n' '@if "%bb%" equ "" for %%P in (%PATH:;=;%) do @dir /b "%%~P\sh.exe" >nul 2>&1 && set bb=%%~P\sh.exe'
-          printf '%s\r\n' '@if "%bb%" equ "" for %%P in (%PATH:;=;%) do @dir /b "%%~P\busybox.exe" >nul 2>&1 && (set bb=%%~P\busybox.exe& set bs=sh)'
-          printf '%s\r\n' '@if "%bb%" equ "" echo Error: requires a POSIX shell (sh.exe or busybox.exe) in PATH.'
+          printf '%s\r\n' '@if "%sh%" equ "" for %%P in (%PATH:;=;%) do @dir /b "%%~P\sh.exe" >nul 2>&1 && set sh=%%~P\sh.exe'
+          printf '%s\r\n' '@if "%sh%" equ "" for %%P in (%PATH:;=;%) do @dir /b "%%~P\busybox.exe" >nul 2>&1 && (set sh=%%~P\busybox.exe& set bb=sh)'
+          printf '%s\r\n' '@if "%sh%" equ "" echo Error: requires a POSIX shell (sh.exe or busybox.exe) in PATH.'
           printf '%s\r\n' '@set self=%~dp0'
-          printf '%s\r\n' '@if "%bb%" neq "" "%bb%" %bs% "%self:\=/%wcurl" %*'
+          printf '%s\r\n' '@if "%sh%" neq "" "%sh%" %bb% "%self:\=/%wcurl" %*'
         } > "${_DST}"/bin/wcurl.bat
       fi
     fi
