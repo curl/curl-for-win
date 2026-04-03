@@ -616,7 +616,6 @@ _VER="$1"
       cp -f -p "${_PP}"/bin/wcurl                 "${_DST}"/bin/
       if [ "${_OS}" = 'win' ]; then
         {
-          printf '%s\r\n' ':: EXPERIMENTAL'
           printf '%s\r\n' '@set bb='
           printf '%s\r\n' '@set bs='
           printf '%s\r\n' '@set PATH=%~dp0;%PATH%'
