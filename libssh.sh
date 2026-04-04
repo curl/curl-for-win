@@ -148,14 +148,14 @@ _VER="$1"
       #   but CMake's version detection (as of 4.2.1) is not aware of BoringSSL
       #   and fails to detect it. Work this around by the horrible hack of copying
       #   the necessary PP line where CMake is looking for it:
-      i="${_TOP}/${_OPENSSL}/${_PP}/include/openssl"
-      v="${i}/opensslv.h"
-      if ! grep -q -a 'OPENSSL_VERSION_NUMBER' "${v}"; then
-        l="$(grep --no-filename -a 'OPENSSL_VERSION_NUMBER' "${i}"/* | head -n 1)"
-        tmp="${l}.tmp"
-        touch -r "${v}" "${tmp}"
-        printf '\n#if 0\n%s\n#endif\n' "${l}" >> "${v}"
-        touch -r "${tmp}" "${v}"
+      openssl_include_dir="${_TOP}/${_OPENSSL}/${_PP}/include/openssl"
+      opensslv_h="${openssl_include_dir}/opensslv.h"
+      if ! grep -q -a 'OPENSSL_VERSION_NUMBER' "${opensslv_h}"; then
+        line="$(grep --no-filename -a 'OPENSSL_VERSION_NUMBER' "${openssl_include_dir}"/* | head -n 1)"
+        tmp='__timestamp.tmp'
+        touch -r "${opensslv_h}" "${tmp}"
+        printf '\n#if 0\n%s\n#endif\n' "${line}" >> "${opensslv_h}"
+        touch -r "${tmp}" "${opensslv_h}"
         rm -f -- "${tmp}"
       fi
 
