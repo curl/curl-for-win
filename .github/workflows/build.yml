@@ -18,7 +18,6 @@ concurrency:
 permissions: {}
 
 env:
-  GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
   CW_MAP: '1'
   CW_JOBS: '5'
   CW_CURL_TEST: '1'
@@ -105,6 +104,8 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-x64"
           export CW_REVISION="${GITHUB_SHA}"
@@ -139,6 +140,8 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-gcc"
           export CW_REVISION="${GITHUB_SHA}"
@@ -174,6 +177,8 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-x64"
           export CW_REVISION="${GITHUB_SHA}"
@@ -210,6 +215,8 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-gcc"
           export CW_REVISION="${GITHUB_SHA}"
@@ -247,6 +254,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
@@ -287,6 +295,8 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl-gcc"
           export CW_REVISION="${GITHUB_SHA}"
@@ -324,6 +334,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
@@ -366,6 +377,8 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl-gcc"
           export CW_REVISION="${GITHUB_SHA}"
@@ -403,6 +416,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
@@ -443,6 +457,8 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-gcc"
           export CW_REVISION="${GITHUB_SHA}"
@@ -477,6 +493,8 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux"
           export CW_REVISION="${GITHUB_SHA}"
@@ -506,6 +524,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
@@ -539,6 +558,8 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         run: |
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-mac-macuni-llvm"
           export CW_REVISION="${GITHUB_SHA}"
@@ -566,6 +587,8 @@ jobs:
           persist-credentials: false
           fetch-depth: '300'
       - name: 'build'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         run: |
           export CW_CCSUFFIX='-15'
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-mac-gcc-a64"
@@ -595,6 +618,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '1'
         run: |
@@ -625,6 +649,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
@@ -668,6 +693,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |

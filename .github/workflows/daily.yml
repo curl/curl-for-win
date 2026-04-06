@@ -15,7 +15,6 @@ concurrency:
 permissions: {}
 
 env:
-  GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
   CW_MAP: '1'
   CW_JOBS: '5'
   CW_CURL_TEST: '1'
@@ -39,6 +38,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
@@ -94,6 +94,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
@@ -149,6 +150,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
@@ -193,6 +195,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           COSIGN_AGE_PASS: '${{ secrets.COSIGN_AGE_PASS }}'
           COSIGN_KEY_PASS: '${{ secrets.COSIGN_KEY_PASS }}'
           MINISIGN_AGE_PASS: '${{ secrets.MINISIGN_AGE_PASS }}'
