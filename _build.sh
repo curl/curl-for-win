@@ -66,6 +66,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        zero       build without 3rd-party dependencies (for testing, implies 'small' option)
 #        trurl      build trurl (default for 'dev' and 'test' configs) (alongside a second, minimal, libcurl, for trurl only)
 #        notrurl    build without trurl (in 'dev' and 'test' configs)
+#        nocertdata build without certdata (also to avoid accessing api.github.com in non-dev builds)
 #        thinlto    build with ThinLTO enabled (requires llvm) [EXPERIMENTAL]
 #        small      optimize for size
 #        r64        build riscv64 target only [EXPERIMENTAL]

@@ -817,7 +817,8 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro) || "${_CONFIG}" =~ (libssh
 fi
 
 if [ "${need_certdata}" = '1' ] && \
-   [ "${_OS}" != 'mac' ]; then
+   [ "${_OS}" != 'mac' ] && \
+   [[ "${_CONFIG}" != *'nocertdata'* ]]; then
   _DEPS+=' certdata'
 fi
 
