@@ -261,7 +261,7 @@ check_update() {
         --header 'X-GitHub-Api-Version: 2022-11-28' \
         | jq --raw-output '.[].ref' \
         | grep -a -E "$4" | sort -V | tail -n -1)"
-      newver="$(printf '%s' "${ref}" | grep -a -E -o '\d+\.\d+\.\d')"
+      newver="$(printf '%s' "${ref}" | grep -a -E -o '\d+\.\d+\.\d+')"
       # Optionally, check for the presence of a path
       if [ -n "$5" ] && \
          ! my_curl --head "https://raw.githubusercontent.com/${slug}/${ref}/$5" >/dev/null 2>&1; then
