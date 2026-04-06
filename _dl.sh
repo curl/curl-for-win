@@ -511,7 +511,7 @@ bump() {
 
             if [ -z "${newhash}" ]; then
               >&2 echo "! ${name}: New version failed to validate."
-            elif [ "${name}" == "${keypkg}" ]; then
+            elif [ "${name}" = "${keypkg}" ]; then
               newcurl=1
             else
               newdep=1
