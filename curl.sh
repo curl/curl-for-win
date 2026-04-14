@@ -227,11 +227,8 @@ _VER="$1"
       options+=' -DHAVE_LIBRESSL=0 -DHAVE_SSL_SET0_WBIO=1'  # fast-track configuration
     fi
     if [ "${_OPENSSL}" = 'openssl' ]; then
-      options+=' -DHAVE_SSL_SET_QUIC_TLS_CBS=1'  # fast-track configuration
-      if [[ "${OPENSSL_VER_}" != '3'* ]]; then
-        options+=' -DUSE_ECH=ON'
-        options+=' -DHAVE_SSL_SET1_ECH_CONFIG_LIST=1'  # fast-track configuration
-      fi
+      options+=' -DUSE_ECH=ON'
+      options+=' -DHAVE_SSL_SET_QUIC_TLS_CBS=1 -DHAVE_SSL_SET1_ECH_CONFIG_LIST=1'  # fast-track configuration
     else
       options+=' -DHAVE_SSL_SET_QUIC_USE_LEGACY_CODEPOINT=1'  # fast-track configuration
     fi
