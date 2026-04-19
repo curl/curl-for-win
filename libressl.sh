@@ -45,10 +45,6 @@ _VER="$1"
   CFLAGS=''
   CPPFLAGS='-DOPENSSL_NO_FILENAMES'
 
-  if [ "${_OS}" = 'win' ] && [ "${_CPU}" = 'a64' ] && [ "${LIBRESSL_VER_}" = '4.2.1' ]; then
-    options+=' -DENABLE_ASM=OFF'  # Pending: https://github.com/libressl/portable/issues/1210 [FIXED]
-  fi
-
   if [[ "${_CONFIG}" != *'debug'* ]]; then
     CPPFLAGS+=' -DNDEBUG'
   fi
