@@ -117,7 +117,7 @@ _VER="$1"
     #   -DCMAKE_THREAD_PREFER_PTHREADS=OFF
     #   -DTHREADS_PREFER_PTHREAD_FLAG=OFF
     #   -DCMAKE_USE_WIN32_THREADS_INIT=ON
-    CPPFLAGS+=' -Dpthread_create=func_not_existing'
+    CPPFLAGS+=' -Dpthread_create=func_pthread_explicitly_disabled'
   fi
 
   # Silence libssh API deprecation warnings when building libssh itself.
