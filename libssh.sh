@@ -181,7 +181,7 @@ _VER="$1"
   fi
 
   if [ "${_OS}" = 'win' ]; then
-    _my_prefix='C:/Windows/System32/ssh'
+    _my_prefix='C:/Windows/System32/ssh'  # use directory non-world-writable on most installations
     export PROGRAMDATA="${_my_prefix}"  # to set 'GLOBAL_CONF_DIR' for 'ssh_known_hosts' (as of v0.12.0)
   else
     _my_prefix='/etc/ssh'
