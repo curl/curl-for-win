@@ -8,17 +8,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 > Sponsor these binary builds to support maintenance, fixes and further
 > improvements: <https://github.com/sponsors/vszakats>
 
-> [!warning]
-> PGP signatures are deprecated and will be dropped in
-> [July 2026](https://github.com/curl/curl-for-win/discussions/93) in
-> favor of cosign, minisign and SSH signatures.
-
 # Reproducible, static, curl binaries for Linux, macOS and Windows
 
 - [Download](https://curl.se/windows/) our
-  `.zip` or `.tar.xz` packages,<br>PGP signed with:
-  [`BDCF 067D 3908 B272 7A4A 9487 67C1 0037 40BF 8DC2`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
-  <br>Also in [sigstore](https://sigstore.dev) with `cosign`, with
+  `.zip` or `.tar.xz` packages.<br>
+  Verify using [sigstore](https://sigstore.dev/), with
   [public key](https://raw.githubusercontent.com/curl/curl-for-win/main/cosign.pub.asc):
   ```
   -----BEGIN PUBLIC KEY-----
@@ -26,7 +20,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   6zvAK0vpHlwFsNRjOWnx/a2SSTN05EXwcKG86R6bCnQMglqmzYo3Jfe3VQ==
   -----END PUBLIC KEY-----
   ```
-  Verify using:
+
   ```sh
   cosign verify-blob --key cosign.pub.asc --bundle curl-8.16.0-win64-mingw.zip.sigstore curl-8.16.0-win64-mingw.zip
   ```
@@ -39,6 +33,12 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   [id](https://raw.githubusercontent.com/curl/curl-for-win/main/id-curl-for-win-sign.id):
   ```sh
   ssh-keygen -Y verify -n file -f id-curl-for-win-sign.id -I id-curl-for-win-sign -s curl-8.16.0-win64-mingw.zip.sig < curl-8.16.0-win64-mingw.zip
+  ```
+  or PGP, with:
+  [`BDCF 067D 3908 B272 7A4A 9487 67C1 0037 40BF 8DC2`](https://raw.githubusercontent.com/curl/curl-for-win/main/sign-pkg-public.asc)
+  ```sh
+  gpg --import sign-pkg-public.asc
+  gpg --verify curl-8.16.0-win64-mingw.zip.asc curl-8.16.0-win64-mingw.zip
   ```
 - Standalone `curl`, `trurl` tools and `libcurl` DLL. Static libraries
   included.
