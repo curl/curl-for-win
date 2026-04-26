@@ -20,7 +20,6 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   6zvAK0vpHlwFsNRjOWnx/a2SSTN05EXwcKG86R6bCnQMglqmzYo3Jfe3VQ==
   -----END PUBLIC KEY-----
   ```
-
   ```sh
   cosign verify-blob --key cosign.pub.asc --bundle curl-8.16.0-win64-mingw.zip.sigstore curl-8.16.0-win64-mingw.zip
   ```
