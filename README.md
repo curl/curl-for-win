@@ -111,7 +111,7 @@ Largefile     | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 libz          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 MultiSSL      |         |         |         |         |         |         |         |         |
 NativeCA      | ✓       | -       | -       | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
-NTLM          | ✓²      | ✓²      | ✓²      | ✓²      | ✓²      | ✓²      | ✓²      |         |
+NTLM          |         |         |         |         |         |         |         |         |
 PSL           | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 SPNEGO        | ✓       |         |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
 SSL           | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
@@ -137,14 +137,13 @@ mqtt/mqtts    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 pop3/pop3s    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 rtsp          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 scp/sftp      | ✓       | ✓       | ✓       | ✓       | ✓       |         |         |         |
-smb/smbs      | ✓²      | ✓²      | ✓²      | ✓²      | ✓²      | ✓²      | ✓²      |         |
+smb/smbs      |         |         |         |         |         |         |         |         |
 smtp/smtps    | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 telnet        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 tftp          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 ws/wss        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 
 - ¹: platform-dependent
-- ²: disabled by the next release 8.20.0
 - noh3: HTTP/2
 - mini: without brotli and zstd, with OS TLS backend (Schannel) if available
 - micro: without libssh2
