@@ -65,7 +65,8 @@ _VER="$1"
     fi
   elif [ "${_OS}" = 'win' ]; then
     # make sure not to detect this symbol in mingw-w64 v15-dev, to retain
-    # compatibility with older/stable mingw-w64 releases.
+    # compatibility with older/stable mingw-w64 releases:
+    #   https://mingw.googlesource.com/mingw-w64/+/250bb18f032236e7b26f42994437ac09f26b2872 (2026-04-09)
     options+=' -DHAVE_STRNDUP=0'
   elif [ "${_OS}" = 'linux' ] && [ "${_CPU}" = 'x64' ]; then
     # Add a `.hidden <func>` next to each `.globl <func>` one:
