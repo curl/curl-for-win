@@ -63,6 +63,10 @@ _VER="$1"
     if [ "${_OSVER}" -lt '1100' ]; then
       options+=' -DHAVE_STRTONUM=0'
     fi
+  elif [ "${_OS}" = 'win' ]; then
+    # make sure not to detect this symbol in mingw-w64 v15-dev, to retain
+    # compatibility with older/stable mingw-w64 releases.
+    options+=' -DHAVE_STRNDUP=0'
   elif [ "${_OS}" = 'linux' ] && [ "${_CPU}" = 'x64' ]; then
     # Add a `.hidden <func>` next to each `.globl <func>` one:
     find . -name '*-elf-x86_64.S' | sort | while read -r f; do
