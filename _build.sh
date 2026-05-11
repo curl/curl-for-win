@@ -1033,8 +1033,8 @@ build_single_target() {
     _CMAKE_GLOBAL+=" -DCMAKE_SYSTEM_PROCESSOR=${_machine}"
   fi
 
-  _CFLAGS_GLOBAL+=' -fno-omit-frame-pointer'
-  _CXXFLAGS_GLOBAL+=' -fno-omit-frame-pointer'
+  _CFLAGS_GLOBAL+=' -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer'
+  _CXXFLAGS_GLOBAL+=' -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer'
 
   # https://fedoraproject.org/wiki/Security_Features_Matrix
   # RISC-V: https://gcc.gnu.org/onlinedocs/gcc/RISC-V-Options.html
