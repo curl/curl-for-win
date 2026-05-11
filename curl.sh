@@ -175,13 +175,6 @@ _VER="$1"
     options+=' -DCURL_DISABLE_VERBOSE_STRINGS=OFF'
   fi
 
-  if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
-    options+=" -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
-    options+=" -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
-    options+=' -DZLIB_USE_STATIC_LIBS=ON'  # a no-op
-  else
-    options+=' -DCURL_ZLIB=OFF'
-  fi
   if [[ "${_DEPS}" = *'brotli'* ]] && [ -d "../brotli/${_PP}" ]; then
     options+=' -DCURL_BROTLI=ON'
     options+=" -DBROTLI_INCLUDE_DIR=${_TOP}/brotli/${_PP}/include"
@@ -190,6 +183,13 @@ _VER="$1"
     options+=' -DBROTLI_USE_STATIC_LIBS=ON'  # a no-op
   else
     options+=' -DCURL_BROTLI=OFF'
+  fi
+  if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
+    options+=" -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
+    options+=" -DZLIB_LIBRARY=${_TOP}/${_ZLIB}/${_PP}/lib/libz.a"
+    options+=' -DZLIB_USE_STATIC_LIBS=ON'  # a no-op
+  else
+    options+=' -DCURL_ZLIB=OFF'
   fi
   if [[ "${_DEPS}" = *'zstd'* ]] && [ -d "../zstd/${_PP}" ]; then
     options+=' -DCURL_ZSTD=ON'
@@ -208,18 +208,18 @@ _VER="$1"
     options+=' -DCURL_USE_OPENSSL=ON'
     options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     options+=' -DCURL_DISABLE_OPENSSL_AUTO_LOAD_CONFIG=ON'
-    if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
+    if [ "${_OPENSSL}" = 'awslc' ] || [ "${_OPENSSL}" = 'boringssl' ]; then
       if [ "${_OPENSSL}" = 'boringssl' ]; then
         options+=" -DBORINGSSL_VERSION=${BORINGSSL_VER_}"
-        options+=' -DHAVE_BORINGSSL=1 -DHAVE_AWSLC=0'  # fast-track configuration
+        options+=' -DHAVE_AWSLC=0 -DHAVE_BORINGSSL=1'  # fast-track configuration
       else
-        options+=' -DHAVE_BORINGSSL=0 -DHAVE_AWSLC=1'  # fast-track configuration
+        options+=' -DHAVE_AWSLC=1 -DHAVE_BORINGSSL=0'  # fast-track configuration
       fi
       options+=' -DUSE_ECH=ON'
       options+=' -DHAVE_SSL_SET1_ECH_CONFIG_LIST=1'  # fast-track configuration
       LIBS+=' -lpthread'
     else
-      options+=' -DHAVE_BORINGSSL=0 -DHAVE_AWSLC=0'  # fast-track configuration
+      options+=' -DHAVE_AWSLC=0 -DHAVE_BORINGSSL=0'  # fast-track configuration
     fi
     h3=1
     if [ "${_OPENSSL}" != 'libressl' ]; then

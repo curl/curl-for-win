@@ -16,7 +16,7 @@ extra=''
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   extra+=' mingw-w64-gcc-base'
   [[ "${CW_CONFIG:-}" != *'noWINE'* ]] && extra+=' wine'
-  if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+  if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
     extra+=' nasm'
   fi
   extra+=' py3-pefile'
@@ -25,7 +25,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   apk add --no-cache checksec-rs --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community/
   extra+=' compiler-rt'  # for llvm
   extra+=' linux-headers'  # for curl 'linux/tcp.h' and openssl 'secure-memory' feature
-  if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+  if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
     extra+=' libc++-static'  # for llvm
   fi
   if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then

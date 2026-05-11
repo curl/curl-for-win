@@ -30,7 +30,7 @@ _VER="$1"
     CPPFLAGS+=' -D_CLANG_DISABLE_CRT_DEPRECATION_WARNINGS'
   fi
 
-  if [ "${_OPENSSL}" = 'boringssl' ] || [ "${_OPENSSL}" = 'awslc' ]; then
+  if [ "${_OPENSSL}" = 'awslc' ] || [ "${_OPENSSL}" = 'boringssl' ]; then
     options+=' -DENABLE_OPENSSL=OFF'
     options+=' -DENABLE_BORINGSSL=ON'
     options+=" -DBORINGSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"

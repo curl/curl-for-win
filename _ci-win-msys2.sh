@@ -17,7 +17,7 @@ pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
 pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
   mingw-w64-"${env}"-go
 
-if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
   pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
     mingw-w64-"${env}"-nasm
 fi

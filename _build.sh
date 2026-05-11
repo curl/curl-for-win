@@ -198,7 +198,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   nghttp3          cmake
 #   ngtcp2           cmake
 #   openssl          proprietary
-#   boringssl/awslc  cmake
+#   awslc/boringssl  cmake
 #   libressl         cmake
 #   libssh           cmake
 #   libssh2          cmake-unity
@@ -1385,7 +1385,7 @@ build_single_target() {
     _CFLAGS_GLOBAL+=' -fno-ident'
   fi
 
-  # for boringssl/awslc
+  # for awslc/boringssl
   export _STRIP_BINUTILS=''
   if [ "${_OS}" = 'win' ] && [ "${_CC}" = 'llvm' ] && [ "${boringssl}" = '1' ]; then
     if [ "${_CPU}" = 'x64' ] || \

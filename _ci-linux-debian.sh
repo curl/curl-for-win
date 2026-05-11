@@ -42,7 +42,7 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   fi
   # https://tracker.debian.org/pkg/osslsigncode
   extra+=' osslsigncode'
-  if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+  if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
     [ "${CW_LLVM_MINGW_ONLY:-}" != '1' ] && extra+=' g++-mingw-w64-x86-64-win32'
     extra+=' nasm'
     if [[ "${CW_CONFIG:-}" = *'x86'* ]]; then
@@ -83,7 +83,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && extra+=" gcc${CW_GCCSUFFIX}-aarch64-linux-gnu"
     [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu"
     [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && extra+=" gcc${CW_GCCSUFFIX}-x86-64-linux-gnu"
-    if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+    if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
       extra+=" g++${CW_GCCSUFFIX}"
       [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && extra+=" g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
       [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && extra+=" g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
@@ -111,7 +111,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     # FIXME: workaround for glibc-llvm-riscv64 builds:
     if [[ "${CW_CONFIG:-}" != *'gcc'* && "${r64}" = 1 ]]; then
       extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu"
-      if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+      if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
         extra+=" g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
       fi
     fi

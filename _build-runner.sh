@@ -30,7 +30,7 @@ if [ ! -f .cw-initialized ]; then
       [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && \
       pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
         mingw-w64-"${env}"-go
-      if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+      if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
         pacman --noconfirm --ask 20 --noprogressbar --sync --needed \
           mingw-w64-"${env}"-nasm
       fi
@@ -43,7 +43,7 @@ if [ ! -f .cw-initialized ]; then
 
       if [ "${_DISTRO}" = 'debian' ]; then
         [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' golang'
-        if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+        if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
           extra+=' nasm'
         fi
         [[ "${CW_CONFIG:-}" = *'musl'* ]] && extra+=' musl musl-dev musl-tools'
@@ -56,7 +56,7 @@ if [ ! -f .cw-initialized ]; then
           zip xz-utils time jq secure-delete ${extra}
       elif [ "${_DISTRO}" = 'alpine' ]; then
         [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go'
-        if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+        if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
           extra+=' nasm'
         fi
         if [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
@@ -69,7 +69,7 @@ if [ ! -f .cw-initialized ]; then
       ;;
     Darwin*)
       [[ "${CW_CONFIG:-}" = *'boringssl'* ]] && extra+=' go'
-      if [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'awslc'* ]]; then
+      if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
         extra+=' nasm'
       fi
       [[ "${CW_CONFIG:-}" = *'linux'* ]] && extra+=' filosottile/musl-cross/musl-cross'
