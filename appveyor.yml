@@ -63,7 +63,8 @@ environment:
   DO_NOT_TRACK: '1'
 build_script:
   - sh: |
-      sudo rm -rf /etc/apt/sources.list.d/*.list
+      ls -l /etc/apt/sources.list.d
+      sudo find /etc/apt/sources.list.d -type f -delete -print  # delete google-chrome.sources and other undesired sources
       sudo apt-get -o Dpkg::Use-Pty=0 update
       sudo rm -f /var/lib/man-db/auto-update
       sudo apt-get -o Dpkg::Use-Pty=0 install -y --no-install-suggests --no-install-recommends podman uidmap
