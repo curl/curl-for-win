@@ -103,7 +103,7 @@ HSTS          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 HTTP2         | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |         |
 HTTP3         | ✓       | ✓       | ✓       |         |         |         |         |         |
 HTTPS-proxy   | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
-HTTPSRR       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
+HTTPSRR²      | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 IDN           | ✓       |         | ✓       | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
 IPv6          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 Kerberos      | ✓       |         |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
@@ -144,6 +144,7 @@ tftp          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 ws/wss        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 
 - ¹: platform-dependent
+- ²: experimental
 - noh3: HTTP/2
 - mini: without brotli and zstd, with OS TLS backend (Schannel) if available
 - micro: without libssh2
