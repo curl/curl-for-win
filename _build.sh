@@ -483,7 +483,7 @@ EOF
   fi
 fi
 
-# Decrypt package signing minisign key
+# Decrypt package signing SSH key
 if command -v age >/dev/null 2>&1 &&
    command -v ssh-keygen >/dev/null 2>&1; then
   export SIGN_SSH_KEY; SIGN_SSH_KEY='id-curl-for-win-sign.key'
