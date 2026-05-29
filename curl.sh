@@ -282,6 +282,10 @@ _VER="$1"
     options+=" -DNGTCP2_INCLUDE_DIR=${_TOP}/ngtcp2/${_PPS}/include"
     options+=" -DNGTCP2_LIBRARY=${_TOP}/ngtcp2/${_PPS}/lib/libngtcp2.a"
     options+=' -DNGTCP2_USE_STATIC_LIBS=ON'
+
+    if [ -n "${_OPENSSL}" ] && [ -d "../${_OPENSSL}/${_PP}" ]; then
+      [ "${CURL_VER_}" != '8.20.0' ] && options+=' -DUSE_PROXY_HTTP3=ON'  # experimental
+    fi
   else
     options+=' -DUSE_NGTCP2=OFF'
   fi
