@@ -123,7 +123,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-linux-glibc-debian-testing-llvm'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -160,7 +160,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-linux-glibc-debian-testing-gcc'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -198,7 +198,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-linux-glibc-debian-stable-llvm'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -235,7 +235,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-linux-glibc-debian-stable-gcc'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -278,7 +278,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-linux-musl-debian-testing-llvm'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -315,7 +315,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-linux-musl-debian-testing-gcc'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -360,7 +360,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-linux-musl-debian-stable-llvm'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -397,7 +397,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-linux-musl-debian-stable-gcc'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -440,7 +440,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-linux-musl-alpine-llvm-x86_64'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -476,7 +476,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-linux-musl-alpine-gcc-x86_64'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -503,7 +503,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-linux-musl-from-mac'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -539,7 +539,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-macos-universal-clang'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -568,7 +568,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-macos-universal-llvm'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -598,7 +598,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-macos-gcc-arm64'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -630,7 +630,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-windows-llvm-from-mac'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -675,7 +675,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-windows-llvm'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -713,7 +713,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: 'curl-windows-gcc-x64'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
