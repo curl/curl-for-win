@@ -392,9 +392,8 @@ _VER="$1"
     # hash, breaking reproducibility.
     hash="$(git -C .. log -1 '--pretty=format:%h' -- "${patch}")"
     if [ -n "${hash}" ]; then
-      patchstamp="https://github.com/curl/curl-for-win/blob/${hash}/${patch}"
       # Appearing as: "security patched: https://github.com/curl/curl-for-win/blob/95a0e6df/curl.patch"
-      [ -n "${patchstamp}" ] && options+=" -DCURL_PATCHSTAMP=${patchstamp}"
+      options+=" -DCURL_PATCHSTAMP=https://github.com/curl/curl-for-win/blob/${hash}/${patch}"
     fi
   fi
 
