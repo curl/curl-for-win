@@ -25,7 +25,7 @@ branches:
     - 'test-mini'
 # https://www.appveyor.com/docs/build-environment/#build-worker-images
 # https://www.appveyor.com/docs/linux-images-software/
-image: 'Ubuntu2204'
+image: 'Ubuntu2404'
 clone_depth: 8
 build:
   verbosity: 'detailed'
@@ -64,7 +64,7 @@ environment:
 build_script:
   - sh: |
       ls -l /etc/apt/sources.list.d
-      sudo find /etc/apt/sources.list.d -type f -delete -print  # delete google-chrome.sources and other undesired sources
+      sudo find /etc/apt/sources.list.d -type f -not -name 'ubuntu.sources' -delete -print  # delete google-chrome.sources and other undesired sources
       sudo apt-get -o Dpkg::Use-Pty=0 update
       sudo rm -f /var/lib/man-db/auto-update
       sudo apt-get -o Dpkg::Use-Pty=0 install -y --no-install-suggests --no-install-recommends podman slirp4netns uidmap
