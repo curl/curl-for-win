@@ -116,7 +116,7 @@ echo "export OCI_IMAGE_ALPINE_LATEST='${name}:${tag}@${digest}' # v${version}"
 
 if false; then
   image="$(curl --disable --user-agent '' --silent --fail --show-error \
-    'https://www.appveyor.com/docs/build-environment/' \
+    'https://www.appveyor.com/docs/linux-images-software/' \
     | grep -a -o -E 'Ubuntu[0-9]{4}' | sort | tail -n -1)"
 
   echo; echo "image: ${image}"
