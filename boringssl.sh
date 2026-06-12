@@ -48,9 +48,8 @@
 # - AWS-LC force-sets _WIN32_WINNT to _WIN32_WINNT_WIN7. The Windows target
 #   should be up to the builder and not something for the project to set
 #   unconditionally. If the selected version is too old, the build should
-#   bail out. Either way, AWS-LC requires Win7, which is higher than the
-#   Vista curl-for-win guarantees. But only for MinGW builds, as a way
-#   to bump up the default, possibly as a workaround.
+#   bail out. This is only done for MinGW GCC builds, as a way to bump up
+#   the default, possibly as a workaround.
 # - AWS-LC: symbols are not hidden, making _info-bin.sh fail.
 # - AWS-LC: requires SSE2 for x86 builds with ASM enabled.
 # - AWS-LC: fails to build on mac-gcc-arm64.
@@ -129,8 +128,10 @@ _VER="$1"
         CPPFLAGS+=' -D_CLANG_DISABLE_CRT_DEPRECATION_WARNINGS'
       fi
 
-      # Patch out to avoid redefinition errors
-      sed -i.bak 's/-D_WIN32_WINNT=_WIN32_WINNT_WIN7//g' ./CMakeLists.txt
+      # Patch out to avoid redefinition errors (clang not affected)
+      if [ "${_CC}" = 'gcc' ]; then
+        sed -i.bak 's/-D_WIN32_WINNT=_WIN32_WINNT_WIN7//g' ./CMakeLists.txt
+      fi
     else
       # Patch the build to omit debug info. This results in 50% smaller footprint
       # for each ${_BLDDIR}. As of llvm 14.0.6, llvm-strip does an imperfect job
