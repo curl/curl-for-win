@@ -26,7 +26,7 @@ env:
 jobs:
   linters:
     name: 'linters'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-26.04'
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -56,7 +56,7 @@ jobs:
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           export SHELLCHECK_OPTS='--exclude=1090,1091 --enable=avoid-nullary-conditions,deprecate-which'
           actionlint --version
-          actionlint .github/workflows/*.yml
+          actionlint --ignore ubuntu-26.04 .github/workflows/*.yml
 
       - name: 'shellcheck GHA'
         run: |
@@ -96,7 +96,7 @@ jobs:
 
   linux-glibc-debian-testing-llvm:
     name: 'linux-glibc-debian-testing-llvm'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-26.04'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -132,7 +132,7 @@ jobs:
 
   linux-glibc-debian-testing-gcc:
     name: 'linux-glibc-debian-testing-gcc'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-26.04'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -169,7 +169,7 @@ jobs:
 
   linux-glibc-debian-stable-llvm:
     name: 'linux-glibc-debian-stable-llvm'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-26.04'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -207,7 +207,7 @@ jobs:
 
   linux-glibc-debian-stable-gcc:
     name: 'linux-glibc-debian-stable-gcc'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-26.04'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -244,7 +244,7 @@ jobs:
 
   linux-musl-debian-testing-llvm:
     name: 'linux-musl-debian-testing-llvm'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-26.04'
     timeout-minutes: 30
     environment: 'production'
     steps:
@@ -287,7 +287,7 @@ jobs:
 
   linux-musl-debian-testing-gcc:
     name: 'linux-musl-debian-testing-gcc'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-26.04'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -324,7 +324,7 @@ jobs:
 
   linux-musl-debian-stable-llvm:
     name: 'linux-musl-debian-stable-llvm'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-26.04'
     timeout-minutes: 30
     environment: 'production'
     steps:
@@ -369,7 +369,7 @@ jobs:
 
   linux-musl-debian-stable-gcc:
     name: 'linux-musl-debian-stable-gcc'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-26.04'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -406,7 +406,7 @@ jobs:
 
   linux-musl-alpine-llvm:
     name: 'linux-musl-alpine-llvm'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-26.04'
     timeout-minutes: 30
     environment: 'production'
     steps:
@@ -449,7 +449,7 @@ jobs:
 
   linux-musl-alpine-gcc:
     name: 'linux-musl-alpine-gcc'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-26.04'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -639,7 +639,7 @@ jobs:
 
   win-llvm:
     name: 'win-llvm'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-26.04'
     timeout-minutes: 30
     environment: 'production'
     steps:
@@ -684,7 +684,7 @@ jobs:
 
   win-gcc:
     name: 'win-gcc'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-26.04'
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
