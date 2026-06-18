@@ -590,7 +590,7 @@ jobs:
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         run: |
-          export CW_CCSUFFIX='-15'
+          export CW_CCSUFFIX='-16'
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-mac-gcc-a64"
           export CW_REVISION="${GITHUB_SHA}"
           sh -c ./_ci-mac-homebrew.sh
