@@ -112,7 +112,7 @@ Largefile     | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 libz          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 MultiSSL      |         |         |         |         |         |         |         |         |
 NativeCA      | ✓       | -       | -       | ✓¹      | ✓¹      | ✓¹      | ✓¹      | ✓¹      |
-proxy-HTTP3²³ | ✓       | ✓       | ✓       |         |         |         |         |         |
+proxy-HTTP3²  | ✓       | ✓       | ✓       |         |         |         |         |         |
 PSL           | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
 SPNEGO        | ✓       |         |         | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
 SSL           | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
@@ -144,7 +144,6 @@ ws/wss        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 
 - ¹: platform-dependent
 - ²: experimental
-- ³: expected in upcoming release 8.21.0
 - noh3: HTTP/2
 - mini: without brotli and zstd, with OS TLS backend (Schannel) if available
 - micro: without libssh2
