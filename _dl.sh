@@ -46,7 +46,7 @@ cat <<EOF
   {
     "name": "psl",
     "url": "https://raw.githubusercontent.com/publicsuffix/list/{commit}/public_suffix_list.dat",
-    "bumpdays": 90,
+    "bumpdays": 60,
     "gittar": "1"
   },
   {
