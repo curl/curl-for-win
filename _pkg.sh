@@ -6,7 +6,7 @@
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
-cd "$(dirname "$0")"
+cd -- "$(dirname "$0")"
 
 mode="${2:-}"
 
@@ -31,17 +31,17 @@ if [ "${_NAM}" != "${_UNIPKG}" ]; then
     [ -d "${_DST}/bin" ]      && rsync --archive --update "${_DST}/bin"     "${unipkg}"
     [ -d "${_DST}/include" ]  && rsync --archive --update "${_DST}/include" "${unipkg}"
     if [ "${_NAM}" = 'libssh2' ]; then
-      mkdir -p "${unipkg}/dep/${_NAM}"
+      mkdir -p -- "${unipkg}/dep/${_NAM}"
       rsync --archive --update "${_DST}/docs" "${unipkg}/dep/${_NAM}"
     fi
     [ -d "${_DST}/lib" ]      && rsync --archive --update "${_DST}/lib" "${unipkg}"
     if [ "${_NAM}" = 'curl' ]; then
-      cp -f -p "${_DST}"/*.* "${unipkg}"
+      cp -f -p -- "${_DST}"/*.* "${unipkg}"
       rsync --archive --update "${_DST}/docs" "${unipkg}"
     else
       _NAM_DEP="${unipkg}/dep/${_NAM}"
-      mkdir -p "${_NAM_DEP}"
-      cp -f -p "${_DST}"/*.* "${_NAM_DEP}"
+      mkdir -p -- "${_NAM_DEP}"
+      cp -f -p -- "${_DST}"/*.* "${_NAM_DEP}"
     fi
   }
 fi
@@ -68,7 +68,7 @@ create_pkg() {
   _FLS="$(dirname "$0")/_files"
 
   (
-    cd "${_DST}/.."
+    cd -- "${_DST}/.."
     case "${_HOST}" in
       win) find "${_BAS}" -exec attrib +A -R -- '{}' \;
     esac
@@ -99,7 +99,7 @@ create_pkg() {
     *)       TZ=UTC stat -c '%n: %s bytes %y' "${_pkg}";;
   esac
 
-  sha256sum --tag "${_pkg}" | tee "${_pkg}.txt" | tee -a hashes.txt
+  sha256sum --tag -- "${_pkg}" | tee "${_pkg}.txt" | tee -a hashes.txt
 
   # Sign production releases, or when explicitly asked to do so (e.g. daily builds)
   if [ -z "${_suf}" ] || \
@@ -113,7 +113,7 @@ create_pkg() {
 
 if [ "${CW_NOPKG:-}" = '1' ]; then
   if [ "${CW_PKG_NODELETE:-}" != '1' ]; then
-    rm -r -f "${_DST:?}"
+    rm -r -f -- "${_DST:?}"
   fi
   exit
 fi
@@ -150,5 +150,5 @@ else
   if [ "${_NAM}" = "${_UNIPKG}" ] && [ "${CW_PKG_NODELETE:-}" = '1' ]; then
     exit
   fi
-  rm -r -f "${_DST:?}"
+  rm -r -f -- "${_DST:?}"
 fi

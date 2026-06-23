@@ -5,8 +5,8 @@
 
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
-gpgdir='.cw-gpg'; rm -r -f "${gpgdir}"; mkdir -m 700 "${gpgdir}"; gpgdir="$(pwd)/${gpgdir}"
-trap 'rm -r -f "${gpgdir:?}"' EXIT HUP INT TERM
+gpgdir='.cw-gpg'; rm -r -f -- "${gpgdir}"; mkdir -m 700 -- "${gpgdir}"; gpgdir="$(pwd)/${gpgdir}"
+trap 'rm -r -f -- "${gpgdir:?}"' EXIT HUP INT TERM
 
 dependencies_json() {
 cat <<EOF
@@ -547,7 +547,7 @@ bump() {
 
 if [ "${1:-}" = 'bump' ]; then
   bump
-  rm -r -f "${gpgdir:?}"
+  rm -r -f -- "${gpgdir:?}"
   exit
 fi
 
@@ -589,7 +589,7 @@ live_xt() {
     if [ -n "${2:-}" ]; then
       echo "${hash}" | grep -q -a -F -w -- "${2:-}" || exit 1
     fi
-    rm -r -f "${pkg:?}"; mkdir "${pkg}"
+    rm -r -f -- "${pkg:?}"; mkdir -- "${pkg}"
     if [ "${pkg}" = 'certdata' ]; then
       mv pkg.bin "${pkg}/${_CERTDATA}"  # It is a single file in this case
     else
@@ -743,7 +743,7 @@ if [ "${_OS}" = 'win' ] && \
   if [ -n "${name}" ]; then
     CW_GET='' live_dl "${name}" "${vers}"
     CW_GET='' live_xt "${name}" "${hash}"
-    mv "${name}" 'llvm-mingw'
+    mv -- "${name}" 'llvm-mingw'
     echo "${vers}" > 'llvm-mingw/version.txt'
   fi
 fi
@@ -909,7 +909,7 @@ if [[ "${_DEPS}" = *'libssh2'* ]]; then
         --retry-all-errors --retry 10 \
         --header 'X-GitHub-Api-Version: 2022-11-28' --output "${tmp}"
       rev="$(jq --raw-output '.sha' "${tmp}")"
-      rm -r -f "${tmp}"
+      rm -r -f -- "${tmp}"
       [ -n "${rev}" ] && LIBSSH2_REV_="${rev}"
       url="https://github.com/libssh2/libssh2/archive/${LIBSSH2_REV_}.tar.gz"
       echo "${url}" > '__libssh2.url'
@@ -939,7 +939,7 @@ if [[ "${_DEPS}" = *'curl'* ]]; then
         --retry-all-errors --retry 10 \
         --header 'X-GitHub-Api-Version: 2022-11-28' --output "${tmp}"
       rev="$(jq --raw-output '.sha' "${tmp}")"
-      rm -r -f "${tmp}"
+      rm -r -f -- "${tmp}"
       [ -n "${rev}" ] && CURL_REV_="${rev}"
       url="https://github.com/curl/curl/archive/${CURL_REV_}.tar.gz"
       echo "${url}" > '__curl.url'
@@ -965,7 +965,7 @@ if [[ "${_DEPS}" = *'trurl'* ]]; then
         --retry-all-errors --retry 10 \
         --header 'X-GitHub-Api-Version: 2022-11-28' --output "${tmp}"
       rev="$(jq --raw-output '.sha' "${tmp}")"
-      rm -r -f "${tmp}"
+      rm -r -f -- "${tmp}"
       [ -n "${rev}" ] && TRURL_REV_="${rev}"
       url="https://github.com/curl/trurl/archive/${TRURL_REV_}.tar.gz"
       echo "${url}" > '__trurl.url'
@@ -992,4 +992,4 @@ if [ "${_OS}" = 'win' ] && \
   ./osslsigncode.sh "${OSSLSIGNCODE_VER_}"
 fi
 
-rm -r -f "${gpgdir:?}"
+rm -r -f -- "${gpgdir:?}"

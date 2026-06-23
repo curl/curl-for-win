@@ -72,7 +72,7 @@ _VER="$1"
     # Add a `.hidden <func>` next to each `.globl <func>` one:
     find . -name '*-elf-x86_64.S' | sort | while read -r f; do
       awk '/^\.globl\t/ {s=$0; sub(/^\.globl/, ".hidden", s); print s}; {print}' < "${f}" > "${f}.tmp"
-      mv "${f}.tmp" "${f}"
+      mv -- "${f}.tmp" "${f}"
     done
   fi
 

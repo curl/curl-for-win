@@ -18,8 +18,8 @@ mkdir -m 700 workdir
   # TODO: Switch to ECC once OpenSSL got support for deterministic ECDSA nonces
   ../mk-cert-code.sh "${name}" "${year}" rsa
 
-  cp -p "${name}_${year}-ca-cert.pem"      ../curl-for-win-ca-cert.pem
-  cp -p "${name}_${year}-code.p12.age.asc" ../sign-code.p12.asc
+  cp -p -- "${name}_${year}-ca-cert.pem"      ../curl-for-win-ca-cert.pem
+  cp -p -- "${name}_${year}-code.p12.age.asc" ../sign-code.p12.asc
 
   # 2. GPG package signing key
 
@@ -27,8 +27,8 @@ mkdir -m 700 workdir
   mail="${name}@localhost"
   ../mk-gpg-sign.sh '' "${name}" "${mail}"
 
-  cp -p "${mail}-sign-public.asc"          ../sign-pkg-public.asc
-  cp -p "${mail}-sign-private.gpg.age.asc" ../sign-pkg.gpg.asc
+  cp -p -- "${mail}-sign-public.asc"          ../sign-pkg-public.asc
+  cp -p -- "${mail}-sign-private.gpg.age.asc" ../sign-pkg.gpg.asc
 
   # 3. minisign package signing key
 
@@ -36,8 +36,8 @@ mkdir -m 700 workdir
   year='2026'
   ../mk-minisign.sh "${name}" "${year}"
 
-  cp -p "${name}_${year}-minisign.pub"         ../minisign.pub
-  cp -p "${name}_${year}-minisign.key.age.asc" ../minisign.key.asc
+  cp -p -- "${name}_${year}-minisign.pub"         ../minisign.pub
+  cp -p -- "${name}_${year}-minisign.key.age.asc" ../minisign.key.asc
 
   # 4. package blob cosign key pair
 
@@ -45,8 +45,8 @@ mkdir -m 700 workdir
   year='2025'
   ../mk-cosign.sh "${name}" "${year}"
 
-  cp -p "${name}_${year}-cosign.pub"         ../cosign.pub.asc
-  cp -p "${name}_${year}-cosign.key.age.asc" ../cosign.key.asc
+  cp -p -- "${name}_${year}-cosign.pub"         ../cosign.pub.asc
+  cp -p -- "${name}_${year}-cosign.key.age.asc" ../cosign.key.asc
 
   # 5. SSH package signing key
 

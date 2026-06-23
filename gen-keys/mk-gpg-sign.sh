@@ -70,7 +70,7 @@ fp="$(cat "${master}-id.txt")"; rm -f -- "${master}-id.txt"
 echo "MY_GPG_SIGN_KEY=${fp}"
 
 # Save the automatically generated revocation certificate
-cp -p "${GNUPGHOME}/openpgp-revocs.d/${fp}.rev" "${master}-revocation.asc"
+cp -p -- "${GNUPGHOME}/openpgp-revocs.d/${fp}.rev" "${master}-revocation.asc"
 
 qrencode --type png "OPENPGP4FPR:${fp}" --output "${master}-public-qr-fingerprint.png"
 optipng -silent -preserve -fix -strip all -o3 "${master}-public-qr-fingerprint.png"

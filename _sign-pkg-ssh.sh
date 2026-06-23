@@ -6,7 +6,7 @@
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
-cd "$(dirname "$0")"
+cd -- "$(dirname "$0")"
 
 # Create signature for package
 if [ -n "${SIGN_SSH_KEY:-}" ] && \
@@ -17,6 +17,6 @@ if [ -n "${SIGN_SSH_KEY:-}" ] && \
   unset DISPLAY
   export SSH_ASKPASS_REQUIRE='force'
   export SSH_ASKPASS; SSH_ASKPASS="$(pwd)/_sign-pkg-ssh-askpass.sh"
-  rm -f "${file}".sig  # to avoid interactive question
+  rm -f -- "${file}".sig  # to avoid interactive question
   ssh-keygen -Y sign -n 'file' -f "${SIGN_SSH_KEY}" "${file}"
 fi

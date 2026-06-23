@@ -46,7 +46,7 @@ while [ -n "${1:-}" ]; do
        [ "${binutils}" = 'old' ]; then
       ff="$(readlink -f "${f}")"  # requires macOS Monterey
       (
-        cd "${tmp}"
+        cd -- "${tmp}"
         "${AR}" x "${ff}"
       )
     else
@@ -55,12 +55,12 @@ while [ -n "${1:-}" ]; do
     for o in "${tmp}"/*; do
       n="$(printf '%s' "${o}" | sed -E \
         -e 's/(\.cc\.obj|\.c\.obj|\.obj)$/.o/g')"
-      [ "${o}" != "${n}" ] && mv -n "${o}" "${n}"
+      [ "${o}" != "${n}" ] && mv -n -- "${o}" "${n}"
     done
     # shellcheck disable=SC2086
     [ -n "${strip}" ] && "${strip}" ${_STRIPFLAGS_LIB:-} "${tmp}"/*
-    rm "${f}"
+    rm -- "${f}"
     find "${tmp}" -type f | sort | tr '\n' '\0' | xargs -0 "${AR}" "${_ar_opt}" "${f}"
-    rm -r -f "${tmp:?}"
+    rm -r -f -- "${tmp:?}"
   fi
 done

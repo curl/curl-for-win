@@ -6,7 +6,7 @@
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
-cd "$(dirname "$0")"
+cd -- "$(dirname "$0")"
 
 # Create signature for package
 if [ -n "${SIGN_PKG_KEY_ID:-}" ] && \

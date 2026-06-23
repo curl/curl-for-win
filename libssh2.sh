@@ -93,7 +93,7 @@ _VER="$1"
     else
       for file in docs/*; do
         if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -E '(\.|/Makefile$)'; then
-          cp -f -p "${file}" "${_DST}/${file}.txt"
+          cp -f -p -- "${file}" "${_DST}/${file}.txt"
         fi
       done
     fi

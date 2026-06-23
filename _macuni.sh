@@ -26,8 +26,8 @@ if [ ! -f "${_ref}" ]; then
   # This can happen with CW_BLD partial builds.
   echo '! WARNING: curl build missing. Skip packaging.'
 else
-  rm -r -f "${_UNIPKG:?}"
-  mkdir -p "${_UNIPKG}"
+  rm -r -f -- "${_UNIPKG:?}"
+  mkdir -p -- "${_UNIPKG}"
   unipkg="${_UNIPKG}"
   rm -r -f __dirs__.txt
   find . -name '__macuni__.txt' | sort -u | while read -r f; do
@@ -35,7 +35,7 @@ else
     echo "${d}" >> __dirs__.txt
     rsync --archive --update "${d}/" "${unipkg}"
   done
-  rm -r -f "${unipkg}/__macuni__.txt"
+  rm -r -f -- "${unipkg}/__macuni__.txt"
   # Is it possible to merge .map files? Exclude them from universal packages for now.
   find "${unipkg}" -name '*.map' -delete
   # Walk through all executables and libraries we want to merge into universal.

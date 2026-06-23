@@ -14,11 +14,11 @@ if [ -z "${_PKGOS:-}" ] || \
   exit 1
 fi
 
-sort -u "${_BLD}" > "${_BLD}.sorted"
-mv -f "${_BLD}.sorted" "${_BLD}"
+sort -u -- "${_BLD}" > "${_BLD}.sorted"
+mv -f -- "${_BLD}.sorted" "${_BLD}"
 
-sort -u "${_URLS}" > "${_URLS}.sorted"
-mv -f "${_URLS}.sorted" "${_URLS}"
+sort -u -- "${_URLS}" > "${_URLS}.sorted"
+mv -f -- "${_URLS}.sorted" "${_URLS}"
 
 if ! ls ./*-*-"${_PKGOS}"*.* >/dev/null 2>&1; then
   echo '! WARNING: Nothing to deploy.'
@@ -42,7 +42,7 @@ cat "${_URLS}"
 find . -maxdepth 1 -type f -name "*-*-${_PKGOS}*.*" | sort | while read -r f; do
   # shellcheck disable=SC2001
   new="$(echo "${f}" | sed 's/-built-on-[^.]*//g')"
-  [ "${f}" = "${new}" ] || mv -f "${f}" "${new}"
+  [ "${f}" = "${new}" ] || mv -f -- "${f}" "${new}"
 done
 
 sed 's/-built-on-[^.]*//g' hashes.txt | sort > hashes.txt.all
@@ -61,7 +61,7 @@ _ALL="all-${_PKGOS}-${CURL_VER_}${_REVSUFFIX}${_FLAV}.zip"
 TZ=UTC zip --quiet -0 --strip-extra --names-stdin - > "${_ALL}"
 TZ=UTC zip --latest-time "${_ALL}"
 
-sha256sum --tag "${_ALL}" | tee "${_ALL}.txt"
+sha256sum --tag -- "${_ALL}" | tee "${_ALL}.txt"
 touch -c -r "${_ALL}" "${_ALL}.txt"
 
 ./_sign-pkg.sh "${_ALL}"
@@ -88,7 +88,7 @@ EOF
     # ssh-keyscan silly.haxx.se
     readonly host_key='silly.haxx.se ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFVVUP9dpjNl2qbHkDYMDS+cTOfxFytjkC04Oh9RNJBg'
     if [ ! -f "${HOME}/.ssh/known_hosts" ]; then
-      [ -d "${HOME}/.ssh" ] || mkdir -m 700 "${HOME}/.ssh"
+      [ -d "${HOME}/.ssh" ] || mkdir -m 700 -- "${HOME}/.ssh"
       ls -l "${HOME}/.ssh"
       install -m 600 /dev/null "${HOME}/.ssh/known_hosts"
     fi

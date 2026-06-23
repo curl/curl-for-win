@@ -55,7 +55,7 @@ _VER="$1"
 
   cp -f -p "./trurl${BIN_EXT}" "${_PP}/bin/"
   if [ "${CW_MAP}" = '1' ]; then
-    cp -f -p "${_map_name}" "${_PP}"/bin/
+    cp -f -p -- "${_map_name}" "${_PP}"/bin/
   fi
 
   # Make steps for determinism
@@ -81,7 +81,7 @@ _VER="$1"
   # Execute trurl and compiled-in dependency code. This is not secure.
   out="../trurl-version-${_CPUPUB}.txt"
   ${_RUN_BIN} "${bin}" --version | sed 's/\r//g' | tee "${out}"
-  [ -s "${out}" ] || rm -f "${out}"
+  [ -s "${out}" ] || rm -f -- "${out}"
 
   if [ "${CW_TRURL_TEST:-}" = '1' ] && \
      [ "${_RUN_BIN}" != 'true' ]; then

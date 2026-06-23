@@ -20,5 +20,5 @@ age-keygen      --output="${key}.age.key"
 age --encrypt --identity="${key}.age.key" --armor "${key}" > "${key}.age.asc"
 
 if age --decrypt --identity="${key}.age.key" "${key}.age.asc" | cmp --quiet -- "${key}" -; then
-  cp -p "${key}.age.asc" "$2"
+  cp -p -- "${key}.age.asc" "$2"
 fi

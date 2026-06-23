@@ -206,7 +206,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #   trurl            cmake gnumake
 #   osslsigncode     cmake
 
-cd "$(dirname "$0")"
+cd -- "$(dirname "$0")"
 
 export LC_ALL=C
 export LC_MESSAGES=C
@@ -548,7 +548,7 @@ bld() {
     ${my_time} "./${pkg}.sh" "$1" "${pkgori}"
 
     if [ "${CW_DEV_MOVEAWAY:-}" = '1' ] && [ "${pkg}" != "${pkgori}" ]; then
-      mv -n "${pkgori}" "${pkg}"
+      mv -n -- "${pkgori}" "${pkg}"
     fi
   fi
 }
@@ -1638,8 +1638,8 @@ build_single_target() {
 
   # Unified, per-target package: Initialize
   export _UNIPKG="curl-${CURL_VER_}${_REVSUFFIX}${_PKGSUFFIX}${_FLAV}"
-  rm -r -f "${_UNIPKG:?}"
-  mkdir -p "${_UNIPKG}"
+  rm -r -f -- "${_UNIPKG:?}"
+  mkdir -p -- "${_UNIPKG}"
   export _UNIMFT="${_UNIPKG}/BUILD-MANIFEST.txt"
 
   # Detect versions
@@ -1974,6 +1974,6 @@ if [ "${CW_PKG_FLATTEN:-}" = '1' ]; then
     -name 'libcurl*.dylib' -o \
     -name 'libcurl.so*'    \) \
     | sort | while read -r f; do
-    mv "${f}" "$(dirname "${f}")/.."
+    mv -- "${f}" "$(dirname "${f}")/.."
   done
 fi

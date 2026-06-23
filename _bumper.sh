@@ -6,7 +6,7 @@
 # shellcheck disable=SC3040,SC2039
 set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
-cd "$(dirname "$0")"
+cd -- "$(dirname "$0")"
 
 if ! command -v hxclean >/dev/null 2>&1; then
   case "$(uname)" in

@@ -580,12 +580,12 @@ _VER="$1"
     # Copy suffix-less files (not directories), with a .txt suffix added to them
     for file in docs/*; do
       if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -F '.'; then
-        cp -f -p "${file}" "${_DST}/${file}.txt"
+        cp -f -p -- "${file}" "${_DST}/${file}.txt"
       fi
     done
     for file in docs/libcurl/*; do
       if [ -f "${file}" ] && echo "${file}" | grep -q -a -v -F '.'; then
-        cp -f -p "${file}" "${_DST}/${file}.txt"
+        cp -f -p -- "${file}" "${_DST}/${file}.txt"
       fi
     done
     # Copy examples
