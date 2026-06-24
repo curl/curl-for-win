@@ -30,13 +30,13 @@ _VER="$1"
     # The generator above is including the local PSL filename in the output.
     # libpsl is then making an attempt to load this filename at runtime as-is
     # and loading its content if its timestamp is newer than the embedded one.
-    # This is terrible idea in many use cases, including this one, because:
-    # - the filename is relative one.
+    # This is a terrible idea in many use-cases, including this one, because:
+    # - the filename is a relative one.
     # - this is loaded on the end user's machine, relative to their current
     #   working directory.
     # - which is by good chance world-writable, and for sure without any
     #   guarantees for protection.
-    # - there is no universal location on disk that is not world-writable.
+    # - there is no universal location on disk that is non-world-writable.
     # - leaks this internal filename into the final binary.
     # Similar case to OpenSSL configurations and CA bundles loaded from
     # world-writable, or arbitrary places on disk (such as PATH), on Windows.
@@ -48,11 +48,6 @@ _VER="$1"
       echo "! Error: Our local PSL database filename is leaking into the libpsl code."
       exit 1
     fi
-    # Fix to use the Windows-native stat function to avoid mingw-w64 v13
-    # mapping the POSIX 'stat' one used in libpsl to an intrinsic and breaking
-    # interoperability with earlier mingw-w64 versions.
-    # This shall really be fixed upstream in libpsl.
-    [ "${_OS}" = 'win' ] && echo '#define stat _stati64' >> "${gencsrc}"
   fi
 
   mkdir -p "${_BLDDIR}"
