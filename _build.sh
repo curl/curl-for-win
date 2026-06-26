@@ -1821,7 +1821,8 @@ build_single_target() {
           "${_CONFIG}" != *'nohttp'* || \
           "${_CONFIG}" != *'noverbose'* ]]; then
 
-      _CONFIG+='-zero-osnotls-osnoidn-nohttp-noverbose-nocurltool-CURLNOPKG'
+      # CURL_FOR_TRURL disables: shared libcurl, tests (if enabled), packaging
+      _CONFIG+='-zero-osnotls-osnoidn-nohttp-noverbose-nocurltool-CURL_FOR_TRURL'
 
       _PKGDIR="_${_CPU}-${_OS}-${_CRT}-for-trurl"
       _PKGDIRS="${_PKGDIR}"

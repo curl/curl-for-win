@@ -46,7 +46,7 @@ _VER="$1"
     options+=' -DENABLE_UNICODE=ON'
   fi
 
-  if [[ "${_CONFIG}" = *'CURLNOPKG'* ]]; then
+  if [[ "${_CONFIG}" = *'CURL_FOR_TRURL'* ]]; then
     options+=' -DBUILD_SHARED_LIBS=OFF'
   else
     options+=' -DBUILD_SHARED_LIBS=ON'
@@ -427,11 +427,11 @@ _VER="$1"
   TZ=UTC cmake --build "${_BLDDIR}" --verbose
   TZ=UTC cmake --install "${_BLDDIR}" --prefix "${_PP}"
 
+  [[ "${_CONFIG}" = *'CURL_FOR_TRURL'* ]] && exit
+
   if [[ "${_CONFIG}" = *'curltests'* ]]; then
     TZ=UTC cmake --build "${_BLDDIR}" --target tt
   fi
-
-  [[ "${_CONFIG}" = *'CURLNOPKG'* ]] && exit
 
   # Manual copy to DESTDIR
 
