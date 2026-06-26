@@ -428,7 +428,7 @@ _VER="$1"
   TZ=UTC cmake --install "${_BLDDIR}" --prefix "${_PP}"
 
   if [[ "${_CONFIG}" = *'curltests'* ]]; then
-    TZ=UTC cmake --build "${_BLDDIR}" --target testdeps
+    TZ=UTC cmake --build "${_BLDDIR}" --target tt
   fi
 
   [[ "${_CONFIG}" = *'CURLNOPKG'* ]] && exit
