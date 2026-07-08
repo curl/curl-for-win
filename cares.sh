@@ -8,7 +8,7 @@
 #   example. The issue seems to be that CARES_EXTERN is set unconditionally
 #   to default visibility and -fvisibility=hidden does not override that.
 # - Compiler warnings when building for macOS with GCC.
-# - Bad cmake configure performance.
+# - Poor cmake configure performance.
 
 # shellcheck disable=SC3040,SC2039
 set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
