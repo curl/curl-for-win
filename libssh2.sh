@@ -19,6 +19,10 @@ _VER="$1"
   LIBS=''
   options=''
 
+  if [ "${LIBSSH2_VER_}" != '1.11.1' ] && [ "${_OS}" = 'win' ] && [[ "${_CONFIG}" = *'unicode'* ]]; then
+    options+=' -DENABLE_UNICODE=ON'
+  fi
+
   if [ -n "${_ZLIB}" ] && [ -d "../${_ZLIB}/${_PP}" ]; then
     options+=' -DENABLE_ZLIB_COMPRESSION=ON'
     options+=" -DZLIB_INCLUDE_DIR=${_TOP}/${_ZLIB}/${_PP}/include"
