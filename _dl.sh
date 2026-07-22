@@ -571,9 +571,7 @@ if ! git config --global safe.directory | grep -q -F "${_pwd}"; then
 fi
 
 export _PATCHSUFFIX
-if [[ "${_CONFIG}" = *'dev'* ]]; then
-  _PATCHSUFFIX='.dev'
-elif [[ "${_CONFIG}" != *'main'* ]]; then
+if [[ "${_CONFIG}" != *'main'* ]]; then
   _PATCHSUFFIX='.test'
 else
   _PATCHSUFFIX=''
@@ -769,17 +767,9 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro|mini) ]]; then
   fi
 fi
 
-if [[ "${_CONFIG}" = *'dev'* ]]; then
-  if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro|mini) || "${_CONFIG}" = *'cares'* ]]; then
-    if [[ "${_CONFIG}" != *'nocares'* ]]; then
-      _DEPS+=' cares'
-    fi
-  fi
-else
   if [[ "${_CONFIG}" = *'cares'* ]]; then
     _DEPS+=' cares'
   fi
-fi
 
 if [[ ! "${_CONFIG}" =~ (zero|bldtst|nocookie) ]]; then
   _DEPS+=' psl'
@@ -878,10 +868,6 @@ if [[ "${_DEPS}" = *'libpsl'* ]]; then
   live_xt libpsl "${LIBPSL_HASH}"
 fi
 if [[ "${_DEPS}" = *'libressl'* ]]; then
-  if [[ "${_CONFIG}" = *'dev'* ]] && false; then
-    LIBRESSL_VER_='3.9.0'
-    LIBRESSL_HASH=1cc232418498de305e6d5cb80c94a16415c01dcb3cd98f2e8c3a2202091a3420
-  fi
   live_dl libressl "${LIBRESSL_VER_}"
   live_xt libressl "${LIBRESSL_HASH}"
 fi
@@ -894,10 +880,6 @@ if [[ "${_DEPS}" = *'boringssl'* ]]; then
   live_xt boringssl "${BORINGSSL_HASH}"
 fi
 if [[ "${_DEPS}" = *'openssl'* ]]; then
-  if [[ "${_CONFIG}" = *'dev'* ]] && false; then
-    OPENSSL_VER_='4.0.0-alpha1'
-    OPENSSL_HASH=
-  fi
   live_dl openssl "${OPENSSL_VER_}"
   live_xt openssl "${OPENSSL_HASH}"
 fi
@@ -908,89 +890,22 @@ if [[ "${_DEPS}" = *'libssh1'* ]]; then
   live_xt libssh "${LIBSSH_HASH}"
 fi
 if [[ "${_DEPS}" = *'libssh2'* ]]; then
-  if [[ "${_CONFIG}" = *'dev'* ]]; then
-    LIBSSH2_HASH=
-    if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *' libssh2 '* ]] && \
-       [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *' libssh2 '* ]]; then
-      LIBSSH2_REV_="${LIBSSH2_REV_:-master}"
-      tmp="$(mktemp)"
-      my_curl --user-agent 'curl' "https://api.github.com/repos/libssh2/libssh2/commits/${LIBSSH2_REV_}" \
-        --retry-all-errors --retry 10 \
-        --header 'X-GitHub-Api-Version: 2022-11-28' --output "${tmp}"
-      rev="$(jq --raw-output '.sha' "${tmp}")"
-      rm -r -f -- "${tmp}"
-      [ -n "${rev}" ] && LIBSSH2_REV_="${rev}"
-      url="https://github.com/libssh2/libssh2/archive/${LIBSSH2_REV_}.tar.gz"
-      echo "${url}" > '__libssh2.url'
-      my_curl --location --proto-redir =https --output pkg.bin "${url}"
-      live_xt libssh2 "${LIBSSH2_HASH}"
-    fi
-  else
     live_dl libssh2 "${LIBSSH2_VER_}"
     live_xt libssh2 "${LIBSSH2_HASH}"
-  fi
-  if [[ "${_CONFIG}" = *'dev'* ]] || [ -d 'libssh2/.git' ]; then
-    LIBSSH2_VER_="$(grep -a -F 'define LIBSSH2_VERSION ' 'libssh2/include/libssh2.h' | grep -o -E '".+"' | tr -d '"')"
-  fi
 fi
 if [[ "${_DEPS}" = *'certdata'* ]]; then
   live_dl certdata "${CERTDATA_VER_}"
   live_xt certdata "${CERTDATA_HASH}"
 fi
 if [[ "${_DEPS}" = *'curl'* ]]; then
-  if [[ "${_CONFIG}" = *'dev'* ]]; then
-    CURL_HASH=
-    if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *' curl '* ]] && \
-       [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *' curl '* ]]; then
-      CURL_REV_="${CURL_REV_:-master}"
-      tmp="$(mktemp)"
-      my_curl --user-agent 'curl' "https://api.github.com/repos/curl/curl/commits/${CURL_REV_}" \
-        --retry-all-errors --retry 10 \
-        --header 'X-GitHub-Api-Version: 2022-11-28' --output "${tmp}"
-      rev="$(jq --raw-output '.sha' "${tmp}")"
-      rm -r -f -- "${tmp}"
-      [ -n "${rev}" ] && CURL_REV_="${rev}"
-      url="https://github.com/curl/curl/archive/${CURL_REV_}.tar.gz"
-      echo "${url}" > '__curl.url'
-      my_curl --location --proto-redir =https --output pkg.bin "${url}"
-      live_xt curl "${CURL_HASH}"
-    fi
-  else
     live_dl curl "${CURL_VER_}"
     live_xt curl "${CURL_HASH}"
-  fi
-  if [[ "${_CONFIG}" = *'dev'* ]] || [ -d 'curl/.git' ]; then
-    CURL_VER_="$(grep -a -F 'define LIBCURL_VERSION' 'curl/include/curl/curlver.h' | grep -o -E '".+"' | tr -d '"')"
-  fi
 fi
 if [[ "${_DEPS}" = *'trurl'* ]]; then
-  if [[ "${_CONFIG}" = *'dev'* ]]; then
-    TRURL_HASH=
-    if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *' trurl '* ]] && \
-       [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *' trurl '* ]]; then
-      TRURL_REV_="${TRURL_REV_:-master}"
-      tmp="$(mktemp)"
-      my_curl --user-agent 'curl' "https://api.github.com/repos/curl/trurl/commits/${TRURL_REV_}" \
-        --retry-all-errors --retry 10 \
-        --header 'X-GitHub-Api-Version: 2022-11-28' --output "${tmp}"
-      rev="$(jq --raw-output '.sha' "${tmp}")"
-      rm -r -f -- "${tmp}"
-      [ -n "${rev}" ] && TRURL_REV_="${rev}"
-      url="https://github.com/curl/trurl/archive/${TRURL_REV_}.tar.gz"
-      echo "${url}" > '__trurl.url'
-      my_curl --location --proto-redir =https --output pkg.bin "${url}"
-      # shellcheck disable=SC2153
-      live_xt trurl "${TRURL_HASH}"
-    fi
-  else
     # shellcheck disable=SC2153
     live_dl trurl "${TRURL_VER_}"
     # shellcheck disable=SC2153
     live_xt trurl "${TRURL_HASH}"
-  fi
-  if [[ "${_CONFIG}" = *'dev'* && -d 'trurl' ]] || [ -d 'trurl/.git' ]; then
-    TRURL_VER_="$(grep -a -F 'define TRURL_VERSION_TXT' 'trurl/version.h' | grep -o -E '".+"' | tr -d '"')-DEV"
-  fi
 fi
 
 if [ "${_OS}" = 'win' ] && \
