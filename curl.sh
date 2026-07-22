@@ -390,7 +390,7 @@ _VER="$1"
     # To retrieve the hash for the commit adding or updating the .patch
     # file (if any). In a shallow clone this could return the latest commit
     # hash, breaking reproducibility.
-    hash="$(git -C .. log -1 '--pretty=format:%h' -- "${patch}")"
+    hash="$(git -C .. log -1 '--pretty=format:%h' --end-of-options "${patch}")"
     if [ -n "${hash}" ]; then
       # Appearing as: "security patched: https://github.com/curl/curl-for-win/blob/95a0e6df/curl.patch"
       options+=" -DCURL_PATCHSTAMP=https://github.com/curl/curl-for-win/blob/${hash}/${patch}"
