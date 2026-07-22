@@ -1020,8 +1020,14 @@ build_single_target() {
     _CFLAGS_GLOBAL+=' -fno-strict-aliasing -fno-strict-overflow'
     _CXXFLAGS_GLOBAL+=' -fno-strict-aliasing -fno-strict-overflow'
     if [ "${_CCVER}" -ge '12' ]; then
-      _CFLAGS_GLOBAL+=' -ftrivial-auto-var-init=zero'
-      _CXXFLAGS_GLOBAL+=' -ftrivial-auto-var-init=zero'
+      # Seen to cause false-positive -Wmaybe-uninitialized warnings in this combination
+      # Tested combo with false positive: mac + gcc 16.1.0 + a64
+      # Tested combos without the issue: mac + gcc 16.1.0 + x64, mac + gcc 15.3.0 + a64
+      # Ref: https://github.com/curl/curl/pull/22209
+      if [[ "${_CCVER}" != '16' || "${_OS}" != 'mac' || "${_CPU}" != 'a64' ]]; then
+        _CFLAGS_GLOBAL+=' -ftrivial-auto-var-init=zero'
+        _CXXFLAGS_GLOBAL+=' -ftrivial-auto-var-init=zero'
+      fi
     fi
     if [ "${_CCVER}" -ge '15' ]; then
       _CFLAGS_GLOBAL+=' -fzero-init-padding-bits=all'
