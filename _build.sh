@@ -1041,8 +1041,10 @@ build_single_target() {
   if [ "${_CPU}" = 'x64' ] || \
      [ "${_CPU}" = 'x86' ]; then
     # https://maskray.me/blog/2022-12-18-control-flow-integrity
-    _CFLAGS_GLOBAL+=' -fcf-protection=full'
-    _CXXFLAGS_GLOBAL+=' -fcf-protection=full'
+    if [[ "${_CCVER}" != '16' || "${_OS}" != 'mac' || "${_CPU}" != 'x64' ]]; then
+      _CFLAGS_GLOBAL+=' -fcf-protection=full'
+      _CXXFLAGS_GLOBAL+=' -fcf-protection=full'
+    fi
     if [ "${_OS}" = 'linux' ]; then
       # https://github.com/llvm/llvm-project/issues/44828
       # https://reviews.llvm.org/D59780
