@@ -12,17 +12,106 @@ index e1ca18cf69c8..419c52009acd 100644
  };
  
  #if defined(_MSC_VER) && defined(_DLL)
-diff --git a/lib/vquic/cf-ngtcp2-cmn.c b/lib/vquic/cf-ngtcp2-cmn.c
-index e6efd2bd64e6..74868d9af7b6 100644
---- a/lib/vquic/cf-ngtcp2-cmn.c
-+++ b/lib/vquic/cf-ngtcp2-cmn.c
-@@ -599,6 +634,9 @@ static ngtcp2_callbacks ng_callbacks = {
- #ifdef NGTCP2_CALLBACKS_V4  /* ngtcp2 v1.24.0+ */
-   NULL, /* recv_stop_sending */
+diff --git a/lib/vquic/cf-ngtcp2-proxy.c b/lib/vquic/cf-ngtcp2-proxy.c
+index 3a7023f300e1..2592b05dab2e 100644
+--- a/lib/vquic/cf-ngtcp2-proxy.c
++++ b/lib/vquic/cf-ngtcp2-proxy.c
+@@ -625,6 +625,9 @@ static nghttp3_callbacks ngh3_proxy_callbacks = {
+ #ifdef NGHTTP3_CALLBACKS_V3  /* nghttp3 v1.14.0+ */
+   NULL, /* recv_settings2 */
  #endif
-+#ifdef NGTCP2_CALLBACKS_V5  /* ngtcp2 v1.25.0+ */
-+  NULL, /* is called instead of cb_stream_close when set */
++#ifdef NGHTTP3_CALLBACKS_V4  /* nghttp3 v1.18.0+ */
++  NULL, /* stream_close2 */
 +#endif
  };
  
+ static CURLcode cf_ngtcp2_proxy_h3_init(struct Curl_cfilter *cf,
+diff --git a/lib/vquic/cf-ngtcp2.c b/lib/vquic/cf-ngtcp2.c
+index 980516d05eaa..9a2b64f235e2 100644
+--- a/lib/vquic/cf-ngtcp2.c
++++ b/lib/vquic/cf-ngtcp2.c
+@@ -410,6 +410,9 @@ static nghttp3_callbacks ngh3_callbacks = {
+ #ifdef NGHTTP3_CALLBACKS_V3  /* nghttp3 v1.14.0+ */
+   NULL, /* recv_settings2 */
+ #endif
++#ifdef NGHTTP3_CALLBACKS_V4  /* nghttp3 v1.18.0+ */
++  NULL, /* stream_close2 */
++#endif
+ };
+ 
+ static CURLcode init_ngh3_conn(struct Curl_cfilter *cf,
+diff --git a/lib/vquic/cf-ngtcp2-cmn.c b/lib/vquic/cf-ngtcp2-cmn.c
+index e6efd2bd64..c474fdbdc5 100644
+--- a/lib/vquic/cf-ngtcp2-cmn.c
++++ b/lib/vquic/cf-ngtcp2-cmn.c
+@@ -546,6 +546,10 @@ static int cb_recv_rx_key(ngtcp2_conn *tconn, ngtcp2_encryption_level level,
+   return 0;
+ }
+ 
++#ifdef CURL_HAVE_DIAG
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
++#endif
+ static ngtcp2_callbacks ng_callbacks = {
+   ngtcp2_crypto_client_initial_cb,
+   NULL, /* recv_client_initial */
+@@ -600,6 +604,9 @@ static ngtcp2_callbacks ng_callbacks = {
+   NULL, /* recv_stop_sending */
+ #endif
+ };
++#ifdef CURL_HAVE_DIAG
++#pragma GCC diagnostic pop
++#endif
+ 
  #if defined(_MSC_VER) && defined(_DLL)
+ #pragma warning(pop)
+diff --git a/lib/vquic/cf-ngtcp2-proxy.c b/lib/vquic/cf-ngtcp2-proxy.c
+index 2592b05dab..ec6de93368 100644
+--- a/lib/vquic/cf-ngtcp2-proxy.c
++++ b/lib/vquic/cf-ngtcp2-proxy.c
+@@ -601,6 +601,10 @@ static nghttp3_ssize cb_h3_tunnel_read_data(nghttp3_conn *conn,
+   return (nghttp3_ssize)nvecs;
+ }
+ 
++#ifdef CURL_HAVE_DIAG
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
++#endif
+ static nghttp3_callbacks ngh3_proxy_callbacks = {
+   cb_h3_proxy_acked_req_body, /* acked_stream_data */
+   cb_h3_proxy_stream_close,
+@@ -629,6 +633,9 @@ static nghttp3_callbacks ngh3_proxy_callbacks = {
+   NULL, /* stream_close2 */
+ #endif
+ };
++#ifdef CURL_HAVE_DIAG
++#pragma GCC diagnostic pop
++#endif
+ 
+ static CURLcode cf_ngtcp2_proxy_h3_init(struct Curl_cfilter *cf,
+                                         struct Curl_easy *data,
+diff --git a/lib/vquic/cf-ngtcp2.c b/lib/vquic/cf-ngtcp2.c
+index 9a2b64f235..4d5c122183 100644
+--- a/lib/vquic/cf-ngtcp2.c
++++ b/lib/vquic/cf-ngtcp2.c
+@@ -386,6 +386,10 @@ static int cb_h3_reset_stream(nghttp3_conn *conn, int64_t stream_id,
+   return 0;
+ }
+ 
++#ifdef CURL_HAVE_DIAG
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
++#endif
+ static nghttp3_callbacks ngh3_callbacks = {
+   cb_h3_acked_req_body, /* acked_stream_data */
+   cb_h3_stream_close,
+@@ -414,6 +418,9 @@ static nghttp3_callbacks ngh3_callbacks = {
+   NULL, /* stream_close2 */
+ #endif
+ };
++#ifdef CURL_HAVE_DIAG
++#pragma GCC diagnostic pop
++#endif
+ 
+ static CURLcode init_ngh3_conn(struct Curl_cfilter *cf,
+                                struct Curl_easy *data,
