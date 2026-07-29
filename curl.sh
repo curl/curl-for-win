@@ -143,6 +143,7 @@ _VER="$1"
       options+=' -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON'
     fi
     options+=' -DUSE_HTTPSRR=ON'
+    [ "${CURL_VER_}" != '8.21.0' ] && options+=' -DCURL_DISABLE_HTTPSIG=OFF'
   fi
 
   if [[ "${_CONFIG}" = *'nocookie'* ]]; then
