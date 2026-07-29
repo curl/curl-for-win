@@ -299,6 +299,7 @@ _VER="$1"
     # GSS API deprecated in 2012-2013 (OS X 10.8 Mountain Lion / 10.9 Mavericks, iOS 7.0)
   # options+=' -DCURL_USE_GSSAPI=ON'
     :
+    [ "${CURL_VER_}" != '8.21.0' ] && options+=' -DCURL_ENABLE_APPLE_FAST_UDP=ON'
   fi
 
   options+=' -DUSE_LIBIDN2=OFF'
