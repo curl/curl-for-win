@@ -41,6 +41,7 @@ if [ -n "${extra}" ]; then
   export HOMEBREW_NO_AUTO_UPDATE=1
   export HOMEBREW_NO_ANALYTICS=1
   export HOMEBREW_NO_ANALYTICS_MESSAGE_OUTPUT=1
+  export HOMEBREW_NO_INSTALL_CLEANUP=1
   brew update >/dev/null || true
   # shellcheck disable=SC2086
   brew install --quiet ${extra}
