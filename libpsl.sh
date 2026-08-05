@@ -30,15 +30,15 @@ _VER="$1"
     # The generator above is including the local PSL filename in the output.
     # libpsl is then making an attempt to load this filename at runtime as-is
     # and loading its content if its timestamp is newer than the embedded one.
-    # This has terrible consequences in many use-cases, including this build,
+    # This has terrible consequences in many use-cases, including this build's,
     # because:
-    # - the filename is a relative one.
+    # - the filename is a relative one,
     # - it is loaded on the end user's machine, relative to their current
-    #   working directory.
+    #   working directory,
     # - which has a fair chance of being world-writable, and without guarantees
-    #   to be protected.
+    #   to be protected,
     # - there is no universal location on disk (on Windows in particular) that
-    #   is non-world-writable.
+    #   is non-world-writable,
     # - leaks this internal filename into the final binary.
     # Similar case to OpenSSL configurations and CA bundles loaded from
     # world-writable, or arbitrary places on disk (such as PATH), on Windows.
