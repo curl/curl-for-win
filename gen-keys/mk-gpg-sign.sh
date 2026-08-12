@@ -41,6 +41,7 @@ install -m 600 /dev/null "${master}.password"; key_pass="$(pwgen --secure 42 1 |
 # AES128, and no way to override that:
 #   "iter+salt S2K, algo: 7 (AES128), SHA1 protection, hash: 2"
 #   https://dev.gnupg.org/T1800 (open since 2014-12-30)
+#   https://dev.gnupg.org/T5783 (2022-01-15)
 #   https://lists.gnupg.org/pipermail/gnupg-users/2017-January/057506.html
 #   https://security.stackexchange.com/questions/119245/how-does-gnupg-encrypt-secret-keys
 # Remains a problem with the v5 storage format introduced in gpg 2.3.0.
