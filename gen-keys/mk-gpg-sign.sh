@@ -55,14 +55,14 @@ my_gpg --verbose \
   --s2k-digest-algo sha512 \
   --cert-digest-algo sha512 \
   --generate-key - << EOF 2>&1 | grep -a -F 'revocation certificate' | grep -a -o -m 1 -E '[A-F0-9]{40,}' > "${master}-id.txt"
-key-type: EDDSA
-key-curve: Ed25519
-key-usage: ${usage}
-name-real: ${name}
-#name-comment: my comment
-name-email: ${mail}
-expire-date: 10y
-passphrase: ${key_pass}
+Key-Type: EDDSA
+Key-Curve: Ed25519
+Key-Usage: ${usage}
+Name-Real: ${name}
+#Name-Comment: my comment
+Name-Email: ${mail}
+Expire-Date: 10y
+Passphrase: ${key_pass}
 %commit
 %echo ! Done.
 EOF
