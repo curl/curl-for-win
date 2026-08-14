@@ -111,7 +111,8 @@ cat <<EOF
   },
   {
     "name": "boringssl",
-    "url": "https://github.com/google/boringssl/releases/download/{ver}/boringssl-{ver}.tar.gz"
+    "url": "https://github.com/google/boringssl/releases/download/{ver}/boringssl-{ver}.tar.gz",
+    "pinned": true
   },
   {
     "name": "osslsigncode",
