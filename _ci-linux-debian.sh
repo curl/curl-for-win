@@ -133,7 +133,7 @@ fi
 [ -n "${MINISIGN_AGE_PASS:+1}" ] && extra+=' minisign'
 [ -n "${SIGN_SSH_AGE_PASS:+1}" ] && extra+=' openssh-client'
 
-[ -n "${SIGN_CODE_AGE_PASS:+1}${COSIGN_AGE_PASS:+1}${DEPLOY_AGE_PASS:+1}${MINISIGN_AGE_PASS:+1}${SIGN_PKG_AGE_PASS:+1}${SIGN_SSH_AGE_PASS:+1}" ] && extra+=' age'
+extra+=' age'
 
 ${sudo} apt-get --option Dpkg::Use-Pty=0 --yes update
 # shellcheck disable=SC2086

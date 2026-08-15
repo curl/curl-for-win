@@ -449,8 +449,7 @@ if [ "${_OS}" = 'win' ] && \
 fi
 
 # Download pqc-compatible age version if not offered by the environment
-if [ "${_HOST}" = 'linux' ] && \
-   [ -n "${SIGN_CODE_AGE_PASS:+1}${COSIGN_AGE_PASS:+1}${DEPLOY_AGE_PASS:+1}${MINISIGN_AGE_PASS:+1}${SIGN_PKG_AGE_PASS:+1}${SIGN_SSH_AGE_PASS:+1}" ]; then
+if [ "${_HOST}" = 'linux' ]; then
   age_ver_str="$(age --version | tr -d 'v')"
   age_ver="$(printf '%02d%02d' \
     "$(printf '%s' "${age_ver_str}" | cut -d '.' -f 1)" \
