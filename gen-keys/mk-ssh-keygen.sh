@@ -16,7 +16,7 @@ install -m 600 /dev/null "${key}.password"; key_pass="$(pwgen --secure 42 1 | te
 rm -f "${key}"; ssh-keygen -N "${key_pass}" -a 192 -t ed25519 -f "${key}" -C "${key}"
 
 # Encrypt private key once again, for distribution (ASCII, binary)
-age-keygen      --output="${key}.age.key"
+age-keygen  -pq --output="${key}.age.key"
 age --encrypt --identity="${key}.age.key" --armor "${key}" > "${key}.age.asc"
 
 if age --decrypt --identity="${key}.age.key" "${key}.age.asc" | cmp --quiet -- "${key}" -; then

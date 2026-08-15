@@ -250,7 +250,7 @@ privout "${code}-weak.p12.asn1.txt" \
 openssl asn1parse -i -inform DER -in "${code}-weak.p12"
 
 # Encrypt private key once again, for distribution (ASCII, binary)
-age-keygen      --output="${code}.p12.age.key"
+age-keygen  -pq --output="${code}.p12.age.key"
 age --encrypt --identity="${code}.p12.age.key" --armor "${code}.p12" > "${code}.p12.age.asc"
 
 echo '! Test signing an executable...'

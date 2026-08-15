@@ -20,5 +20,5 @@ mv cosign.key "${prfx}.key"
 mv cosign.pub "${prfx}.pub"
 
 # Encrypt private key once again, for distribution (ASCII, binary)
-age-keygen      --output="${prfx}.key.age.key"
+age-keygen  -pq --output="${prfx}.key.age.key"
 age --encrypt --identity="${prfx}.key.age.key" --armor "${prfx}.key" > "${prfx}.key.age.asc"

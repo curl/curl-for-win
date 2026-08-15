@@ -22,5 +22,5 @@ if command -v minizign >/dev/null 2>&1; then
 fi
 
 # Encrypt private key once again, for distribution (ASCII, binary)
-age-keygen      --output="${prfx}.key.age.key"
+age-keygen  -pq --output="${prfx}.key.age.key"
 age --encrypt --identity="${prfx}.key.age.key" --armor "${prfx}.key" > "${prfx}.key.age.asc"
