@@ -447,6 +447,25 @@ if [ "${_OS}" = 'win' ] && \
   echo "! Using llvm-mingw: '${CW_LLVM_MINGW_PATH}' (${CW_LLVM_MINGW_VER_})"
 fi
 
+# Download pqc-compatible age version if not offered by the environment
+if [ "${_HOST}" = 'linux' ] && \
+   [ -n "${SIGN_CODE_AGE_PASS:+1}${COSIGN_AGE_PASS:+1}${DEPLOY_AGE_PASS:+1}${MINISIGN_AGE_PASS:+1}${SIGN_PKG_AGE_PASS:+1}${SIGN_SSH_AGE_PASS:+1}" ]; then
+  age_ver_str="$(age --version | tr -d 'v')"
+  age_ver="$(printf '%02d%02d' \
+    "$(printf '%s' "${age_ver_str}" | cut -d '.' -f 1)" \
+    "$(printf '%s' "${age_ver_str}" | cut -d '.' -f 2)")"
+  if [ "${age_ver}" -lt 0130 ]; then  # debian:trixie
+    AGE_VERSION=1.3.1
+    AGE_SHA256=bdc69c09cbdd6cf8b1f333d372a1f58247b3a33146406333e30c0f26e8f51377
+    curl --disable --fail --silent --show-error --connect-timeout 15 --max-time 60 --retry 3 --retry-connrefused \
+      --location --proto-redir =https "https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz" --output pkg.bin
+    sha256sum pkg.bin | tee /dev/stderr | grep -qwF -- "${AGE_SHA256}" && tar -xf pkg.bin && rm -f pkg.bin
+    export PATH; PATH="$(pwd)/age:${PATH}"
+  fi
+  command -v age
+  age --version
+fi
+
 # Decrypt package signing key
 SIGN_PKG_KEY='sign-pkg.gpg.asc'
 if [ -s "${SIGN_PKG_KEY}" ] && \
