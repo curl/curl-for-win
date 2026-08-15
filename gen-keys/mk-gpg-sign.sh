@@ -51,9 +51,23 @@ install -m 600 /dev/null "${master}.password"; key_pass="$(pwgen --secure 42 1 |
 my_gpg --verbose \
   --batch --yes --no-tty \
   --keyid-format 0xlong \
-  --s2k-cipher-algo aes256 \
-  --s2k-digest-algo sha512 \
-  --cert-digest-algo sha512 \
+  --s2k-cipher-algo AES256 \
+  --s2k-digest-algo SHA512 \
+  --s2k-count 65011712 \
+  --cert-digest-algo SHA512 \
+  --compress-algo Uncompressed \
+  --default-preference-list 'SHA512 SHA384 SHA256 AES256 Uncompressed' \
+  --personal-digest-preferences 'SHA512 SHA384 SHA256' \
+  --personal-cipher-preferences AES256 \
+  --personal-aead-preferences EAX \
+  --personal-compress-preferences Uncompressed \
+  --with-fingerprint \
+  --with-subkey-fingerprint \
+  --display-charset utf-8 \
+  --disable-dsa2 \
+  --force-aead \
+  --full-timestrings \
+  --no-comments \
   --generate-key - << EOF 2>&1 | grep -a -F 'revocation certificate' | grep -a -o -m 1 -E '[A-F0-9]{40,}' > "${master}-id.txt"
 Key-Type: EDDSA
 Key-Curve: Ed25519
@@ -97,7 +111,7 @@ my_gpg \
   --keyid-format 0xlong \
   --armor --export "${id}" > "${master}-public.asc"
 pgpdump "${master}-public.asc" 2>/dev/null \
-      > "${master}-public.asc.dump.txt"
+      > "${master}-public.asc.dump.txt" || true
 my_gpg --list-packets --verbose --debug 0x02 2>/dev/null \
   < "${master}-public.asc" \
   > "${master}-public.asc.pkt.txt"
@@ -112,8 +126,6 @@ echo "${key_pass}" | my_gpg \
   --batch --yes --no-tty \
   --keyid-format 0xlong \
   --pinentry-mode loopback --passphrase-fd 0 \
-  --s2k-cipher-algo aes256 \
-  --s2k-digest-algo sha512 \
   --export-secret-key "${id}" > "${master}-private.gpg"
 
 # Export private key (encrypted)
@@ -121,11 +133,9 @@ echo "${key_pass}" | my_gpg \
   --batch --yes --no-tty \
   --keyid-format 0xlong \
   --pinentry-mode loopback --passphrase-fd 0 \
-  --s2k-cipher-algo aes256 \
-  --s2k-digest-algo sha512 \
   --export-secret-key --armor "${id}" > "${master}-private.asc"
 pgpdump "${master}-private.asc" 2>/dev/null \
-      > "${master}-private.asc.dump.txt"
+      > "${master}-private.asc.dump.txt" || true
 my_gpg --list-packets --verbose --debug 0x02 2>/dev/null \
   < "${master}-private.asc" \
   > "${master}-private.asc.pkt.txt"
