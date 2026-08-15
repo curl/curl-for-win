@@ -462,6 +462,7 @@ if [ "${_HOST}" = 'linux' ]; then
     sha256sum pkg.bin | tee /dev/stderr | grep -qwF -- "${AGE_SHA256}" && tar -xf pkg.bin && rm -f pkg.bin
     export PATH; PATH="$(pwd)/age:${PATH}"
   fi
+  command -v age
   age --version
 fi
 
