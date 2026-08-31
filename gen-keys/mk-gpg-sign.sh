@@ -56,10 +56,10 @@ my_gpg --verbose \
   --s2k-count 65011712 \
   --cert-digest-algo SHA512 \
   --compress-algo 'Uncompressed' \
-  --default-preference-list 'SHA512 SHA384 SHA256 AES256 Uncompressed' \
+  --default-preference-list 'SHA512 SHA384 SHA256 Uncompressed' \
   --personal-digest-preferences 'SHA512 SHA384 SHA256' \
-  --personal-cipher-preferences 'AES256' \
-  --personal-aead-preferences 'EAX' \
+  --personal-cipher-preferences '' \
+  --personal-aead-preferences '' \
   --personal-compress-preferences 'Uncompressed' \
   --with-fingerprint \
   --with-subkey-fingerprint \
