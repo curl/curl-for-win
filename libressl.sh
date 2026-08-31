@@ -68,6 +68,10 @@ _VER="$1"
     # compatibility with older/stable mingw-w64 releases:
     #   https://mingw.googlesource.com/mingw-w64/+/250bb18f032236e7b26f42994437ac09f26b2872 (2026-04-09)
     options+=' -DHAVE_STRNDUP=0'
+    # detected with llvm-mingw 23.1.0 by LibreSSL 4.3.2, and breaking the build.
+    #   https://ci.appveyor.com/project/curlorg/curl-for-win/builds/54632645?fullLog=true
+    # force-disable it as a workaround:
+    options+=' -DHAVE_ENDIAN_H=0'
   elif [ "${_OS}" = 'linux' ] && [ "${_CPU}" = 'x64' ]; then
     # Add a `.hidden <func>` next to each `.globl <func>` one:
     find . -name '*-elf-x86_64.S' | sort | while read -r f; do
@@ -84,7 +88,7 @@ _VER="$1"
     options+=' -DHAVE_GETAUXVAL=0 -DHAVE_GETENTROPY=0 -DHAVE_GETPAGESIZE=0 -DHAVE_GETPROGNAME=0'
     options+=' -DHAVE_SYSLOG_R=0 -DHAVE_SYSLOG=0'
     options+=' -DHAVE_TIMESPECSUB=0 -DHAVE_TIMINGSAFE_BCMP=0 -DHAVE_TIMINGSAFE_MEMCMP=0'
-    options+=' -DHAVE_MEMMEM=0 -DHAVE_ENDIAN_H=0 -DHAVE_MACHINE_ENDIAN_H=0 -DHAVE_ERR_H=0 -DHAVE_NETINET_IP_H=0 -DHAVE_CLOCK_GETTIME=0'
+    options+=' -DHAVE_MEMMEM=0 -DHAVE_MACHINE_ENDIAN_H=0 -DHAVE_ERR_H=0 -DHAVE_NETINET_IP_H=0 -DHAVE_CLOCK_GETTIME=0'
     options+=' -DHAVE_SYS_TYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_STDDEF_H=1'
   fi
 
