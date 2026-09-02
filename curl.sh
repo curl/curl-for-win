@@ -105,6 +105,7 @@ _VER="$1"
   if [[ ! "${_CONFIG}" =~ (zero|bldtst|pico|nano|micro|mini) ]]; then
     if [ "${_OS}" = 'mac' ] && [[ "${_CONFIG}" != *'nogss'* ]]; then
       options+=' -DCURL_USE_GSSAPI=ON'
+      options+=' -DCURL_GSS_FLAVOR=Apple'  # 10.14+
     fi
   fi
 
@@ -297,8 +298,6 @@ _VER="$1"
     options+=' -DCARES_USE_STATIC_LIBS=ON'
   fi
   if [ "${_OS}" = 'mac' ]; then
-    # GSS API deprecated in 2012-2013 (OS X 10.8 Mountain Lion / 10.9 Mavericks, iOS 7.0)
-  # options+=' -DCURL_USE_GSSAPI=ON'
     options+=' -DCURL_ENABLE_APPLE_FAST_UDP=ON'
   fi
 
