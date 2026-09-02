@@ -57,4 +57,12 @@ mkdir -m 700 workdir
   # 6. SSH deploy key for CI script (restricted)
 
   ../mk-ssh-keygen.sh 'id-curl-for-win-deploy' ../deploy.key.asc
+
+  # 7. SOP (Stateless OpenPGP) package signing key
+
+  name='curl-for-win-release-test@localhost-sign'
+  ../mk-sop-sign.sh "${name}"
+
+  cp -p -- "${name}-public.asc"          ../sign-pkg-sop-public.asc
+  cp -p -- "${name}-private.gpg.age.asc" ../sign-pkg-sop.gpg.asc
 )
