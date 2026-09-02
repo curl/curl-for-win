@@ -64,7 +64,7 @@ _VER="$1"
       options+=' -DHAVE_STRTONUM=0'
     fi
     # Found by configure, later causing `-Wmacro-redefined`. Force-disable
-    # to silence the issue.
+    # as a workaround.
     if [ "${_CC}" = 'llvm' ]; then
       options+=' -DHAVE_ENDIAN_H=0'
     fi
