@@ -44,7 +44,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   included.
 - Required: Windows Vista with
   [Universal CRT](https://support.microsoft.com/topic/update-for-universal-c-runtime-in-windows-322bf30f-4735-bb94-3949-49f5c49f4732)
-  (ARM64 or x64), macOS 10.12 Sierra (arm64 or x86_64),
+  (ARM64 or x64), macOS 10.14 Mojave (arm64 or x86_64),
   Linux [kernel](https://wiki.musl-libc.org/supported-platforms) 2.6.39+
   (amd64, arm64, riscv64) with [MUSL](https://en.wikipedia.org/wiki/Musl)
   builds.
