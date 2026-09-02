@@ -104,7 +104,7 @@ HSTS          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 HTTP2         | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |         |
 HTTP3         | ✓       | ✓       | ✓       |         |         |         |         |         |
 HTTPS-proxy   | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
-HTTPSIG²      | ✓³      | ✓³      | ✓³      | ✓³      | ✓³      | ✓³      | ✓³      |         |
+HTTPSIG²      | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 HTTPSRR²      | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |         |
 IDN           | ✓       |         | ✓       | ✓¹      | ✓¹      | ✓¹      | ✓¹      |         |
 IPv6          | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       | ✓       |
@@ -145,7 +145,6 @@ ws/wss        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 
 - ¹: platform-dependent
 - ²: experimental
-- ³: expected in upcoming release 8.22.0
 - noh3: HTTP/2
 - mini: without brotli and zstd, with OS TLS backend (Schannel) if available
 - micro: without libssh2
