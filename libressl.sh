@@ -63,6 +63,11 @@ _VER="$1"
     if [ "${_OSVER}" -lt '1100' ]; then
       options+=' -DHAVE_STRTONUM=0'
     fi
+    # Found by configure, later causing `-Wmacro-redefined`. Force-disable
+    # to silence the issue.
+    if [ "${_CC}" = 'llvm' ]; then
+      options+=' -DHAVE_ENDIAN_H=0'
+    fi
   elif [ "${_OS}" = 'win' ]; then
     # make sure not to detect this symbol in mingw-w64 v15-dev, to retain
     # compatibility with older/stable mingw-w64 releases:
