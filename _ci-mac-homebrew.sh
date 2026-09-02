@@ -18,9 +18,10 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   # On AppVeyor CI macos-sonoma runner wine stalls for 5 minutes 5 times with
   # an error on first invocation (from this script). Then on a next invocation
   # it repeats the 5-minute stalls indefinitely. Skip wine as a workaround:
+  # Homebrew removed the wine-stable package without a replacement.
   if [[ "${CW_CONFIG:-}" != *'noWINE'* ]] && \
      [ -z "${APPVEYOR_ACCOUNT_NAME:-}" ]; then
-    extra+=' wine-stable'
+    :
   fi
   if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
     extra+=' nasm'
