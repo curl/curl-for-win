@@ -29,7 +29,7 @@ qrencode --type svg --inline --svg-path --rle < "${master}-public.asc" | \
 
 # paperkey --secret-key "${master}-private.gpg" --output "${master}-private.gpg.paperkey.txt"
 
-# Encrypt private key once again, for distribution (ASCII, binary) [FIXME: this may be overkill]
+# Encrypt private key once again, for distribution (ASCII, binary)
 age-keygen  -pq --output="${master}-private.pgp.age.key"
 age --encrypt --identity="${master}-private.pgp.age.key" --armor "${master}-private.pgp" > "${master}-private.pgp.age.asc"
 
