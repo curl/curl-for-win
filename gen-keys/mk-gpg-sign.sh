@@ -7,7 +7,7 @@
 set -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o pipefail
 
 # Requires:
-#   brew install gnupg optipng pgpdump scour age pwgen
+#   brew install gnupg optipng pgpdump qrencode scour age pwgen
 
 case "$(uname)" in
   *Darwin*)
