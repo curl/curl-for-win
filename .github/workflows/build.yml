@@ -1,3 +1,4 @@
+# This workflow is managed by gh actions-lock.
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 ---
@@ -49,7 +50,7 @@ jobs:
     runs-on: ubuntu-24.04-firewall
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
@@ -128,7 +129,7 @@ jobs:
     runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -151,7 +152,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-linux-glibc-debian-testing-llvm'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -164,7 +165,7 @@ jobs:
     runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -187,7 +188,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-linux-glibc-debian-testing-gcc'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -200,7 +201,7 @@ jobs:
     runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -224,7 +225,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-linux-glibc-debian-stable-llvm'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -237,7 +238,7 @@ jobs:
     runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -261,7 +262,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-linux-glibc-debian-stable-gcc'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -275,7 +276,7 @@ jobs:
     timeout-minutes: 15
     environment: 'production'
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -304,7 +305,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-linux-musl-debian-testing-llvm'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -317,7 +318,7 @@ jobs:
     runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -340,7 +341,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-linux-musl-debian-testing-gcc'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -354,7 +355,7 @@ jobs:
     timeout-minutes: 15
     environment: 'production'
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -384,7 +385,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-linux-musl-debian-stable-llvm'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -397,7 +398,7 @@ jobs:
     runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -421,7 +422,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-linux-musl-debian-stable-gcc'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -435,7 +436,7 @@ jobs:
     timeout-minutes: 15
     environment: 'production'
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -464,7 +465,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-linux-musl-alpine-llvm-x86_64'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -477,7 +478,7 @@ jobs:
     runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -500,7 +501,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-linux-musl-alpine-gcc-arm64'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -513,7 +514,7 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -527,7 +528,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-linux-musl-from-mac'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -543,7 +544,7 @@ jobs:
     env:
       CW_JOBS: '4'
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -563,7 +564,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-macos-universal-clang'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -578,7 +579,7 @@ jobs:
     env:
       CW_JOBS: '4'
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -592,7 +593,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-macos-universal-llvm'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -607,7 +608,7 @@ jobs:
     env:
       CW_JOBS: '4'
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -622,7 +623,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-macos-gcc-arm64'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -637,7 +638,7 @@ jobs:
     env:
       CW_JOBS: '4'
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -654,7 +655,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-windows-llvm-from-mac'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -668,7 +669,7 @@ jobs:
     timeout-minutes: 15
     environment: 'production'
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -699,7 +700,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-windows-llvm'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
@@ -712,7 +713,7 @@ jobs:
     runs-on: ubuntu-24.04-firewall
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -738,7 +739,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@v7.0.1
         with:
           name: 'curl-windows-gcc-x64'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
