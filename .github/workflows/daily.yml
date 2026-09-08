@@ -1,3 +1,4 @@
+# This workflow is managed by gh actions-lock.
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 ---
@@ -52,7 +53,7 @@ jobs:
     timeout-minutes: 15
     environment: 'production'
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -83,7 +84,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: 'curl-linux-glibc-daily-tool'
           retention-days: 42
@@ -91,7 +92,7 @@ jobs:
             curl-*-*-*/curl*
             curl-*-*-*/trurl*
 
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: 'curl-linux-glibc-daily'
           retention-days: 42
@@ -106,7 +107,7 @@ jobs:
     timeout-minutes: 15
     environment: 'production'
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -137,7 +138,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: 'curl-linux-musl-daily-tool'
           retention-days: 42
@@ -145,7 +146,7 @@ jobs:
             curl-*-*-*/curl*
             curl-*-*-*/trurl*
 
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: 'curl-linux-musl-daily'
           retention-days: 42
@@ -164,7 +165,7 @@ jobs:
     steps:
       - uses: $/.github/actions/macos-fix-certs
 
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -185,7 +186,7 @@ jobs:
 
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: 'curl-macos-daily-tool'
           retention-days: 42
@@ -193,7 +194,7 @@ jobs:
             curl-*-*-*/curl*
             curl-*-*-*/trurl*
 
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: 'curl-macos-daily'
           retention-days: 42
@@ -208,7 +209,7 @@ jobs:
     timeout-minutes: 15
     environment: 'production'
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           fetch-depth: '300'
@@ -241,7 +242,7 @@ jobs:
       - name: 'list dependencies'
         run: cat urls.txt ./*-version-*.txt || true
       # https://github.com/actions/upload-artifact
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: 'curl-windows-daily-tool'
           retention-days: 42
@@ -249,7 +250,7 @@ jobs:
             curl-*-*-*/curl*
             curl-*-*-*/trurl*
 
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: 'curl-windows-daily'
           retention-days: 42
