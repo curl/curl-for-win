@@ -7,6 +7,7 @@ SPDX-PackageDownloadLocation = "https://github.com/curl/curl-for-win"
 
 [[annotations]]
 path = [
+  ".github/workflows/actions.lock",
   "*.asc",
   "*.id",
   "*.patch",
