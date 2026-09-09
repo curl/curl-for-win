@@ -53,8 +53,15 @@ jobs:
         env:
           GH_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         run: |
+          cat <<YAML > ~/zizmor.yml
+          rules:
+            # needs access to api.github.com
+            # Note: 'impostor_commit' rule may also access it if falling off the happy codepath.
+            known-vulnerable-actions:
+              disable: true
+          YAML
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          zizmor --persona auditor .github/workflows/*.yml .github/dependabot.yml
+          zizmor --config ~/zizmor.yml --persona auditor .github/workflows/*.yml .github/dependabot.yml
 
       - name: 'actionlint'
         run: |
