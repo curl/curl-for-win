@@ -257,10 +257,8 @@ check_update() {
     # heavily rate-limited
     elif [ -n "$4" ]; then
       # >&2 echo "tag|${tag}|"
-      ref="$(my_curl --user-agent 'curl' "https://api.github.com/repos/${slug}/git/refs/tags" \
-        --header 'X-GitHub-Api-Version: 2022-11-28' \
-        | jq --raw-output '.[].ref' \
-        | grep -a -E "$4" | sort -V | tail -n -1)"
+      ref="$(GIT_HTTP_USER_AGENT='' git ls-remote --tags --refs --sort=version:refname "https://github.com/${slug}.git" | cut -f 2 \
+        | grep -a -E "$4" | tail -n -1)"
       newver="$(printf '%s' "${ref}" | grep -a -E -o '\d+\.\d+\.\d+')"
       # Optionally, check for the presence of a path
       if [ -n "$5" ] && \
