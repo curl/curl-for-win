@@ -15,6 +15,7 @@ allow:
   - auth.docker.io
   - curl.se
   - deb.debian.org
+  - files.pythonhosted.org
   - formulae.brew.sh
   - ftp.openbsd.org
   - ghcr.io
