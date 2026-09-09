@@ -254,7 +254,6 @@ check_update() {
       newver="$(my_curl "$6" \
         | grep -F "$7" \
         | grep -a -o -E "$8")"
-    # heavily rate-limited
     elif [ -n "$4" ]; then
       # >&2 echo "tag|${tag}|"
       ref="$(GIT_HTTP_USER_AGENT='' git ls-remote --tags --refs --sort=version:refname "https://github.com/${slug}.git" | cut -f 2 \
@@ -265,6 +264,7 @@ check_update() {
          ! my_curl --head "https://raw.githubusercontent.com/${slug}/${ref}/$5" >/dev/null 2>&1; then
         newver=''
       fi
+    # heavily rate-limited
     else
       if [[ "${_CONFIG}" = *'dev'* ]]; then
         newver="$(my_curl --user-agent 'curl' "https://api.github.com/repos/${slug}/releases" \
