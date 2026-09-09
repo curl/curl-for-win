@@ -14,6 +14,19 @@ export DEBIAN_FRONTEND='noninteractive'
 extra=''
 dl=''
 
+# Requires obtaining a CA root bundle via cleartext. Or from the host
+# machine. Both fragile/complex/slow/insecure.
+# https://github.com/debuerreotype/docker-debian-artifacts/issues/28
+# https://github.com/debuerreotype/docker-debian-artifacts/issues/15
+if false; then
+  # Install CA roots. It has the side-effect of also installing the openssl
+  # tool as a hard dependency, as of Forky.
+  ${sudo} apt-get --option Dpkg::Use-Pty=0 --yes update
+  ${sudo} apt-get --option Dpkg::Use-Pty=0 --yes install --no-install-suggests --no-install-recommends ca-certificates
+  # Update sources to use HTTPS
+  ${sudo} sed -i 's/http:/https:/g' /etc/apt/sources.list.d/debian.sources
+fi
+
 if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
   [ -n "${CW_CCSUFFIX:-}" ] || export CW_CCSUFFIX='-21'
   if [[ "${CW_CONFIG:-}" != *'win'* ]] || [ "${CW_LLVM_MINGW_ONLY:-}" != '1' ]; then
