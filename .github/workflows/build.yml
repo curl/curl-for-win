@@ -34,6 +34,11 @@ jobs:
           persist-credentials: false
 
       - name: 'install prereqs'
+        env:
+          HOMEBREW_NO_ANALYTICS_MESSAGE_OUTPUT: '1'
+          HOMEBREW_NO_ANALYTICS: '1'
+          HOMEBREW_NO_AUTO_UPDATE: '1'
+          HOMEBREW_NO_INSTALL_CLEANUP: '1'
         run: |
           /home/linuxbrew/.linuxbrew/bin/brew install actionlint shellcheck zizmor
           python3 -m venv ~/venv
