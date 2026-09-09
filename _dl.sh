@@ -266,18 +266,9 @@ check_update() {
       fi
     # heavily rate-limited
     else
-      if [[ "${_CONFIG}" = *'dev'* ]]; then
-        newver="$(my_curl --user-agent 'curl' "https://api.github.com/repos/${slug}/releases" \
-          --header 'X-GitHub-Api-Version: 2022-11-28' \
-          | jq --raw-output 'map(select(.prerelease)) | first | .tag_name' | sed 's/^v//')"
-        [ "${newver}" = 'null' ] && newver=''
-        [[ ! "${newver}" =~ ^[0-9.]+$ ]] && newver=''
-      fi
-      if [ -z "${newver}" ]; then
-        newver="$(my_curl --user-agent 'curl' "https://api.github.com/repos/${slug}/releases/latest" \
-          --header 'X-GitHub-Api-Version: 2022-11-28' \
-          | jq --raw-output '.tag_name' | sed 's/^v//')"
-      fi
+      newver="$(my_curl --user-agent 'curl' "https://api.github.com/repos/${slug}/releases/latest" \
+        --header 'X-GitHub-Api-Version: 2022-11-28' \
+        | jq --raw-output '.tag_name' | sed 's/^v//')"
       if [ -n "$8" ]; then
         newver="$(printf '%s' "${newver}" | grep -a -o -E "$8")"
       elif [[ "${newver}" =~ ^[0-9]+\.[0-9]+$ ]]; then
