@@ -640,16 +640,10 @@ live_dl() {
         url="https://github.com/${slug}/archive/${commit}.tar.gz"
         redir='redir'
       else
-        # Use the GitHub API to find out the timestamp of the downloaded file
-        sha=''
-        [ -n "${commit:-}" ] && sha="&sha=${commit}"
         # Tweak the received date format to be accepted also by busybox (on Alpine).
         # https://busybox.net/downloads/BusyBox.html#date
-        dcommit="$(my_curl --user-agent 'curl' "https://api.github.com/repos/${slug}/commits?path=${path}${sha}" \
-          --retry-all-errors --retry 10 \
-          --header 'X-GitHub-Api-Version: 2022-11-28' \
-          | jq --raw-output '.[0].commit.committer.date' | sed 's/^null$//' | tr 'T' ' ' | tr -d 'Z')"  # 'YYYY-MM-DDThh:mm:ssZ' -> 'YYYY-MM-DD hh:mm:ss'
-        echo "! Detected file timestamp: |${dcommit}|"
+        dcommit="${ver} 00:00:00"  # YYYY-MM-DD hh:mm:ss
+        echo "! Using file timestamp: |${dcommit}|"
       fi
     fi
 
