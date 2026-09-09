@@ -17,6 +17,7 @@ allow:
   - deb.debian.org
   - formulae.brew.sh
   - ftp.openbsd.org
+  - ghcr.io
   - keyserver.ubuntu.com
   - libssh2.org
   - pgpkeys.eu
