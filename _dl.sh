@@ -256,13 +256,8 @@ check_update() {
         | grep -a -o -E "$8")"
     # heavily rate-limited
     elif [ -n "$4" ]; then
-      if [[ "${url}" = *'/refs/heads/'* ]]; then
-        heads_or_tags='heads'
-      else
-        heads_or_tags='tags'
-      fi
       # >&2 echo "tag|${tag}|"
-      ref="$(my_curl --user-agent 'curl' "https://api.github.com/repos/${slug}/git/refs/${heads_or_tags}" \
+      ref="$(my_curl --user-agent 'curl' "https://api.github.com/repos/${slug}/git/refs/tags" \
         --header 'X-GitHub-Api-Version: 2022-11-28' \
         | jq --raw-output '.[].ref' \
         | grep -a -E "$4" | sort -V | tail -n -1)"
