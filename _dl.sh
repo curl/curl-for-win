@@ -909,12 +909,7 @@ if [[ "${_DEPS}" = *'libssh2'* ]]; then
     if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *' libssh2 '* ]] && \
        [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *' libssh2 '* ]]; then
       LIBSSH2_REV_="${LIBSSH2_REV_:-master}"
-      tmp="$(mktemp)"
-      my_curl --user-agent 'curl' "https://api.github.com/repos/libssh2/libssh2/commits/${LIBSSH2_REV_}" \
-        --retry-all-errors --retry 10 \
-        --header 'X-GitHub-Api-Version: 2022-11-28' --output "${tmp}"
-      rev="$(jq --raw-output '.sha' "${tmp}")"
-      rm -r -f -- "${tmp}"
+      rev="$(GIT_HTTP_USER_AGENT='' git ls-remote https://github.com/libssh2/libssh2.git refs/heads/"${LIBSSH2_REV_}" | cut -f 1)"
       [ -n "${rev}" ] && LIBSSH2_REV_="${rev}"
       url="https://github.com/libssh2/libssh2/archive/${LIBSSH2_REV_}.tar.gz"
       echo "${url}" > '__libssh2.url'
@@ -939,12 +934,7 @@ if [[ "${_DEPS}" = *'curl'* ]]; then
     if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *' curl '* ]] && \
        [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *' curl '* ]]; then
       CURL_REV_="${CURL_REV_:-master}"
-      tmp="$(mktemp)"
-      my_curl --user-agent 'curl' "https://api.github.com/repos/curl/curl/commits/${CURL_REV_}" \
-        --retry-all-errors --retry 10 \
-        --header 'X-GitHub-Api-Version: 2022-11-28' --output "${tmp}"
-      rev="$(jq --raw-output '.sha' "${tmp}")"
-      rm -r -f -- "${tmp}"
+      rev="$(GIT_HTTP_USER_AGENT='' git ls-remote https://github.com/curl/curl.git refs/heads/"${CURL_REV_}" | cut -f 1)"
       [ -n "${rev}" ] && CURL_REV_="${rev}"
       url="https://github.com/curl/curl/archive/${CURL_REV_}.tar.gz"
       echo "${url}" > '__curl.url'
@@ -965,12 +955,7 @@ if [[ "${_DEPS}" = *'trurl'* ]]; then
     if [[ -z "${CW_GET:-}"   || " ${CW_GET} "    = *' trurl '* ]] && \
        [[ -z "${CW_NOGET:-}" || " ${CW_NOGET} " != *' trurl '* ]]; then
       TRURL_REV_="${TRURL_REV_:-master}"
-      tmp="$(mktemp)"
-      my_curl --user-agent 'curl' "https://api.github.com/repos/curl/trurl/commits/${TRURL_REV_}" \
-        --retry-all-errors --retry 10 \
-        --header 'X-GitHub-Api-Version: 2022-11-28' --output "${tmp}"
-      rev="$(jq --raw-output '.sha' "${tmp}")"
-      rm -r -f -- "${tmp}"
+      rev="$(GIT_HTTP_USER_AGENT='' git ls-remote https://github.com/curl/trurl.git refs/heads/"${TRURL_REV_}" | cut -f 1)"
       [ -n "${rev}" ] && TRURL_REV_="${rev}"
       url="https://github.com/curl/trurl/archive/${TRURL_REV_}.tar.gz"
       echo "${url}" > '__trurl.url'
