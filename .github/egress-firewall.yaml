@@ -15,6 +15,7 @@ allow:
   - auth.docker.io
   - curl.se
   - deb.debian.org
+  - formulae.brew.sh
   - ftp.openbsd.org
   - keyserver.ubuntu.com
   - libssh2.org
