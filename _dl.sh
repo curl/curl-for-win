@@ -264,11 +264,9 @@ check_update() {
          ! my_curl --head "https://raw.githubusercontent.com/${slug}/${ref}/$5" >/dev/null 2>&1; then
         newver=''
       fi
-    # heavily rate-limited
     else
-      newver="$(my_curl --user-agent 'curl' "https://api.github.com/repos/${slug}/releases/latest" \
-        --header 'X-GitHub-Api-Version: 2022-11-28' \
-        | jq --raw-output '.tag_name' | sed 's/^v//')"
+      newver="$(my_curl --location --head --output /dev/null --write-out '%{url_effective}' "https://github.com/${slug}/releases/latest" \
+        | grep -a -o -E '/tag/.+$' | sed -e 's|^/tag/||' -e 's/^v//')"
       if [ -n "$8" ]; then
         newver="$(printf '%s' "${newver}" | grep -a -o -E "$8")"
       elif [[ "${newver}" =~ ^[0-9]+\.[0-9]+$ ]]; then
