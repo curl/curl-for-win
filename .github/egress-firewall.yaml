@@ -21,6 +21,7 @@ allow:
   - keyserver.ubuntu.com
   - libssh2.org
   - pgpkeys.eu
+  - pkg-containers.githubusercontent.com
   - production.cloudfront.docker.com
   - registry-1.docker.io
   - release-assets.githubusercontent.com
