@@ -455,11 +455,9 @@ if [ "${_HOST}" = 'linux' ] && \
     "$(printf '%s' "${age_ver_str}" | cut -d '.' -f 1)" \
     "$(printf '%s' "${age_ver_str}" | cut -d '.' -f 2)")"
   if [ "${age_ver}" -lt 0130 ]; then  # debian:trixie
-    AGE_VERSION=1.3.2
-    AGE_SHA256=cbe24006683f8eb669266162894b9a522a1af52f2665fbc63a4bb032ed26ac10
     curl --disable --fail --silent --show-error --connect-timeout 15 --max-time 60 --retry 3 --retry-connrefused \
-      --location --proto-redir =https "https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz" --output pkg.bin
-    sha256sum pkg.bin | tee /dev/stderr | grep -qwF -- "${AGE_SHA256}" && tar -xf pkg.bin && rm -f pkg.bin
+      --location --proto-redir =https "https://github.com/FiloSottile/age/releases/download/v${AGE_VER_}/age-v${AGE_VER_}-linux-amd64.tar.gz" --output pkg.bin
+    sha256sum pkg.bin | tee /dev/stderr | grep -qwF -- "${AGE_HASH}" && tar -xf pkg.bin && rm -f pkg.bin
     export PATH; PATH="$(pwd)/age:${PATH}"
   fi
   command -v age
