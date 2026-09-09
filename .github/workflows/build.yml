@@ -713,9 +713,10 @@ jobs:
           sudo podman image trust set --type accept docker.io/library
           time podman pull "${OCI_IMAGE_DEBIAN_TESTING}"
           podman images --digests
+          export GIT_SSL_CAINFO="${CURL_CA_BUNDLE}"
           time podman run --volume "$(pwd):$(pwd)" --volume /var/lib/actions-firewall:/var/lib/actions-firewall --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CURL_CA_BUNDLE|CW_|SIGN_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CURL_CA_BUNDLE|GIT_SSL_CAINFO|CW_|SIGN_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${OCI_IMAGE_DEBIAN_TESTING}" \
             sh -c ./_ci-linux-debian.sh
 
