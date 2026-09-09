@@ -23,5 +23,6 @@ allow:
   - pgpkeys.eu
   - pkg-containers.githubusercontent.com
   - production.cloudfront.docker.com
+  - pypi.org
   - registry-1.docker.io
   - release-assets.githubusercontent.com
