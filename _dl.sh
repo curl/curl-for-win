@@ -246,17 +246,17 @@ check_update() {
     # Alternative solution using the GitHub Atom feed:
     # https://github.com/<user>/<repo>/commits/<branch-or-tag>/<filename>.atom
     #
-    # $ curl https://github.com/curl/curl/commits/master/RELEASE-NOTES.atom | tee atom.xml
+    # $ curl https://github.com/mozilla-firefox/firefox/commits/release/security/nss/lib/ckfw/builtins/certdata.txt.atom | tee atom.xml
     # <feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xml:lang="en-US">
-    #   <id>tag:github.com,2008:/curl/curl/commits/master/RELEASE-NOTES</id>
-    #   <link type="text/html" rel="alternate" href="https://github.com/curl/curl/commits/master/RELEASE-NOTES"/>
-    #   <link type="application/atom+xml" rel="self" href="https://github.com/curl/curl/commits/master/RELEASE-NOTES.atom"/>
-    #   <title>Recent Commits to curl:master</title>
-    #   <updated>2026-09-09T12:09:04Z</updated>
+    #   <id>tag:github.com,2008:/mozilla-firefox/firefox/commits/release/security/nss/lib/ckfw/builtins/certdata.txt</id>
+    #   <link type="text/html" rel="alternate" href="https://github.com/mozilla-firefox/firefox/commits/release/security/nss/lib/ckfw/builtins/certdata.txt"/>
+    #   <link type="application/atom+xml" rel="self" href="https://github.com/mozilla-firefox/firefox/commits/release/security/nss/lib/ckfw/builtins/certdata.txt.atom"/>
+    #   <title>Recent Commits to firefox:release</title>
+    #   <updated>2026-07-15T15:49:08Z</updated>
     #   <entry>
-    #     <id>tag:github.com,2008:Grit::Commit/c0c4971fceb41f312065b96be623d24dcc399892</id>
-    #     <link type="text/html" rel="alternate" href="https://github.com/curl/curl/commit/c0c4971fceb41f312065b96be623d24dcc399892"/>
-    #     <updated>2026-09-09T12:09:04Z</updated>
+    #     <id>tag:github.com,2008:Grit::Commit/4e9426ae522c67de47ff3e060774328b42df0134</id>
+    #     <link type="text/html" rel="alternate" href="https://github.com/mozilla-firefox/firefox/commit/4e9426ae522c67de47ff3e060774328b42df0134"/>
+    #     <updated>2026-07-15T15:49:08Z</updated>
     #     [...]
     # $ xmllint --xpath "./*[local-name()='feed']/*[local-name()='entry'][1]/*[local-name()='updated']/text()" atom.xml
     # $ hxselect -c 'feed > entry:nth-of-type(1) > updated' < atom.xml
