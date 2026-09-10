@@ -46,6 +46,7 @@ cat <<EOF
   {
     "name": "psl",
     "url": "https://raw.githubusercontent.com/publicsuffix/list/{commit}/public_suffix_list.dat",
+    "refs": "refs/heads/main",
     "bumpdays": 56,
     "gittar": "1"
   },
@@ -241,12 +242,29 @@ check_update() {
     path="${BASH_REMATCH[2]}"
     # https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28
     # https://api.github.com/repos/<user>/<repo>/commits?path=<filename>[&sha=<refs>]
-    refs=''
-    [ -n "${8:-}" ] && refs="&sha=${8}"  # e.g. refs/heads/release
-    jcommit="$(my_curl --user-agent 'curl' "https://api.github.com/repos/${slug}/commits?path=${path}${refs}" \
-      --header 'X-GitHub-Api-Version: 2022-11-28')"
-    newver="$(echo    "${jcommit}" | jq --raw-output '.[0].commit.committer.date' | cut -c -10)"  # 'YYYY-MM-DDThh:mm:ssZ' -> 'YYYY-MM-DD'
-    newcommit="$(echo "${jcommit}" | jq --raw-output '.[0].sha')"
+    #
+    # Alternative solution using the GitHub Atom feed:
+    # https://github.com/<user>/<repo>/commits/<branch-or-tag>/<filename>.atom
+    #
+    # $ curl https://github.com/curl/curl/commits/master/RELEASE-NOTES.atom | tee atom.xml
+    # <feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xml:lang="en-US">
+    #   <id>tag:github.com,2008:/curl/curl/commits/master/RELEASE-NOTES</id>
+    #   <link type="text/html" rel="alternate" href="https://github.com/curl/curl/commits/master/RELEASE-NOTES"/>
+    #   <link type="application/atom+xml" rel="self" href="https://github.com/curl/curl/commits/master/RELEASE-NOTES.atom"/>
+    #   <title>Recent Commits to curl:master</title>
+    #   <updated>2026-09-09T12:09:04Z</updated>
+    #   <entry>
+    #     <id>tag:github.com,2008:Grit::Commit/c0c4971fceb41f312065b96be623d24dcc399892</id>
+    #     <link type="text/html" rel="alternate" href="https://github.com/curl/curl/commit/c0c4971fceb41f312065b96be623d24dcc399892"/>
+    #     <updated>2026-09-09T12:09:04Z</updated>
+    #     [...]
+    # $ xmllint --xpath "./*[local-name()='feed']/*[local-name()='entry'][1]/*[local-name()='updated']/text()" atom.xml
+    # $ hxselect -c 'feed > entry:nth-of-type(1) > updated' < atom.xml
+    refs="${8:-master}"
+    jcommit="$(my_curl --user-agent 'curl' "https://github.com/${slug}/commits/${refs}${path}.atom")"
+    newver="$(echo    "${jcommit}" | hxselect -c 'feed > entry:nth-of-type(1) > updated' | cut -c -10)"  # 'YYYY-MM-DDThh:mm:ssZ' -> 'YYYY-MM-DD'
+    # https://github.com/libssh2/libssh2/commit/260fe5b69456cabc4c85f3db3fad069152534ab4
+    newcommit="$(echo "${jcommit}" | hxselect -c 'feed > entry:nth-of-type(1) > link::attr(href)' | grep -a -o -E '[0-9A-Fa-f]{40,}')"
   elif [[ "${url}" =~ ^https://github.com/([a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+)/ ]]; then
     slug="${BASH_REMATCH[1]}"
     if [ -n "$6" ]; then
