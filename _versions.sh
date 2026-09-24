@@ -5,7 +5,7 @@
 
 export OCI_IMAGE_DEBIAN_TESTING='debian:testing-20260918-slim@sha256:fcaae10ef02f2c0cc2e4cb291ade86c2d259143fb919ee4544a0236a90cc975a'
 export OCI_IMAGE_DEBIAN_STABLE='debian:trixie-20260918-slim@sha256:a99cfc517144bc59b1978475ec53b46ecabec7e43635402ee5b77cc54cd1b20a'
-export OCI_IMAGE_ALPINE_LATEST='alpine:latest@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b' # v3.24.1
+export OCI_IMAGE_ALPINE_LATEST='alpine:latest@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6' # v3.24.2
 export OCI_IMAGE_DEBIAN="${OCI_IMAGE_DEBIAN_TESTING}"
 
 export CURL_VER_='8.22.0'
