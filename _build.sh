@@ -1549,6 +1549,19 @@ build_single_target() {
     _LDFLAGS_GLOBAL+=" -Wl,--dynamic-linker=/lib/ld-musl-${_machine}.so.1"
   fi
 
+  # for curl and trurl, and possibly other projects with -Werror
+  if [ "${_OS}" = 'linux' ] && [ "${_CC}" = 'llvm' ] && [ "${_CCVER}" -ge '22' ]; then
+    # Do not error on:
+    # ```
+    # clang-22: error: future releases of the clang compiler will prefer GCC installations containing
+    # libstdc++ include directories; '/usr/lib/gcc/x86_64-linux-gnu/15' would be chosen over
+    # '/usr/lib/gcc/x86_64-linux-gnu/16' [-Werror,-Wgcc-install-dir-libstdcxx]
+    # ```
+    # Could not figure out how to fix it to avoid the warning in the first
+    # place.
+    _CFLAGS_GLOBAL+=' -Wno-error=gcc-install-dir-libstdcxx'
+  fi
+
   if [ "${_CCRT}" = 'libgcc' ] && [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
     if [ "${_CC}" = 'gcc' ]; then
       ccrtlib="$("${_CCPREFIX}gcc${_CCSUFFIX}" -print-libgcc-file-name)"               # /usr/lib/gcc/aarch64-linux-gnu/12/libgcc.a
