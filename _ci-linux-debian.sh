@@ -116,6 +116,11 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
 
     [[ "${CW_CONFIG:-}" = *'gcc'* ]] && extra+=" libgcc${CW_GCCSUFFIX}-dev"
 
+    # to silence llvm -Wgcc-install-dir-libstdcxx ?
+    [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && extra+=" libstdc++${CW_GCCSUFFIX}-dev-arm64-cross"
+    [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && extra+=" libstdc++${CW_GCCSUFFIX}-dev-riscv64-cross"
+    [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && extra+=" libstdc++${CW_GCCSUFFIX}-dev-amd64-cross"
+
     # for curl 'linux/tcp.h' and openssl 'secure-memory' feature
     [[ "$(uname -m)" = 'aarch64' && "${a64}" = 1 ]] && extra+=' linux-headers-arm64'
     [[ "$(uname -m)" = 'riscv64' && "${r64}" = 1 ]] && extra+=' linux-headers-riscv64'
