@@ -455,9 +455,15 @@ if [ "${_HOST}" = 'linux' ] && \
     "$(printf '%s' "${age_ver_str}" | cut -d '.' -f 1)" \
     "$(printf '%s' "${age_ver_str}" | cut -d '.' -f 2)")"
   if [ "${age_ver}" -lt 0130 ]; then  # debian:trixie
-    curl --disable --fail --silent --show-error --connect-timeout 15 --max-time 60 --retry 3 --retry-connrefused \
-      --location --proto-redir =https "https://github.com/FiloSottile/age/releases/download/v${AGE_VER_}/age-v${AGE_VER_}-linux-amd64.tar.gz" --output pkg.bin
-    sha256sum pkg.bin | tee /dev/stderr | grep -qwF -- "${AGE_HASH}" && tar -xf pkg.bin && rm -f pkg.bin
+    if [ "${unamem}" = 'x86_64' ]; then
+      curl --disable --fail --silent --show-error --connect-timeout 15 --max-time 60 --retry 3 --retry-connrefused \
+        --location --proto-redir =https "https://github.com/FiloSottile/age/releases/download/v${AGE_LINUX_AMD64_VER_}/age-v${AGE_LINUX_AMD64_VER_}-linux-amd64.tar.gz" --output pkg.bin
+      sha256sum pkg.bin | tee /dev/stderr | grep -qwF -- "${AGE_LINUX_AMD64_HASH}" && tar -xf pkg.bin && rm -f pkg.bin
+    elif [ "${unamem}" = 'aarch64' ]; then
+      curl --disable --fail --silent --show-error --connect-timeout 15 --max-time 60 --retry 3 --retry-connrefused \
+        --location --proto-redir =https "https://github.com/FiloSottile/age/releases/download/v${AGE_LINUX_ARM64_VER_}/age-v${AGE_LINUX_ARM64_VER_}-linux-arm64.tar.gz" --output pkg.bin
+      sha256sum pkg.bin | tee /dev/stderr | grep -qwF -- "${AGE_LINUX_ARM64_HASH}" && tar -xf pkg.bin && rm -f pkg.bin
+    fi
     export PATH; PATH="$(pwd)/age:${PATH}"
   fi
   command -v age

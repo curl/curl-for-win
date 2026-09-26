@@ -120,8 +120,12 @@ cat <<EOF
     "url": "https://github.com/mtrojnar/osslsigncode/archive/refs/tags/{vermm}.tar.gz"
   },
   {
-    "name": "age",
+    "name": "age-linux-amd64",
     "url": "https://github.com/FiloSottile/age/releases/download/v{ver}/age-v{ver}-linux-amd64.tar.gz"
+  },
+  {
+    "name": "age-linux-arm64",
+    "url": "https://github.com/FiloSottile/age/releases/download/v{ver}/age-v{ver}-linux-arm64.tar.gz"
   },
   {
     "name": "zlibng",
