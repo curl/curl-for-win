@@ -30,9 +30,7 @@ _VER="$1"
 
   # shellcheck disable=SC2086
   cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
-    -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL} -v" || true
-
-  cat "${_BLDDIR}"/config.log "${_BLDDIR}"/CMakeFiles/CMakeConfigureLog.yaml 2>/dev/null || true
+    -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL}"
 
   cmake --build "${_BLDDIR}"
   cmake --install "${_BLDDIR}" --prefix "${_PP}"
