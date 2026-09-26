@@ -1572,7 +1572,7 @@ build_single_target() {
     # ```
     # Could not figure out how to fix it to avoid the warning in the first
     # place.
-    CFLAGS+=' -Wno-error=gcc-install-dir-libstdcxx'
+    _CFLAGS_GLOBAL+=' -Wno-error=gcc-install-dir-libstdcxx'
   fi
 
   if [ "${_CCRT}" = 'libgcc' ] && [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
