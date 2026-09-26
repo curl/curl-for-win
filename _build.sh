@@ -1550,6 +1550,11 @@ build_single_target() {
     _LDFLAGS_GLOBAL+=" -Wl,--dynamic-linker=/lib/ld-musl-${_machine}.so.1"
   fi
 
+  # TEMP
+  if [ "${_CC}" = 'llvm' ] && [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" = 'aarch64' ] && [ "${_CCVER}" -ge '21' ]; then
+    _LDFLAGS_GLOBAL+=' --gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15'
+  fi
+
   if [ "${_CCRT}" = 'libgcc' ] && [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
     if [ "${_CC}" = 'gcc' ]; then
       ccrtlib="$("${_CCPREFIX}gcc${_CCSUFFIX}" -print-libgcc-file-name)"               # /usr/lib/gcc/aarch64-linux-gnu/12/libgcc.a
