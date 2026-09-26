@@ -118,7 +118,7 @@ jobs:
   linux-glibc-debian-testing-llvm:
     name: 'linux-glibc-debian-testing-llvm'
     runs-on: ubuntu-26.04
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -154,7 +154,7 @@ jobs:
   linux-glibc-debian-testing-gcc:
     name: 'linux-glibc-debian-testing-gcc'
     runs-on: ubuntu-26.04
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -191,7 +191,7 @@ jobs:
   linux-glibc-debian-stable-llvm:
     name: 'linux-glibc-debian-stable-llvm'
     runs-on: ubuntu-26.04
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -229,7 +229,7 @@ jobs:
   linux-glibc-debian-stable-gcc:
     name: 'linux-glibc-debian-stable-gcc'
     runs-on: ubuntu-26.04
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -266,7 +266,7 @@ jobs:
   linux-musl-debian-testing-llvm:
     name: 'linux-musl-debian-testing-llvm'
     runs-on: ubuntu-26.04
-    timeout-minutes: 30
+    timeout-minutes: 15
     environment: 'production'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -309,7 +309,7 @@ jobs:
   linux-musl-debian-testing-gcc:
     name: 'linux-musl-debian-testing-gcc'
     runs-on: ubuntu-26.04
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -346,7 +346,7 @@ jobs:
   linux-musl-debian-stable-llvm:
     name: 'linux-musl-debian-stable-llvm'
     runs-on: ubuntu-26.04
-    timeout-minutes: 30
+    timeout-minutes: 15
     environment: 'production'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -391,7 +391,7 @@ jobs:
   linux-musl-debian-stable-gcc:
     name: 'linux-musl-debian-stable-gcc'
     runs-on: ubuntu-26.04
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -428,7 +428,7 @@ jobs:
   linux-musl-alpine-llvm:
     name: 'linux-musl-alpine-llvm'
     runs-on: ubuntu-26.04
-    timeout-minutes: 30
+    timeout-minutes: 15
     environment: 'production'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -471,7 +471,7 @@ jobs:
   linux-musl-alpine-gcc:
     name: 'linux-musl-alpine-gcc'
     runs-on: ubuntu-26.04
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -507,7 +507,7 @@ jobs:
   linux-musl-from-mac:
     name: 'linux-musl-from-mac'
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -534,7 +534,7 @@ jobs:
   mac-clang:
     name: 'mac-clang'
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     environment: 'production'
     env:
       CW_JOBS: '4'
@@ -570,7 +570,7 @@ jobs:
   mac-llvm:
     name: 'mac-llvm'
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     env:
       CW_JOBS: '4'
     steps:
@@ -599,7 +599,7 @@ jobs:
   mac-gcc:
     name: 'mac-gcc'
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     env:
       CW_JOBS: '4'
     steps:
@@ -629,7 +629,7 @@ jobs:
   win-llvm-from-mac:
     name: 'win-llvm-from-mac'
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     env:
       CW_JOBS: '4'
     steps:
@@ -661,7 +661,7 @@ jobs:
   win-llvm:
     name: 'win-llvm'
     runs-on: ubuntu-26.04
-    timeout-minutes: 30
+    timeout-minutes: 15
     environment: 'production'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -706,7 +706,7 @@ jobs:
   win-gcc:
     name: 'win-gcc'
     runs-on: ubuntu-24.04-firewall
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
