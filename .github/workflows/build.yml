@@ -281,7 +281,7 @@ jobs:
           SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
           SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl-x64"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl-a64"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           #export CW_CCSUFFIX='-21'  # '22.1.8' is broken on arm hosts with LibreSSL (x64) ASM compilation as of 2026-09-26
@@ -325,7 +325,7 @@ jobs:
           SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
           SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl-a64"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl-x64"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           #export CW_CCSUFFIX='-21'  # '22.1.8' is broken on arm hosts with LibreSSL (x64) ASM compilation as of 2026-09-26
