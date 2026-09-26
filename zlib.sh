@@ -29,7 +29,7 @@ _VER="$1"
   fi
 
   echo '----------------------ZZZ'
-  find /usr/lib/gcc -type -d
+  find /usr/lib/gcc -type d
   echo '----------------------'
 
   # shellcheck disable=SC2086
