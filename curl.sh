@@ -31,6 +31,7 @@ _VER="$1"
   # Build
 
   options=''
+  CFLAGS=''
 
   LIBS=''
   LDFLAGS=''
@@ -405,6 +406,18 @@ _VER="$1"
 
   options+=' -DCURL_USE_PKGCONFIG=OFF'
 
+  if [ "${_CC}" = 'gcc' ] && [ "${_CCVER}" -ge '16' ]; then
+    # To silence GCC 16.2.0 warning:
+    # ```
+    #     inlined from 'Curl_headers_push' at lib/headers.c:382:12:
+    # lib/headers.c:329:12: error: writing 1 byte into a region of size 0 [-Werror=stringop-overflow=]
+    #   329 |     *end-- = 0; /* null-terminate */
+    #       |     ~~~~~~~^~~
+    # ```
+    # Default is -Wstringop-overflow=2, also happens with -Wstringop-overflow=1.
+    CFLAGS+=' -Wno-stringop-overflow'
+  fi
+
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
     # shellcheck disable=SC2086
     cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
@@ -413,7 +426,7 @@ _VER="$1"
       -DBUILD_STATIC_LIBS=ON \
       -DCURL_HIDDEN_SYMBOLS=ON \
       -DCMAKE_RC_FLAGS="${_RCFLAGS_GLOBAL}" \
-      -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL}" \
+      -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${_LDFLAGS_GLOBAL}" \
       -DCMAKE_EXE_LINKER_FLAGS="${LDFLAGS} ${LDFLAGS_BIN} ${LIBS}" \
       -DCMAKE_SHARED_LINKER_FLAGS="${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}" \
       || { cat "${_BLDDIR}"/CMakeFiles/CMake*.yaml; false; }
