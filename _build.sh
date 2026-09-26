@@ -287,9 +287,13 @@ case "$(uname)" in
 esac
 
 export _DISTRO=''
+export _DISTVER=''
 if [ "${_HOST}" = 'linux' ] && [ -s /etc/os-release ]; then
   _DISTRO="$(grep -a '^ID=' /etc/os-release | cut -c 4- | tr -d '"' || true)"
   _DISTRO="${_DISTRO:-unrecognized}"
+  # Note: debian:sid returns the same string as debian:testing
+  _DISTVER="$(grep -a '^VERSION_CODENAME=' /etc/os-release | cut -c 18- || true)"
+  _DISTVER="${_DISTVER:-unrecognized}"
 fi
 
 export _OS='win'
@@ -1291,7 +1295,20 @@ build_single_target() {
     fi
     _CMAKE_GLOBAL+=" -DCMAKE_C_COMPILER=clang${_CCSUFFIX}"
     _CMAKE_CXX_GLOBAL+=" -DCMAKE_CXX_COMPILER=clang++${_CCSUFFIX}"
-    _CMAKE_ASM_GLOBAL+=" -DCMAKE_ASM_COMPILER=clang${_CCSUFFIX}"
+    if [ "${_OS}" = 'linux' ] && [ "${_DISTRO}" = 'debian' ] && [ "${_DISTVER}" = 'forky' ] && [ "${unamem}" = 'aarch64' ] && [ "${_CRT}" = 'musl' ] && [ "${_CCVER}" = '22' ]; then
+      # Workaround for --target=x86_64-unknown-linux-musl option missing from compiler command-line
+      # for ASM (.S) source (e.g. in LibreSSL) on debian:forky arm64 Linux hosts (llvm 22.1.8-1+b2 + cmake 4.3.4-1)
+      # when doing MUSL builds.
+      # Same works with llvm 22.1.8-1~deb13u4 + cmake 3.31.6-2 on debian:trixie. Also works on Intel Linux
+      # hosts with debian:forky. It also works on debian:forky arm64 with llvm 21.1.8-13 + cmake 4.3.4-1.
+      # It also works on debian:sid arm64 with llvm 22.1.8-1+b2 + cmake 4.3.4-1 and llvm 23.1.2-1 + cmake 4.3.4-1.
+      # It also works in all combinations with glibc.
+      # It seems like a forky-specific llvm 22.1.8 MUSL triplet regression.
+      # Despite this script passing the same CMake options in all these scenarios.
+      export ASM="clang${_CCSUFFIX} --target=${_TRIPLET}"
+    else
+      _CMAKE_ASM_GLOBAL+=" -DCMAKE_ASM_COMPILER=clang${_CCSUFFIX}"
+    fi
 
     if [ "${_TOOLCHAIN}" = 'llvm-apple' ]; then
       _LD='ld-apple'
