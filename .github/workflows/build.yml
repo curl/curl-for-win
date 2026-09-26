@@ -152,7 +152,7 @@ jobs:
             urls.txt
 
   linux-glibc-debian-testing-llvm-arm:
-    name: 'linux-glibc-debian-testing-llvm'
+    name: 'linux-glibc-debian-testing-llvm-arm'
     runs-on: ubuntu-26.04-arm  # broken on arm hosts with llvm-22.1.8/21.1.8
     timeout-minutes: 15
     steps:
@@ -167,6 +167,7 @@ jobs:
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-x64"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
+          export CW_CCSUFFIX='-21'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
           time podman pull "${OCI_IMAGE_DEBIAN_TESTING}"
@@ -262,7 +263,7 @@ jobs:
             urls.txt
 
   linux-glibc-debian-stable-llvm-arm:
-    name: 'linux-glibc-debian-stable-llvm'
+    name: 'linux-glibc-debian-stable-llvm-arm'
     runs-on: ubuntu-26.04-arm  # broken on arm hosts with llvm-22.1.8
     timeout-minutes: 15
     steps:
@@ -277,7 +278,7 @@ jobs:
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-x64"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
-          export CW_GCCSUFFIX='-14'
+          export CW_CCSUFFIX='-22'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
           time podman pull "${OCI_IMAGE_DEBIAN_STABLE}"
