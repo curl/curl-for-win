@@ -1552,7 +1552,7 @@ build_single_target() {
 
   # Workaround for llvm 21/22 (20 untested) not picking up the gcc install root
   # on arm64 machines.
-  if [ "${_CC}" = 'llvm' ] && [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" = 'aarch64' ] && [ "${unamem}" = "${_machine}" ] && [ "${_CCVER}" -ge '21' ]; then
+  if [ "${_CC}" = 'llvm' ] && [ "${_OS}" = 'linux' ] && [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" = 'aarch64' ] && [ "${unamem}" = "${_machine}" ] && [ "${_CCVER}" -ge '21' ]; then
     gccroot="/usr/lib/gcc/${_TRIPLETSH}"        # /usr/lib/gcc/aarch64-linux-gnu/15
     ccrtdir="$(find "${gccroot}" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1 || true)"
     if [ -z "${ccrtdir}" ]; then
