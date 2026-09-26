@@ -1550,9 +1550,16 @@ build_single_target() {
     _LDFLAGS_GLOBAL+=" -Wl,--dynamic-linker=/lib/ld-musl-${_machine}.so.1"
   fi
 
-  # TEMP
-  if [ "${_CC}" = 'llvm' ] && [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" = 'aarch64' ] && [ "${_CCVER}" -ge '21' ]; then
-    _LDFLAGS_GLOBAL+=' --gcc-install-dir=/usr/lib/gcc/aarch64-linux-gnu/15'
+  # Workaround for llvm 21/22 (20 untested) not picking up the gcc install root
+  # on arm64 machines.
+  if [ "${_CC}" = 'llvm' ] && [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" = 'aarch64' ] && [ "${unamem}" = "${_machine}" ] && [ "${_CCVER}" -ge '21' ]; then
+    gccroot="/usr/lib/gcc/${_TRIPLETSH}"        # /usr/lib/gcc/aarch64-linux-gnu/15
+    ccrtdir="$(find "${gccroot}" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1 || true)"
+    if [ -z "${ccrtdir}" ]; then
+      >&2 echo '! Error: Failed to detect gcc env root.'
+      exit 1
+    fi
+    _LDFLAGS_GLOBAL+=" --gcc-install-dir=${ccrtdir}"
   fi
 
   if [ "${_CCRT}" = 'libgcc' ] && [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
