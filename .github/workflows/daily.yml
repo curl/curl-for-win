@@ -188,7 +188,7 @@ jobs:
   win:
     if: ${{ github.repository_owner == 'curl' }}
     name: 'Windows (ARM64, x64)'
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     environment: 'production'
     steps:

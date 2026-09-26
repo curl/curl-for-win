@@ -660,7 +660,7 @@ jobs:
 
   win-llvm:
     name: 'win-llvm'
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     environment: 'production'
     steps:
