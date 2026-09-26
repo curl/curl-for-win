@@ -1552,7 +1552,7 @@ build_single_target() {
 
   # TEMP
   if [ "${_CC}" = 'llvm' ] && [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" = 'aarch64' ] && [ "${_CCVER}" -ge '21' ]; then
-    _LDFLAGS_GLOBAL+=' --gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15'
+    _LDFLAGS_GLOBAL+=' --gcc-install-dir=/usr/lib/gcc/aarch64-linux-gnu/15'
   fi
 
   if [ "${_CCRT}" = 'libgcc' ] && [ "${_CRT}" = 'musl' ] && [ "${_DISTRO}" = 'debian' ]; then
