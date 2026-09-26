@@ -167,7 +167,7 @@ jobs:
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-x64"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
-          export CW_CCSUFFIX='-21'
+          export CW_CCSUFFIX='-22'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
           time podman pull "${OCI_IMAGE_DEBIAN_TESTING}"
