@@ -117,7 +117,7 @@ jobs:
 
   linux-glibc-debian-testing-llvm:
     name: 'linux-glibc-debian-testing-llvm'
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-26.04  # broken on arm hosts with llvm-22.1.8/21.1.8
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -153,7 +153,7 @@ jobs:
 
   linux-glibc-debian-testing-gcc:
     name: 'linux-glibc-debian-testing-gcc'
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -190,7 +190,7 @@ jobs:
 
   linux-glibc-debian-stable-llvm:
     name: 'linux-glibc-debian-stable-llvm'
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-26.04  # broken on arm hosts with llvm-22.1.8
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -228,7 +228,7 @@ jobs:
 
   linux-glibc-debian-stable-gcc:
     name: 'linux-glibc-debian-stable-gcc'
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -265,7 +265,7 @@ jobs:
 
   linux-musl-debian-testing-llvm:
     name: 'linux-musl-debian-testing-llvm'
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     environment: 'production'
     steps:
@@ -308,7 +308,7 @@ jobs:
 
   linux-musl-debian-testing-gcc:
     name: 'linux-musl-debian-testing-gcc'
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -345,7 +345,7 @@ jobs:
 
   linux-musl-debian-stable-llvm:
     name: 'linux-musl-debian-stable-llvm'
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     environment: 'production'
     steps:
@@ -390,7 +390,7 @@ jobs:
 
   linux-musl-debian-stable-gcc:
     name: 'linux-musl-debian-stable-gcc'
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
