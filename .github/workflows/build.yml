@@ -117,7 +117,7 @@ jobs:
 
   linux-glibc-debian-testing-llvm:
     name: 'linux-glibc-debian-testing-llvm'
-    runs-on: ubuntu-26.04  # broken on arm hosts with llvm-22.1.8/21.1.8
+    runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -131,43 +131,6 @@ jobs:
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-x64"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
-          sudo podman image trust set --type reject default
-          sudo podman image trust set --type accept docker.io/library
-          time podman pull "${OCI_IMAGE_DEBIAN_TESTING}"
-          podman images --digests
-          time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
-            --env-file <(env | grep -a -E \
-              '^(CW_|SIGN_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${OCI_IMAGE_DEBIAN_TESTING}" \
-            sh -c ./_ci-linux-debian.sh
-
-      - name: 'list dependencies'
-        run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: 'curl-linux-glibc-debian-testing-llvm'
-          retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
-          path: |
-            *-*-linux*.*
-            urls.txt
-
-  linux-glibc-debian-testing-llvm-arm:
-    name: 'linux-glibc-debian-testing-llvm-arm'
-    runs-on: ubuntu-26.04-arm  # broken on arm hosts with llvm-22.1.8/21.1.8
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: '300'
-      - name: 'build'
-        env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-        run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-x64"
-          export CW_REVISION="${GITHUB_SHA}"
-          . ./_versions.sh
-          export CW_CCSUFFIX='-22'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
           time podman pull "${OCI_IMAGE_DEBIAN_TESTING}"
@@ -226,7 +189,7 @@ jobs:
 
   linux-glibc-debian-stable-llvm:
     name: 'linux-glibc-debian-stable-llvm'
-    runs-on: ubuntu-26.04  # broken on arm hosts with llvm-22.1.8
+    runs-on: ubuntu-26.04-arm
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -240,44 +203,6 @@ jobs:
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-x64"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
-          export CW_GCCSUFFIX='-14'
-          sudo podman image trust set --type reject default
-          sudo podman image trust set --type accept docker.io/library
-          time podman pull "${OCI_IMAGE_DEBIAN_STABLE}"
-          podman images --digests
-          time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
-            --env-file <(env | grep -a -E \
-              '^(CW_|SIGN_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
-            "${OCI_IMAGE_DEBIAN_STABLE}" \
-            sh -c ./_ci-linux-debian.sh
-
-      - name: 'list dependencies'
-        run: cat urls.txt ./*-version-*.txt || true
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: 'curl-linux-glibc-debian-stable-llvm'
-          retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
-          path: |
-            *-*-linux*.*
-            urls.txt
-
-  linux-glibc-debian-stable-llvm-arm:
-    name: 'linux-glibc-debian-stable-llvm-arm'
-    runs-on: ubuntu-26.04-arm  # broken on arm hosts with llvm-22.1.8
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: '300'
-      - name: 'build'
-        env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-        run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-x64"
-          export CW_REVISION="${GITHUB_SHA}"
-          . ./_versions.sh
-          export CW_CCSUFFIX='-22'
           export CW_GCCSUFFIX='-14'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
