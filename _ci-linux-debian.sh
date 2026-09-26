@@ -65,7 +65,7 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   extra+=' python3-pefile'
   [ -n "${DEPLOY_AGE_PASS:+1}" ] && extra+=' openssh-client'
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
-  [ -n "${CW_GCCSUFFIX:-}" ] || CW_GCCSUFFIX='-14'
+  [ -n "${CW_GCCSUFFIX:-}" ] || CW_GCCSUFFIX='-16'
 
   [ "${CW_TRURL_TEST:-}" = '1' ] && extra+=' python3'
 
