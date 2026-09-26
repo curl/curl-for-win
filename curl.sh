@@ -418,13 +418,15 @@ _VER="$1"
     CFLAGS+=' -Wno-stringop-overflow'
   fi
 
-  # Do not error on:
-  # ```
-  # clang-22: error: future releases of the clang compiler will prefer GCC installations containing
-  # libstdc++ include directories; '/usr/lib/gcc/x86_64-linux-gnu/15' would be chosen over
-  # '/usr/lib/gcc/x86_64-linux-gnu/16' [-Werror,-Wgcc-install-dir-libstdcxx]
-  # ```
-  CFLAGS+=' -Wno-error=gcc-install-dir-libstdcxx'
+  if [ "${_OS}" = 'linux' ] && [ "${_CC}" = 'llvm' ] && [ "${_CCVER}" -ge '21' ]; then
+    # Do not error on:
+    # ```
+    # clang-22: error: future releases of the clang compiler will prefer GCC installations containing
+    # libstdc++ include directories; '/usr/lib/gcc/x86_64-linux-gnu/15' would be chosen over
+    # '/usr/lib/gcc/x86_64-linux-gnu/16' [-Werror,-Wgcc-install-dir-libstdcxx]
+    # ```
+    CFLAGS+=' -Wno-error=gcc-install-dir-libstdcxx'
+  fi
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
     # shellcheck disable=SC2086
