@@ -425,6 +425,8 @@ _VER="$1"
     # libstdc++ include directories; '/usr/lib/gcc/x86_64-linux-gnu/15' would be chosen over
     # '/usr/lib/gcc/x86_64-linux-gnu/16' [-Werror,-Wgcc-install-dir-libstdcxx]
     # ```
+    # Could not figure out how to fix it to avoid the warning in the first
+    # place.
     CFLAGS+=' -Wno-error=gcc-install-dir-libstdcxx'
   fi
 
