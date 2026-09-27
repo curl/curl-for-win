@@ -981,6 +981,20 @@ build_single_target() {
           ( "${_CC}" = 'gcc'  && "${_CCVER}" -ge '13' ) ]]; then
       _CFLAGS_GLOBAL+=' -fstrict-flex-arrays=3'
       _CXXFLAGS_GLOBAL+=' -fstrict-flex-arrays=3'
+
+      if [ "${_CC}" = 'gcc' ] && [ "${_CCVER}" -ge '15' ] && [ "${unamem}" = 'aarch64' ] && [ "${unamem}" = "${_machine}" ]; then
+        # To silence compiler warning with arm64 GCC targeting arm64 with the '-fstrict-flex-arrays=3'
+        # option set. Seen with GCC 15.2.0/16.2.0 when compiling curl:
+        # ```
+        #     inlined from 'Curl_headers_push' at curl/lib/headers.c:382:12:
+        # curl/lib/headers.c:329:12: error: writing 1 byte into a region of size 0 [-Werror=stringop-overflow=]
+        #   329 |     *end-- = 0; /* null-terminate */
+        #       |     ~~~~~~~^~~
+        # ```
+        # Default is -Wstringop-overflow=2, also happens with -Wstringop-overflow=1.
+        _CFLAGS_GLOBAL+=' -Wno-stringop-overflow'
+        _CXXFLAGS_GLOBAL+=' -Wno-stringop-overflow'
+      fi
     fi
 
     # With musl, this seems to be a no-op as of Alpine v3.18
