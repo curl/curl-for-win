@@ -76,50 +76,52 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   [[ "${CW_CONFIG}" = *'r64'* || ! "${CW_CONFIG}" =~ (a64|x64) ]] && r64=1
   [[ "${CW_CONFIG}" = *'x64'* || ! "${CW_CONFIG}" =~ (a64|r64) ]] && x64=1
 
+  unamem="$(uname -m)"
+
   if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
     anycross=0
-    [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && anycross=1
-    [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && anycross=1
-    [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && anycross=1
+    [[ "${unamem}" != 'aarch64' && "${a64}" = 1 ]] && anycross=1
+    [[ "${unamem}" != 'riscv64' && "${r64}" = 1 ]] && anycross=1
+    [[ "${unamem}" != 'x86_64'  && "${x64}" = 1 ]] && anycross=1
     [ "${anycross}" = 1 ] && extra+=' qemu-user-static'
   fi
 
   if [[ "${CW_CONFIG:-}" != *'gcc'* ]] || [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
-    [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && ${sudo} dpkg --add-architecture arm64
-    [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && ${sudo} dpkg --add-architecture riscv64
-    [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && ${sudo} dpkg --add-architecture amd64
+    [[ "${unamem}" != 'aarch64' && "${a64}" = 1 ]] && ${sudo} dpkg --add-architecture arm64
+    [[ "${unamem}" != 'riscv64' && "${r64}" = 1 ]] && ${sudo} dpkg --add-architecture riscv64
+    [[ "${unamem}" != 'x86_64'  && "${x64}" = 1 ]] && ${sudo} dpkg --add-architecture amd64
   fi
 
   if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
     export CW_CCSUFFIX="${CW_GCCSUFFIX}"
     extra+=" gcc${CW_GCCSUFFIX}"
-    [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && extra+=" gcc${CW_GCCSUFFIX}-aarch64-linux-gnu"
-    [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu"
-    [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && extra+=" gcc${CW_GCCSUFFIX}-x86-64-linux-gnu"
+    [[ "${unamem}" != 'aarch64' && "${a64}" = 1 ]] && extra+=" gcc${CW_GCCSUFFIX}-aarch64-linux-gnu"
+    [[ "${unamem}" != 'riscv64' && "${r64}" = 1 ]] && extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu"
+    [[ "${unamem}" != 'x86_64'  && "${x64}" = 1 ]] && extra+=" gcc${CW_GCCSUFFIX}-x86-64-linux-gnu"
     if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
       extra+=" g++${CW_GCCSUFFIX}"
-      [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && extra+=" g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
-      [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && extra+=" g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
-      [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && extra+=" g++${CW_GCCSUFFIX}-x86-64-linux-gnu"
+      [[ "${unamem}" != 'aarch64' && "${a64}" = 1 ]] && extra+=" g++${CW_GCCSUFFIX}-aarch64-linux-gnu"
+      [[ "${unamem}" != 'riscv64' && "${r64}" = 1 ]] && extra+=" g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
+      [[ "${unamem}" != 'x86_64'  && "${x64}" = 1 ]] && extra+=" g++${CW_GCCSUFFIX}-x86-64-linux-gnu"
     fi
   else
     # ./my-pkg/usr/lib/llvm-17/lib/clang/17/lib/linux/libclang_rt.builtins-aarch64.a
-    [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:arm64"
-    [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:riscv64"
-    [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:amd64"
+    [[ "${unamem}" != 'aarch64' && "${a64}" = 1 ]] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:arm64"
+    [[ "${unamem}" != 'riscv64' && "${r64}" = 1 ]] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:riscv64"
+    [[ "${unamem}" != 'x86_64'  && "${x64}" = 1 ]] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:amd64"
   fi
   if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
     extra+=' musl musl-dev'
-    [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && extra+=' musl:arm64 musl-dev:arm64'
-    [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && extra+=' musl:riscv64 musl-dev:riscv64'
-    [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && extra+=' musl:amd64 musl-dev:amd64'
+    [[ "${unamem}" != 'aarch64' && "${a64}" = 1 ]] && extra+=' musl:arm64 musl-dev:arm64'
+    [[ "${unamem}" != 'riscv64' && "${r64}" = 1 ]] && extra+=' musl:riscv64 musl-dev:riscv64'
+    [[ "${unamem}" != 'x86_64'  && "${x64}" = 1 ]] && extra+=' musl:amd64 musl-dev:amd64'
 
     [[ "${CW_CONFIG:-}" = *'gcc'* ]] && extra+=" libgcc${CW_GCCSUFFIX}-dev"
 
     # for curl 'linux/tcp.h' and openssl 'secure-memory' feature
-    [[ "$(uname -m)" = 'aarch64' && "${a64}" = 1 ]] && extra+=' linux-headers-arm64'
-    [[ "$(uname -m)" = 'riscv64' && "${r64}" = 1 ]] && extra+=' linux-headers-riscv64'
-    [[ "$(uname -m)" = 'x86_64'  && "${x64}" = 1 ]] && extra+=' linux-headers-amd64'
+    [[ "${unamem}" = 'aarch64' && "${a64}" = 1 ]] && extra+=' linux-headers-arm64'
+    [[ "${unamem}" = 'riscv64' && "${r64}" = 1 ]] && extra+=' linux-headers-riscv64'
+    [[ "${unamem}" = 'x86_64'  && "${x64}" = 1 ]] && extra+=' linux-headers-amd64'
   else  # glibc
     # FIXME: workaround for glibc-llvm-riscv64 builds:
     if [[ "${CW_CONFIG:-}" != *'gcc'* && "${r64}" = 1 ]]; then
@@ -128,14 +130,14 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
         extra+=" g++${CW_GCCSUFFIX}-riscv64-linux-gnu"
       fi
     fi
-    [[ "$(uname -m)" != 'aarch64' && "${a64}" = 1 ]] && extra+=' libc6-dev-arm64-cross'
-    [[ "$(uname -m)" != 'riscv64' && "${r64}" = 1 ]] && extra+=' libc6-dev-riscv64-cross'
-    [[ "$(uname -m)" != 'x86_64'  && "${x64}" = 1 ]] && extra+=' libc6-dev-amd64-cross'
+    [[ "${unamem}" != 'aarch64' && "${a64}" = 1 ]] && extra+=' libc6-dev-arm64-cross'
+    [[ "${unamem}" != 'riscv64' && "${r64}" = 1 ]] && extra+=' libc6-dev-riscv64-cross'
+    [[ "${unamem}" != 'x86_64'  && "${x64}" = 1 ]] && extra+=' libc6-dev-amd64-cross'
 
     anynoncross=0
-    [[ "$(uname -m)" = 'aarch64' && "${a64}" = 1 ]] && anynoncross=1
-    [[ "$(uname -m)" = 'riscv64' && "${r64}" = 1 ]] && anynoncross=1
-    [[ "$(uname -m)" = 'x86_64'  && "${x64}" = 1 ]] && anynoncross=1
+    [[ "${unamem}" = 'aarch64' && "${a64}" = 1 ]] && anynoncross=1
+    [[ "${unamem}" = 'riscv64' && "${r64}" = 1 ]] && anynoncross=1
+    [[ "${unamem}" = 'x86_64'  && "${x64}" = 1 ]] && anynoncross=1
     [ "${anynoncross}" = 1 ] && extra+=' libc6-dev'
   fi
 fi
