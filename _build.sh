@@ -1549,7 +1549,7 @@ build_single_target() {
     _LDFLAGS_GLOBAL+=" -Wl,--dynamic-linker=/lib/ld-musl-${_machine}.so.1"
   fi
 
-  # for curl and trurl, and possibly other projects with -Werror
+  # for curl and trurl, and potentially dependencies setting -Werror
   if [ "${_OS}" = 'linux' ] && [ "${_CC}" = 'llvm' ] && [ "${_CCVER}" = '22' ]; then
     # Do not error on:
     # ```
