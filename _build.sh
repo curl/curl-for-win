@@ -1550,7 +1550,7 @@ build_single_target() {
   fi
 
   # for curl and trurl, and possibly other projects with -Werror
-  if [ "${_OS}" = 'linux' ] && [ "${_CC}" = 'llvm' ] && [ "${_CCVER}" -ge '22' ]; then
+  if [ "${_OS}" = 'linux' ] && [ "${_CC}" = 'llvm' ] && [ "${_CCVER}" = '22' ]; then
     # Do not error on:
     # ```
     # clang-22: error: future releases of the clang compiler will prefer GCC installations containing
