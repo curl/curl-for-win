@@ -77,7 +77,7 @@ EOF
 
 token="$(dockerhub_token "${name}")"
 
-for release in 'testing' 'trixie'; do
+for release in 'sid' 'testing' 'trixie'; do
   tag="$(dockerhub_latest_tag "${token}" "${name}" "${release}")"
 
   # Architecture-agnostic image hash:
@@ -89,7 +89,9 @@ Authorization: Bearer ${token}
 EOF
 )"
 
-  if [ "${release}" = 'testing' ]; then
+  if [ "${release}" = 'sid' ]; then
+    oci='OCI_IMAGE_DEBIAN_SID'
+  elif [ "${release}" = 'testing' ]; then
     oci='OCI_IMAGE_DEBIAN_TESTING'
   else
     oci='OCI_IMAGE_DEBIAN_STABLE'
