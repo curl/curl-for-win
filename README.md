@@ -77,11 +77,9 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 - Patching policy: No local patches. We may apply patches if already merged
   upstream or &mdash; for showstoppers &mdash; had them submitted with fair
   confidence of getting merged.
+- ARM64 host machines are supported and used when available, for efficiency.
 - You can look up our package hashes in lines starting with `SHA` in the
   [build log](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main).
-- Packages built across host platforms do not have identical hashes due to
-  slightly different build options and toolchain builds/versions. Except
-  `llvm-mingw` builds used for ARM64, which are reproducible across platforms.
 - We code-sign with a self-signed certificate on Windows, and avoid trusted
   timestamps for reproducibility.
 
