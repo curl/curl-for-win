@@ -494,7 +494,7 @@ jobs:
         run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: 'curl-linux-musl-alpine-gcc-x86_64'
+          name: 'curl-linux-musl-alpine-gcc-arm64'
           retention-days: ${{ github.ref_name == 'main' && 90 || 5 }}
           path: |
             *-*-linux*.*
