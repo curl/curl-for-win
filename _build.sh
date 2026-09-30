@@ -671,7 +671,7 @@ build_single_target() {
     # Revert to arm64, because documents suggests that arm64e is not supported
     # by macOS by default (for user apps) and enabling it is an involved process
     # (as of macOS Ventura):
-    #   https://github.com/lelegard/arm-cpusysregs/blob/6316fb608c8e4cd817d72485a57abbffd3d811b4/docs/arm64e-on-macos.md#enabling-arm64e-on-macos-13-ventura
+    #   https://github.com/lelegard/arm-cpusysregs/blob/9ba5a0a1d989807ea3da5f98fa6de56174bbefe0/docs/arm64e-on-macos.md#enabling-arm64e-on-macos-13-ventura
     _machines='arm64'
   # _machines='arm64e'
   else

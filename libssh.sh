@@ -145,7 +145,7 @@ _VER="$1"
       [ -d include/openssl ] || mkdir -p include/openssl
       touch include/openssl/modes.h
       # - libssh 0.10.0 started to enforce specific OpenSSL version numbers,
-      #   but CMake's version detection (as of 4.2.1) is not aware of BoringSSL
+      #   but CMake's version detection (as of 4.4.3) is not aware of BoringSSL
       #   and fails to detect it. Work this around by the horrible hack of copying
       #   the necessary PP line where CMake is looking for it:
       openssl_include_dir="${_TOP}/${_OPENSSL}/${_PP}/include/openssl"

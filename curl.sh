@@ -551,7 +551,7 @@ _VER="$1"
     # on non-compatible ones). It would be best to extract `--version` output
     # directly from the binary as strings, but curl creates most of these
     # strings dynamically at runtime, so this is not possible
-    # (as of curl 7.83.1).
+    # (as of curl 8.22.0).
     out="../curl-version-${_CPUPUB}.txt"
     ${_RUN_BIN} "${bin}" --disable --version | sed 's/\r//g' | tee "${out}"
     [ -s "${out}" ] || rm -f "${out}"

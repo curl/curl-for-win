@@ -3,7 +3,7 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-# Caveats (as of 4.2.1):
+# Caveats (as of 4.3.2):
 # - Most ASM is implemented for x64 only.
 # - ASM implemented for ARM64 on Windows triggers -Wasm-operand-widths, 2300+ times.
 #   It breaks connecting with TLS:
