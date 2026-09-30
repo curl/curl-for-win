@@ -898,13 +898,13 @@ build_single_target() {
     _CMAKE_GLOBAL+=' -G Ninja'
   fi
 
-  if [[ "${_CONFIG}" =~ (small|zero) ]]; then
+  #if [[ "${_CONFIG}" =~ (small|zero) ]]; then
     _CFLAGS_GLOBAL_RAW+=' -Os'
     _CMAKE_GLOBAL+=' -DCMAKE_BUILD_TYPE=MinSizeRel'
-  else
-    _CFLAGS_GLOBAL_RAW+=' -O3'
-    _CMAKE_GLOBAL+=' -DCMAKE_BUILD_TYPE=Release'
-  fi
+  #else
+  #  _CFLAGS_GLOBAL_RAW+=' -O3'
+  #  _CMAKE_GLOBAL+=' -DCMAKE_BUILD_TYPE=Release'
+  #fi
 
   # for CMake and openssl
   unset CC
