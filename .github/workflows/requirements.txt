@@ -1,6 +1,6 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 
-codespell==2.4.2
+codespell==2.4.3
 reuse==6.2.0
-ruff==0.15.7
+ruff==0.16.8
