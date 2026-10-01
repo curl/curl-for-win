@@ -126,9 +126,13 @@ fi
 
 # Find out the latest llvm version offered by Debian testing
 
-llvm_latest="$(curl --disable --user-agent 'curl' --silent --fail --show-error \
-  'https://packages.debian.org/search?keywords=llvm&searchon=names&suite=testing&section=all' \
-  | hxclean | hxselect -i -c -s '\n' 'h3' \
-  | grep -a -o -E 'llvm-[0-9]+' | sort -u | tail -n -1)"
+echo
 
-echo; echo "export CW_CCSUFFIX='$(echo "${llvm_latest}" | cut -c 5-)'  # ${llvm_latest} (in debian:testing)"
+for release in 'sid' 'testing' 'trixie'; do
+  llvm_latest="$(curl --disable --user-agent 'curl' --silent --fail --show-error \
+    "https://packages.debian.org/search?keywords=libllvm&searchon=names&suite=${release}&section=all" \
+    | hxclean | hxselect -i -c -s '\n' 'h3' \
+    | grep -a -o -E 'libllvm-[0-9]+' | sort -u | tail -n -1)"
+
+  echo "export CW_CCSUFFIX='$(echo "${llvm_latest}" | cut -c 8-)'  # (in debian:${release})"
+done
