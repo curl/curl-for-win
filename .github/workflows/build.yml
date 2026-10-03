@@ -25,8 +25,8 @@ env:
   DO_NOT_TRACK: '1'
 
 jobs:
-  verify-binary-downloads:
-    name: 'Verify binary downloads'
+  verify-binaries:
+    name: 'verify-binaries'
     runs-on: ubuntu-26.04-arm
     timeout-minutes: 2
     steps:

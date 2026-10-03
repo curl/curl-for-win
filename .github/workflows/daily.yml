@@ -26,8 +26,8 @@ env:
   SIGN_PKG_KEY_ID: 'BDCF067D3908B2727A4A948767C1003740BF8DC2'
 
 jobs:
-  verify-binary-downloads:
-    name: 'Verify binary downloads'
+  verify-binaries:
+    name: 'verify-binaries'
     runs-on: ubuntu-26.04-arm
     timeout-minutes: 2
     steps:
