@@ -27,12 +27,12 @@ for suffix in \
   win64-mingw.tar.xz \
 ; do
 
-  url="$(curl --disable --fail --silent --show-error --connect-timeout 15 --max-time 60 --retry 3 --retry-connrefused \
+  url="$(curl --disable --fail --silent --show-error --connect-timeout 15 --max-time 60 --retry 3 --retry-connrefused --retry-max-time 60 \
     --location "https://curl.se/windows/latest.cgi?p=${suffix}" --output /dev/null --write-out '%{url_effective}')"
 
   echo "--- Downloading ${url}"
   rm -f _pkg.bin*
-  curl --disable --fail --silent --show-error --connect-timeout 15 --max-time 60 --retry 3 --retry-connrefused \
+  curl --disable --fail --silent --show-error --connect-timeout 15 --max-time 60 --retry 3 --retry-connrefused --retry-max-time 60 \
     --output _pkg.bin          "${url}" \
     --output _pkg.bin.asc      "${url}.asc" \
     --output _pkg.bin.minisig  "${url}.minisig" \

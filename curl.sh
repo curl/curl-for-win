@@ -558,7 +558,7 @@ _VER="$1"
 
     if [ "${CW_CURL_TEST:-}" = '1' ]; then
       # Test basic functionality
-      ${_RUN_BIN} "${bin}" --disable --fail --connect-timeout 5 --max-time 15 --retry 2 --retry-connrefused \
+      ${_RUN_BIN} "${bin}" --disable --fail --connect-timeout 5 --max-time 15 --retry 2 --retry-connrefused --retry-max-time 60 \
         --verbose --user-agent 'curl' --head 'https://curl.se/'
     fi
   fi
