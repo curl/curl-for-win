@@ -521,7 +521,7 @@ jobs:
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-x64"
           export CW_REVISION="${GITHUB_SHA}"
           sh -c ./_ci-mac-homebrew.sh
 
@@ -586,7 +586,7 @@ jobs:
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-mac-macuni-llvm"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-mac-llvm-x64"
           export CW_REVISION="${GITHUB_SHA}"
           sh -c ./_ci-mac-homebrew.sh
 
@@ -647,7 +647,7 @@ jobs:
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '1'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-canonsrc-win"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-canonsrc-win-x64"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sh -c ./_ci-mac-homebrew.sh
