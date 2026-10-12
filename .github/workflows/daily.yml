@@ -157,7 +157,7 @@ jobs:
 
   mac:
     if: ${{ github.repository_owner == 'curl' }}
-    name: 'macOS (arm64, x86_64)'
+    name: 'macOS (arm64)'
     runs-on: macos-latest
     timeout-minutes: 15
     environment: 'production'
@@ -180,7 +180,7 @@ jobs:
           SIGN_PKG_AGE_PASS: '${{ secrets.SIGN_PKG_AGE_PASS }}'
           SIGN_PKG_KEY_PASS: '${{ secrets.SIGN_PKG_KEY_PASS }}'
         run: |
-          export CW_CONFIG='werror-canonsrc-dev-mac-macuni'
+          export CW_CONFIG='werror-canonsrc-dev-mac-a64'
           export CW_REVISION; CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           sh -c ./_ci-mac-homebrew.sh
 
