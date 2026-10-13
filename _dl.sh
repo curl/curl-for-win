@@ -171,12 +171,6 @@ my_curl() {
     --remote-time --xattr \
     --connect-timeout 15 --max-time 80 --retry 6 --max-redirs 10 --retry-max-time 60)
   # >&2 echo "my_curl|${opts[*]} $*|"
-  if [[ "$*" = *'https://api.github.com/'* && -n "${GITHUB_TOKEN:+1}" ]]; then
-    opts+=(--header @/dev/stdin)
-    exec <<EOF
-Authorization: Bearer ${GITHUB_TOKEN}
-EOF
-  fi
   curl "${opts[@]}" "$@"
 }
 
