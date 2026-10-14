@@ -405,7 +405,7 @@ _VER="$1"
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
     # shellcheck disable=SC2086
-    cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
+    cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} -Werror=unused-cli \
       -DCURL_CA_PATH=none \
       -DCURL_CA_BUNDLE=none \
       -DBUILD_STATIC_LIBS=ON \
