@@ -245,8 +245,6 @@ _VER="$1"
     fi
   fi
 
-  options+=' -DCURL_DISABLE_SRP=ON'
-
   if [[ "${_DEPS}" = *'libssh1'* ]] && [ -d "../libssh/${_PPS}" ]; then
     options+=' -DCURL_USE_LIBSSH=ON'
     options+=' -DCURL_USE_LIBSSH2=OFF'
