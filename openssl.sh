@@ -79,11 +79,7 @@ _VER="$1"
   fi
 
   # Enabling `no-deprecated` requires walking a fine line. It needs:
-  # - libssh2 1.11.1
-  # - curl with an alternate system TLS-backend, it means Windows builds with Schannel
-  #   enabled.
-  #   Or, curl without NTLM support if there is no alternate system TLS-backend,
-  #   e.g. on Linux and macOS.
+  # - libssh2 1.11.1+
   # - other OpenSSL dependents playing well with `no-deprecated`: ngtcp2
   # - other OpenSSL dependents broken with `no-deprecated`: libssh
   if [[ "${_DEPS}" != *'libssh1'* && \
