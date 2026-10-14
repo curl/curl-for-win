@@ -328,7 +328,9 @@ _VER="$1"
       options+=' -DHAVE_SYS_EVENT_H=1'
       options+=' -DHAVE_SYS_SOCKIO_H=1'
 
-      options+=' -DIOS=0'
+      if false; then
+        options+=' -DIOS=0'  # not used with curl-for-win targets
+      fi
       options+=' -DIOS_V10=0'
       if [ "${_OSVER}" -ge '1012' ]; then
         options+=' -DMACOS_V1012=1'

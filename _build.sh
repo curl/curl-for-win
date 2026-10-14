@@ -900,6 +900,8 @@ build_single_target() {
     _MK='gnumake'
   fi
 
+  _CMAKE_GLOBAL+=' -Werror=unused-cli'
+
   if [ "${_MK}" = 'ninja' ]; then
     _CMAKE_GLOBAL+=' -G Ninja'
   fi
