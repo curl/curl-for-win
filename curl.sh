@@ -335,7 +335,11 @@ _VER="$1"
     # Could not figure how to pass it with an argument with spaces by
     # appending it to `options`, or via the environment.
     #   CMake Warning: Manually-specified variables were not used by the project: CMAKE_RC_FLAGS
-    options+=' --no-warn-unused-cli'
+    if [ "${_DISTVER}" = 'trixie' ]; then
+      options+=' --no-warn-unused-cli'
+    else
+      options+=' -Wno-unused-cli'
+    fi
   fi
 
   if [[ "${_CONFIG}" != *'nounity'* ]]; then

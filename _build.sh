@@ -881,10 +881,16 @@ build_single_target() {
   export _LDFLAGS_GLOBAL=''
   export _LDFLAGS_BIN_GLOBAL=''
   export _LDFLAGS_CXX_GLOBAL=''  # CMake uses this
-  export _CMAKE_GLOBAL='-Wno-dev'  # Suppress CMake warnings meant for upstream developers
+  export _CMAKE_GLOBAL=''
   export _CMAKE_CXX_GLOBAL=''
   export _CMAKE_ASM_GLOBAL=''
   export _CROSS=0
+
+  if [ "${_DISTVER}" = 'trixie' ]; then
+    _CMAKE_GLOBAL+=' -Wno-dev'  # Suppress CMake warnings meant for upstream developers
+  else
+    _CMAKE_GLOBAL+=' -Wno-author'  # Suppress CMake warnings meant for upstream developers
+  fi
 
   export _MK
   if command -v ninja >/dev/null 2>&1; then
