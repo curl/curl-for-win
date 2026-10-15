@@ -45,11 +45,12 @@
 #   hit earlier.
 # - Objects built on different OSes result in a few byte differences.
 #   e.g. windows.c.obj, a_utf8.c.obj. But not a_octet.c.obj.
-# - AWS-LC force-sets _WIN32_WINNT to _WIN32_WINNT_WIN7. The Windows target
-#   should be up to the builder and not something for the project to set
-#   unconditionally. If the selected version is too old, the build should
-#   bail out. This is only done for MinGW GCC builds, as a way to bump up
-#   the default, possibly as a workaround.
+# - AWS-LC force-sets _WIN32_WINNT to _WIN32_WINNT_WIN7 for mingw-w64
+#   when using GCC. The Windows target should be up to the builder to decide
+#   and not something for the project to set unconditionally. If the selected
+#   version is too old, the build should bail out, or should verify if there
+#   was a target set already and respect it. This is only done for MinGW GCC
+#   builds, as a way to bump up the default, possibly as a workaround.
 # - AWS-LC: symbols are not hidden, making _info-bin.sh fail.
 # - AWS-LC: requires SSE2 for x86 builds with ASM enabled.
 # - AWS-LC: fails to build on mac-gcc-arm64.
