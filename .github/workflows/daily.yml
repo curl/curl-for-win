@@ -185,7 +185,7 @@ jobs:
         run: cat urls.txt ./*-version-*.txt || true
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: 'curl-macos-universal-daily-tool'
+          name: 'curl-macos-daily-tool'
           retention-days: 42
           path: |
             curl-*-*-*/curl*
@@ -193,7 +193,7 @@ jobs:
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: 'curl-macos-universal-daily'
+          name: 'curl-macos-daily'
           retention-days: 42
           path: |
             *-*-macos*.*
