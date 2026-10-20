@@ -380,7 +380,7 @@ _VER="$1"
 
   if [[ "${_DEPS}" = *'certdata'* ]] && [ ! -f "${cacert}" ]; then
     cp -p "../certdata/${_CERTDATA}" .
-    TZ=UTC scripts/mk-ca-bundle.pl -n
+    TZ=UTC scripts/mk-ca-bundle.pl -n -x '125609AA301DA0A249B97A8239CB6A34216F44DCAC9F3954B14292F2E8C8608F,BC4D809B15189D78DB3E1D8CF4F9726A795DA1643CA5F1358E1DDB0EDC0D7EB3'
     touch -c -r "../certdata/${_CERTDATA}" ca-bundle.crt
     mv ca-bundle.crt "${cacert}"
   fi
