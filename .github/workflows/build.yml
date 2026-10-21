@@ -132,7 +132,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-x64"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
@@ -200,7 +200,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-x64"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           export CW_GCCSUFFIX='-14'

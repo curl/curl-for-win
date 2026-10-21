@@ -1268,17 +1268,19 @@ build_single_target() {
           exit 1
         fi
         _LDFLAGS_GLOBAL+=" -L${tmp}"
-        # https://packages.debian.org/testing/all/libstdc++-16-dev-arm64-cross/filelist
-        # https://packages.debian.org/testing/all/libstdc++-16-dev-riscv64-cross/filelist
-        # /usr/aarch64-linux-gnu/include/c++/16/
-        tmp="$(find "/usr/${_TRIPLETSH}/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
-        if [ -z "${tmp}" ]; then
-          >&2 echo '! Error: Failed to detect g++-cross env root.'
-          exit 1
+        if [ "${boringssl}" = '1' ]; then
+          # https://packages.debian.org/testing/all/libstdc++-16-dev-arm64-cross/filelist
+          # https://packages.debian.org/testing/all/libstdc++-16-dev-riscv64-cross/filelist
+          # /usr/aarch64-linux-gnu/include/c++/16/
+          tmp="$(find "/usr/${_TRIPLETSH}/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
+          if [ -z "${tmp}" ]; then
+            >&2 echo '! Error: Failed to detect g++-cross env root.'
+            exit 1
+          fi
+          _CXXFLAGS_GLOBAL+=" -I${tmp}"
+          _CXXFLAGS_GLOBAL+=" -I${tmp}/${_TRIPLETSH}"
+          _CXXFLAGS_GLOBAL+=" -I${tmp}/backward"
         fi
-        _CXXFLAGS_GLOBAL+=" -I${tmp}"
-        _CXXFLAGS_GLOBAL+=" -I${tmp}/${_TRIPLETSH}"
-        _CXXFLAGS_GLOBAL+=" -I${tmp}/backward"
       fi
     fi
 
