@@ -16,8 +16,11 @@ permissions: {}
 cache-mode: none
 
 env:
+  CW_LLVM_MINGW_DL: '1'
+  CW_LLVM_MINGW_ONLY: '1'
   CW_MAP: '0'
   CW_JOBS: '5'
+  CW_CURL_TEST: '1'
   DO_NOT_TRACK: '1'
   SIGN_PKG_KEY_ID: 'BDCF067D3908B2727A4A948767C1003740BF8DC2'
 
@@ -50,7 +53,7 @@ jobs:
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '1'
         run: |
-          export CW_CONFIG='werror-canonsrc-win'
+          export CW_CONFIG='werror-canonsrc-werror-trurl-win'
           export CW_REVISION; CW_REVISION="$(TZ=UTC date +'%Y%m%d')"
           . ./_versions.sh
           sudo podman image trust set --type reject default
@@ -86,6 +89,5 @@ jobs:
         with:
           name: 'curl-windows-all'
           retention-days: 5
-          archive: false
           path: |
             all-mingw*.*
