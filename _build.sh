@@ -458,7 +458,7 @@ if [ "${_HOST}" = 'linux' ] && \
   age_ver="$(printf '%02d%02d' \
     "$(printf '%s' "${age_ver_str}" | cut -d '.' -f 1)" \
     "$(printf '%s' "${age_ver_str}" | cut -d '.' -f 2)")"
-  if [ "${age_ver}" -lt 0130 ]; then  # debian:trixie
+  if [ "${age_ver}" -lt 0103 ]; then  # debian:trixie
     if [ "${unamem}" = 'x86_64' ]; then
       curl --disable --fail --silent --show-error --connect-timeout 15 --max-time 60 --retry 3 --retry-connrefused --retry-max-time 60 \
         --location --proto-redir =https "https://github.com/FiloSottile/age/releases/download/v${AGE_LINUX_AMD64_VER_}/age-v${AGE_LINUX_AMD64_VER_}-linux-amd64.tar.gz" --output pkg.bin
