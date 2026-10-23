@@ -1258,16 +1258,17 @@ build_single_target() {
       _CFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include"
       _LDFLAGS_GLOBAL+=" -L/usr/${_TRIPLETSH}/lib"
       if [ "${_CCRT}" = 'libgcc' ]; then
-        # https://packages.debian.org/testing/all/libgcc-13-dev-arm64-cross/filelist
-        # /usr/lib/gcc-cross/aarch64-linux-gnu/13/
+        # https://packages.debian.org/testing/all/libgcc-16-dev-arm64-cross/filelist
+        # /usr/lib/gcc-cross/aarch64-linux-gnu/16/
         tmp="$(find "/usr/lib/gcc-cross/${_TRIPLETSH}" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
         if [ -z "${tmp}" ]; then
           >&2 echo '! Error: Failed to detect gcc-cross env root.'
           exit 1
         fi
         _LDFLAGS_GLOBAL+=" -L${tmp}"
-        # https://packages.debian.org/testing/all/libstdc++-13-dev-arm64-cross/filelist
-        # /usr/aarch64-linux-gnu/include/c++/13/
+        # https://packages.debian.org/testing/all/libstdc++-16-dev-arm64-cross/filelist
+        # https://packages.debian.org/testing/all/libstdc++-16-dev-riscv64-cross/filelist
+        # /usr/aarch64-linux-gnu/include/c++/16/
         tmp="$(find "/usr/${_TRIPLETSH}/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
         if [ -z "${tmp}" ]; then
           >&2 echo '! Error: Failed to detect g++-cross env root.'
