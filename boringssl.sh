@@ -116,6 +116,7 @@ _VER="$1"
     options+=' -DOPENSSL_SMALL=ON'
   else
     options+=' -DOPENSSL_SMALL=OFF'  # ON reduces curl binary sizes by ~300 KB
+    options="${_CMAKE_ASM_GLOBAL} ${options}"
   fi
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
@@ -146,7 +147,7 @@ _VER="$1"
     fi
 
     # shellcheck disable=SC2086
-    cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${_CMAKE_ASM_GLOBAL} ${options} \
+    cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
       -DBUILD_TESTING=OFF \
       -DBUILD_SHARED_LIBS=OFF \
       -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${LIBS}" \
