@@ -409,7 +409,7 @@ _VER="$1"
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
     # shellcheck disable=SC2086
-    cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
+    if ! cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${options} \
       -DCURL_CA_PATH=none \
       -DCURL_CA_BUNDLE=none \
       -DBUILD_STATIC_LIBS=ON \
@@ -418,8 +418,10 @@ _VER="$1"
       -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL}" \
       -DCMAKE_EXE_LINKER_FLAGS="${LDFLAGS} ${LDFLAGS_BIN} ${LIBS}" \
       -DCMAKE_SHARED_LINKER_FLAGS="${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}" \
-      || { cat "${_BLDDIR}"/CMakeFiles/CMake*.yaml; false; }
-    # --debug-find --debug-trycompile
+    ; then  # --debug-find --debug-trycompile
+      [ -n "${CI:-}" ] && cat "${_BLDDIR}"/CMakeFiles/CMake*.yaml
+      false
+    fi
   fi
 
   if [[ "${_CONFIG}" != *'nodumpconf'* ]]; then
