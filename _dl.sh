@@ -800,7 +800,7 @@ if [[ ! "${_CONFIG}" =~ (zero|bldtst) || "${_CONFIG}" = *'libssh1'* ]]; then
     need_certdata=1
   elif [[ "${_OS}" = 'linux' ]] || \
        [[ ! "${_CONFIG}" =~ (pico|nano|micro|mini|ostls) ]]; then
-    _DEPS+=' libressl'
+    _DEPS+=' awslc'
     need_certdata=1
   fi
 fi
