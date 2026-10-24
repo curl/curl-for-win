@@ -85,7 +85,7 @@ _VER="$1"
   CPPFLAGS=''
   options=''
 
-  if false || [ "${_CPU}" = 'r64' ]; then
+  if [ "${_CPU}" = 'r64' ]; then
     # to avoid (as of 4fe29ebc):
     #   ld.lld: error: undefined symbol: fiat_p256_adx_mul
     #   >>> referenced by libcrypto.a(bcm.o):(fiat_p256_mul)
