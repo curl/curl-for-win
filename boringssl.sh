@@ -113,7 +113,7 @@ _VER="$1"
   # ./boringssl/crypto/curve25519/../../third_party/fiat/curve25519_64_adx.h:40:11: error: call to undeclared function '_umul128'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
   #   *out1 = _umul128(arg1, arg2, &t);
   #           ^
-  if [ "${_OS}" = 'win' ] && [ "${_CPU}" = 'x64' ] && [ "${_CC}" = 'llvm' ]; then
+  if [ "${_OS}" = 'win' ] && [ "${_CPU}" = 'x64' ] && [ "${_CC}" = 'llvm' ] && [ "${_NAM}" = 'boringssl' ]; then
     options+=' -DOPENSSL_SMALL=ON'
   else
     options+=' -DOPENSSL_SMALL=OFF'  # ON reduces curl binary sizes by ~300 KB
