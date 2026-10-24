@@ -219,7 +219,6 @@ _VER="$1"
       fi
       options+=' -DUSE_ECH=ON'
       options+=' -DHAVE_SSL_SET1_ECH_CONFIG_LIST=1'  # fast-track configuration
-      LIBS+=' -lpthread'
     else
       options+=' -DHAVE_AWSLC=0 -DHAVE_BORINGSSL=0'  # fast-track configuration
     fi
