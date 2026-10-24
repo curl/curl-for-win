@@ -201,7 +201,7 @@ _VER="$1"
   "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/libssl.a
 
   if [ -n "${_STRIP_BINUTILS}" ]; then
-    # FIXME: llvm-strip corrupts nasm objects as of LLVM v16.0.0
+    # FIXME: llvm-strip corrupts nasm objects as of LLVM v23.1.4
     # shellcheck disable=SC2086
   # "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/libcrypto.a
 
