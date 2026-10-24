@@ -35,7 +35,7 @@ _VER="$1"
     if [ "${_OPENSSL}" = 'awslc' ] || [ "${_OPENSSL}" = 'boringssl' ]; then
       LIBS+=' -lpthread'  # for feature detection. Redundant with awslc + mingw-w64 + clang.
     fi
-    if [ "${_OS}" = 'win' ]; then
+    if [ "${LIBSSH2_VER_}" = '1.11.1' ] && [ "${_OS}" = 'win' ]; then
       # Silence useless libssh2 warning about missing runtime DLL
       touch "${_TOP}/${_OPENSSL}/${_PP}/crypto.dll"
     fi
