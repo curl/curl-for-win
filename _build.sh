@@ -68,13 +68,16 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 #        notrurl    build without trurl (in 'dev' and 'test' configs)
 #        nocertdata build without certdata (also to avoid accessing api.github.com in non-dev builds)
 #        thinlto    build with ThinLTO enabled (requires llvm) [EXPERIMENTAL]
-#        small      optimize for size
+#        osslsmall  build AWS-LC/BoringSSL with OPENSSL_SMALL=ON option (~300 KB size reduction)
+#        minsizerel build with MinSizeRel CMake configuration.
+#        small      optimize for size. 15-25% (via minsizerel) + ~200 (via unitbatch) + ~300 KB (via osslsmall) size reduction.
 #        r64        build riscv64 target only [EXPERIMENTAL]
 #        a64        build arm64 target only
 #        x64        build x86_64 target only
 #        x86        build i686 target only (i686 not built by default) (for win target)
 #        nounity    build without CMake UNITY mode (slower builds for slightly smaller binaries)
-#        unitybatch enable UNITY batching (default for 'dev' config)
+#        unitybatch enable UNITY batching (default for 'dev' config) (~200 KB size reduction, faster builds)
+#        fullunity  disable UNITY batching (in 'dev' config, too)
 #        nocurltool do not build the curl tool
 #        prefill    pre-fill curl auto-detection results on well-known *nix targets (not recommended for production)
 #        curldocs   include curl Markdown manual pages in the package
@@ -905,7 +908,7 @@ build_single_target() {
     _CMAKE_GLOBAL+=' -G Ninja'
   fi
 
-  if [[ "${_CONFIG}" =~ (small|zero) ]]; then
+  if [[ "${_CONFIG}" =~ (minsizerel|small|zero) ]]; then
     _CFLAGS_GLOBAL_RAW+=' -Os'
     _CMAKE_GLOBAL+=' -DCMAKE_BUILD_TYPE=MinSizeRel'
   else

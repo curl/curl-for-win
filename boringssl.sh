@@ -115,6 +115,8 @@ _VER="$1"
   #           ^
   if [ "${_OS}" = 'win' ] && [ "${_CPU}" = 'x64' ] && [ "${_CC}" = 'llvm' ] && [ "${_NAM}" = 'boringssl' ]; then
     options+=' -DOPENSSL_SMALL=ON'
+  elif [[ "${_CONFIG}" =~ (osslsmall|small) ]]; then
+    options+=' -DOPENSSL_SMALL=ON'
   else
     options+=' -DOPENSSL_SMALL=OFF'  # ON reduces curl binary sizes by ~300 KB
   fi
