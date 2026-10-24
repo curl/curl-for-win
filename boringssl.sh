@@ -100,6 +100,8 @@ _VER="$1"
     if [ "${_OS}" = 'win' ] && [ "${_CPU}" != 'a64' ]; then
       # nasm is used for Windows x64 and x86
       options+=' -DCMAKE_ASM_NASM_FLAGS=--reproducible'
+    else
+      options="${_CMAKE_ASM_GLOBAL} ${options}"
     fi
     if [ "${_NAM}" = 'awslc' ] && [ "${_CPU}" = 'x86' ]; then
       CFLAGS+=' -msse2'
@@ -115,7 +117,6 @@ _VER="$1"
     options+=' -DOPENSSL_SMALL=ON'
   else
     options+=' -DOPENSSL_SMALL=OFF'  # ON reduces curl binary sizes by ~300 KB
-    options="${_CMAKE_ASM_GLOBAL} ${options}"
   fi
 
   if [ "${CW_DEV_INCREMENTAL:-}" != '1' ] || [ ! -d "${_BLDDIR}" ]; then
