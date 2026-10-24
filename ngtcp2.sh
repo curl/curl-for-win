@@ -34,7 +34,9 @@ _VER="$1"
     options+=' -DENABLE_OPENSSL=OFF'
     options+=' -DENABLE_BORINGSSL=ON'
     options+=" -DBORINGSSL_INCLUDE_DIR=${_TOP}/${_OPENSSL}/${_PP}/include"
-    options+=" -DBORINGSSL_LIBRARIES=${_TOP}/${_OPENSSL}/${_PP}/lib/libssl.a;${_TOP}/${_OPENSSL}/${_PP}/lib/libcrypto.a;-lpthread"; [ "${_OS}" = 'win' ] && options="${options};-lws2_32"
+    tls_libs+=';-lpthread'  # Redundant with awslc + mingw-w64 + clang.
+    [ "${_OS}" = 'win' ] && tls_libs+=";-lws2_32"
+    options+=" -DBORINGSSL_LIBRARIES=${_TOP}/${_OPENSSL}/${_PP}/lib/libssl.a;${_TOP}/${_OPENSSL}/${_PP}/lib/libcrypto.a${tls_libs}"
     CPPFLAGS+=' -DNOCRYPT'
   else
     options+=' -DENABLE_OPENSSL=ON'

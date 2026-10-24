@@ -33,7 +33,7 @@ _VER="$1"
     options+=' -DCRYPTO_BACKEND=OpenSSL'
     options+=" -DOPENSSL_ROOT_DIR=${_TOP}/${_OPENSSL}/${_PP}"
     if [ "${_OPENSSL}" = 'awslc' ] || [ "${_OPENSSL}" = 'boringssl' ]; then
-      LIBS+=' -lpthread'
+      LIBS+=' -lpthread'  # for feature detection. Redundant with awslc + mingw-w64 + clang.
     fi
     if [ "${_OS}" = 'win' ]; then
       # Silence useless libssh2 warning about missing runtime DLL

@@ -160,7 +160,7 @@ _VER="$1"
       fi
 
       [ "${_OS}" = 'win' ] && CPPFLAGS+=' -DWIN32_LEAN_AND_MEAN'
-      LIBS+=' -lpthread'  # to detect EVP_aes_128_*
+      LIBS+=' -lpthread'  # to detect EVP_aes_128_*. Redundant with awslc + mingw-w64 + clang.
     elif [ "${_OPENSSL}" = 'libressl' ]; then
       # FIXME (upstream):
       # - Public function explicit_bzero() clashes with libressl.
