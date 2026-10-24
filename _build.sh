@@ -961,15 +961,11 @@ build_single_target() {
       _CMAKE_GLOBAL="-DCMAKE_SYSTEM_NAME=Darwin ${_CMAKE_GLOBAL}"
       _CROSS=1
     fi
-    if [ "${_CC}" = 'llvm' ] && [ "${boringssl}" = '1' ]; then
-      # macOS 11.00 Big Sur 2020-11-12
-      macminver='11.00'  # required by llvm/clang 22+ libc++
-    else
-      # macOS 10.14 Mojave 2018-09-24. Seems to work for arm64 builds,
-      # though arm64 was released in macOS 11.0 Big Sur 2020-11-12.
-      # NOTE: 10.8 (and older) trigger C++ issues with Xcode and CMake.
-      macminver='10.14'
-    fi
+    # macOS 11.00 Big Sur 2020-11-12. First release to support arm64.
+    # NOTES:
+    # - older releases (<10.15) not supported by llvm/clang v22+ C++ headers.
+    # - 10.8 (and older) trigger C++ issues with Xcode and CMake.
+    macminver='11.00'
     _CMAKE_GLOBAL+=" -DCMAKE_OSX_DEPLOYMENT_TARGET=${macminver}"
     # TODO: This option might have been renamed to `-mmacos-version-min=`?
     _CFLAGS_GLOBAL+=" -mmacosx-version-min=${macminver}"
