@@ -226,8 +226,6 @@ _VER="$1"
     h3=1
     if [ "${_OPENSSL}" != 'libressl' ]; then
       options+=' -DHAVE_SSL_SET0_WBIO=1'  # fast-track configuration
-    else
-      options+=' -DHAVE_SSL_SET_QUIC_USE_LEGACY_CODEPOINT=1'  # fast-track configuration
     fi
     if [ "${_OPENSSL}" = 'openssl' ]; then
       options+=' -DUSE_ECH=ON'
