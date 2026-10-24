@@ -125,11 +125,6 @@ _VER="$1"
       options+=' -DDISABLE_GO=ON'
       options+=' -DDISABLE_PERL=ON'
 
-      if [ "${_OS}" = 'win' ]; then
-        # Avoid deprecation warning triggered by mingw-w64 inside clang 19
-        CPPFLAGS+=' -D_CLANG_DISABLE_CRT_DEPRECATION_WARNINGS'
-      fi
-
       # Patch out to avoid redefinition errors (clang not affected)
       if [ "${_CC}" = 'gcc' ]; then
         sed -i.bak 's/-D_WIN32_WINNT=_WIN32_WINNT_WIN7//g' ./CMakeLists.txt
