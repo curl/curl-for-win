@@ -39,7 +39,7 @@ fi
 if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   if [ "${CW_LLVM_MINGW_ONLY:-}" != '1' ]; then
     extra+=' gcc-mingw-w64-x86-64-win32'
-  elif [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
+  elif [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
     extra+=' binutils-mingw-w64-x86-64'
   fi
   if false; then  # debian:testing dropped the wine package: https://tracker.debian.org/pkg/wine
@@ -48,7 +48,7 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   if [[ "${CW_CONFIG:-}" = *'x86'* ]]; then
     if [ "${CW_LLVM_MINGW_ONLY:-}" != '1' ]; then
       extra+=' gcc-mingw-w64-i686-win32'
-    elif [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
+    elif [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
       extra+=' binutils-mingw-w64-i686'
     fi
     extra+=' wine32'
