@@ -77,7 +77,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|SIGN_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CI\b|CW_|SIGN_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${OCI_IMAGE_DEBIAN_STABLE}" \
             sh -c ./_ci-linux-debian.sh
 
@@ -131,7 +131,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|SIGN_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CI\b|CW_|SIGN_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${OCI_IMAGE_DEBIAN_STABLE}" \
             sh -c ./_ci-linux-debian.sh
 
@@ -232,7 +232,7 @@ jobs:
           podman images --digests
           time podman run --volume "$(pwd):$(pwd)" --workdir "$(pwd)" \
             --env-file <(env | grep -a -E \
-              '^(CW_|SIGN_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
+              '^(CI\b|CW_|SIGN_|COSIGN_|MINISIGN_|GITHUB_|DO_NOT_TRACK)') \
             "${OCI_IMAGE_DEBIAN_TESTING}" \
             sh -c ./_ci-linux-debian.sh
 
