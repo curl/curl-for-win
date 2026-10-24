@@ -32,7 +32,6 @@ _VER="$1"
 
   options=''
 
-  LIBS=''
   LDFLAGS=''
   LDFLAGS_BIN="${_LDFLAGS_BIN_GLOBAL}"
   LDFLAGS_LIB=''
@@ -413,8 +412,8 @@ _VER="$1"
       -DCURL_HIDDEN_SYMBOLS=ON \
       -DCMAKE_RC_FLAGS="${_RCFLAGS_GLOBAL}" \
       -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${_LDFLAGS_GLOBAL}" \
-      -DCMAKE_EXE_LINKER_FLAGS="${LDFLAGS} ${LDFLAGS_BIN} ${LIBS}" \
-      -DCMAKE_SHARED_LINKER_FLAGS="${LDFLAGS} ${LDFLAGS_LIB} ${LIBS}" \
+      -DCMAKE_EXE_LINKER_FLAGS="${LDFLAGS} ${LDFLAGS_BIN}" \
+      -DCMAKE_SHARED_LINKER_FLAGS="${LDFLAGS} ${LDFLAGS_LIB}" \
     ; then  # --debug-find --debug-trycompile
       [ -n "${CI:-}" ] && cat "${_BLDDIR}"/CMakeFiles/CMake*.yaml
       false
