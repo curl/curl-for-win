@@ -140,7 +140,7 @@ _VER="$1"
     [[ "${_CONFIG}" = *'noftp'* ]] && options+=' -DCURL_DISABLE_FTP=ON'
     if [ "${_OS}" = 'win' ]; then
       options+=' -DCURL_WINDOWS_SSPI=ON'
-    elif [ "${_OS}" != 'mac' ] || [ "${_OSVER}" -ge '1010' ]; then  # On macOS we use the built-in LDAP lib
+    elif [ "${_OS}" != 'mac' ]; then  # On macOS we use the built-in LDAP lib
       options+=' -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON'
     fi
     options+=' -DUSE_HTTPSRR=ON'
