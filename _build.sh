@@ -918,11 +918,7 @@ build_single_target() {
 
   if [ "${_OS}" = 'win' ]; then
 
-    if [ "${_OPENSSL}" = 'awslc' ]; then
-      _CPPFLAGS_GLOBAL+=' -D_WIN32_WINNT=0x0700'  # Windows 7
-    else
-      _CPPFLAGS_GLOBAL+=' -D_WIN32_WINNT=0x0600'  # Windows Vista
-    fi
+    _CPPFLAGS_GLOBAL+=' -D_WIN32_WINNT=0x0600'  # Windows Vista
 
     if [ "${_HOST}" != "${_OS}" ] || \
        [ "${unamem}" != "${_machine}" ]; then
