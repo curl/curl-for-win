@@ -1421,6 +1421,10 @@ build_single_target() {
       _CC_GLOBAL+=" --sysroot=${_SYSROOT}"
     fi
 
+    if [ "${_TOOLCHAIN}" = 'llvm-apple' ] && [ "${boringssl}" = '1' ] && [ "${_CCVER}" -lt '21' ]; then
+      _CFLAGS_GLOBAL+=" -isystem ${_SYSROOT}/usr/include/c++/v1"
+    fi
+
     if [ "${_TOOLCHAIN}" = 'llvm-apple' ] && [ "${_XCODEVER}" -ge '15' ]; then
       _LDFLAGS_GLOBAL+=' -Wl,-ld_new'
     fi
