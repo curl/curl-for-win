@@ -125,6 +125,26 @@ _VER="$1"
       options+=' -DDISABLE_GO=ON'
       options+=' -DDISABLE_PERL=ON'
 
+      # Workaround to cancel global `-fno-strict-overflow`, to fix this compiler
+      # warning as seen with gcc 14.2.0, 16.0.0, 16.2.0 as of awslc 5.12.0:
+      # ```
+      # In file included from awslc/crypto/asn1/a_bitstr.c:7:
+      # In function 'memcpy',
+      #     inlined from 'OPENSSL_memcpy' at awslc/crypto/asn1/../internal.h:870:10,
+      #     inlined from 'i2c_ASN1_BIT_STRING' at awslc/crypto/asn1/a_bitstr.c:77:3:
+      # /usr/share/mingw-w64/include/string.h:230:10: error: '__builtin_memcpy' specified bound between
+      #     18446744071562067968 and 18446744073709551615 exceeds maximum object size 9223372036854775807
+      #     [-Werror=stringop-overflow=]
+      #   230 |   return __builtin___memcpy_chk(__dst, __src, __n, __mingw_bos(__dst, 0));
+      #       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      # ```
+      # https://github.com/curl/curl-for-win/actions/runs/40143923934/job/121021179816
+      # https://github.com/curl/curl-for-win/discussions/44#discussioncomment-19175919
+      # https://github.com/aws/aws-lc/issues/3691
+      if [ "${_CC}" = 'gcc' ]; then
+        CFLAGS+=' -fstrict-overflow'
+      fi
+
       # Patch out to avoid redefinition errors (clang not affected)
       if [ "${_CC}" = 'gcc' ]; then
         sed -i.bak 's/-D_WIN32_WINNT=_WIN32_WINNT_WIN7//g' ./CMakeLists.txt

@@ -1061,8 +1061,10 @@ build_single_target() {
       _CXXFLAGS_GLOBAL+=' -fno-strict-aliasing'
     fi
   elif [ "${_CC}" = 'gcc' ]; then
-    _CFLAGS_GLOBAL+=' -fno-strict-aliasing -fno-strict-overflow'
-    _CXXFLAGS_GLOBAL+=' -fno-strict-aliasing -fno-strict-overflow'
+    _CFLAGS_GLOBAL+=' -fno-strict-aliasing'
+    _CXXFLAGS_GLOBAL+=' -fno-strict-aliasing'
+    _CFLAGS_GLOBAL+=' -fno-strict-overflow'
+    _CXXFLAGS_GLOBAL+=' -fno-strict-overflow'
     if [ "${_CCVER}" -ge '12' ]; then
       # Seen to cause false-positive -Wmaybe-uninitialized warnings in this combination
       # Tested combo with false positive: mac + gcc 16.1.0 + a64
