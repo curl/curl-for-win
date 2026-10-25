@@ -41,7 +41,7 @@ _VER="$1"
   # [ "${_CC}" = 'gcc' ] && LDFLAGS+=' -Wl,--trace'
   fi
 
-  if [ "${_OS}" = 'win' ] && [[ "${_CONFIG}" != *'nounicode'* ]]; then
+  if [ "${_OS}" = 'win' ] && [[ "${_CONFIG}" = *'unicode'* ]]; then
     options+=' -DENABLE_UNICODE=ON'
   fi
 
