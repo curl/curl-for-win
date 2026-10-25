@@ -968,7 +968,6 @@ build_single_target() {
     _CMAKE_GLOBAL+=" -DCMAKE_OSX_DEPLOYMENT_TARGET=${macminver}"
     # TODO: This option might have been renamed to `-mmacos-version-min=`?
     _CFLAGS_GLOBAL+=" -mmacosx-version-min=${macminver}"
-    _CXXFLAGS_GLOBAL+=" -mmacosx-version-min=${macminver}"
     _OSVER="$(printf '%02d%02d' \
       "$(printf '%s' "${macminver}" | cut -d '.' -f 1)" \
       "$(printf '%s' "${macminver}" | cut -d '.' -f 2)")"
@@ -992,7 +991,6 @@ build_single_target() {
     if [[ ( "${_CC}" = 'llvm' && "${_CCVER}" -ge '16' ) || \
           ( "${_CC}" = 'gcc'  && "${_CCVER}" -ge '13' ) ]]; then
       _CFLAGS_GLOBAL+=' -fstrict-flex-arrays=3'
-      _CXXFLAGS_GLOBAL+=' -fstrict-flex-arrays=3'
 
       if [ "${_CC}" = 'gcc' ] && [ "${_CCVER}" -ge '15' ] && [ "${unamem}" = 'aarch64' ] && [ "${unamem}" = "${_machine}" ]; then
         # To silence compiler warning with arm64 GCC targeting arm64 with the '-fstrict-flex-arrays=3'
@@ -1005,19 +1003,16 @@ build_single_target() {
         # ```
         # Default is -Wstringop-overflow=2, also happens with -Wstringop-overflow=1.
         _CFLAGS_GLOBAL+=' -Wno-stringop-overflow'
-        _CXXFLAGS_GLOBAL+=' -Wno-stringop-overflow'
       fi
     fi
 
     # With musl, this seems to be a no-op as of Alpine v3.18
     # https://en.wikipedia.org/wiki/Buffer_overflow_protection
     _CFLAGS_GLOBAL+=' -fstack-protector-all'
-    _CXXFLAGS_GLOBAL+=' -fstack-protector-all'
 
     if false && [ "${_CC}" = 'gcc' ] && [ "${_CCVER}" -ge '14' ]; then
       # https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html#index-fhardened
       _CFLAGS_GLOBAL+=' -fhardened'
-      _CXXFLAGS_GLOBAL+=' -fhardened'
     else
       # https://en.wikipedia.org/wiki/Position-independent_code#PIE
       _CFLAGS_GLOBAL_RAW+=' -fPIC'
@@ -1034,7 +1029,6 @@ build_single_target() {
          [ "${_CPU}" = 'x86' ] || \
          [ "${_CC}" = 'gcc' ]; then
         _CFLAGS_GLOBAL+=' -fstack-clash-protection'
-        _CXXFLAGS_GLOBAL+=' -fstack-clash-protection'
       fi
 
       _LDFLAGS_GLOBAL+=' -Wl,-z,relro,-z,now'
@@ -1055,19 +1049,14 @@ build_single_target() {
   fi
 
   _CFLAGS_GLOBAL+=' -fno-delete-null-pointer-checks'
-  _CXXFLAGS_GLOBAL+=' -fno-delete-null-pointer-checks'
   if [ "${_CC}" = 'llvm' ]; then
     _CFLAGS_GLOBAL+=' -ftrivial-auto-var-init=zero'
-    _CXXFLAGS_GLOBAL+=' -ftrivial-auto-var-init=zero'
     if [ "${_CCVER}" -ge '18' ]; then
       _CFLAGS_GLOBAL+=' -fno-strict-aliasing'
-      _CXXFLAGS_GLOBAL+=' -fno-strict-aliasing'
     fi
   elif [ "${_CC}" = 'gcc' ]; then
     _CFLAGS_GLOBAL+=' -fno-strict-aliasing'
-    _CXXFLAGS_GLOBAL+=' -fno-strict-aliasing'
     _CFLAGS_GLOBAL+=' -fno-strict-overflow'
-    _CXXFLAGS_GLOBAL+=' -fno-strict-overflow'
     if [ "${_CCVER}" -ge '12' ]; then
       # Seen to cause false-positive -Wmaybe-uninitialized warnings in this combination
       # Tested combo with false positive: mac + gcc 16.1.0 + a64
@@ -1075,12 +1064,10 @@ build_single_target() {
       # Ref: https://github.com/curl/curl/pull/22209
       if [[ "${_CCVER}" != '16' || "${_OS}" != 'mac' || "${_CPU}" != 'a64' ]]; then
         _CFLAGS_GLOBAL+=' -ftrivial-auto-var-init=zero'
-        _CXXFLAGS_GLOBAL+=' -ftrivial-auto-var-init=zero'
       fi
     fi
     if [ "${_CCVER}" -ge '15' ]; then
       _CFLAGS_GLOBAL+=' -fzero-init-padding-bits=all'
-      _CXXFLAGS_GLOBAL+=' -fzero-init-padding-bits=all'
     fi
   fi
 
@@ -1089,7 +1076,6 @@ build_single_target() {
   fi
 
   _CFLAGS_GLOBAL+=' -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer'
-  _CXXFLAGS_GLOBAL+=' -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer'
 
   # https://fedoraproject.org/wiki/Security_Features_Matrix
   # RISC-V: https://gcc.gnu.org/onlinedocs/gcc/RISC-V-Options.html
@@ -1098,7 +1084,6 @@ build_single_target() {
     # https://maskray.me/blog/2022-12-18-control-flow-integrity
     if [[ "${_CCVER}" != '16' || "${_OS}" != 'mac' || "${_CPU}" != 'x64' ]]; then
       _CFLAGS_GLOBAL+=' -fcf-protection=full'
-      _CXXFLAGS_GLOBAL+=' -fcf-protection=full'
     fi
     if [ "${_OS}" = 'linux' ]; then
       # https://github.com/llvm/llvm-project/issues/44828
@@ -1111,7 +1096,6 @@ build_single_target() {
   elif [ "${_CPU}" = 'a64' ]; then
     # https://gcc.gnu.org/onlinedocs/gcc/AArch64-Options.html
     _CFLAGS_GLOBAL+=' -mbranch-protection=standard'
-    _CXXFLAGS_GLOBAL+=' -mbranch-protection=standard'
   fi
 
   _CMAKE_GLOBAL+=' -DCMAKE_INSTALL_MESSAGE=NEVER'
@@ -1131,7 +1115,6 @@ build_single_target() {
   # continue to leak out from the libcurl shared library.
   if [ "${_OS}" != 'win' ]; then
     _CFLAGS_GLOBAL+=' -fvisibility=hidden'
-    _CXXFLAGS_GLOBAL+=' -fvisibility=hidden'
   fi
 
   if [ "${boringssl}" = '1' ]; then
@@ -1154,7 +1137,6 @@ build_single_target() {
       # https://maskray.me/blog/2021-05-16-elf-interposition-and-bsymbolic
       # https://flameeyes.blog/2012/10/07/symbolism-and-elf-files-or-what-does-bsymbolic-do/
       _CFLAGS_GLOBAL+=' -fno-semantic-interposition'
-      _CXXFLAGS_GLOBAL+=' -fno-semantic-interposition'
       _LDFLAGS_GLOBAL+=' -Wl,-Bsymbolic'  # -Wl,-Bsymbolic-functions (safer option, but libcurl isn't affected)
     fi
   fi
@@ -1181,7 +1163,6 @@ build_single_target() {
     # per lib (currently libcurl and libssh2). Build times seem to remain
     # around the same. Makes '.map' files grow significantly.
     _CFLAGS_GLOBAL+=' -ffunction-sections -fdata-sections'
-    _CXXFLAGS_GLOBAL+=' -ffunction-sections -fdata-sections'
     _LDFLAGS_GLOBAL+=' -Wl,--gc-sections'
   fi
 
@@ -1559,7 +1540,6 @@ build_single_target() {
   if [[ "${_CONFIG}" = *'thinlto'* ]]; then
     if [[ "${_CC}" = 'llvm' ]]; then
       _CFLAGS_GLOBAL+=' -flto=thin'
-      _CXXFLAGS_GLOBAL+=' -flto=thin'
 
       # `llvm-strip` as of v17 does not support ThinLTO objects, with:
       #   The file was not recognized as a valid object file
