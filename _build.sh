@@ -1121,10 +1121,8 @@ build_single_target() {
     if [ "${_OS}" = 'win' ]; then
       _LDFLAGS_CXX_GLOBAL+=' -Wl,-Bstatic -lstdc++'
     fi
-    if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
+    if [ "${_CC}" = 'llvm' ]; then
       _LDFLAGS_CXX_GLOBAL+=' -stdlib=libc++'
-    elif [ "${_CC}" = 'llvm' ]; then
-      _LDFLAGS_CXX_GLOBAL+=' -stdlib=c++'
     else
       _LDFLAGS_CXX_GLOBAL+=' -lstdc++'
     fi
