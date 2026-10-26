@@ -55,7 +55,7 @@ fi
 # https://pkgs.alpinelinux.org/packages
 # coreutils to override the busybox sha256sum implementation for `--tag` option support.
 # shellcheck disable=SC2086
-apk add --no-cache curl git gpg gpg-agent rsync cmake samurai patch file \
+apk add --no-cache curl git gpg gpg-agent rsync cmake samurai patch file g++ \
   zip tar xz jq coreutils sed perl ${extra}
 
 ./_build.sh
