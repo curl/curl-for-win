@@ -1252,7 +1252,12 @@ build_single_target() {
         if [ "${boringssl}" = '1' ]; then
           # https://packages.debian.org/forky/amd64/libstdc++-15-dev/filelist
           # /usr/lib/gcc/x86_64-linux-gnu/15/
-          _LDFLAGS_GLOBAL+=" -L/usr/lib/gcc/${_TRIPLETSH}"
+          tmp="$(find "/usr/lib/gcc/${_TRIPLETSH}" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
+          if [ -z "${tmp}" ]; then
+            >&2 echo '! Error: Failed to detect gcc-cross env root.'
+            exit 1
+          fi
+          _LDFLAGS_GLOBAL+=" -L${tmp}"
           # https://packages.debian.org/testing/all/libstdc++-16-dev-arm64-cross/filelist
           # https://packages.debian.org/testing/all/libstdc++-16-dev-riscv64-cross/filelist
           # /usr/aarch64-linux-gnu/include/c++/16/
