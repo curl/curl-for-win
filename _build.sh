@@ -1269,17 +1269,17 @@ build_single_target() {
     # /usr/include/c++/15.2.0
     # /usr/include/c++/15.2.0/x86_64-alpine-linux-musl
     # /usr/include/c++/15.2.0/backward
-   # if [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [[ "${_CRT}" = 'musl' || "${_CC}" = 'llvm' ]]; then
-   #   tmp="$(find "/usr/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
-   #   if [ -z "${tmp}" ]; then
-   #     >&2 echo '! Error: Failed to detect C++ env root.'
-   #     exit 1
-   #   fi
-   #   _LDFLAGS_GLOBAL+=" -L${tmp}"
-   #   _CXXFLAGS_GLOBAL+=" -I${tmp}"
-   #   _CXXFLAGS_GLOBAL+=" -I${tmp}/${_TRIPLETSH}"
-   #   _CXXFLAGS_GLOBAL+=" -I${tmp}/backward"
-   # fi
+    if [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [[ "${_CRT}" = 'musl' || "${_CC}" = 'llvm' ]]; then
+      tmp="$(find "/usr/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
+      if [ -z "${tmp}" ]; then
+        >&2 echo '! Error: Failed to detect C++ env root.'
+        exit 1
+      fi
+      _LDFLAGS_GLOBAL+=" -L${tmp}"
+      _CXXFLAGS_GLOBAL+=" -isystem ${tmp}"
+      _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/${_TRIPLETSH}"
+      _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/backward"
+    fi
 
     # Requires llvm v16 and mingw-w64 v11 built with `--enable-cfguard`.
     if [ "${_OS}" = 'win' ] && [ "${_CPU}" != 'x86' ]; then
