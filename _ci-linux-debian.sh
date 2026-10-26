@@ -123,10 +123,12 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
 
     [[ "${CW_CONFIG:-}" = *'gcc'* ]] && extra+=" libgcc${CW_GCCSUFFIX}-dev"
 
-    # for curl 'linux/tcp.h' and openssl 'secure-memory' feature
-    [[ "${unamem}" = 'aarch64' && "${a64}" = 1 ]] && extra+=' linux-headers-arm64'
-    [[ "${unamem}" = 'riscv64' && "${r64}" = 1 ]] && extra+=' linux-headers-riscv64'
-    [[ "${unamem}" = 'x86_64'  && "${x64}" = 1 ]] && extra+=' linux-headers-amd64'
+    if [[ "${CW_CONFIG:-}" = *'openssl'* ]]; then
+      # for openssl 'secure-memory' feature requiring 'linux/mman.h'
+      [[ "${unamem}" = 'aarch64' && "${a64}" = 1 ]] && extra+=' linux-headers-arm64'
+      [[ "${unamem}" = 'riscv64' && "${r64}" = 1 ]] && extra+=' linux-headers-riscv64'
+      [[ "${unamem}" = 'x86_64'  && "${x64}" = 1 ]] && extra+=' linux-headers-amd64'
+    fi
   else  # glibc
     # FIXME: workaround for glibc-llvm-riscv64 builds:
     if [[ "${CW_CONFIG:-}" != *'gcc'* && "${r64}" = 1 ]]; then
