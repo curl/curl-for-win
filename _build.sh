@@ -1229,9 +1229,9 @@ build_single_target() {
           exit 1
         fi
         _LDFLAGS_GLOBAL+=" -L${tmp}"
-        _CXXFLAGS_GLOBAL+=" -I${tmp}/include/c++"
-        _CXXFLAGS_GLOBAL+=" -I${tmp}/include/c++/${_TRIPLET}"
-        _CXXFLAGS_GLOBAL+=" -I${tmp}/include/c++/backward"
+        _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/include/c++"
+        _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/include/c++/${_TRIPLET}"
+        _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/include/c++/backward"
       fi
     elif [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [ "${unamem}" != "${_machine}" ] && [ "${_CRT}" != 'musl' ]; then
       _CFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include"
@@ -1253,9 +1253,9 @@ build_single_target() {
           >&2 echo '! Error: Failed to detect g++-cross env root.'
           exit 1
         fi
-        _CXXFLAGS_GLOBAL+=" -I${tmp}"
-        _CXXFLAGS_GLOBAL+=" -I${tmp}/${_TRIPLETSH}"
-        _CXXFLAGS_GLOBAL+=" -I${tmp}/backward"
+        _CXXFLAGS_GLOBAL+=" -isystem ${tmp}"
+        _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/${_TRIPLETSH}"
+        _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/backward"
       fi
     fi
 
