@@ -59,7 +59,7 @@ while [ -n "${1:-}" ]; do
       "${_OBJDUMP}" --all-headers "${f}" | grep -a -E -o '^\s+[A-Z_]{4,}$' | sort
     fi
     if [ "${filetype}" = 'exe' ] && [ "${is_curl}" = '1' ]; then  # should be the same output for the DLL
-      # regexp compatible with llvm and binutils output
+      # regex compatible with llvm and binutils output
       # = llvm-readobj --coff-imports | grep -a -F 'Symbol: ' | sort
       "${_OBJDUMP}" --all-headers "${f}" \
         | grep -a -E ' [0-9]{1,5} +[a-zA-Z_][a-zA-Z0-9_]*$' \
