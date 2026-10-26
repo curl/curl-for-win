@@ -23,17 +23,19 @@ if [[ "${CW_CONFIG:-}" = *'win'* ]]; then
   [ -n "${DEPLOY_AGE_PASS:+1}" ] && extra+=' openssh-client-default'
 elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   apk add --no-cache checksec-rs --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community/
-  extra+=' compiler-rt'  # for llvm
-  if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
-    extra+=' libc++-static'  # for llvm
-  elif [[ "${CW_CONFIG:-}" = *'openssl'* ]]; then
-    extra+=' linux-headers'  # for openssl 'secure-memory' feature requiring 'linux/mman.h'
-  fi
   if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
     extra+=' gcc musl-dev'
     if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
       extra+=' g++'
     fi
+  else
+    extra+=' compiler-rt'  # for llvm
+    if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
+      extra+=' libstdc++-dev'
+    fi
+  fi
+  if [[ "${CW_CONFIG:-}" = *'openssl'* ]]; then
+    extra+=' linux-headers'  # for openssl 'secure-memory' feature requiring 'linux/mman.h'
   fi
 fi
 extra+=' make'  # for trurl <=1.16.1
