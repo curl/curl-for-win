@@ -34,8 +34,8 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
       extra+=' libstdc++-dev'
     fi
   fi
-  if [[ "${CW_CONFIG:-}" = *'openssl'* ]]; then
-    extra+=' linux-headers'  # for openssl 'secure-memory' feature requiring 'linux/mman.h'
+  if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'openssl'* ]]; then
+    extra+=' linux-headers'  # for awslc/boringssl 'linux/random.h', openssl 'secure-memory' feature requiring 'linux/mman.h'
   fi
 fi
 extra+=' make'  # for trurl <=1.16.1
