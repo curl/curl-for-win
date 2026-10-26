@@ -1622,9 +1622,9 @@ build_single_target() {
       fi
       ccrsdir="${ccrtdir}"
       ccrtlib="-Wl,-lgcc -Wl,-lgcc_eh"
-      if [ "${boringssl}" != '1' ]; then
-        _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
-      fi
+      #if [ "${boringssl}" != '1' ]; then
+      #  _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
+      #fi
       ccridir="$("clang${_CCSUFFIX}" -print-resource-dir)"                             # /usr/lib/llvm-13/lib/clang/13.0.1
     fi
     libprefix="/usr/lib/${_machine}-linux-musl"
@@ -1706,9 +1706,9 @@ build_single_target() {
         fi
         _LDFLAGS_GLOBAL+=' -rtlib=compiler-rt'
       fi
-      if [ "${boringssl}" != '1' ]; then
-        _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
-      fi
+      #if [ "${boringssl}" != '1' ]; then
+      #  _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
+      #fi
     fi
   else
     if [ "${_OS}" = 'win' ]; then
