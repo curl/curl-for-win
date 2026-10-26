@@ -123,8 +123,8 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
 
     [[ "${CW_CONFIG:-}" = *'gcc'* ]] && extra+=" libgcc${CW_GCCSUFFIX}-dev"
 
-    if [[ "${CW_CONFIG:-}" = *'openssl'* ]]; then
-      # for openssl 'secure-memory' feature requiring 'linux/mman.h'
+    if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'openssl'* ]]; then
+      # for awslc/boringssl 'linux/random.h', openssl 'secure-memory' feature requiring 'linux/mman.h'
       [[ "${unamem}" = 'aarch64' && "${a64}" = 1 ]] && extra+=' linux-headers-arm64'
       [[ "${unamem}" = 'riscv64' && "${r64}" = 1 ]] && extra+=' linux-headers-riscv64'
       [[ "${unamem}" = 'x86_64'  && "${x64}" = 1 ]] && extra+=' linux-headers-amd64'
