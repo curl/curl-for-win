@@ -1123,11 +1123,9 @@ build_single_target() {
     else
       _LDFLAGS_CXX_GLOBAL+=' -lstdc++'
     fi
-    if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-      _LDFLAGS_CXX_GLOBAL+=' -stdlib=libc++'
-    elif [ "${_TOOLCHAIN}" = 'llvm' ]; then
-      _LDFLAGS_CXX_GLOBAL+=' -stdlib=libstdc++'
-    fi
+    #if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
+    #  _LDFLAGS_CXX_GLOBAL+=' -stdlib=libc++'
+    #fi
   fi
 
   # These options have just minor effect when using -fvisibility=hidden, but
