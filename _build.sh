@@ -1125,6 +1125,8 @@ build_single_target() {
     fi
     if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
       _LDFLAGS_CXX_GLOBAL+=' -stdlib=libc++'
+    elif [ "${_TOOLCHAIN}" = 'llvm' ]; then
+      _LDFLAGS_CXX_GLOBAL+=' -stdlib=libstdc++'
     fi
   fi
 
