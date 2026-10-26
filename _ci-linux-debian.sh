@@ -123,7 +123,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
 
     [[ "${CW_CONFIG:-}" = *'gcc'* ]] && extra+=" libgcc${CW_GCCSUFFIX}-dev"
 
-    if [[ "${CW_CONFIG:-}" = *'openssl'* ]]; then
+    if [[ "${CW_CONFIG:-}" = *'awslc'* || "${CW_CONFIG:-}" = *'boringssl'* || "${CW_CONFIG:-}" = *'openssl'* ]]; then
       # https://packages.debian.org/trixie/all/linux-libc-dev/filelist
       extra+=' linux-libc-dev'  # for awslc/boringssl 'linux/random.h', openssl 'secure-memory' feature requiring 'linux/mman.h'
     fi
