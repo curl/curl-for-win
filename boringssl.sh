@@ -163,15 +163,20 @@ _VER="$1"
       sed -i.bak 's/ -ggdb//g' ./CMakeLists.txt
     fi
 
+    export LDFLAGS=-v
     # shellcheck disable=SC2086
-    cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
+    if ! cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
       -DBUILD_TESTING=OFF \
       -DBUILD_SHARED_LIBS=OFF \
       -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}" \
-      -DCMAKE_CXX_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
+      -DCMAKE_CXX_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}" \
+    ; then  # --debug-find --debug-trycompile
+      [ -n "${CI:-}" ] && cat "${_BLDDIR}"/CMakeFiles/CMake*.yaml
+      false
+    fi
   fi
 
-  cmake --build "${_BLDDIR}"  # --verbose
+  cmake --build "${_BLDDIR}" --verbose
   cmake --install "${_BLDDIR}" --prefix "${_PP}"
 
   # List files created
