@@ -332,7 +332,7 @@ _VER="$1"
     # appending it to `options`, or via the environment.
     #   CMake Warning: Manually-specified variables were not used by the project: CMAKE_RC_FLAGS
     # Alternative option: pass it via `RCFLAGS` env.
-    # Downside: it obscures this configuation setting and makes
+    # Downside: it obscures this configuration setting and makes
     # the cmake command-line incomplete.
     if [ "${_DISTVER}" = 'trixie' ]; then
       options+=' --no-warn-unused-cli'
