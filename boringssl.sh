@@ -81,7 +81,7 @@ _VER="$1"
 
   [ "${CW_DEV_INCREMENTAL:-}" != '1' ] && rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
-  CFLAGS="-v -ffile-prefix-map=$(pwd)="
+  CFLAGS="-ffile-prefix-map=$(pwd)="
   CPPFLAGS=''
   options=''
 
