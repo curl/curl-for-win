@@ -103,18 +103,13 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     [[ "${unamem}" != 'aarch64' && "${a64}" = 1 ]] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:arm64"
     [[ "${unamem}" != 'riscv64' && "${r64}" = 1 ]] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:riscv64"
     [[ "${unamem}" != 'x86_64'  && "${x64}" = 1 ]] && dl+=" libclang-rt${CW_CCSUFFIX}-dev:amd64"
-    if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
-      [[ "${unamem}" != 'aarch64' && "${a64}" = 1 ]] && dl+=" libc++${CW_CCSUFFIX}-dev:arm64"
-      [[ "${unamem}" != 'riscv64' && "${r64}" = 1 ]] && dl+=" libc++${CW_CCSUFFIX}-dev:riscv64"
-      [[ "${unamem}" != 'x86_64'  && "${x64}" = 1 ]] && dl+=" libc++${CW_CCSUFFIX}-dev:amd64"
-    fi
   fi
   if [[ ( "${CW_CONFIG:-}" = *'awslc'* || "${CW_CONFIG:-}" = *'boringssl'* ) && \
         ( "${CW_CONFIG:-}" != *'gcc'* || "${CW_CONFIG:-}" = *'musl'* ) ]]; then
-    extra+=" libstdc++${CW_GCCSUFFIX}-dev"
-    [[ "${unamem}" != 'aarch64' && "${a64}" = 1 ]] && extra+=" libstdc++${CW_GCCSUFFIX}-dev-arm64-cross"
-    [[ "${unamem}" != 'riscv64' && "${r64}" = 1 ]] && extra+=" libstdc++${CW_GCCSUFFIX}-dev-riscv64-cross"
-    [[ "${unamem}" != 'x86_64'  && "${x64}" = 1 ]] && extra+=" libstdc++${CW_GCCSUFFIX}-dev-amd64-cross"
+    extra+=" libc++${CW_GCCSUFFIX}-dev"
+    [[ "${unamem}" != 'aarch64' && "${a64}" = 1 ]] && dl+=" libc++${CW_CCSUFFIX}-dev:arm64"
+    [[ "${unamem}" != 'riscv64' && "${r64}" = 1 ]] && dl+=" libc++${CW_CCSUFFIX}-dev:riscv64"
+    [[ "${unamem}" != 'x86_64'  && "${x64}" = 1 ]] && dl+=" libc++${CW_CCSUFFIX}-dev:amd64"
   fi
   if [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
     extra+=' musl musl-dev'
