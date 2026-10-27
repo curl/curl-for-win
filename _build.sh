@@ -1120,12 +1120,8 @@ build_single_target() {
   if [ "${boringssl}" = '1' ]; then
     if [ "${_OS}" = 'win' ]; then
       _LDFLAGS_CXX_GLOBAL+=' -Wl,-Bstatic -lstdc++'
-    else
       _LDFLAGS_CXX_GLOBAL+=' -lstdc++'
     fi
-    #if [ "${_TOOLCHAIN}" = 'llvm-mingw' ]; then
-    #  _LDFLAGS_CXX_GLOBAL+=' -stdlib=libc++'
-    #fi
   fi
 
   # These options have just minor effect when using -fvisibility=hidden, but
@@ -1370,7 +1366,8 @@ build_single_target() {
         >&2 echo '! Error: Failed to detect C++-cross (local) env root.'
         exit 1
       fi
-      _LDFLAGS_GLOBAL+=" -L${PWD}/my-pkg/usr/lib/${_TRIPLETSH}"
+      _LDFLAGS_CXX_GLOBAL+=" -L${PWD}/my-pkg/usr/lib/${_TRIPLETSH}"
+      _LDFLAGS_CXX_GLOBAL+=' -lc++'
       _CXXFLAGS_GLOBAL+=" -isystem ${tmp}"
     elif [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" != "${_machine}" ]; then
       # https://packages.debian.org/forky/all/libstdc++-16-dev-arm64-cross/filelist
@@ -1387,7 +1384,8 @@ build_single_target() {
         exit 1
       fi
       tmp="$(basename "${tmp}")"  # 16
-      _LDFLAGS_GLOBAL+=" -L/usr/lib/gcc-cross/${_TRIPLETSH}/${tmp}"
+      _LDFLAGS_CXX_GLOBAL+=" -L/usr/lib/gcc-cross/${_TRIPLETSH}/${tmp}"
+      _LDFLAGS_CXX_GLOBAL+=' -lstdc++'
       _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include/c++/${tmp}"
       _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include/c++/${tmp}/${_TRIPLETSH}"
       _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include/c++/${tmp}/backward"
@@ -1403,7 +1401,8 @@ build_single_target() {
         exit 1
       fi
       tmp="$(basename "${tmp}")"  # 16
-      _LDFLAGS_GLOBAL+=" -L/usr/lib/gcc/${_TRIPLETSH}/${tmp}"
+      _LDFLAGS_CXX_GLOBAL+=" -L/usr/lib/gcc/${_TRIPLETSH}/${tmp}"
+      _LDFLAGS_CXX_GLOBAL+=' -lstdc++'
       _CXXFLAGS_GLOBAL+=" -isystem /usr/include/c++/${tmp}"
       _CXXFLAGS_GLOBAL+=" -isystem /usr/include/${_TRIPLETSH}/c++/${tmp}"
       _CXXFLAGS_GLOBAL+=" -isystem /usr/include/c++/${tmp}/backward"
@@ -1413,7 +1412,8 @@ build_single_target() {
       # https://pkgs.alpinelinux.org/contents?file=&path=&name=libc%5B%2B%5D%5B%2B%5D-static&branch=edge&repo=main&arch=x86_64
       #   /usr/lib/libc++.a
       #   /usr/include/c++/v1/
-      _LDFLAGS_GLOBAL+=' -L/usr/lib'
+      _LDFLAGS_CXX_GLOBAL+=' -L/usr/lib'
+      _LDFLAGS_CXX_GLOBAL+=' -lc++'
       _CXXFLAGS_GLOBAL+=' -isystem /usr/include/c++/v1'
     elif [ "${_DISTRO}" = 'alpine' ]; then  # compatible with both gcc and llvm, we only use it for gcc
       # libstdc++-dev
@@ -1427,7 +1427,8 @@ build_single_target() {
         >&2 echo '! Error: Failed to detect C++ env root.'
         exit 1
       fi
-      _LDFLAGS_GLOBAL+=' -L/usr/lib'
+      _LDFLAGS_CXX_GLOBAL+=' -L/usr/lib'
+      _LDFLAGS_CXX_GLOBAL+=' -lstdc++'
       _CXXFLAGS_GLOBAL+=" -isystem ${tmp}"
       _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/${_TRIPLETSH}"
       _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/backward"
