@@ -31,7 +31,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   else
     extra+=' compiler-rt'  # for llvm
     if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]]; then
-      extra+=' libstdc++-dev'
+      extra+=' libc++-dev libc++-static'  # also works: libstdc++-dev
     fi
   fi
   if [[ "${CW_CONFIG:-}" = *'awslc'* ]] || [[ "${CW_CONFIG:-}" = *'boringssl'* ]] || [[ "${CW_CONFIG:-}" = *'openssl'* ]]; then
