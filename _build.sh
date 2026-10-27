@@ -1248,45 +1248,7 @@ build_single_target() {
           exit 1
         fi
         _LDFLAGS_GLOBAL+=" -L${tmp}"
-
-        if [ "${boringssl}" = '1' ]; then
-          # https://packages.debian.org/forky/amd64/libstdc++-15-dev/filelist
-          # /usr/lib/gcc/x86_64-linux-gnu/15/
-          tmp="$(find "/usr/lib/gcc/${_TRIPLETSH}" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
-          if [ -z "${tmp}" ]; then
-            >&2 echo '! Error: Failed to detect gcc-cross env root.'
-            exit 1
-          fi
-          _LDFLAGS_GLOBAL+=" -L${tmp}"
-          # https://packages.debian.org/testing/all/libstdc++-16-dev-arm64-cross/filelist
-          # https://packages.debian.org/testing/all/libstdc++-16-dev-riscv64-cross/filelist
-          # /usr/aarch64-linux-gnu/include/c++/16/
-          tmp="$(find "/usr/${_TRIPLETSH}/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
-          if [ -z "${tmp}" ]; then
-            >&2 echo '! Error: Failed to detect g++-cross env root.'
-            exit 1
-          fi
-          _CXXFLAGS_GLOBAL+=" -isystem ${tmp}"
-          _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/${_TRIPLETSH}"
-          _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/backward"
-        fi
       fi
-    fi
-
-    # Alpine:
-    # /usr/include/c++/15.2.0
-    # /usr/include/c++/15.2.0/x86_64-alpine-linux-musl
-    # /usr/include/c++/15.2.0/backward
-    if [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [[ "${_CRT}" = 'musl' || "${_CC}" = 'llvm' ]]; then
-      tmp="$(find "/usr/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
-      if [ -z "${tmp}" ]; then
-        >&2 echo '! Error: Failed to detect C++ env root.'
-        exit 1
-      fi
-      _LDFLAGS_GLOBAL+=" -L${tmp}"
-      _CXXFLAGS_GLOBAL+=" -isystem ${tmp}"
-      _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/${_TRIPLETSH}"
-      _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/backward"
     fi
 
     # Requires llvm v16 and mingw-w64 v11 built with `--enable-cfguard`.
@@ -1387,6 +1349,58 @@ build_single_target() {
     fi
 
     _BINUTILS_SUFFIX="${_CCSUFFIX}"
+  fi
+
+  if [ "${boringssl}" = '1' ] && [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [[ "${_CRT}" = 'musl' || "${_CC}" = 'llvm' ]]; then
+    if [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" != "${_machine}" ]; then
+      # https://packages.debian.org/forky/all/libstdc++-16-dev-arm64-cross/filelist
+      #   /usr/lib/gcc-cross/aarch64-linux-gnu/16/libstdc++.a
+      #   /usr/aarch64-linux-gnu/include/c++/16/
+      # https://packages.debian.org/forky/all/libstdc++-16-dev-riscv64-cross/filelist
+      #   /usr/lib/gcc-cross/riscv64-linux-gnu/16/libstdc++.a
+      #   /usr/riscv64-linux-gnu/include/c++/16/
+      tmp="$(find "/usr/lib/gcc-cross/${_TRIPLETSH}" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
+      if [ -z "${tmp}" ]; then
+        >&2 echo '! Error: Failed to detect C++-cross env root.'
+        exit 1
+      fi
+      tmp="$(basename "${tmp}")"  # 16
+      _LDFLAGS_GLOBAL+=" -L/usr/lib/gcc-cross/${_TRIPLETSH}/${tmp}"
+      _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/${tmp}"
+      _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/${tmp}/backward"
+      _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/${tmp}/${_TRIPLETSH}"
+    elif [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" = "${_machine}" ]; then
+      # https://packages.debian.org/forky/amd64/libstdc++-16-dev/filelist
+      #   /usr/lib/gcc/x86_64-linux-gnu/16/libstdc++.a
+      #   /usr/include/c++/16/
+      #   /usr/include/c++/16/backward
+      #   /usr/include/x86_64-linux-gnu/c++/16/
+      tmp="$(find "/usr/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
+      if [ -z "${tmp}" ]; then
+        >&2 echo '! Error: Failed to detect C++ env root.'
+        exit 1
+      fi
+      tmp="$(basename "${tmp}")"  # 16
+      _LDFLAGS_GLOBAL+=" -L/usr/lib/gcc/${_TRIPLETSH}/${tmp}"
+      _CXXFLAGS_GLOBAL+=" -isystem /usr/include/c++/${tmp}"
+      _CXXFLAGS_GLOBAL+=" -isystem /usr/include/c++/${tmp}/backward"
+      _CXXFLAGS_GLOBAL+=" -isystem /usr/include/${_TRIPLETSH}/c++/${tmp}"
+    elif [ "${_DISTRO}" = 'alpine' ]; then
+      # https://pkgs.alpinelinux.org/contents?page=17&file=&path=&name=libstdc%5B%2B%5D%5B%2B%5D-dev&branch=edge&repo=main&arch=x86_64
+      #   /usr/lib/libstdc++.a
+      #   /usr/include/c++/15.2.0
+      #   /usr/include/c++/15.2.0/backward
+      #   /usr/include/c++/15.2.0/x86_64-alpine-linux-musl
+      tmp="$(find "/usr/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
+      if [ -z "${tmp}" ]; then
+        >&2 echo '! Error: Failed to detect C++ env root.'
+        exit 1
+      fi
+      _LDFLAGS_GLOBAL+=' -L/usr/lib'
+      _CXXFLAGS_GLOBAL+=" -isystem ${tmp}"
+      _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/backward"
+      _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/${_TRIPLETSH}"
+    fi
   fi
 
   # Avoid picking up dependencies from system locations
