@@ -185,4 +185,15 @@ if [ -n "${dl}" ]; then
   find -L 'my-pkg/usr/lib/clang' | sort
 fi
 
+echo '=============='
+find \
+  /usr/lib/gcc-cross/riscv64-linux-gnu/16/include           \
+  /usr/include/riscv64-linux-musl                           \
+  /usr/riscv64-linux-gnu/include/c++/16                     \
+  /usr/riscv64-linux-gnu/include/c++/16/backward            \
+  /usr/riscv64-linux-gnu/include/c++/16/riscv64-linux-gnu   -name stdlib.h || true
+echo '--------------'
+fine /usr -name stdlib.h || true
+echo '--------------'
+
 ./_build.sh
