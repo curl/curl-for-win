@@ -1369,14 +1369,14 @@ build_single_target() {
       tmp="$(basename "${tmp}")"  # 16
       _LDFLAGS_GLOBAL+=" -L/usr/lib/gcc-cross/${_TRIPLETSH}/${tmp}"
       _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include/c++/${tmp}"
-      _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include/c++/${tmp}/backward"
       _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include/c++/${tmp}/${_TRIPLETSH}"
+      _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include/c++/${tmp}/backward"
     elif [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" = "${_machine}" ]; then
       # https://packages.debian.org/forky/amd64/libstdc++-16-dev/filelist
       #   /usr/lib/gcc/x86_64-linux-gnu/16/libstdc++.a
       #   /usr/include/c++/16/
-      #   /usr/include/c++/16/backward
       #   /usr/include/x86_64-linux-gnu/c++/16/
+      #   /usr/include/c++/16/backward
       tmp="$(find "/usr/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
       if [ -z "${tmp}" ]; then
         >&2 echo '! Error: Failed to detect C++ env root.'
@@ -1385,14 +1385,14 @@ build_single_target() {
       tmp="$(basename "${tmp}")"  # 16
       _LDFLAGS_GLOBAL+=" -L/usr/lib/gcc/${_TRIPLETSH}/${tmp}"
       _CXXFLAGS_GLOBAL+=" -isystem /usr/include/c++/${tmp}"
-      _CXXFLAGS_GLOBAL+=" -isystem /usr/include/c++/${tmp}/backward"
       _CXXFLAGS_GLOBAL+=" -isystem /usr/include/${_TRIPLETSH}/c++/${tmp}"
+      _CXXFLAGS_GLOBAL+=" -isystem /usr/include/c++/${tmp}/backward"
     elif [ "${_DISTRO}" = 'alpine' ]; then
       # https://pkgs.alpinelinux.org/contents?page=17&file=&path=&name=libstdc%5B%2B%5D%5B%2B%5D-dev&branch=edge&repo=main&arch=x86_64
       #   /usr/lib/libstdc++.a
       #   /usr/include/c++/15.2.0
-      #   /usr/include/c++/15.2.0/backward
       #   /usr/include/c++/15.2.0/x86_64-alpine-linux-musl
+      #   /usr/include/c++/15.2.0/backward
       tmp="$(find "/usr/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
       if [ -z "${tmp}" ]; then
         >&2 echo '! Error: Failed to detect C++ env root.'
@@ -1400,8 +1400,8 @@ build_single_target() {
       fi
       _LDFLAGS_GLOBAL+=' -L/usr/lib'
       _CXXFLAGS_GLOBAL+=" -isystem ${tmp}"
-      _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/backward"
       _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/${_TRIPLETSH}"
+      _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/backward"
     fi
   fi
 
@@ -1662,9 +1662,9 @@ build_single_target() {
       fi
       ccrsdir="${ccrtdir}"
       ccrtlib="-Wl,-lgcc -Wl,-lgcc_eh"
-      #if [ "${boringssl}" != '1' ]; then
-      #  _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
-      #fi
+      if [ "${boringssl}" != '1' ]; then
+        _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
+      fi
       ccridir="$("clang${_CCSUFFIX}" -print-resource-dir)"                             # /usr/lib/llvm-13/lib/clang/13.0.1
     fi
     libprefix="/usr/lib/${_machine}-linux-musl"
@@ -1746,9 +1746,9 @@ build_single_target() {
         fi
         _LDFLAGS_GLOBAL+=' -rtlib=compiler-rt'
       fi
-      #if [ "${boringssl}" != '1' ]; then
-      #  _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
-      #fi
+      if [ "${boringssl}" != '1' ]; then
+        _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
+      fi
     fi
   else
     if [ "${_OS}" = 'win' ]; then
