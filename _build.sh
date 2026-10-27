@@ -1358,7 +1358,7 @@ build_single_target() {
       # https://packages.debian.org/forky/amd64/libc++-22-dev/filelist
       # https://packages.debian.org/forky/riscv64/libc++-22-dev/filelist
       #   <PWD>/my-pkg/usr/include/c++/v1 [symlink]
-      #   <PWD>/my-pkg/usr/lib/llvm-22/include/c++/v1
+      #   <PWD>/my-pkg/usr/lib/llvm-22/include/c++/v1/
       #   <PWD>/my-pkg/usr/lib/riscv64-linux-gnu/libc++.a
       #   <PWD>/my-pkg/usr/lib/x86_64-linux-gnu/libc++.a
       tmp="$(find "${PWD}/my-pkg/usr/include/c++" -mindepth 1 -maxdepth 1 -type d,l | head -n 1 || true)"
@@ -1394,7 +1394,7 @@ build_single_target() {
       #   /usr/lib/gcc/x86_64-linux-gnu/16/libstdc++.a
       #   /usr/include/c++/16/
       #   /usr/include/x86_64-linux-gnu/c++/16/
-      #   /usr/include/c++/16/backward
+      #   /usr/include/c++/16/backward/
       tmp="$(find "/usr/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
       if [ -z "${tmp}" ]; then
         >&2 echo '! Error: Failed to detect C++ env root.'
@@ -1419,9 +1419,9 @@ build_single_target() {
       # libstdc++-dev
       # https://pkgs.alpinelinux.org/contents?page=17&file=&path=&name=libstdc%5B%2B%5D%5B%2B%5D-dev&branch=edge&repo=main&arch=x86_64
       #   /usr/lib/libstdc++.a
-      #   /usr/include/c++/15.2.0
-      #   /usr/include/c++/15.2.0/x86_64-alpine-linux-musl
-      #   /usr/include/c++/15.2.0/backward
+      #   /usr/include/c++/15.2.0/
+      #   /usr/include/c++/15.2.0/x86_64-alpine-linux-musl/
+      #   /usr/include/c++/15.2.0/backward/
       tmp="$(find "/usr/include/c++" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
       if [ -z "${tmp}" ]; then
         >&2 echo '! Error: Failed to detect C++ env root.'
