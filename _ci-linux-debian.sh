@@ -193,7 +193,7 @@ find \
   /usr/riscv64-linux-gnu/include/c++/16/backward            \
   /usr/riscv64-linux-gnu/include/c++/16/riscv64-linux-gnu   -name stdlib.h || true
 echo '--------------'
-fine /usr -name stdlib.h || true
+find /usr -name stdlib.h || true
 echo '--------------'
 
 ./_build.sh
