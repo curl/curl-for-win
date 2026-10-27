@@ -86,12 +86,6 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     [ "${anycross}" = 1 ] && extra+=' qemu-user-static'
   fi
 
-  if [[ "${CW_CONFIG:-}" != *'gcc'* ]] || [[ "${CW_CONFIG:-}" = *'musl'* ]]; then
-    [[ "${unamem}" != 'aarch64' && "${a64}" = 1 ]] && ${sudo} dpkg --add-architecture arm64
-    [[ "${unamem}" != 'riscv64' && "${r64}" = 1 ]] && ${sudo} dpkg --add-architecture riscv64
-    [[ "${unamem}" != 'x86_64'  && "${x64}" = 1 ]] && ${sudo} dpkg --add-architecture amd64
-  fi
-
   if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
     export CW_CCSUFFIX="${CW_GCCSUFFIX}"
     extra+=" gcc${CW_GCCSUFFIX}"
@@ -116,7 +110,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     fi
   fi
   if [[ ( "${CW_CONFIG:-}" = *'awslc'* || "${CW_CONFIG:-}" = *'boringssl'* ) && \
-        ( "${CW_CONFIG:-}" = *'musl'* || "${CW_CONFIG:-}" != *'gcc'* ) ]]; then
+        ( "${CW_CONFIG:-}" != *'gcc'* || "${CW_CONFIG:-}" = *'musl'* ) ]]; then
     extra+=" libstdc++${CW_GCCSUFFIX}-dev"
     [[ "${unamem}" != 'aarch64' && "${a64}" = 1 ]] && extra+=" libstdc++${CW_GCCSUFFIX}-dev-arm64-cross"
     [[ "${unamem}" != 'riscv64' && "${r64}" = 1 ]] && extra+=" libstdc++${CW_GCCSUFFIX}-dev-riscv64-cross"
@@ -154,6 +148,10 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
     [[ "${unamem}" = 'x86_64'  && "${x64}" = 1 ]] && anynoncross=1
     [ "${anynoncross}" = 1 ] && extra+=' libc6-dev'
   fi
+
+  [[ "${extra} ${dl}" = *':arm64'*   ]] && ${sudo} dpkg --add-architecture arm64
+  [[ "${extra} ${dl}" = *':riscv64'* ]] && ${sudo} dpkg --add-architecture riscv64
+  [[ "${extra} ${dl}" = *':amd64'*   ]] && ${sudo} dpkg --add-architecture amd64
 fi
 
 [[ ! "${CW_CONFIG}" =~ (zero|bldtst|nocookie) ]] && extra+=' python3'  # for libpsl
