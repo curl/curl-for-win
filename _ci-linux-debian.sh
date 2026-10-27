@@ -115,7 +115,7 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
       [[ "${unamem}" != 'x86_64'  && "${x64}" = 1 ]] && dl+=" libc++${CW_CCSUFFIX}-dev:amd64"
     fi
   fi
-  if [[ "${CW_CONFIG:-}" = *'awslc'* || "${CW_CONFIG:-}" = *'boringssl'* ]] && ( "${CW_CONFIG:-}" = *'musl'* || "${CW_CONFIG:-}" != *'gcc'* ); then
+  if [[ "${CW_CONFIG:-}" = *'awslc'* || "${CW_CONFIG:-}" = *'boringssl'* && ( "${CW_CONFIG:-}" = *'musl'* || "${CW_CONFIG:-}" != *'gcc'* ) ]]; then
     extra+=" libstdc++${CW_GCCSUFFIX}-dev"
     [[ "${unamem}" = 'aarch64' && "${a64}" = 1 ]] && extra+=" libstdc++${CW_GCCSUFFIX}-dev-arm64-cross"
     [[ "${unamem}" = 'riscv64' && "${r64}" = 1 ]] && extra+=" libstdc++${CW_GCCSUFFIX}-dev-riscv64-cross"
