@@ -1356,9 +1356,11 @@ build_single_target() {
       # https://packages.debian.org/forky/all/libstdc++-16-dev-arm64-cross/filelist
       #   /usr/lib/gcc-cross/aarch64-linux-gnu/16/libstdc++.a
       #   /usr/aarch64-linux-gnu/include/c++/16/
+      #   /usr/riscv64-linux-gnu/include/c++/16/aarch64-linux-gnu/
       # https://packages.debian.org/forky/all/libstdc++-16-dev-riscv64-cross/filelist
       #   /usr/lib/gcc-cross/riscv64-linux-gnu/16/libstdc++.a
       #   /usr/riscv64-linux-gnu/include/c++/16/
+      #   /usr/riscv64-linux-gnu/include/c++/16/riscv64-linux-gnu/
       tmp="$(find "/usr/lib/gcc-cross/${_TRIPLETSH}" -mindepth 1 -maxdepth 1 -type d | head -n 1 || true)"
       if [ -z "${tmp}" ]; then
         >&2 echo '! Error: Failed to detect C++-cross env root.'
@@ -1366,9 +1368,9 @@ build_single_target() {
       fi
       tmp="$(basename "${tmp}")"  # 16
       _LDFLAGS_GLOBAL+=" -L/usr/lib/gcc-cross/${_TRIPLETSH}/${tmp}"
-      _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/${tmp}"
-      _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/${tmp}/backward"
-      _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/${tmp}/${_TRIPLETSH}"
+      _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include/c++/${tmp}"
+      _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include/c++/${tmp}/backward"
+      _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include/c++/${tmp}/${_TRIPLETSH}"
     elif [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" = "${_machine}" ]; then
       # https://packages.debian.org/forky/amd64/libstdc++-16-dev/filelist
       #   /usr/lib/gcc/x86_64-linux-gnu/16/libstdc++.a
