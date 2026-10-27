@@ -1354,8 +1354,11 @@ build_single_target() {
   # NOTE: C++ standard headers must be included _before_ C ones.
   #       Make sure to pass _CXXFLAGS_GLOBAL before _CFLAGS_GLOBAL to the builds.
   if [ "${boringssl}" = '1' ] && [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [[ "${_CRT}" = 'musl' || "${_CC}" = 'llvm' ]]; then
+    # NOTE: debian musl is incompatible with libstdc++ (from gcc).
+    #       Must use libc++ (from llvm/clang).
+    #       with debian glibc, libstdc++ is compatible with both gcc and llvm.
     if [ "${_DISTRO}" = 'debian' ] && [[ "${_CRT}" = 'musl' || "${_CC}" = 'llvm' ]] && [ -d 'my-pkg/usr/include/c++' ]; then
-      # use the locall installed libc++ package
+      # use the local installed libc++ package
       # https://packages.debian.org/forky/amd64/libc++-22-dev/filelist
       # https://packages.debian.org/forky/riscv64/libc++-22-dev/filelist
       #   <PWD>/my-pkg/usr/include/c++/v1 [symlink]
@@ -1404,7 +1407,16 @@ build_single_target() {
       _CXXFLAGS_GLOBAL+=" -isystem /usr/include/c++/${tmp}"
       _CXXFLAGS_GLOBAL+=" -isystem /usr/include/${_TRIPLETSH}/c++/${tmp}"
       _CXXFLAGS_GLOBAL+=" -isystem /usr/include/c++/${tmp}/backward"
-    elif [ "${_DISTRO}" = 'alpine' ]; then
+    elif [ "${_DISTRO}" = 'alpine' ] && [ "${_CC}" = 'llvm' ]; then
+      # libc++-dev, libc++-static
+      # https://pkgs.alpinelinux.org/contents?file=&path=&name=libc%5B%2B%5D%5B%2B%5D-dev&branch=edge&repo=main&arch=x86_64&page=34
+      # https://pkgs.alpinelinux.org/contents?file=&path=&name=libc%5B%2B%5D%5B%2B%5D-static&branch=edge&repo=main&arch=x86_64
+      #   /usr/lib/libc++.a
+      #   /usr/include/c++/v1/
+      _LDFLAGS_GLOBAL+=' -L/usr/lib'
+      _CXXFLAGS_GLOBAL+=' -isystem /usr/include/c++/v1'
+    elif [ "${_DISTRO}" = 'alpine' ]; then  # compatible with both gcc and llvm, we only use it for gcc
+      # libstdc++-dev
       # https://pkgs.alpinelinux.org/contents?page=17&file=&path=&name=libstdc%5B%2B%5D%5B%2B%5D-dev&branch=edge&repo=main&arch=x86_64
       #   /usr/lib/libstdc++.a
       #   /usr/include/c++/15.2.0
