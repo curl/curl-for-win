@@ -1351,8 +1351,25 @@ build_single_target() {
     _BINUTILS_SUFFIX="${_CCSUFFIX}"
   fi
 
+  # NOTE: C++ standard headers must be included _before_ C ones.
+  #       Make sure to pass _CXXFLAGS_GLOBAL before _CFLAGS_GLOBAL to the builds.
   if [ "${boringssl}" = '1' ] && [ "${_HOST}" = 'linux' ] && [ "${_OS}" = 'linux' ] && [[ "${_CRT}" = 'musl' || "${_CC}" = 'llvm' ]]; then
-    if [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" != "${_machine}" ]; then
+    if [ "${_DISTRO}" = 'debian' ] && [[ "${_CRT}" = 'musl' || "${_CC}" = 'llvm' ]] && [ -d 'my-pkg/usr/include/c++' ]; then
+      # use the locall installed libc++ package
+      # https://packages.debian.org/forky/amd64/libc++-22-dev/filelist
+      # https://packages.debian.org/forky/riscv64/libc++-22-dev/filelist
+      #   <PWD>/my-pkg/usr/include/c++/v1 [symlink]
+      #   <PWD>/my-pkg/usr/lib/llvm-22/include/c++/v1
+      #   <PWD>/my-pkg/usr/lib/riscv64-linux-gnu/libc++.a
+      #   <PWD>/my-pkg/usr/lib/x86_64-linux-gnu/libc++.a
+      tmp="$(find "${PWD}/my-pkg/usr/include/c++" -mindepth 1 -maxdepth 1 -type d,l | head -n 1 || true)"
+      if [ -z "${tmp}" ]; then
+        >&2 echo '! Error: Failed to detect C++-cross (local) env root.'
+        exit 1
+      fi
+      _LDFLAGS_GLOBAL+=" -L${PWD}/my-pkg/usr/lib/${_TRIPLETSH}"
+      _CXXFLAGS_GLOBAL+=" -isystem ${tmp}"
+    elif [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" != "${_machine}" ]; then
       # https://packages.debian.org/forky/all/libstdc++-16-dev-arm64-cross/filelist
       #   /usr/lib/gcc-cross/aarch64-linux-gnu/16/libstdc++.a
       #   /usr/aarch64-linux-gnu/include/c++/16/
