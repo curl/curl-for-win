@@ -1368,7 +1368,7 @@ build_single_target() {
         exit 1
       fi
       _LDFLAGS_CXX_GLOBAL+=" -L${PWD}/my-pkg/usr/lib/${_TRIPLETSH}"
-      _LDFLAGS_CXX_GLOBAL+=' -lc++'
+      _LDFLAGS_CXX_GLOBAL+=' -nostdlib++ -lc++'
       _CXXFLAGS_GLOBAL+=" -isystem ${tmp}"
     elif [ "${_DISTRO}" = 'debian' ] && [ "${unamem}" != "${_machine}" ]; then
       # https://packages.debian.org/forky/all/libstdc++-16-dev-arm64-cross/filelist
@@ -1386,7 +1386,7 @@ build_single_target() {
       fi
       tmp="$(basename "${tmp}")"  # 16
       _LDFLAGS_CXX_GLOBAL+=" -L/usr/lib/gcc-cross/${_TRIPLETSH}/${tmp}"
-      _LDFLAGS_CXX_GLOBAL+=' -lstdc++'
+      _LDFLAGS_CXX_GLOBAL+=' -nostdlib++ -lstdc++'
       _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include/c++/${tmp}"
       _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include/c++/${tmp}/${_TRIPLETSH}"
       _CXXFLAGS_GLOBAL+=" -isystem /usr/${_TRIPLETSH}/include/c++/${tmp}/backward"
@@ -1403,7 +1403,7 @@ build_single_target() {
       fi
       tmp="$(basename "${tmp}")"  # 16
       _LDFLAGS_CXX_GLOBAL+=" -L/usr/lib/gcc/${_TRIPLETSH}/${tmp}"
-      _LDFLAGS_CXX_GLOBAL+=' -lstdc++'
+      _LDFLAGS_CXX_GLOBAL+=' -nostdlib++ -lstdc++'
       _CXXFLAGS_GLOBAL+=" -isystem /usr/include/c++/${tmp}"
       _CXXFLAGS_GLOBAL+=" -isystem /usr/include/${_TRIPLETSH}/c++/${tmp}"
       _CXXFLAGS_GLOBAL+=" -isystem /usr/include/c++/${tmp}/backward"
@@ -1414,7 +1414,7 @@ build_single_target() {
       #   /usr/lib/libc++.a
       #   /usr/include/c++/v1/
       _LDFLAGS_CXX_GLOBAL+=' -L/usr/lib'
-      _LDFLAGS_CXX_GLOBAL+=' -lc++'
+      _LDFLAGS_CXX_GLOBAL+=' -nostdlib++ -lc++'
       _CXXFLAGS_GLOBAL+=' -isystem /usr/include/c++/v1'
     elif [ "${_DISTRO}" = 'alpine' ]; then  # compatible with both gcc and llvm, we only use it for gcc
       # libstdc++-dev
@@ -1429,7 +1429,7 @@ build_single_target() {
         exit 1
       fi
       _LDFLAGS_CXX_GLOBAL+=' -L/usr/lib'
-      _LDFLAGS_CXX_GLOBAL+=' -lstdc++'
+      _LDFLAGS_CXX_GLOBAL+=' -nostdlib++ -lstdc++'
       _CXXFLAGS_GLOBAL+=" -isystem ${tmp}"
       _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/${_TRIPLETSH}"
       _CXXFLAGS_GLOBAL+=" -isystem ${tmp}/backward"
@@ -1693,9 +1693,6 @@ build_single_target() {
       fi
       ccrsdir="${ccrtdir}"
       ccrtlib="-Wl,-lgcc -Wl,-lgcc_eh"
-      if [ "${boringssl}" != '1' ]; then
-        _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
-      fi
       ccridir="$("clang${_CCSUFFIX}" -print-resource-dir)"                             # /usr/lib/llvm-13/lib/clang/13.0.1
     fi
     libprefix="/usr/lib/${_machine}-linux-musl"
@@ -1776,9 +1773,6 @@ build_single_target() {
           _LDFLAGS_GLOBAL+=" -L${libprefix} -L${ccrtdir} -Wl,-lc ${ccrtlib}"
         fi
         _LDFLAGS_GLOBAL+=' -rtlib=compiler-rt'
-      fi
-      if [ "${boringssl}" != '1' ]; then
-        _LDFLAGS_CXX_GLOBAL+=' -nostdlib++'
       fi
     fi
   else
