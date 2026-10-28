@@ -1353,7 +1353,7 @@ build_single_target() {
     # NOTE: debian musl is incompatible with libstdc++ (from gcc).
     #       Must use libc++ (from llvm/clang).
     #       with debian glibc, libstdc++ is compatible with both gcc and llvm.
-    if [ "${_DISTRO}" = 'debian' ] && [[ "${_CRT}" = 'musl' || "${_CC}" = 'llvm' ]] && [ -d 'my-pkg/usr/include/c++' ]; then
+    if [ "${_DISTRO}" = 'debian' ] && [ "${_CRT}" = 'musl' ] && [ -d 'my-pkg/usr/include/c++' ]; then
       # use the local installed libc++ package
       # https://packages.debian.org/forky/amd64/libc++-22-dev/filelist
       # https://packages.debian.org/forky/riscv64/libc++-22-dev/filelist
