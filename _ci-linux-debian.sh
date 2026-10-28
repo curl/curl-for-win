@@ -27,8 +27,9 @@ if false; then
   ${sudo} sed -i 's/http:/https:/g' /etc/apt/sources.list.d/debian.sources
 fi
 
+[ -n "${CW_CCSUFFIX:-}" ] || export CW_CCSUFFIX='-22'
+
 if [[ "${CW_CONFIG:-}" != *'gcc'* ]]; then
-  [ -n "${CW_CCSUFFIX:-}" ] || export CW_CCSUFFIX='-22'
   if [[ "${CW_CONFIG:-}" != *'win'* ]] || [ "${CW_LLVM_MINGW_ONLY:-}" != '1' ]; then
     extra+=" llvm${CW_CCSUFFIX} clang${CW_CCSUFFIX} lld${CW_CCSUFFIX} libclang-rt${CW_CCSUFFIX}-dev"
   fi
@@ -87,7 +88,6 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
   fi
 
   if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
-    export CW_CCSUFFIX="${CW_GCCSUFFIX}"
     extra+=" gcc${CW_GCCSUFFIX}"
     [[ "${unamem}" != 'aarch64' && "${a64}" = 1 ]] && extra+=" gcc${CW_GCCSUFFIX}-aarch64-linux-gnu"
     [[ "${unamem}" != 'riscv64' && "${r64}" = 1 ]] && extra+=" gcc${CW_GCCSUFFIX}-riscv64-linux-gnu"
@@ -175,6 +175,10 @@ if [ -n "${dl}" ]; then
     ln -s -f "llvm${CW_CCSUFFIX}/lib/clang" 'my-pkg/usr/lib/clang'
   fi
   find -L 'my-pkg/usr/lib/clang' | sort
+fi
+
+if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
+  export CW_CCSUFFIX="${CW_GCCSUFFIX}"
 fi
 
 echo '=============='
