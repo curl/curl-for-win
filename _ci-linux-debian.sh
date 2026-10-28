@@ -178,7 +178,7 @@ if [ -n "${dl}" ]; then
 fi
 
 if [[ "${CW_CONFIG:-}" = *'gcc'* ]]; then
-  export CW_CCSUFFIX="${CW_GCCSUFFIX}"
+  export CW_CCSUFFIX="${CW_GCCSUFFIX:-}"
 fi
 
 echo '=============='
