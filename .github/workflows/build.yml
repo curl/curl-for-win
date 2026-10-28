@@ -494,6 +494,8 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 15
     steps:
+      - uses: $/.github/actions/macos-fix-certs
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
@@ -522,6 +524,8 @@ jobs:
     env:
       CW_JOBS: '4'
     steps:
+      - uses: $/.github/actions/macos-fix-certs
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
@@ -556,6 +560,8 @@ jobs:
     env:
       CW_JOBS: '4'
     steps:
+      - uses: $/.github/actions/macos-fix-certs
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
@@ -583,6 +589,8 @@ jobs:
     env:
       CW_JOBS: '4'
     steps:
+      - uses: $/.github/actions/macos-fix-certs
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
@@ -611,6 +619,8 @@ jobs:
     env:
       CW_JOBS: '4'
     steps:
+      - uses: $/.github/actions/macos-fix-certs
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
