@@ -108,12 +108,12 @@ cat <<EOF
     "name": "awslc",
     "url": "https://github.com/aws/aws-lc/archive/refs/tags/v{ver}.tar.gz",
     "tag": "v\\\\d+\\\\.\\\\d+\\\\.\\\\d+$",
-    "pinned": true
+    "bumpdays": 30
   },
   {
     "name": "boringssl",
     "url": "https://github.com/google/boringssl/releases/download/{ver}/boringssl-{ver}.tar.gz",
-    "pinned": true
+    "bumpdays": 30
   },
   {
     "name": "osslsigncode",
