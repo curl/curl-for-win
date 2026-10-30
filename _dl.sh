@@ -39,8 +39,8 @@ cat <<EOF
   },
   {
     "name": "certdata",
-    "url": "https://raw.githubusercontent.com/mozilla-firefox/firefox/{commit}/security/nss/lib/ckfw/builtins/certdata.txt",
-    "refs": "refs/heads/release",
+    "url": "https://raw.githubusercontent.com/mozilla/nss/{commit}/lib/ckfw/builtins/certdata.txt",
+    "refs": "refs/heads/master",
     "bumpdays": 1
   },
   {
