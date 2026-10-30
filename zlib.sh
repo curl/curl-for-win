@@ -53,8 +53,12 @@ _VER="$1"
     readonly _ref='ChangeLog'
   fi
 
+  command -v "${_STRIP_LIB}"
+  "${_STRIP_LIB}" --version || true
+  sha256sum "${_PP}"/lib/*.a
   # shellcheck disable=SC2086
   "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/*.a
+  sha256sum "${_PP}"/lib/*.a
 
   touch -c -r "${_ref}" "${_PP}"/include/*.h
   touch -c -r "${_ref}" "${_PP}"/lib/*.a
