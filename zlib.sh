@@ -54,7 +54,11 @@ _VER="$1"
   fi
 
   # shellcheck disable=SC2086
+  command -v "${_STRIP_LIB}"
+  "${_STRIP_LIB}" --version || true
+  sha256sum "${_PP}"/lib/*.a
   "${_STRIP_LIB}" ${_STRIPFLAGS_LIB} "${_PP}"/lib/*.a
+  sha256sum "${_PP}"/lib/*.a
 
   touch -c -r "${_ref}" "${_PP}"/include/*.h
   touch -c -r "${_ref}" "${_PP}"/lib/*.a
