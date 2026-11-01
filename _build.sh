@@ -440,7 +440,8 @@ export _REVSUFFIX="${_REV}"; [ -z "${_REVSUFFIX}" ] || _REVSUFFIX="_${_REVSUFFIX
 if [ "${_OS}" = 'win' ] && [ "${_HOST}" = 'mac' ]; then
   if [ ! -d .venv ]; then
     python3 -m venv .venv
-    PIP_PROGRESS_BAR=off .venv/bin/python3 -m pip --disable-pip-version-check --no-cache-dir --require-virtualenv install -r requirements.txt
+    PIP_PROGRESS_BAR=off .venv/bin/python3 -m pip --cert "$(brew --prefix)/etc/ca-certificates/cert.pem" \
+      --disable-pip-version-check --no-cache-dir --require-virtualenv install -r requirements.txt
   fi
   export PATH; PATH="$(pwd)/.venv/bin:${PATH}"
 fi
