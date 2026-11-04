@@ -56,10 +56,6 @@ environment:
     secure: 'abLXuqdfwj2eEIRPDttWH94uZrYHLg640oMdTLmBHnShCfRNvzkCQ9lN8YeSUmXMyzQtbAnAgHwFBa1VeZaNNZNluUxEWAVCzfnmSTPswro='
   COSIGN_KEY_PASS:
     secure: 'OnmQRlYaVGvoXGqjCW72gmWCGh89KxjCCpNRwC7Gqbr2CVRBeLgTem558dmbgeJW'
-  DEPLOY_AGE_PASS:
-    secure: 'abLXuqdfwj2eEIRPDttWH7Bya0JqHvmKTcyiOFJh2lnbbZ7ubhydO67LX4+TytV3e51bHRTMUA4PCauppBcSGrqt94bHU7k2nTq10mGfCpM='
-  DEPLOY_KEY_PASS:
-    secure: 'CS5o1b7BhBEmoEq+RFaTmtWpAd3HqHLqnpJvkAjF+DmnlJVPLo34MeusmnJ56wAX'
   DO_NOT_TRACK: '1'
 build_script:
   - sh: |

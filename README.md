@@ -2,7 +2,7 @@
 Copyright (C) Viktor Szakats
 SPDX-License-Identifier: CC-BY-SA-4.0
 -->
-[![Build status](https://ci.appveyor.com/api/projects/status/8yf6xjgq7u0cm013/branch/main?svg=true)](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main)
+[![Build status](https://github.com/curl/curl-for-win/actions/workflows/release.yml/badge.svg)](https://github.com/curl/curl-for-win/actions/workflows/release.yml)
 [![Daily status](https://github.com/curl/curl-for-win/actions/workflows/daily.yml/badge.svg)](https://github.com/curl/curl-for-win/actions/workflows/daily.yml)
 
 > [!tip]
@@ -57,7 +57,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   [CET](https://www.intel.com/content/www/us/en/developer/articles/technical/technical-look-control-flow-enforcement-technology.html)
   enabled. All builds have frame pointers enabled.
 - Transparent builds, using open source code, run in
-  [public](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main),
+  [public](https://github.com/curl/curl-for-win/actions/workflows/release.yml),
   with auditable [logs](#build-logs).
 - [LLVM/Clang](https://clang.llvm.org/) build environment with
   [`mingw-w64`](https://sourceforge.net/p/mingw-w64/) via
@@ -65,8 +65,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   [Homebrew](https://formulae.brew.sh/formula/mingw-w64),
   [MSYS2](https://www.msys2.org/).
   [`llvm-mingw`](https://github.com/mstorsjo/llvm-mingw) for ARM64.
-- Windows cross-built and published via
-  [AppVeyor CI](https://www.appveyor.com/). Linux built via GHA.
+- Cross-built and published via GitHub Actions.
   Using reproducible [container](https://docker.debian.net/) image
   [`debian:testing-slim`](https://github.com/debuerreotype/docker-debian-artifacts/tree/dist-amd64/testing/slim)
   via rootless [podman](https://podman.io/). macOS built via GHA.
@@ -79,7 +78,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
   confidence of getting merged.
 - ARM64 host machines are supported and used when available, for efficiency.
 - You can look up our package hashes in lines starting with `SHA` in the
-  [build log](https://ci.appveyor.com/project/curlorg/curl-for-win/branch/main).
+  [build log](https://github.com/curl/curl-for-win/actions/workflows/release.yml).
 - We code-sign with a self-signed certificate on Windows, and avoid trusted
   timestamps for reproducibility.
 
@@ -160,7 +159,7 @@ ws/wss        | ✓       | ✓       | ✓       | ✓       | ✓       | ✓ 
 
 # Build logs
 
-<https://ci.appveyor.com/project/curlorg/curl-for-win/history?branch=main>
+<https://github.com/curl/curl-for-win/actions/workflows/release.yml>
 
 # Unstable/development daily builds
 
