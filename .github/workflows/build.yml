@@ -132,7 +132,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-awslc-linux-a64-x64"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-openssl-linux-a64-x64"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
@@ -166,7 +166,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-awslc-linux-gcc"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-openssl-linux-gcc"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
@@ -200,7 +200,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-awslc-linux-a64-x64"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-openssl-linux-a64-x64"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           export CW_GCCSUFFIX='-14'
@@ -235,7 +235,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-awslc-linux-gcc"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-openssl-linux-gcc"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           export CW_GCCSUFFIX='-14'
@@ -278,7 +278,7 @@ jobs:
           SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
           SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-awslc-linux-musl"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-openssl-linux-musl"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
@@ -312,7 +312,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-awslc-linux-musl-gcc"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-openssl-linux-musl-gcc"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
@@ -354,7 +354,7 @@ jobs:
           SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
           SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-awslc-linux-musl"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-openssl-linux-musl"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           export CW_GCCSUFFIX='-14'
@@ -389,7 +389,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-awslc-linux-musl-gcc"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-openssl-linux-musl-gcc"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           export CW_GCCSUFFIX='-14'
@@ -432,7 +432,7 @@ jobs:
           SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
           SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-awslc-linux"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-openssl-linux"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
@@ -466,7 +466,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-awslc-linux-gcc"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-openssl-linux-gcc"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
@@ -502,7 +502,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-awslc-linux-a64"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-openssl-linux-a64"
           export CW_REVISION="${GITHUB_SHA}"
           sh -c ./_ci-mac-homebrew.sh
 
@@ -539,7 +539,7 @@ jobs:
           SIGN_SSH_AGE_PASS: '${{ secrets.SIGN_SSH_AGE_PASS }}'
           SIGN_SSH_KEY_PASS: '${{ secrets.SIGN_SSH_KEY_PASS }}'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-awslc-mac-macuni"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-openssl-mac-macuni"
           export CW_REVISION="${GITHUB_SHA}"
           sh -c ./_ci-mac-homebrew.sh
 
@@ -568,7 +568,7 @@ jobs:
           fetch-depth: '300'
       - name: 'build'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-awslc-mac-llvm-x64"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-openssl-mac-llvm-x64"
           export CW_REVISION="${GITHUB_SHA}"
           sh -c ./_ci-mac-homebrew.sh
 
@@ -630,7 +630,7 @@ jobs:
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '1'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-awslc-canonsrc-win-a64"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-openssl-canonsrc-win-a64"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sh -c ./_ci-mac-homebrew.sh
@@ -666,7 +666,7 @@ jobs:
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '1'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-awslc-win"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-openssl-win"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
@@ -703,7 +703,7 @@ jobs:
           CW_LLVM_MINGW_DL: '1'
           CW_LLVM_MINGW_ONLY: '0'
         run: |
-          export CW_CONFIG="${GITHUB_REF_NAME}-werror-awslc-win-gcc"
+          export CW_CONFIG="${GITHUB_REF_NAME}-werror-openssl-win-gcc"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
           sudo podman image trust set --type reject default
