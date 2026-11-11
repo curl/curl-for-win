@@ -69,6 +69,6 @@ jobs:
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: 'curl-windows'
-          retention-days: 5
+          retention-days: 90
           path: |
             all-mingw*.*
