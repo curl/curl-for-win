@@ -76,9 +76,8 @@ _VER="$1"
   # Workaround for musl builds missing Linux header (as of OpenSSL 4.1.0):
   #   ../crypto/mem_sec.c:60:13: fatal error: linux/mman.h: No such file or directory
   # Linux cross-builds from other systems (e.g. macOS) are unlikely to provide
-  # Linux headers. On native Linux, gcc 14/16 builds do not find kernel headers
-  # even when installed.
-  if [[ "${_CRT}" = 'musl' && ( "${_HOST}" != 'linux' || ( "${_OS}" = 'linux' && "${_CC}" = 'gcc' ) ) ]]; then
+  # Linux headers.
+  if [[ "${_CRT}" = 'musl' && "${_HOST}" != 'linux' ]]; then
     options+=' no-secure-memory'
   fi
 

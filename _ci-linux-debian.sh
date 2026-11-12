@@ -123,11 +123,9 @@ elif [[ "${CW_CONFIG:-}" = *'linux'* ]]; then
 
     [[ "${CW_CONFIG:-}" = *'gcc'* ]] && extra+=" libgcc${CW_GCCSUFFIX}-dev"
 
-    if [[ "${CW_CONFIG:-}" = *'openssl'* && "${CW_CONFIG:-}" != *'gcc'* ]]; then
-      # for openssl 'secure-memory' feature requiring 'linux/mman.h'
-      [[ "${unamem}" = 'aarch64' && "${a64}" = 1 ]] && extra+=' linux-headers-arm64'
-      [[ "${unamem}" = 'riscv64' && "${r64}" = 1 ]] && extra+=' linux-headers-riscv64'
-      [[ "${unamem}" = 'x86_64'  && "${x64}" = 1 ]] && extra+=' linux-headers-amd64'
+    if [[ "${CW_CONFIG:-}" = *'openssl'* ]]; then
+      # https://packages.debian.org/trixie/all/linux-libc-dev/filelist
+      extra+=' linux-libc-dev'  # for awslc/boringssl 'linux/random.h', openssl 'secure-memory' feature requiring 'linux/mman.h'
     fi
   else  # glibc
     # FIXME: workaround for glibc-llvm-riscv64 builds:
