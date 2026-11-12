@@ -95,6 +95,7 @@ _VER="$1"
   fi
 
   export CC="${_CC_GLOBAL}"
+  export CFLAGS="${_CFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_RAW}"
 
   if [ "${_VER}" = '4.1.0' ]; then
     # OpenSSL's ./Configure dumps build flags into object `crypto/cversion.o`
