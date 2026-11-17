@@ -1140,6 +1140,7 @@ build_single_target() {
       _CFLAGS_GLOBAL+=' -fno-semantic-interposition'
       _LDFLAGS_GLOBAL+=' -Wl,-Bsymbolic'  # -Wl,-Bsymbolic-functions (safer option, but libcurl isn't affected)
     elif [ "${_CPU}" = 'r64' ]; then
+      _CFLAGS_GLOBAL+=' -fno-semantic-interposition'
       _LDFLAGS_GLOBAL+=' -Wl,-Bsymbolic'
     fi
   fi
