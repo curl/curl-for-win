@@ -81,14 +81,8 @@ _VER="$1"
     options+=' no-secure-memory'
   fi
 
-  # Enabling `no-deprecated` requires walking a fine line. It needs:
-  # - libssh2 1.11.1+
-  # - other OpenSSL dependents playing well with `no-deprecated`: ngtcp2
-  # - other OpenSSL dependents broken with `no-deprecated`: libssh
-  if [[ "${_DEPS}" != *'libssh1'* && \
-        ( "${_OS}" = 'win' || \
-          ( "${_OS}" = 'mac' && "${_OSVER}" -lt '1015' ) || \
-          ( "${_OS}" = 'linux' && "${_CONFIG}" = *'pico'* )) ]]; then
+  # Enabling `no-deprecated` when possible.
+  if [[ "${_DEPS}" != *'libssh1'* ]]; then
     options+=' no-deprecated'
   fi
 
