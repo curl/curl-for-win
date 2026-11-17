@@ -1130,7 +1130,7 @@ build_single_target() {
   fi
 
   # These options have just minor effect when using -fvisibility=hidden, but
-  # we're going for it.
+  # we are going for it.
   if [ "${_OS}" = 'linux' ]; then
     # gcc (as of v12/v13) creates slightly larger exes and shared libs with these options.
     if [ "${_CC}" = 'llvm' ]; then
