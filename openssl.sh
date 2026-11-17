@@ -40,7 +40,7 @@ _VER="$1"
   elif [ "${_OS}" = 'linux' ]; then
     [ "${_CPU}" = 'x64' ] && options+=' linux-x86_64'
     [ "${_CPU}" = 'a64' ] && options+=' linux-aarch64'
-    [ "${_CPU}" = 'r64' ] && options+=' linux64-riscv64 no-asm'  # FIXME: disabled ASM to avoid 'AES_set_encrypt_key' relocation errors at link time
+    [ "${_CPU}" = 'r64' ] && options+=' linux64-riscv64'
   fi
 
   if [ "${_OS}" = 'mac' ]; then
