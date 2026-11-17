@@ -50,6 +50,7 @@ _VER="$1"
   options+=" ${_LDFLAGS_GLOBAL} ${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL}"
   if [ "${_OS}" = 'win' ]; then
     options+=' -DUSE_BCRYPTGENRANDOM -lbcrypt'  # default for MSVC Vista+ targets. Enable manually for mingw-w64.
+    options+=' -DOPENSSL_SYS_WIN_CORE'  # exclude crazy stuff: GUI popup, legacy advapi32 and user32 APIs
   fi
   [ "${_CPU}" = 'x86' ] || options+=' enable-ec_nistp_64_gcc_128'
 
