@@ -86,10 +86,9 @@ _VER="$1"
   # - other OpenSSL dependents playing well with `no-deprecated`: ngtcp2
   # - other OpenSSL dependents broken with `no-deprecated`: libssh
   if [[ "${_DEPS}" != *'libssh1'* && \
-        ( \
-          "${_OS}" = 'win' || \
-        ( "${_OS}" = 'mac' && "${_OSVER}" -lt '1015' ) || \
-        ( "${_OS}" = 'linux' && "${_CONFIG}" = *'pico'* )) ]]; then
+        ( "${_OS}" = 'win' || \
+          ( "${_OS}" = 'mac' && "${_OSVER}" -lt '1015' ) || \
+          ( "${_OS}" = 'linux' && "${_CONFIG}" = *'pico'* )) ]]; then
     options+=' no-deprecated'
   fi
 
