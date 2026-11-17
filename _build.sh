@@ -1135,8 +1135,6 @@ build_single_target() {
     # https://maskray.me/blog/2021-05-09-fno-semantic-interposition
     # https://maskray.me/blog/2021-05-16-elf-interposition-and-bsymbolic
     # https://flameeyes.blog/2012/10/07/symbolism-and-elf-files-or-what-does-bsymbolic-do/
-    # gcc (as of v12/v13) creates slightly larger exes and shared libs with these options.
-    #  but also required in OpenSSL ASM builds on riscv64 to avoid relocation errors.
     _CFLAGS_GLOBAL+=' -fno-semantic-interposition'
     _LDFLAGS_GLOBAL+=' -Wl,-Bsymbolic'  # -Wl,-Bsymbolic-functions (safer option, but libcurl isn't affected)
   fi
