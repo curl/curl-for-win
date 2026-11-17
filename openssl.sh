@@ -82,7 +82,7 @@ _VER="$1"
   fi
 
   # Enabling `no-deprecated` when possible.
-  if [[ "${_DEPS}" != *'libssh1'* ]]; then
+  if [[ "${_DEPS}" != *'libssh1'* ]]; then  # no supported by libssh as of 0.12.2
     options+=' no-deprecated'
   fi
 
