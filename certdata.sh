@@ -31,7 +31,7 @@ _VER="$1"
   # as certdata itself. (only some _almost_ identical copies.)
   # To avoid depending on an unversioned download (or vendoring this file),
   # link to it instead:
-  ../_mk-url-file.sh "${_ref}" 'LICENSE' 'https://www.mozilla.org/media/MPL/2.0/index.txt'
+  ../_mk-url-file.sh "${_ref}" 'LICENSE' 'https://mozilla.org/MPL/2.0/'
 
   ../_pkg.sh "$(pwd)/${_ref}"
 )
