@@ -132,7 +132,7 @@ for release in 'sid' 'testing' 'trixie'; do
   llvm_latest="$(curl --disable --user-agent 'curl' --silent --fail --show-error \
     "https://packages.debian.org/search?keywords=libllvm&searchon=names&suite=${release}&section=all" \
     | hxclean | hxselect -i -c -s '\n' 'h3' \
-    | grep -a -o -E 'libllvm-[0-9]+' | sort -u | tail -n -1)"
+    | grep -a -o -E 'libllvm[0-9]+$' | sort -u | tail -n -1)"
 
   echo "export CW_CCSUFFIX='$(echo "${llvm_latest}" | cut -c 8-)'  # (in debian:${release})"
 done
