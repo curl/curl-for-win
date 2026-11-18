@@ -203,6 +203,7 @@ jobs:
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-a64-x64"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
+          export CW_CCSUFFIX='-22'
           export CW_GCCSUFFIX='-14'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
@@ -238,6 +239,7 @@ jobs:
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-gcc"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
+          export CW_CCSUFFIX='-22'
           export CW_GCCSUFFIX='-14'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
@@ -357,6 +359,7 @@ jobs:
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
+          export CW_CCSUFFIX='-22'
           export CW_GCCSUFFIX='-14'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
@@ -392,6 +395,7 @@ jobs:
           export CW_CONFIG="${GITHUB_REF_NAME}-werror-linux-musl-gcc"
           export CW_REVISION="${GITHUB_SHA}"
           . ./_versions.sh
+          export CW_CCSUFFIX='-22'
           export CW_GCCSUFFIX='-14'
           sudo podman image trust set --type reject default
           sudo podman image trust set --type accept docker.io/library
