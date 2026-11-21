@@ -8,7 +8,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 cd -- "$(dirname "$0")"
 
-# Create signature for package
+# Create reproducible signature for package
 if [ -n "${MINISIGN_KEY:-}" ] && \
    [ -s "${MINISIGN_KEY}" ] && \
    [ -n "${MINISIGN_KEY_PASS:+1}" ]; then

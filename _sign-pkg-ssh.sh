@@ -8,7 +8,7 @@ set -o xtrace -o errexit -o nounset; [ -n "${BASH:-}${ZSH_NAME:-}" ] && set -o p
 
 cd -- "$(dirname "$0")"
 
-# Create signature for package
+# Create reproducible signature for package
 if [ -n "${SIGN_SSH_KEY:-}" ] && \
    [ -s "${SIGN_SSH_KEY}" ] && \
    [ -n "${SIGN_SSH_KEY_PASS:+1}" ]; then
