@@ -626,6 +626,7 @@ _VER="$1"
 @if "%sh%" equ "" echo Error: requires a POSIX shell (sh.exe or busybox.exe) in PATH.
 @if "%sh%" neq "" "%sh%" %bb% "%~dp0wcurl" %*
 EOF
+        touch -c -r "${_ref}" "${_DST}"/bin/wcurl.bat
       fi
     fi
   fi
