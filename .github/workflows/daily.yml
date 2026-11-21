@@ -1,6 +1,8 @@
 # Copyright (C) Viktor Szakats. See LICENSE.md
 # SPDX-License-Identifier: MIT
 ---
+# TEST minisign signature REPRODUCIBILITY
+
 # https://docs.github.com/actions/learn-github-actions
 name: daily
 'on':
