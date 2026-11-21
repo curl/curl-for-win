@@ -4,6 +4,9 @@
 # https://docs.github.com/actions/learn-github-actions
 name: daily
 'on':
+  push:
+    branches:
+      - daily
   schedule:
     # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
     - cron: '29 20 * * *'
