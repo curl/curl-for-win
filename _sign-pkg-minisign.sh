@@ -13,12 +13,16 @@ if [ -n "${MINISIGN_KEY:-}" ] && \
    [ -s "${MINISIGN_KEY}" ] && \
    [ -n "${MINISIGN_KEY_PASS:+1}" ]; then
   file="$1"
+  case "${_HOST}" in
+    bsd|mac) unixts="$(TZ=UTC stat -f '%m' "${file}")";;
+    *)       unixts="$(TZ=UTC stat -c '%Y' "${file}")";;
+  esac
   echo "Package signing with minisign: '${file}'"
   # Signature saved to "${file}.minisign"
   # The -l option is able to create signatures compatible with signify,
   # but it is not recommended by the minisign documentation.
   # https://jedisct1.github.io/minisign/
-  minisign -S -s "${MINISIGN_KEY}" -m "${file}" <<EOF
+  minisign -S -s "${MINISIGN_KEY}" -m "${file}" -t "timestamp:${unixts} file:${file} hashed" <<EOF
 ${MINISIGN_KEY_PASS}
 EOF
 fi
