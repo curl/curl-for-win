@@ -138,8 +138,8 @@ for release in 'sid' 'testing' 'trixie'; do
 
   llvm_latest="$(curl --disable --user-agent 'curl' --silent --fail --show-error \
     "https://packages.debian.org/search?keywords=libgcc+dev+amd64&searchon=names&suite=${release}&section=all" \
-    | hxclean | hxselect -i -c -s '\n' 'h3' | tee rrro \
-    | grep -a -o -E 'libgcc-[0-9]+-dev' | tee rrr | grep -a -o -E '[0-9]+' | tee uuu | sort -u | tail -n -1)"
+    | hxclean | hxselect -i -c -s '\n' 'h3' \
+    | grep -a -o -E 'libgcc-[0-9]+-dev' | grep -a -o -E '[0-9]+' | sort -u | tail -n -1)"
 
-  echo "export CW_GCCSUFFIX='$(echo "${llvm_latest}")'  # (in debian:${release})"
+  echo "export CW_GCCSUFFIX='${llvm_latest}'  # (in debian:${release})"
 done
