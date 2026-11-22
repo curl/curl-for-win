@@ -68,7 +68,7 @@ _VER="$1"
   # Manual copy to DESTDIR
 
   if [ "${CW_MAP}" = '1' ]; then
-    cp -p "${_BLDDIR}/${_map_name}" "${_PP}"/bin/
+    sed "s|${_ROOT}||g" "${_BLDDIR}/${_map_name}" > "${_PP}/bin/${_map_name}"
   fi
 
   # Make steps for determinism

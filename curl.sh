@@ -452,9 +452,9 @@ _VER="$1"
   fi
 
   if [ "${CW_MAP}" = '1' ]; then
-    cp -p "${_BLDDIR}/${_out_lib}${_map_name_lib}" "${_PP}/${DYN_DIR}/"
+    sed "s|${_ROOT}||g" "${_BLDDIR}/${_out_lib}${_map_name_lib}" > "${_PP}/${DYN_DIR}/${_map_name_lib}"
     if [[ "${_CONFIG}" != *'nocurltool'* ]]; then
-      cp -p "${_BLDDIR}/${_out_src}${_map_name_bin}" "${_PP}"/bin/
+      sed "s|${_ROOT}||g" "${_BLDDIR}/${_out_src}${_map_name_bin}" > "${_PP}/bin/${_map_name_bin}"
     fi
   fi
 

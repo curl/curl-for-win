@@ -255,6 +255,8 @@ else
 fi
 echo "${_LOGURL}" | tee "${_LOG}"
 
+export _ROOT="${PWD}"
+
 export _CONFIG
 if [ -n "${CW_CONFIG:-}" ]; then
   _CONFIG="${CW_CONFIG}"
