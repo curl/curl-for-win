@@ -140,7 +140,7 @@ cat <<EOF
   },
   {
     "name": "zstd",
-    "url": "https://github.com/facebook/zstd/releases/download/v{ver}/zstd-{ver}.tar.gz",
+    "url": "https://github.com/meta/zstd/releases/download/v{ver}/zstd-{ver}.tar.gz",
     "sig": ".sig",
     "sha": ".sha256",
     "keys": "4EF4AC63455FC9F4545D9B7DEF8FE99528B52FFD"

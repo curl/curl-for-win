@@ -16,6 +16,7 @@ _VER="$1"
 
   rm -r -f "${_PKGDIR:?}" "${_BLDDIR:?}"
 
+  options=''
   CPPFLAGS='-DZSTD_TRACE=0'  # disable public debug functions with always-visible weak symbols
 
   if [ "${_OS}" != 'win' ]; then
@@ -23,16 +24,24 @@ _VER="$1"
     CPPFLAGS+=' -DZSTDERRORLIB_VISIBLE='
   fi
 
+  # ASM options may or may not be used along with complex/changing conditions,
+  # therefore always pass them and suppress the CMake warning.
+  if [ "${_DISTVER}" = 'trixie' ]; then
+    options+=' --no-warn-unused-cli'
+  else
+    options+=' -Wno-unused-cli'
+  fi
+
   # shellcheck disable=SC2086
-  cmake build/cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} \
+  cmake build/cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_ASM_GLOBAL} ${options} \
     -DZSTD_BUILD_CONTRIB=OFF \
     -DZSTD_BUILD_TESTS=OFF \
-    -DZSTD_LEGACY_SUPPORT=OFF \
     -DZSTD_BUILD_PROGRAMS=OFF \
     -DZSTD_PROGRAMS_LINK_SHARED=OFF \
     -DZSTD_BUILD_SHARED=OFF \
     -DZSTD_BUILD_STATIC=ON \
     -DZSTD_MULTITHREAD_SUPPORT=ON \
+    -DCMAKE_ASM_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}" \
     -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}"
 
   cmake --build "${_BLDDIR}"
