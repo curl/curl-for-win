@@ -25,7 +25,7 @@ if len(sys.argv) > 2:
     for argv in sys.argv[2:]:
         for fname in glob.glob(argv):
             print(
-                datetime.datetime.fromtimestamp(ts, datetime.timezone.utc).isoformat()
+                datetime.datetime.fromtimestamp(ts, datetime.UTC).isoformat()
                 + " -> "
                 + fname
             )
