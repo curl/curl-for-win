@@ -92,10 +92,7 @@ _VER="$1"
     options+=' -DOPENSSL_NO_ASM=ON'
   else
     if [ "${_OS}" = 'win' ] && [ "${_CPU}" != 'a64' ]; then
-      # nasm is used for Windows x64 and x86
-      options+=' -DCMAKE_ASM_NASM_FLAGS=--reproducible'
-    else
-      options="${_CMAKE_ASM_GLOBAL} ${options}"
+      options+=' -DCMAKE_ASM_NASM_FLAGS=--reproducible'  # nasm is used for Windows x64 and x86
     fi
     if [ "${_NAM}" = 'awslc' ] && [ "${_CPU}" = 'x86' ]; then
       CFLAGS+=' -msse2'
@@ -152,10 +149,19 @@ _VER="$1"
       sed -i.bak 's/ -ggdb//g' ./CMakeLists.txt
     fi
 
+    # ASM options may or may not be used along with complex/changing conditions,
+    # therefore always pass them and suppress the CMake warning.
+    if [ "${_DISTVER}" = 'trixie' ]; then
+      options+=' --no-warn-unused-cli'
+    else
+      options+=' -Wno-unused-cli'
+    fi
+
     # shellcheck disable=SC2086
-    cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${options} \
+    cmake -B "${_BLDDIR}" ${_CMAKE_GLOBAL} ${_CMAKE_CXX_GLOBAL} ${_CMAKE_ASM_GLOBAL} ${options} \
       -DBUILD_TESTING=OFF \
       -DBUILD_SHARED_LIBS=OFF \
+      -DCMAKE_ASM_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}" \
       -DCMAKE_C_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL}" \
       -DCMAKE_CXX_FLAGS="${_CFLAGS_GLOBAL_CMAKE} ${_CFLAGS_GLOBAL} ${_CPPFLAGS_GLOBAL} ${CFLAGS} ${CPPFLAGS} ${_LDFLAGS_GLOBAL} ${_CXXFLAGS_GLOBAL} ${_LDFLAGS_CXX_GLOBAL}"
   fi
